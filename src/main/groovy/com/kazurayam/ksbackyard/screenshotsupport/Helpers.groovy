@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.screenshot
+package com.kazurayam.ksbackyard.screenshotsupport
 
 import java.nio.file.Files
 import java.nio.file.Path
