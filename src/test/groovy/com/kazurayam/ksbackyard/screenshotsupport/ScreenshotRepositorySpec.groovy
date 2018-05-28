@@ -5,7 +5,7 @@ import java.nio.file.Paths
 
 import spock.lang.Specification
 
-class ScreenshotRepositoryTest extends Specification {
+class ScreenshotRepositorySpec extends Specification {
 
     private static Path workdir
 
