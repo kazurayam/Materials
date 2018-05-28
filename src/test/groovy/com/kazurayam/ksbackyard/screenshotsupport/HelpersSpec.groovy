@@ -158,12 +158,41 @@ class HelpersSpec extends Specification {
      * # area will not be visible)
      * convert ./tmp/photo1.png -alpha off ./tmp/photo1.png
      */
+    def testRunImagemagickCommand_step6() {
+        setup:
+        Path masked1 = workdir.resolve('photo1.png')
+        String[] args = ['convert',
+            "${masked1}",
+            '-alpha', 'off',
+            "${masked1}"
+            ] as String[]
+        when:
+        int ret = Helpers.runImagemagickCommand(args, out, err)
+        then:
+        ret == 0
+    }
 
     /**
      * # remove opacity (this extra step is needed, otherwise ignored
      * # area will not be visible)
      * convert ./tmp/photo2.png -alpha off ./tmp/photo2.png
      */
+    def testRunImagemagickCommand_step7() {
+        setup:
+        Path masked2 = workdir.resolve('photo2.png')
+        String[] args = ['convert',
+            "${masked2}",
+            '-alpha', 'off',
+            "${masked2}"
+            ] as String[]
+        when:
+        int ret = Helpers.runImagemagickCommand(args, out, err)
+        then:
+        ret == 0
+    }
+
+
+
 
     // helper methods
     private boolean deleteDirectory(File directoryToBeDeleted) {
