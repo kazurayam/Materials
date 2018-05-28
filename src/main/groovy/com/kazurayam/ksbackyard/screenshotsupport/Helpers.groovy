@@ -65,7 +65,10 @@ final class Helpers {
         try {
             Process process = new ProcessBuilder(args).start()
 
-            // 外部プロセスが返って来ない場合にそなえて外部プロセスの標準出力と標準エラー出力を別スレッドでsqueezeする。
+            // 外部プロセスは標準出力のバッファと標準エラー出力のバッファをもっている。バッファに中身が残っていると
+            // waitFor()が返ってこない。waitForする前にバッファから中身を吸い取る必要がある。
+            // 標準出力と標準エラー出力とどちらに中身が残っているか不定なので順序を前提することができない。
+            // だから外部プロセスの標準出力と標準エラー出力を別スレッドでsqueezeする。
             // https://qiita.com/shintaness/items/6dd91260726e555c49e5
             Thread th = new Thread(new Runnable() {
                 @Override
