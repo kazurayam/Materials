@@ -1,5 +1,8 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import spock.lang.Specification
 
 /**
@@ -8,11 +11,19 @@ import spock.lang.Specification
 class HelpersSpec extends Specification {
 
     // fields
+    private static Path workdir
+    private static Path resourcesdir
 
     // fixture methods
     def setup() {}
     def cleanup() {}
-    def setupSpec() {}
+    def setupSpec() {
+        resourcesdir = Paths.get("./src/test/resources")
+        workdir = Paths.get("./build/tmp/${Helpers.getName()}")
+        if (!workdir.toFile().exists()) {
+            workdir.toFile().mkdirs()
+        }
+    }
     def cleanupSpec() {}
 
     // feature methods
@@ -25,27 +36,31 @@ class HelpersSpec extends Specification {
         when:
         int ret = Helpers.runImagemagickCommand(args, out, err)
         then:
-        ret == 4   // ファイルシステムを指定してください
+        ret == 1
         cleanup:
-        println(args)
-        println("out=${out.toString()}")
-        println("err=${err.toString()}")
+        System.out.println("out=${out.toString()}")
+        System.err.println("err=${err.toString()}")
     }
 
-    def testRunImagemagickCommandConvertHelp() {
+    def testRunImagemagickCommand_step1() {
         setup:
+        Path photo1 = resourcesdir.resolve('photo1.png')
+        Path mask   = workdir.resolve('mask.png')
         OutputStream out = new ByteArrayOutputStream()
         OutputStream err = new ByteArrayOutputStream()
 
-        String[] args = ['convert', '-h'] as String[]
+        String[] args = ['convert',
+            "${photo1.toString()}",
+            '-fill', 'white', '-colorize', '100%',
+            "${mask.toString()}"
+            ] as String[]
         when:
         int ret = Helpers.runImagemagickCommand(args, out, err)
         then:
-        ret == 0   // ファイルシステムを指定してください
+        ret == 0
         cleanup:
-        println(args)
-        println("out=${out.toString()}")
-        println("err=${err.toString()}")
+        System.out.println("out=${out.toString()}")
+        System.err.println("err=${err.toString()}")
     }
 
     // helper methods

@@ -5,7 +5,12 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 final class Helpers {
+
+    private static Logger log = LoggerFactory.getLogger(ScreenshotRepository.class)
 
     /**
      * not to be instanciated
@@ -47,23 +52,31 @@ final class Helpers {
      * @return returns the valued returned by ImageMagick
      */
     static int runImagemagickCommand(String[] args, OutputStream out, OutputStream err) {
-        def envVarName = 'IMAGEMAGICK_HOME'
-        def path
-
-        if (System.getenv(envVarName) != null)
-            path="${System.getenv(envVarName)}/"
-        else
-            path=''
-        if (args.length == 0)
+        if (args.length == 0) {
             throw new IllegalArgumentException("Usage: <imagemagick command> args...")
+        }
+
+        def envVarName = 'IMAGEMAGICK_HOME'
+        if (System.getenv(envVarName) != null) {
+            args[0] = "${System.getenv(envVarName)}/${args[0]}"
+        }
+        log.info("args=${args}")
 
         try {
-            Process process = new ProcessBuilder(args[0]).start()
+            Process process = new ProcessBuilder(args).start()
+
+            // 外部プロセスが返って来ない場合にそなえて外部プロセスの標準出力と標準エラー出力を別スレッドでsqueezeする。
+            // https://qiita.com/shintaness/items/6dd91260726e555c49e5
+            Thread th = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    transfer(squeeze(process.getErrorStream()), err)
+                }
+            })
+            th.start()
+            transfer(squeeze(process.getInputStream()), out)
+
             int ret = process.waitFor()
-            String oText = squeeze(process.getInputStream())
-            String eText = squeeze(process.getErrorStream())
-            transfer(oText, out)
-            transfer(eText, err)
             return ret
         }
         catch (IOException | InterruptedException e) {

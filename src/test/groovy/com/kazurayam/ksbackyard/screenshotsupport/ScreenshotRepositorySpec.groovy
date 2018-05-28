@@ -16,6 +16,7 @@ class ScreenshotRepositorySpec extends Specification {
         }
     }
 
+
     def testGetInstanceFull() {
         setup:
         ScreenshotRepository sr = ScreenshotRepository.getInstance(workdir, "testGetInstanceFull")
