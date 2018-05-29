@@ -19,11 +19,8 @@ class ScreenshotRepositorySpec extends Specification {
 
     def testGetInstanceFull() {
         setup:
-        ScreenshotRepository sr = ScreenshotRepository.getInstance(workdir)
         String testSuiteId = 'testGetInstanceFull'
-        sr.setCurrentTestSuiteId(testSuiteId)
-        Timestamp timestamp = new Timestamp()
-        sr.setCurrentTimestamp(timestamp)
+        ScreenshotRepository sr = ScreenshotRepository.getInstance(workdir, testSuiteId)
         when:
         TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
         then:

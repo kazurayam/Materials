@@ -16,14 +16,18 @@ final class ScreenshotRepository {
     private Path baseDirPath
     private Map<String, Map<Timestamp, TestSuiteResult>> testSuiteResults
 
-    private String currentTestSuiteId
+    private static String currentTestSuiteId
     private Timestamp currentTimestamp
     private String currentTestCaseId
 
     final static String BASE_DIR_NAME = 'Screenshots'
 
     static ScreenshotRepository getInstance() {
-        return getInstance(Paths.get(System.getProperty('user.dir')))
+        if (currentTestSuiteId != null) {
+            return getInstance(Paths.get(System.getProperty('user.dir')))
+        } else {
+            throw new IllegalStateException('currentTestSuiteId is not set')
+        }
     }
 
     /**
@@ -49,10 +53,12 @@ final class ScreenshotRepository {
      * @param dirPath You should pass the Katalon project directory here.
      * @return singleton instance
      */
-    static ScreenshotRepository getInstance(Path dirPath) {
+    static ScreenshotRepository getInstance(Path dirPath, String testSuiteId) {
         if (instance == null) {
             Path p = dirPath.resolve(BASE_DIR_NAME)
             instance = new ScreenshotRepository(p)
+            instance.setCurrentTestSuiteId(testSuiteId)
+            instance.setCurrentTimestamp(new Timestamp())
         }
         log.info("returning ${instance.toString()}")
         return instance
@@ -79,7 +85,7 @@ final class ScreenshotRepository {
     }
 
     void setCurrentTestSuiteId(String testSuiteId) {
-        this.currentTestSuiteId = testSuiteId
+       this.currentTestSuiteId = testSuiteId
     }
 
     String getCurrentTestSuiteId() {
