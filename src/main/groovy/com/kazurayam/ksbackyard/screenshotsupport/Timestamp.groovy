@@ -6,23 +6,25 @@ import java.time.temporal.TemporalAccessor
 
 class Timestamp {
 
-    // yyyyhhMMdd_hhmmssを記録するLocalDateTime。ミリ秒以下はゼロにしてある。
     private LocalDateTime timestamp
 
     static String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
 
+    /**
+     * create a Timestamp object based on the LocalDateTime of now
+     */
     Timestamp() {
         this(LocalDateTime.now())
     }
 
     /**
-     * tsのミリ秒をゼロにしてから記憶する。
+     * instanciate a Timestamp object while ignoring milliseconds
      *
      * @param ts
      */
     Timestamp(LocalDateTime ts) {
         this.timestamp = LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
-            ts.getHour(), ts.getMinute(), ts.getSecond())
+            ts.getHour(), ts.getMinute(), ts.getSecond())  // ignore milliseconds
     }
 
     LocalDateTime getValue() {

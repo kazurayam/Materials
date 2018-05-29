@@ -13,10 +13,16 @@ final class TestCaseResult {
     private String testCaseStatus
 
     protected TestCaseResult(TestSuiteResult parent, String testCaseId) {
+        assert parent != null
+        assert testCaseId != null
         this.parent = parent
         this.testCaseId = testCaseId
         this.targetPageMap = new HashMap<String, TargetPage>()
         this.testCaseStatus = ''
+    }
+
+    protected getParent() {
+        return this.parent
     }
 
     String getTestCaseId() {
@@ -24,6 +30,7 @@ final class TestCaseResult {
     }
 
     void setTestCaseStatus(String testCaseStatus) {
+        assert testCaseStatus != null
         this.testCaseStatus = testCaseStatus
     }
 
@@ -55,6 +62,23 @@ final class TestCaseResult {
     protected Path resolveTestCaseDirPath() {
         Path testSuiteOutputDirPath = parent.resolveTestSuiteOutputDirPath()
         return testSuiteOutputDirPath.resolve(testCaseId.replaceFirst('^Test Cases/', ''))
+    }
+
+    @Override
+    boolean equals(Object obj) {
+        if (this == obj) { return true }
+        if (!(obj instanceof TestCaseResult)) { return false }
+        TestCaseResult other = (TestCaseResult)obj
+        if (this.testCaseId == other.getTestCaseId()) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    @Override
+    int hashCode() {
+        return this.testCaseId.hashCode()
     }
 
     class TargetPage {

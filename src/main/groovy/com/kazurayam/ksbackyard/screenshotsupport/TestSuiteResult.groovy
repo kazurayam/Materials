@@ -1,7 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
 import java.nio.file.Path
-import java.time.LocalDateTime
 
 /**
  *
@@ -10,14 +9,21 @@ final class TestSuiteResult {
 
     private ScreenshotRepository parent
     private String testSuiteId
-    private LocalDateTime timestamp
+    private Timestamp timestamp
     private Map<String, TestCaseResult> testCaseResultMap
 
-    protected TestSuiteResult(ScreenshotRepository parent, String testSuiteId, LocalDateTime timestamp) {
+    protected TestSuiteResult(ScreenshotRepository parent, String testSuiteId, Timestamp timestamp) {
+        assert parent != null
+        assert testSuiteId != null
+        assert timestamp != null
         this.parent = parent
         this.testSuiteId = testSuiteId
         this.timestamp = timestamp
         this.testCaseResultMap = new HashMap<String, TestCaseResult>()
+    }
+
+    protected ScreenshotRepository getParent() {
+        return this.parent
     }
 
     List<String> getTestCaseIdList() {
@@ -28,6 +34,10 @@ final class TestSuiteResult {
 
     String getTestSuiteId() {
         return testSuiteId
+    }
+
+    Timestamp getTimestamp() {
+        return timestamp
     }
 
     TestCaseResult getTestCaseResult(String testCaseId) {
@@ -53,5 +63,25 @@ final class TestSuiteResult {
         return tsOutputDir
     }
 
+    @Override
+    boolean equals(Object obj) {
+        if (this == obj) { return true }
+        if (!(obj instanceof TestSuiteResult)) { return false }
+        TestSuiteResult other = (TestSuiteResult)obj
+        if (this.testSuiteId == other.getTestSuiteId() && this.timestamp == other.getTimestamp()) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    @Override
+    int hashCode() {
+        final int prime = 31
+        int result = 1
+        result = prime * result + this.getTestSuiteId().hashCode()
+        result = prime * result + this.getTimestamp().hashCode()
+        return result
+    }
 }
 
