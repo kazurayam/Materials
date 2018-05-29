@@ -3,12 +3,13 @@ package com.kazurayam.ksbackyard.screenshotsupport
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 final class ScreenshotRepository implements IScreenshotRepository {
 
-    private static String BASE_DIR_PATH = './Screenshots'
+    final static String BASE_DIR_NAME = 'Screenshots'
 
     private static ScreenshotRepository instance
 
@@ -25,12 +26,37 @@ final class ScreenshotRepository implements IScreenshotRepository {
     }
 
     static ScreenshotRepository getInstance(String testSuiteId) {
-        return getInstance(Paths.get(BASE_DIR_PATH), testSuiteId)
+        return getInstance(Paths.get(System.getProperty('user.dir')), testSuiteId)
     }
 
-    static ScreenshotRepository getInstance(Path baseDirPath, String testSuiteId) {
+    /**
+     * You are supposed to call this in the TestListener@BeforeTestSuite as follows:
+     *
+     * <PRE>
+     * import java.nio.file.Path
+     * import java.nio.file.Paths
+     * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
+     * import katalonimport com.kms.katalon.core.configuration.RunConfiguration
+     * import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
+     * ...
+     * class TL {
+     *     @BeforeTestSuite
+     *     def beforeTestSuite(TestSuiteContext testSuiteContext) {
+     *         Path projectDir = Paths.get(RunConfiguration.getProjectDir())
+     *         String testSuiteId = testSuiteContext.getTestSuiteId()
+     *         ScreenshotRepository scRepos = ScreenshotRepository.getInstance(projectDir, testSuiteId)
+     *         WebUI.comment(">>> got instance of ${scRepos.toString()}")
+     *         ...
+     * </PRE>
+     *
+     * @param projectDir You should pass the project directory here.
+     * @param testSuiteId
+     * @return
+     */
+    static ScreenshotRepository getInstance(Path projectDirPath, String testSuiteId) {
         if (instance == null) {
-            instance = new ScreenshotRepository(baseDirPath, testSuiteId)
+            Path p = projectDirPath.resolve(BASE_DIR_NAME)
+            instance = new ScreenshotRepository(p, testSuiteId)
         }
         log.info("returning ${instance.toString()}")
         return instance

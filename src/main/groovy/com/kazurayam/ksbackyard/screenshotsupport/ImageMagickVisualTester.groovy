@@ -13,6 +13,12 @@ class ImageMagickVisualTester {
 
     private static Logger log = LoggerFactory.getLogger(ImageMagickVisualTester.class)
 
+    private ScreenshotRepository screpos
+
+    public ImageMagickVisualTester(ScreenshotRepository screpos) {
+        this.screpos = screpos
+    }
+
     /**
      * JavaでShellScriptの実行 https://qiita.com/itoa06/items/9e761d53c58eeb20490e
      *
