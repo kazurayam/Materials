@@ -34,6 +34,10 @@ final class TestCaseResult {
         this.testCaseStatus = testCaseStatus
     }
 
+    String getTestCaseStatus() {
+        return this.testCaseStatus
+    }
+
     List<String> getUrlList() {
         List<String> urlList = new ArrayList(targetPageMap.keySet())
         Collections.sort(urlList)

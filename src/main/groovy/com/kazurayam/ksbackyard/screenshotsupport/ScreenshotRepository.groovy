@@ -102,6 +102,14 @@ final class ScreenshotRepository {
         return this.currentTestCaseId
     }
 
+    void setCurrentTestCaseStatus(String testCaseStatus) {
+        this.getCurrentTestCaseResult().setTestCaseStatus(testCaseStatus)
+    }
+
+    String getCurrentTestCaseStatus() {
+        return this.getCurrentTestCaseResult().getTestCaseStatus()
+    }
+
     TestSuiteResult getCurrentTestSuiteResult() {
         if (this.currentTestSuiteId != null) {
             if (this.currentTimestamp != null) {
