@@ -9,6 +9,7 @@ import spock.lang.Specification
 /**
  * http://spockframework.org/spock/docs/1.0/spock_primer.html
  */
+@Ignore
 class ImageMagickVisualTesterSpec extends Specification {
 
     // fields
@@ -34,7 +35,7 @@ class ImageMagickVisualTesterSpec extends Specification {
     def setupSpec() {
         resourcesdir = Paths.get("./src/test/resources")
         workdir = Paths.get("./build/tmp/${ImageMagickVisualTester.getName()}")
-        deleteDirectory(workdir.toFile())
+        Helpers.deleteDirectory(workdir)
         workdir.toFile().mkdirs()
         mask = workdir.resolve('mask.png')
     }
@@ -195,13 +196,5 @@ class ImageMagickVisualTesterSpec extends Specification {
 
 
     // helper methods
-    private boolean deleteDirectory(File directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.listFiles()
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file)
-            }
-        }
-        return directoryToBeDeleted.delete()
-    }
+
 }

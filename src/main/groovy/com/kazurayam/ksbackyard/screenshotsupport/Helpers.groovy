@@ -44,4 +44,31 @@ final class Helpers {
         }
     }
 
+    /**
+     * force-delete the directory and its contents(files and directories)
+     *
+     * @param directoryToBeDeleted
+     * @return
+     */
+    static boolean deleteDirectory(Path directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.toFile().listFiles()
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file.toPath())
+            }
+        }
+        return directoryToBeDeleted.toFile().delete()
+    }
+
+    /**
+     * simulate UNIX touch command for a Path
+     *
+     * @param filePath
+     * @throws IOException
+     */
+    static void touch(Path filePath) throws IOException{
+        filePath.toFile().createNewFile()
+        filePath.toFile().setLastModified(System.currentTimeMillis())
+    }
+
 }

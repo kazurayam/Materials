@@ -53,9 +53,9 @@ final class ScreenshotRepository implements IScreenshotRepository {
      * @param testSuiteId
      * @return
      */
-    static ScreenshotRepository getInstance(Path projectDirPath, String testSuiteId) {
+    static ScreenshotRepository getInstance(Path katalonProjectDirPath, String testSuiteId) {
         if (instance == null) {
-            Path p = projectDirPath.resolve(BASE_DIR_NAME)
+            Path p = katalonProjectDirPath.resolve(BASE_DIR_NAME)
             instance = new ScreenshotRepository(p, testSuiteId)
         }
         log.info("returning ${instance.toString()}")

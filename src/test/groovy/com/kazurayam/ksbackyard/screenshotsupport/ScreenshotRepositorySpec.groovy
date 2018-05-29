@@ -22,7 +22,7 @@ class ScreenshotRepositorySpec extends Specification {
         ScreenshotRepository sr = ScreenshotRepository.getInstance(workdir, "testGetInstanceFull")
         expect:
         sr != null
-        sr.getBaseDirPath() == workdir
+        sr.getBaseDirPath() == workdir.resolve(ScreenshotRepository.BASE_DIR_NAME)
         sr.getTestSuiteResult().getTestSuiteId() == 'testGetInstanceFull'
     }
 }
