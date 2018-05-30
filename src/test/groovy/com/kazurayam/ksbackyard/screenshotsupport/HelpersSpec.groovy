@@ -18,7 +18,7 @@ class HelpersSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getName()}")
+        workdir = Paths.get("./build/tmp/${HelpersSpec.getName()}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }

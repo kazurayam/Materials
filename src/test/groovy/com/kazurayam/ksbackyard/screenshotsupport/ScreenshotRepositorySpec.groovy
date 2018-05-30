@@ -10,7 +10,7 @@ class ScreenshotRepositorySpec extends Specification {
     private static Path workdir
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${ScreenshotRepository.getName()}")
+        workdir = Paths.get("./build/tmp/${ScreenshotRepositorySpec.getName()}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -79,6 +79,13 @@ class ScreenshotRepositorySpec extends Specification {
         then:
         p != null
         assert p.endsWith("${URLEncoder.encode(url, 'UTF-8')}.png")
+    }
+
+    def testLoadTree() {
+        setup:
+        String dirName = 'testResolveScreenshotFilePath'
+        Path baseDir = workdir.resolve(dirName)
+        Path fixture = Paths.get("./src/test/resources/Screenshots")
     }
 
 }

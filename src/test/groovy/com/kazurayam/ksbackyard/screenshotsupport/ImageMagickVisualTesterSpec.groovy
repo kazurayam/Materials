@@ -33,7 +33,7 @@ class ImageMagickVisualTesterSpec extends Specification {
     }
 
     def setupSpec() {
-        resourcesdir = Paths.get("./src/test/resources")
+        resourcesdir = Paths.get("./src/test/fixture")
         workdir = Paths.get("./build/tmp/${ImageMagickVisualTester.getName()}")
         Helpers.deleteDirectory(workdir)
         workdir.toFile().mkdirs()

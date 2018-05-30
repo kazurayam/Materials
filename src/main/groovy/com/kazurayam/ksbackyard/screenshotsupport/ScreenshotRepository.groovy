@@ -1,7 +1,9 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 final class ScreenshotRepository {
 
@@ -65,23 +67,39 @@ final class ScreenshotRepository {
         this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
     }
 
-    /**
-     *
-     * @param baseDir
-     */
+
     private void init(Path baseDir) {
         this.baseDir = baseDir
         this.testSuiteResults = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
-        loadTree(this.baseDir, this.testSuiteResults)
+        //loadTree(this.baseDir, this.testSuiteResults)
     }
 
     /**
+     * Supposing in the local file system we have a tree like:
+     * <baseDir>/<Test Suite Name>/<Timestamp>/<Test Case Name>/<image file>
+     *
+     * The loadTree method scans through the tree and fill the tree with the loaded objects
      *
      * @param baseDir
      * @param tree
      */
-    private void loadTree(Path baseDir, Map<String, Map<TSTimestamp, TestSuiteResult>> tree) {
-        System.err.println("TODO")
+    protected void loadTree(Path baseDir, Map<String, Map<TSTimestamp, TestSuiteResult>> tree) {
+        if (baseDir == null) { throw new IllegalArgumentException('argument baseDir is null') }
+        if (tree == null) { throw new IllegalArgumentException('argument tree is null')}
+        List<Path> tsNames = Files.list(baseDir).collect(Collectors.toList())
+        for (Path tsName : tsNames) {
+            List<Path> tstamps = Files.list(tsName).collect(Collectors.toList())
+            for (Path tstamp : tstamps) {
+                List<Path> tcNames = Files.list(tstamp).collect(Collectors.toList())
+                for (Path tcName : tcNames) {
+                    List<Path> imageFiles = Files.list(tcName).collect(Collectors.toList())
+                    for (Path imageFile : imageFiles) {
+                        // TODO
+                        System.out.println(imageFile.toString())
+                    }
+                }
+            }
+        }
     }
 
     String toString() {
@@ -186,4 +204,5 @@ final class ScreenshotRepository {
                     .createScreenshotWrapper().getScreenshotFilePath()
         }
     }
+
 }
