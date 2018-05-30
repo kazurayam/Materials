@@ -39,6 +39,8 @@ class ScreenshotRepositorySpec extends Specification {
         Path actual = sr.getBaseDir()
         then:
         actual == baseDir
+        cleanup:
+        Helpers.deleteDirectory(baseDir)
     }
 
     def testConstructor_Path_tsId() {
@@ -67,6 +69,8 @@ class ScreenshotRepositorySpec extends Specification {
         then:
         actual == baseDir
         sr.getCurrentTestSuiteId() == tsId
+        cleanup:
+        Helpers.deleteDirectory(baseDir)
     }
 
     def testResolveScreenshotFilePath() {

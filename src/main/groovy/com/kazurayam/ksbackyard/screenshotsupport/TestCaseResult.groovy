@@ -85,6 +85,8 @@ final class TestCaseResult {
         return this.testCaseId.hashCode()
     }
 
+
+
     class TargetPage {
 
         private TestCaseResult parentTestCaseResult
@@ -116,6 +118,8 @@ final class TestCaseResult {
             return this.parentTestCaseResult
         }
 
+
+
         /**
          *
          */
@@ -127,6 +131,10 @@ final class TestCaseResult {
             ScreenshotWrapper(TargetPage parent, Integer seq) {
                 this.parentTargetPage = parent
                 this.seq = seq
+            }
+
+            Integer getSeq() {
+                return seq
             }
 
             Path getScreenshotFilePath() {
