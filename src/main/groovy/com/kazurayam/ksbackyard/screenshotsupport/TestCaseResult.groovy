@@ -135,9 +135,9 @@ final class TestCaseResult {
                     Path testCaseDirPath = tcr.resolveTestCaseDirPath()
                     Helpers.ensureDirs(testCaseDirPath)
                     def encodedUrl = URLEncoder.encode(parentTargetPage.getUrl(), 'UTF-8')
-                    def ext = (seq == 0) ? '' : "${seq}"
+                    def ext = (seq == 0) ? '' : ".${seq}"
                     Path screenshotFilePath =
-                            testCaseDirPath.resolve("${encodedUrl}.${ext}.png")
+                            testCaseDirPath.resolve("${encodedUrl}${ext}.png")
                     return screenshotFilePath
                 }
                 catch (IOException ex) {

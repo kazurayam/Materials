@@ -171,4 +171,19 @@ final class ScreenshotRepository {
             throw new IllegalStateException("currentTestCaseId is null")
         }
     }
+
+    /**
+     *
+     * @param targetUrl
+     * @return
+     */
+    Path resolveScreenshotFilePath(String pageUrl) {
+        TestCaseResult tcResult = this.getCurrentTestCaseResult()
+        if (tcResult == null ) {
+            throw new IllegalStateException("currentTestCaseId is not set")
+        } else {
+            return tcResult.findOrNewTargetPage(pageUrl)
+                    .createScreenshotWrapper().getScreenshotFilePath()
+        }
+    }
 }

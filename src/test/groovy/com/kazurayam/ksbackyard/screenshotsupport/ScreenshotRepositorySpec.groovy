@@ -20,35 +20,35 @@ class ScreenshotRepositorySpec extends Specification {
     def testConstructor_Path() {
         setup:
         String dirName = 'testConstructor_Path'
-        Path expected = workdir.resolve(dirName)
-        ScreenshotRepository sr = new ScreenshotRepository(expected)
+        Path baseDir = workdir.resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(baseDir)
         when:
         Path actual = sr.getBaseDir()
         then:
-        actual == expected
+        actual == baseDir
     }
 
     def testConstructor_PathString() {
         setup:
         String dirName = 'testConstructor_PathString'
-        Path expected = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(dirName)
         ScreenshotRepository sr = new ScreenshotRepository(dirName)
         when:
         Path actual = sr.getBaseDir()
         then:
-        actual == expected
+        actual == baseDir
     }
 
     def testConstructor_Path_tsId() {
         setup:
         String dirName = 'testConstructor_Path_tsId'
         String tsId = 'TS0'
-        Path expected = workdir.resolve(dirName)
-        ScreenshotRepository sr = new ScreenshotRepository(expected, tsId)
+        Path baseDir = workdir.resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsId)
         when:
         Path actual = sr.getBaseDir()
         then:
-        actual == expected
+        actual == baseDir
         sr.getCurrentTestSuiteId() == tsId
     }
 
@@ -56,13 +56,30 @@ class ScreenshotRepositorySpec extends Specification {
         setup:
         String dirName = 'testConstructor_PathString_tsId'
         String tsId = 'TS1'
-        Path expected = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(dirName)
         ScreenshotRepository sr = new ScreenshotRepository(dirName, tsId)
         when:
         Path actual = sr.getBaseDir()
         then:
-        actual == expected
+        actual == baseDir
         sr.getCurrentTestSuiteId() == tsId
     }
+
+    def testResolveScreenshotFilePath() {
+        setup:
+        String dirName = 'testResolveScreenshotFilePath'
+        String tsId = 'TS5'
+        String tcId = 'TC5'
+        String url = 'http://demoauto.katalon.com/'
+        Path baseDir = workdir.resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsId)
+        sr.setCurrentTestCaseId(tcId)
+        when:
+        Path p = sr.resolveScreenshotFilePath(url)
+        then:
+        p != null
+        assert p.endsWith("${URLEncoder.encode(url, 'UTF-8')}.png")
+    }
+
 }
 

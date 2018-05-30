@@ -57,8 +57,7 @@ final class TestSuiteResult {
 
     protected Path resolveTestSuiteOutputDirPath() {
         def ts = URLEncoder.encode(testSuiteId.replaceFirst('^Test Suites/', ''), 'UTF-8')
-        def tstamp = Helpers.getTimestampAsString(timestamp)
-        Path tsOutputDir = parent.getBaseDirPath().resolve("${ts}/${tstamp}")
+        Path tsOutputDir = parent.getBaseDir().resolve("${ts}/${this.timestamp}")
         Helpers.ensureDirs(tsOutputDir)
         return tsOutputDir
     }
