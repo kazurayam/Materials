@@ -3,31 +3,30 @@ package com.kazurayam.ksbackyard.screenshotsupport
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 final class ScreenshotRepository {
 
-    // Singleton pattern is applied
-    private static ScreenshotRepository instance
+    private Path baseDir
+    private Map<String, Map<TSTimestamp, TestSuiteResult>> testSuiteResults
 
-    private static Logger log = LoggerFactory.getLogger(ScreenshotRepository.class)
-
-    private Path baseDirPath
-    private Map<String, Map<Timestamp, TestSuiteResult>> testSuiteResults
-
-    private static String currentTestSuiteId
-    private Timestamp currentTimestamp
+    private TSTimestamp currentTimestamp
+    private String currentTestSuiteId
     private String currentTestCaseId
 
-    final static String BASE_DIR_NAME = 'Screenshots'
+    /**
+     *
+     * @param basDir
+     */
+    ScreenshotRepository(Path baseDir) {
+        this.init(baseDir)
+    }
 
-    static ScreenshotRepository getInstance() {
-        if (currentTestSuiteId != null) {
-            return getInstance(Paths.get(System.getProperty('user.dir')))
-        } else {
-            throw new IllegalStateException('currentTestSuiteId is not set')
-        }
+    /**
+     *
+     * @param basDir
+     */
+    ScreenshotRepository(String baseDirString) {
+        Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(baseDirString)
+        this.init(baseDir)
     }
 
     /**
@@ -43,45 +42,56 @@ final class ScreenshotRepository {
      * class TL {
      *     @BeforeTestSuite
      *     def beforeTestSuite(TestSuiteContext testSuiteContext) {
-     *         Path projectDir = Paths.get(RunConfiguration.getProjectDir())
-     *         String testSuiteId = testSuiteContext.getTestSuiteId()
-     *         ScreenshotRepository scRepos = ScreenshotRepository.getInstance(projectDir, testSuiteId)
+     *         ScreenshotRepository scRepos =
+     *             new ScreenshotRepository('Screenshots', testSuiteContext.getTestSuiteId())
+     *         GlobalVariable.SCREENSHOT_REPOSITORY = scRepos
      *         WebUI.comment(">>> got instance of ${scRepos.toString()}")
-     *         ...
+     *     }
      * </PRE>
      *
-     * @param dirPath You should pass the Katalon project directory here.
-     * @return singleton instance
+     * @param dirPath directory under which a directory named as BASE_DIR_NAME will be created.
      */
-    static ScreenshotRepository getInstance(Path dirPath, String testSuiteId) {
-        if (instance == null) {
-            Path p = dirPath.resolve(BASE_DIR_NAME)
-            instance = new ScreenshotRepository(p)
-            instance.setCurrentTestSuiteId(testSuiteId)
-            instance.setCurrentTimestamp(new Timestamp())
-        }
-        log.info("returning ${instance.toString()}")
-        return instance
+    ScreenshotRepository(String baseDirString, String testSuiteId) {
+        this(baseDirString)
+        this.currentTestSuiteId = testSuiteId
+        this.currentTimestamp = new TSTimestamp()
+        this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+    }
+
+    ScreenshotRepository(Path baseDir, String testSuiteId) {
+        this(baseDir)
+        this.currentTestSuiteId = testSuiteId
+        this.currentTimestamp = new TSTimestamp()
+        this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+    }
+
+    /**
+     *
+     * @param baseDir
+     */
+    private void init(Path baseDir) {
+        this.baseDir = baseDir
+        this.testSuiteResults = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
+        loadTree(this.baseDir, this.testSuiteResults)
+    }
+
+    /**
+     *
+     * @param baseDir
+     * @param tree
+     */
+    private void loadTree(Path baseDir, Map<String, Map<TSTimestamp, TestSuiteResult>> tree) {
+        System.err.println("TODO")
     }
 
     String toString() {
         StringBuilder sb = new StringBuilder()
-        sb.append("${ScreenshotRepository.getName()}('${this.baseDirPath}')")
+        sb.append("${ScreenshotRepository.getName()}('${this.baseDir}')")
         return sb.toString()
     }
 
-    /**
-     * Signleton pattern is applied. The constructor is hidden intentionally.
-     *
-     * @param baseDirPath
-     */
-    private ScreenshotRepository(Path baseDirPath) {
-        this.baseDirPath = baseDirPath
-        this.testSuiteResults = new HashMap<String, Map<Timestamp, TestSuiteResult>>()
-    }
-
-    Path getBaseDirPath() {
-        return this.baseDirPath
+    Path getBaseDir() {
+        return this.baseDir
     }
 
     void setCurrentTestSuiteId(String testSuiteId) {
@@ -92,11 +102,11 @@ final class ScreenshotRepository {
         return this.currentTestSuiteId
     }
 
-    void setCurrentTimestamp(Timestamp timestamp) {
+    void setCurrentTimestamp(TSTimestamp timestamp) {
         this.currentTimestamp = timestamp
     }
 
-    Timestamp getCurrentTimestamp() {
+    TSTimestamp getCurrentTimestamp() {
         return this.currentTimestamp
     }
 
@@ -128,10 +138,16 @@ final class ScreenshotRepository {
         }
     }
 
-    TestSuiteResult findOrNewTestSuiteResult(String testSuiteId, Timestamp timestamp) {
+    /**
+     *
+     * @param testSuiteId
+     * @param timestamp
+     * @return
+     */
+    TestSuiteResult findOrNewTestSuiteResult(String testSuiteId, TSTimestamp timestamp) {
         TestSuiteResult tsr
         if (this.testSuiteResults.containsKey(testSuiteId)) {
-            Map<Timestamp, TestSuiteResult> series = this.testSuiteResults.get(testSuiteId)
+            Map<TSTimestamp, TestSuiteResult> series = this.testSuiteResults.get(testSuiteId)
             if (series.containsKey(timestamp)) {
                 tsr = series.get(timestamp)
             } else {
@@ -140,7 +156,7 @@ final class ScreenshotRepository {
             }
         } else {
             tsr = new TestSuiteResult(this, testSuiteId, timestamp)
-            Map<Timestamp, TestSuiteResult> series = new HashMap<Timestamp, TestSuiteResult>()
+            Map<TSTimestamp, TestSuiteResult> series = new HashMap<TSTimestamp, TestSuiteResult>()
             series.put(timestamp, tsr)
             this.testSuiteResults.put(testSuiteId, series)
         }

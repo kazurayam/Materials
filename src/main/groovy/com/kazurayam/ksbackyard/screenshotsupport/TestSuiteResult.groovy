@@ -9,10 +9,10 @@ final class TestSuiteResult {
 
     private ScreenshotRepository parent
     private String testSuiteId
-    private Timestamp timestamp
+    private TSTimestamp timestamp
     private Map<String, TestCaseResult> testCaseResultMap
 
-    protected TestSuiteResult(ScreenshotRepository parent, String testSuiteId, Timestamp timestamp) {
+    protected TestSuiteResult(ScreenshotRepository parent, String testSuiteId, TSTimestamp timestamp) {
         assert parent != null
         assert testSuiteId != null
         assert timestamp != null
@@ -36,7 +36,7 @@ final class TestSuiteResult {
         return testSuiteId
     }
 
-    Timestamp getTimestamp() {
+    TSTimestamp getTimestamp() {
         return timestamp
     }
 

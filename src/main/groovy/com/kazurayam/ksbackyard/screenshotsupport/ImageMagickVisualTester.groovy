@@ -1,8 +1,5 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 /**
  * Visual Testing engine using ImageMagick
  *
@@ -10,8 +7,6 @@ import org.slf4j.LoggerFactory
  *
  */
 class ImageMagickVisualTester {
-
-    private static Logger log = LoggerFactory.getLogger(ImageMagickVisualTester.class)
 
     private ScreenshotRepository screpos
 
@@ -35,7 +30,6 @@ class ImageMagickVisualTester {
         if (System.getenv(envVarName) != null) {
             args[0] = "${System.getenv(envVarName)}/${args[0]}"
         }
-        log.info("args=${args}")
 
         try {
             Process process = new ProcessBuilder(args).start()

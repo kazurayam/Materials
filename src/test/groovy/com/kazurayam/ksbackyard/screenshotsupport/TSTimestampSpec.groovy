@@ -4,7 +4,13 @@ import java.time.LocalDateTime
 
 import spock.lang.Specification
 
-class TimestampSpec extends Specification {
+/**
+ * TestSuite Timestamp
+ *
+ * @author kazurayam
+ *
+ */
+class TSTimestampSpec extends Specification {
 
     // fields
 
@@ -20,18 +26,18 @@ class TimestampSpec extends Specification {
         String fixture = '20180529_143459'
         LocalDateTime expected = LocalDateTime.of(2018, 5, 29, 14, 34, 59)
         when:
-        LocalDateTime actual = Timestamp.parse(fixture)
+        LocalDateTime actual = TSTimestamp.parse(fixture)
         then:
         actual == expected
     }
-    
+
     def testEquals() {
         setup:
         LocalDateTime source = LocalDateTime.of(2018, 5, 29, 11, 22, 33, 44)
         LocalDateTime expected1 = LocalDateTime.of(2018, 5, 29, 11, 22, 33)
         LocalDateTime expected2 = LocalDateTime.of(2018, 5, 29, 11, 22, 33, 00)
         when:
-        Timestamp ts = new Timestamp(source)
+        TSTimestamp ts = new TSTimestamp(source)
         then:
         ts.getValue() == expected1
         ts.getValue() == expected2

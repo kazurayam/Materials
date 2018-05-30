@@ -17,16 +17,52 @@ class ScreenshotRepositorySpec extends Specification {
     }
 
 
-    def testGetInstanceFull() {
+    def testConstructor_Path() {
         setup:
-        String testSuiteId = 'testGetInstanceFull'
-        ScreenshotRepository sr = ScreenshotRepository.getInstance(workdir, testSuiteId)
+        String dirName = 'testConstructor_Path'
+        Path expected = workdir.resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(expected)
         when:
-        TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
+        Path actual = sr.getBaseDir()
         then:
-        sr != null
-        sr.getBaseDirPath() == workdir.resolve(ScreenshotRepository.BASE_DIR_NAME)
-        tsr.getTestSuiteId() == 'testGetInstanceFull'
+        actual == expected
+    }
+
+    def testConstructor_PathString() {
+        setup:
+        String dirName = 'testConstructor_PathString'
+        Path expected = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(dirName)
+        when:
+        Path actual = sr.getBaseDir()
+        then:
+        actual == expected
+    }
+
+    def testConstructor_Path_tsId() {
+        setup:
+        String dirName = 'testConstructor_Path_tsId'
+        String tsId = 'TS0'
+        Path expected = workdir.resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(expected, tsId)
+        when:
+        Path actual = sr.getBaseDir()
+        then:
+        actual == expected
+        sr.getCurrentTestSuiteId() == tsId
+    }
+
+    def testConstructor_PathString_tsId() {
+        setup:
+        String dirName = 'testConstructor_PathString_tsId'
+        String tsId = 'TS1'
+        Path expected = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        ScreenshotRepository sr = new ScreenshotRepository(dirName, tsId)
+        when:
+        Path actual = sr.getBaseDir()
+        then:
+        actual == expected
+        sr.getCurrentTestSuiteId() == tsId
     }
 }
 

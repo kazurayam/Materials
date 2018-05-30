@@ -4,7 +4,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 
-class Timestamp {
+/**
+ * Test Suite Timestamp
+ * 
+ * @author kazurayam
+ *
+ */
+class TSTimestamp {
 
     private LocalDateTime timestamp
 
@@ -13,7 +19,7 @@ class Timestamp {
     /**
      * create a Timestamp object based on the LocalDateTime of now
      */
-    Timestamp() {
+    TSTimestamp() {
         this(LocalDateTime.now())
     }
 
@@ -22,7 +28,7 @@ class Timestamp {
      *
      * @param ts
      */
-    Timestamp(LocalDateTime ts) {
+    TSTimestamp(LocalDateTime ts) {
         this.timestamp = LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
             ts.getHour(), ts.getMinute(), ts.getSecond())  // ignore milliseconds
     }
@@ -44,9 +50,9 @@ class Timestamp {
     public boolean equals(Object obj) {
         if (this == obj)
             return true
-        if (!(obj instanceof Timestamp))
+        if (!(obj instanceof TSTimestamp))
             return false
-        Timestamp other = (Timestamp)obj
+        TSTimestamp other = (TSTimestamp)obj
         return this.getValue() == other.getValue()
     }
 
