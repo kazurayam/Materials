@@ -21,6 +21,7 @@ class ScreenshotRepositorySpec extends Specification {
         setup:
         String dirName = 'testConstructor_Path'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(baseDir)
         when:
         Path actual = sr.getBaseDir()
@@ -32,6 +33,7 @@ class ScreenshotRepositorySpec extends Specification {
         setup:
         String dirName = 'testConstructor_PathString'
         Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(dirName)
         when:
         Path actual = sr.getBaseDir()
@@ -44,6 +46,7 @@ class ScreenshotRepositorySpec extends Specification {
         String dirName = 'testConstructor_Path_tsId'
         String tsId = 'TS0'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsId)
         when:
         Path actual = sr.getBaseDir()
@@ -57,6 +60,7 @@ class ScreenshotRepositorySpec extends Specification {
         String dirName = 'testConstructor_PathString_tsId'
         String tsId = 'TS1'
         Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(dirName)
+        Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(dirName, tsId)
         when:
         Path actual = sr.getBaseDir()
@@ -72,6 +76,7 @@ class ScreenshotRepositorySpec extends Specification {
         String tcId = 'TC5'
         String url = 'http://demoauto.katalon.com/'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsId)
         sr.setCurrentTestCaseId(tcId)
         when:
@@ -83,9 +88,15 @@ class ScreenshotRepositorySpec extends Specification {
 
     def testLoadTree() {
         setup:
+        Path fixture = Paths.get("./src/test/fixture/Screenshots")
         String dirName = 'testResolveScreenshotFilePath'
         Path baseDir = workdir.resolve(dirName)
-        Path fixture = Paths.get("./src/test/resources/Screenshots")
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
+        when:
+        Map<String, Map<TSTimestamp, TestSuiteResult>> tree = ScreenshotRepository.loadTree(baseDir)
+        then:
+        tree.size()== 1
     }
 
 }

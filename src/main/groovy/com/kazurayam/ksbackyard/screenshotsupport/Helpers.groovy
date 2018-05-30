@@ -102,8 +102,16 @@ final class Helpers {
                     copyDirectory(childFrom, childTo)
                 } else {
                     // childFrom is a file
-                    // copy it into dirTo
-                    Files.copy(childFrom, dirTo.resolve(childFrom.getFileName()))
+                    Path childTo = dirTo.resolve(childFrom.getFileName())
+                    if (Files.exists(childTo)) {
+                        if (Files.isDirectory(childTo)) {
+                            deleteDirectory(childTo)
+                        } else {
+                            Files.delete(childTo)
+                        }
+                    }
+                    // copy the file
+                    Files.copy(childFrom, childTo)
                 }
             }
             return true

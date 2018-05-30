@@ -70,8 +70,11 @@ final class ScreenshotRepository {
 
     private void init(Path baseDir) {
         this.baseDir = baseDir
-        this.testSuiteResults = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
-        //loadTree(this.baseDir, this.testSuiteResults)
+        this.testSuiteResults = loadTreeDebug(this.baseDir)
+    }
+
+    protected static Map<String, Map<TSTimestamp, TestSuiteResult>> loadTreeDebug(Path baseDir) {
+        return new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
     }
 
     /**
@@ -83,23 +86,39 @@ final class ScreenshotRepository {
      * @param baseDir
      * @param tree
      */
-    protected void loadTree(Path baseDir, Map<String, Map<TSTimestamp, TestSuiteResult>> tree) {
-        if (baseDir == null) { throw new IllegalArgumentException('argument baseDir is null') }
-        if (tree == null) { throw new IllegalArgumentException('argument tree is null')}
-        List<Path> tsNames = Files.list(baseDir).collect(Collectors.toList())
+    protected static Map<String, Map<TSTimestamp, TestSuiteResult>> loadTree(Path baseDir) {
+        if (baseDir == null) {
+            throw new IllegalArgumentException('argument baseDir is null')
+        }
+        Map<String, Map<TSTimestamp, TestSuiteResult>> tree = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
+        List<Path> tsNames = Files.list(baseDir)
+                                 .filter({ p -> Files.isDirectory(p) })
+                                 .collect(Collectors.toList())
         for (Path tsName : tsNames) {
-            List<Path> tstamps = Files.list(tsName).collect(Collectors.toList())
+            List<Path> tstamps = Files.list(tsName)
+                                     .filter({ p -> Files.isDirectory(p) })
+                                     .collect(Collectors.toList())
             for (Path tstamp : tstamps) {
-                List<Path> tcNames = Files.list(tstamp).collect(Collectors.toList())
+                List<Path> tcNames = Files.list(tstamp)
+                                         .filter({ p -> Files.isDirectory(p) })
+                                         .collect(Collectors.toList())
                 for (Path tcName : tcNames) {
-                    List<Path> imageFiles = Files.list(tcName).collect(Collectors.toList())
+                    List<Path> imageFiles = Files.list(tcName)
+                                                .filter({ p -> Files.isRegularFile(p) })
+                                                .filter({ p -> p.toString().endsWith('.png')})
+                                                .collect(Collectors.toList())
                     for (Path imageFile : imageFiles) {
+
+
                         // TODO
                         System.out.println(imageFile.toString())
+
+
                     }
                 }
             }
         }
+        return tree
     }
 
     String toString() {

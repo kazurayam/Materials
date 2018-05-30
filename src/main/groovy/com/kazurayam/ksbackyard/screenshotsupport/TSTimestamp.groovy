@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 
 /**
- * Test Suite Timestamp
- * 
+ * Timestamp of a Test Suite
+ *
  * @author kazurayam
  *
  */
