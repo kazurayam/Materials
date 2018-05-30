@@ -1,6 +1,8 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
 import java.nio.file.Path
+import java.util.regex.Pattern
+import java.util.regex.Matcher
 
 /**
  *
@@ -107,6 +109,10 @@ final class TestCaseResult {
             return this.url
         }
 
+        String getEncodedUrl() {
+            return URLEncoder.encode(this.url, 'UTF-8')
+        }
+
         ScreenshotWrapper createScreenshotWrapper() {
             ScreenshotWrapper sw =
                     new ScreenshotWrapper(this, screenshotWrapperList.size())
@@ -118,7 +124,29 @@ final class TestCaseResult {
             return this.parentTestCaseResult
         }
 
+        /**
+         * accept a string in a format (<any string>[¥¥/])(<enocoded URL>)(.[0-9]+)?(.png)
+         * and returns a List<String> of ['<decoded URL>', '[0-9]+', '.png']
+         * @param screenshotFileName
+         * @return empty List<String> if unmatched
+         */
+        static int flag = Pattern.CASE_INSENSITIVE
+        static Pattern pattern = Pattern.compile('([^¥.]+)(¥.[0-9]+)?¥.png$', flag)
 
+        static List<String> parseScreenshotFileName(String screenshotFileName) {
+            List<String> values = new ArrayList<String>()
+            List<String> elements = screenshotFileName.split('[/¥¥]')
+            if (elements.size() > 1) {
+                String fileName = elements.getAt(elements.size() - 1)
+                Matcher m = pattern.matcher(fileName)
+                boolean b = m.matches()
+                if (b) {
+                    values.add(m.group(1))
+                    values.add(m.group(2))
+                }
+            }
+            return values
+        }
 
         /**
          *
@@ -142,7 +170,7 @@ final class TestCaseResult {
                     TestCaseResult tcr = parentTargetPage.getParentTestCaseResult()
                     Path testCaseDirPath = tcr.resolveTestCaseDirPath()
                     Helpers.ensureDirs(testCaseDirPath)
-                    def encodedUrl = URLEncoder.encode(parentTargetPage.getUrl(), 'UTF-8')
+                    def encodedUrl = parentTargetPage.getEncodedUrl()
                     def ext = (seq == 0) ? '' : ".${seq}"
                     Path screenshotFilePath =
                             testCaseDirPath.resolve("${encodedUrl}${ext}.png")
