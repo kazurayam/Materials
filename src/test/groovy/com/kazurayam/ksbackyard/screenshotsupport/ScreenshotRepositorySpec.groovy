@@ -96,7 +96,7 @@ class ScreenshotRepositorySpec extends Specification {
         when:
         Map<String, Map<TSTimestamp, TestSuiteResult>> tree = ScreenshotRepository.loadTree(baseDir)
         then:
-        tree.size()== 1
+        tree.size() == 2
     }
 
 }

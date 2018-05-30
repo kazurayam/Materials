@@ -2,6 +2,7 @@ package com.kazurayam.ksbackyard.screenshotsupport
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.temporal.TemporalAccessor
 
 /**
@@ -42,8 +43,13 @@ class TSTimestamp {
     }
 
     static LocalDateTime parse(String str) {
-        TemporalAccessor parsed = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).parse(str)
-        return LocalDateTime.from(parsed)
+        try {
+            TemporalAccessor parsed = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).parse(str)
+            return LocalDateTime.from(parsed)
+        } catch (DateTimeParseException ex) {
+            System.err.println("unable to parse '${str}' as LocalDateTime")
+            return null
+        }
     }
 
     @Override

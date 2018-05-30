@@ -3,6 +3,7 @@ package com.kazurayam.ksbackyard.screenshotsupport
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 final class ScreenshotRepository {
@@ -95,25 +96,32 @@ final class ScreenshotRepository {
                                  .filter({ p -> Files.isDirectory(p) })
                                  .collect(Collectors.toList())
         for (Path tsName : tsNames) {
-            List<Path> tstamps = Files.list(tsName)
+            List<Path> tstampDirs = Files.list(tsName)
                                      .filter({ p -> Files.isDirectory(p) })
                                      .collect(Collectors.toList())
-            for (Path tstamp : tstamps) {
-                List<Path> tcNames = Files.list(tstamp)
-                                         .filter({ p -> Files.isDirectory(p) })
-                                         .collect(Collectors.toList())
-                for (Path tcName : tcNames) {
-                    List<Path> imageFiles = Files.list(tcName)
-                                                .filter({ p -> Files.isRegularFile(p) })
-                                                .filter({ p -> p.toString().endsWith('.png')})
-                                                .collect(Collectors.toList())
-                    for (Path imageFile : imageFiles) {
-
-
-                        // TODO
-                        System.out.println(imageFile.toString())
-
-
+            for (Path tstampDir : tstampDirs) {
+                String testSuiteId = tsName.getFileName().toString()
+                Map<TSTimestamp, TestSuiteResult> entry = new HashMap<TSTimestamp, TestSuiteResult>()
+                tree.put(testSuiteId, entry)
+                //
+                LocalDateTime ldt = TSTimestamp.parse(tstampDir.getFileName().toString())
+                if (ldt != null) {
+                    TSTimestamp tstp = new TSTimestamp(ldt)
+                    TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteId, tstp)
+                    entry.put(tstp, tsr)
+                    //
+                    List<Path> tcNames = Files.list(tstampDir)
+                                             .filter({ p -> Files.isDirectory(p) })
+                                             .collect(Collectors.toList())
+                    for (Path tcName : tcNames) {
+                        List<Path> imageFiles = Files.list(tcName)
+                                                    .filter({ p -> Files.isRegularFile(p) })
+                                                    .filter({ p -> p.toString().endsWith('.png')})
+                                                    .collect(Collectors.toList())
+                        for (Path imageFile : imageFiles) {
+                            // TODO
+                            System.out.println(imageFile.toString())
+                        }
                     }
                 }
             }
@@ -188,11 +196,11 @@ final class ScreenshotRepository {
             if (series.containsKey(timestamp)) {
                 tsr = series.get(timestamp)
             } else {
-                tsr = new TestSuiteResult(this, testSuiteId, timestamp)
+                tsr = new TestSuiteResult(this.baseDir, testSuiteId, timestamp)
                 series.put(timestamp, tsr)
             }
         } else {
-            tsr = new TestSuiteResult(this, testSuiteId, timestamp)
+            tsr = new TestSuiteResult(this.baseDir, testSuiteId, timestamp)
             Map<TSTimestamp, TestSuiteResult> series = new HashMap<TSTimestamp, TestSuiteResult>()
             series.put(timestamp, tsr)
             this.testSuiteResults.put(testSuiteId, series)

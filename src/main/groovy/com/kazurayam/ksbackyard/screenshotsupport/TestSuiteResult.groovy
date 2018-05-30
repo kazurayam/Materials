@@ -7,16 +7,16 @@ import java.nio.file.Path
  */
 final class TestSuiteResult {
 
-    private ScreenshotRepository parent
+    private Path baseDir
     private String testSuiteId
     private TSTimestamp timestamp
     private Map<String, TestCaseResult> testCaseResultMap
 
-    protected TestSuiteResult(ScreenshotRepository parent, String testSuiteId, TSTimestamp timestamp) {
-        assert parent != null
+    protected TestSuiteResult(Path baseDir, String testSuiteId, TSTimestamp timestamp) {
+        assert baseDir != null
         assert testSuiteId != null
         assert timestamp != null
-        this.parent = parent
+        this.baseDir = baseDir
         this.testSuiteId = testSuiteId
         this.timestamp = timestamp
         this.testCaseResultMap = new HashMap<String, TestCaseResult>()
@@ -57,7 +57,7 @@ final class TestSuiteResult {
 
     protected Path resolveTestSuiteOutputDirPath() {
         def ts = URLEncoder.encode(testSuiteId.replaceFirst('^Test Suites/', ''), 'UTF-8')
-        Path tsOutputDir = parent.getBaseDir().resolve("${ts}/${this.timestamp}")
+        Path tsOutputDir = this.baseDir.resolve("${ts}/${this.timestamp}")
         Helpers.ensureDirs(tsOutputDir)
         return tsOutputDir
     }
