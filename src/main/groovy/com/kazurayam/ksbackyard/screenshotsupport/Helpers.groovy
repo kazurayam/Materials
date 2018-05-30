@@ -4,6 +4,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.stream.Collectors
 
 final class Helpers {
 
@@ -29,7 +30,7 @@ final class Helpers {
      * @param directory
      */
     static void ensureDirs(Path directory) {
-        if (!(directory.toFile().exists())) {
+        if (!(Files.exists(directory))) {
             try {
                 Files.createDirectories(directory)
             }
@@ -64,6 +65,52 @@ final class Helpers {
     static void touch(Path filePath) throws IOException{
         filePath.toFile().createNewFile()
         filePath.toFile().setLastModified(System.currentTimeMillis())
+    }
+
+    /**
+     *
+     * @param dirFrom
+     * @param dirTo
+     * @return
+     */
+    static boolean copyDirectory(Path dirFrom, Path dirTo) {
+        if (dirFrom == null) {
+            throw new IllegalArgumentException('dirFrom is null')
+        }
+        if (!Files.exists(dirFrom)) {
+            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} does not exist")
+        }
+        if (!Files.isDirectory(dirFrom)) {
+            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} is not a directory")
+        }
+        if (!Files.isReadable(dirFrom)) {
+            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} is not readable")
+        }
+        if (dirTo == null) {
+            throw new IllegalArgumentException('dirTo is null')
+        }
+        try {
+            ensureDirs(dirTo)
+            List<Path> childrenFrom = Files.list(dirFrom).collect(Collectors.toList())
+            for (Path childFrom : childrenFrom) {
+                if (Files.isDirectory(childFrom)) {
+                    // childFrom is a directory
+                    // make a directoy with same name in dirTo
+                    Path childTo = dirTo.resolve(childFrom.getFileName())
+                    ensureDirs(childTo)
+                    // and recurse
+                    copyDirectory(childFrom, childTo)
+                } else {
+                    // childFrom is a file
+                    // copy it into dirTo
+                    Files.copy(childFrom, dirTo.resolve(childFrom.getFileName()))
+                }
+            }
+            return true
+        } catch (IOException ex) {
+            ex.printStackTrace()
+            return false
+        }
     }
 
 }
