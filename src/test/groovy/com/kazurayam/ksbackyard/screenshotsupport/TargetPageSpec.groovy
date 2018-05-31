@@ -96,6 +96,15 @@ class TargetPageSpec extends Specification {
         values.size() == 1
         values[0] == 'http://demoaut.katalon.com/'
     }
+    
+    def testParseScreentshotFileName6() {
+        when:
+        List<String> values = TargetPage.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.0.png')
+        then:
+        values.size() == 2
+        values[0] == 'http://demoaut.katalon.com/'
+        values[1] == '0'
+    }
 
 
     // helper methods
