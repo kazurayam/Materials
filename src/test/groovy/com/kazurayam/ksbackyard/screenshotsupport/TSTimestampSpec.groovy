@@ -10,6 +10,7 @@ import spock.lang.Specification
  * @author kazurayam
  *
  */
+//@Ignore
 class TSTimestampSpec extends Specification {
 
     // fields

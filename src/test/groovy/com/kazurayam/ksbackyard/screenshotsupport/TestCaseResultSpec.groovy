@@ -1,29 +1,29 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import spock.lang.Specification
 
+//@Ignore
 class TestCaseResultSpec extends Specification {
+
     // fields
+    private static Path workdir
+
     // fixture methods
-    def setup() {}
+    def setup() {
+        workdir = Paths.get("./build/tmp/${TestCaseResultSpec.getName()}")
+        if (!workdir.toFile().exists()) {
+            workdir.toFile().mkdirs()
+        }
+    }
     def cleanup() {}
     def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods
-    def testTargetPageParseScreenshotFileName() {
-        when:
-        List<String> values1 = TestCaseResult.TargetPage.parseScreenshotFileName('C:/temp/a/b/c.png')
-        then:
-        values1.size() == 1
-        values1[0] == 'c'
-        when:
-        List<String> values2 = TestCaseResult.TargetPage.parseScreenshotFileName('C:/temp/a/b/c.1.png')
-        then:
-        values2.size() == 2
-        values2[0] == 'c'
-        values2[1] == '1'
-    }
+
 
     // helper methods
 }
