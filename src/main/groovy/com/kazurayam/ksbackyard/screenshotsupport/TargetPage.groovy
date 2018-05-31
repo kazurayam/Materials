@@ -49,7 +49,7 @@ class TargetPage {
 
     ScreenshotWrapper getScreenshotWrapper(Path imageFilePath) {
         for (ScreenshotWrapper sw : screenshotWrappers) {
-            if (sw.getImageFilePath() == imageFilePath) {
+            if (sw.getScreenshotFilePath() == imageFilePath) {
                 return sw
             }
         }

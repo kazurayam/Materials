@@ -6,16 +6,16 @@ package com.kazurayam.ksbackyard.screenshotsupport
 class TestCaseResult {
 
     private TestSuiteResult parentTestSuiteResult
-    private String testCaseId
+    private TestCaseName testCaseName
     private List<TargetPage> targetPages
     private String testCaseStatus
 
     // --------------------- constructors and initializer ---------------------
-    TestCaseResult(TestSuiteResult parentTestSuiteResult, String testCaseId) {
+    TestCaseResult(TestSuiteResult parentTestSuiteResult, TestCaseName testCaseName) {
         assert parentTestSuiteResult != null
-        assert testCaseId != null
+        assert testCaseName != null
         this.parentTestSuiteResult = parentTestSuiteResult
-        this.testCaseId = testCaseId
+        this.testCaseName = testCaseName
         this.targetPages = new ArrayList<TargetPage>()
         this.testCaseStatus = ''
     }
@@ -25,8 +25,8 @@ class TestCaseResult {
         return this.parentTestSuiteResult
     }
 
-    String getTestCaseId() {
-        return testCaseId
+    TestCaseName getTestCaseName() {
+        return testCaseName
     }
 
     void setTestCaseStatus(String testCaseStatus) {
@@ -92,7 +92,7 @@ class TestCaseResult {
         if (this == obj) { return true }
         if (!(obj instanceof TestCaseResult)) { return false }
         TestCaseResult other = (TestCaseResult)obj
-        if (this.testCaseId == other.getTestCaseId()) {
+        if (this.testCaseName == other.getTestCaseName()) {
             return true
         } else {
             return false
@@ -101,7 +101,7 @@ class TestCaseResult {
 
     @Override
     int hashCode() {
-        return this.testCaseId.hashCode()
+        return this.testCaseName.hashCode()
     }
 
 }

@@ -8,17 +8,17 @@ import java.nio.file.Path
 final class TestSuiteResult {
 
     private Path baseDir
-    private String testSuiteId
+    private TestSuiteName testSuiteName
     private TSTimestamp timestamp
     private List<TestCaseResult> testCaseResults
 
     // ------------------ constructors & initializer -------------------------------
-    TestSuiteResult(Path baseDir, String testSuiteId, TSTimestamp timestamp) {
+    TestSuiteResult(Path baseDir, TestSuiteName testSuiteName, TSTimestamp timestamp) {
         assert baseDir != null
-        assert testSuiteId != null
+        assert testSuiteName != null
         assert timestamp != null
         this.baseDir = baseDir
-        this.testSuiteId = testSuiteId
+        this.testSuiteName = testSuiteName
         this.timestamp = timestamp
         this.testCaseResults = new ArrayList<TestCaseResult>()
     }
@@ -28,8 +28,8 @@ final class TestSuiteResult {
         return this.baseDir
     }
 
-    String getTestSuiteId() {
-        return testSuiteId
+    TestSuiteName getTestSuiteName() {
+        return testSuiteName
     }
 
     TSTimestamp getTSTimestamp() {
@@ -37,10 +37,10 @@ final class TestSuiteResult {
     }
 
     // ------------------ create/add/get child nodes ------------------------------
-    TestCaseResult findOrNewTestCaseResult(String testCaseId) {
-        TestCaseResult tcr = this.getTestCaseResult(testCaseId)
+    TestCaseResult findOrNewTestCaseResult(TestCaseName testCaseName) {
+        TestCaseResult tcr = this.getTestCaseResult(testCaseName)
         if (tcr == null) {
-            tcr = new TestCaseResult(this, testCaseId)
+            tcr = new TestCaseResult(this, testCaseName)
         }
         return tcr
     }
@@ -57,9 +57,9 @@ final class TestSuiteResult {
         }
     }
 
-    TestCaseResult getTestCaseResult(String testCaseId) {
+    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
         for (TestCaseResult tcr : this.testCaseResults) {
-            if (tcr.getTestCaseId() == testCaseId) {
+            if (tcr.getTestCaseName() == testCaseName) {
                 return tcr
             }
         }
@@ -82,7 +82,7 @@ final class TestSuiteResult {
         if (this == obj) { return true }
         if (!(obj instanceof TestSuiteResult)) { return false }
         TestSuiteResult other = (TestSuiteResult)obj
-        if (this.testSuiteId == other.getTestSuiteId() && this.timestamp == other.getTSTimestamp()) {
+        if (this.testSuiteName == other.getTestSuiteName() && this.timestamp == other.getTSTimestamp()) {
             return true
         } else {
             return false
@@ -93,7 +93,7 @@ final class TestSuiteResult {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTestSuiteId().hashCode()
+        result = prime * result + this.getTestSuiteName().hashCode()
         result = prime * result + this.getTSTimestamp().hashCode()
         return result
     }
