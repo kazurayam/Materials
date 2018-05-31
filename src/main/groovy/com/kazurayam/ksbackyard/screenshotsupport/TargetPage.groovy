@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Path
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -7,40 +8,58 @@ class TargetPage {
 
     private TestCaseResult parentTestCaseResult
     private String url
-    private List<ScreenshotWrapper> screenshotWrapperList
+    private List<ScreenshotWrapper> screenshotWrappers
 
+    // ---------------------- constructors & initializers ---------------------
     protected TargetPage(TestCaseResult parent, String url) {
         this.parentTestCaseResult = parent
         this.url = url
-        this.screenshotWrapperList = new ArrayList<ScreenshotWrapper>()
+        this.screenshotWrappers = new ArrayList<ScreenshotWrapper>()
     }
 
-    List<ScreenshotWrapper> getScreenshotWrapperList() {
-        return this.screenshotWrapperList
+    // --------------------- properties getter & setter -----------------------
+    TestCaseResult getParentTestCaseResult() {
+        return this.parentTestCaseResult
     }
 
     String getUrl() {
         return this.url
     }
 
-    String getEncodedUrl() {
-        return URLEncoder.encode(this.url, 'UTF-8')
-    }
-
-    ScreenshotWrapper createScreenshotWrapper() {
-        ScreenshotWrapper sw =
-            new ScreenshotWrapper(this, screenshotWrapperList.size())
-        screenshotWrapperList.add(sw)
+    // --------------------- create/add/get child nodes -----------------------
+    ScreenshotWrapper findOrNewScreenshotWrapper(Path imageFilePath) {
+        ScreenshotWrapper sw = this.getScreenshotWrapper(imageFilePath)
+        if (sw == null) {
+            sw = new ScreenshotWrapper(this, imageFilePath)
+        }
         return sw
     }
 
-    TestCaseResult getParentTestCaseResult() {
-        return this.parentTestCaseResult
+    void addScreenshotWrapper(ScreenshotWrapper screenshotWrapper) {
+        boolean found = false
+        for (ScreenshotWrapper sw : screenshotWrappers) {
+            if (sw == screenshotWrapper) {
+                found = true
+            }
+        }
+        if (!found) {
+            screenshotWrappers.add(screenshotWrapper)
+        }
     }
 
-    static final int flag = Pattern.CASE_INSENSITIVE
-    static final String EXTENSION_PART_REGEX = '(\\.([0-9]+))?\\.png$'
-    static final Pattern EXTENSION_PART_PATTERN = Pattern.compile(EXTENSION_PART_REGEX, flag)
+    ScreenshotWrapper getScreenshotWrapper(Path imageFilePath) {
+        for (ScreenshotWrapper sw : screenshotWrappers) {
+            if (sw.getImageFilePath() == imageFilePath) {
+                return sw
+            }
+        }
+        return null
+    }
+
+    // --------------------- helpers ------------------------------------------
+    String getEncodedUrl() {
+        return URLEncoder.encode(this.url, 'UTF-8')
+    }
 
     /**
      * accept a string in a format (<any string>[/\])(<enocoded URL string>)(.[0-9]+)?(.png)
@@ -48,11 +67,12 @@ class TargetPage {
      * @param screenshotFileName
      * @return empty List<String> if unmatched
      */
+    static final int flag = Pattern.CASE_INSENSITIVE
+    static final String EXTENSION_PART_REGEX = '(\\.([0-9]+))?\\.png$'
+    static final Pattern EXTENSION_PART_PATTERN = Pattern.compile(EXTENSION_PART_REGEX, flag)
     static List<String> parseScreenshotFileName(String screenshotFileName) {
         List<String> values = new ArrayList<String>()
         String preprocessed = screenshotFileName.replaceAll('\\\\', '/')  // Windows File path separator -> UNIX
-        //System.out.println("    original screenshotFileName=${screenshotFileName}")
-        //System.out.println("preprocessed screenshotFileName=${preprocessed}")
         List<String> elements = preprocessed.split('[/]')
         if (elements.size() > 0) {
             String fileName = elements.getAt(elements.size() - 1)
@@ -70,6 +90,7 @@ class TargetPage {
         return values
     }
 
+    // ------------------------ equals, hashCode ------------------------------
     @Override
     boolean equals(Object obj) {
         if (this == obj) { return true }

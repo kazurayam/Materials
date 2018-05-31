@@ -1,19 +1,18 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.LocalDateTime
-import java.util.stream.Collectors
 
 final class ScreenshotRepository {
 
     private Path baseDir
-    private Map<String, Map<TSTimestamp, TestSuiteResult>> testSuiteResults
+    private List<TestSuiteResult> testSuiteResults
 
     private TSTimestamp currentTimestamp
     private String currentTestSuiteId
     private String currentTestCaseId
+
+    // ---------------------- constructors & initializer ----------------------
 
     /**
      *
@@ -58,14 +57,15 @@ final class ScreenshotRepository {
         this(baseDirString)
         this.currentTestSuiteId = testSuiteId
         this.currentTimestamp = new TSTimestamp()
-        this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
     }
 
     ScreenshotRepository(Path baseDir, String testSuiteId) {
         this(baseDir)
         this.currentTestSuiteId = testSuiteId
         this.currentTimestamp = new TSTimestamp()
-        this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+        this.addTestSuiteResult(tsr)
     }
 
 
@@ -74,59 +74,74 @@ final class ScreenshotRepository {
         this.testSuiteResults = loadTreeDebug(this.baseDir)
     }
 
-    protected static Map<String, Map<TSTimestamp, TestSuiteResult>> loadTreeDebug(Path baseDir) {
-        return new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
+    protected static List<TestSuiteResult> loadTreeDebug(Path baseDir) {
+        return new ArrayList<TestSuiteResult>()
     }
 
     /**
-     * Supposing in the local file system we have a tree like:
+     * Here I assume that I have a file system tree like:
+     *
+     * ./Screenshots/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
+     *
+     * The format is as follows:
+     *
      * <baseDir>/<Test Suite Name>/<Timestamp>/<Test Case Name>/<image file>
      *
-     * The loadTree method scans through the tree and fill the tree with the loaded objects
+     * This loadTree method scans through the file system under the baseDir, construct a tree
+     * and return it.
      *
      * @param baseDir
-     * @param tree
+     * @returns the tree
+     *
      */
-    protected static Map<String, Map<TSTimestamp, TestSuiteResult>> loadTree(Path baseDir) {
+    protected static List<TestSuiteResult> loadTree(Path baseDir) {
         if (baseDir == null) {
             throw new IllegalArgumentException('argument baseDir is null')
         }
-        Map<String, Map<TSTimestamp, TestSuiteResult>> tree = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
-        List<Path> tsNames = Files.list(baseDir)
+        /*
+        def tree = new HashMap<String, Map<TSTimestamp, TestSuiteResult>>()
+        List<Path> testSuiteNamePaths = Files.list(baseDir)
                                  .filter({ p -> Files.isDirectory(p) })
                                  .collect(Collectors.toList())
-        for (Path tsName : tsNames) {
-            List<Path> tstampDirs = Files.list(tsName)
+        for (Path testSuiteNamePath : testSuiteNamePaths) {
+            String testSuiteName = testSuiteNamePath.getFileName().toString()
+            List<Path> tsTimestampsPaths = Files.list(testSuiteNamePath)
                                      .filter({ p -> Files.isDirectory(p) })
                                      .collect(Collectors.toList())
-            for (Path tstampDir : tstampDirs) {
-                String testSuiteId = tsName.getFileName().toString()
-                Map<TSTimestamp, TestSuiteResult> entry = new HashMap<TSTimestamp, TestSuiteResult>()
-                tree.put(testSuiteId, entry)
-                //
-                LocalDateTime ldt = TSTimestamp.parse(tstampDir.getFileName().toString())
+            for (Path tsTimestampPath : tsTimestampsPaths) {
+                LocalDateTime ldt = TSTimestamp.parse(tsTimestampPath.getFileName().toString())
                 if (ldt != null) {
-                    TSTimestamp tstp = new TSTimestamp(ldt)
-                    TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteId, tstp)
-                    entry.put(tstp, tsr)
+                    TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteName, new TSTimestamp(ldt))
+                    tree.put(testSuiteName, tsr)
                     //
-                    List<Path> tcNames = Files.list(tstampDir)
-                                             .filter({ p -> Files.isDirectory(p) })
-                                             .collect(Collectors.toList())
-                    for (Path tcName : tcNames) {
-                        List<Path> imageFiles = Files.list(tcName)
-                                                    .filter({ p -> Files.isRegularFile(p) })
-                                                    .filter({ p -> p.toString().endsWith('.png')})
+                    List<Path> testCaseNamePaths = Files.list(tsTimestampPath)
+                                                    .filter({ p -> Files.isDirectory(p) })
                                                     .collect(Collectors.toList())
-                        for (Path imageFile : imageFiles) {
-                            // TODO
-                            System.out.println(imageFile.toString())
+                    for (Path testCaseNamePath : testCaseNamePaths) {
+                        String testCaseName = testCaseNamePath.getFileName().toString()
+                        TestCaseResult tcr = tsr.findOrNewTestCaseResult(testCaseName)
+                        //
+                        List<Path> imageFilePaths = Files.list(testCaseNamePath)
+                                                        .filter({ p -> Files.isRegularFile(p) })
+                                                        .filter({ p -> p.getFileName().toString().endsWith('.png') })
+                                                        .collect(Collectors.toList())
+                        for (Path imageFilePath : imageFilePaths) {
+                            List<String> values = TargetPage.parseScreenshotFileName(imageFilePath.toString())
+                            if (values.size() > 0) {
+                                String decodedUrl = values[0]
+                                TargetPage targetPage = tcr.findOrNewTargetPage(decodedUrl)
+                                //TODO
+                            }
                         }
                     }
+                } else {
+                    System.err.println("${tsTimestampPath.getFileName()} is NOT in the format "
+                        + "${TSTimestamp.DATE_TIME_PATTERN}, therefore ignored")
                 }
             }
         }
         return tree
+        */
     }
 
     String toString() {
@@ -135,6 +150,9 @@ final class ScreenshotRepository {
         return sb.toString()
     }
 
+
+
+    // -------------------------- attribute getters & setters ------------------------
     Path getBaseDir() {
         return this.baseDir
     }
@@ -163,6 +181,58 @@ final class ScreenshotRepository {
         return this.currentTestCaseId
     }
 
+
+    // --------------------- create/add/get child nodes -----------------------
+    /**
+     *
+     * @param testSuiteId
+     * @param timestamp
+     * @return
+     */
+    TestSuiteResult findOrNewTestSuiteResult(String testSuiteId, TSTimestamp timestamp) {
+        TestSuiteResult tsr = this.getTestSuiteResult(testSuiteId, timestamp)
+        if (tsr == null) {
+            tsr = new TestSuiteResult(this.baseDir, testSuiteId, timestamp)
+        }
+        return tsr
+    }
+
+    /**
+     *
+     * @param testSuiteId
+     * @param timestamp
+     * @return
+     */
+    void addTestSuiteResult(TestSuiteResult testSuiteResult) {
+        boolean found = false
+        for (TestSuiteResult tsr : this.testSuiteResults) {
+            if (tsr == testSuiteResult) {
+                found = true
+            }
+        }
+        if (!found) {
+            this.testSuiteResults.add(testSuiteResult)
+        }
+    }
+
+    /**
+     *
+     * @param testSuiteId
+     * @param timestamp
+     * @return
+     */
+    TestSuiteResult getTestSuiteResult(String testSuiteId, TSTimestamp timestamp) {
+        for (TestSuiteResult tsr : this.testSuiteResults) {
+            if (tsr.getTestSuiteId() == testSuiteId && tsr.getTSTimestamp() == timestamp) {
+                return tsr
+            }
+        }
+        return null
+    }
+
+
+    // ----------------------------- helpers ----------------------------------
+
     void setCurrentTestCaseStatus(String testCaseStatus) {
         this.getCurrentTestCaseResult().setTestCaseStatus(testCaseStatus)
     }
@@ -174,7 +244,9 @@ final class ScreenshotRepository {
     TestSuiteResult getCurrentTestSuiteResult() {
         if (this.currentTestSuiteId != null) {
             if (this.currentTimestamp != null) {
-                return findOrNewTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+                TestSuiteResult tsr = getTestSuiteResult(this.currentTestSuiteId, this.currentTimestamp)
+                assert tsr != null
+                return tsr
             } else {
                 throw new IllegalStateException('currentTimestamp is not set')
             }
@@ -183,52 +255,32 @@ final class ScreenshotRepository {
         }
     }
 
-    /**
-     *
-     * @param testSuiteId
-     * @param timestamp
-     * @return
-     */
-    TestSuiteResult findOrNewTestSuiteResult(String testSuiteId, TSTimestamp timestamp) {
-        TestSuiteResult tsr
-        if (this.testSuiteResults.containsKey(testSuiteId)) {
-            Map<TSTimestamp, TestSuiteResult> series = this.testSuiteResults.get(testSuiteId)
-            if (series.containsKey(timestamp)) {
-                tsr = series.get(timestamp)
-            } else {
-                tsr = new TestSuiteResult(this.baseDir, testSuiteId, timestamp)
-                series.put(timestamp, tsr)
-            }
-        } else {
-            tsr = new TestSuiteResult(this.baseDir, testSuiteId, timestamp)
-            Map<TSTimestamp, TestSuiteResult> series = new HashMap<TSTimestamp, TestSuiteResult>()
-            series.put(timestamp, tsr)
-            this.testSuiteResults.put(testSuiteId, series)
-        }
-        return tsr
-    }
-
     TestCaseResult getCurrentTestCaseResult() {
-        if (currentTestCaseId) {
-            return this.getCurrentTestSuiteResult().findOrNewTestCaseResult(currentTestCaseId)
+        if (currentTestCaseId != null) {
+            TestSuiteResult tsr = this.getCurrentTestSuiteResult()
+            assert tsr != null
+            return tsr.getTestCaseResult(currentTestCaseId)
         }
         else {
             throw new IllegalStateException("currentTestCaseId is null")
         }
     }
 
+
+
+    // ------------------------- reason d'etre --------------------------------
     /**
      *
-     * @param targetUrl
-     * @return
+     * @param pageUrl
+     * @return Path for a file to store the screenshot image of the URL of viewed by the current TestCase
      */
-    Path resolveScreenshotFilePath(String pageUrl) {
+    Path resolveScreenshotFilePath(String url) {
         TestCaseResult tcResult = this.getCurrentTestCaseResult()
-        if (tcResult == null ) {
-            throw new IllegalStateException("currentTestCaseId is not set")
+        if (tcResult == null) {
+            throw new IllegalStateException("this.getCurrentTestCaseResult() return null")
         } else {
-            return tcResult.findOrNewTargetPage(pageUrl)
-                    .createScreenshotWrapper().getScreenshotFilePath()
+            return tcResult.findOrNewTargetPage(url)
+                    .findOrNewScreenshotWrapper().getScreenshotFilePath()
         }
     }
 

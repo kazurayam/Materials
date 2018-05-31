@@ -10,64 +10,79 @@ final class TestSuiteResult {
     private Path baseDir
     private String testSuiteId
     private TSTimestamp timestamp
-    private Map<String, TestCaseResult> testCaseResultMap
+    private List<TestCaseResult> testCaseResults
 
-    protected TestSuiteResult(Path baseDir, String testSuiteId, TSTimestamp timestamp) {
+    // ------------------ constructors & initializer -------------------------------
+    TestSuiteResult(Path baseDir, String testSuiteId, TSTimestamp timestamp) {
         assert baseDir != null
         assert testSuiteId != null
         assert timestamp != null
         this.baseDir = baseDir
         this.testSuiteId = testSuiteId
         this.timestamp = timestamp
-        this.testCaseResultMap = new HashMap<String, TestCaseResult>()
+        this.testCaseResults = new ArrayList<TestCaseResult>()
     }
 
-    protected ScreenshotRepository getParent() {
-        return this.parent
-    }
-
-    List<String> getTestCaseIdList() {
-        List<String> keys = new ArrayList<String>(testCaseResultMap.keySet())
-        Collections.sort(keys)
-        return keys
+    // ------------------ attribute setter & getter -------------------------------
+    protected Path getBaseDir() {
+        return this.baseDir
     }
 
     String getTestSuiteId() {
         return testSuiteId
     }
 
-    TSTimestamp getTimestamp() {
+    TSTimestamp getTSTimestamp() {
         return timestamp
     }
 
+    // ------------------ create/add/get child nodes ------------------------------
+    TestCaseResult findOrNewTestCaseResult(String testCaseId) {
+        TestCaseResult tcr = this.getTestCaseResult(testCaseId)
+        if (tcr == null) {
+            tcr = new TestCaseResult(this, testCaseId)
+        }
+        return tcr
+    }
+
+    void addTestCaseResult(TestCaseResult testCaseResult) {
+        boolean found = false
+        for (TestCaseResult tcr : this.testCaseResults) {
+            if (tcr == testCaseResult) {
+                found = true
+            }
+        }
+        if (!found) {
+            this.testCaseResults.add(testCaseResult)
+        }
+    }
+
     TestCaseResult getTestCaseResult(String testCaseId) {
-        return testCaseResultMap.get(testCaseId)
+        for (TestCaseResult tcr : this.testCaseResults) {
+            if (tcr.getTestCaseId() == testCaseId) {
+                return tcr
+            }
+        }
+        return null
     }
 
-    protected TestCaseResult findOrNewTestCaseResult(String testCaseId) {
-        if (testCaseResultMap.containsKey(testCaseId)) {
-            return testCaseResultMap.get(testCaseId)
-        }
-        else {
-            TestCaseResult tcr = new TestCaseResult(this, testCaseId)
-            this.testCaseResultMap.put(testCaseId, tcr)
-            return tcr
-        }
-    }
-
-    protected Path resolveTestSuiteOutputDirPath() {
+    // ------------------- helpers -----------------------------------------------
+    /*
+    Path resolveTestSuiteDirPath() {
         def ts = URLEncoder.encode(testSuiteId.replaceFirst('^Test Suites/', ''), 'UTF-8')
         Path tsOutputDir = this.baseDir.resolve("${ts}/${this.timestamp}")
         Helpers.ensureDirs(tsOutputDir)
         return tsOutputDir
     }
+     */
 
+    // -------------------- equals, hashCode ------------------------------------
     @Override
     boolean equals(Object obj) {
         if (this == obj) { return true }
         if (!(obj instanceof TestSuiteResult)) { return false }
         TestSuiteResult other = (TestSuiteResult)obj
-        if (this.testSuiteId == other.getTestSuiteId() && this.timestamp == other.getTimestamp()) {
+        if (this.testSuiteId == other.getTestSuiteId() && this.timestamp == other.getTSTimestamp()) {
             return true
         } else {
             return false
@@ -79,7 +94,7 @@ final class TestSuiteResult {
         final int prime = 31
         int result = 1
         result = prime * result + this.getTestSuiteId().hashCode()
-        result = prime * result + this.getTimestamp().hashCode()
+        result = prime * result + this.getTSTimestamp().hashCode()
         return result
     }
 }

@@ -5,35 +5,19 @@ import java.nio.file.Path
 class ScreenshotWrapper {
 
     private TargetPage parentTargetPage
-    private Integer seq
+    private Path screenshotFilePath
 
-    ScreenshotWrapper(TargetPage parent, Integer seq) {
+    ScreenshotWrapper(TargetPage parent, Path imageFilePath) {
         this.parentTargetPage = parent
-        this.seq = seq
+        this.screenshotFilePath = imageFilePath
     }
 
     TargetPage getTargetPage() {
         return parentTargetPage
     }
 
-    Integer getSeq() {
-        return seq
-    }
-
     Path getScreenshotFilePath() {
-        try {
-            TestCaseResult tcr = parentTargetPage.getParentTestCaseResult()
-            Path testCaseDirPath = tcr.resolveTestCaseDirPath()
-            Helpers.ensureDirs(testCaseDirPath)
-            def encodedUrl = parentTargetPage.getEncodedUrl()
-            def ext = (seq == 0) ? '' : ".${seq}"
-            Path screenshot = testCaseDirPath.resolve("${encodedUrl}${ext}.png")
-            return screenshot
-        }
-        catch (IOException ex) {
-            System.err.println(ex)
-            return null
-        }
+        return screenshotFilePath
     }
 
     @Override
@@ -41,7 +25,7 @@ class ScreenshotWrapper {
         if (this == obj) { return true }
         if (!(obj instanceof ScreenshotWrapper)) { return false }
         ScreenshotWrapper other = (ScreenshotWrapper)obj
-        if (this.targetPage == other.getTargetPage() && this.seq == other.getSeq()) {
+        if (this.screenshotFilePath == other.getScreenshotFilePath()) {
             return true
         } else {
             return false
@@ -53,7 +37,7 @@ class ScreenshotWrapper {
         final int prime = 31
         int result = 1
         result = prime * result + this.getTargetPage().hashCode()
-        result = prime * result + this.getSeq().hashCode()
+        result = prime * result + this.getScreenshotFilePath().hashCode()
         return result
     }
 }

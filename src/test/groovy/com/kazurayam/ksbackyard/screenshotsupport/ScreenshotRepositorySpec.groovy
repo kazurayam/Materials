@@ -3,6 +3,7 @@ package com.kazurayam.ksbackyard.screenshotsupport
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
@@ -74,6 +75,7 @@ class ScreenshotRepositorySpec extends Specification {
         Helpers.deleteDirectory(baseDir)
     }
 
+
     def testResolveScreenshotFilePath() {
         setup:
         String dirName = 'testResolveScreenshotFilePath'
@@ -91,6 +93,7 @@ class ScreenshotRepositorySpec extends Specification {
         assert p.endsWith("${URLEncoder.encode(url, 'UTF-8')}.png")
     }
 
+    @Ignore
     def testLoadTree() {
         setup:
         Path fixture = Paths.get("./src/test/fixture/Screenshots")
