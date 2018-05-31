@@ -10,10 +10,10 @@ import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
  */
 class ImageMagickVisualTestingDriver {
 
-    private ScreenshotRepository screpos
+    private ScreenshotRepository scRepo
 
-    public ImageMagickVisualTestingDriver(ScreenshotRepository screpos) {
-        this.screpos = screpos
+    public ImageMagickVisualTestingDriver(ScreenshotRepository scRepo) {
+        this.scRepo = scRepo
     }
 
     /**
