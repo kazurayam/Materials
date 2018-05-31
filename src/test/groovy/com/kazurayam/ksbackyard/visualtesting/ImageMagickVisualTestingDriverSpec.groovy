@@ -1,7 +1,9 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.ksbackyard.visualtesting
 
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import com.kazurayam.ksbackyard.visualtesting.ImageMagickVisualTestingDriver
 
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -10,7 +12,7 @@ import spock.lang.Specification
  * http://spockframework.org/spock/docs/1.0/spock_primer.html
  */
 @Ignore
-class ImageMagickVisualTesterSpec extends Specification {
+class ImageMagickVisualTestingDriverSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -34,7 +36,7 @@ class ImageMagickVisualTesterSpec extends Specification {
 
     def setupSpec() {
         resourcesdir = Paths.get("./src/test/fixture")
-        workdir = Paths.get("./build/tmp/${ImageMagickVisualTester.getName()}")
+        workdir = Paths.get("./build/tmp/${ImageMagickVisualTestingDriver.getName()}")
         Helpers.deleteDirectory(workdir)
         workdir.toFile().mkdirs()
         mask = workdir.resolve('mask.png')
@@ -48,7 +50,7 @@ class ImageMagickVisualTesterSpec extends Specification {
         setup:
         String[] args = ['convert'] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 1
     }
@@ -73,7 +75,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             "${mask.toString()}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -90,7 +92,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             '-fill', 'black', '-draw', 'rectangle 0,0 480,32',
             "${mask.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -109,7 +111,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -128,7 +130,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -148,7 +150,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             "${masked2.toString()}",
             "${delta.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         // ふたつの画像を比較して差異があるので1がreturnされるはず。
         ret == 1
@@ -168,7 +170,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             "${masked1}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -187,7 +189,7 @@ class ImageMagickVisualTesterSpec extends Specification {
             "${masked2}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTester.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
         then:
         ret == 0
     }

@@ -1,4 +1,6 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.ksbackyard.visualtesting
+
+import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
 
 /**
  * Visual Testing engine using ImageMagick
@@ -6,11 +8,11 @@ package com.kazurayam.ksbackyard.screenshotsupport
  * @author kazurayam
  *
  */
-class ImageMagickVisualTester {
+class ImageMagickVisualTestingDriver {
 
     private ScreenshotRepository screpos
 
-    public ImageMagickVisualTester(ScreenshotRepository screpos) {
+    public ImageMagickVisualTestingDriver(ScreenshotRepository screpos) {
         this.screpos = screpos
     }
 
