@@ -223,7 +223,7 @@ final class ScreenshotRepository {
      */
     TestSuiteResult getTestSuiteResult(TestSuiteName testSuiteName, TSTimestamp timestamp) {
         for (TestSuiteResult tsr : this.testSuiteResults) {
-            if (tsr.getTestSuiteId() == testSuiteName && tsr.getTSTimestamp() == timestamp) {
+            if (tsr.getTestSuiteName() == testSuiteName && tsr.getTSTimestamp() == timestamp) {
                 return tsr
             }
         }

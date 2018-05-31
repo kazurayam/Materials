@@ -75,16 +75,17 @@ class ScreenshotRepositorySpec extends Specification {
         Helpers.deleteDirectory(baseDir)
     }
 
-    @Ignore
+    //@Ignore
     def testResolveScreenshotFilePath() {
         setup:
         String dirName = 'testResolveScreenshotFilePath'
         TestSuiteName tsn = new TestSuiteName('TS5')
         TestCaseName tcn = new TestCaseName('TC5')
-        String url = 'http://demoauto.katalon.com/'
+        URL url = new URL('http://demoauto.katalon.com/')
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsn)
+        // TODO
         sr.setCurrentTestCaseName(tcn)
         when:
         Path p = sr.resolveScreenshotFilePath(url)

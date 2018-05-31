@@ -7,11 +7,11 @@ import java.util.regex.Pattern
 class TargetPage {
 
     private TestCaseResult parentTestCaseResult
-    private String url
+    private URL url
     private List<ScreenshotWrapper> screenshotWrappers
 
     // ---------------------- constructors & initializers ---------------------
-    protected TargetPage(TestCaseResult parent, String url) {
+    protected TargetPage(TestCaseResult parent, URL url) {
         this.parentTestCaseResult = parent
         this.url = url
         this.screenshotWrappers = new ArrayList<ScreenshotWrapper>()
@@ -22,7 +22,7 @@ class TargetPage {
         return this.parentTestCaseResult
     }
 
-    String getUrl() {
+    URL getUrl() {
         return this.url
     }
 
@@ -57,8 +57,8 @@ class TargetPage {
     }
 
     // --------------------- helpers ------------------------------------------
-    String getEncodedUrl() {
-        return URLEncoder.encode(this.url, 'UTF-8')
+    String getUrlAsEncodedString() {
+        return URLEncoder.encode(this.url.toExternalForm(), 'UTF-8')
     }
 
     /**
