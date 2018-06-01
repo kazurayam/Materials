@@ -3,9 +3,10 @@ package com.kazurayam.ksbackyard.screenshotsupport
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
-//@Ignore
+@Ignore
 class TestCaseResultSpec extends Specification {
 
     // fields

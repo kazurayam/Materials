@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.Matcher
 
@@ -9,9 +10,15 @@ import spock.lang.Specification
 class TargetPageSpec extends Specification {
 
     // fields
+    private static Path workdir
 
     // fixture methods
-    def setup() {}
+    def setup() {
+        workdir = Paths.get("./build/tmp/${TargetPageSpec.getName()}")
+        if (!workdir.toFile().exists()) {
+            workdir.toFile().mkdirs()
+        }
+    }
     def cleanup() {}
     def setupSpec() {}
     def cleanupSpec() {}
@@ -96,7 +103,7 @@ class TargetPageSpec extends Specification {
         values.size() == 1
         values[0] == 'http://demoaut.katalon.com/'
     }
-    
+
     def testParseScreentshotFileName6() {
         when:
         List<String> values = TargetPage.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.0.png')
@@ -106,6 +113,43 @@ class TargetPageSpec extends Specification {
         values[1] == '0'
     }
 
+    /**
+     * TargetPage#uniqueScreenshotWrapper will scan the TestCase diretory.
+     * Supposing that there are following files in the TestCase directory,
+     *     http%3A%2F%2Fdemoaut.katalon.com%2F.png
+     *     http%3A%2F%2Fdemoaut.katalon.com%2F.1.png
+     *     http%3A%2F%2Fdemoaut.katalon.com%2F.3.png
+     * then we will find the following Path is unique and avaliable:
+     *     http%3A%2F%2Fdemoaut.katalon.com%2F.2.png
+     *
+     */
+    def testUniqueScreenshotWrapper() {
+        setup:
+        String dirName = 'testUniqueScreenshotWrapper'
+        Path baseDir = workdir.resolve(dirName)
+        TestSuiteName tsn = new TestSuiteName('TS')
+        TestCaseName tcn = new TestCaseName('TC')
+        URL url = new URL('http://demoauto.katalon.com/')
+        ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsn)
+        when:
+        TestCaseResult tcr = sr.getCurrentTestSuiteResult().findOrNewTestCaseResult(tcn)
+        then:
+        tcr != null
+        when:
+        Path testCaseDir = tcr.getTestCaseDir()
+        Helpers.ensureDirs(testCaseDir)
+        Helpers.touch(testCaseDir.resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        Helpers.touch(testCaseDir.resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'))
+        Helpers.touch(testCaseDir.resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.3.png'))
+        TargetPage tp = tcr.findOrNewTargetPage(url)
+        then:
+        assert tp != null
+        when:
+        ScreenshotWrapper sw = tp.uniqueScreenshotWrapper()
+        then:
+        sw != null
+        sw.getScreenshotFilePath() == testCaseDir.resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.2.png')
+    }
 
     // helper methods
 

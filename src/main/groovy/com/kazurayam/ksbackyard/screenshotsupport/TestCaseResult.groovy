@@ -1,5 +1,7 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import java.nio.file.Path
+
 /**
  *
  */
@@ -7,6 +9,7 @@ class TestCaseResult {
 
     private TestSuiteResult parentTestSuiteResult
     private TestCaseName testCaseName
+    private Path testCaseDir
     private List<TargetPage> targetPages
     private TestCaseStatus testCaseStatus
 
@@ -16,6 +19,7 @@ class TestCaseResult {
         assert testCaseName != null
         this.parentTestSuiteResult = parentTestSuiteResult
         this.testCaseName = testCaseName
+        this.testCaseDir = parentTestSuiteResult.getTestSuiteTimestampDir().resolve(this.testCaseName.toString())
         this.targetPages = new ArrayList<TargetPage>()
         this.testCaseStatus = TestCaseStatus.TO_BE_EXECUTED
     }
@@ -27,6 +31,10 @@ class TestCaseResult {
 
     TestCaseName getTestCaseName() {
         return testCaseName
+    }
+
+    Path getTestCaseDir() {
+        return testCaseDir
     }
 
     void setTestCaseStatus(String testCaseStatus) {

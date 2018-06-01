@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import spock.lang.Ignore
 import spock.lang.Specification
 
-//@Ignore
+@Ignore
 class ScreenshotRepositorySpec extends Specification {
 
     private static Path workdir
@@ -17,7 +17,6 @@ class ScreenshotRepositorySpec extends Specification {
             workdir.toFile().mkdirs()
         }
     }
-
 
     def testConstructor_Path() {
         setup:
@@ -75,7 +74,6 @@ class ScreenshotRepositorySpec extends Specification {
         Helpers.deleteDirectory(baseDir)
     }
 
-    //@Ignore
     def testResolveScreenshotFilePath() {
         setup:
         String dirName = 'testResolveScreenshotFilePath'
@@ -84,14 +82,18 @@ class ScreenshotRepositorySpec extends Specification {
         TestCaseName tcn = new TestCaseName('TC5')
         URL url = new URL('http://demoauto.katalon.com/')
         Helpers.ensureDirs(baseDir)
+        when:
         ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsn)
         TestCaseResult tcr = sr.getCurrentTestSuiteResult().findOrNewTestCaseResult(tcn)
+        then:
+        tcr != null
+        tcr.getTestCaseName() == tcn
         when:
         TargetPage tp = tcr.findOrNewTargetPage(url)
         then:
-        tp != null
+        tp.getUrl() == url
         when:
-        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper(url)
+        ScreenshotWrapper sw = tp.uniqueScreenshotWrapper()
         then:
         sw != null
     }

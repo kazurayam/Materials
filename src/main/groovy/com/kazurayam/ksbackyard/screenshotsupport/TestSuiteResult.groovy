@@ -10,7 +10,9 @@ final class TestSuiteResult {
     private Path baseDir
     private TestSuiteName testSuiteName
     private TestSuiteTimestamp testSuiteTimestamp
+    private Path testSuiteTimestampDir
     private List<TestCaseResult> testCaseResults
+
 
     // ------------------ constructors & initializer -------------------------------
     TestSuiteResult(Path baseDir, TestSuiteName testSuiteName, TestSuiteTimestamp testSuiteTimestamp) {
@@ -20,12 +22,17 @@ final class TestSuiteResult {
         this.baseDir = baseDir
         this.testSuiteName = testSuiteName
         this.testSuiteTimestamp = testSuiteTimestamp
+        this.testSuiteTimestampDir = baseDir.resolve(testSuiteName.toString()).resolve(testSuiteTimestamp.toString())
         this.testCaseResults = new ArrayList<TestCaseResult>()
     }
 
     // ------------------ attribute setter & getter -------------------------------
     protected Path getBaseDir() {
         return this.baseDir
+    }
+
+    protected Path getTestSuiteTimestampDir() {
+        return this.testSuiteTimestampDir
     }
 
     TestSuiteName getTestSuiteName() {

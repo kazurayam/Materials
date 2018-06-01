@@ -6,12 +6,13 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
  * http://spockframework.org/spock/docs/1.0/spock_primer.html
  */
-//@Ignore
+@Ignore
 class HelpersSpec extends Specification {
 
     // fields
