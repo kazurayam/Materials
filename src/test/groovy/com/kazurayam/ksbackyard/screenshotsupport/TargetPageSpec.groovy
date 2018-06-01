@@ -4,6 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.Matcher
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
@@ -123,6 +124,7 @@ class TargetPageSpec extends Specification {
      *     http%3A%2F%2Fdemoaut.katalon.com%2F.2.png
      *
      */
+    @Ignore
     def testUniqueScreenshotWrapper() {
         setup:
         String dirName = 'testUniqueScreenshotWrapper'

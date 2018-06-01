@@ -1,9 +1,9 @@
-package com.kazurayam.ksbackyard.visualtesting
+package com.kazurayam.ksbackyard.screenshotsupport
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.ksbackyard.visualtesting.ImageMagickVisualTestingDriver
+import com.kazurayam.ksbackyard.screenshotsupport.ImageMagickVisualTestingDriver
 
 import spock.lang.Ignore
 import spock.lang.Specification

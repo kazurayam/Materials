@@ -209,7 +209,18 @@ final class ScreenshotRepository {
         return null
     }
 
+    // -------------------------- do the business -----------------------------
+    Path resolveScreenshotPath(String testCaseId, String url) {
+        this.resolveScreenshotPath(new TestCaseName(testCaseId), new URL(url))
+    }
 
+    Path resolveScreenshotPath(TestCaseName testCaseName, URL url) {
+        throw new UnsupportedOperationException("TODO")
+    }
+
+    void makeIndex() {
+        throw new UnsupportedOperationException("TODO")
+    }
 
     // ----------------------------- helpers ----------------------------------
 

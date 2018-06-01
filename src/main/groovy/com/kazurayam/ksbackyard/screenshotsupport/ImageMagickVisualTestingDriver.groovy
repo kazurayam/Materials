@@ -1,6 +1,8 @@
-package com.kazurayam.ksbackyard.visualtesting
+package com.kazurayam.ksbackyard.screenshotsupport
 
 import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
+
+import java.nio.file.Path
 
 /**
  * Visual Testing engine using ImageMagick
@@ -11,9 +13,18 @@ import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
 class ImageMagickVisualTestingDriver {
 
     private ScreenshotRepository scRepo
+    private Path outputDir
 
-    public ImageMagickVisualTestingDriver(ScreenshotRepository scRepo) {
+    ImageMagickVisualTestingDriver(ScreenshotRepository scRepo) {
         this.scRepo = scRepo
+    }
+
+    void setOutputDir(Path outputDir) {
+        this.outputDir = outputDir
+    }
+
+    void execute() {
+        throw new UnsupportedOperationException("TODO")
     }
 
     /**
