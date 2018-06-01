@@ -27,6 +27,17 @@ class TargetPage {
     }
 
     // --------------------- create/add/get child nodes -----------------------
+
+    /**
+     * This is the core trick.
+     *
+     * @param targetPageUrl
+     * @return
+     */
+    ScreenshotWrapper findOrNewScreenshotWrapper(URL targetPageUrl) {
+
+    }
+
     ScreenshotWrapper findOrNewScreenshotWrapper(Path imageFilePath) {
         ScreenshotWrapper sw = this.getScreenshotWrapper(imageFilePath)
         if (sw == null) {

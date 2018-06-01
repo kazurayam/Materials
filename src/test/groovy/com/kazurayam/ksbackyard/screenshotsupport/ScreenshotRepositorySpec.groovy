@@ -79,19 +79,21 @@ class ScreenshotRepositorySpec extends Specification {
     def testResolveScreenshotFilePath() {
         setup:
         String dirName = 'testResolveScreenshotFilePath'
+        Path baseDir = workdir.resolve(dirName)
         TestSuiteName tsn = new TestSuiteName('TS5')
         TestCaseName tcn = new TestCaseName('TC5')
         URL url = new URL('http://demoauto.katalon.com/')
-        Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsn)
-        // TODO
-        sr.setCurrentTestCaseName(tcn)
+        TestCaseResult tcr = sr.getCurrentTestSuiteResult().findOrNewTestCaseResult(tcn)
         when:
-        Path p = sr.resolveScreenshotFilePath(url)
+        TargetPage tp = tcr.findOrNewTargetPage(url)
         then:
-        p != null
-        assert p.endsWith("${URLEncoder.encode(url, 'UTF-8')}.png")
+        tp != null
+        when:
+        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper(url)
+        then:
+        sw != null
     }
 
     @Ignore
@@ -103,7 +105,7 @@ class ScreenshotRepositorySpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        Map<String, Map<TSTimestamp, TestSuiteResult>> tree = ScreenshotRepository.loadTree(baseDir)
+        Map<String, Map<TestSuiteTimestamp, TestSuiteResult>> tree = ScreenshotRepository.loadTree(baseDir)
         then:
         tree.size() == 2
     }

@@ -8,11 +8,19 @@ final class ScreenshotRepository {
     private Path baseDir
     private List<TestSuiteResult> testSuiteResults
 
-    private TSTimestamp currentTimestamp
+    private TestSuiteTimestamp currentTestSuiteTimestamp
     private TestSuiteName currentTestSuiteName
-    private TestCaseName currentTestCaseName
+
 
     // ---------------------- constructors & initializer ----------------------
+
+    /**
+     *
+     * @param basDir
+     */
+    ScreenshotRepository(String baseDirString) {
+        this(Paths.get(System.getProperty('user.dir')).resolve(baseDirString))
+    }
 
     /**
      *
@@ -23,20 +31,10 @@ final class ScreenshotRepository {
     }
 
     /**
-     *
-     * @param basDir
-     */
-    ScreenshotRepository(String baseDirString) {
-        Path baseDir = Paths.get(System.getProperty('user.dir')).resolve(baseDirString)
-        this.init(baseDir)
-    }
-
-    /**
      * You are supposed to call this in the TestListener@BeforeTestSuite as follows:
      *
      * <PRE>
      * import java.nio.file.Path
-     * import java.nio.file.Paths
      * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
      * import katalonimport com.kms.katalon.core.configuration.RunConfiguration
      * import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
@@ -44,27 +42,24 @@ final class ScreenshotRepository {
      * class TL {
      *     @BeforeTestSuite
      *     def beforeTestSuite(TestSuiteContext testSuiteContext) {
-     *         ScreenshotRepository scRepos =
-     *             new ScreenshotRepository('Screenshots', testSuiteContext.getTestSuiteId())
-     *         GlobalVariable.SCREENSHOT_REPOSITORY = scRepos
-     *         WebUI.comment(">>> got instance of ${scRepos.toString()}")
+     *         GlobalVariable.CURRENT_TESTSUITE_ID = testSuiteContext.getTestSuiteId()
+     *         Path screenshotsDir = Paths.get(RunConfiguration.getProjectDir()).resolve('Screenshots')
+     *         ScreenshotRepository scRepo = new ScreenshotRepository(screenshotsDir, testSuiteContext.getTestSuiteId())
+     *         GlobalVariable.SCREENSHOT_REPOSITORY = scRepo
      *     }
      * </PRE>
      *
      * @param dirPath directory under which a directory named as BASE_DIR_NAME will be created.
      */
-    ScreenshotRepository(String baseDirString, String testSuiteName) {
-        this(baseDirString)
-        this.currentTestSuiteName = testSuiteName
-        this.currentTimestamp = new TSTimestamp()
-        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTimestamp)
+    ScreenshotRepository(Path baseDir, String testSuiteId) {
+        this(baseDir, new TestSuiteName(testSuiteId))
     }
 
     ScreenshotRepository(Path baseDir, TestSuiteName testSuiteName) {
         this(baseDir)
         this.currentTestSuiteName = testSuiteName
-        this.currentTimestamp = new TSTimestamp()
-        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTimestamp)
+        this.currentTestSuiteTimestamp = new TestSuiteTimestamp()
+        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
         this.addTestSuiteResult(tsr)
     }
 
@@ -157,28 +152,12 @@ final class ScreenshotRepository {
         return this.baseDir
     }
 
-    void setCurrentTestSuiteName(TestSuiteName testSuiteName) {
-       this.currentTestSuiteName = testSuiteName
-    }
-
     TestSuiteName getCurrentTestSuiteName() {
         return this.currentTestSuiteName
     }
 
-    void setCurrentTimestamp(TSTimestamp timestamp) {
-        this.currentTimestamp = timestamp
-    }
-
-    TSTimestamp getCurrentTimestamp() {
-        return this.currentTimestamp
-    }
-
-    void setCurrentTestCaseName(TestCaseName testCaseName) {
-        this.currentTestCaseName = testCaseName
-    }
-
-    TestCaseName getCurrentTestCaseName() {
-        return this.currentTestCaseName
+    TestSuiteTimestamp getCurrentTestSuiteTimestamp() {
+        return this.currentTestSuiteTimestamp
     }
 
 
@@ -189,7 +168,7 @@ final class ScreenshotRepository {
      * @param timestamp
      * @return
      */
-    TestSuiteResult findOrNewTestSuiteResult(TestSuiteName testSuiteName, TSTimestamp timestamp) {
+    TestSuiteResult findOrNewTestSuiteResult(TestSuiteName testSuiteName, TestSuiteTimestamp timestamp) {
         TestSuiteResult tsr = this.getTestSuiteResult(testSuiteName, timestamp)
         if (tsr == null) {
             tsr = new TestSuiteResult(this.baseDir, testSuiteName, timestamp)
@@ -221,9 +200,9 @@ final class ScreenshotRepository {
      * @param timestamp
      * @return
      */
-    TestSuiteResult getTestSuiteResult(TestSuiteName testSuiteName, TSTimestamp timestamp) {
+    TestSuiteResult getTestSuiteResult(TestSuiteName testSuiteName, TestSuiteTimestamp timestamp) {
         for (TestSuiteResult tsr : this.testSuiteResults) {
-            if (tsr.getTestSuiteName() == testSuiteName && tsr.getTSTimestamp() == timestamp) {
+            if (tsr.getTestSuiteName() == testSuiteName && tsr.getTestSuiteTimestamp() == timestamp) {
                 return tsr
             }
         }
@@ -231,19 +210,13 @@ final class ScreenshotRepository {
     }
 
 
-    // ----------------------------- helpers ----------------------------------
-    void setCurrentTestCaseStatus(String testCaseStatus) {
-        this.getCurrentTestCaseResult().setTestCaseStatus(testCaseStatus)
-    }
 
-    String getCurrentTestCaseStatus() {
-        return this.getCurrentTestCaseResult().getTestCaseStatus()
-    }
+    // ----------------------------- helpers ----------------------------------
 
     TestSuiteResult getCurrentTestSuiteResult() {
         if (this.currentTestSuiteName != null) {
-            if (this.currentTimestamp != null) {
-                TestSuiteResult tsr = getTestSuiteResult(this.currentTestSuiteName, this.currentTimestamp)
+            if (this.currentTestSuiteTimestamp != null) {
+                TestSuiteResult tsr = getTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
                 assert tsr != null
                 return tsr
             } else {
@@ -254,16 +227,23 @@ final class ScreenshotRepository {
         }
     }
 
-    TestCaseResult getCurrentTestCaseResult() {
-        if (currentTestCaseName != null) {
+    TestCaseResult getTestCaseResult(String testCaseId) {
+        return this.getTestCaseResult(new TestCaseName(testCaseId))
+    }
+
+    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
+        if (testCaseName != null) {
             TestSuiteResult tsr = this.getCurrentTestSuiteResult()
             assert tsr != null
-            return tsr.getTestCaseResult(currentTestCaseName)
+            return tsr.getTestCaseResult(testCaseName)
         }
         else {
             throw new IllegalStateException("currentTestCaseName is null")
         }
     }
 
+    void setTestCaseStatus(String testCaseId, String testCaseStatus) {
+        this.getTestCaseResult(testCaseId).setTestCaseStatus(testCaseStatus)
+    }
 
 }

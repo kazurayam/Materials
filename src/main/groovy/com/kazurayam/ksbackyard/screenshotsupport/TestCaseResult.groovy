@@ -8,7 +8,7 @@ class TestCaseResult {
     private TestSuiteResult parentTestSuiteResult
     private TestCaseName testCaseName
     private List<TargetPage> targetPages
-    private String testCaseStatus
+    private TestCaseStatus testCaseStatus
 
     // --------------------- constructors and initializer ---------------------
     TestCaseResult(TestSuiteResult parentTestSuiteResult, TestCaseName testCaseName) {
@@ -17,7 +17,7 @@ class TestCaseResult {
         this.parentTestSuiteResult = parentTestSuiteResult
         this.testCaseName = testCaseName
         this.targetPages = new ArrayList<TargetPage>()
-        this.testCaseStatus = ''
+        this.testCaseStatus = TestCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -31,10 +31,16 @@ class TestCaseResult {
 
     void setTestCaseStatus(String testCaseStatus) {
         assert testCaseStatus != null
+        TestCaseStatus tcs = TestCaseStatus.valueOf(testCaseStatus)  // this may throw IllegalArgumentException
+        this.setTestCaseStatus(tcs)
+    }
+
+    void setTestCaseStatus(TestCaseStatus testCaseStatus) {
+        assert testCaseStatus != null
         this.testCaseStatus = testCaseStatus
     }
 
-    String getTestCaseStatus() {
+    TestCaseStatus getTestCaseStatus() {
         return this.testCaseStatus
     }
 

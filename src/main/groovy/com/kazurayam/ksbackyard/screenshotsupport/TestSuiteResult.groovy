@@ -9,17 +9,17 @@ final class TestSuiteResult {
 
     private Path baseDir
     private TestSuiteName testSuiteName
-    private TSTimestamp timestamp
+    private TestSuiteTimestamp testSuiteTimestamp
     private List<TestCaseResult> testCaseResults
 
     // ------------------ constructors & initializer -------------------------------
-    TestSuiteResult(Path baseDir, TestSuiteName testSuiteName, TSTimestamp timestamp) {
+    TestSuiteResult(Path baseDir, TestSuiteName testSuiteName, TestSuiteTimestamp testSuiteTimestamp) {
         assert baseDir != null
         assert testSuiteName != null
-        assert timestamp != null
+        assert testSuiteTimestamp != null
         this.baseDir = baseDir
         this.testSuiteName = testSuiteName
-        this.timestamp = timestamp
+        this.testSuiteTimestamp = testSuiteTimestamp
         this.testCaseResults = new ArrayList<TestCaseResult>()
     }
 
@@ -32,8 +32,8 @@ final class TestSuiteResult {
         return testSuiteName
     }
 
-    TSTimestamp getTSTimestamp() {
-        return timestamp
+    TestSuiteTimestamp getTestSuiteTimestamp() {
+        return testSuiteTimestamp
     }
 
     // ------------------ create/add/get child nodes ------------------------------
@@ -82,7 +82,7 @@ final class TestSuiteResult {
         if (this == obj) { return true }
         if (!(obj instanceof TestSuiteResult)) { return false }
         TestSuiteResult other = (TestSuiteResult)obj
-        if (this.testSuiteName == other.getTestSuiteName() && this.timestamp == other.getTSTimestamp()) {
+        if (this.testSuiteName == other.getTestSuiteName() && this.testSuiteTimestamp == other.getTestSuiteTimestamp()) {
             return true
         } else {
             return false
@@ -94,7 +94,7 @@ final class TestSuiteResult {
         final int prime = 31
         int result = 1
         result = prime * result + this.getTestSuiteName().hashCode()
-        result = prime * result + this.getTSTimestamp().hashCode()
+        result = prime * result + this.getTestSuiteTimestamp().hashCode()
         return result
     }
 }
