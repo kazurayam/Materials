@@ -72,19 +72,6 @@ class ScreenshotRepositorySpec extends Specification {
         scfp.toString().contains('demoaut.katalon.com')
     }
 
-    @Ignore
-    def testLoadTree() {
-        setup:
-        Path fixture = Paths.get("./src/test/fixture/Screenshots")
-        String dirName = 'testResolveScreenshotFilePath'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
-        when:
-        Map<String, Map<TestSuiteTimestamp, TestSuiteResult>> tree = ScreenshotRepositoryImpl.loadTree(baseDir)
-        then:
-        tree.size() == 2
-    }
 
 }
 

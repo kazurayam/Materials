@@ -87,7 +87,7 @@ final class TestSuiteResult {
     // -------------------- overriding Object properties ----------------------
     @Override
     boolean equals(Object obj) {
-        if (this == obj) { return true }
+        //if (this == obj) { return true }
         if (!(obj instanceof TestSuiteResult)) { return false }
         TestSuiteResult other = (TestSuiteResult)obj
         if (this.testSuiteName == other.getTestSuiteName() && this.testSuiteTimestamp == other.getTestSuiteTimestamp()) {

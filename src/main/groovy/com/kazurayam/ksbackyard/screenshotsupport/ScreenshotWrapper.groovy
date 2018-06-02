@@ -25,7 +25,7 @@ class ScreenshotWrapper {
     // ---------------- overriding Object properties --------------------------
     @Override
     boolean equals(Object obj) {
-        if (this == obj) { return true }
+        //if (this == obj) { return true }
         if (!(obj instanceof ScreenshotWrapper)) { return false }
         ScreenshotWrapper other = (ScreenshotWrapper)obj
         if (this.screenshotFilePath == other.getScreenshotFilePath()) {

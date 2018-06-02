@@ -93,9 +93,9 @@ class TestCaseResult {
     // ------------------ overriding Object properties ------------------------
     @Override
     boolean equals(Object obj) {
-        if (this == obj) {
-            return true
-        }
+        //if (this == obj) {
+        //    return true
+        //}
         if (!(obj instanceof TestCaseResult)) {
             return false
         }

@@ -108,7 +108,7 @@ class TargetPage {
     // ------------------------ overriding Object properties ------------------
     @Override
     boolean equals(Object obj) {
-        if (this == obj) { return true }
+        //if (this == obj) { return true }
         if (!(obj instanceof TargetPage)) { return false }
         TargetPage other = (TargetPage)obj
         if (this.parentTestCaseResult == other.getParentTestCaseResult()

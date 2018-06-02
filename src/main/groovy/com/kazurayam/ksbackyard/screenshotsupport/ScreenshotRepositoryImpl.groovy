@@ -68,7 +68,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
      * @returns the tree
      *
      */
-    List<TestSuiteResult> load(Path baseDir) {
+    static List<TestSuiteResult> load(Path baseDir) {
         List<TestSuiteResult> testSuiteResults = new ArrayList<TestSuiteResult>()
         List<Path> testSuiteNamePaths =
                 Files.list(baseDir)
@@ -91,7 +91,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
                             Files.list(timestampPath)
                                     .filter({ p -> Files.isDirectory(p) })
                                     .collect(Collectors.toList())
-                    for (Path testCaseNamePath : testCaseNamePath) {
+                    for (Path testCaseNamePath : testCaseNamePaths) {
                         TestCaseResult testCaseResult =
                                 tsr.findOrNewTestCaseResult(new TestCaseName(testCaseNamePath.getFileName().toString()))
                         //
@@ -115,7 +115,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
                 }
             }
         }
-        return tsr
+        return testSuiteResults
     }
 
 
