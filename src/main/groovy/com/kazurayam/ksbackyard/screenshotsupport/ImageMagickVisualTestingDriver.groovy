@@ -17,7 +17,7 @@ class ImageMagickVisualTestingDriver implements VisualTestingDriver {
         this.scRepo = scRepo
     }
 
-    void setOutputDir(Path outputDir) {
+    void setOutput(Path outputDir) {
         this.outputDir = outputDir
     }
 

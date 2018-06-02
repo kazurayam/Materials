@@ -13,6 +13,8 @@ class TargetPage {
     private URL url
     private List<ScreenshotWrapper> screenshotWrappers
 
+    static final String IMAGE_FILE_EXTENSION = '.png'
+
     // ---------------------- constructors & initializers ---------------------
     protected TargetPage(TestCaseResult parent, URL url) {
         this.parentTestCaseResult = parent
@@ -39,7 +41,7 @@ class TargetPage {
      */
     ScreenshotWrapper getScreenshotWrapper(String postFix) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${postFix}.png")
+        Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${postFix}${IMAGE_FILE_EXTENSION}")
         return new ScreenshotWrapper(this, p)
     }
 

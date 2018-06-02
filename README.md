@@ -1,4 +1,4 @@
-A library to support Screenshot management in Katalon Studio
+Screenshot repository in Katalon Studio
 ====
 
 
