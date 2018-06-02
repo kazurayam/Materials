@@ -1,6 +1,7 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
 import groovy.json.JsonOutput
+import static groovy.json.JsonOutput.toJson
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -19,6 +20,18 @@ class ScreenshotRepositorySpec extends Specification {
         }
     }
 
+    def testJsonOutput() {
+        setup:
+        List<String> errors = []
+        errors << 'Your password was bad.'
+        errors << 'Your feet smell.'
+        errors << 'I am having a bad day.'
+        when:
+        def jsonString = toJson(errors)
+        then:
+        jsonString == '["Your password was bad.","Your feet smell.","I am having a bad day."]'
+    }
+
     def testToString() {
         setup:
         String dirName = 'testToString'
@@ -32,6 +45,7 @@ class ScreenshotRepositorySpec extends Specification {
         prettyJson.contains('TS1')
     }
 
+    @Ignore
     def testConstructor_Path_tsn() {
         setup:
         String dirName = 'testConstructor_Path_tsId'
@@ -47,15 +61,15 @@ class ScreenshotRepositorySpec extends Specification {
 
     def testResolveScreenshotFilePath() {
         setup:
-        String dirName = 'testResolveScreenshotFilePath'
+        String dirName = 'testFindOrNewTestCaseResult'
         Path baseDir = workdir.resolve(dirName)
         when:
         ScreenshotRepository sr = ScreenshotRepositoryFactory.createInstance(baseDir, 'Test Suites/TS1')
         Path scfp = sr.resolveScreenshotFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         scfp != null
-        scfp.toString().contains('http://demoaut.katalon.com/')
-        scfp.toString().contains('TS1')
+        scfp.toString().contains('TC1')
+        scfp.toString().contains('demoaut.katalon.com')
     }
 
     @Ignore

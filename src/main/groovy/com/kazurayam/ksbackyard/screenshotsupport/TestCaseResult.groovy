@@ -118,8 +118,8 @@ class TestCaseResult {
         json (
                 ["testCaseName": this.testCaseName.toString()],
                 ["testCaseDir": this.testCaseDir.toString()],
-                ["targetPages": this.targetPages.toString()],
-                ["testCaseStatus": this.testCaseStatus.toString()]
+                ["testCaseStatus": this.testCaseStatus.toString()],
+                //["targetPages": this.targetPages]
         )
         return json.toString()
     }

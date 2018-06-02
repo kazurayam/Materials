@@ -40,7 +40,7 @@ class TargetPage {
     ScreenshotWrapper getScreenshotWrapper(String postFix) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${postFix}.png")
-        return p
+        return new ScreenshotWrapper(this, p)
     }
 
     ScreenshotWrapper findOrNewScreenshotWrapper(Path imageFilePath) {
@@ -131,7 +131,7 @@ class TargetPage {
         def json = new JsonBuilder()
         json (
                 ["url": this.url.toString()],
-                ["screenshotWrappers": this.screenshotWrappers.toString()]
+                ["screenshotWrappers": this.screenshotWrappers]
         )
         return json.toString()
     }

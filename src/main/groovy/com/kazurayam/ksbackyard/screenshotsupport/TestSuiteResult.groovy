@@ -1,6 +1,7 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
 import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
 import java.nio.file.Path
 
 /**
@@ -23,7 +24,7 @@ final class TestSuiteResult {
         this.baseDir = baseDir
         this.testSuiteName = testSuiteName
         this.testSuiteTimestamp = testSuiteTimestamp
-        this.testSuiteTimestampDir = baseDir.resolve(testSuiteName.toString()).resolve(testSuiteTimestamp.toString())
+        this.testSuiteTimestampDir = baseDir.resolve(testSuiteName.toString()).resolve(testSuiteTimestamp.format())
         this.testCaseResults = new ArrayList<TestCaseResult>()
     }
 
@@ -113,9 +114,10 @@ final class TestSuiteResult {
                 ["testSuiteName": this.testSuiteName.toString()],
                 ["testSuiteTimestamp": this.testSuiteTimestamp.toString()],
                 ["testSuiteTimestampDir": this.testSuiteTimestampDir.toString()],
-                ["testCaseResults": this.testCaseResults.toString()]
+                //["testCaseResults": this.testCaseResults]
         )
         return json.toString()
     }
+
 }
 
