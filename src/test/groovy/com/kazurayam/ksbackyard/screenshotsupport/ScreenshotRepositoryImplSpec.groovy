@@ -18,8 +18,11 @@ class ScreenshotRepositoryImplSpec extends Specification {
             workdir.toFile().mkdirs()
         }
     }
+
     def cleanup() {}
+
     def setupSpec() {}
+
     def cleanupSpec() {}
 
     // feature methods
@@ -36,13 +39,15 @@ class ScreenshotRepositoryImplSpec extends Specification {
         tsrList != null
         tsrList.size() == 2
         when:
-        // Screenshots/TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-        TestSuiteResult tsr0 = tsrList.get(0)
+        TestSuiteResult tsr0 =
+                lookup(tsrList, new TestSuiteName('TS1'),
+                        new TestSuiteTimestamp('20180530_130419'))
         then:
+        tsr0 != null
         tsr0.getBaseDir() == baseDir
         tsr0.getTestSuiteName() == new TestSuiteName('TS1')
-        tsr0.getTestSuiteTimestamp() == new TestSuiteTimestamp(TestSuiteTimestamp.parse('20180530_130419'))
-        tsr0.getTestSuiteTimestampDir() == baseDir.get('TS1/20180530_130419')
+        tsr0.getTestSuiteTimestamp() == new TestSuiteTimestamp('20180530_130419')
+        tsr0.getTestSuiteTimestampDir() == baseDir.resolve('TS1/20180530_130419')
         when:
         TestCaseName tcn = new TestCaseName('TC1')
         TestCaseResult tcr = tsr0.getTestCaseResult(tcn)
@@ -64,4 +69,12 @@ class ScreenshotRepositoryImplSpec extends Specification {
     }
 
     // helper methods
+    TestSuiteResult lookup(List<TestSuiteResult> tsrList, TestSuiteName tsn, TestSuiteTimestamp tst) {
+        for (TestSuiteResult tsr : tsrList ) {
+            if (tsr.getTestSuiteName() == tsn && tsr.getTestSuiteTimestamp() == tst) {
+                return tsr
+            }
+        }
+        return null
+    }
 }

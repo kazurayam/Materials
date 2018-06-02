@@ -25,14 +25,27 @@ class TestSuiteTimestamp {
         this(LocalDateTime.now())
     }
 
+    TestSuiteTimestamp(String timestamp) {
+        LocalDateTime ldt = parse(timestamp)
+        if (ldt != null) {
+            this.timestamp = ignoreMilliseconds(ldt)
+        } else {
+            throw new IllegalArgumentException("unable to parse '${timestamp}' as TestSuiteTimestamp")
+        }
+    }
+
     /**
      * instanciate a Timestamp object while ignoring milliseconds
      *
      * @param ts
      */
     TestSuiteTimestamp(LocalDateTime ts) {
-        this.timestamp = LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
-            ts.getHour(), ts.getMinute(), ts.getSecond())  // ignore milliseconds
+        this.timestamp = ignoreMilliseconds(ts)
+    }
+
+    private LocalDateTime ignoreMilliseconds(LocalDateTime ts) {
+        return LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
+                ts.getHour(), ts.getMinute(), ts.getSecond())
     }
 
     LocalDateTime getValue() {
