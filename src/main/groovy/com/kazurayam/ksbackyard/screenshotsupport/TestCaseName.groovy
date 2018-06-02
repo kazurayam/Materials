@@ -12,6 +12,8 @@ class TestCaseName {
         return value
     }
 
+    // ---------------- overriding Object properties --------------------------
+    @Override
     String toString() {
         return value
     }

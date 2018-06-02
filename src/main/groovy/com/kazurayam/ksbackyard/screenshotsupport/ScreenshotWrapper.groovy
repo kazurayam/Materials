@@ -1,5 +1,7 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import groovy.json.JsonBuilder
+
 import java.nio.file.Path
 
 class ScreenshotWrapper {
@@ -20,6 +22,7 @@ class ScreenshotWrapper {
         return screenshotFilePath
     }
 
+    // ---------------- overriding Object properties --------------------------
     @Override
     boolean equals(Object obj) {
         if (this == obj) { return true }
@@ -39,5 +42,14 @@ class ScreenshotWrapper {
         result = prime * result + this.getTargetPage().hashCode()
         result = prime * result + this.getScreenshotFilePath().hashCode()
         return result
+    }
+
+    @Override
+    String toString() {
+        def json = new JsonBuilder()
+        json (
+                ["screenshotFilePath" : this.screenshotFilePath.toString()]
+        )
+        return json.toString()
     }
 }

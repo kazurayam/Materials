@@ -1,5 +1,7 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import org.omg.CORBA.SetOverrideTypeHelper
+
 class TestSuiteName {
 
     private String value
@@ -12,6 +14,8 @@ class TestSuiteName {
         return value
     }
 
+    // -------------------- overriding Object properties ----------------------
+    @Override
     String toString() {
         return value
     }

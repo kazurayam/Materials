@@ -1,7 +1,5 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
-import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepository
-
 import java.nio.file.Path
 
 /**
@@ -10,12 +8,12 @@ import java.nio.file.Path
  * @author kazurayam
  *
  */
-class ImageMagickVisualTestingDriver {
+class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
-    private ScreenshotRepository scRepo
+    private ScreenshotRepositoryImpl scRepo
     private Path outputDir
 
-    ImageMagickVisualTestingDriver(ScreenshotRepository scRepo) {
+    ImageMagickVisualTestingDriver(ScreenshotRepositoryImpl scRepo) {
         this.scRepo = scRepo
     }
 

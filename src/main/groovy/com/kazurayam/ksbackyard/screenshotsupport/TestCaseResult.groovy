@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import groovy.json.JsonBuilder
 import java.nio.file.Path
 
 /**
@@ -52,7 +53,6 @@ class TestCaseResult {
         return this.testCaseStatus
     }
 
-
     // --------------------- create/add/get child nodes ----------------------
     TargetPage findOrNewTargetPage(String urlString) throws MalformedURLException {
         URL url = new URL(urlString)
@@ -89,27 +89,17 @@ class TestCaseResult {
     }
 
     // -------------------------- helpers -------------------------------------
-    /*
-    List<String> getUrlList() {
-        List<String> urlList = new ArrayList(targetPageMap.keySet())
-        Collections.sort(urlList)
-        return urlList
-    }
-     */
 
-    /*
-    protected Path resolveTestCaseDirPath() {
-        Path testSuiteOutputDirPath = parentTestSuiteResult.resolveTestSuiteDirPath()
-        return testSuiteOutputDirPath.resolve(testCaseId.replaceFirst('^Test Cases/', ''))
-    }
-     */
-
-    // -------------------------- equals , hashCode ---------------------------
+    // ------------------ overriding Object properties ------------------------
     @Override
     boolean equals(Object obj) {
-        if (this == obj) { return true }
-        if (!(obj instanceof TestCaseResult)) { return false }
-        TestCaseResult other = (TestCaseResult)obj
+        if (this == obj) {
+            return true
+        }
+        if (!(obj instanceof TestCaseResult)) {
+            return false
+        }
+        TestCaseResult other = (TestCaseResult) obj
         if (this.testCaseName == other.getTestCaseName()) {
             return true
         } else {
@@ -122,6 +112,17 @@ class TestCaseResult {
         return this.testCaseName.hashCode()
     }
 
+    @Override
+    String toString() {
+        def json = new JsonBuilder()
+        json (
+                ["testCaseName": this.testCaseName.toString()],
+                ["testCaseDir": this.testCaseDir.toString()],
+                ["targetPages": this.targetPages.toString()],
+                ["testCaseStatus": this.testCaseStatus.toString()]
+        )
+        return json.toString()
+    }
 }
 
 

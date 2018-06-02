@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import groovy.json.JsonBuilder
 import java.nio.file.Path
 
 /**
@@ -78,12 +79,11 @@ final class TestSuiteResult {
     Path resolveTestSuiteDirPath() {
         def ts = URLEncoder.encode(testSuiteId.replaceFirst('^Test Suites/', ''), 'UTF-8')
         Path tsOutputDir = this.baseDir.resolve("${ts}/${this.timestamp}")
-        Helpers.ensureDirs(tsOutputDir)
         return tsOutputDir
     }
      */
 
-    // -------------------- equals, hashCode ------------------------------------
+    // -------------------- overriding Object properties ----------------------
     @Override
     boolean equals(Object obj) {
         if (this == obj) { return true }
@@ -103,6 +103,19 @@ final class TestSuiteResult {
         result = prime * result + this.getTestSuiteName().hashCode()
         result = prime * result + this.getTestSuiteTimestamp().hashCode()
         return result
+    }
+
+    @Override
+    String toString() {
+        def json = new JsonBuilder()
+        json (
+                ["baseDir": this.baseDir.toString()],
+                ["testSuiteName": this.testSuiteName.toString()],
+                ["testSuiteTimestamp": this.testSuiteTimestamp.toString()],
+                ["testSuiteTimestampDir": this.testSuiteTimestampDir.toString()],
+                ["testCaseResults": this.testCaseResults.toString()]
+        )
+        return json.toString()
     }
 }
 

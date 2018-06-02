@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import groovy.json.JsonBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -38,7 +39,7 @@ class TestSuiteTimestamp {
         return this.timestamp
     }
 
-    String toString() {
+    String format() {
         return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp)
     }
 
@@ -52,6 +53,7 @@ class TestSuiteTimestamp {
         }
     }
 
+    // ---------------- overriding Object properties --------------------------
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -66,4 +68,14 @@ class TestSuiteTimestamp {
     public int hashCode() {
         return this.getValue().hashCode()
     }
+
+    @Override
+    String toString() {
+        def json = new JsonBuilder()
+        json (
+               ["timestamp": this.format() ]
+        )
+        return json.toString()
+    }
+
 }

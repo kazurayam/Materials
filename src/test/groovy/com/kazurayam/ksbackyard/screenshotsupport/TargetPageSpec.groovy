@@ -124,6 +124,7 @@ class TargetPageSpec extends Specification {
      *     http%3A%2F%2Fdemoaut.katalon.com%2F.2.png
      *
      */
+
     @Ignore
     def testUniqueScreenshotWrapper() {
         setup:
@@ -132,7 +133,7 @@ class TargetPageSpec extends Specification {
         TestSuiteName tsn = new TestSuiteName('TS')
         TestCaseName tcn = new TestCaseName('TC')
         URL url = new URL('http://demoauto.katalon.com/')
-        ScreenshotRepository sr = new ScreenshotRepository(baseDir, tsn)
+        ScreenshotRepositoryImpl sr = new ScreenshotRepositoryImpl(baseDir, tsn)
         when:
         TestCaseResult tcr = sr.getCurrentTestSuiteResult().findOrNewTestCaseResult(tcn)
         then:
