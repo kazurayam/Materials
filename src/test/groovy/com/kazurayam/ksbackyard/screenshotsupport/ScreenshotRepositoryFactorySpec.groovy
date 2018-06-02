@@ -24,9 +24,10 @@ class ScreenshotRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        ScreenshotRepository scRepo = ScreenshotRepositoryFactory.createInstance(workdir, 'TS1')
+        ScreenshotRepository scRepo = ScreenshotRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         then:
         scRepo != null
+        scRepo.toString().contains('TS1')
     }
 
     // helper methods

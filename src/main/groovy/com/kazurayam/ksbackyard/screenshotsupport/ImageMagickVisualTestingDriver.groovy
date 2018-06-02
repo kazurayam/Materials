@@ -22,7 +22,7 @@ class ImageMagickVisualTestingDriver implements VisualTestingDriver {
     }
 
     void execute() {
-        throw new UnsupportedOperationException("TODO")
+        //throw new UnsupportedOperationException("TODO")
     }
 
     /**
