@@ -12,7 +12,7 @@ import spock.lang.Specification
  *
  */
 @Ignore
-class TSTimestampSpec extends Specification {
+class TestSuiteTimestampSpec extends Specification {
 
     // fields
 

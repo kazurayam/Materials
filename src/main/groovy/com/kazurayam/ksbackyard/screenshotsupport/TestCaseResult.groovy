@@ -54,15 +54,11 @@ class TestCaseResult {
     }
 
     // --------------------- create/add/get child nodes ----------------------
-    TargetPage findOrNewTargetPage(String urlString) throws MalformedURLException {
-        URL url = new URL(urlString)
-        return this.findOrNewTargetPage(url)
-    }
-
     TargetPage findOrNewTargetPage(URL url) {
         TargetPage ntp = this.getTargetPage(url)
         if (ntp == null) {
             ntp = new TargetPage(this, url)
+            this.targetPages.add(ntp)
         }
         return ntp
     }

@@ -86,6 +86,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
                     TestSuiteTimestamp testSuiteTimestamp = new TestSuiteTimestamp(ldt)
                     TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteName, testSuiteTimestamp)
                     testSuiteResults.add(tsr)
+                    System.out.println("TestSuiteResult ${tsr}")
                     //
                     List<Path> testCaseNamePaths =
                             Files.list(timestampPath)
@@ -93,19 +94,25 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
                                     .collect(Collectors.toList())
                     for (Path testCaseNamePath : testCaseNamePaths) {
                         TestCaseResult testCaseResult =
-                                tsr.findOrNewTestCaseResult(new TestCaseName(testCaseNamePath.getFileName().toString()))
+                                new TestCaseResult(tsr, new TestCaseName(testCaseNamePath.getFileName().toString()))
+                        tsr.addTestCaseResult(testCaseResult)
+                        System.out.println("TestCaseResult ${testCaseResult}")
                         //
                         List<Path> imageFilePaths =
                                 Files.list(testCaseNamePath)
                                         .filter({ p -> Files.isRegularFile(p) })
-                                        .filter( { p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
+                                        //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
                                         .collect(Collectors.toList())
                         for (Path imageFilePath : imageFilePaths) {
                             List<String> fileNameElements =
                                     TargetPage.parseScreenshotFileName(imageFilePath.getFileName().toString())
                             if (0 < fileNameElements.size() && fileNameElements.size() <= 2) {
-                                TargetPage targetPage = testCaseResult.findOrNewTargetPage(fileNameElements[0])
-                                ScreenshotWrapper sw = targetPage.findOrNewScreenshotWrapper(imageFilePath)
+                                TargetPage targetPage = new TargetPage(testCaseResult, new URL(fileNameElements[0]))
+                                testCaseResult.addTargetPage(targetPage)
+                                System.out.println("TargetPage ${targetPage}")
+                                ScreenshotWrapper sw = new ScreenshotWrapper(targetPage, imageFilePath)
+                                targetPage.addScreenshotWrapper(sw)
+                                System.out.println("ScreenshotWrapper ${sw}")
                                 System.out.println("loaded image file ${imageFilePath.toString()}")
                             }
                         }

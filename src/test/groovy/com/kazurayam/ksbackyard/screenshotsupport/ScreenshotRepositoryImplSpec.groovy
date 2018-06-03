@@ -6,6 +6,7 @@ import spock.lang.Specification
 import java.nio.file.Path
 import java.nio.file.Paths
 
+//@Ignore
 class ScreenshotRepositoryImplSpec extends Specification {
 
     // fields

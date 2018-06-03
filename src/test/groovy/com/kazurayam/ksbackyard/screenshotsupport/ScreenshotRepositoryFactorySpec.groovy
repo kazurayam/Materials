@@ -1,10 +1,11 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.file.Path
 import java.nio.file.Paths
-
+@Ignore
 class ScreenshotRepositoryFactorySpec extends Specification {
 
     // fields

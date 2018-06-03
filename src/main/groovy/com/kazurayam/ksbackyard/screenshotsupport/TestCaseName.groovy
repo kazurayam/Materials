@@ -20,8 +20,8 @@ class TestCaseName {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true
+        //if (this == obj)
+        //    return true
         if (!(obj instanceof TestCaseName))
             return false
         TestCaseName other = (TestCaseName)obj

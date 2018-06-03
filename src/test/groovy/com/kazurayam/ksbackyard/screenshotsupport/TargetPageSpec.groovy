@@ -7,7 +7,7 @@ import java.util.regex.Matcher
 import spock.lang.Ignore
 import spock.lang.Specification
 
-//@Ignore
+@Ignore
 class TargetPageSpec extends Specification {
 
     // fields

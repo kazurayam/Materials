@@ -46,10 +46,20 @@ final class TestSuiteResult {
     }
 
     // ------------------ create/add/get child nodes ------------------------------
+    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
+        for (TestCaseResult tcr : this.testCaseResults) {
+            if (tcr.getTestCaseName() == testCaseName) {
+                return tcr
+            }
+        }
+        return null
+    }
+
     TestCaseResult findOrNewTestCaseResult(TestCaseName testCaseName) {
         TestCaseResult tcr = this.getTestCaseResult(testCaseName)
         if (tcr == null) {
             tcr = new TestCaseResult(this, testCaseName)
+            this.testCaseResults.add(tcr)
         }
         return tcr
     }
@@ -64,15 +74,6 @@ final class TestSuiteResult {
         if (!found) {
             this.testCaseResults.add(testCaseResult)
         }
-    }
-
-    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
-        for (TestCaseResult tcr : this.testCaseResults) {
-            if (tcr.getTestCaseName() == testCaseName) {
-                return tcr
-            }
-        }
-        return null
     }
 
     // ------------------- helpers -----------------------------------------------

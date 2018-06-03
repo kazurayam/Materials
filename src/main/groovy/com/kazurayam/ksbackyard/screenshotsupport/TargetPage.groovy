@@ -87,7 +87,7 @@ class TargetPage {
     static final Pattern EXTENSION_PART_PATTERN = Pattern.compile(EXTENSION_PART_REGEX, flag)
     static List<String> parseScreenshotFileName(String screenshotFileName) {
         List<String> values = new ArrayList<String>()
-        String preprocessed = screenshotFileName.replaceAll('\\\\', '/')  // Windows File path separator -> UNIX
+        String preprocessed = screenshotFileName.replaceAll('\\\\', '/')  // Windows XFile path separator -> UNIX
         List<String> elements = preprocessed.split('[/]')
         if (elements.size() > 0) {
             String fileName = elements.getAt(elements.size() - 1)
