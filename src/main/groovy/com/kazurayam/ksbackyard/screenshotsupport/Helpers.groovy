@@ -121,4 +121,18 @@ final class Helpers {
         }
     }
 
+    /**
+     * clazzが com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRespsitoryImpl であるとき
+     * packageを除外した短い名前すなわち ScreenshotRepositoryImpl を返す
+     *
+     * @param clazz
+     * @return
+     */
+    static String getClassShortName(Class clazz) {
+        String fqdn = clazz.getName()
+        String packageStr = clazz.getPackage().getName()
+        String shortName = fqdn.replaceFirst(packageStr + '.', '')
+        return shortName
+    }
+
 }

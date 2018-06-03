@@ -7,7 +7,7 @@ import java.util.regex.Matcher
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
+//@Ignore
 class TargetPageSpec extends Specification {
 
     // fields
@@ -15,7 +15,7 @@ class TargetPageSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${TargetPageSpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetPageSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }

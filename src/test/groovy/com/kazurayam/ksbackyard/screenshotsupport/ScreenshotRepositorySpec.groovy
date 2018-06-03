@@ -14,7 +14,7 @@ class ScreenshotRepositorySpec extends Specification {
     private static Path workdir
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${ScreenshotRepositorySpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }

@@ -96,7 +96,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
         return testSuiteResults
     }
 
-    static List<TestCaseResult> scanTestSuiteResult(TestSuiteResult tsr) {
+    private static List<TestCaseResult> scanTestSuiteResult(TestSuiteResult tsr) {
         List<TestCaseResult> testCaseResults = new ArrayList<TestCaseResult>()
         List<Path> testCaseDirectories =
                 Files.list(tsr.getTestSuiteTimestampDir())

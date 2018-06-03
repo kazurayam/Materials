@@ -5,7 +5,7 @@ import spock.lang.Specification
 
 import java.nio.file.Path
 import java.nio.file.Paths
-@Ignore
+//@Ignore
 class ScreenshotRepositoryFactorySpec extends Specification {
 
     // fields
@@ -13,7 +13,7 @@ class ScreenshotRepositoryFactorySpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${ScreenshotRepositoryFactorySpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositoryFactorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }

@@ -15,7 +15,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${ScreenshotRepositoryImplSpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositoryImplSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -31,7 +31,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
     def testScan() {
         setup:
         Path fixture = Paths.get("./src/test/fixture/Screenshots")
-        String dirName = 'testLoad'
+        String dirName = 'testScan'
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
@@ -66,7 +66,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
         when:
         Path imageFilePath = tcr.getTestCaseDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         ScreenshotWrapper sw = tp.getScreenshotWrapper(imageFilePath)
-        System.out.println(prettyPrint("${sw}"))
+        //System.out.println(prettyPrint("${sw}"))
         then:
         sw.getScreenshotFilePath() == imageFilePath
     }

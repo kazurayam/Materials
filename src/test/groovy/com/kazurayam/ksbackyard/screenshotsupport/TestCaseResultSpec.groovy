@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
+//@Ignore
 class TestCaseResultSpec extends Specification {
 
     // fields
@@ -14,7 +14,7 @@ class TestCaseResultSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${TestCaseResultSpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestCaseResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }

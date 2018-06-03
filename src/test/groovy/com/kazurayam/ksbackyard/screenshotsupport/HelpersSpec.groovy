@@ -12,7 +12,7 @@ import spock.lang.Specification
 /**
  * http://spockframework.org/spock/docs/1.0/spock_primer.html
  */
-@Ignore
+//@Ignore
 class HelpersSpec extends Specification {
 
     // fields
@@ -20,7 +20,7 @@ class HelpersSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${HelpersSpec.getName()}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(HelpersSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -96,6 +96,10 @@ class HelpersSpec extends Specification {
         Files.exists(targetDir.resolve('TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
 
+    def testGetClassShortName() {
+        expect:
+        Helpers.getClassShortName(Helpers.class) == 'Helpers'
+    }
 
     // helper methods
     private boolean someHelper() {
