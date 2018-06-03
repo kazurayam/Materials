@@ -1,7 +1,7 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
 import groovy.json.JsonBuilder
-import groovy.json.JsonOutput
+
 import java.nio.file.Path
 
 /**

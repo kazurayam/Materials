@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
 import groovy.json.JsonBuilder
 import java.nio.file.Files
@@ -24,7 +24,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
      * import java.nio.file.Path
      * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
      * import katalonimport com.kms.katalon.core.configuration.RunConfiguration
-     * import com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRepositoryImpl
+     * import ScreenshotRepositoryImpl
      * ...
      * class TL {
      *     @BeforeTestSuite

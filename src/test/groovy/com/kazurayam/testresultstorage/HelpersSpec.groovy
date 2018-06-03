@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -6,7 +6,6 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**

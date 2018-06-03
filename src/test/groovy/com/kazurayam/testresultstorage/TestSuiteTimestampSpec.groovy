@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
 import java.time.LocalDateTime
 

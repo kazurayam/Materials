@@ -1,4 +1,4 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
 import groovy.json.JsonBuilder
 import java.time.LocalDateTime

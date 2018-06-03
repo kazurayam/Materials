@@ -1,6 +1,4 @@
-package com.kazurayam.ksbackyard.screenshotsupport
-
-import org.omg.CORBA.SetOverrideTypeHelper
+package com.kazurayam.testresultstorage
 
 class TestSuiteName {
 

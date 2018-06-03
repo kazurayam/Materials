@@ -1,6 +1,5 @@
-package com.kazurayam.ksbackyard.screenshotsupport
+package com.kazurayam.testresultstorage
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.file.Path
