@@ -41,15 +41,12 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
      */
     ScreenshotRepositoryImpl(Path baseDir, TestSuiteName testSuiteName) {
         this.baseDir = baseDir
+        this.testSuiteResults = scan(this.baseDir)
+        //
         this.currentTestSuiteName = testSuiteName
         this.currentTestSuiteTimestamp = new TestSuiteTimestamp()
-        this.testSuiteResults = loadDebug(this.baseDir)
         TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
         this.addTestSuiteResult(tsr)
-    }
-
-    static List<TestSuiteResult> loadDebug(Path baseDir) {
-        return new ArrayList<TestSuiteResult>()
     }
 
     /**
@@ -68,7 +65,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
      * @returns the tree
      *
      */
-    static List<TestSuiteResult> load(Path baseDir) {
+    static List<TestSuiteResult> scan(Path baseDir) {
         List<TestSuiteResult> testSuiteResults = new ArrayList<TestSuiteResult>()
         List<Path> testSuiteNamePaths =
                 Files.list(baseDir)
@@ -86,36 +83,10 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
                     TestSuiteTimestamp testSuiteTimestamp = new TestSuiteTimestamp(ldt)
                     TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteName, testSuiteTimestamp)
                     testSuiteResults.add(tsr)
-                    System.out.println("TestSuiteResult ${tsr}")
-                    //
-                    List<Path> testCaseNamePaths =
-                            Files.list(timestampPath)
-                                    .filter({ p -> Files.isDirectory(p) })
-                                    .collect(Collectors.toList())
-                    for (Path testCaseNamePath : testCaseNamePaths) {
-                        TestCaseResult testCaseResult =
-                                new TestCaseResult(tsr, new TestCaseName(testCaseNamePath.getFileName().toString()))
-                        tsr.addTestCaseResult(testCaseResult)
-                        System.out.println("TestCaseResult ${testCaseResult}")
-                        //
-                        List<Path> imageFilePaths =
-                                Files.list(testCaseNamePath)
-                                        .filter({ p -> Files.isRegularFile(p) })
-                                        //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
-                                        .collect(Collectors.toList())
-                        for (Path imageFilePath : imageFilePaths) {
-                            List<String> fileNameElements =
-                                    TargetPage.parseScreenshotFileName(imageFilePath.getFileName().toString())
-                            if (0 < fileNameElements.size() && fileNameElements.size() <= 2) {
-                                TargetPage targetPage = new TargetPage(testCaseResult, new URL(fileNameElements[0]))
-                                testCaseResult.addTargetPage(targetPage)
-                                System.out.println("TargetPage ${targetPage}")
-                                ScreenshotWrapper sw = new ScreenshotWrapper(targetPage, imageFilePath)
-                                targetPage.addScreenshotWrapper(sw)
-                                System.out.println("ScreenshotWrapper ${sw}")
-                                System.out.println("loaded image file ${imageFilePath.toString()}")
-                            }
-                        }
+                    //System.out.println("TestSuiteResult ${tsr}")
+                    List<TestCaseResult> testCaseResults = scanTestSuiteResult(tsr)
+                    for (TestCaseResult tcr : testCaseResults) {
+                        tsr.addTestCaseResult(tcr)
                     }
                 } else {
                     // ignore directories not in the format of yyyyMMdd_hhmmss
@@ -125,7 +96,38 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
         return testSuiteResults
     }
 
-
+    static List<TestCaseResult> scanTestSuiteResult(TestSuiteResult tsr) {
+        List<TestCaseResult> testCaseResults = new ArrayList<TestCaseResult>()
+        List<Path> testCaseDirectories =
+                Files.list(tsr.getTestSuiteTimestampDir())
+                        .filter({ p -> Files.isDirectory(p) })
+                        .collect(Collectors.toList())
+        for (Path testCaseDirectory : testCaseDirectories) {
+            TestCaseResult tcr =
+                    new TestCaseResult(tsr,
+                            new TestCaseName(testCaseDirectory.getFileName().toString()))
+            testCaseResults.add(tcr)
+            List<Path> imageFilePaths =
+                    Files.list(testCaseDirectory)
+                            .filter({ p -> Files.isRegularFile(p) })
+                    //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
+                            .collect(Collectors.toList())
+            for (Path imageFilePath : imageFilePaths) {
+                List<String> fileNameElements =
+                        TargetPage.parseScreenshotFileName(imageFilePath.getFileName().toString())
+                if (0 < fileNameElements.size() && fileNameElements.size() <= 2) {
+                    TargetPage targetPage = new TargetPage(tcr, new URL(fileNameElements[0]))
+                    tcr.addTargetPage(targetPage)
+                    //System.out.println("TargetPage ${targetPage}")
+                    ScreenshotWrapper sw = new ScreenshotWrapper(targetPage, imageFilePath)
+                    targetPage.addScreenshotWrapper(sw)
+                    //System.out.println("ScreenshotWrapper ${sw}")
+                    //System.out.println("loaded image file ${imageFilePath.toString()}")
+                }
+            }
+        }
+        return testCaseResults
+    }
 
 
     // -------------------------- attribute getters & setters ------------------------

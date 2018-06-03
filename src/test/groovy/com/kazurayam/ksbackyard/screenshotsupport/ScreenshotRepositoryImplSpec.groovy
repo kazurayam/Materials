@@ -1,5 +1,6 @@
 package com.kazurayam.ksbackyard.screenshotsupport
 
+import static groovy.json.JsonOutput.prettyPrint
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -27,7 +28,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    def testLoad() {
+    def testScan() {
         setup:
         Path fixture = Paths.get("./src/test/fixture/Screenshots")
         String dirName = 'testLoad'
@@ -35,7 +36,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        List<TestSuiteResult> tsrList = ScreenshotRepositoryImpl.load(baseDir)
+        List<TestSuiteResult> tsrList = ScreenshotRepositoryImpl.scan(baseDir)
         then:
         tsrList != null
         tsrList.size() == 2
@@ -65,6 +66,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
         when:
         Path imageFilePath = tcr.getTestCaseDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         ScreenshotWrapper sw = tp.getScreenshotWrapper(imageFilePath)
+        System.out.println(prettyPrint("${sw}"))
         then:
         sw.getScreenshotFilePath() == imageFilePath
     }

@@ -39,9 +39,9 @@ class TargetPage {
      * @param targetPageUrl
      * @return
      */
-    ScreenshotWrapper getScreenshotWrapper(String postFix) {
+    ScreenshotWrapper getScreenshotWrapper(String identifier) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${postFix}${IMAGE_FILE_EXTENSION}")
+        Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${identifier}${IMAGE_FILE_EXTENSION}")
         return new ScreenshotWrapper(this, p)
     }
 

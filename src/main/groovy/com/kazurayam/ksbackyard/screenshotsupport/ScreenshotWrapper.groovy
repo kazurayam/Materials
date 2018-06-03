@@ -46,10 +46,11 @@ class ScreenshotWrapper {
 
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-                ["screenshotFilePath" : this.screenshotFilePath.toString()]
-        )
-        return json.toString()
+        StringBuilder sb = new StringBuilder()
+        sb.append('{')
+        sb.append('"ScreenshotWrapper":')
+        sb.append('{"screenshotFilePath":"' + this.screenshotFilePath.toString() + '"}')
+        sb.append('}')
+        return sb.toString()
     }
 }
