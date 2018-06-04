@@ -1,16 +1,16 @@
 package com.kazurayam.testresultstorage
 
-import spock.lang.Ignore
-import spock.lang.Specification
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@Ignore
+import spock.lang.Specification
+
+//@Ignore
 class TestSuiteResultSpec extends Specification {
 
     // fields
     private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
     def setup() {
@@ -26,12 +26,11 @@ class TestSuiteResultSpec extends Specification {
     // feature methods
     def testFindOrNewTestCaseResult() {
         setup:
-        Path fixture = Paths.get("./src/test/fixture/Screenshots")
         String dirName = 'testGetTestCaseResult'
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        ScreenshotRepository sr = new ScreenshotRepositoryImpl(baseDir, new TestSuiteName('TS1'))
+        ScreenshotRepositoryImpl sr = new ScreenshotRepositoryImpl(baseDir, new TestSuiteName('TS1'))
         when:
         TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))

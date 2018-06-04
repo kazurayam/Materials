@@ -1,5 +1,8 @@
 package com.kazurayam.testresultstorage
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -7,9 +10,16 @@ import spock.lang.Specification
 class SpecTemplate extends Specification {
 
     // fields
+    private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
-    def setup() {}
+    def setup() {
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
+        if (!workdir.toFile().exists()) {
+            workdir.toFile().mkdirs()
+        }
+    }
     def cleanup() {}
     def setupSpec() {}
     def cleanupSpec() {}

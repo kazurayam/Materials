@@ -2,7 +2,6 @@ package com.kazurayam.testresultstorage
 
 import java.time.LocalDateTime
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -11,7 +10,7 @@ import spock.lang.Specification
  * @author kazurayam
  *
  */
-@Ignore
+//@Ignore
 class TestSuiteTimestampSpec extends Specification {
 
     // fields

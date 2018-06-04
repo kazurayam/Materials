@@ -1,15 +1,16 @@
 package com.kazurayam.testresultstorage
 
-import spock.lang.Specification
-
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import spock.lang.Specification
 
 //@Ignore
 class ScreenshotRepositoryImplSpec extends Specification {
 
     // fields
     private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
     def setup() {
@@ -28,7 +29,6 @@ class ScreenshotRepositoryImplSpec extends Specification {
     // feature methods
     def testScan() {
         setup:
-        Path fixture = Paths.get("./src/test/fixture/Screenshots")
         String dirName = 'testScan'
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)

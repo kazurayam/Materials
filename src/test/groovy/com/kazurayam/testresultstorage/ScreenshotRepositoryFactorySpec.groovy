@@ -1,14 +1,15 @@
 package com.kazurayam.testresultstorage
 
-import spock.lang.Specification
-
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import spock.lang.Specification
 //@Ignore
 class ScreenshotRepositoryFactorySpec extends Specification {
 
     // fields
     private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
     def setup() {
@@ -23,6 +24,11 @@ class ScreenshotRepositoryFactorySpec extends Specification {
 
     // feature methods
     def testCreateInstance() {
+        setup:
+        String dirName = 'testCreateInstance'
+        Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
         when:
         ScreenshotRepository scRepo = ScreenshotRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         then:

@@ -1,17 +1,18 @@
 package com.kazurayam.testresultstorage
 
-import groovy.json.JsonOutput
-import static groovy.json.JsonOutput.toJson
+import static groovy.json.JsonOutput.*
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import spock.lang.Ignore
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
-@Ignore
+//@Ignore
 class ScreenshotRepositorySpec extends Specification {
 
     private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositorySpec.class)}")
@@ -36,6 +37,8 @@ class ScreenshotRepositorySpec extends Specification {
         setup:
         String dirName = 'testToString'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
         when:
         ScreenshotRepository sr = ScreenshotRepositoryFactory.createInstance(baseDir, 'Test Suites/TS1')
         def prettyJson = JsonOutput.prettyPrint(sr.toString())
@@ -45,11 +48,12 @@ class ScreenshotRepositorySpec extends Specification {
         prettyJson.contains('TS1')
     }
 
-    @Ignore
     def testConstructor_Path_tsn() {
         setup:
-        String dirName = 'testConstructor_Path_tsId'
+        String dirName = 'testConstructor_Path_tsn'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
         when:
         ScreenshotRepository sr = ScreenshotRepositoryFactory.createInstance(baseDir, 'Test Suites/TS1')
         String str = sr.toString()
@@ -58,11 +62,12 @@ class ScreenshotRepositorySpec extends Specification {
         str.contains('TS1')
     }
 
-
     def testResolveScreenshotFilePath() {
         setup:
-        String dirName = 'testFindOrNewTestCaseResult'
+        String dirName = 'testResolveScreenshotFilePath'
         Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
         when:
         ScreenshotRepository sr = ScreenshotRepositoryFactory.createInstance(baseDir, 'Test Suites/TS1')
         Path scfp = sr.resolveScreenshotFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
@@ -71,7 +76,6 @@ class ScreenshotRepositorySpec extends Specification {
         scfp.toString().contains('TC1')
         scfp.toString().contains('demoaut.katalon.com')
     }
-
 
 }
 
