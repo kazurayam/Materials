@@ -1,18 +1,18 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
-class TestSuiteName {
+class TestCaseName {
 
     private String value
 
-    TestSuiteName(String testSuiteId) {
-        this.value = testSuiteId.replaceFirst('^Test Suites/', '')
+    TestCaseName(String testCaseId) {
+        this.value = testCaseId.replaceFirst('^Test Cases/', '')
     }
 
     String getValue() {
         return value
     }
 
-    // -------------------- overriding Object properties ----------------------
+    // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
         return value
@@ -22,9 +22,9 @@ class TestSuiteName {
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof TestSuiteName))
+        if (!(obj instanceof TestCaseName))
             return false
-        TestSuiteName other = (TestSuiteName)obj
+        TestCaseName other = (TestCaseName)obj
         return this.getValue() == other.getValue()
     }
 

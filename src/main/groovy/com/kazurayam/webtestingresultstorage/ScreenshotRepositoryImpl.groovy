@@ -1,4 +1,4 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import groovy.json.JsonBuilder
 import java.nio.file.Files

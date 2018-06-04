@@ -1,4 +1,4 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 
@@ -26,7 +26,7 @@ class ImageMagickVisualTestingDriver implements VisualTestingDriver {
     }
 
     /**
-     * JavaでShellScriptの実行 https://qiita.com/itoa06/items/9e761d53c58eeb20490e
+     * JavaでShellScriptを実行する https://qiita.com/itoa06/items/9e761d53c58eeb20490e
      *
      * @param args
      * @param out

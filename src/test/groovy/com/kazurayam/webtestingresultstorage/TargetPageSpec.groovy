@@ -1,8 +1,11 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.Matcher
+
+import com.kazurayam.webtestingresultstorage.Helpers
+import com.kazurayam.webtestingresultstorage.TargetPage
 
 import spock.lang.Specification
 

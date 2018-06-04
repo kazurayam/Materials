@@ -1,7 +1,11 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import com.kazurayam.webtestingresultstorage.Helpers
+import com.kazurayam.webtestingresultstorage.ScreenshotRepository
+import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryFactory
 
 import spock.lang.Specification
 //@Ignore

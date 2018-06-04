@@ -1,9 +1,13 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import com.kazurayam.webtestingresultstorage.Helpers
+import com.kazurayam.webtestingresultstorage.ScreenshotRepository
+import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification

@@ -1,6 +1,8 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.time.LocalDateTime
+
+import com.kazurayam.webtestingresultstorage.TestSuiteTimestamp
 
 import spock.lang.Specification
 

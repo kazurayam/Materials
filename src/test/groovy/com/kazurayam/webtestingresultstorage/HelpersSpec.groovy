@@ -1,10 +1,12 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
+
+import com.kazurayam.webtestingresultstorage.Helpers
 
 import spock.lang.Specification
 

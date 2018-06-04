@@ -1,7 +1,17 @@
-package com.kazurayam.testresultstorage
+package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import com.kazurayam.webtestingresultstorage.Helpers
+import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryImpl
+import com.kazurayam.webtestingresultstorage.ScreenshotWrapper
+import com.kazurayam.webtestingresultstorage.TargetPage
+import com.kazurayam.webtestingresultstorage.TestCaseName
+import com.kazurayam.webtestingresultstorage.TestCaseResult
+import com.kazurayam.webtestingresultstorage.TestSuiteName
+import com.kazurayam.webtestingresultstorage.TestSuiteResult
+import com.kazurayam.webtestingresultstorage.TestSuiteTimestamp
 
 import spock.lang.Specification
 
