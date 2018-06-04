@@ -2,7 +2,7 @@ package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 
-interface ScreenshotRepository {
+interface WebTestingResultStorage {
 
     Path resolveScreenshotFilePath(String testCaseId, String url)
     Path resolveScreenshotFilePath(String testCaseId, String url, String postFix)

@@ -6,7 +6,7 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
-final class ScreenshotRepositoryImpl implements ScreenshotRepository {
+final class WebTestingResultStorageImpl implements WebTestingResultStorage {
 
     private Path baseDir
     private TestSuiteName currentTestSuiteName
@@ -39,7 +39,7 @@ final class ScreenshotRepositoryImpl implements ScreenshotRepository {
      *
      * @param dirPath directory under which a directory named as BASE_DIR_NAME will be created.
      */
-    ScreenshotRepositoryImpl(Path baseDir, TestSuiteName testSuiteName) {
+    WebTestingResultStorageImpl(Path baseDir, TestSuiteName testSuiteName) {
         this.baseDir = baseDir
         this.testSuiteResults = scan(this.baseDir)
         //

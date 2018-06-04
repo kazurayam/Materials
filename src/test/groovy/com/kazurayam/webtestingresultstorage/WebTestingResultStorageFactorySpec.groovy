@@ -4,12 +4,12 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.ScreenshotRepository
-import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryFactory
+import com.kazurayam.webtestingresultstorage.WebTestingResultStorage
+import com.kazurayam.webtestingresultstorage.WebTestingResultStorageFactory
 
 import spock.lang.Specification
 //@Ignore
-class ScreenshotRepositoryFactorySpec extends Specification {
+class WebTestingResultStorageFactorySpec extends Specification {
 
     // fields
     private static Path workdir
@@ -17,7 +17,7 @@ class ScreenshotRepositoryFactorySpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositoryFactorySpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(WebTestingResultStorageFactorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -34,7 +34,7 @@ class ScreenshotRepositoryFactorySpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        ScreenshotRepository scRepo = ScreenshotRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
+        WebTestingResultStorage scRepo = WebTestingResultStorageFactory.createInstance(workdir, 'Test Suites/TS1')
         then:
         scRepo != null
         scRepo.toString().contains('TS1')

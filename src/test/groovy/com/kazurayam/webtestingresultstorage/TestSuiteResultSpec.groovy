@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryImpl
+import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
 import com.kazurayam.webtestingresultstorage.TestCaseName
 import com.kazurayam.webtestingresultstorage.TestCaseResult
 import com.kazurayam.webtestingresultstorage.TestSuiteName
@@ -37,7 +37,7 @@ class TestSuiteResultSpec extends Specification {
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        ScreenshotRepositoryImpl sr = new ScreenshotRepositoryImpl(baseDir, new TestSuiteName('TS1'))
+        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
         when:
         TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))

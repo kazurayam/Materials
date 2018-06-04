@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryImpl
+import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
 import com.kazurayam.webtestingresultstorage.ScreenshotWrapper
 import com.kazurayam.webtestingresultstorage.TargetPage
 import com.kazurayam.webtestingresultstorage.TestCaseName
@@ -39,7 +39,7 @@ class ScreenshotWrapperSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        ScreenshotRepositoryImpl sr = new ScreenshotRepositoryImpl(baseDir, new TestSuiteName('TS1'))
+        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
         TestSuiteResult tsr = sr.getTestSuiteResult(
                 new TestSuiteName('TS1'), new TestSuiteTimestamp('20180530_130419'))
         TestCaseResult tcr = tsr.getTestCaseResult(new TestCaseName('TC1'))

@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.ScreenshotRepositoryImpl
+import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
 import com.kazurayam.webtestingresultstorage.ScreenshotWrapper
 import com.kazurayam.webtestingresultstorage.TargetPage
 import com.kazurayam.webtestingresultstorage.TestCaseName
@@ -17,7 +17,7 @@ import com.kazurayam.webtestingresultstorage.TestSuiteTimestamp
 import spock.lang.Specification
 
 //@Ignore
-class ScreenshotRepositoryImplSpec extends Specification {
+class WebTestingResultStorageImplSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -25,7 +25,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotRepositoryImplSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(WebTestingResultStorageImplSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -45,7 +45,7 @@ class ScreenshotRepositoryImplSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        List<TestSuiteResult> tsrList = ScreenshotRepositoryImpl.scan(baseDir)
+        List<TestSuiteResult> tsrList = WebTestingResultStorageImpl.scan(baseDir)
         then:
         tsrList != null
         tsrList.size() == 2

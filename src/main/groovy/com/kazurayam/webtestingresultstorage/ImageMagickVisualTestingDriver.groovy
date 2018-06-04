@@ -10,10 +10,10 @@ import java.nio.file.Path
  */
 class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
-    private ScreenshotRepositoryImpl scRepo
+    private WebTestingResultStorageImpl scRepo
     private Path outputDir
 
-    ImageMagickVisualTestingDriver(ScreenshotRepositoryImpl scRepo) {
+    ImageMagickVisualTestingDriver(WebTestingResultStorageImpl scRepo) {
         this.scRepo = scRepo
     }
 
