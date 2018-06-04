@@ -3,6 +3,7 @@ package com.kazurayam.webtestingresultstorage
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -28,20 +29,21 @@ class ScreenshotWrapperSpec extends Specification {
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        when:
         TestSuiteName tsn = new TestSuiteName('TS1')
         TestCaseName tcn = new TestCaseName('TC1')
         TestSuiteTimestamp tstamp = new TestSuiteTimestamp('20180530_130419')
         WebTestingResultStorageImpl wtrs = new WebTestingResultStorageImpl(baseDir, tsn)
         TestSuiteResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
-        TestCaseResult tcr = tsr.getTestCaseResult(tcn)
+        TestCaseResult tcr = tsr.findOrNewTestCaseResult(tcn)
         assert tcr != null
-        TargetPage tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
-        ScreenshotWrapper sw = tp.getScreenshotWrapper('')
+        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        when:
+        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         def str = sw.toString()
+        System.out.println("#testToString:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"ScreenshotWrapper":{"screenshotFilePath":"')
-        str.contains(sw.getScreenshotFilePath().toString())
+        str.contains(Helpers.escapeAsJsonText(sw.getScreenshotFilePath().toString()))
         str.endsWith('"}}')
     }
 }

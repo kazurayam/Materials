@@ -4,8 +4,6 @@ import java.nio.file.Path
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import groovy.json.JsonBuilder
-
 class TargetPage {
 
     private TestCaseResult parentTestCaseResult
@@ -38,16 +36,23 @@ class TargetPage {
      * @param targetPageUrl
      * @return
      */
-    ScreenshotWrapper getScreenshotWrapper(String identifier) {
+    ScreenshotWrapper findOrNewScreenshotWrapper(String identifier) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${identifier}${IMAGE_FILE_EXTENSION}")
-        return new ScreenshotWrapper(this, p)
+        if (this.getScreenshotWrapper(p) != null) {
+            return this.getScreenshotWrapper(p)
+        } else {
+            ScreenshotWrapper sw = new ScreenshotWrapper(this, p)
+            this.screenshotWrappers.add(sw)
+            return sw
+        }
     }
 
     ScreenshotWrapper findOrNewScreenshotWrapper(Path imageFilePath) {
         ScreenshotWrapper sw = this.getScreenshotWrapper(imageFilePath)
         if (sw == null) {
             sw = new ScreenshotWrapper(this, imageFilePath)
+            this.screenshotWrappers.add(sw)
         }
         return sw
     }
@@ -129,11 +134,24 @@ class TargetPage {
 
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-                ["url": this.url.toString()],
-                ["screenshotWrappers": this.screenshotWrappers]
-        )
-        return json.toString()
+        return this.toJson()
+    }
+
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TargetPage":{')
+        sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
+        sb.append('"screenshotWrappers":[')
+        def count = 0
+        for (ScreenshotWrapper sw : screenshotWrappers) {
+            if (count > 0) {
+                sb.append(',')
+            }
+            sb.append(sw.toJson())
+            count += 1
+        }
+        sb.append(']')
+        sb.append('}}')
+        return sb.toString()
     }
 }

@@ -44,10 +44,14 @@ class ScreenshotWrapper {
 
     @Override
     String toString() {
+        return this.toJson()
+    }
+
+    String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"ScreenshotWrapper":')
-        sb.append('{"screenshotFilePath":"' + this.screenshotFilePath.toString() + '"}')
+        sb.append('{"screenshotFilePath":"' + Helpers.escapeAsJsonText(screenshotFilePath.toString()) + '"}')
         sb.append('}')
         return sb.toString()
     }

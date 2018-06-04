@@ -1,7 +1,5 @@
 package com.kazurayam.webtestingresultstorage
 
-import groovy.json.JsonBuilder
-
 import java.nio.file.Path
 
 /**
@@ -109,15 +107,26 @@ final class TestSuiteResult {
 
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-                ["baseDir": this.baseDir.toString()],
-                ["testSuiteName": this.testSuiteName.toString()],
-                ["testSuiteTimestamp": this.testSuiteTimestamp.toString()],
-                ["testSuiteTimestampDir": this.testSuiteTimestampDir.toString()],
-                //["testCaseResults": this.testCaseResults]
-        )
-        return json.toString()
+        return this.toJson()
+    }
+    
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TestSuiteResult":{')
+        sb.append('"baseDir": "' + Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
+        sb.append('"testSuiteName": "' + Helpers.escapeAsJsonText(this.testSuiteName.toString()) + '",')
+        sb.append('"testSuiteTimestamp": "' + this.testSuiteTimestamp.toString() + '",')
+        sb.append('"testSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.testSuiteTimestampDir.toString()) + '",')
+        sb.append('"testCaseResults": [')
+        def count = 0
+        for (TestCaseResult tcr : this.testCaseResults) {
+            if (count > 0) { sb.append(',') }
+            count += 1
+            sb.append(tcr.toJson())
+        }
+        sb.append(']')
+        sb.append('}}')
+        return sb.toString()
     }
 
 }

@@ -215,7 +215,7 @@ final class WebTestingResultStorageImpl implements WebTestingResultStorage {
         assert currentTestSuiteResult != null
         TestCaseResult tcr = currentTestSuiteResult.findOrNewTestCaseResult(testCaseName)
         if (tcr != null) {
-            ScreenshotWrapper sw = tcr.findOrNewTargetPage(url).getScreenshotWrapper(postFix)
+            ScreenshotWrapper sw = tcr.findOrNewTargetPage(url).findOrNewScreenshotWrapper(postFix)
             Path screenshotFilePath = sw.getScreenshotFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath

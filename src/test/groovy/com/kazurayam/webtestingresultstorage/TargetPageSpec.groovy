@@ -4,9 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.Matcher
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.TargetPage
-
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -14,6 +12,7 @@ class TargetPageSpec extends Specification {
 
     // fields
     private static Path workdir
+    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
     def setup() {
@@ -114,6 +113,28 @@ class TargetPageSpec extends Specification {
         values.size() == 2
         values[0] == 'http://demoaut.katalon.com/'
         values[1] == '0'
+    }
+
+    def testToString() {
+        setup:
+        String dirName = 'testGetTestCaseResult'
+        Path baseDir = workdir.resolve(dirName)
+        Helpers.ensureDirs(baseDir)
+        Helpers.copyDirectory(fixture, baseDir)
+        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
+        TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
+        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
+        when:
+        def str = tp.toString()
+        def pretty = JsonOutput.prettyPrint(str)
+        System.out.println("#testToString: ${pretty}")
+        then:
+        str.startsWith('{"TargetPage":{')
+        str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
+        str.contains(Helpers.escapeAsJsonText('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        str.endsWith('}}')
     }
 
     // helper methods

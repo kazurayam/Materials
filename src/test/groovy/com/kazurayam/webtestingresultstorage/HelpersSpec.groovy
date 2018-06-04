@@ -6,8 +6,6 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
-import com.kazurayam.webtestingresultstorage.Helpers
-
 import spock.lang.Specification
 
 /**
@@ -100,6 +98,13 @@ class HelpersSpec extends Specification {
     def testGetClassShortName() {
         expect:
         Helpers.getClassShortName(Helpers.class) == 'Helpers'
+    }
+    
+    def testEscapeAsJsonText() {
+        expect:
+        Helpers.escapeAsJsonText('/') == '\\/'
+        Helpers.escapeAsJsonText('\\') == '\\\\'
+        Helpers.escapeAsJsonText('"') == '\\"'
     }
 
     // helper methods

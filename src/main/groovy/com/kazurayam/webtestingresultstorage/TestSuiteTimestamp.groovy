@@ -1,6 +1,5 @@
 package com.kazurayam.webtestingresultstorage
 
-import groovy.json.JsonBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -84,11 +83,11 @@ class TestSuiteTimestamp {
 
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-               ["timestamp": this.format() ]
-        )
-        return json.toString()
+        return this.toJson()
+    }
+    
+    String toJson() {
+        throw new UnsupportedOperationException('TODO')
     }
 
 }

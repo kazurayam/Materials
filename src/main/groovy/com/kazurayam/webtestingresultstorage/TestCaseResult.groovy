@@ -2,8 +2,6 @@ package com.kazurayam.webtestingresultstorage
 
 import java.nio.file.Path
 
-import groovy.json.JsonBuilder
-
 /**
  *
  */
@@ -113,14 +111,25 @@ class TestCaseResult {
 
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-                ["testCaseName": this.testCaseName.toString()],
-                ["testCaseDir": this.testCaseDir.toString()],
-                ["testCaseStatus": this.testCaseStatus.toString()],
-                //["targetPages": this.targetPages]
-        )
-        return json.toString()
+        return this.toJson()
+    }
+
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TestCaseResult":{')
+        sb.append('"testCaseName":"'   + Helpers.escapeAsJsonText(this.testCaseName.toString())   + '",')
+        sb.append('"testCaseDir":"'    + Helpers.escapeAsJsonText(this.testCaseDir.toString())    + '",')
+        sb.append('"testCaseStatus":"' + this.testCaseStatus.toString() + '",')
+        sb.append('"targetPages":[')
+        def count = 0
+        for (TargetPage tp : this.targetPages) {
+            if (count > 0) { sb.append(',') }
+            sb.append(tp.toJson())
+            count += 1
+        }
+        sb.append(']')
+        sb.append('}}')
+        return sb.toString()
     }
 }
 

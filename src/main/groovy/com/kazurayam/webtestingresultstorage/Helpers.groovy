@@ -135,4 +135,23 @@ final class Helpers {
         return shortName
     }
 
+
+    /**
+     * JSONの値として含まれることになるstringのなかに含まれる文字を適切にエスケープする
+     *
+     * @param string
+     * @return
+     */
+    static String escapeAsJsonText(String string) {
+        char[] chars = string.toCharArray()
+        StringBuilder sb = new StringBuilder()
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '/') { sb.append('\\/') }
+            else if (chars[i] == '\\') { sb.append('\\\\') }
+            else if (chars[i] == '"') { sb.append('\\"') }
+            else { sb.append(chars[i]) }
+        }
+        return sb.toString()
+    }
+
 }

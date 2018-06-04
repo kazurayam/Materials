@@ -3,13 +3,7 @@ package com.kazurayam.webtestingresultstorage
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
-import com.kazurayam.webtestingresultstorage.TestCaseName
-import com.kazurayam.webtestingresultstorage.TestCaseResult
-import com.kazurayam.webtestingresultstorage.TestSuiteName
-import com.kazurayam.webtestingresultstorage.TestSuiteResult
-
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -18,6 +12,7 @@ class TestSuiteResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
+    private WebTestingResultStorageImpl wtrs
 
     // fixture methods
     def setup() {
@@ -25,6 +20,9 @@ class TestSuiteResultSpec extends Specification {
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
+        Helpers.copyDirectory(fixture, workdir)
+        wtrs = new WebTestingResultStorageImpl(workdir, new TestSuiteName('TS1'))
+
     }
     def cleanup() {}
     def setupSpec() {}
@@ -32,19 +30,39 @@ class TestSuiteResultSpec extends Specification {
 
     // feature methods
     def testFindOrNewTestCaseResult() {
-        setup:
-        String dirName = 'testGetTestCaseResult'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
-        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
         when:
-        TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
+        TestSuiteResult tsr = wtrs.getCurrentTestSuiteResult()
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
         then:
         tcr != null
         tcr.getTestCaseName() == new TestCaseName('TC1')
+        when:
+        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        then:
+        tp != null
+        when:
+        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
+        then:
+        sw != null
+    }
 
+    def testToString() {
+        setup:
+        TestSuiteResult tsr = wtrs.getCurrentTestSuiteResult()
+        when:
+        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
+        def str = tsr.toString()
+        System.out.println("${JsonOutput.prettyPrint(str)}")
+        then:
+        str.startsWith('{"TestSuiteResult":{')
+        str.contains('testSuiteName')
+        str.contains('TS1')
+        str.contains('testCaseName')
+        str.contains('TC1')
+        str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
+        str.endsWith('}}')
     }
 
     // helper methods
