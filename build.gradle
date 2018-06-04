@@ -17,9 +17,13 @@ dependencies {
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 }
 
-test.outputs.upToDateWhen {false}
-
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 def defaultEncoding = 'UTF-8'
+
+test.outputs.upToDateWhen {false}
+
+test {
+    include '**/CommandRunnerSpec.class'
+}
