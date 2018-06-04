@@ -1,23 +1,12 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
-import com.kazurayam.webtestingresultstorage.ScreenshotWrapper
-import com.kazurayam.webtestingresultstorage.TargetPage
-import com.kazurayam.webtestingresultstorage.TestCaseName
-import com.kazurayam.webtestingresultstorage.TestCaseResult
-import com.kazurayam.webtestingresultstorage.TestCaseStatus
-import com.kazurayam.webtestingresultstorage.TestSuiteName
-import com.kazurayam.webtestingresultstorage.TestSuiteResult
-import com.kazurayam.webtestingresultstorage.TestSuiteTimestamp
-
 import spock.lang.Specification
 
 //@Ignore
-class WebTestingResultStorageImplSpec extends Specification {
+class TestResultsImplSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -25,7 +14,7 @@ class WebTestingResultStorageImplSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(WebTestingResultStorageImplSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsImplSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -45,7 +34,7 @@ class WebTestingResultStorageImplSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        List<TestSuiteResult> tsrList = WebTestingResultStorageImpl.scan(baseDir)
+        List<TestSuiteResult> tsrList = TestResultsImpl.scan(baseDir)
         then:
         tsrList != null
         tsrList.size() == 2

@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import groovy.json.JsonBuilder
 import java.nio.file.Files
@@ -6,7 +6,7 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
-final class WebTestingResultStorageImpl implements WebTestingResultStorage {
+final class TestResultsImpl implements TestResults {
 
     private Path baseDir
     private TestSuiteName currentTestSuiteName
@@ -39,7 +39,7 @@ final class WebTestingResultStorageImpl implements WebTestingResultStorage {
      *
      * @param dirPath directory under which a directory named as BASE_DIR_NAME will be created.
      */
-    WebTestingResultStorageImpl(Path baseDir, TestSuiteName testSuiteName) {
+    TestResultsImpl(Path baseDir, TestSuiteName testSuiteName) {
         this.baseDir = baseDir
         this.testSuiteResults = scan(this.baseDir)
         //

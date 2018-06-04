@@ -1,25 +1,21 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorage
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorageFactory
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class WebTestingResultStorageSpec extends Specification {
+class TestResultsSpec extends Specification {
 
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(WebTestingResultStorageSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -44,7 +40,7 @@ class WebTestingResultStorageSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        WebTestingResultStorage sr = WebTestingResultStorageFactory.createInstance(baseDir, 'Test Suites/TS1')
+        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
         def prettyJson = JsonOutput.prettyPrint(sr.toString())
         System.out.println(prettyJson)
         then:
@@ -59,7 +55,7 @@ class WebTestingResultStorageSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        WebTestingResultStorage sr = WebTestingResultStorageFactory.createInstance(baseDir, 'Test Suites/TS1')
+        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
         String str = sr.toString()
         then:
         str.contains(dirName)
@@ -73,7 +69,7 @@ class WebTestingResultStorageSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        WebTestingResultStorage sr = WebTestingResultStorageFactory.createInstance(baseDir, 'Test Suites/TS1')
+        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
         Path scfp = sr.resolveScreenshotFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         scfp != null

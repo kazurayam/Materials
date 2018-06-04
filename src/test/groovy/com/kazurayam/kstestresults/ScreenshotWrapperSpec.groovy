@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -32,7 +32,7 @@ class ScreenshotWrapperSpec extends Specification {
         TestSuiteName tsn = new TestSuiteName('TS1')
         TestCaseName tcn = new TestCaseName('TC1')
         TestSuiteTimestamp tstamp = new TestSuiteTimestamp('20180530_130419')
-        WebTestingResultStorageImpl wtrs = new WebTestingResultStorageImpl(baseDir, tsn)
+        TestResultsImpl wtrs = new TestResultsImpl(baseDir, tsn)
         TestSuiteResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(tcn)
         assert tcr != null

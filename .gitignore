@@ -12,7 +12,7 @@ gradle-app.setting
 
 # IntelliJ IDEA
 .idea/
-*.iml/
+*.iml
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties

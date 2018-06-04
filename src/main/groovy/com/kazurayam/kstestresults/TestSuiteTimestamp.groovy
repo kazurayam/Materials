@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -1,8 +1,8 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 
-interface WebTestingResultStorage {
+interface TestResults {
 
     Path resolveScreenshotFilePath(String testCaseId, String url)
     Path resolveScreenshotFilePath(String testCaseId, String url, String postFix)

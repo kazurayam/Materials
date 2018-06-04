@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 class TestSuiteName {
 

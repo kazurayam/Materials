@@ -1,10 +1,7 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
-
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.ImageMagickVisualTestingDriver
 
 import spock.lang.Ignore
 import spock.lang.Specification

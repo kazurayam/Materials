@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -12,7 +12,7 @@ class TestSuiteResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
-    private WebTestingResultStorageImpl wtrs
+    private TestResultsImpl wtrs
 
     // fixture methods
     def setup() {
@@ -21,7 +21,7 @@ class TestSuiteResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        wtrs = new WebTestingResultStorageImpl(workdir, new TestSuiteName('TS1'))
+        wtrs = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
 
     }
     def cleanup() {}

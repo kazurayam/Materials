@@ -1,15 +1,11 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorage
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorageFactory
-
 import spock.lang.Specification
 //@Ignore
-class WebTestingResultStorageFactorySpec extends Specification {
+class TestResultsFactorySpec extends Specification {
 
     // fields
     private static Path workdir
@@ -17,7 +13,7 @@ class WebTestingResultStorageFactorySpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(WebTestingResultStorageFactorySpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsFactorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -34,7 +30,7 @@ class WebTestingResultStorageFactorySpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        WebTestingResultStorage scRepo = WebTestingResultStorageFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResults scRepo = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
         then:
         scRepo != null
         scRepo.toString().contains('TS1')

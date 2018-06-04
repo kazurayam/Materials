@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -121,7 +121,7 @@ class TargetPageSpec extends Specification {
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
+        TestResultsImpl sr = new TestResultsImpl(baseDir, new TestSuiteName('TS1'))
         TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))

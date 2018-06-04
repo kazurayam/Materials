@@ -1,4 +1,4 @@
-package com.kazurayam.webtestingresultstorage
+package com.kazurayam.kstestresults
 
 import java.nio.file.Path
 
@@ -10,10 +10,10 @@ import java.nio.file.Path
  */
 class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
-    private WebTestingResultStorageImpl scRepo
+    private TestResultsImpl scRepo
     private Path outputDir
 
-    ImageMagickVisualTestingDriver(WebTestingResultStorageImpl scRepo) {
+    ImageMagickVisualTestingDriver(TestResultsImpl scRepo) {
         this.scRepo = scRepo
     }
 
