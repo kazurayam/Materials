@@ -1,7 +1,8 @@
 package com.kazurayam.webtestingresultstorage
 
-import groovy.json.JsonBuilder
 import java.nio.file.Path
+
+import groovy.json.JsonBuilder
 
 /**
  *
@@ -65,7 +66,9 @@ class TestCaseResult {
 
     TargetPage getTargetPage(URL url) {
         for (TargetPage tp : this.targetPages) {
-            if (tp.getUrl() == url) {
+            // you MUST NOT evaluate 'tp.getUrl() == url'
+            // because it will take more than 10 seconds for DNS Hostname resolution
+            if (tp.getUrl().toString() == url.toString()) {
                 return tp
             }
         }

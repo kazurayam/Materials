@@ -1,5 +1,9 @@
-Screenshot repository in Katalon Studio
+Web Testing Result Storage
 ====
+
+# What is this?
+
+# How to make use of this?
 
 
 ```

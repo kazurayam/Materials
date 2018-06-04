@@ -3,16 +3,6 @@ package com.kazurayam.webtestingresultstorage
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.webtestingresultstorage.Helpers
-import com.kazurayam.webtestingresultstorage.WebTestingResultStorageImpl
-import com.kazurayam.webtestingresultstorage.ScreenshotWrapper
-import com.kazurayam.webtestingresultstorage.TargetPage
-import com.kazurayam.webtestingresultstorage.TestCaseName
-import com.kazurayam.webtestingresultstorage.TestCaseResult
-import com.kazurayam.webtestingresultstorage.TestSuiteName
-import com.kazurayam.webtestingresultstorage.TestSuiteResult
-import com.kazurayam.webtestingresultstorage.TestSuiteTimestamp
-
 import spock.lang.Specification
 
 //@Ignore
@@ -39,16 +29,19 @@ class ScreenshotWrapperSpec extends Specification {
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
         when:
-        WebTestingResultStorageImpl sr = new WebTestingResultStorageImpl(baseDir, new TestSuiteName('TS1'))
-        TestSuiteResult tsr = sr.getTestSuiteResult(
-                new TestSuiteName('TS1'), new TestSuiteTimestamp('20180530_130419'))
-        TestCaseResult tcr = tsr.getTestCaseResult(new TestCaseName('TC1'))
+        TestSuiteName tsn = new TestSuiteName('TS1')
+        TestCaseName tcn = new TestCaseName('TC1')
+        TestSuiteTimestamp tstamp = new TestSuiteTimestamp('20180530_130419')
+        WebTestingResultStorageImpl wtrs = new WebTestingResultStorageImpl(baseDir, tsn)
+        TestSuiteResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
+        TestCaseResult tcr = tsr.getTestCaseResult(tcn)
         assert tcr != null
         TargetPage tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.getScreenshotWrapper('')
+        def str = sw.toString()
         then:
-        sw.toString().startsWith('{"ScreenshotWrapper":{"screenshotFilePath":"')
-        sw.toString().contains(sw.getScreenshotFilePath().toString())
-        sw.toString().endsWith('"}}')
+        str.startsWith('{"ScreenshotWrapper":{"screenshotFilePath":"')
+        str.contains(sw.getScreenshotFilePath().toString())
+        str.endsWith('"}}')
     }
 }

@@ -1,10 +1,10 @@
 package com.kazurayam.webtestingresultstorage
 
-import groovy.json.JsonBuilder
-
 import java.nio.file.Path
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
+import groovy.json.JsonBuilder
 
 class TargetPage {
 
