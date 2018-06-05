@@ -5,38 +5,6 @@ class CommandRunner {
     private CommandRunner() {}
 
     /**
-     * Run a ImageMagick command from Java, wait for the command to finish, and
-     * squeeze the standard output and the standard error into the output streams given.
-     *
-     * Will check for the Environement Variable 'IMAGEMAGICK_HOME' to find the absolute
-     * location of the ImageMagick commands executables.
-     *
-     * @param args
-     * @param out
-     * @param err
-     * @return
-     */
-    static int runImageMagickCommand(String[] args, OutputStream out, OutputStream err) {
-        if (args == null) { throw new IllegalArgumentException("1st argument arg is null") }
-        if (out == null) { throw new IllegalArgumentException("2nd argument out is null") }
-        if (err == null) { throw new IllegalArgumentException("3rd argument err is null") }
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Usage: <imagemagick command> args...")
-        }
-        def envVarName = 'IMAGEMAGICK_HOME'
-        def envVar = System.getenv(envVarName)
-        if (envVar != null) {
-            if (envVar.endsWith('/') || envVar.endsWith('\\')) {
-                args[0] = "${envVar}${args[0]}"
-            } else {
-                args[0] = "${envVar}/${args[0]}"
-            }
-        }
-        runCommand(args, out, err)
-    }
-
-
-    /**
      * Run a OS-level command from Java.
      *
      * Learned how to at https://qiita.com/itoa06/items/9e761d53c58eeb20490e

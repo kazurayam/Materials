@@ -11,8 +11,8 @@ class TsResultSpec extends Specification {
 
     // fields
     private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
-    private TestResultsImpl wtrs
+    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private TestResultsImpl trsi
 
     // fixture methods
     def setup() {
@@ -21,7 +21,7 @@ class TsResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        wtrs = new TestResultsImpl(workdir, new TsName('TS1'))
+        trsi = new TestResultsImpl(workdir, new TsName('TS1'))
 
     }
     def cleanup() {}
@@ -31,36 +31,36 @@ class TsResultSpec extends Specification {
     // feature methods
     def testFindOrNewTestCaseResult() {
         when:
-        TsResult tsr = wtrs.getCurrentTestSuiteResult()
-        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
+        TsResult tsr = trsi.getCurrentTsResult()
+        TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
         then:
         tcr != null
-        tcr.getTestCaseName() == new TcName('TC1')
+        tcr.getTcName() == new TcName('TC1')
         when:
-        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
         tp != null
         when:
-        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('')
         then:
         sw != null
     }
 
     def testToJson() {
         setup:
-        TsResult tsr = wtrs.getCurrentTestSuiteResult()
+        TsResult tsr = trsi.getCurrentTsResult()
         when:
-        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
-        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
-        ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
+        TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
+        TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('')
         def str = tsr.toString()
         System.err.println("${str}")
         System.out.println("${JsonOutput.prettyPrint(str)}")
         then:
-        str.startsWith('{"TestSuiteResult":{')
-        str.contains('testSuiteName')
+        str.startsWith('{"TsResult":{')
+        str.contains('tsName')
         str.contains('TS1')
-        str.contains('testCaseName')
+        str.contains('tcName')
         str.contains('TC1')
         str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
         str.endsWith('}}')

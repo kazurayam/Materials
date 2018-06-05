@@ -19,10 +19,13 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
     private static OutputStream out
     private static OutputStream err
 
+    private ImageMagickVisualTestingDriver imvtd
+
     // fixture methods
     def setup() {
         out = new ByteArrayOutputStream()
         err = new ByteArrayOutputStream()
+        imvtd = new ImageMagickVisualTestingDriver()
     }
 
     def cleanup() {
@@ -48,7 +51,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
         setup:
         String[] args = ['convert'] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 1
     }
@@ -73,7 +76,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             "${mask.toString()}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -90,7 +93,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             '-fill', 'black', '-draw', 'rectangle 0,0 480,32',
             "${mask.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -109,7 +112,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -128,7 +131,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -148,7 +151,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             "${masked2.toString()}",
             "${delta.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         // ふたつの画像を比較して差異があるので1がreturnされるはず。
         ret == 1
@@ -168,7 +171,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             "${masked1}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }
@@ -187,7 +190,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
             "${masked2}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImagemagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
         then:
         ret == 0
     }

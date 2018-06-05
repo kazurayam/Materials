@@ -88,7 +88,7 @@ class TsTimestamp {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TestSuiteTimestamp":')
+        sb.append('{"TsTimestamp":')
         sb.append('{"timestamp":"' + this.format()+ '"}' )
         sb.append('}')
         return sb.toString()

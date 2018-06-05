@@ -81,7 +81,7 @@ class HelpersSpec extends Specification {
 
     def testCopyDirectory() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Screenshots')
+        Path sourceDir = Paths.get('./src/test/fixture/Results')
         Path targetDir = workdir.resolve('testCopyDirectory')
         when:
         Helpers.copyDirectory(sourceDir, targetDir)

@@ -13,7 +13,7 @@ class CommandRunnerSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    def testJavaVersion() {
+    def testRunCommand() {
         when:
         String[] args = ['java', '-version']
         OutputStream out = new ByteArrayOutputStream()

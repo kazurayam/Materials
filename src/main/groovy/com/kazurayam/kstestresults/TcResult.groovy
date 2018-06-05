@@ -7,63 +7,63 @@ import java.nio.file.Path
  */
 class TcResult {
 
-    private TsResult parentTestSuiteResult
-    private TcName testCaseName
-    private Path testCaseDir
-    private List<TargetURL> targetPages
-    private TcStatus testCaseStatus
+    private TsResult parentTsResult
+    private TcName tcName
+    private Path tcDir
+    private List<TargetURL> targetURLs
+    private TcStatus tcStatus
 
     // --------------------- constructors and initializer ---------------------
-    TcResult(TsResult parentTestSuiteResult, TcName testCaseName) {
-        assert parentTestSuiteResult != null
-        assert testCaseName != null
-        this.parentTestSuiteResult = parentTestSuiteResult
-        this.testCaseName = testCaseName
-        this.testCaseDir = parentTestSuiteResult.getTestSuiteTimestampDir().resolve(this.testCaseName.toString())
-        this.targetPages = new ArrayList<TargetURL>()
-        this.testCaseStatus = TcStatus.TO_BE_EXECUTED
+    TcResult(TsResult parentTsResult, TcName tcName) {
+        assert parentTsResult != null
+        assert tcName != null
+        this.parentTsResult = parentTsResult
+        this.tcName = tcName
+        this.tcDir = parentTsResult.getTsTimestampDir().resolve(this.tcName.toString())
+        this.targetURLs = new ArrayList<TargetURL>()
+        this.tcStatus = TcStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
-    TsResult getParentTestSuiteResult() {
-        return this.parentTestSuiteResult
+    TsResult getParentTsResult() {
+        return this.parentTsResult
     }
 
-    TcName getTestCaseName() {
-        return testCaseName
+    TcName getTcName() {
+        return tcName
     }
 
-    Path getTestCaseDir() {
-        return testCaseDir
+    Path getTcDir() {
+        return tcDir
     }
 
-    void setTestCaseStatus(String testCaseStatus) {
-        assert testCaseStatus != null
-        TcStatus tcs = TcStatus.valueOf(testCaseStatus)  // this may throw IllegalArgumentException
-        this.setTestCaseStatus(tcs)
+    void setTcStatus(String tcStatus) {
+        assert tcStatus != null
+        TcStatus tcs = TcStatus.valueOf(tcStatus)  // this may throw IllegalArgumentException
+        this.setTcStatus(tcs)
     }
 
-    void setTestCaseStatus(TcStatus testCaseStatus) {
-        assert testCaseStatus != null
-        this.testCaseStatus = testCaseStatus
+    void setTcStatus(TcStatus tcStatus) {
+        assert tcStatus != null
+        this.tcStatus = tcStatus
     }
 
-    TcStatus getTestCaseStatus() {
-        return this.testCaseStatus
+    TcStatus getTcStatus() {
+        return this.tcStatus
     }
 
     // --------------------- create/add/get child nodes ----------------------
-    TargetURL findOrNewTargetPage(URL url) {
-        TargetURL ntp = this.getTargetPage(url)
+    TargetURL findOrNewTargetURL(URL url) {
+        TargetURL ntp = this.getTargetURL(url)
         if (ntp == null) {
             ntp = new TargetURL(this, url)
-            this.targetPages.add(ntp)
+            this.targetURLs.add(ntp)
         }
         return ntp
     }
 
-    TargetURL getTargetPage(URL url) {
-        for (TargetURL tp : this.targetPages) {
+    TargetURL getTargetURL(URL url) {
+        for (TargetURL tp : this.targetURLs) {
             // you MUST NOT evaluate 'tp.getUrl() == url'
             // because it will take more than 10 seconds for DNS Hostname resolution
             if (tp.getUrl().toString() == url.toString()) {
@@ -73,15 +73,15 @@ class TcResult {
         return null
     }
 
-    void addTargetPage(TargetURL targetPage) {
+    void addTargetURL(TargetURL targetPage) {
         boolean found = false
-        for (TargetURL tp : this.targetPages) {
+        for (TargetURL tp : this.targetURLs) {
             if (tp == targetPage) {
                 found = true
             }
         }
         if (!found) {
-            this.targetPages.add(targetPage)
+            this.targetURLs.add(targetPage)
         }
     }
 
@@ -97,7 +97,7 @@ class TcResult {
             return false
         }
         TcResult other = (TcResult) obj
-        if (this.testCaseName == other.getTestCaseName()) {
+        if (this.tcName == other.getTcName()) {
             return true
         } else {
             return false
@@ -106,7 +106,7 @@ class TcResult {
 
     @Override
     int hashCode() {
-        return this.testCaseName.hashCode()
+        return this.tcName.hashCode()
     }
 
     @Override
@@ -116,13 +116,13 @@ class TcResult {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TestCaseResult":{')
-        sb.append('"testCaseName":"'   + Helpers.escapeAsJsonText(this.testCaseName.toString())   + '",')
-        sb.append('"testCaseDir":"'    + Helpers.escapeAsJsonText(this.testCaseDir.toString())    + '",')
-        sb.append('"testCaseStatus":"' + this.testCaseStatus.toString() + '",')
-        sb.append('"targetPages":[')
+        sb.append('{"TcResult":{')
+        sb.append('"tcName":"'   + Helpers.escapeAsJsonText(this.tcName.toString())   + '",')
+        sb.append('"tcDir":"'    + Helpers.escapeAsJsonText(this.tcDir.toString())    + '",')
+        sb.append('"tcStatus":"' + this.tcStatus.toString() + '",')
+        sb.append('"targetURLs":[')
         def count = 0
-        for (TargetURL tp : this.targetPages) {
+        for (TargetURL tp : this.targetURLs) {
             if (count > 0) { sb.append(',') }
             sb.append(tp.toJson())
             count += 1

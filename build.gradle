@@ -26,4 +26,5 @@ test.outputs.upToDateWhen {false}
 
 test {
     include '**/*Spec.class'
+    exclude '**/CommandRunner.class'
 }

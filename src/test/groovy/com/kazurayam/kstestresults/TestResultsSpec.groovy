@@ -12,7 +12,7 @@ import spock.lang.Specification
 class TestResultsSpec extends Specification {
 
     private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
+    private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsSpec.class)}")
@@ -54,7 +54,7 @@ class TestResultsSpec extends Specification {
     def testResolveScreenshotFilePath() {
         when:
         TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
-        Path scfp = sr.resolveScreenshotFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         scfp != null
         scfp.toString().contains('TC1')

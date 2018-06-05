@@ -6,22 +6,22 @@ import java.util.regex.Pattern
 
 class TargetURL {
 
-    private TcResult parentTestCaseResult
+    private TcResult parentTcResult
     private URL url
-    private List<ScreenshotWrapper> screenshotWrappers
+    private List<MaterialWrapper> materialWrappers
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializers ---------------------
     protected TargetURL(TcResult parent, URL url) {
-        this.parentTestCaseResult = parent
+        this.parentTcResult = parent
         this.url = url
-        this.screenshotWrappers = new ArrayList<ScreenshotWrapper>()
+        this.materialWrappers = new ArrayList<MaterialWrapper>()
     }
 
     // --------------------- properties getter & setter -----------------------
-    TcResult getParentTestCaseResult() {
-        return this.parentTestCaseResult
+    TcResult getParentTcResult() {
+        return this.parentTcResult
     }
 
     URL getUrl() {
@@ -36,42 +36,42 @@ class TargetURL {
      * @param targetPageUrl
      * @return
      */
-    ScreenshotWrapper findOrNewScreenshotWrapper(String identifier) {
+    MaterialWrapper findOrNewMaterialWrapper(String identifier) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p = this.parentTestCaseResult.getTestCaseDir().resolve("${encodedUrl}${identifier}${IMAGE_FILE_EXTENSION}")
-        if (this.getScreenshotWrapper(p) != null) {
-            return this.getScreenshotWrapper(p)
+        Path p = this.parentTcResult.getTcDir().resolve("${encodedUrl}${identifier}${IMAGE_FILE_EXTENSION}")
+        if (this.getMaterialWrapper(p) != null) {
+            return this.getMaterialWrapper(p)
         } else {
-            ScreenshotWrapper sw = new ScreenshotWrapper(this, p)
-            this.screenshotWrappers.add(sw)
+            MaterialWrapper sw = new MaterialWrapper(this, p)
+            this.materialWrappers.add(sw)
             return sw
         }
     }
 
-    ScreenshotWrapper findOrNewScreenshotWrapper(Path imageFilePath) {
-        ScreenshotWrapper sw = this.getScreenshotWrapper(imageFilePath)
+    MaterialWrapper findOrNewMaterialWrapper(Path materialFilePath) {
+        MaterialWrapper sw = this.getMaterialWrapper(materialFilePath)
         if (sw == null) {
-            sw = new ScreenshotWrapper(this, imageFilePath)
-            this.screenshotWrappers.add(sw)
+            sw = new MaterialWrapper(this, materialFilePath)
+            this.materialWrappers.add(sw)
         }
         return sw
     }
 
-    void addScreenshotWrapper(ScreenshotWrapper screenshotWrapper) {
+    void addMaterialWrapper(MaterialWrapper materialWrapper) {
         boolean found = false
-        for (ScreenshotWrapper sw : this.screenshotWrappers) {
-            if (sw == screenshotWrapper) {
+        for (MaterialWrapper sw : this.materialWrappers) {
+            if (sw == materialWrapper) {
                 found = true
             }
         }
         if (!found) {
-            this.screenshotWrappers.add(screenshotWrapper)
+            this.materialWrappers.add(materialWrapper)
         }
     }
 
-    ScreenshotWrapper getScreenshotWrapper(Path imageFilePath) {
-        for (ScreenshotWrapper sw : this.screenshotWrappers) {
-            if (sw.getScreenshotFilePath() == imageFilePath) {
+    MaterialWrapper getMaterialWrapper(Path materialFilePath) {
+        for (MaterialWrapper sw : this.materialWrappers) {
+            if (sw.getMaterialFilePath() == materialFilePath) {
                 return sw
             }
         }
@@ -83,15 +83,15 @@ class TargetURL {
     /**
      * accept a string in a format (<any string>[/\])(<enocoded URL string>)(.[0-9]+)?(.png)
      * and returns a List<String> of ['<decoded URL>', '[1-9][0-9]*'] or ['<decoded URL>']
-     * @param screenshotFileName
+     * @param materialFileName
      * @return empty List<String> if unmatched
      */
     static final int flag = Pattern.CASE_INSENSITIVE
     static final String EXTENSION_PART_REGEX = '(\\.([0-9]+))?\\.png$'
     static final Pattern EXTENSION_PART_PATTERN = Pattern.compile(EXTENSION_PART_REGEX, flag)
-    static List<String> parseScreenshotFileName(String screenshotFileName) {
+    static List<String> parseMaterialFileName(String materialFileName) {
         List<String> values = new ArrayList<String>()
-        String preprocessed = screenshotFileName.replaceAll('\\\\', '/')  // Windows XFile path separator -> UNIX
+        String preprocessed = materialFileName.replaceAll('\\\\', '/')  // Windows XFile path separator -> UNIX
         List<String> elements = preprocessed.split('[/]')
         if (elements.size() > 0) {
             String fileName = elements.getAt(elements.size() - 1)
@@ -115,7 +115,7 @@ class TargetURL {
         //if (this == obj) { return true }
         if (!(obj instanceof TargetURL)) { return false }
         TargetURL other = (TargetURL)obj
-        if (this.parentTestCaseResult == other.getParentTestCaseResult()
+        if (this.parentTcResult == other.getParentTcResult()
             && this.url == other.getUrl()) {
             return true
         } else {
@@ -127,7 +127,7 @@ class TargetURL {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getParentTestCaseResult().hashCode()
+        result = prime * result + this.getParentTcResult().hashCode()
         result = prime * result + this.getUrl().hashCode()
         return result
     }
@@ -139,11 +139,11 @@ class TargetURL {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TargetPage":{')
+        sb.append('{"TargetURL":{')
         sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
-        sb.append('"screenshotWrappers":[')
+        sb.append('"materialWrappers":[')
         def count = 0
-        for (ScreenshotWrapper sw : screenshotWrappers) {
+        for (MaterialWrapper sw : materialWrappers) {
             if (count > 0) {
                 sb.append(',')
             }

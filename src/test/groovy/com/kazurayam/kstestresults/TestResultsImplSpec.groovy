@@ -11,7 +11,7 @@ class TestResultsImplSpec extends Specification {
 
     // fields
     private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
+    private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setup() {}
@@ -41,28 +41,28 @@ class TestResultsImplSpec extends Specification {
         then:
         tsr != null
         tsr.getBaseDir() == workdir
-        tsr.getTestSuiteName() == new TsName('TS1')
-        tsr.getTestSuiteTimestamp() == new TsTimestamp('20180530_130419')
-        tsr.getTestSuiteTimestampDir() == workdir.resolve('TS1/20180530_130419')
+        tsr.getTsName() == new TsName('TS1')
+        tsr.getTsTimestamp() == new TsTimestamp('20180530_130419')
+        tsr.getTsTimestampDir() == workdir.resolve('TS1/20180530_130419')
         when:
         TcName tcn = new TcName('TC1')
-        TcResult tcr = tsr.getTestCaseResult(tcn)
+        TcResult tcr = tsr.getTcResult(tcn)
         then:
         tcr != null
-        tcr.getParentTestSuiteResult() == tsr
-        tcr.getTestCaseName() == tcn
-        tcr.getTestCaseDir() == tsr.getTestSuiteTimestampDir().resolve('TC1')
-        tcr.getTestCaseStatus() == TcStatus.TO_BE_EXECUTED
+        tcr.getParentTsResult() == tsr
+        tcr.getTcName() == tcn
+        tcr.getTcDir() == tsr.getTsTimestampDir().resolve('TC1')
+        tcr.getTcStatus() == TcStatus.TO_BE_EXECUTED
         when:
-        TargetURL tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
         tp != null
         when:
-        Path imageFilePath = tcr.getTestCaseDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
-        ScreenshotWrapper sw = tp.getScreenshotWrapper(imageFilePath)
+        Path imageFilePath = tcr.getTcDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        MaterialWrapper sw = tp.getMaterialWrapper(imageFilePath)
         //System.out.println(prettyPrint("${sw}"))
         then:
-        sw.getScreenshotFilePath() == imageFilePath
+        sw.getMaterialFilePath() == imageFilePath
     }
 
     def testToJson() {
@@ -83,7 +83,7 @@ class TestResultsImplSpec extends Specification {
     // helper methods
     TsResult lookupTestSuiteResult(List<TsResult> tsrList, TsName tsn, TsTimestamp tst) {
         for (TsResult tsr : tsrList ) {
-            if (tsr.getTestSuiteName() == tsn && tsr.getTestSuiteTimestamp() == tst) {
+            if (tsr.getTsName() == tsn && tsr.getTsTimestamp() == tst) {
                 return tsr
             }
         }

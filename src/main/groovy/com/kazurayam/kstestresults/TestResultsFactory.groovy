@@ -10,8 +10,8 @@ class TestResultsFactory {
         return createInstance(baseDir, new TsName(testSuiteId))
     }
 
-    static TestResults createInstance(Path baseDir, TsName testSuiteName) {
-        return new TestResultsImpl(baseDir, testSuiteName)
+    static TestResults createInstance(Path baseDir, TsName tsName) {
+        return new TestResultsImpl(baseDir, tsName)
     }
 
 }

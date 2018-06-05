@@ -9,7 +9,7 @@ class TestResultsFactorySpec extends Specification {
 
     // fields
     private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
+    private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setup() {}
@@ -19,21 +19,17 @@ class TestResultsFactorySpec extends Specification {
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
+        Helpers.copyDirectory(fixture, workdir)
     }
     def cleanupSpec() {}
 
     // feature methods
     def testCreateInstance() {
-        setup:
-        String dirName = 'testCreateInstance'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
         when:
-        TestResults scRepo = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResults trs = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
         then:
-        scRepo != null
-        scRepo.toString().contains('TS1')
+        trs != null
+        trs.toString().contains('TS1')
     }
 
     // helper methods

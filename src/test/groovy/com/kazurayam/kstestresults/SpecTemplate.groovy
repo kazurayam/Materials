@@ -11,7 +11,7 @@ class SpecTemplate extends Specification {
 
     // fields
     private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
+    private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setup() {
