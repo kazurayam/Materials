@@ -30,6 +30,7 @@ final class TestResultsImpl implements TestResults {
      *     def beforeTestSuite(TestSuiteContext testSuiteContext) {
      *         GlobalVariable.CURRENT_TESTSUITE_ID = testSuiteContext.getTestSuiteId()
      *         Path resultsDir = Paths.get(RunConfiguration.getProjectDir()).resolve('Results')
+     *         Helpers.ensureDirs(resultsDir)
      *         TestResults trs =
      *             TestResultsFactory.createInstance(resultsDir, testSuiteContext.getTestSuiteId())
      *         GlobalVariable.TESTRESULTS = trs
@@ -40,6 +41,9 @@ final class TestResultsImpl implements TestResults {
      * @param tsName
      */
     TestResultsImpl(Path baseDir, TsName tsName) {
+        if (!baseDir.toFile().exists()) {
+            throw new IllegalArgumentException("${baseDir} does not exist")
+        }
         this.baseDir = baseDir
         this.tsResults = scan(this.baseDir)
         //
