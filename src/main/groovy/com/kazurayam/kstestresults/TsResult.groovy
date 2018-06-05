@@ -5,17 +5,17 @@ import java.nio.file.Path
 /**
  *
  */
-final class TestSuiteResult {
+final class TsResult {
 
     private Path baseDir
-    private TestSuiteName testSuiteName
-    private TestSuiteTimestamp testSuiteTimestamp
+    private TsName testSuiteName
+    private TsTimestamp testSuiteTimestamp
     private Path testSuiteTimestampDir
-    private List<TestCaseResult> testCaseResults
+    private List<TcResult> testCaseResults
 
 
     // ------------------ constructors & initializer -------------------------------
-    TestSuiteResult(Path baseDir, TestSuiteName testSuiteName, TestSuiteTimestamp testSuiteTimestamp) {
+    TsResult(Path baseDir, TsName testSuiteName, TsTimestamp testSuiteTimestamp) {
         assert baseDir != null
         assert testSuiteName != null
         assert testSuiteTimestamp != null
@@ -23,7 +23,7 @@ final class TestSuiteResult {
         this.testSuiteName = testSuiteName
         this.testSuiteTimestamp = testSuiteTimestamp
         this.testSuiteTimestampDir = baseDir.resolve(testSuiteName.toString()).resolve(testSuiteTimestamp.format())
-        this.testCaseResults = new ArrayList<TestCaseResult>()
+        this.testCaseResults = new ArrayList<TcResult>()
     }
 
     // ------------------ attribute setter & getter -------------------------------
@@ -35,17 +35,17 @@ final class TestSuiteResult {
         return this.testSuiteTimestampDir
     }
 
-    TestSuiteName getTestSuiteName() {
+    TsName getTestSuiteName() {
         return testSuiteName
     }
 
-    TestSuiteTimestamp getTestSuiteTimestamp() {
+    TsTimestamp getTestSuiteTimestamp() {
         return testSuiteTimestamp
     }
 
     // ------------------ create/add/get child nodes ------------------------------
-    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
-        for (TestCaseResult tcr : this.testCaseResults) {
+    TcResult getTestCaseResult(TcName testCaseName) {
+        for (TcResult tcr : this.testCaseResults) {
             if (tcr.getTestCaseName() == testCaseName) {
                 return tcr
             }
@@ -53,18 +53,18 @@ final class TestSuiteResult {
         return null
     }
 
-    TestCaseResult findOrNewTestCaseResult(TestCaseName testCaseName) {
-        TestCaseResult tcr = this.getTestCaseResult(testCaseName)
+    TcResult findOrNewTestCaseResult(TcName testCaseName) {
+        TcResult tcr = this.getTestCaseResult(testCaseName)
         if (tcr == null) {
-            tcr = new TestCaseResult(this, testCaseName)
+            tcr = new TcResult(this, testCaseName)
             this.testCaseResults.add(tcr)
         }
         return tcr
     }
 
-    void addTestCaseResult(TestCaseResult testCaseResult) {
+    void addTestCaseResult(TcResult testCaseResult) {
         boolean found = false
-        for (TestCaseResult tcr : this.testCaseResults) {
+        for (TcResult tcr : this.testCaseResults) {
             if (tcr == testCaseResult) {
                 found = true
             }
@@ -87,8 +87,8 @@ final class TestSuiteResult {
     @Override
     boolean equals(Object obj) {
         //if (this == obj) { return true }
-        if (!(obj instanceof TestSuiteResult)) { return false }
-        TestSuiteResult other = (TestSuiteResult)obj
+        if (!(obj instanceof TsResult)) { return false }
+        TsResult other = (TsResult)obj
         if (this.testSuiteName == other.getTestSuiteName() && this.testSuiteTimestamp == other.getTestSuiteTimestamp()) {
             return true
         } else {
@@ -119,7 +119,7 @@ final class TestSuiteResult {
         sb.append('"testSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.testSuiteTimestampDir.toString()) + '",')
         sb.append('"testCaseResults": [')
         def count = 0
-        for (TestCaseResult tcr : this.testCaseResults) {
+        for (TcResult tcr : this.testCaseResults) {
             if (count > 0) { sb.append(',') }
             count += 1
             sb.append(tcr.toJson())

@@ -11,7 +11,7 @@ import java.time.temporal.TemporalAccessor
  * @author kazurayam
  *
  */
-class TestSuiteTimestamp {
+class TsTimestamp {
 
     private LocalDateTime timestamp
 
@@ -20,11 +20,11 @@ class TestSuiteTimestamp {
     /**
      * create a Timestamp object based on the LocalDateTime of now
      */
-    TestSuiteTimestamp() {
+    TsTimestamp() {
         this(LocalDateTime.now())
     }
 
-    TestSuiteTimestamp(String timestamp) {
+    TsTimestamp(String timestamp) {
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
             this.timestamp = ignoreMilliseconds(ldt)
@@ -38,7 +38,7 @@ class TestSuiteTimestamp {
      *
      * @param ts
      */
-    TestSuiteTimestamp(LocalDateTime ts) {
+    TsTimestamp(LocalDateTime ts) {
         this.timestamp = ignoreMilliseconds(ts)
     }
 
@@ -70,9 +70,9 @@ class TestSuiteTimestamp {
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof TestSuiteTimestamp))
+        if (!(obj instanceof TsTimestamp))
             return false
-        TestSuiteTimestamp other = (TestSuiteTimestamp)obj
+        TsTimestamp other = (TsTimestamp)obj
         return this.getValue() == other.getValue()
     }
 

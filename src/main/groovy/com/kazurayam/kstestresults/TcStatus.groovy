@@ -1,6 +1,6 @@
 package com.kazurayam.kstestresults
 
-enum TestCaseStatus {
+enum TcStatus {
 
     TO_BE_EXECUTED,
     FAILED,

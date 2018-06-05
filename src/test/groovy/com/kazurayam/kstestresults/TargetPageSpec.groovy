@@ -121,9 +121,9 @@ class TargetPageSpec extends Specification {
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        TestResultsImpl sr = new TestResultsImpl(baseDir, new TestSuiteName('TS1'))
-        TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
-        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TestResultsImpl sr = new TestResultsImpl(baseDir, new TsName('TS1'))
+        TsResult tsr = sr.getCurrentTestSuiteResult()
+        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         when:

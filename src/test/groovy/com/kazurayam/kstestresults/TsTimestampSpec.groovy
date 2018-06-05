@@ -12,7 +12,7 @@ import spock.lang.Specification
  *
  */
 //@Ignore
-class TestSuiteTimestampSpec extends Specification {
+class TsTimestampSpec extends Specification {
 
     // fields
 
@@ -28,7 +28,7 @@ class TestSuiteTimestampSpec extends Specification {
         String fixture = '20180529_143459'
         LocalDateTime expected = LocalDateTime.of(2018, 5, 29, 14, 34, 59)
         when:
-        LocalDateTime actual = TestSuiteTimestamp.parse(fixture)
+        LocalDateTime actual = TsTimestamp.parse(fixture)
         then:
         actual == expected
     }
@@ -39,7 +39,7 @@ class TestSuiteTimestampSpec extends Specification {
         LocalDateTime expected1 = LocalDateTime.of(2018, 5, 29, 11, 22, 33)
         LocalDateTime expected2 = LocalDateTime.of(2018, 5, 29, 11, 22, 33, 00)
         when:
-        TestSuiteTimestamp ts = new TestSuiteTimestamp(source)
+        TsTimestamp ts = new TsTimestamp(source)
         then:
         ts.getValue() == expected1
         ts.getValue() == expected2
@@ -50,7 +50,7 @@ class TestSuiteTimestampSpec extends Specification {
         setup:
         LocalDateTime source = LocalDateTime.of(2018, 6, 5, 9, 2, 13)
         when:
-        TestSuiteTimestamp ts = new TestSuiteTimestamp(source)
+        TsTimestamp ts = new TsTimestamp(source)
         def str = ts.toString()
         System.out.println("${JsonOutput.prettyPrint(str)}")
         then:

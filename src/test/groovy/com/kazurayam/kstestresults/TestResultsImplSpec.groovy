@@ -30,29 +30,29 @@ class TestResultsImplSpec extends Specification {
         setup:
         Helpers.copyDirectory(fixture, workdir)
         when:
-        List<TestSuiteResult> tsrList = TestResultsImpl.scan(workdir)
+        List<TsResult> tsrList = TestResultsImpl.scan(workdir)
         then:
         tsrList != null
         tsrList.size() == 2
         when:
-        TestSuiteResult tsr =
-                lookupTestSuiteResult(tsrList, new TestSuiteName('TS1'),
-                        new TestSuiteTimestamp('20180530_130419'))
+        TsResult tsr =
+                lookupTestSuiteResult(tsrList, new TsName('TS1'),
+                        new TsTimestamp('20180530_130419'))
         then:
         tsr != null
         tsr.getBaseDir() == workdir
-        tsr.getTestSuiteName() == new TestSuiteName('TS1')
-        tsr.getTestSuiteTimestamp() == new TestSuiteTimestamp('20180530_130419')
+        tsr.getTestSuiteName() == new TsName('TS1')
+        tsr.getTestSuiteTimestamp() == new TsTimestamp('20180530_130419')
         tsr.getTestSuiteTimestampDir() == workdir.resolve('TS1/20180530_130419')
         when:
-        TestCaseName tcn = new TestCaseName('TC1')
-        TestCaseResult tcr = tsr.getTestCaseResult(tcn)
+        TcName tcn = new TcName('TC1')
+        TcResult tcr = tsr.getTestCaseResult(tcn)
         then:
         tcr != null
         tcr.getParentTestSuiteResult() == tsr
         tcr.getTestCaseName() == tcn
         tcr.getTestCaseDir() == tsr.getTestSuiteTimestampDir().resolve('TC1')
-        tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
+        tcr.getTestCaseStatus() == TcStatus.TO_BE_EXECUTED
         when:
         TargetPage tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
         then:
@@ -67,7 +67,7 @@ class TestResultsImplSpec extends Specification {
 
     def testToJson() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
         when:
         def str = tri.toJson()
         System.err.println("str=\n${str}")
@@ -81,8 +81,8 @@ class TestResultsImplSpec extends Specification {
     }
 
     // helper methods
-    TestSuiteResult lookupTestSuiteResult(List<TestSuiteResult> tsrList, TestSuiteName tsn, TestSuiteTimestamp tst) {
-        for (TestSuiteResult tsr : tsrList ) {
+    TsResult lookupTestSuiteResult(List<TsResult> tsrList, TsName tsn, TsTimestamp tst) {
+        for (TsResult tsr : tsrList ) {
             if (tsr.getTestSuiteName() == tsn && tsr.getTestSuiteTimestamp() == tst) {
                 return tsr
             }

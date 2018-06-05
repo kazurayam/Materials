@@ -28,12 +28,12 @@ class ScreenshotWrapperSpec extends Specification {
         Path baseDir = workdir.resolve(dirName)
         Helpers.ensureDirs(baseDir)
         Helpers.copyDirectory(fixture, baseDir)
-        TestSuiteName tsn = new TestSuiteName('TS1')
-        TestCaseName tcn = new TestCaseName('TC1')
-        TestSuiteTimestamp tstamp = new TestSuiteTimestamp('20180530_130419')
+        TsName tsn = new TsName('TS1')
+        TcName tcn = new TcName('TC1')
+        TsTimestamp tstamp = new TsTimestamp('20180530_130419')
         TestResultsImpl wtrs = new TestResultsImpl(baseDir, tsn)
-        TestSuiteResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
-        TestCaseResult tcr = tsr.findOrNewTestCaseResult(tcn)
+        TsResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
+        TcResult tcr = tsr.findOrNewTestCaseResult(tcn)
         assert tcr != null
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         when:

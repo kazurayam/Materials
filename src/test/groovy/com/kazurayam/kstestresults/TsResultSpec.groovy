@@ -7,7 +7,7 @@ import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TestSuiteResultSpec extends Specification {
+class TsResultSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -16,12 +16,12 @@ class TestSuiteResultSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestSuiteResultSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TsResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        wtrs = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
+        wtrs = new TestResultsImpl(workdir, new TsName('TS1'))
 
     }
     def cleanup() {}
@@ -31,11 +31,11 @@ class TestSuiteResultSpec extends Specification {
     // feature methods
     def testFindOrNewTestCaseResult() {
         when:
-        TestSuiteResult tsr = wtrs.getCurrentTestSuiteResult()
-        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TsResult tsr = wtrs.getCurrentTestSuiteResult()
+        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
         then:
         tcr != null
-        tcr.getTestCaseName() == new TestCaseName('TC1')
+        tcr.getTestCaseName() == new TcName('TC1')
         when:
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         then:
@@ -48,9 +48,9 @@ class TestSuiteResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TestSuiteResult tsr = wtrs.getCurrentTestSuiteResult()
+        TsResult tsr = wtrs.getCurrentTestSuiteResult()
         when:
-        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         def str = tsr.toString()

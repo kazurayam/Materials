@@ -8,9 +8,9 @@ import java.util.stream.Collectors
 final class TestResultsImpl implements TestResults {
 
     private Path baseDir
-    private TestSuiteName currentTestSuiteName
-    private TestSuiteTimestamp currentTestSuiteTimestamp
-    private List<TestSuiteResult> testSuiteResults
+    private TsName currentTestSuiteName
+    private TsTimestamp currentTestSuiteTimestamp
+    private List<TsResult> testSuiteResults
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
@@ -38,13 +38,13 @@ final class TestResultsImpl implements TestResults {
      *
      * @param dirPath directory under which a directory named as BASE_DIR_NAME will be created.
      */
-    TestResultsImpl(Path baseDir, TestSuiteName testSuiteName) {
+    TestResultsImpl(Path baseDir, TsName testSuiteName) {
         this.baseDir = baseDir
         this.testSuiteResults = scan(this.baseDir)
         //
         this.currentTestSuiteName = testSuiteName
-        this.currentTestSuiteTimestamp = new TestSuiteTimestamp()
-        TestSuiteResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
+        this.currentTestSuiteTimestamp = new TsTimestamp()
+        TsResult tsr = this.findOrNewTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
         this.addTestSuiteResult(tsr)
     }
 
@@ -64,27 +64,27 @@ final class TestResultsImpl implements TestResults {
      * @returns the tree
      *
      */
-    static List<TestSuiteResult> scan(Path baseDir) {
-        List<TestSuiteResult> testSuiteResults = new ArrayList<TestSuiteResult>()
+    static List<TsResult> scan(Path baseDir) {
+        List<TsResult> testSuiteResults = new ArrayList<TsResult>()
         List<Path> testSuiteNamePaths =
                 Files.list(baseDir)
                         .filter({ p -> Files.isDirectory(p) })
                         .collect(Collectors.toList())
         for (Path testSuiteNamePath : testSuiteNamePaths) {
-            TestSuiteName testSuiteName = new TestSuiteName(testSuiteNamePath.getFileName().toString())
+            TsName testSuiteName = new TsName(testSuiteNamePath.getFileName().toString())
             List<Path> timestampPaths =
                     Files.list(testSuiteNamePath)
                             .filter( { p -> Files.isDirectory(p) })
                             .collect(Collectors.toList())
             for (Path timestampPath : timestampPaths) {
-                LocalDateTime ldt = TestSuiteTimestamp.parse(timestampPath.getFileName().toString())
+                LocalDateTime ldt = TsTimestamp.parse(timestampPath.getFileName().toString())
                 if (ldt != null) {
-                    TestSuiteTimestamp testSuiteTimestamp = new TestSuiteTimestamp(ldt)
-                    TestSuiteResult tsr = new TestSuiteResult(baseDir, testSuiteName, testSuiteTimestamp)
+                    TsTimestamp testSuiteTimestamp = new TsTimestamp(ldt)
+                    TsResult tsr = new TsResult(baseDir, testSuiteName, testSuiteTimestamp)
                     testSuiteResults.add(tsr)
                     //System.out.println("TestSuiteResult ${tsr}")
-                    List<TestCaseResult> testCaseResults = scanTestSuiteResult(tsr)
-                    for (TestCaseResult tcr : testCaseResults) {
+                    List<TcResult> testCaseResults = scanTestSuiteResult(tsr)
+                    for (TcResult tcr : testCaseResults) {
                         tsr.addTestCaseResult(tcr)
                     }
                 } else {
@@ -95,16 +95,16 @@ final class TestResultsImpl implements TestResults {
         return testSuiteResults
     }
 
-    private static List<TestCaseResult> scanTestSuiteResult(TestSuiteResult tsr) {
-        List<TestCaseResult> testCaseResults = new ArrayList<TestCaseResult>()
+    private static List<TcResult> scanTestSuiteResult(TsResult tsr) {
+        List<TcResult> testCaseResults = new ArrayList<TcResult>()
         List<Path> testCaseDirectories =
                 Files.list(tsr.getTestSuiteTimestampDir())
                         .filter({ p -> Files.isDirectory(p) })
                         .collect(Collectors.toList())
         for (Path testCaseDirectory : testCaseDirectories) {
-            TestCaseResult tcr =
-                    new TestCaseResult(tsr,
-                            new TestCaseName(testCaseDirectory.getFileName().toString()))
+            TcResult tcr =
+                    new TcResult(tsr,
+                            new TcName(testCaseDirectory.getFileName().toString()))
             testCaseResults.add(tcr)
             List<Path> imageFilePaths =
                     Files.list(testCaseDirectory)
@@ -134,11 +134,11 @@ final class TestResultsImpl implements TestResults {
         return this.baseDir
     }
 
-    TestSuiteName getCurrentTestSuiteName() {
+    TsName getCurrentTestSuiteName() {
         return this.currentTestSuiteName
     }
 
-    TestSuiteTimestamp getCurrentTestSuiteTimestamp() {
+    TsTimestamp getCurrentTestSuiteTimestamp() {
         return this.currentTestSuiteTimestamp
     }
 
@@ -150,10 +150,10 @@ final class TestResultsImpl implements TestResults {
      * @param timestamp
      * @return
      */
-    TestSuiteResult findOrNewTestSuiteResult(TestSuiteName testSuiteName, TestSuiteTimestamp timestamp) {
-        TestSuiteResult tsr = this.getTestSuiteResult(testSuiteName, timestamp)
+    TsResult findOrNewTestSuiteResult(TsName testSuiteName, TsTimestamp timestamp) {
+        TsResult tsr = this.getTestSuiteResult(testSuiteName, timestamp)
         if (tsr == null) {
-            tsr = new TestSuiteResult(this.baseDir, testSuiteName, timestamp)
+            tsr = new TsResult(this.baseDir, testSuiteName, timestamp)
         }
         return tsr
     }
@@ -164,9 +164,9 @@ final class TestResultsImpl implements TestResults {
      * @param timestamp
      * @return
      */
-    void addTestSuiteResult(TestSuiteResult testSuiteResult) {
+    void addTestSuiteResult(TsResult testSuiteResult) {
         boolean found = false
-        for (TestSuiteResult tsr : this.testSuiteResults) {
+        for (TsResult tsr : this.testSuiteResults) {
             if (tsr == testSuiteResult) {
                 found = true
             }
@@ -182,8 +182,8 @@ final class TestResultsImpl implements TestResults {
      * @param timestamp
      * @return
      */
-    TestSuiteResult getTestSuiteResult(TestSuiteName testSuiteName, TestSuiteTimestamp timestamp) {
-        for (TestSuiteResult tsr : this.testSuiteResults) {
+    TsResult getTestSuiteResult(TsName testSuiteName, TsTimestamp timestamp) {
+        for (TsResult tsr : this.testSuiteResults) {
             if (tsr.getTestSuiteName() == testSuiteName && tsr.getTestSuiteTimestamp() == timestamp) {
                 return tsr
             }
@@ -194,12 +194,12 @@ final class TestResultsImpl implements TestResults {
     // -------------------------- do the business -----------------------------
     @Override
     Path resolveScreenshotFilePath(String testCaseId, String url) {
-        this.resolveScreenshotFilePath(new TestCaseName(testCaseId), new URL(url), '')
+        this.resolveScreenshotFilePath(new TcName(testCaseId), new URL(url), '')
     }
 
     @Override
     Path resolveScreenshotFilePath(String testCaseId, String url, String postFix) {
-        this.resolveScreenshotFilePath(new TestCaseName(testCaseId), new URL(url), postFix)
+        this.resolveScreenshotFilePath(new TcName(testCaseId), new URL(url), postFix)
     }
 
     /**
@@ -209,10 +209,10 @@ final class TestResultsImpl implements TestResults {
      * @param postFix
      * @return
      */
-    Path resolveScreenshotFilePath(TestCaseName testCaseName, URL url, String postFix) {
-        TestSuiteResult currentTestSuiteResult = this.getCurrentTestSuiteResult()
+    Path resolveScreenshotFilePath(TcName testCaseName, URL url, String postFix) {
+        TsResult currentTestSuiteResult = this.getCurrentTestSuiteResult()
         assert currentTestSuiteResult != null
-        TestCaseResult tcr = currentTestSuiteResult.findOrNewTestCaseResult(testCaseName)
+        TcResult tcr = currentTestSuiteResult.findOrNewTestCaseResult(testCaseName)
         if (tcr != null) {
             ScreenshotWrapper sw = tcr.findOrNewTargetPage(url).findOrNewScreenshotWrapper(postFix)
             Path screenshotFilePath = sw.getScreenshotFilePath()
@@ -230,10 +230,10 @@ final class TestResultsImpl implements TestResults {
 
     // ----------------------------- helpers ----------------------------------
 
-    TestSuiteResult getCurrentTestSuiteResult() {
+    TsResult getCurrentTestSuiteResult() {
         if (this.currentTestSuiteName != null) {
             if (this.currentTestSuiteTimestamp != null) {
-                TestSuiteResult tsr = getTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
+                TsResult tsr = getTestSuiteResult(this.currentTestSuiteName, this.currentTestSuiteTimestamp)
                 assert tsr != null
                 return tsr
             } else {
@@ -244,13 +244,13 @@ final class TestResultsImpl implements TestResults {
         }
     }
 
-    TestCaseResult getTestCaseResult(String testCaseId) {
-        return this.getTestCaseResult(new TestCaseName(testCaseId))
+    TcResult getTestCaseResult(String testCaseId) {
+        return this.getTestCaseResult(new TcName(testCaseId))
     }
 
-    TestCaseResult getTestCaseResult(TestCaseName testCaseName) {
+    TcResult getTestCaseResult(TcName testCaseName) {
         if (testCaseName != null) {
-            TestSuiteResult tsr = this.getCurrentTestSuiteResult()
+            TsResult tsr = this.getCurrentTestSuiteResult()
             assert tsr != null
             return tsr.getTestCaseResult(testCaseName)
         }
@@ -282,7 +282,7 @@ final class TestResultsImpl implements TestResults {
             Helpers.escapeAsJsonText(this.currentTestSuiteTimestamp.toString()) + '",')
         sb.append('"testSuiteResults":[')
         def counter = 0
-        for (TestSuiteResult tsr : this.testSuiteResults) {
+        for (TsResult tsr : this.testSuiteResults) {
             if (counter > 0) { sb.append(',') }
             sb.append(tsr.toJson())
             counter += 1

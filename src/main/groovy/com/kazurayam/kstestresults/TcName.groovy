@@ -1,10 +1,10 @@
 package com.kazurayam.kstestresults
 
-class TestCaseName {
+class TcName {
 
     private String value
 
-    TestCaseName(String testCaseId) {
+    TcName(String testCaseId) {
         this.value = testCaseId.replaceFirst('^Test Cases/', '')
     }
 
@@ -22,9 +22,9 @@ class TestCaseName {
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof TestCaseName))
+        if (!(obj instanceof TcName))
             return false
-        TestCaseName other = (TestCaseName)obj
+        TcName other = (TcName)obj
         return this.getValue() == other.getValue()
     }
 

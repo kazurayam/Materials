@@ -5,31 +5,31 @@ import java.nio.file.Path
 /**
  *
  */
-class TestCaseResult {
+class TcResult {
 
-    private TestSuiteResult parentTestSuiteResult
-    private TestCaseName testCaseName
+    private TsResult parentTestSuiteResult
+    private TcName testCaseName
     private Path testCaseDir
     private List<TargetPage> targetPages
-    private TestCaseStatus testCaseStatus
+    private TcStatus testCaseStatus
 
     // --------------------- constructors and initializer ---------------------
-    TestCaseResult(TestSuiteResult parentTestSuiteResult, TestCaseName testCaseName) {
+    TcResult(TsResult parentTestSuiteResult, TcName testCaseName) {
         assert parentTestSuiteResult != null
         assert testCaseName != null
         this.parentTestSuiteResult = parentTestSuiteResult
         this.testCaseName = testCaseName
         this.testCaseDir = parentTestSuiteResult.getTestSuiteTimestampDir().resolve(this.testCaseName.toString())
         this.targetPages = new ArrayList<TargetPage>()
-        this.testCaseStatus = TestCaseStatus.TO_BE_EXECUTED
+        this.testCaseStatus = TcStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
-    TestSuiteResult getParentTestSuiteResult() {
+    TsResult getParentTestSuiteResult() {
         return this.parentTestSuiteResult
     }
 
-    TestCaseName getTestCaseName() {
+    TcName getTestCaseName() {
         return testCaseName
     }
 
@@ -39,16 +39,16 @@ class TestCaseResult {
 
     void setTestCaseStatus(String testCaseStatus) {
         assert testCaseStatus != null
-        TestCaseStatus tcs = TestCaseStatus.valueOf(testCaseStatus)  // this may throw IllegalArgumentException
+        TcStatus tcs = TcStatus.valueOf(testCaseStatus)  // this may throw IllegalArgumentException
         this.setTestCaseStatus(tcs)
     }
 
-    void setTestCaseStatus(TestCaseStatus testCaseStatus) {
+    void setTestCaseStatus(TcStatus testCaseStatus) {
         assert testCaseStatus != null
         this.testCaseStatus = testCaseStatus
     }
 
-    TestCaseStatus getTestCaseStatus() {
+    TcStatus getTestCaseStatus() {
         return this.testCaseStatus
     }
 
@@ -93,10 +93,10 @@ class TestCaseResult {
         //if (this == obj) {
         //    return true
         //}
-        if (!(obj instanceof TestCaseResult)) {
+        if (!(obj instanceof TcResult)) {
             return false
         }
-        TestCaseResult other = (TestCaseResult) obj
+        TcResult other = (TcResult) obj
         if (this.testCaseName == other.getTestCaseName()) {
             return true
         } else {

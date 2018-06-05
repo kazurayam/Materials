@@ -6,21 +6,21 @@ import java.util.regex.Pattern
 
 class TargetPage {
 
-    private TestCaseResult parentTestCaseResult
+    private TcResult parentTestCaseResult
     private URL url
     private List<ScreenshotWrapper> screenshotWrappers
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializers ---------------------
-    protected TargetPage(TestCaseResult parent, URL url) {
+    protected TargetPage(TcResult parent, URL url) {
         this.parentTestCaseResult = parent
         this.url = url
         this.screenshotWrappers = new ArrayList<ScreenshotWrapper>()
     }
 
     // --------------------- properties getter & setter -----------------------
-    TestCaseResult getParentTestCaseResult() {
+    TcResult getParentTestCaseResult() {
         return this.parentTestCaseResult
     }
 

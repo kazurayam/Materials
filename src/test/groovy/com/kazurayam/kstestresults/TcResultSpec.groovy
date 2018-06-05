@@ -7,24 +7,24 @@ import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TestCaseResultSpec extends Specification {
+class TcResultSpec extends Specification {
 
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
     private static TestResultsImpl tri
-    private static TestSuiteResult tsr
+    private static TsResult tsr
 
     // fixture methods
     def setup() {}
     def cleanup() {}
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestCaseResultSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TcResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
+        tri = new TestResultsImpl(workdir, new TsName('TS1'))
         tsr = tri.getCurrentTestSuiteResult()
     }
     def cleanupSpec() {}
@@ -32,7 +32,7 @@ class TestCaseResultSpec extends Specification {
     // feature methods
     def testToJson() {
         setup:
-        TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
+        TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         when:
@@ -46,7 +46,7 @@ class TestCaseResultSpec extends Specification {
         str.contains('testCaseDir')
         str.contains(Helpers.escapeAsJsonText( sw.getScreenshotFilePath().toString()))
         str.contains('testCaseStatus')
-        str.contains(TestCaseStatus.TO_BE_EXECUTED.toString())
+        str.contains(TcStatus.TO_BE_EXECUTED.toString())
         str.endsWith('}}')
     }
 
