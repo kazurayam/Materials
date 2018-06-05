@@ -122,7 +122,7 @@ class TargetURLSpec extends Specification {
         TsResult tsr = sr.getCurrentTsResult()
         TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('')
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileExtension.PNG)
         when:
         def str = tp.toString()
         def pretty = JsonOutput.prettyPrint(str)

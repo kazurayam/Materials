@@ -34,7 +34,7 @@ class MaterialWrapperSpec extends Specification {
         assert tcr != null
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         when:
-        MaterialWrapper mw = tp.findOrNewMaterialWrapper('')
+        MaterialWrapper mw = tp.findOrNewMaterialWrapper('', FileExtension.PNG)
         def str = mw.toString()
         System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:

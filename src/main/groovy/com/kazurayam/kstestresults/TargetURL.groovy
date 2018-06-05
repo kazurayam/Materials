@@ -10,8 +10,6 @@ class TargetURL {
     private URL url
     private List<MaterialWrapper> materialWrappers
 
-    static final String IMAGE_FILE_EXTENSION = '.png'
-
     // ---------------------- constructors & initializers ---------------------
     protected TargetURL(TcResult parent, URL url) {
         this.parentTcResult = parent
@@ -36,9 +34,13 @@ class TargetURL {
      * @param targetPageUrl
      * @return
      */
-    MaterialWrapper findOrNewMaterialWrapper(String identifier) {
+    MaterialWrapper findOrNewMaterialWrapper(String suffix, FileExtension ext) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p = this.parentTcResult.getTcDir().resolve("${encodedUrl}${identifier}${IMAGE_FILE_EXTENSION}")
+        Path p = this.parentTcResult.getTcDir().resolve(
+
+            "${encodedUrl}${suffix}.${ext.getExtension()}"
+
+            )
         if (this.getMaterialWrapper(p) != null) {
             return this.getMaterialWrapper(p)
         } else {

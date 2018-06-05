@@ -195,13 +195,29 @@ final class TestResultsImpl implements TestResults {
 
     // -------------------------- do the business -----------------------------
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '')
+    Path resolveMaterialFilePath(String testCaseId, String url, FileExtension ext) {
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '', ext)
     }
 
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, String postFix) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), postFix)
+    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileExtension ext) {
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, ext)
+    }
+
+    /**
+     * returns a Path to save a screenshot of the URL in PNG format
+     */
+    @Override
+    Path resolveScreenshotFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), FileExtension.PNG)
+    }
+
+    /**
+     * return a Path to save a screenshot of the URL appended with the suffix in PNG format
+     */
+    @Override
+    Path resolveScreenshotFilePath(String testCaseId, String url, String suffix) {
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, FileExtension.PNG)
     }
 
     /**
@@ -211,12 +227,12 @@ final class TestResultsImpl implements TestResults {
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TcName testCaseName, URL url, String postFix) {
+    Path resolveMaterialFilePath(TcName testCaseName, URL url, String suffix, FileExtension ext) {
         TsResult currentTestSuiteResult = this.getCurrentTsResult()
         assert currentTestSuiteResult != null
         TcResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
         if (tcr != null) {
-            MaterialWrapper sw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(postFix)
+            MaterialWrapper sw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, ext)
             Path screenshotFilePath = sw.getMaterialFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath
