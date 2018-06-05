@@ -10,7 +10,7 @@ class TcResult {
     private TsResult parentTestSuiteResult
     private TcName testCaseName
     private Path testCaseDir
-    private List<TargetPage> targetPages
+    private List<TargetURL> targetPages
     private TcStatus testCaseStatus
 
     // --------------------- constructors and initializer ---------------------
@@ -20,7 +20,7 @@ class TcResult {
         this.parentTestSuiteResult = parentTestSuiteResult
         this.testCaseName = testCaseName
         this.testCaseDir = parentTestSuiteResult.getTestSuiteTimestampDir().resolve(this.testCaseName.toString())
-        this.targetPages = new ArrayList<TargetPage>()
+        this.targetPages = new ArrayList<TargetURL>()
         this.testCaseStatus = TcStatus.TO_BE_EXECUTED
     }
 
@@ -53,17 +53,17 @@ class TcResult {
     }
 
     // --------------------- create/add/get child nodes ----------------------
-    TargetPage findOrNewTargetPage(URL url) {
-        TargetPage ntp = this.getTargetPage(url)
+    TargetURL findOrNewTargetPage(URL url) {
+        TargetURL ntp = this.getTargetPage(url)
         if (ntp == null) {
-            ntp = new TargetPage(this, url)
+            ntp = new TargetURL(this, url)
             this.targetPages.add(ntp)
         }
         return ntp
     }
 
-    TargetPage getTargetPage(URL url) {
-        for (TargetPage tp : this.targetPages) {
+    TargetURL getTargetPage(URL url) {
+        for (TargetURL tp : this.targetPages) {
             // you MUST NOT evaluate 'tp.getUrl() == url'
             // because it will take more than 10 seconds for DNS Hostname resolution
             if (tp.getUrl().toString() == url.toString()) {
@@ -73,9 +73,9 @@ class TcResult {
         return null
     }
 
-    void addTargetPage(TargetPage targetPage) {
+    void addTargetPage(TargetURL targetPage) {
         boolean found = false
-        for (TargetPage tp : this.targetPages) {
+        for (TargetURL tp : this.targetPages) {
             if (tp == targetPage) {
                 found = true
             }
@@ -122,7 +122,7 @@ class TcResult {
         sb.append('"testCaseStatus":"' + this.testCaseStatus.toString() + '",')
         sb.append('"targetPages":[')
         def count = 0
-        for (TargetPage tp : this.targetPages) {
+        for (TargetURL tp : this.targetPages) {
             if (count > 0) { sb.append(',') }
             sb.append(tp.toJson())
             count += 1

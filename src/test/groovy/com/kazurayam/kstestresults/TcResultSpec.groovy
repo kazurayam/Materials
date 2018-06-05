@@ -33,7 +33,7 @@ class TcResultSpec extends Specification {
     def testToJson() {
         setup:
         TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
-        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         when:
         def str = tcr.toString()

@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class TargetPage {
+class TargetURL {
 
     private TcResult parentTestCaseResult
     private URL url
@@ -13,7 +13,7 @@ class TargetPage {
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializers ---------------------
-    protected TargetPage(TcResult parent, URL url) {
+    protected TargetURL(TcResult parent, URL url) {
         this.parentTestCaseResult = parent
         this.url = url
         this.screenshotWrappers = new ArrayList<ScreenshotWrapper>()
@@ -113,8 +113,8 @@ class TargetPage {
     @Override
     boolean equals(Object obj) {
         //if (this == obj) { return true }
-        if (!(obj instanceof TargetPage)) { return false }
-        TargetPage other = (TargetPage)obj
+        if (!(obj instanceof TargetURL)) { return false }
+        TargetURL other = (TargetURL)obj
         if (this.parentTestCaseResult == other.getParentTestCaseResult()
             && this.url == other.getUrl()) {
             return true

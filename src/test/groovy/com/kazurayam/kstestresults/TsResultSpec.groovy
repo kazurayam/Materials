@@ -37,7 +37,7 @@ class TsResultSpec extends Specification {
         tcr != null
         tcr.getTestCaseName() == new TcName('TC1')
         when:
-        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         then:
         tp != null
         when:
@@ -51,7 +51,7 @@ class TsResultSpec extends Specification {
         TsResult tsr = wtrs.getCurrentTestSuiteResult()
         when:
         TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
-        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         def str = tsr.toString()
         System.err.println("${str}")

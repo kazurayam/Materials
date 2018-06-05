@@ -54,7 +54,7 @@ class TestResultsImplSpec extends Specification {
         tcr.getTestCaseDir() == tsr.getTestSuiteTimestampDir().resolve('TC1')
         tcr.getTestCaseStatus() == TcStatus.TO_BE_EXECUTED
         when:
-        TargetPage tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
         then:
         tp != null
         when:

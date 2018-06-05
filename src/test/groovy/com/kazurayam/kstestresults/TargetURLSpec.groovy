@@ -8,7 +8,7 @@ import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TargetPageSpec extends Specification {
+class TargetURLSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -18,7 +18,7 @@ class TargetPageSpec extends Specification {
     def setup() {}
     def cleanup() {}
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetPageSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetURLSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -28,7 +28,7 @@ class TargetPageSpec extends Specification {
     // feature methods
     def testExtensionPartPattern1() {
         setup:
-        Matcher m = TargetPage.EXTENSION_PART_PATTERN.matcher('a.png')
+        Matcher m = TargetURL.EXTENSION_PART_PATTERN.matcher('a.png')
         expect:
         m.find()
         m.groupCount() == 2
@@ -39,7 +39,7 @@ class TargetPageSpec extends Specification {
 
     def testExtensionPartPattern2() {
         setup:
-        Matcher m = TargetPage.EXTENSION_PART_PATTERN.matcher('a.1.png')
+        Matcher m = TargetURL.EXTENSION_PART_PATTERN.matcher('a.1.png')
         expect:
         m.find()
         m.groupCount() == 2
@@ -50,21 +50,21 @@ class TargetPageSpec extends Specification {
 
     def testExtensionPartPattern3() {
         setup:
-        Matcher m = TargetPage.EXTENSION_PART_PATTERN.matcher('a.jpn')
+        Matcher m = TargetURL.EXTENSION_PART_PATTERN.matcher('a.jpn')
         expect:
         ! m.find()
     }
 
     def testExtensionPartPattern4() {
         setup:
-        Matcher m = TargetPage.EXTENSION_PART_PATTERN.matcher('foo')
+        Matcher m = TargetURL.EXTENSION_PART_PATTERN.matcher('foo')
         expect:
         ! m.find()
     }
 
     def testParseScreenshotFileName1() {
         when:
-        List<String> values = TargetPage.parseScreenshotFileName('C:/temp/a/b/c.png')
+        List<String> values = TargetURL.parseScreenshotFileName('C:/temp/a/b/c.png')
         then:
         values.size() == 1
         values[0] == 'c'
@@ -72,7 +72,7 @@ class TargetPageSpec extends Specification {
 
     def testParseScreenshotFileName2() {
         when:
-        List<String> values = TargetPage.parseScreenshotFileName('C:/temp/a/b/c.1.png')
+        List<String> values = TargetURL.parseScreenshotFileName('C:/temp/a/b/c.1.png')
         then:
         values.size() == 2
         values[0] == 'c'
@@ -81,7 +81,7 @@ class TargetPageSpec extends Specification {
 
     def testParseScreenshotFileName3() {
         when:
-        List<String> values = TargetPage.parseScreenshotFileName('C:\\temp\\d.9.png')
+        List<String> values = TargetURL.parseScreenshotFileName('C:\\temp\\d.9.png')
         then:
         values.size() == 2
         values[0] == 'd'
@@ -92,7 +92,7 @@ class TargetPageSpec extends Specification {
         when:
         String p = Paths.get('./src/test/fixture/photo1.png').normalize().toAbsolutePath().toString()
         //System.out.println("p=${p}")
-        List<String> values = TargetPage.parseScreenshotFileName(p)
+        List<String> values = TargetURL.parseScreenshotFileName(p)
         then:
         values.size() == 1
         values[0] == 'photo1'
@@ -100,7 +100,7 @@ class TargetPageSpec extends Specification {
 
     def testParseScreentshotFileName5() {
         when:
-        List<String> values = TargetPage.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        List<String> values = TargetURL.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         then:
         values.size() == 1
         values[0] == 'http://demoaut.katalon.com/'
@@ -108,7 +108,7 @@ class TargetPageSpec extends Specification {
 
     def testParseScreentshotFileName6() {
         when:
-        List<String> values = TargetPage.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.0.png')
+        List<String> values = TargetURL.parseScreenshotFileName('http%3A%2F%2Fdemoaut.katalon.com%2F.0.png')
         then:
         values.size() == 2
         values[0] == 'http://demoaut.katalon.com/'
@@ -124,7 +124,7 @@ class TargetPageSpec extends Specification {
         TestResultsImpl sr = new TestResultsImpl(baseDir, new TsName('TS1'))
         TsResult tsr = sr.getCurrentTestSuiteResult()
         TcResult tcr = tsr.findOrNewTestCaseResult(new TcName('TC1'))
-        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         when:
         def str = tp.toString()

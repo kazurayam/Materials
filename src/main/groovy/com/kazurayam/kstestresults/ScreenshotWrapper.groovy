@@ -4,15 +4,15 @@ import java.nio.file.Path
 
 class ScreenshotWrapper {
 
-    private TargetPage parentTargetPage
+    private TargetURL parentTargetPage
     private Path screenshotFilePath
 
-    ScreenshotWrapper(TargetPage parent, Path imageFilePath) {
+    ScreenshotWrapper(TargetURL parent, Path imageFilePath) {
         this.parentTargetPage = parent
         this.screenshotFilePath = imageFilePath
     }
 
-    TargetPage getTargetPage() {
+    TargetURL getTargetPage() {
         return parentTargetPage
     }
 

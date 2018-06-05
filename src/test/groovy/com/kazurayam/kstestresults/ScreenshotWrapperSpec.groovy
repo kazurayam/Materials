@@ -35,7 +35,7 @@ class ScreenshotWrapperSpec extends Specification {
         TsResult tsr = wtrs.getTestSuiteResult(tsn, tstamp)
         TcResult tcr = tsr.findOrNewTestCaseResult(tcn)
         assert tcr != null
-        TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         when:
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         def str = sw.toString()

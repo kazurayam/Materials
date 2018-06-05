@@ -113,9 +113,9 @@ final class TestResultsImpl implements TestResults {
                             .collect(Collectors.toList())
             for (Path imageFilePath : imageFilePaths) {
                 List<String> fileNameElements =
-                        TargetPage.parseScreenshotFileName(imageFilePath.getFileName().toString())
+                        TargetURL.parseScreenshotFileName(imageFilePath.getFileName().toString())
                 if (0 < fileNameElements.size() && fileNameElements.size() <= 2) {
-                    TargetPage targetPage = new TargetPage(tcr, new URL(fileNameElements[0]))
+                    TargetURL targetPage = new TargetURL(tcr, new URL(fileNameElements[0]))
                     tcr.addTargetPage(targetPage)
                     //System.out.println("TargetPage ${targetPage}")
                     ScreenshotWrapper sw = new ScreenshotWrapper(targetPage, imageFilePath)
