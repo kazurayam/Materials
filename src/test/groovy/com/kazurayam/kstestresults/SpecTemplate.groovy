@@ -15,13 +15,15 @@ class SpecTemplate extends Specification {
 
     // fixture methods
     def setup() {
+    }
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
+        Helpers.copyDirectory(fixture, workdir)
     }
-    def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods

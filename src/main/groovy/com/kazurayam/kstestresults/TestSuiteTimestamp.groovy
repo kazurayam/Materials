@@ -85,9 +85,13 @@ class TestSuiteTimestamp {
     String toString() {
         return this.toJson()
     }
-    
+
     String toJson() {
-        throw new UnsupportedOperationException('TODO')
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TestSuiteTimestamp":')
+        sb.append('{"timestamp":"' + this.format()+ '"}' )
+        sb.append('}')
+        return sb.toString()
     }
 
 }

@@ -14,16 +14,15 @@ class ScreenshotWrapperSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
-    def setup() {
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(ScreenshotWrapperSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
-
     }
 
     // feature methods
-    def testToString() {
+    def testToJson() {
         setup:
         String dirName = 'testToString'
         Path baseDir = workdir.resolve(dirName)

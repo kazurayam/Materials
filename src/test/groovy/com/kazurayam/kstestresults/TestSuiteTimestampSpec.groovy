@@ -2,6 +2,7 @@ package com.kazurayam.kstestresults
 
 import java.time.LocalDateTime
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 /**
@@ -43,6 +44,20 @@ class TestSuiteTimestampSpec extends Specification {
         ts.getValue() == expected1
         ts.getValue() == expected2
         //cleanup:
+    }
+
+    def testToJson() {
+        setup:
+        LocalDateTime source = LocalDateTime.of(2018, 6, 5, 9, 2, 13)
+        when:
+        TestSuiteTimestamp ts = new TestSuiteTimestamp(source)
+        def str = ts.toString()
+        System.out.println("${JsonOutput.prettyPrint(str)}")
+        then:
+        str.contains('{"TestSuiteTimestamp":')
+        str.contains('{"timestamp":')
+        str.contains('20180605_090213')
+        str.contains('}}')
     }
 
     // helper methods

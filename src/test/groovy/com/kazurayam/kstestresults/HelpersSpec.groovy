@@ -18,14 +18,14 @@ class HelpersSpec extends Specification {
     private static Path workdir
 
     // fixture methods
-    def setup() {
+    def setup() {}
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(HelpersSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
     }
-    def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods
@@ -99,7 +99,7 @@ class HelpersSpec extends Specification {
         expect:
         Helpers.getClassShortName(Helpers.class) == 'Helpers'
     }
-    
+
     def testEscapeAsJsonText() {
         expect:
         Helpers.escapeAsJsonText('/') == '\\/'

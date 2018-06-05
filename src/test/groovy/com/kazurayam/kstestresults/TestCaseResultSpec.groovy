@@ -12,25 +12,25 @@ class TestCaseResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
-    private static TestResultsImpl wtrs
+    private static TestResultsImpl tri
     private static TestSuiteResult tsr
 
     // fixture methods
-    def setup() {
+    def setup() {}
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestCaseResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        TestResultsImpl sr = new TestResultsImpl(work, new TestSuiteName('TS1'))
-        TestSuiteResult tsr = sr.getCurrentTestSuiteResult()
+        tri = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
+        tsr = tri.getCurrentTestSuiteResult()
     }
-    def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods
-    def testToString() {
+    def testToJson() {
         setup:
         TestCaseResult tcr = tsr.findOrNewTestCaseResult(new TestCaseName('TC1'))
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))

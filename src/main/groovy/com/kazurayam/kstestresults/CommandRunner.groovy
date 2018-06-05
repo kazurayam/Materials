@@ -86,6 +86,7 @@ class CommandRunner {
         while ((c = reader.read()) != -1) {
             sb.append((char)c)
         }
+        is.close()
         return sb.toString()
     }
 

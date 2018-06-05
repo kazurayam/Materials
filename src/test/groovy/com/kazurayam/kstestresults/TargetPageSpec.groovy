@@ -15,14 +15,14 @@ class TargetPageSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
-    def setup() {
+    def setup() {}
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetPageSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
     }
-    def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods
@@ -115,7 +115,7 @@ class TargetPageSpec extends Specification {
         values[1] == '0'
     }
 
-    def testToString() {
+    def testToJson() {
         setup:
         String dirName = 'testGetTestCaseResult'
         Path baseDir = workdir.resolve(dirName)

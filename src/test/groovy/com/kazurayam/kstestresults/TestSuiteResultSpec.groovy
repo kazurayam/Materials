@@ -46,7 +46,7 @@ class TestSuiteResultSpec extends Specification {
         sw != null
     }
 
-    def testToString() {
+    def testToJson() {
         setup:
         TestSuiteResult tsr = wtrs.getCurrentTestSuiteResult()
         when:
@@ -54,6 +54,7 @@ class TestSuiteResultSpec extends Specification {
         TargetPage tp = tcr.findOrNewTargetPage(new URL('http://demoaut.katalon.com/'))
         ScreenshotWrapper sw = tp.findOrNewScreenshotWrapper('')
         def str = tsr.toString()
+        System.err.println("${str}")
         System.out.println("${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"TestSuiteResult":{')

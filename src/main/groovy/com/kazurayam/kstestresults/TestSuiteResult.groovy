@@ -109,13 +109,13 @@ final class TestSuiteResult {
     String toString() {
         return this.toJson()
     }
-    
+
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TestSuiteResult":{')
         sb.append('"baseDir": "' + Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
         sb.append('"testSuiteName": "' + Helpers.escapeAsJsonText(this.testSuiteName.toString()) + '",')
-        sb.append('"testSuiteTimestamp": "' + this.testSuiteTimestamp.toString() + '",')
+        sb.append('"testSuiteTimestamp": ' + this.testSuiteTimestamp.toString() + ',')
         sb.append('"testSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.testSuiteTimestampDir.toString()) + '",')
         sb.append('"testCaseResults": [')
         def count = 0

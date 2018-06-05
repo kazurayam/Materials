@@ -25,5 +25,5 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/TestSuiteResultSpec.class'
+    include '**/*Spec.class'
 }

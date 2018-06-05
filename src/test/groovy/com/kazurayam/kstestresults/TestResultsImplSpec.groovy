@@ -3,6 +3,7 @@ package com.kazurayam.kstestresults
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -13,49 +14,44 @@ class TestResultsImplSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
-    def setup() {
+    def setup() {}
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsImplSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
+        Helpers.copyDirectory(fixture, workdir)
     }
-
-    def cleanup() {}
-
-    def setupSpec() {}
-
     def cleanupSpec() {}
 
     // feature methods
     def testScan() {
         setup:
-        String dirName = 'testScan'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
+        Helpers.copyDirectory(fixture, workdir)
         when:
-        List<TestSuiteResult> tsrList = TestResultsImpl.scan(baseDir)
+        List<TestSuiteResult> tsrList = TestResultsImpl.scan(workdir)
         then:
         tsrList != null
         tsrList.size() == 2
         when:
-        TestSuiteResult tsr0 =
-                lookup(tsrList, new TestSuiteName('TS1'),
+        TestSuiteResult tsr =
+                lookupTestSuiteResult(tsrList, new TestSuiteName('TS1'),
                         new TestSuiteTimestamp('20180530_130419'))
         then:
-        tsr0 != null
-        tsr0.getBaseDir() == baseDir
-        tsr0.getTestSuiteName() == new TestSuiteName('TS1')
-        tsr0.getTestSuiteTimestamp() == new TestSuiteTimestamp('20180530_130419')
-        tsr0.getTestSuiteTimestampDir() == baseDir.resolve('TS1/20180530_130419')
+        tsr != null
+        tsr.getBaseDir() == workdir
+        tsr.getTestSuiteName() == new TestSuiteName('TS1')
+        tsr.getTestSuiteTimestamp() == new TestSuiteTimestamp('20180530_130419')
+        tsr.getTestSuiteTimestampDir() == workdir.resolve('TS1/20180530_130419')
         when:
         TestCaseName tcn = new TestCaseName('TC1')
-        TestCaseResult tcr = tsr0.getTestCaseResult(tcn)
+        TestCaseResult tcr = tsr.getTestCaseResult(tcn)
         then:
         tcr != null
-        tcr.getParentTestSuiteResult() == tsr0
+        tcr.getParentTestSuiteResult() == tsr
         tcr.getTestCaseName() == tcn
-        tcr.getTestCaseDir() == tsr0.getTestSuiteTimestampDir().resolve('TC1')
+        tcr.getTestCaseDir() == tsr.getTestSuiteTimestampDir().resolve('TC1')
         tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
         when:
         TargetPage tp = tcr.getTargetPage(new URL('http://demoaut.katalon.com/'))
@@ -69,8 +65,23 @@ class TestResultsImplSpec extends Specification {
         sw.getScreenshotFilePath() == imageFilePath
     }
 
+    def testToJson() {
+        setup:
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TestSuiteName('TS1'))
+        when:
+        def str = tri.toJson()
+        System.err.println("str=\n${str}")
+        System.out.println("str=\n${JsonOutput.prettyPrint(str)}")
+        then:
+        str != null
+        str.contains('{"TestResultsImpl":{')
+        str.contains(Helpers.escapeAsJsonText(workdir.toString()))
+        // TODO
+        str.contains('}}')
+    }
+
     // helper methods
-    TestSuiteResult lookup(List<TestSuiteResult> tsrList, TestSuiteName tsn, TestSuiteTimestamp tst) {
+    TestSuiteResult lookupTestSuiteResult(List<TestSuiteResult> tsrList, TestSuiteName tsn, TestSuiteTimestamp tst) {
         for (TestSuiteResult tsr : tsrList ) {
             if (tsr.getTestSuiteName() == tsn && tsr.getTestSuiteTimestamp() == tst) {
                 return tsr

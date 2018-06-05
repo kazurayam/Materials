@@ -19,6 +19,7 @@ class TestResultsSpec extends Specification {
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
+        Helpers.copyDirectory(fixture, workdir)
     }
 
     def testJsonOutput() {
@@ -33,43 +34,26 @@ class TestResultsSpec extends Specification {
         jsonString == '["Your password was bad.","Your feet smell.","I am having a bad day."]'
     }
 
-    def testToString() {
-        setup:
-        String dirName = 'testToString'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
+    def testToJson() {
         when:
-        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
-        def prettyJson = JsonOutput.prettyPrint(sr.toString())
-        System.out.println(prettyJson)
+        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        def str = JsonOutput.prettyPrint(sr.toString())
+        System.out.println(JsonOutput.prettyPrint(str))
         then:
-        prettyJson.contains(dirName)
-        prettyJson.contains('TS1')
+        str.contains('TS1')
     }
 
     def testConstructor_Path_tsn() {
-        setup:
-        String dirName = 'testConstructor_Path_tsn'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
         when:
-        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
+        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
         String str = sr.toString()
         then:
-        str.contains(dirName)
         str.contains('TS1')
     }
 
     def testResolveScreenshotFilePath() {
-        setup:
-        String dirName = 'testResolveScreenshotFilePath'
-        Path baseDir = workdir.resolve(dirName)
-        Helpers.ensureDirs(baseDir)
-        Helpers.copyDirectory(fixture, baseDir)
         when:
-        TestResults sr = TestResultsFactory.createInstance(baseDir, 'Test Suites/TS1')
+        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
         Path scfp = sr.resolveScreenshotFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         scfp != null

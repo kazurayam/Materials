@@ -12,14 +12,14 @@ class TestResultsFactorySpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Screenshots")
 
     // fixture methods
-    def setup() {
+    def setup() {}
+    def cleanup() {}
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsFactorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
     }
-    def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods

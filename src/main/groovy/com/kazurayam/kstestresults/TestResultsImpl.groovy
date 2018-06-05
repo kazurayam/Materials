@@ -1,6 +1,5 @@
 package com.kazurayam.kstestresults
 
-import groovy.json.JsonBuilder
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -269,14 +268,28 @@ final class TestResultsImpl implements TestResults {
     // ---------------------- overriding Object properties --------------------
     @Override
     String toString() {
-        def json = new JsonBuilder()
-        json (
-                ["baseDir":this.baseDir.toString()],
-                ["currentTestSuiteName":this.currentTestSuiteName.toString()],
-                ["currentTestSuiteTimestamp":this.currentTestSuiteTimestamp.format()],
-                //["testSuiteResults": this.testSuiteResults]
-        )
-        return json.toString()
+        return this.toJson()
+    }
+
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TestResultsImpl":{')
+        sb.append('"baseDir":"' + 
+            Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
+        sb.append('"currentTestSuiteName":"' + 
+            Helpers.escapeAsJsonText(this.currentTestSuiteName.toString()) + '",')
+        sb.append('"currentTestSuiteTimestamp":"' + 
+            Helpers.escapeAsJsonText(this.currentTestSuiteTimestamp.toString()) + '",')
+        sb.append('"testSuiteResults":[')
+        def counter = 0
+        for (TestSuiteResult tsr : this.testSuiteResults) {
+            if (counter > 0) { sb.append(',') }
+            sb.append(tsr.toJson())
+            counter += 1
+        }
+        sb.append(']')
+        sb.append('}}')
+        return sb.toString()
     }
 
 }
