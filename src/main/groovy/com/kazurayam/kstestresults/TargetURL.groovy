@@ -35,7 +35,7 @@ class TargetURL {
     MaterialWrapper findOrNewMaterialWrapper(String suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
 
-        String filteredSuffix = suffix.trim().replaceAll('.', '')
+        String filteredSuffix = suffix.trim().replace('.', '')
         String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
 
         Path p = this.parentTcResult.getTcDir().resolve(
