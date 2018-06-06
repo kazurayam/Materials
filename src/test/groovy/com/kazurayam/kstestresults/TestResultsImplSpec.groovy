@@ -80,6 +80,15 @@ class TestResultsImplSpec extends Specification {
         str.contains('}}')
     }
 
+    def testReport() {
+        setup:
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
+        when:
+        Path html = tri.report()
+        then:
+        html.toFile().exists()
+    }
+
     // helper methods
     TsResult lookupTestSuiteResult(List<TsResult> tsrList, TsName tsn, TsTimestamp tst) {
         for (TsResult tsr : tsrList ) {

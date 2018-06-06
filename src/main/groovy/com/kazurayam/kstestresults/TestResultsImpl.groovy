@@ -5,6 +5,8 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
+import groovy.xml.MarkupBuilder
+
 final class TestResultsImpl implements TestResults {
 
     private Path baseDir
@@ -15,6 +17,10 @@ final class TestResultsImpl implements TestResults {
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializer ----------------------
+
+    TestResultsImpl(Path baseDir) {
+        this(baseDir, null, null)
+    }
 
     /**
      * You are supposed to call this in the TestListener@BeforeTestSuite as follows:
@@ -41,16 +47,22 @@ final class TestResultsImpl implements TestResults {
      * @param tsName
      */
     TestResultsImpl(Path baseDir, TsName tsName) {
+        this(baseDir, tsName, new TsTimestamp())
+    }
+
+    TestResultsImpl(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         this.baseDir = baseDir
         this.tsResults = scan(this.baseDir)
         //
-        this.currentTsName = tsName
-        this.currentTsTimestamp = new TsTimestamp()
-        TsResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
-        this.addTsResult(tsr)
+        if (tsName != null && tsTimestamp != null) {
+            this.currentTsName = tsName
+            this.currentTsTimestamp = tsTimestamp
+            TsResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
+            this.addTsResult(tsr)
+        }
     }
 
     /**
@@ -241,10 +253,30 @@ final class TestResultsImpl implements TestResults {
         }
     }
 
+    /**
+     * create a Result.html file under the directory ${baseDir}/${Test Suite name}/${Test Suite timestamp}/
+     * The Result.html file is an index to the Material files created by the TestResultsImpl at this time of execution
+     *
+     * @returns Path of the Results.html file
+     */
     @Override
-    void report() {
-        //throw new UnsupportedOperationException("TODO")
+    Path report() throws IOException {
+        if (currentTsName != null && currentTsTimestamp != null) {
+            List<TsResult> tsrList =
+                this.tsResults.stream()
+                    .filter({tsr -> tsr.getTsName() == currentTsName && tsr.getTsTimestamp() == currentTsTimestamp })
+                    .collect(Collectors.toList())
+            if (tsrList.size() > 0) {
+                TsResult tsr = tsrList[0]
+                Path html = tsr.getTsTimestampDir().resolve("Result.html")
+                Helpers.ensureDirs(tsr.getTsTimestampDir())
+                //
+                createIndex(tsr, Files.newOutputStream(html))
+                return html
+            }
+        }
     }
+
 
     // ----------------------------- helpers ----------------------------------
 
@@ -309,5 +341,47 @@ final class TestResultsImpl implements TestResults {
         sb.append('}}')
         return sb.toString()
     }
+
+
+    // ---------------------------- lengthy private method --------------------
+    /**
+     * create and write a HTML to the Material files
+     * @param os
+     * @returns Path of the created Results.html file
+     * @throws IOException
+     */
+    private void createIndex(TsResult tsResult, OutputStream os) throws IOException {
+        def writer = new OutputStreamWriter(os, 'UTF-8')
+        def html = new MarkupBuilder(writer)
+        html.doubleQuotes = true
+        html.html {
+            head {
+                meta('http-equiv':'Content-Type', content:'text/html; charset=UTF-8')
+                title('generate HTML with MarkupBuilder')
+                style(type:'text/css') {
+                    mkp.yieldUnescaped('''
+                        <!--
+                        body {
+                            color      : #000000;
+                            background : #E6DED9;
+                            font-size  : 200%;
+                        }
+                        //-->
+                    ''')
+                }
+            }
+            body() {
+                mkp.comment('''
+                    mkp is required to call helper methods such as yieldUnescaped, yield, comment
+                ''')
+                mkp.yield('testing MarkupBuilder'); br()
+                a(href:'http://d.hatena.ne.jp/fumokmm/', 'No Programming, No Life'); br()
+                a(href:'http://d.hatena.ne.jp/fumokmm/20090131/1233428513', 'MarkupBuilderでHTML生成を試してみた'); br()
+                mkp.yield('↑entry'); br()
+            }
+        }
+        writer.close()
+    }
+
 
 }
