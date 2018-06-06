@@ -356,8 +356,22 @@ final class TestResultsImpl implements TestResults {
         builder.doubleQuotes = true
         builder.html {
             head {
-                meta('http-equiv':'Content-Type', content:'text/html; charset=UTF-8')
-                title('generate HTML with MarkupBuilder')
+                meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
+                title("Katalon Studio Test Results ${tsResult.getTsName().toString()}/${tsResult.getTsTimestamp().toString()}")
+                meta('charset':'utf-8')
+                meta('name':'description', 'content':'')
+                meta('name':'author', 'content':'')
+                meta('name':'viewport', 'content':'width=device-width, initial-scale=1')
+                link('rel':'stylesheet', 'href':'')
+                mkp.comment('''[if lt IE 9]
+<script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]''')
+                link('rel':'shortcut icon', 'href':'')
+                link('href':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',
+                    'rel':'stylesheet')
+
+                /*
                 style(type:'text/css') {
                     mkp.yieldUnescaped('''
                         <!--
@@ -369,32 +383,46 @@ final class TestResultsImpl implements TestResults {
                         //-->
                     ''')
                 }
+                */
             }
             body() {
-                mkp.comment('''
-                    mkp is required to call helper methods such as yieldUnescaped, yield, comment
-                ''')
-                mkp.yield('testing MarkupBuilder'); br()
-                a(href:'http://d.hatena.ne.jp/fumokmm/', 'No Programming, No Life'); br()
-                a(href:'http://d.hatena.ne.jp/fumokmm/20090131/1233428513', 'MarkupBuilderでHTML生成を試してみた'); br()
-                mkp.yield('↑entry'); br()
+                mkp.comment('Place your content here')
+                div('class':'container') {
+                    h1('Katalon Studio Test Results')
 
-                List<TcResult> tcResults = tsResult.getTcResults()
-                for (TcResult tcResult : tcResults) {
-                    List<TargetURL> targetURLs = tcResult.getTargetURLs()
-                    for (TargetURL targetURL : targetURLs) {
-                        List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
-                        for (MaterialWrapper materialWrapper : materialWrappers) {
-                            Path file = materialWrapper.getMaterialFilePath()
-                            Path relative = tsResult.getTsTimestampDir().relativize(file).normalize()
-                            img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
-                                alt:"${targetURL.getUrl().toExternalForm()}",
-                                border:"0",
-                                width:"90%")
+                    List<TcResult> tcResults = tsResult.getTcResults()
+                    for (TcResult tcResult : tcResults) {
+                        div('class':'row') {
+                            div('class':'col-sm-12') {
+                            List<TargetURL> targetURLs = tcResult.getTargetURLs()
+                                for (TargetURL targetURL : targetURLs) {
+                                    List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
+                                    for (MaterialWrapper materialWrapper : materialWrappers) {
+                                        Path file = materialWrapper.getMaterialFilePath()
+                                        Path relative = tsResult.getTsTimestampDir().relativize(file).normalize()
+                                        img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
+                                            alt:"${targetURL.getUrl().toExternalForm()}",
+                                            border:"0",
+                                            width:"96%")
+                                    }
+                                }
+                            }
                         }
                     }
-
                 }
+                mkp.comment('SCRIPTS')
+                script('src':'https://code.jquery.com/jquery-1.12.4.min.js') {mkp.comment('')}
+                script('src':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js') {mkp.comment('')}
+                /*
+                 mkp.comment('''
+                     mkp is required to call helper methods such as yieldUnescaped, yield, comment
+                 ''')
+                 mkp.yield('testing MarkupBuilder'); br()
+                 a(href:'http://d.hatena.ne.jp/fumokmm/', 'No Programming, No Life'); br()
+                 a(href:'http://d.hatena.ne.jp/fumokmm/20090131/1233428513', 'MarkupBuilderでHTML生成を試してみた'); br()
+                 mkp.yield('↑entry'); br()
+                 */
+
             }
         }
         writer.close()
