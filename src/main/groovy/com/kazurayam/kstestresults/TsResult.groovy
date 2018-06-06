@@ -80,6 +80,17 @@ final class TsResult {
 
 
     // ------------------- helpers -----------------------------------------------
+    List<MaterialWrapper> getMaterialWrappers() {
+        List<MaterialWrapper> materialWrappers = new ArrayList<MaterialWrapper>()
+        for (TcResult tcr : this.getTcResults()) {
+            for (TargetURL targetURL : tcr.getTargetURLs()) {
+                for (MaterialWrapper mw : targetURL.getMaterialWrappers()) {
+                    materialWrappers.add(mw)
+                }
+            }
+        }
+        return materialWrappers
+    }
 
     // -------------------- overriding Object properties ----------------------
     @Override

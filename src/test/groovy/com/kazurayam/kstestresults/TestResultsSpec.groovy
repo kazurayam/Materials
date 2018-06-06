@@ -54,7 +54,7 @@ class TestResultsSpec extends Specification {
     def testResolveScreenshotFilePath() {
         when:
         TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
-        Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/', FileExtension.PNG)
+        Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         scfp != null
         scfp.toString().contains('TC1')

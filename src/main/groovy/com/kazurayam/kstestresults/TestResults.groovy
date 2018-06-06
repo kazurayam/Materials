@@ -6,8 +6,8 @@ interface TestResults {
 
     void setTcStatus(String testCaseId, String testCaseStatus)
 
-    Path resolveMaterialFilePath(String testCaseId, String url, FileExtension ext)
-    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileExtension ext)
+    Path resolveMaterialFilePath(String testCaseId, String url, FileType ext)
+    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType ext)
 
     Path resolveScreenshotFilePath(String testCaseId, String url)
     Path resolveScreenshotFilePath(String testCaseId, String url, String suffix)

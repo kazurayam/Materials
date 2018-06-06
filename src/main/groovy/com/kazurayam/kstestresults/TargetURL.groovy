@@ -1,8 +1,6 @@
 package com.kazurayam.kstestresults
 
 import java.nio.file.Path
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class TargetURL {
 
@@ -29,22 +27,24 @@ class TargetURL {
     // --------------------- create/add/get child nodes -----------------------
 
     /**
-     * This is the core trick.
+     * This is a TRICKY part.
      *
      * @param targetPageUrl
      * @return
      */
-    MaterialWrapper findOrNewMaterialWrapper(String suffix, FileExtension ext) {
+    MaterialWrapper findOrNewMaterialWrapper(String suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+
+        String filteredSuffix = suffix.trim().replaceAll('.', '')
+        String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
+
         Path p = this.parentTcResult.getTcDir().resolve(
-
-            "${encodedUrl}${suffix}.${ext.getExtension()}"
-
+            "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
             )
         if (this.getMaterialWrapper(p) != null) {
             return this.getMaterialWrapper(p)
         } else {
-            MaterialWrapper sw = new MaterialWrapper(this, p)
+            MaterialWrapper sw = new MaterialWrapper(this, p, fileType)
             this.materialWrappers.add(sw)
             return sw
         }
@@ -86,34 +86,7 @@ class TargetURL {
 
     // --------------------- helpers ------------------------------------------
 
-    /**
-     * accept a string in a format (<any string>[/\])(<enocoded URL string>)(.[0-9]+)?(.png)
-     * and returns a List<String> of ['<decoded URL>', '[1-9][0-9]*'] or ['<decoded URL>']
-     * @param materialFileName
-     * @return empty List<String> if unmatched
-     */
-    static final int flag = Pattern.CASE_INSENSITIVE
-    static final String EXTENSION_PART_REGEX = '(\\.([0-9]+))?\\.png$'
-    static final Pattern EXTENSION_PART_PATTERN = Pattern.compile(EXTENSION_PART_REGEX, flag)
-    static List<String> parseMaterialFileName(String materialFileName) {
-        List<String> values = new ArrayList<String>()
-        String preprocessed = materialFileName.replaceAll('\\\\', '/')  // Windows XFile path separator -> UNIX
-        List<String> elements = preprocessed.split('[/]')
-        if (elements.size() > 0) {
-            String fileName = elements.getAt(elements.size() - 1)
-            Matcher m = EXTENSION_PART_PATTERN.matcher(fileName)
-            boolean b = m.find()
-            if (b) {
-                String encodedUrl = fileName.replaceFirst(EXTENSION_PART_REGEX, '')
-                String decodedUrl = URLDecoder.decode(encodedUrl, 'UTF-8')
-                values.add(decodedUrl)
-                if (m.group(2) != null) {
-                    values.add(m.group(2))
-                }
-            }
-        }
-        return values
-    }
+
 
     // ------------------------ overriding Object properties ------------------
     @Override

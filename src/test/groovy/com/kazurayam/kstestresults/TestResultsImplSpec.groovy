@@ -3,6 +3,7 @@ package com.kazurayam.kstestresults
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
@@ -25,6 +26,55 @@ class TestResultsImplSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
+    def testIdentifyFileType() {
+        expect:
+        TestResultsImpl.identifyFileType(Paths.get('/temp/a.png')) == FileType.PNG
+        TestResultsImpl.identifyFileType(Paths.get('/temp/a.pdf')) == FileType.PDF
+        TestResultsImpl.identifyFileType(Paths.get('/temp/a.csv')) == FileType.CSV
+        TestResultsImpl.identifyFileType(Paths.get('/temp/a')) == FileType.OCTET
+    }
+
+    def testIdentifySuffix_noDot() {
+        expect:
+        TestResultsImpl.identifySuffix(Paths.get('/temp/a')) == ''
+    }
+
+    def testIdentifySuffix_1dot() {
+        expect:
+        TestResultsImpl.identifySuffix(Paths.get('/temp/a.png')) == ''
+    }
+
+    def testIdentifySuffix_2dots() {
+        expect:
+        TestResultsImpl.identifySuffix(Paths.get('/temp/a.1.png')) == '1'
+    }
+
+    def testIdentifySuffix_3dots() {
+        expect:
+        TestResultsImpl.identifySuffix(Paths.get('/temp/a.b.c.png')) == 'c'
+    }
+
+    def testIdentifyURLpart_noDot() {
+        expect:
+        TestResultsImpl.identifyURLpart(Paths.get('/temp/a')) == 'a'
+    }
+
+    def testIdentifyURLpart_1Dot() {
+        expect:
+        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.png')) == 'a'
+    }
+
+    def testIdentifyURLpart_2Dots() {
+        expect:
+        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.1.png')) == 'a'
+    }
+
+    def testIdentifyURLpart_3Dots() {
+        expect:
+        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.b.c.png')) == 'a.b'
+    }
+
+    @Ignore
     def testScan() {
         setup:
         Helpers.copyDirectory(fixture, workdir)
@@ -64,6 +114,7 @@ class TestResultsImplSpec extends Specification {
         sw.getMaterialFilePath() == imageFilePath
     }
 
+    @Ignore
     def testToJson() {
         setup:
         TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
@@ -79,6 +130,7 @@ class TestResultsImplSpec extends Specification {
         str.contains('}}')
     }
 
+    @Ignore
     def testReport() {
         setup:
         TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))

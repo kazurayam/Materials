@@ -41,7 +41,7 @@ class TsResultSpec extends Specification {
         then:
         tp != null
         when:
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileExtension.PNG)
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         then:
         sw != null
     }
@@ -52,7 +52,7 @@ class TsResultSpec extends Specification {
         when:
         TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileExtension.PNG)
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         def str = tsr.toString()
         System.err.println("${str}")
         System.out.println("${JsonOutput.prettyPrint(str)}")

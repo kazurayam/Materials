@@ -34,7 +34,7 @@ class TcResultSpec extends Specification {
         setup:
         TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileExtension.PNG)
+        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         when:
         def str = tcr.toString()
         def pretty = JsonOutput.prettyPrint(str)

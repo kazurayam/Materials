@@ -6,10 +6,12 @@ class MaterialWrapper {
 
     private TargetURL parentTargetURL
     private Path materialFilePath
+    private FileType fileType
 
-    MaterialWrapper(TargetURL parent, Path materialFilePath) {
+    MaterialWrapper(TargetURL parent, Path materialFilePath, FileType fileType) {
         this.parentTargetURL = parent
         this.materialFilePath = materialFilePath
+        this.fileType = fileType
     }
 
     TargetURL getTargetURL() {
@@ -18,6 +20,33 @@ class MaterialWrapper {
 
     Path getMaterialFilePath() {
         return materialFilePath
+    }
+
+    FileType getFileType() {
+        return fileType
+    }
+
+    Path getRelativePathToTsTimestampDir() {
+        Path tsTimestampDir =
+            this.getTargetURL()
+                .getParentTcResult().getParentTsResult().getTsTimestampDir()
+        Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
+        return path
+    }
+
+    /**
+     * relative path to the TestSuiteName/Timestamp directory
+     */
+    String getRelativePathAsString() {
+        return this.getRelativePathToTsTimestampDir().toString()
+    }
+
+    /**
+     *
+     * @return
+     */
+    String getRelativeUrlAsString() {
+        return this.getRelativePathAsString().replace('\\','/').replace('%','%25')
     }
 
     // ---------------- overriding Object properties --------------------------

@@ -90,7 +90,7 @@ class TcResult {
     }
 
     // -------------------------- helpers -------------------------------------
-
+    
     // ------------------ overriding Object properties ------------------------
     @Override
     boolean equals(Object obj) {

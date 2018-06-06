@@ -129,17 +129,80 @@ final class TestResultsImpl implements TestResults {
                     //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
                             .collect(Collectors.toList())
             for (Path materialFilePath : materialFilePaths) {
-                List<String> elements =
-                        TargetURL.parseMaterialFileName(materialFilePath.getFileName().toString())
-                if (0 < elements.size() && elements.size() <= 2) {
-                    TargetURL targetURL = new TargetURL(tcr, new URL(elements[0]))
-                    tcr.addTargetURL(targetURL)
-                    MaterialWrapper sw = new MaterialWrapper(targetURL, materialFilePath)
-                    targetURL.addMaterialWrapper(sw)
-                }
+                String urlPart = this.identifyURLpart(materialFilePath)
+                String suffix = this.identifySuffix(materialFilePath)
+                FileType ft = this.identifyFileType(materialFilePath)
+                URL url = new URL(URLDecoder.decode(urlPart, 'UTF-8'))
+                TargetURL targetURL = new TargetURL(tcr, url)
+                tcr.addTargetURL(targetURL)
+                MaterialWrapper sw = new MaterialWrapper(targetURL, materialFilePath, ft)
+                targetURL.addMaterialWrapper(sw)
             }
         }
         return tcResults
+    }
+
+    /**
+     * check the file name extension (.png, .pdf, etc) and identify the FileType
+     * @param p
+     * @return
+     */
+    static FileType identifyFileType(Path p) {
+        String fileName = p.getFileName().toString().trim()
+        if (fileName.lastIndexOf('.') < 0) {
+            return FileType.OCTET
+        } else {
+            String ext = fileName.substring(fileName.lastIndexOf('.') + 1)
+            def ft = FileType.getByExtension(ext)
+            if (ft != null) {
+                return ft
+            } else {
+                return FileType.OCTET
+            }
+        }
+    }
+
+    /**
+     * if p is /temp/abd.de.fg then return 'de' which is enclosed by a pair of dot(.) characters
+     *
+     * @param p
+     * @return
+     */
+    static String identifySuffix(Path p) {
+        String fileName = p.getFileName().toString().trim()
+        List<String> tokens = Arrays.asList(fileName.split('\\.'))
+        Collections.reverse(tokens)
+        if (tokens.size() >= 3) {
+            //   /temp/a.b.c.png => ['png', 'c', 'b', 'a'] => 'c'
+            //   /temp/a.1.png => ['png', '1', 'a'] =>'1'
+            return tokens.get(1)
+        } else {
+            //   /temp/a.png => ['png', 'a'] => ''
+            //   /temp/a => ['a']
+            return ''
+        }
+    }
+
+    static String identifyURLpart(Path p) {
+        String fileName = p.getFileName().toString().trim()
+        List<String> tokens = Arrays.asList(fileName.split('\\.'))
+        Collections.reverse(tokens)
+        if (tokens.size() >= 3) {
+            //   /temp/a.b.c.png => ['png', 'c', 'b', 'a']
+            //   /temp/a.1.png => ['png', '1', 'a']
+            List<String> sublist = tokens.subList(2, tokens.size())
+            Collections.reverse(sublist)
+            String[] sarray = sublist.toArray()
+            return String.join('.', sarray)
+        } else if (tokens.size() == 2) {
+            //   /temp/a.png => ['png', 'a']
+            return tokens[1]
+        } else if (tokens.size() == 1) {
+            //   /temp/a => ['a']
+            return tokens[0]
+        } else {
+            return ''
+        }
     }
 
 
@@ -207,12 +270,12 @@ final class TestResultsImpl implements TestResults {
 
     // -------------------------- do the business -----------------------------
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, FileExtension ext) {
+    Path resolveMaterialFilePath(String testCaseId, String url, FileType ext) {
         this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '', ext)
     }
 
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileExtension ext) {
+    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType ext) {
         this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, ext)
     }
 
@@ -221,7 +284,7 @@ final class TestResultsImpl implements TestResults {
      */
     @Override
     Path resolveScreenshotFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), FileExtension.PNG)
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), FileType.PNG)
     }
 
     /**
@@ -229,7 +292,7 @@ final class TestResultsImpl implements TestResults {
      */
     @Override
     Path resolveScreenshotFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, FileExtension.PNG)
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, FileType.PNG)
     }
 
     /**
@@ -239,7 +302,7 @@ final class TestResultsImpl implements TestResults {
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TcName testCaseName, URL url, String suffix, FileExtension ext) {
+    Path resolveMaterialFilePath(TcName testCaseName, URL url, String suffix, FileType ext) {
         TsResult currentTestSuiteResult = this.getCurrentTsResult()
         assert currentTestSuiteResult != null
         TcResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
@@ -389,17 +452,56 @@ final class TestResultsImpl implements TestResults {
                 mkp.comment('Place your content here')
                 div('class':'container') {
                     h1('Katalon Studio Test Results')
+                    h3("Test Suite : ${tsResult.getTsName().toString()}/${tsResult.getTsTimestamp().format()}")
+                    // Slideshow
+                    div('id':'carousel0', 'class':'carousel slide', 'data-ride':'carousel') {
+                        ol('class':'carousel-indicators') {
+                            // TODO このTsResultのなかにScreenshotが百個もあったらどうしよう?
+                            List<MaterialWrapper> mwList = tsResult.getMaterialWrappers()
+                            // TODO 画像じゃないPDFやJSONやXMLファイルを除外したい
+                            def count = 0
+                            for (MaterialWrapper mw: mwList) {
+                                if (count == 0) {
+                                    li('data-target':'#carousel0',
+                                        'data-slide-to':"${count}",
+                                        'class': 'active')
+                                } else {
+                                    li('data-target':'#carousel0',
+                                        'data-slide-to':"${count}")
+                                }
+                                count += 1
+                            }
+                        }
+                    }
+                    div('class':'carousel-inner') {
+                        List<MaterialWrapper> mwList = tsResult.getMaterialWrappers()
+                        def count = 0
+                        for (MaterialWrapper mw: mwList) {
+                            if (count == 0) {
+                                div('class': 'item active') {
 
+                                }
+                            } else {
+
+                            }
+                            count += 1
+                        }
+                    }
+                    //
                     List<TcResult> tcResults = tsResult.getTcResults()
                     for (TcResult tcResult : tcResults) {
                         div('class':'row') {
                             div('class':'col-sm-12') {
-                            List<TargetURL> targetURLs = tcResult.getTargetURLs()
+                                h4("Test Case name : ${tcResult.getTcName().toString()}")
+                                h4("Test Case status : ${tcResult.getTcStatus()}")
+                                List<TargetURL> targetURLs = tcResult.getTargetURLs()
                                 for (TargetURL targetURL : targetURLs) {
+                                    h5("URL : ${targetURL.getUrl().toExternalForm()}")
                                     List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
                                     for (MaterialWrapper materialWrapper : materialWrappers) {
                                         Path file = materialWrapper.getMaterialFilePath()
                                         Path relative = tsResult.getTsTimestampDir().relativize(file).normalize()
+                                        h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
                                             alt:"${targetURL.getUrl().toExternalForm()}",
                                             border:"0",

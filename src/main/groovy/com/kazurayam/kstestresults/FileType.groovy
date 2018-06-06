@@ -1,12 +1,14 @@
 package com.kazurayam.kstestresults
 
-enum FileExtension {
+enum FileType {
 
     PLAIN('txt',   'text/plain'),
+    CSV('csv',     'text/plain'),
     HTML('html',   'text/html'),
     CSS('css',     'text/css'),
     JS('js',       'text/javascript'),
     GIF('gif',     'image/gif'),
+    JPG('jpg',     'image/jpeg'),
     JPEG('jpeg',   'image/jpeg'),
     PNG('png' ,    'image/png'),
     BMP('bmp',     'image/bmp'),
@@ -20,7 +22,7 @@ enum FileExtension {
     private final String extension
     private final String mimeType
 
-    FileExtension(String extension, String mimeType) {
+    FileType(String extension, String mimeType) {
         this.extension = extension
         this.mimeType  = mimeType
     }
@@ -36,23 +38,25 @@ enum FileExtension {
     String getMimeType() {
         return this.mimeType
     }
-    
-    static FileExtension getByExtension(String ext) {
-        for (FileExtension v : values()) {
+
+    static FileType getByExtension(String ext) {
+        for (FileType v : values()) {
             if (v.getExtension() == ext) {
                 return v
             }
         }
-        throw new IllegalArgumentException("undefined: ${ext}")
+        System.err.println("FileType#getByExtension: undefined: ${ext}")
+        return null
     }
-    
-    static FileExtension getByMimeType(String mime) {
-        for (FileExtension v : values()) {
+
+    static FileType getByMimeType(String mime) {
+        for (FileType v : values()) {
             if (v.getMimeType() == mime) {
                 return v
             }
         }
-        throw new IllegalArgumentException("undefined: ${mime}")
+        System.err.println("FileType#getByMimeType: undefined: ${mime}")
+        return null
     }
 
 }
