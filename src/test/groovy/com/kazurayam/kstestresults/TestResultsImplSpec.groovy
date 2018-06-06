@@ -3,7 +3,6 @@ package com.kazurayam.kstestresults
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -70,8 +69,8 @@ class TestResultsImplSpec extends Specification {
         TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
         when:
         def str = tri.toJson()
-        System.err.println("str=\n${str}")
-        System.out.println("str=\n${JsonOutput.prettyPrint(str)}")
+        //System.err.println("str=\n${str}")
+        //System.out.println("str=\n${JsonOutput.prettyPrint(str)}")
         then:
         str != null
         str.contains('{"TestResultsImpl":{')
@@ -82,7 +81,7 @@ class TestResultsImplSpec extends Specification {
 
     def testReport() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path html = tri.report()
         then:

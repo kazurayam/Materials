@@ -352,9 +352,9 @@ final class TestResultsImpl implements TestResults {
      */
     private void createIndex(TsResult tsResult, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
-        def html = new MarkupBuilder(writer)
-        html.doubleQuotes = true
-        html.html {
+        def builder = new MarkupBuilder(writer)
+        builder.doubleQuotes = true
+        builder.html {
             head {
                 meta('http-equiv':'Content-Type', content:'text/html; charset=UTF-8')
                 title('generate HTML with MarkupBuilder')
@@ -378,6 +378,23 @@ final class TestResultsImpl implements TestResults {
                 a(href:'http://d.hatena.ne.jp/fumokmm/', 'No Programming, No Life'); br()
                 a(href:'http://d.hatena.ne.jp/fumokmm/20090131/1233428513', 'MarkupBuilderでHTML生成を試してみた'); br()
                 mkp.yield('↑entry'); br()
+
+                List<TcResult> tcResults = tsResult.getTcResults()
+                for (TcResult tcResult : tcResults) {
+                    List<TargetURL> targetURLs = tcResult.getTargetURLs()
+                    for (TargetURL targetURL : targetURLs) {
+                        List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
+                        for (MaterialWrapper materialWrapper : materialWrappers) {
+                            Path file = materialWrapper.getMaterialFilePath()
+                            Path relative = tsResult.getTsTimestampDir().relativize(file).normalize()
+                            img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
+                                alt:"${targetURL.getUrl().toExternalForm()}",
+                                border:"0",
+                                width:"90%")
+                        }
+                    }
+
+                }
             }
         }
         writer.close()

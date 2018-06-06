@@ -80,6 +80,10 @@ class TargetURL {
         return null
     }
 
+    List<MaterialWrapper> getMaterialWrappers() {
+        return this.materialWrappers
+    }
+
     // --------------------- helpers ------------------------------------------
 
     /**

@@ -73,6 +73,10 @@ class TcResult {
         return null
     }
 
+    List<TargetURL> getTargetURLs() {
+        return this.targetURLs
+    }
+
     void addTargetURL(TargetURL targetPage) {
         boolean found = false
         for (TargetURL tp : this.targetURLs) {

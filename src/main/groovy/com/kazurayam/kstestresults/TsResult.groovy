@@ -53,6 +53,10 @@ final class TsResult {
         return null
     }
 
+    List<TcResult> getTcResults() {
+        return tcResults
+    }
+
     TcResult findOrNewTcResult(TcName tcName) {
         TcResult tcr = this.getTcResult(tcName)
         if (tcr == null) {
@@ -73,6 +77,7 @@ final class TsResult {
             this.tcResults.add(tcResult)
         }
     }
+
 
     // ------------------- helpers -----------------------------------------------
 
