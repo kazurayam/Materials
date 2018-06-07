@@ -1,14 +1,25 @@
-shelve
+carmina
 ====
 
 # What is this?
 
-# How to make use of this?
+'carmina' is a small JVM library coded in Groovy, that implements Test Results Repository.
 
+
+Carmina help you to resolve a file path for a screenshot in the following format:
 
 ```
-$ gradle jacocoTestReport
+${base directory}/${test suite name}/${test suite timestamp}/${test case name}/${prefix}/${material file name}
 ```
 
-[ImageMagick (1) インストール編](https://higuma.github.io/2016/08/31/imagemagick-1/)
+For example:
+```
+.Results/TS1/20180809_091047/1/https%3A%2F%2Fwww.google.com%2F.png
+```
+
+You can use carmina to save any material files (PNG, JPEG, JSON, XML, PDF, HTML, CSV etc.) which
+you obtained during testing with WebDriver in JUnit, Spock and Katalon Studio.
+
+Carmina requires Java8+
+
 
