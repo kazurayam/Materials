@@ -44,25 +44,25 @@ class TargetURL {
         if (this.getMaterialWrapper(p) != null) {
             return this.getMaterialWrapper(p)
         } else {
-            MaterialWrapper sw = new MaterialWrapper(this, p, fileType)
-            this.materialWrappers.add(sw)
-            return sw
+            MaterialWrapper mw = new MaterialWrapper(p, fileType).setParent(this)
+            this.materialWrappers.add(mw)
+            return mw
         }
     }
 
     MaterialWrapper findOrNewMaterialWrapper(Path materialFilePath) {
-        MaterialWrapper sw = this.getMaterialWrapper(materialFilePath)
-        if (sw == null) {
-            sw = new MaterialWrapper(this, materialFilePath)
-            this.materialWrappers.add(sw)
+        MaterialWrapper mw = this.getMaterialWrapper(materialFilePath)
+        if (mw == null) {
+            mw = new MaterialWrapper(materialFilePath).setParent(this)
+            this.materialWrappers.add(mw)
         }
-        return sw
+        return mw
     }
 
     void addMaterialWrapper(MaterialWrapper materialWrapper) {
         boolean found = false
-        for (MaterialWrapper sw : this.materialWrappers) {
-            if (sw == materialWrapper) {
+        for (MaterialWrapper mw : this.materialWrappers) {
+            if (mw == materialWrapper) {
                 found = true
             }
         }
@@ -72,9 +72,9 @@ class TargetURL {
     }
 
     MaterialWrapper getMaterialWrapper(Path materialFilePath) {
-        for (MaterialWrapper sw : this.materialWrappers) {
-            if (sw.getMaterialFilePath() == materialFilePath) {
-                return sw
+        for (MaterialWrapper mw : this.materialWrappers) {
+            if (mw.getMaterialFilePath() == materialFilePath) {
+                return mw
             }
         }
         return null

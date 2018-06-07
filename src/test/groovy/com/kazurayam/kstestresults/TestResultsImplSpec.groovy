@@ -131,9 +131,9 @@ class TestResultsImplSpec extends Specification {
         p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
     }
 
-    def testScan() {
+    def testScanBaseDir() {
         when:
-        List<TsResult> tsrList = TestResultsImpl.scan(workdir)
+        List<TsResult> tsrList = TestResultsImpl.scanBaseDir(workdir)
         then:
         tsrList != null
         tsrList.size() == 3

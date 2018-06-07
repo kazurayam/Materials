@@ -4,18 +4,26 @@ import java.nio.file.Path
 
 class MaterialWrapper {
 
-    private TargetURL parentTargetURL
+    private TargetURL parent
     private Path materialFilePath
     private FileType fileType
 
-    MaterialWrapper(TargetURL parent, Path materialFilePath, FileType fileType) {
-        this.parentTargetURL = parent
+    MaterialWrapper(Path materialFilePath, FileType fileType) {
         this.materialFilePath = materialFilePath
         this.fileType = fileType
     }
 
+    MaterialWrapper setParent(TargetURL parent) {
+        this.parent = parent
+        return this
+    }
+
+    TargetURL getParent() {
+        return parent
+    }
+
     TargetURL getTargetURL() {
-        return parentTargetURL
+        return this.getParent()
     }
 
     Path getMaterialFilePath() {
@@ -27,11 +35,15 @@ class MaterialWrapper {
     }
 
     Path getRelativePathToTsTimestampDir() {
-        Path tsTimestampDir =
-            this.getTargetURL()
-                .getParentTcResult().getParentTsResult().getTsTimestampDir()
-        Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
+        if (parent != null) {
+            Path tsTimestampDir =
+                this.getTargetURL()
+                    .getParentTcResult().getParentTsResult().getTsTimestampDir()
+                    Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
         return path
+        } else {
+            throw new IllegalStateException('parent TargetURL is null')
+        }
     }
 
     /**

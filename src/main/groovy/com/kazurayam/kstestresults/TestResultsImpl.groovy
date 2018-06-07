@@ -61,7 +61,7 @@ final class TestResultsImpl implements TestResults {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         this.baseDir = baseDir
-        this.tsResults = scan(this.baseDir)
+        this.tsResults = scanBaseDir(this.baseDir)
         //
         this.currentTsName = tsName
         this.currentTsTimestamp = tsTimestamp
@@ -85,7 +85,7 @@ final class TestResultsImpl implements TestResults {
      * @returns the tree
      *
      */
-    static List<TsResult> scan(Path baseDir) {
+    static List<TsResult> scanBaseDir(Path baseDir) {
         List<TsResult> tsResults_work = new ArrayList<TsResult>()
         List<Path> tsNamePaths =
                 Files.list(baseDir)
@@ -139,8 +139,8 @@ final class TestResultsImpl implements TestResults {
                 URL url = new URL(URLDecoder.decode(urlPart, 'UTF-8'))
                 TargetURL targetURL = new TargetURL(tcr, url)
                 tcr.addTargetURL(targetURL)
-                MaterialWrapper sw = new MaterialWrapper(targetURL, materialFilePath, ft)
-                targetURL.addMaterialWrapper(sw)
+                MaterialWrapper mw = new MaterialWrapper(materialFilePath, ft).setParent(targetURL)
+                targetURL.addMaterialWrapper(mw)
             }
         }
         return tcResults
