@@ -49,7 +49,7 @@ class MaterialWrapperSpec extends Specification {
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         Path p = mw.getRelativePathToTsTimestampDir()
         then:
-        p.toString().replace('¥¥','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
     }
 
     def testGetRelativePathAsString() {
@@ -57,7 +57,7 @@ class MaterialWrapperSpec extends Specification {
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         String s = mw.getRelativePathAsString()
         then:
-        s.toString().replace('¥¥', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
     }
 
     def testGetRelativeUrlAsString() {

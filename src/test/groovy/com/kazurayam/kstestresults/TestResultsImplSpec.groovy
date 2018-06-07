@@ -157,11 +157,11 @@ class TestResultsImplSpec extends Specification {
         tcr.getTcName() == tcn
         tcr.getTcDir() == tsr.getTsTimestampDir().resolve('TC1')
         tcr.getTcStatus() == TcStatus.TO_BE_EXECUTED
+        /*
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
         tp != null
-        /*
         when:
         Path imageFilePath = tcr.getTcDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         MaterialWrapper sw = tp.getMaterialWrapper(imageFilePath)
