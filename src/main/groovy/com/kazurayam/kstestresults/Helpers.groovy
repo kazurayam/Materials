@@ -1,10 +1,16 @@
 package com.kazurayam.kstestresults
 
+import static java.nio.file.FileVisitResult.*
+
+import java.nio.file.FileAlreadyExistsException
+import java.nio.file.FileVisitOption
+import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.stream.Collectors
 
 final class Helpers {
 
@@ -73,36 +79,61 @@ final class Helpers {
      * @param dirTo
      * @return
      */
-    static boolean copyDirectory(Path dirFrom, Path dirTo) {
-        if (dirFrom == null) {
-            throw new IllegalArgumentException('dirFrom is null')
+    static boolean copyDirectory(Path source, Path target) {
+        if (source == null) {
+            throw new IllegalArgumentException('source is null')
         }
-        if (!Files.exists(dirFrom)) {
-            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} does not exist")
+        if (!Files.exists(source)) {
+            throw new IllegalArgumentException("${source.normalize().toAbsolutePath()} does not exist")
         }
-        if (!Files.isDirectory(dirFrom)) {
-            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} is not a directory")
+        if (!Files.isDirectory(source)) {
+            throw new IllegalArgumentException("${source.normalize().toAbsolutePath()} is not a directory")
         }
-        if (!Files.isReadable(dirFrom)) {
-            throw new IllegalArgumentException("${dirFrom.normalize().toAbsolutePath()} is not readable")
+        if (!Files.isReadable(source)) {
+            throw new IllegalArgumentException("${source.normalize().toAbsolutePath()} is not readable")
         }
-        if (dirTo == null) {
-            throw new IllegalArgumentException('dirTo is null')
+        if (target == null) {
+            throw new IllegalArgumentException('target is null')
         }
+        Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+            Integer.MAX_VALUE,
+            new SimpleFileVisitor<Path>() {
+                @Override
+                FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attr) throws IOException {
+                    Path targetdir = target.resolve(source.relativize(dir))
+                    try {
+                        Files.copy(dir, targetdir)
+                    } catch (FileAlreadyExistsException e) {
+                        if (!Files.isDirectory(targetdir))
+                            throw e
+                    }
+                    return CONTINUE
+                }
+                @Override
+                FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
+                    Path targetFile = target.resolve(source.relativize(file))
+                    if (Files.exists(targetFile)) {
+                        Files.delete(targetFile)
+                    }
+                    Files.copy(file, targetFile)
+                    return CONTINUE
+                }
+            })
+        /*
         try {
-            ensureDirs(dirTo)
-            List<Path> childrenFrom = Files.list(dirFrom).collect(Collectors.toList())
+            ensureDirs(target)
+            List<Path> childrenFrom = Files.list(source).collect(Collectors.toList())
             for (Path childFrom : childrenFrom) {
                 if (Files.isDirectory(childFrom)) {
                     // childFrom is a directory
                     // make a directoy with same name in dirTo
-                    Path childTo = dirTo.resolve(childFrom.getFileName())
+                    Path childTo = target.resolve(childFrom.getFileName())
                     ensureDirs(childTo)
                     // and recurse
                     copyDirectory(childFrom, childTo)
                 } else {
                     // childFrom is a file
-                    Path childTo = dirTo.resolve(childFrom.getFileName())
+                    Path childTo = target.resolve(childFrom.getFileName())
                     if (Files.exists(childTo)) {
                         if (Files.isDirectory(childTo)) {
                             deleteDirectory(childTo)
@@ -119,6 +150,7 @@ final class Helpers {
             ex.printStackTrace()
             return false
         }
+        */
     }
 
     /**
