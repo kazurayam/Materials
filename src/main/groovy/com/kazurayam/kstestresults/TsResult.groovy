@@ -60,7 +60,7 @@ final class TsResult {
     TcResult findOrNewTcResult(TcName tcName) {
         TcResult tcr = this.getTcResult(tcName)
         if (tcr == null) {
-            tcr = new TcResult(this, tcName)
+            tcr = new TcResult(tcName).setParent(this)
             this.tcResults.add(tcr)
         }
         return tcr

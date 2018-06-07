@@ -124,8 +124,7 @@ final class TestResultsImpl implements TestResults {
                         .collect(Collectors.toList())
         for (Path tcDir : tcDirs) {
             TcResult tcr =
-                    new TcResult(tsr,
-                            new TcName(tcDir.getFileName().toString()))
+                    new TcResult(new TcName(tcDir.getFileName().toString())).setParent(tsr)
             tcResults.add(tcr)
             List<Path> materialFilePaths =
                     Files.list(tcDir)

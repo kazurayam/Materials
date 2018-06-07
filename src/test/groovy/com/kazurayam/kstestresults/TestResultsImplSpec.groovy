@@ -153,7 +153,7 @@ class TestResultsImplSpec extends Specification {
         then:
         tcr != null
         System.out.println("tcr=\n${JsonOutput.prettyPrint(tcr.toString())}")
-        tcr.getParentTsResult() == tsr
+        tcr.getTsResult() == tsr
         tcr.getTcName() == tcn
         tcr.getTcDir() == tsr.getTsTimestampDir().resolve('TC1')
         tcr.getTcStatus() == TcStatus.TO_BE_EXECUTED

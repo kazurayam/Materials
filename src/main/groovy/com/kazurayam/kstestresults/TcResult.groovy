@@ -7,26 +7,32 @@ import java.nio.file.Path
  */
 class TcResult {
 
-    private TsResult parentTsResult
+    private TsResult parent
     private TcName tcName
     private Path tcDir
     private List<TargetURL> targetURLs
     private TcStatus tcStatus
 
     // --------------------- constructors and initializer ---------------------
-    TcResult(TsResult parentTsResult, TcName tcName) {
-        assert parentTsResult != null
-        assert tcName != null
-        this.parentTsResult = parentTsResult
+    TcResult(TcName tcName) {
         this.tcName = tcName
-        this.tcDir = parentTsResult.getTsTimestampDir().resolve(this.tcName.toString())
         this.targetURLs = new ArrayList<TargetURL>()
         this.tcStatus = TcStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
-    TsResult getParentTsResult() {
-        return this.parentTsResult
+    TcResult setParent(TsResult parent) {
+        this.parent = parent
+        this.tcDir = parent.getTsTimestampDir().resolve(this.tcName.toString())
+        return this
+    }
+
+    TsResult getParent() {
+        return this.parent
+    }
+
+    TsResult getTsResult() {
+        return this.getParent()
     }
 
     TcName getTcName() {
