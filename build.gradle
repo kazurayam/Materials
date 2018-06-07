@@ -26,7 +26,5 @@ test.outputs.upToDateWhen {false}
 
 test {
     include '**/TestResultsImplSpec.class'
-    //include '**/TargetURLSpec.class'
-    //include '**/TestResultsImplSpec.class'
     exclude '**/CommandRunnerSpec.class'
 }

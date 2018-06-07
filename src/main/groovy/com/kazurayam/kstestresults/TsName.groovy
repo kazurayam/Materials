@@ -2,6 +2,10 @@ package com.kazurayam.kstestresults
 
 class TsName {
 
+    static final String SUITELESS_DIRNAME = '_'
+
+    static final TsName SUITELESS = new TsName(SUITELESS_DIRNAME)
+
     private String value
 
     TsName(String testSuiteId) {

@@ -19,7 +19,7 @@ final class TestResultsImpl implements TestResults {
     // ---------------------- constructors & initializer ----------------------
 
     TestResultsImpl(Path baseDir) {
-        this(baseDir, null, null)
+        this(baseDir, TsName.SUITELESS, TsTimestamp.TIMELESS)
     }
 
     /**
@@ -50,6 +50,12 @@ final class TestResultsImpl implements TestResults {
         this(baseDir, tsName, new TsTimestamp())
     }
 
+    /**
+     *
+     * @param baseDir required
+     * @param tsName required
+     * @param tsTimestamp required
+     */
     TestResultsImpl(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
@@ -57,12 +63,10 @@ final class TestResultsImpl implements TestResults {
         this.baseDir = baseDir
         this.tsResults = scan(this.baseDir)
         //
-        if (tsName != null && tsTimestamp != null) {
-            this.currentTsName = tsName
-            this.currentTsTimestamp = tsTimestamp
-            TsResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
-            this.addTsResult(tsr)
-        }
+        this.currentTsName = tsName
+        this.currentTsTimestamp = tsTimestamp
+        TsResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
+        this.addTsResult(tsr)
     }
 
     /**

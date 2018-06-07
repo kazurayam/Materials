@@ -13,9 +13,13 @@ import java.time.temporal.TemporalAccessor
  */
 class TsTimestamp {
 
-    private LocalDateTime timestamp
+    static final String TIMELESS_DIRNAME = '_'
 
-    static String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
+    static final TsTimestamp TIMELESS = new TsTimestamp(LocalDateTime.MIN)
+
+    static final String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
+
+    private LocalDateTime timestamp
 
     /**
      * create a Timestamp object based on the LocalDateTime of now
@@ -51,14 +55,31 @@ class TsTimestamp {
         return this.timestamp
     }
 
+    /**
+     *
+     * @return
+     */
     String format() {
-        return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp)
+        if (timestamp == LocalDateTime.MIN) {
+            return TIMELESS_DIRNAME
+        } else {
+            return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp)
+        }
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     static LocalDateTime parse(String str) {
         try {
-            TemporalAccessor parsed = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).parse(str)
-            return LocalDateTime.from(parsed)
+            if (str == TIMELESS_DIRNAME) {
+                return LocalDateTime.MIN
+            }else {
+                TemporalAccessor parsed = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).parse(str)
+                return LocalDateTime.from(parsed)
+            }
         } catch (DateTimeParseException ex) {
             System.err.println("unable to parse '${str}' as LocalDateTime")
             return null

@@ -60,5 +60,15 @@ class TsTimestampSpec extends Specification {
         str.contains('}}')
     }
 
+    def testFormatOfTimeless() {
+        expect:
+        TsTimestamp.TIMELESS.format() == TsTimestamp.TIMELESS_DIRNAME
+    }
+
+    def testParseDirnameOfTimeless() {
+        expect:
+        TsTimestamp.parse(TsTimestamp.TIMELESS_DIRNAME) == LocalDateTime.MIN
+    }
+
     // helper methods
 }
