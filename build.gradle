@@ -25,7 +25,7 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/*Spec.class'
+    include '**/TestResultsImplSpec.class'
     //include '**/TargetURLSpec.class'
     //include '**/TestResultsImplSpec.class'
     exclude '**/CommandRunnerSpec.class'

@@ -283,15 +283,15 @@ final class TestResultsImpl implements TestResults {
      * returns a Path to save a screenshot of the URL in PNG format
      */
     @Override
-    Path resolveScreenshotFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), FileType.PNG)
+    Path resolvePngFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '', FileType.PNG)
     }
 
     /**
      * return a Path to save a screenshot of the URL appended with the suffix in PNG format
      */
     @Override
-    Path resolveScreenshotFilePath(String testCaseId, String url, String suffix) {
+    Path resolvePngFilePath(String testCaseId, String url, String suffix) {
         this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, FileType.PNG)
     }
 

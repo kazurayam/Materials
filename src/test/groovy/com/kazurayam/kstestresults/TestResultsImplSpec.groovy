@@ -3,7 +3,6 @@ package com.kazurayam.kstestresults
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
@@ -74,10 +73,49 @@ class TestResultsImplSpec extends Specification {
         TestResultsImpl.identifyURLpart(Paths.get('/temp/a.b.c.png')) == 'a.b'
     }
 
-    @Ignore
-    def testScan() {
+    def testResolveMaterialFilePath() {
         setup:
-        Helpers.copyDirectory(fixture, workdir)
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        when:
+        Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
+        then:
+        p != null
+        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+    }
+
+    def testResolveMaterialFilePathWithSuffix() {
+        setup:
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        when:
+        Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        then:
+        p != null
+        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+    }
+
+    def testResolvePngFilePath() {
+        setup:
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        when:
+        Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
+        then:
+        p != null
+        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+    }
+
+    def testResolvePngFilePathWithSuffix() {
+        setup:
+        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        when:
+        Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
+        then:
+        p != null
+        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+    }
+
+
+
+    def testScan() {
         when:
         List<TsResult> tsrList = TestResultsImpl.scan(workdir)
         then:
@@ -114,7 +152,7 @@ class TestResultsImplSpec extends Specification {
         sw.getMaterialFilePath() == imageFilePath
     }
 
-    @Ignore
+
     def testToJson() {
         setup:
         TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
@@ -130,7 +168,7 @@ class TestResultsImplSpec extends Specification {
         str.contains('}}')
     }
 
-    @Ignore
+
     def testReport() {
         setup:
         TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))

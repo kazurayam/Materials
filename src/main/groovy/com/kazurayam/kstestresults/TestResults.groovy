@@ -9,8 +9,8 @@ interface TestResults {
     Path resolveMaterialFilePath(String testCaseId, String url, FileType ext)
     Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType ext)
 
-    Path resolveScreenshotFilePath(String testCaseId, String url)
-    Path resolveScreenshotFilePath(String testCaseId, String url, String suffix)
+    Path resolvePngFilePath(String testCaseId, String url)
+    Path resolvePngFilePath(String testCaseId, String url, String suffix)
 
     //Path resolveJsonFilePath(String testCaseId, String url)
     //Path resolveJsonFilePath(String testCaseId, String url, String suffix)
