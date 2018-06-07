@@ -137,7 +137,7 @@ final class TestResultsImpl implements TestResults {
                 String suffix = this.identifySuffix(materialFilePath)
                 FileType ft = this.identifyFileType(materialFilePath)
                 URL url = new URL(URLDecoder.decode(urlPart, 'UTF-8'))
-                TargetURL targetURL = new TargetURL(tcr, url)
+                TargetURL targetURL = new TargetURL(url).setParent(tcr)
                 tcr.addTargetURL(targetURL)
                 MaterialWrapper mw = new MaterialWrapper(materialFilePath, ft).setParent(targetURL)
                 targetURL.addMaterialWrapper(mw)

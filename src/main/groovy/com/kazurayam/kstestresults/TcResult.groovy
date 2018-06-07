@@ -56,7 +56,7 @@ class TcResult {
     TargetURL findOrNewTargetURL(URL url) {
         TargetURL ntp = this.getTargetURL(url)
         if (ntp == null) {
-            ntp = new TargetURL(this, url)
+            ntp = new TargetURL(url).setParent(this)
             this.targetURLs.add(ntp)
         }
         return ntp
@@ -90,7 +90,7 @@ class TcResult {
     }
 
     // -------------------------- helpers -------------------------------------
-    
+
     // ------------------ overriding Object properties ------------------------
     @Override
     boolean equals(Object obj) {

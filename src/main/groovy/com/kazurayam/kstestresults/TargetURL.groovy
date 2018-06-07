@@ -4,20 +4,28 @@ import java.nio.file.Path
 
 class TargetURL {
 
-    private TcResult parentTcResult
+    private TcResult parent
     private URL url
     private List<MaterialWrapper> materialWrappers
 
     // ---------------------- constructors & initializers ---------------------
-    protected TargetURL(TcResult parent, URL url) {
-        this.parentTcResult = parent
+    TargetURL(URL url) {
         this.url = url
         this.materialWrappers = new ArrayList<MaterialWrapper>()
     }
 
+    TargetURL setParent(TcResult parent) {
+        this.parent = parent
+        return this
+    }
+
     // --------------------- properties getter & setter -----------------------
-    TcResult getParentTcResult() {
-        return this.parentTcResult
+    TcResult getParent() {
+        return this.parent
+    }
+
+    TcResult getTcResult() {
+        return this.getParent()
     }
 
     URL getUrl() {
@@ -38,7 +46,7 @@ class TargetURL {
         String filteredSuffix = suffix.trim().replace('.', '')
         String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
 
-        Path p = this.parentTcResult.getTcDir().resolve(
+        Path p = this.parent.getTcDir().resolve(
             "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
             )
         if (this.getMaterialWrapper(p) != null) {
@@ -94,7 +102,7 @@ class TargetURL {
         //if (this == obj) { return true }
         if (!(obj instanceof TargetURL)) { return false }
         TargetURL other = (TargetURL)obj
-        if (this.parentTcResult == other.getParentTcResult()
+        if (this.parent == other.getTcResult()
             && this.url == other.getUrl()) {
             return true
         } else {
@@ -106,7 +114,7 @@ class TargetURL {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getParentTcResult().hashCode()
+        result = prime * result + this.getTcResult().hashCode()
         result = prime * result + this.getUrl().hashCode()
         return result
     }
