@@ -10,6 +10,11 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
+# eclipse
+.checkstyle
+.classpath
+.project
+
 # IntelliJ IDEA
 .idea/
 *.iml
