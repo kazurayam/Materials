@@ -9,13 +9,13 @@ import com.kazurayam.kstestresults.Helpers
 
 import spock.lang.Specification
 
-class MyFileVisitorSpec extends Specification {
+class PrintingFileVisitorSpec extends Specification {
 
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MyFileVisitorSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(PrintingFileVisitorSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -25,7 +25,7 @@ class MyFileVisitorSpec extends Specification {
     def testSoke() {
         when:
         Path start = workdir
-        FileVisitor<Path> visitor = new MyFileVisitor()
+        FileVisitor<Path> visitor = new PrintingFileVisitor()
         Files.walkFileTree(start, visitor)
         then:
         true == true

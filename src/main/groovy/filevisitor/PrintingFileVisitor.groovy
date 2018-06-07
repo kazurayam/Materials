@@ -5,7 +5,7 @@ import java.nio.file.FileVisitor
 import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributes
 
-class MyFileVisitor implements FileVisitor<Path> {
+class PrintingFileVisitor implements FileVisitor<Path> {
 
     private int indentSize
 
