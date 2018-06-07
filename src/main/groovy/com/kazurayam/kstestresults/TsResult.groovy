@@ -27,11 +27,11 @@ final class TsResult {
     }
 
     // ------------------ attribute setter & getter -------------------------------
-    protected Path getBaseDir() {
+    Path getBaseDir() {
         return this.baseDir
     }
 
-    protected Path getTsTimestampDir() {
+    Path getTsTimestampDir() {
         return this.tsTimestampDir
     }
 

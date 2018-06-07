@@ -61,6 +61,9 @@ class MaterialWrapper {
         return this.getRelativePathAsString().replace('\\','/').replace('%','%25')
     }
 
+    // ---------------- helpers -----------------------------------------------
+
+
     // ---------------- overriding Object properties --------------------------
     @Override
     boolean equals(Object obj) {

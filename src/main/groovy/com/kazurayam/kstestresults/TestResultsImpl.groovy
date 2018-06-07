@@ -70,16 +70,11 @@ final class TestResultsImpl implements TestResults {
     }
 
     /**
-     * Here I assume that I have a file system tree like:
+     * ./Results/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
+     * ./Results/TS1/20180530_130604/TC1/1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
+     * ./Results/TS1/20180530_130604/TC1/2/http%3A%2F%2Fdemoaut.katalon.com%2F.png
      *
-     * ./Screenshots/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-     *
-     * The format is as follows:
-     *
-     * <baseDir>/<Test Suite Name>/<Timestamp>/<Test Case Name>/<image file>
-     *
-     * This load method scans through the file system under the baseDir, construct a tree
-     * and return it.
+     * <baseDir>/<Test Suite Name>/<Timestamp>/<Test Case Name>/<subpath>
      *
      * @param baseDir
      * @returns the tree
