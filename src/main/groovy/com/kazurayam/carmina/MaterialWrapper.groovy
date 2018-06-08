@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 class MaterialWrapper {
 
-    private TargetURL parent
+    private TargetURL targetURL
     private Path materialFilePath
     private FileType fileType
 
@@ -14,16 +14,16 @@ class MaterialWrapper {
     }
 
     MaterialWrapper setParent(TargetURL parent) {
-        this.parent = parent
+        this.targetURL = parent
         return this
     }
 
     TargetURL getParent() {
-        return this.parent
+        return this.getTargetURL()
     }
 
     TargetURL getTargetURL() {
-        return this.getParent()
+        return this.targetURL
     }
 
     Path getMaterialFilePath() {
@@ -35,10 +35,10 @@ class MaterialWrapper {
     }
 
     Path getRelativePathToTsTimestampDir() {
-        if (parent != null) {
+        if (targetURL != null) {
             Path tsTimestampDir =
                 this.getTargetURL()
-                    .getTcResult().getTsResult().getTsTimestampDir()
+                    .getTCaseResult().getTsResult().getTsTimestampDir()
                     Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
         return path
         } else {

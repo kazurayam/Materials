@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 class TargetURL {
 
-    private TCaseResult parent
+    private TCaseResult tCaseResult
     private URL url
     private List<MaterialWrapper> materialWrappers
 
@@ -15,17 +15,17 @@ class TargetURL {
     }
 
     TargetURL setParent(TCaseResult parent) {
-        this.parent = parent
+        this.tCaseResult = parent
         return this
     }
 
     // --------------------- properties getter & setter -----------------------
     TCaseResult getParent() {
-        return this.parent
+        return this.getTCaseResult()
     }
 
-    TCaseResult getTcResult() {
-        return this.getParent()
+    TCaseResult getTCaseResult() {
+        return this.tCaseResult
     }
 
     URL getUrl() {
@@ -46,7 +46,7 @@ class TargetURL {
         String filteredSuffix = suffix.trim().replace('.', '')
         String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
 
-        Path p = this.parent.getTcDir().resolve(
+        Path p = this.tCaseResult.getTcDir().resolve(
             "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
             )
         if (this.getMaterialWrapper(p) != null) {
@@ -102,7 +102,7 @@ class TargetURL {
         //if (this == obj) { return true }
         if (!(obj instanceof TargetURL)) { return false }
         TargetURL other = (TargetURL)obj
-        if (this.parent == other.getTcResult()
+        if (this.tCaseResult == other.getTCaseResult()
             && this.url == other.getUrl()) {
             return true
         } else {
@@ -114,7 +114,7 @@ class TargetURL {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTcResult().hashCode()
+        result = prime * result + this.getTCaseResult().hashCode()
         result = prime * result + this.getUrl().hashCode()
         return result
     }

@@ -3,18 +3,6 @@ package com.kazurayam.carmina
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.FileType
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.MaterialWrapper
-import com.kazurayam.carmina.TargetURL
-import com.kazurayam.carmina.TCaseName
-import com.kazurayam.carmina.TCaseResult
-import com.kazurayam.carmina.TestResultsRepositoryFactory
-import com.kazurayam.carmina.TestResultsRepositoryImpl
-import com.kazurayam.carmina.TSuiteName
-import com.kazurayam.carmina.TSuiteResult
-import com.kazurayam.carmina.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -24,13 +12,13 @@ class MaterialWrapperSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static TestResultsRepositoryImpl tri
+    private static TestResultsRepositoryImpl trri
     private static TargetURL tu
 
     // fixture methods
     def setup() {
         TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = tri.getTsResult(new TSuiteName('TS1'), tstamp)
+        TSuiteResult tsr = trri.getTsResult(new TSuiteName('TS1'), tstamp)
         TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
         assert tcr != null
         tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
@@ -41,10 +29,19 @@ class MaterialWrapperSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = TestResultsRepositoryFactory.createInstance(workdir, new TSuiteName('TS1'))
+        trri = TestResultsRepositoryFactory.createInstance(workdir, new TSuiteName('TS1'))
     }
 
     // feature methods
+    def testSetParent_GetParent() {
+        when:
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper modified = mw.setParent(tu)
+        then:
+        modified.getParent() == tu
+
+    }
+
     def testToJson() {
         when:
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)

@@ -96,7 +96,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 LocalDateTime ldt = TSuiteTimestamp.parse(tsTimestampPath.getFileName().toString())
                 if (ldt != null) {
                     TSuiteTimestamp tsTimestamp = new TSuiteTimestamp(ldt)
-                    TSuiteResult tsr = new TSuiteResult(baseDir, tsName, tsTimestamp)
+                    TSuiteResult tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
                     tsResults_work.add(tsr)
                     //System.out.println("tsr=${tsr}")
                     List<TCaseResult> tcResults = scanTsResult(tsr)
@@ -228,7 +228,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     TSuiteResult findOrNewTsResult(TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
         TSuiteResult tsr = this.getTsResult(tsName, tsTimestamp)
         if (tsr == null) {
-            tsr = new TSuiteResult(this.baseDir, tsName, tsTimestamp)
+            tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
         }
         return tsr
     }
@@ -305,8 +305,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         assert currentTestSuiteResult != null
         TCaseResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
         if (tcr != null) {
-            MaterialWrapper sw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, ext)
-            Path screenshotFilePath = sw.getMaterialFilePath()
+            MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, ext)
+            Path screenshotFilePath = mw.getMaterialFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath
         } else {

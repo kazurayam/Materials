@@ -28,6 +28,13 @@ class TestResultsRepositoryImplSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
+    def testGetBaseDir() {
+        when:
+        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(workdir)
+        then:
+        trri.getBaseDir() == workdir
+    }
+
     def testIdentifyFileType() {
         expect:
         TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.png')) == FileType.PNG

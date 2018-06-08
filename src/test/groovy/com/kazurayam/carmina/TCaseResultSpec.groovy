@@ -3,17 +3,6 @@ package com.kazurayam.carmina
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.FileType
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.MaterialWrapper
-import com.kazurayam.carmina.TargetURL
-import com.kazurayam.carmina.TCaseName
-import com.kazurayam.carmina.TCaseResult
-import com.kazurayam.carmina.TCaseStatus
-import com.kazurayam.carmina.TestResultsRepositoryImpl
-import com.kazurayam.carmina.TSuiteName
-import com.kazurayam.carmina.TSuiteResult
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -23,7 +12,6 @@ class TCaseResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static TestResultsRepositoryImpl tri
     private static TSuiteResult tsr
 
     // fixture methods
@@ -35,12 +23,20 @@ class TCaseResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
-        tsr = tri.getCurrentTsResult()
+        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
+        tsr = trri.getCurrentTsResult()
     }
     def cleanupSpec() {}
 
     // feature methods
+    def testSetParent_GetParent() {
+        when:
+        TCaseResult tcr = new TCaseResult(new TCaseName('TC1'))
+        TCaseResult modified = tcr.setParent(tsr)
+        then:
+        modified.getParent() == tsr
+    }
+
     def testToJson() {
         setup:
         TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))

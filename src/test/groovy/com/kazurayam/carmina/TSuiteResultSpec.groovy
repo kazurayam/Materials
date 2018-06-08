@@ -2,16 +2,7 @@ package com.kazurayam.carmina
 
 import java.nio.file.Path
 import java.nio.file.Paths
-
-import com.kazurayam.carmina.FileType
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.MaterialWrapper
-import com.kazurayam.carmina.TargetURL
-import com.kazurayam.carmina.TCaseName
-import com.kazurayam.carmina.TCaseResult
-import com.kazurayam.carmina.TestResultsRepositoryImpl
-import com.kazurayam.carmina.TSuiteName
-import com.kazurayam.carmina.TSuiteResult
+import java.time.LocalDateTime
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -22,7 +13,7 @@ class TSuiteResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private TestResultsRepositoryImpl trsi
+    private TestResultsRepositoryImpl trri
 
     // fixture methods
     def setup() {
@@ -31,7 +22,7 @@ class TSuiteResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        trsi = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
+        trri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
 
     }
     def cleanup() {}
@@ -39,41 +30,50 @@ class TSuiteResultSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
+    def testSetParent_getParent() {
+        when:
+        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp(LocalDateTime.now()))
+        TSuiteResult modified = tsr.setParent(workdir)
+        then:
+        modified.getParent() == workdir
+
+    }
+
     def testFindOrNewTcResult() {
         when:
-        TSuiteResult tsr = trsi.getCurrentTsResult()
+        TSuiteResult tsr = trri.getCurrentTsResult()
         TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
         then:
         tcr != null
         tcr.getTcName() == new TCaseName('TC1')
         when:
-        TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
-        tp != null
+        tu != null
         when:
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper('', FileType.PNG)
         then:
-        sw != null
+        mw != null
     }
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = trsi.getCurrentTsResult()
+        TSuiteResult tsr = trri.getCurrentTsResult()
         when:
         TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
-        TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
-        def str = tsr.toString()
-        System.err.println("${str}")
-        System.out.println("${JsonOutput.prettyPrint(str)}")
+        TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+        MaterialWrapper sw = tu.findOrNewMaterialWrapper('', FileType.PNG)
+        def s = tsr.toString()
+        System.err.println("${s}")
+        System.out.println("${JsonOutput.prettyPrint(s)}")
         then:
-        str.startsWith('{"TsResult":{')
-        str.contains('tsName')
-        str.contains('TS1')
-        str.contains('tcName')
-        str.contains('TC1')
-        str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
-        str.endsWith('}}')
+        s.startsWith('{"TsResult":{')
+        s.contains('tsName')
+        s.contains('TS1')
+        s.contains('tcName')
+        s.contains('TC1')
+        s.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
+        s.endsWith('}}')
     }
 
     // helper methods
