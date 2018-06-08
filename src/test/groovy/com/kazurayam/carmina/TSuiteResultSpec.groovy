@@ -41,11 +41,11 @@ class TSuiteResultSpec extends Specification {
 
     def testFindOrNewTcResult() {
         when:
-        TSuiteResult tsr = trri.getCurrentTsResult()
-        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
+        TSuiteResult tsr = trri.getCurrentTSuiteResult()
+        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
         then:
         tcr != null
-        tcr.getTcName() == new TCaseName('TC1')
+        tcr.getTCaseName() == new TCaseName('TC1')
         when:
         TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
@@ -58,19 +58,19 @@ class TSuiteResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = trri.getCurrentTsResult()
+        TSuiteResult tsr = trri.getCurrentTSuiteResult()
         when:
-        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
+        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
         TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         MaterialWrapper sw = tu.findOrNewMaterialWrapper('', FileType.PNG)
         def s = tsr.toString()
         System.err.println("${s}")
         System.out.println("${JsonOutput.prettyPrint(s)}")
         then:
-        s.startsWith('{"TsResult":{')
-        s.contains('tsName')
+        s.startsWith('{"TSuiteResult":{')
+        s.contains('tSuiteName')
         s.contains('TS1')
-        s.contains('tcName')
+        s.contains('tCaseName')
         s.contains('TC1')
         s.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))
         s.endsWith('}}')

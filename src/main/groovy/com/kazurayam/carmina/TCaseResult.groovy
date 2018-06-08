@@ -8,22 +8,26 @@ import java.nio.file.Path
 class TCaseResult {
 
     private TSuiteResult parent
-    private TCaseName tcName
-    private Path tcDir
+    private TCaseName tCaseName
+    private Path tCaseDir
     private List<TargetURL> targetURLs
-    private TCaseStatus tcStatus
+    private TestCaseStatus tCaseStatus
 
     // --------------------- constructors and initializer ---------------------
-    TCaseResult(TCaseName tcName) {
-        this.tcName = tcName
+    /**
+     *
+     * @param tCaseName
+     */
+    TCaseResult(TCaseName tCaseName) {
+        this.tCaseName = tCaseName
         this.targetURLs = new ArrayList<TargetURL>()
-        this.tcStatus = TCaseStatus.TO_BE_EXECUTED
+        this.tCaseStatus = TestCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
         this.parent = parent
-        this.tcDir = parent.getTsTimestampDir().resolve(this.tcName.toString())
+        this.tCaseDir = parent.getTsTimestampDir().resolve(this.tCaseName.toString())
         return this
     }
 
@@ -31,31 +35,30 @@ class TCaseResult {
         return this.parent
     }
 
-    TSuiteResult getTsResult() {
+    TSuiteResult getTSuiteResult() {
         return this.getParent()
     }
 
-    TCaseName getTcName() {
-        return tcName
+    TCaseName getTCaseName() {
+        return tCaseName
     }
 
-    Path getTcDir() {
-        return tcDir
+    Path getTCaseDir() {
+        return tCaseDir
     }
 
-    void setTcStatus(String tcStatus) {
-        assert tcStatus != null
-        TCaseStatus tcs = TCaseStatus.valueOf(tcStatus)  // this may throw IllegalArgumentException
-        this.setTcStatus(tcs)
+    void setTestCaseStatus(String str) {
+        TestCaseStatus tcs = TCaseStatus.valueOf(str)  // this may throw IllegalArgumentException
+        this.setTestCaseStatus(tcs)
     }
 
-    void setTcStatus(TCaseStatus tcStatus) {
-        assert tcStatus != null
-        this.tcStatus = tcStatus
+    void setTestCaseStatus(TestCaseStatus tCaseStatus) {
+        assert tCaseStatus != null
+        this.tCaseStatus = tCaseStatus
     }
 
-    TCaseStatus getTcStatus() {
-        return this.tcStatus
+    TestCaseStatus getTestCaseStatus() {
+        return this.tCaseStatus
     }
 
     // --------------------- create/add/get child nodes ----------------------
@@ -107,7 +110,7 @@ class TCaseResult {
             return false
         }
         TCaseResult other = (TCaseResult) obj
-        if (this.tcName == other.getTcName()) {
+        if (this.tCaseName == other.getTCaseName()) {
             return true
         } else {
             return false
@@ -116,7 +119,7 @@ class TCaseResult {
 
     @Override
     int hashCode() {
-        return this.tcName.hashCode()
+        return this.tCaseName.hashCode()
     }
 
     @Override
@@ -126,10 +129,10 @@ class TCaseResult {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TcResult":{')
-        sb.append('"tcName":"'   + Helpers.escapeAsJsonText(this.tcName.toString())   + '",')
-        sb.append('"tcDir":"'    + Helpers.escapeAsJsonText(this.tcDir.toString())    + '",')
-        sb.append('"tcStatus":"' + this.tcStatus.toString() + '",')
+        sb.append('{"TCaseResult":{')
+        sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(this.tCaseName.toString())   + '",')
+        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(this.tCaseDir.toString())    + '",')
+        sb.append('"tCaseStatus":"' + this.tCaseStatus.toString() + '",')
         sb.append('"targetURLs":[')
         def count = 0
         for (TargetURL tp : this.targetURLs) {

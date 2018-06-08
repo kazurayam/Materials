@@ -38,7 +38,7 @@ class MaterialWrapper {
         if (targetURL != null) {
             Path tsTimestampDir =
                 this.getTargetURL()
-                    .getTCaseResult().getTsResult().getTsTimestampDir()
+                    .getTCaseResult().getTSuiteResult().getTsTimestampDir()
                     Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
         return path
         } else {

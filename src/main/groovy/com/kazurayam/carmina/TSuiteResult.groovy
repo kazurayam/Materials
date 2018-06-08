@@ -42,46 +42,46 @@ final class TSuiteResult {
         return this.tSuiteTimestampDir
     }
 
-    TSuiteName getTsName() {
+    TSuiteName getTSuiteName() {
         return tSuiteName
     }
 
-    TSuiteTimestamp getTsTimestamp() {
+    TSuiteTimestamp getTSuiteTimestamp() {
         return tSuiteTimestamp
     }
 
     // ------------------ create/add/get child nodes ------------------------------
-    TCaseResult getTcResult(TCaseName tcName) {
+    TCaseResult getTCaseResult(TCaseName tCaseName) {
         for (TCaseResult tcr : this.tCaseResults) {
-            if (tcr.getTcName() == tcName) {
+            if (tcr.getTCaseName() == tCaseName) {
                 return tcr
             }
         }
         return null
     }
 
-    List<TCaseResult> getTcResults() {
+    List<TCaseResult> getTCaseResults() {
         return tCaseResults
     }
 
-    TCaseResult findOrNewTcResult(TCaseName tcName) {
-        TCaseResult tcr = this.getTcResult(tcName)
+    TCaseResult findOrNewTCaseResult(TCaseName tCaseName) {
+        TCaseResult tcr = this.getTCaseResult(tCaseName)
         if (tcr == null) {
-            tcr = new TCaseResult(tcName).setParent(this)
+            tcr = new TCaseResult(tCaseName).setParent(this)
             this.tCaseResults.add(tcr)
         }
         return tcr
     }
 
-    void addTcResult(TCaseResult tcResult) {
+    void addTcResult(TCaseResult tCaseResult) {
         boolean found = false
         for (TCaseResult tcr : this.tCaseResults) {
-            if (tcr == tcResult) {
+            if (tcr == tCaseResult) {
                 found = true
             }
         }
         if (!found) {
-            this.tCaseResults.add(tcResult)
+            this.tCaseResults.add(tCaseResult)
         }
     }
 
@@ -89,7 +89,7 @@ final class TSuiteResult {
     // ------------------- helpers -----------------------------------------------
     List<MaterialWrapper> getMaterialWrappers() {
         List<MaterialWrapper> materialWrappers = new ArrayList<MaterialWrapper>()
-        for (TCaseResult tcr : this.getTcResults()) {
+        for (TCaseResult tcr : this.getTCaseResults()) {
             for (TargetURL targetURL : tcr.getTargetURLs()) {
                 for (MaterialWrapper mw : targetURL.getMaterialWrappers()) {
                     materialWrappers.add(mw)
@@ -105,7 +105,7 @@ final class TSuiteResult {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (this.tSuiteName == other.getTsName() && this.tSuiteTimestamp == other.getTsTimestamp()) {
+        if (this.tSuiteName == other.getTSuiteName() && this.tSuiteTimestamp == other.getTSuiteTimestamp()) {
             return true
         } else {
             return false
@@ -116,8 +116,8 @@ final class TSuiteResult {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTsName().hashCode()
-        result = prime * result + this.getTsTimestamp().hashCode()
+        result = prime * result + this.getTSuiteName().hashCode()
+        result = prime * result + this.getTSuiteTimestamp().hashCode()
         return result
     }
 
@@ -128,12 +128,12 @@ final class TSuiteResult {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TsResult":{')
+        sb.append('{"TSuiteResult":{')
         sb.append('"baseDir": "' + Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
-        sb.append('"tsName": "' + Helpers.escapeAsJsonText(this.tSuiteName.toString()) + '",')
-        sb.append('"tsTimestamp": ' + this.tSuiteTimestamp.toString() + ',')
-        sb.append('"tsTimestampDir": "' + Helpers.escapeAsJsonText(this.tSuiteTimestampDir.toString()) + '",')
-        sb.append('"tcResults": [')
+        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.tSuiteName.toString()) + '",')
+        sb.append('"tSuiteTimestamp": ' + this.tSuiteTimestamp.toString() + ',')
+        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.tSuiteTimestampDir.toString()) + '",')
+        sb.append('"tCaseResults": [')
         def count = 0
         for (TCaseResult tcr : this.tCaseResults) {
             if (count > 0) { sb.append(',') }

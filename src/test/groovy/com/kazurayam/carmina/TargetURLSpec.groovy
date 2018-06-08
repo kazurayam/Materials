@@ -17,8 +17,8 @@ class TargetURLSpec extends Specification {
     // fixture methods
     def setup() {
         TestResultsRepositoryImpl strri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
-        TSuiteResult tsr = strri.getCurrentTsResult()
-        tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
+        TSuiteResult tsr = strri.getCurrentTSuiteResult()
+        tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
     }
     def cleanup() {}
     def setupSpec() {

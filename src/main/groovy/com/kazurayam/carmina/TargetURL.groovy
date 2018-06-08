@@ -32,6 +32,7 @@ class TargetURL {
         return this.url
     }
 
+
     // --------------------- create/add/get child nodes -----------------------
 
     /**
@@ -46,7 +47,7 @@ class TargetURL {
         String filteredSuffix = suffix.trim().replace('.', '')
         String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
 
-        Path p = this.tCaseResult.getTcDir().resolve(
+        Path p = this.tCaseResult.getTCaseDir().resolve(
             "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
             )
         if (this.getMaterialWrapper(p) != null) {
@@ -91,6 +92,7 @@ class TargetURL {
     List<MaterialWrapper> getMaterialWrappers() {
         return this.materialWrappers
     }
+
 
     // --------------------- helpers ------------------------------------------
 

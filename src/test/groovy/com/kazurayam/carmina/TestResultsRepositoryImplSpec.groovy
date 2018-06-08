@@ -152,19 +152,19 @@ class TestResultsRepositoryImplSpec extends Specification {
         then:
         tsr != null
         tsr.getBaseDir() == workdir
-        tsr.getTsName() == new TSuiteName('TS1')
-        tsr.getTsTimestamp() == new TSuiteTimestamp('20180530_130419')
+        tsr.getTSuiteName() == new TSuiteName('TS1')
+        tsr.getTSuiteTimestamp() == new TSuiteTimestamp('20180530_130419')
         tsr.getTsTimestampDir() == workdir.resolve('TS1/20180530_130419')
         when:
         TCaseName tcn = new TCaseName('TC1')
-        TCaseResult tcr = tsr.getTcResult(tcn)
+        TCaseResult tcr = tsr.getTCaseResult(tcn)
         then:
         tcr != null
         System.out.println("tcr=\n${JsonOutput.prettyPrint(tcr.toString())}")
-        tcr.getTsResult() == tsr
-        tcr.getTcName() == tcn
-        tcr.getTcDir() == tsr.getTsTimestampDir().resolve('TC1')
-        tcr.getTcStatus() == TCaseStatus.TO_BE_EXECUTED
+        tcr.getTSuiteResult() == tsr
+        tcr.getTCaseName() == tcn
+        tcr.getTCaseDir() == tsr.getTsTimestampDir().resolve('TC1')
+        tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
         /*
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
@@ -207,7 +207,7 @@ class TestResultsRepositoryImplSpec extends Specification {
     // helper methods
     TSuiteResult lookupTestSuiteResult(List<TSuiteResult> tsrList, TSuiteName tsn, TSuiteTimestamp tst) {
         for (TSuiteResult tsr : tsrList ) {
-            if (tsr.getTsName() == tsn && tsr.getTsTimestamp() == tst) {
+            if (tsr.getTSuiteName() == tsn && tsr.getTSuiteTimestamp() == tst) {
                 return tsr
             }
         }

@@ -1,9 +1,9 @@
 package com.kazurayam.carmina
 
-enum TCaseStatus {
+public enum TestCaseStatus {
 
     TO_BE_EXECUTED,
     FAILED,
-    PASSED
+    PASSED,
 
 }

@@ -118,39 +118,8 @@ final class Helpers {
                     Files.copy(file, targetFile)
                     return CONTINUE
                 }
-            })
-        /*
-        try {
-            ensureDirs(target)
-            List<Path> childrenFrom = Files.list(source).collect(Collectors.toList())
-            for (Path childFrom : childrenFrom) {
-                if (Files.isDirectory(childFrom)) {
-                    // childFrom is a directory
-                    // make a directoy with same name in dirTo
-                    Path childTo = target.resolve(childFrom.getFileName())
-                    ensureDirs(childTo)
-                    // and recurse
-                    copyDirectory(childFrom, childTo)
-                } else {
-                    // childFrom is a file
-                    Path childTo = target.resolve(childFrom.getFileName())
-                    if (Files.exists(childTo)) {
-                        if (Files.isDirectory(childTo)) {
-                            deleteDirectory(childTo)
-                        } else {
-                            Files.delete(childTo)
-                        }
-                    }
-                    // copy the file
-                    Files.copy(childFrom, childTo)
-                }
             }
-            return true
-        } catch (IOException ex) {
-            ex.printStackTrace()
-            return false
-        }
-        */
+        )
     }
 
     /**

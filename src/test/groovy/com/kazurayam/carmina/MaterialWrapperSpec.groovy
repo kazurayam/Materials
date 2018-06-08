@@ -19,7 +19,7 @@ class MaterialWrapperSpec extends Specification {
     def setup() {
         TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
         TSuiteResult tsr = trri.getTsResult(new TSuiteName('TS1'), tstamp)
-        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
+        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
         assert tcr != null
         tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
     }

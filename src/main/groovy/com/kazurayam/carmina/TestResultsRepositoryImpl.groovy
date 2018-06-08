@@ -10,9 +10,9 @@ import groovy.xml.MarkupBuilder
 final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     private Path baseDir
-    private TSuiteName currentTsName
-    private TSuiteTimestamp currentTsTimestamp
-    private List<TSuiteResult> tsResults
+    private TSuiteName currentTSuiteName
+    private TSuiteTimestamp currentTSuiteTimestamp
+    private List<TSuiteResult> tSuiteResults
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
@@ -61,11 +61,11 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         this.baseDir = baseDir
-        this.tsResults = scanBaseDir(this.baseDir)
+        this.tSuiteResults = scanBaseDir(this.baseDir)
         //
-        this.currentTsName = tsName
-        this.currentTsTimestamp = tsTimestamp
-        TSuiteResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
+        this.currentTSuiteName = tsName
+        this.currentTSuiteTimestamp = tsTimestamp
+        TSuiteResult tsr = this.findOrNewTsResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
         this.addTsResult(tsr)
     }
 
@@ -209,12 +209,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         return this.baseDir
     }
 
-    TSuiteName getCurrentTestSuiteName() {
-        return this.currentTsName
+    TSuiteName getCurrentTSuiteName() {
+        return this.currentTSuiteName
     }
 
-    TSuiteTimestamp getCurrentTestSuiteTimestamp() {
-        return this.currentTsTimestamp
+    TSuiteTimestamp getCurrentTSuiteTimestamp() {
+        return this.currentTSuiteTimestamp
     }
 
 
@@ -225,10 +225,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    TSuiteResult findOrNewTsResult(TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
-        TSuiteResult tsr = this.getTsResult(tsName, tsTimestamp)
+    TSuiteResult findOrNewTsResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        TSuiteResult tsr = this.getTsResult(tSuiteName, tSuiteTimestamp)
         if (tsr == null) {
-            tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
+            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
         }
         return tsr
     }
@@ -239,15 +239,15 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    void addTsResult(TSuiteResult tsResult) {
+    void addTsResult(TSuiteResult tSuiteResult) {
         boolean found = false
-        for (TSuiteResult tsr : this.tsResults) {
-            if (tsr == tsResult) {
+        for (TSuiteResult tsr : this.tSuiteResults) {
+            if (tsr == tSuiteResult) {
                 found = true
             }
         }
         if (!found) {
-            this.tsResults.add(tsResult)
+            this.tSuiteResults.add(tSuiteResult)
         }
     }
 
@@ -257,9 +257,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    TSuiteResult getTsResult(TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
-        for (TSuiteResult tsr : this.tsResults) {
-            if (tsr.getTsName() == tsName && tsr.getTsTimestamp() == tsTimestamp) {
+    TSuiteResult getTsResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        for (TSuiteResult tsr : this.tSuiteResults) {
+            if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
             }
         }
@@ -268,13 +268,13 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     // -------------------------- do the business -----------------------------
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, FileType ext) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', ext)
+    Path resolveMaterialFilePath(String testCaseId, String url, FileType fileType) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', fileType)
     }
 
     @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType ext) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, ext)
+    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType fileType) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, fileType)
     }
 
     /**
@@ -300,12 +300,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, String suffix, FileType ext) {
-        TSuiteResult currentTestSuiteResult = this.getCurrentTsResult()
+    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, String suffix, FileType fileType) {
+        TSuiteResult currentTestSuiteResult = this.getCurrentTSuiteResult()
         assert currentTestSuiteResult != null
-        TCaseResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
+        TCaseResult tcr = currentTestSuiteResult.findOrNewTCaseResult(testCaseName)
         if (tcr != null) {
-            MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, ext)
+            MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, fileType)
             Path screenshotFilePath = mw.getMaterialFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath
@@ -322,10 +322,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path report() throws IOException {
-        if (currentTsName != null && currentTsTimestamp != null) {
+        if (currentTSuiteName != null && currentTSuiteTimestamp != null) {
             List<TSuiteResult> tsrList =
-                this.tsResults.stream()
-                    .filter({tsr -> tsr.getTsName() == currentTsName && tsr.getTsTimestamp() == currentTsTimestamp })
+                this.tSuiteResults.stream()
+                    .filter({tsr -> tsr.getTSuiteName() == currentTSuiteName && tsr.getTSuiteTimestamp() == currentTSuiteTimestamp })
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
                 TSuiteResult tsr = tsrList[0]
@@ -341,29 +341,29 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     // ----------------------------- helpers ----------------------------------
 
-    TSuiteResult getCurrentTsResult() {
-        if (this.currentTsName != null) {
-            if (this.currentTsTimestamp != null) {
-                TSuiteResult tsr = getTsResult(this.currentTsName, this.currentTsTimestamp)
+    TSuiteResult getCurrentTSuiteResult() {
+        if (this.currentTSuiteName != null) {
+            if (this.currentTSuiteTimestamp != null) {
+                TSuiteResult tsr = getTsResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
                 assert tsr != null
                 return tsr
             } else {
-                throw new IllegalStateException('currentTsTimestamp is not set')
+                throw new IllegalStateException('currentTSuiteTimestamp is not set')
             }
         } else {
-            throw new IllegalStateException('currentTsName is not set')
+            throw new IllegalStateException('currentTSuiteName is not set')
         }
     }
 
-    TCaseResult getTcResult(String testCaseId) {
-        return this.getTcResult(new TCaseName(testCaseId))
+    TCaseResult getTCaseResult(String testCaseId) {
+        return this.getTCaseResult(new TCaseName(testCaseId))
     }
 
-    TCaseResult getTcResult(TCaseName tcName) {
-        if (tcName != null) {
-            TSuiteResult tsr = this.getCurrentTsResult()
+    TCaseResult getTCaseResult(TCaseName tCaseName) {
+        if (tCaseName != null) {
+            TSuiteResult tsr = this.getCurrentTSuiteResult()
             assert tsr != null
-            return tsr.getTcResult(tcName)
+            return tsr.getTCaseResult(tCaseName)
         }
         else {
             throw new IllegalStateException("currentTcName is null")
@@ -371,8 +371,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     @Override
-    void setTcStatus(String testCaseId, String testCaseStatus) {
-        this.getTcResult(testCaseId).setTcStatus(testCaseStatus)
+    void setTestCaseStatus(String testCaseId, String testCaseStatus) {
+        this.getTCaseResult(testCaseId).setTestCaseStatus(testCaseStatus)
     }
 
 
@@ -388,12 +388,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
         sb.append('"currentTsName":"' +
-            Helpers.escapeAsJsonText(this.currentTsName.toString()) + '",')
+            Helpers.escapeAsJsonText(this.currentTSuiteName.toString()) + '",')
         sb.append('"currentTsTimestamp":"' +
-            Helpers.escapeAsJsonText(this.currentTsTimestamp.toString()) + '",')
+            Helpers.escapeAsJsonText(this.currentTSuiteTimestamp.toString()) + '",')
         sb.append('"tsResults":[')
         def counter = 0
-        for (TSuiteResult tsr : this.tsResults) {
+        for (TSuiteResult tsr : this.tSuiteResults) {
             if (counter > 0) { sb.append(',') }
             sb.append(tsr.toJson())
             counter += 1
@@ -411,14 +411,14 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @returns Path of the created Results.html file
      * @throws IOException
      */
-    private void createIndex(TSuiteResult tsResult, OutputStream os) throws IOException {
+    private void createIndex(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         def builder = new MarkupBuilder(writer)
         builder.doubleQuotes = true
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("Katalon Studio Test Results ${tsResult.getTsName().toString()}/${tsResult.getTsTimestamp().toString()}")
+                title("Katalon Studio Test Results ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -450,12 +450,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 mkp.comment('Place your content here')
                 div('class':'container') {
                     h1('Katalon Studio Test Results')
-                    h3("Test Suite : ${tsResult.getTsName().toString()}/${tsResult.getTsTimestamp().format()}")
+                    h3("Test Suite : ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
                     // Slideshow
                     div('id':'carousel0', 'class':'carousel slide', 'data-ride':'carousel') {
                         ol('class':'carousel-indicators') {
-                            // TODO このTsResultのなかにScreenshotが百個もあったらどうしよう?
-                            List<MaterialWrapper> mwList = tsResult.getMaterialWrappers()
+                            // TODO このTSuiteResultのなかにScreenshotが百個もあったらどうしよう?
+                            List<MaterialWrapper> mwList = tSuiteResult.getMaterialWrappers()
                             // TODO 画像じゃないPDFやJSONやXMLファイルを除外したい
                             def count = 0
                             for (MaterialWrapper mw: mwList) {
@@ -472,7 +472,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                         }
                     }
                     div('class':'carousel-inner') {
-                        List<MaterialWrapper> mwList = tsResult.getMaterialWrappers()
+                        List<MaterialWrapper> mwList = tSuiteResult.getMaterialWrappers()
                         def count = 0
                         for (MaterialWrapper mw: mwList) {
                             if (count == 0) {
@@ -486,19 +486,19 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                         }
                     }
                     //
-                    List<TCaseResult> tcResults = tsResult.getTcResults()
+                    List<TCaseResult> tcResults = tSuiteResult.getTCaseResults()
                     for (TCaseResult tcResult : tcResults) {
                         div('class':'row') {
                             div('class':'col-sm-12') {
-                                h4("Test Case name : ${tcResult.getTcName().toString()}")
-                                h4("Test Case status : ${tcResult.getTcStatus()}")
+                                h4("Test Case name : ${tcResult.getTCaseName().toString()}")
+                                h4("Test Case status : ${tcResult.getTestCaseStatus()}")
                                 List<TargetURL> targetURLs = tcResult.getTargetURLs()
                                 for (TargetURL targetURL : targetURLs) {
                                     h5("URL : ${targetURL.getUrl().toExternalForm()}")
                                     List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
                                     for (MaterialWrapper materialWrapper : materialWrappers) {
                                         Path file = materialWrapper.getMaterialFilePath()
-                                        Path relative = tsResult.getTsTimestampDir().relativize(file).normalize()
+                                        Path relative = tSuiteResult.getTsTimestampDir().relativize(file).normalize()
                                         h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
                                             alt:"${targetURL.getUrl().toExternalForm()}",

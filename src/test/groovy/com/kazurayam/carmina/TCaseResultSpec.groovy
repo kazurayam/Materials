@@ -24,7 +24,7 @@ class TCaseResultSpec extends Specification {
         }
         Helpers.copyDirectory(fixture, workdir)
         TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
-        tsr = trri.getCurrentTsResult()
+        tsr = trri.getCurrentTSuiteResult()
     }
     def cleanupSpec() {}
 
@@ -39,7 +39,7 @@ class TCaseResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
+        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         when:
@@ -47,13 +47,13 @@ class TCaseResultSpec extends Specification {
         def pretty = JsonOutput.prettyPrint(str)
         System.out.println("#testToString: \n${pretty}")
         then:
-        str.startsWith('{"TcResult":{')
-        str.contains('tcName')
+        str.startsWith('{"TCaseResult":{')
+        str.contains('tCaseName')
         str.contains('TC1')
-        str.contains('tcDir')
+        str.contains('tCaseDir')
         str.contains(Helpers.escapeAsJsonText( sw.getMaterialFilePath().toString()))
-        str.contains('tcStatus')
-        str.contains(TCaseStatus.TO_BE_EXECUTED.toString())
+        str.contains('tCaseStatus')
+        str.contains(TestCaseStatus.TO_BE_EXECUTED.toString())
         str.endsWith('}}')
     }
 
