@@ -7,20 +7,20 @@ import java.nio.file.Paths
 
 import com.kazurayam.carmina.FileType
 import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.TestResults
-import com.kazurayam.carmina.TestResultsFactory
+import com.kazurayam.carmina.TestResultsRepository
+import com.kazurayam.carmina.TestResultsRepositoryFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TestResultsSpec extends Specification {
+class TestResultsRepositorySpec extends Specification {
 
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -41,7 +41,7 @@ class TestResultsSpec extends Specification {
 
     def testToJson() {
         when:
-        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         def str = JsonOutput.prettyPrint(sr.toString())
         System.out.println(JsonOutput.prettyPrint(str))
         then:
@@ -50,7 +50,7 @@ class TestResultsSpec extends Specification {
 
     def testConstructor_Path_tsn() {
         when:
-        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         String str = sr.toString()
         then:
         str.contains('TS1')
@@ -58,7 +58,7 @@ class TestResultsSpec extends Specification {
 
     def testResolveScreenshotFilePath() {
         when:
-        TestResults sr = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         scfp != null

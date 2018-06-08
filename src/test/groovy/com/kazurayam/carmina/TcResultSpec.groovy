@@ -10,7 +10,7 @@ import com.kazurayam.carmina.TargetURL
 import com.kazurayam.carmina.TcName
 import com.kazurayam.carmina.TcResult
 import com.kazurayam.carmina.TcStatus
-import com.kazurayam.carmina.TestResultsImpl
+import com.kazurayam.carmina.TestResultsRepositoryImpl
 import com.kazurayam.carmina.TsName
 import com.kazurayam.carmina.TsResult
 
@@ -23,7 +23,7 @@ class TcResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static TestResultsImpl tri
+    private static TestResultsRepositoryImpl tri
     private static TsResult tsr
 
     // fixture methods
@@ -35,7 +35,7 @@ class TcResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = new TestResultsImpl(workdir, new TsName('TS1'))
+        tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
         tsr = tri.getCurrentTsResult()
     }
     def cleanupSpec() {}

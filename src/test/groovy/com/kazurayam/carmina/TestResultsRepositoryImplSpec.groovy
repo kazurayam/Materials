@@ -3,32 +3,23 @@ package com.kazurayam.carmina
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.FileType
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.TcName
-import com.kazurayam.carmina.TcResult
-import com.kazurayam.carmina.TcStatus
-import com.kazurayam.carmina.TestResultsImpl
-import com.kazurayam.carmina.TsName
-import com.kazurayam.carmina.TsResult
-import com.kazurayam.carmina.TsTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
-class TestResultsImplSpec extends Specification {
+class TestResultsRepositoryImplSpec extends Specification {
 
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static String classShortName = Helpers.getClassShortName(TestResultsRepositoryImplSpec.class)
 
     // fixture methods
     def setup() {}
     def cleanup() {}
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsImplSpec.class)}")
+        workdir = Paths.get("./build/tmp/${classShortName}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -39,111 +30,111 @@ class TestResultsImplSpec extends Specification {
     // feature methods
     def testIdentifyFileType() {
         expect:
-        TestResultsImpl.identifyFileType(Paths.get('/temp/a.png')) == FileType.PNG
-        TestResultsImpl.identifyFileType(Paths.get('/temp/a.pdf')) == FileType.PDF
-        TestResultsImpl.identifyFileType(Paths.get('/temp/a.csv')) == FileType.CSV
-        TestResultsImpl.identifyFileType(Paths.get('/temp/a')) == FileType.OCTET
+        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.png')) == FileType.PNG
+        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.pdf')) == FileType.PDF
+        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.csv')) == FileType.CSV
+        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a')) == FileType.OCTET
     }
 
     def testIdentifySuffix_noDot() {
         expect:
-        TestResultsImpl.identifySuffix(Paths.get('/temp/a')) == ''
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a')) == ''
     }
 
     def testIdentifySuffix_1dot() {
         expect:
-        TestResultsImpl.identifySuffix(Paths.get('/temp/a.png')) == ''
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.png')) == ''
     }
 
     def testIdentifySuffix_2dots() {
         expect:
-        TestResultsImpl.identifySuffix(Paths.get('/temp/a.1.png')) == '1'
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.1.png')) == '1'
     }
 
     def testIdentifySuffix_3dots() {
         expect:
-        TestResultsImpl.identifySuffix(Paths.get('/temp/a.b.c.png')) == 'c'
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.b.c.png')) == 'c'
     }
 
     def testIdentifyURLpart_noDot() {
         expect:
-        TestResultsImpl.identifyURLpart(Paths.get('/temp/a')) == 'a'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a')) == 'a'
     }
 
     def testIdentifyURLpart_1Dot() {
         expect:
-        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.png')) == 'a'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.png')) == 'a'
     }
 
     def testIdentifyURLpart_2Dots() {
         expect:
-        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.1.png')) == 'a'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.1.png')) == 'a'
     }
 
     def testIdentifyURLpart_3Dots() {
         expect:
-        TestResultsImpl.identifyURLpart(Paths.get('/temp/a.b.c.png')) == 'a.b'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.b.c.png')) == 'a.b'
     }
 
     @Ignore
     def testIdentifyURLpart_realistic() {
         expect:
-        TestResultsImpl.identifyURLpart(Paths.get('/temp/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) == 'http%3A%2F%2Fdemoaut.katalon.com%2F'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) == 'http%3A%2F%2Fdemoaut.katalon.com%2F'
     }
 
     def testResolveMaterialFilePath() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolveMaterialFilePathWithSuffix() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
     }
 
     def testResolvePngFilePath() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
         then:
         p != null
-        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolvePngFilePathWithSuffix() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
     }
 
     def testResolvePngFilePathBySuitelessTimeless() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, TsName.SUITELESS, TsTimestamp.TIMELESS)
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, TsName.SUITELESS, TsTimestamp.TIMELESS)
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == './build/tmp/TestResultsImplSpec/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
     }
 
     def testScanBaseDir() {
         when:
-        List<TsResult> tsrList = TestResultsImpl.scanBaseDir(workdir)
+        List<TsResult> tsrList = TestResultsRepositoryImpl.scanBaseDir(workdir)
         then:
         tsrList != null
         tsrList.size() == 3
@@ -183,7 +174,7 @@ class TestResultsImplSpec extends Specification {
 
     def testToJson() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
         when:
         def str = tri.toJson()
         //System.err.println("str=\n${str}")
@@ -199,7 +190,7 @@ class TestResultsImplSpec extends Specification {
 
     def testReport() {
         setup:
-        TestResultsImpl tri = new TestResultsImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
         when:
         Path html = tri.report()
         then:

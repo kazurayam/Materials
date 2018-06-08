@@ -9,7 +9,7 @@ import com.kazurayam.carmina.MaterialWrapper
 import com.kazurayam.carmina.TargetURL
 import com.kazurayam.carmina.TcName
 import com.kazurayam.carmina.TcResult
-import com.kazurayam.carmina.TestResultsImpl
+import com.kazurayam.carmina.TestResultsRepositoryImpl
 import com.kazurayam.carmina.TsName
 import com.kazurayam.carmina.TsResult
 
@@ -39,7 +39,7 @@ class TargetURLSpec extends Specification {
 
     def testToJson() {
         setup:
-        TestResultsImpl sr = new TestResultsImpl(workdir, new TsName('TS1'))
+        TestResultsRepositoryImpl sr = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
         TsResult tsr = sr.getCurrentTsResult()
         TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))

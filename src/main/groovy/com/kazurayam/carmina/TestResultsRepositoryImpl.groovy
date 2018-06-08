@@ -7,7 +7,7 @@ import java.util.stream.Collectors
 
 import groovy.xml.MarkupBuilder
 
-final class TestResultsImpl implements TestResults {
+final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     private Path baseDir
     private TsName currentTsName
@@ -18,7 +18,7 @@ final class TestResultsImpl implements TestResults {
 
     // ---------------------- constructors & initializer ----------------------
 
-    TestResultsImpl(Path baseDir) {
+    TestResultsRepositoryImpl(Path baseDir) {
         this(baseDir, TsName.SUITELESS, TsTimestamp.TIMELESS)
     }
 
@@ -46,7 +46,7 @@ final class TestResultsImpl implements TestResults {
      * @param baseDir
      * @param tsName
      */
-    TestResultsImpl(Path baseDir, TsName tsName) {
+    TestResultsRepositoryImpl(Path baseDir, TsName tsName) {
         this(baseDir, tsName, new TsTimestamp())
     }
 
@@ -56,7 +56,7 @@ final class TestResultsImpl implements TestResults {
      * @param tsName required
      * @param tsTimestamp required
      */
-    TestResultsImpl(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
+    TestResultsRepositoryImpl(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }

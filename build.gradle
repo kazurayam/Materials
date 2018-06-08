@@ -25,6 +25,6 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/*Spec.class'
+    include '**/carmina/*Spec.class'
     exclude '**/CommandRunnerSpec.class'
 }

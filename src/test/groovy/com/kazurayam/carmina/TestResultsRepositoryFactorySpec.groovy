@@ -4,12 +4,12 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.TestResults
-import com.kazurayam.carmina.TestResultsFactory
+import com.kazurayam.carmina.TestResultsRepository
+import com.kazurayam.carmina.TestResultsRepositoryFactory
 
 import spock.lang.Specification
 //@Ignore
-class TestResultsFactorySpec extends Specification {
+class TestResultsRepositoryFactorySpec extends Specification {
 
     // fields
     private static Path workdir
@@ -19,7 +19,7 @@ class TestResultsFactorySpec extends Specification {
     def setup() {}
     def cleanup() {}
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsFactorySpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositoryFactorySpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -30,7 +30,7 @@ class TestResultsFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        TestResults trs = TestResultsFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository trs = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         then:
         trs != null
         trs.toString().contains('TS1')

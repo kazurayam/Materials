@@ -2,7 +2,7 @@ package com.kazurayam.visualtesting
 
 import java.nio.file.Path
 
-import com.kazurayam.carmina.TestResults
+import com.kazurayam.carmina.TestResultsRepository
 import com.kazurayam.carmina.VisualTestingDriver
 
 /**
@@ -13,11 +13,11 @@ import com.kazurayam.carmina.VisualTestingDriver
  */
 class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
-    private TestResults target
-    private TestResults basis
+    private TestResultsRepository target
+    private TestResultsRepository basis
     private Path outputDir
 
-    ImageMagickVisualTestingDriver(TestResults target) {
+    ImageMagickVisualTestingDriver(TestResultsRepository target) {
         this.target = target
     }
 

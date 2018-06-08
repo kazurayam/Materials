@@ -9,7 +9,7 @@ import com.kazurayam.carmina.MaterialWrapper
 import com.kazurayam.carmina.TargetURL
 import com.kazurayam.carmina.TcName
 import com.kazurayam.carmina.TcResult
-import com.kazurayam.carmina.TestResultsImpl
+import com.kazurayam.carmina.TestResultsRepositoryImpl
 import com.kazurayam.carmina.TsName
 import com.kazurayam.carmina.TsResult
 
@@ -22,7 +22,7 @@ class TsResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private TestResultsImpl trsi
+    private TestResultsRepositoryImpl trsi
 
     // fixture methods
     def setup() {
@@ -31,7 +31,7 @@ class TsResultSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        trsi = new TestResultsImpl(workdir, new TsName('TS1'))
+        trsi = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
 
     }
     def cleanup() {}

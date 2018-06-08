@@ -9,8 +9,8 @@ import com.kazurayam.carmina.MaterialWrapper
 import com.kazurayam.carmina.TargetURL
 import com.kazurayam.carmina.TcName
 import com.kazurayam.carmina.TcResult
-import com.kazurayam.carmina.TestResultsFactory
-import com.kazurayam.carmina.TestResultsImpl
+import com.kazurayam.carmina.TestResultsRepositoryFactory
+import com.kazurayam.carmina.TestResultsRepositoryImpl
 import com.kazurayam.carmina.TsName
 import com.kazurayam.carmina.TsResult
 import com.kazurayam.carmina.TsTimestamp
@@ -24,7 +24,7 @@ class MaterialWrapperSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static TestResultsImpl tri
+    private static TestResultsRepositoryImpl tri
     private static TargetURL tu
 
     // fixture methods
@@ -41,7 +41,7 @@ class MaterialWrapperSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = TestResultsFactory.createInstance(workdir, new TsName('TS1'))
+        tri = TestResultsRepositoryFactory.createInstance(workdir, new TsName('TS1'))
     }
 
     // feature methods

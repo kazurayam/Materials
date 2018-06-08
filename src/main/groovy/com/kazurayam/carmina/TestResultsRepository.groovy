@@ -2,7 +2,7 @@ package com.kazurayam.carmina
 
 import java.nio.file.Path
 
-interface TestResults {
+interface TestResultsRepository {
 
     void setTcStatus(String testCaseId, String testCaseStatus)
 
