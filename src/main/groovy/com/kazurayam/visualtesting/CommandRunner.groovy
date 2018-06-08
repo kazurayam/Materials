@@ -1,4 +1,4 @@
-package com.kazurayam.carmina
+package com.kazurayam.visualtesting
 
 class CommandRunner {
 

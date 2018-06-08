@@ -1,10 +1,9 @@
-package com.kazurayam.carmina
+package com.kazurayam.visualtesting
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.ImageMagickVisualTestingDriver
 
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -12,7 +11,6 @@ import spock.lang.Specification
 /**
  * http://spockframework.org/spock/docs/1.0/spock_primer.html
  */
-@Ignore
 class ImageMagickVisualTestingDriverSpec extends Specification {
 
     // fields

@@ -1,6 +1,4 @@
-package com.kazurayam.carmina
-
-import com.kazurayam.carmina.CommandRunner
+package com.kazurayam.visualtesting
 
 import spock.lang.Specification
 
