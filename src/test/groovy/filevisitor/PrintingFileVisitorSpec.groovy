@@ -5,7 +5,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.kstestresults.Helpers
+import com.kazurayam.carmina.Helpers
 
 import spock.lang.Specification
 
