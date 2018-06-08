@@ -11,11 +11,11 @@ import java.time.temporal.TemporalAccessor
  * @author kazurayam
  *
  */
-class TsTimestamp {
+class TSuiteTimestamp {
 
     static final String TIMELESS_DIRNAME = '_'
 
-    static final TsTimestamp TIMELESS = new TsTimestamp(LocalDateTime.MIN)
+    static final TSuiteTimestamp TIMELESS = new TSuiteTimestamp(LocalDateTime.MIN)
 
     static final String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
 
@@ -24,11 +24,11 @@ class TsTimestamp {
     /**
      * create a Timestamp object based on the LocalDateTime of now
      */
-    TsTimestamp() {
+    TSuiteTimestamp() {
         this(LocalDateTime.now())
     }
 
-    TsTimestamp(String timestamp) {
+    TSuiteTimestamp(String timestamp) {
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
             this.timestamp = ignoreMilliseconds(ldt)
@@ -42,7 +42,7 @@ class TsTimestamp {
      *
      * @param ts
      */
-    TsTimestamp(LocalDateTime ts) {
+    TSuiteTimestamp(LocalDateTime ts) {
         this.timestamp = ignoreMilliseconds(ts)
     }
 
@@ -91,9 +91,9 @@ class TsTimestamp {
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof TsTimestamp))
+        if (!(obj instanceof TSuiteTimestamp))
             return false
-        TsTimestamp other = (TsTimestamp)obj
+        TSuiteTimestamp other = (TSuiteTimestamp)obj
         return this.getValue() == other.getValue()
     }
 

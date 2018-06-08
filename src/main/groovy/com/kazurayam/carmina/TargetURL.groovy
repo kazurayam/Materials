@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 class TargetURL {
 
-    private TcResult parent
+    private TCaseResult parent
     private URL url
     private List<MaterialWrapper> materialWrappers
 
@@ -14,17 +14,17 @@ class TargetURL {
         this.materialWrappers = new ArrayList<MaterialWrapper>()
     }
 
-    TargetURL setParent(TcResult parent) {
+    TargetURL setParent(TCaseResult parent) {
         this.parent = parent
         return this
     }
 
     // --------------------- properties getter & setter -----------------------
-    TcResult getParent() {
+    TCaseResult getParent() {
         return this.parent
     }
 
-    TcResult getTcResult() {
+    TCaseResult getTcResult() {
         return this.getParent()
     }
 

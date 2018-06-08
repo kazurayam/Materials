@@ -7,17 +7,17 @@ import com.kazurayam.carmina.FileType
 import com.kazurayam.carmina.Helpers
 import com.kazurayam.carmina.MaterialWrapper
 import com.kazurayam.carmina.TargetURL
-import com.kazurayam.carmina.TcName
-import com.kazurayam.carmina.TcResult
+import com.kazurayam.carmina.TCaseName
+import com.kazurayam.carmina.TCaseResult
 import com.kazurayam.carmina.TestResultsRepositoryImpl
-import com.kazurayam.carmina.TsName
-import com.kazurayam.carmina.TsResult
+import com.kazurayam.carmina.TSuiteName
+import com.kazurayam.carmina.TSuiteResult
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TsResultSpec extends Specification {
+class TSuiteResultSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -26,12 +26,12 @@ class TsResultSpec extends Specification {
 
     // fixture methods
     def setup() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TsResultSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TSuiteResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        trsi = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
+        trsi = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
 
     }
     def cleanup() {}
@@ -41,11 +41,11 @@ class TsResultSpec extends Specification {
     // feature methods
     def testFindOrNewTcResult() {
         when:
-        TsResult tsr = trsi.getCurrentTsResult()
-        TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
+        TSuiteResult tsr = trsi.getCurrentTsResult()
+        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
         then:
         tcr != null
-        tcr.getTcName() == new TcName('TC1')
+        tcr.getTcName() == new TCaseName('TC1')
         when:
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
@@ -58,9 +58,9 @@ class TsResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TsResult tsr = trsi.getCurrentTsResult()
+        TSuiteResult tsr = trsi.getCurrentTsResult()
         when:
-        TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
+        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         MaterialWrapper sw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         def str = tsr.toString()

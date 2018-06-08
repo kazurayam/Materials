@@ -3,11 +3,11 @@ package com.kazurayam.carmina
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.TsName
+import com.kazurayam.carmina.TSuiteName
 
 import spock.lang.Specification
 
-class TsNameSpec extends Specification {
+class TSuiteNameSpec extends Specification {
 
     // fields
     private static Path workdir
@@ -29,7 +29,7 @@ class TsNameSpec extends Specification {
     // feature methods
     def testGetValueOfSuiteless() {
         expect:
-        TsName.SUITELESS.getValue() == TsName.SUITELESS_DIRNAME
+        TSuiteName.SUITELESS.getValue() == TSuiteName.SUITELESS_DIRNAME
 
     }
 

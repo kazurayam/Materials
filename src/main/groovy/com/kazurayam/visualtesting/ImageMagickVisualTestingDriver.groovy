@@ -3,7 +3,6 @@ package com.kazurayam.visualtesting
 import java.nio.file.Path
 
 import com.kazurayam.carmina.TestResultsRepository
-import com.kazurayam.carmina.VisualTestingDriver
 
 /**
  * Visual Testing engine using ImageMagick

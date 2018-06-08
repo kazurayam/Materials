@@ -1,18 +1,22 @@
 package com.kazurayam.carmina
 
-class TcName {
+class TSuiteName {
+
+    static final String SUITELESS_DIRNAME = '_'
+
+    static final TSuiteName SUITELESS = new TSuiteName(SUITELESS_DIRNAME)
 
     private String value
 
-    TcName(String testCaseId) {
-        this.value = testCaseId.replaceFirst('^Test Cases/', '')
+    TSuiteName(String testSuiteId) {
+        this.value = testSuiteId.replaceFirst('^Test Suites/', '')
     }
 
     String getValue() {
         return value
     }
 
-    // ---------------- overriding Object properties --------------------------
+    // -------------------- overriding Object properties ----------------------
     @Override
     String toString() {
         return value
@@ -22,9 +26,9 @@ class TcName {
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof TcName))
+        if (!(obj instanceof TSuiteName))
             return false
-        TcName other = (TcName)obj
+        TSuiteName other = (TSuiteName)obj
         return this.getValue() == other.getValue()
     }
 

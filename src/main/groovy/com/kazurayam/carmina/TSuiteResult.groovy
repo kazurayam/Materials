@@ -5,17 +5,17 @@ import java.nio.file.Path
 /**
  *
  */
-final class TsResult {
+final class TSuiteResult {
 
     private Path baseDir
-    private TsName tsName
-    private TsTimestamp tsTimestamp
+    private TSuiteName tsName
+    private TSuiteTimestamp tsTimestamp
     private Path tsTimestampDir
-    private List<TcResult> tcResults
+    private List<TCaseResult> tcResults
 
 
     // ------------------ constructors & initializer -------------------------------
-    TsResult(Path baseDir, TsName testSuiteName, TsTimestamp testSuiteTimestamp) {
+    TSuiteResult(Path baseDir, TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
         assert baseDir != null
         assert testSuiteName != null
         assert testSuiteTimestamp != null
@@ -23,7 +23,7 @@ final class TsResult {
         this.tsName = testSuiteName
         this.tsTimestamp = testSuiteTimestamp
         this.tsTimestampDir = baseDir.resolve(testSuiteName.toString()).resolve(testSuiteTimestamp.format())
-        this.tcResults = new ArrayList<TcResult>()
+        this.tcResults = new ArrayList<TCaseResult>()
     }
 
     // ------------------ attribute setter & getter -------------------------------
@@ -35,17 +35,17 @@ final class TsResult {
         return this.tsTimestampDir
     }
 
-    TsName getTsName() {
+    TSuiteName getTsName() {
         return tsName
     }
 
-    TsTimestamp getTsTimestamp() {
+    TSuiteTimestamp getTsTimestamp() {
         return tsTimestamp
     }
 
     // ------------------ create/add/get child nodes ------------------------------
-    TcResult getTcResult(TcName tcName) {
-        for (TcResult tcr : this.tcResults) {
+    TCaseResult getTcResult(TCaseName tcName) {
+        for (TCaseResult tcr : this.tcResults) {
             if (tcr.getTcName() == tcName) {
                 return tcr
             }
@@ -53,22 +53,22 @@ final class TsResult {
         return null
     }
 
-    List<TcResult> getTcResults() {
+    List<TCaseResult> getTcResults() {
         return tcResults
     }
 
-    TcResult findOrNewTcResult(TcName tcName) {
-        TcResult tcr = this.getTcResult(tcName)
+    TCaseResult findOrNewTcResult(TCaseName tcName) {
+        TCaseResult tcr = this.getTcResult(tcName)
         if (tcr == null) {
-            tcr = new TcResult(tcName).setParent(this)
+            tcr = new TCaseResult(tcName).setParent(this)
             this.tcResults.add(tcr)
         }
         return tcr
     }
 
-    void addTcResult(TcResult tcResult) {
+    void addTcResult(TCaseResult tcResult) {
         boolean found = false
-        for (TcResult tcr : this.tcResults) {
+        for (TCaseResult tcr : this.tcResults) {
             if (tcr == tcResult) {
                 found = true
             }
@@ -82,7 +82,7 @@ final class TsResult {
     // ------------------- helpers -----------------------------------------------
     List<MaterialWrapper> getMaterialWrappers() {
         List<MaterialWrapper> materialWrappers = new ArrayList<MaterialWrapper>()
-        for (TcResult tcr : this.getTcResults()) {
+        for (TCaseResult tcr : this.getTcResults()) {
             for (TargetURL targetURL : tcr.getTargetURLs()) {
                 for (MaterialWrapper mw : targetURL.getMaterialWrappers()) {
                     materialWrappers.add(mw)
@@ -96,8 +96,8 @@ final class TsResult {
     @Override
     boolean equals(Object obj) {
         //if (this == obj) { return true }
-        if (!(obj instanceof TsResult)) { return false }
-        TsResult other = (TsResult)obj
+        if (!(obj instanceof TSuiteResult)) { return false }
+        TSuiteResult other = (TSuiteResult)obj
         if (this.tsName == other.getTsName() && this.tsTimestamp == other.getTsTimestamp()) {
             return true
         } else {
@@ -128,7 +128,7 @@ final class TsResult {
         sb.append('"tsTimestampDir": "' + Helpers.escapeAsJsonText(this.tsTimestampDir.toString()) + '",')
         sb.append('"tcResults": [')
         def count = 0
-        for (TcResult tcr : this.tcResults) {
+        for (TCaseResult tcr : this.tcResults) {
             if (count > 0) { sb.append(',') }
             count += 1
             sb.append(tcr.toJson())

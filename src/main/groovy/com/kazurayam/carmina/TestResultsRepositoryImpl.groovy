@@ -10,16 +10,16 @@ import groovy.xml.MarkupBuilder
 final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     private Path baseDir
-    private TsName currentTsName
-    private TsTimestamp currentTsTimestamp
-    private List<TsResult> tsResults
+    private TSuiteName currentTsName
+    private TSuiteTimestamp currentTsTimestamp
+    private List<TSuiteResult> tsResults
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializer ----------------------
 
     TestResultsRepositoryImpl(Path baseDir) {
-        this(baseDir, TsName.SUITELESS, TsTimestamp.TIMELESS)
+        this(baseDir, TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -46,8 +46,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param baseDir
      * @param tsName
      */
-    TestResultsRepositoryImpl(Path baseDir, TsName tsName) {
-        this(baseDir, tsName, new TsTimestamp())
+    TestResultsRepositoryImpl(Path baseDir, TSuiteName tsName) {
+        this(baseDir, tsName, new TSuiteTimestamp())
     }
 
     /**
@@ -56,7 +56,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    TestResultsRepositoryImpl(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
+    TestResultsRepositoryImpl(Path baseDir, TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
@@ -65,7 +65,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         //
         this.currentTsName = tsName
         this.currentTsTimestamp = tsTimestamp
-        TsResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
+        TSuiteResult tsr = this.findOrNewTsResult(this.currentTsName, this.currentTsTimestamp)
         this.addTsResult(tsr)
     }
 
@@ -80,27 +80,27 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @returns the tree
      *
      */
-    static List<TsResult> scanBaseDir(Path baseDir) {
-        List<TsResult> tsResults_work = new ArrayList<TsResult>()
+    static List<TSuiteResult> scanBaseDir(Path baseDir) {
+        List<TSuiteResult> tsResults_work = new ArrayList<TSuiteResult>()
         List<Path> tsNamePaths =
                 Files.list(baseDir)
                         .filter({ p -> Files.isDirectory(p) })
                         .collect(Collectors.toList())
         for (Path tsNamePath : tsNamePaths) {
-            TsName tsName = new TsName(tsNamePath.getFileName().toString())
+            TSuiteName tsName = new TSuiteName(tsNamePath.getFileName().toString())
             List<Path> tsTimestampPaths =
                     Files.list(tsNamePath)
                             .filter( { p -> Files.isDirectory(p) })
                             .collect(Collectors.toList())
             for (Path tsTimestampPath : tsTimestampPaths) {
-                LocalDateTime ldt = TsTimestamp.parse(tsTimestampPath.getFileName().toString())
+                LocalDateTime ldt = TSuiteTimestamp.parse(tsTimestampPath.getFileName().toString())
                 if (ldt != null) {
-                    TsTimestamp tsTimestamp = new TsTimestamp(ldt)
-                    TsResult tsr = new TsResult(baseDir, tsName, tsTimestamp)
+                    TSuiteTimestamp tsTimestamp = new TSuiteTimestamp(ldt)
+                    TSuiteResult tsr = new TSuiteResult(baseDir, tsName, tsTimestamp)
                     tsResults_work.add(tsr)
                     //System.out.println("tsr=${tsr}")
-                    List<TcResult> tcResults = scanTsResult(tsr)
-                    for (TcResult tcr : tcResults) {
+                    List<TCaseResult> tcResults = scanTsResult(tsr)
+                    for (TCaseResult tcr : tcResults) {
                         tsr.addTcResult(tcr)
                     }
                 } else {
@@ -111,15 +111,15 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         return tsResults_work
     }
 
-    private static List<TcResult> scanTsResult(TsResult tsr) {
-        List<TcResult> tcResults = new ArrayList<TcResult>()
+    private static List<TCaseResult> scanTsResult(TSuiteResult tsr) {
+        List<TCaseResult> tcResults = new ArrayList<TCaseResult>()
         List<Path> tcDirs =
                 Files.list(tsr.getTsTimestampDir())
                         .filter({ p -> Files.isDirectory(p) })
                         .collect(Collectors.toList())
         for (Path tcDir : tcDirs) {
-            TcResult tcr =
-                    new TcResult(new TcName(tcDir.getFileName().toString())).setParent(tsr)
+            TCaseResult tcr =
+                    new TCaseResult(new TCaseName(tcDir.getFileName().toString())).setParent(tsr)
             tcResults.add(tcr)
             List<Path> materialFilePaths =
                     Files.list(tcDir)
@@ -209,11 +209,11 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         return this.baseDir
     }
 
-    TsName getCurrentTestSuiteName() {
+    TSuiteName getCurrentTestSuiteName() {
         return this.currentTsName
     }
 
-    TsTimestamp getCurrentTestSuiteTimestamp() {
+    TSuiteTimestamp getCurrentTestSuiteTimestamp() {
         return this.currentTsTimestamp
     }
 
@@ -225,10 +225,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    TsResult findOrNewTsResult(TsName tsName, TsTimestamp tsTimestamp) {
-        TsResult tsr = this.getTsResult(tsName, tsTimestamp)
+    TSuiteResult findOrNewTsResult(TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
+        TSuiteResult tsr = this.getTsResult(tsName, tsTimestamp)
         if (tsr == null) {
-            tsr = new TsResult(this.baseDir, tsName, tsTimestamp)
+            tsr = new TSuiteResult(this.baseDir, tsName, tsTimestamp)
         }
         return tsr
     }
@@ -239,9 +239,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    void addTsResult(TsResult tsResult) {
+    void addTsResult(TSuiteResult tsResult) {
         boolean found = false
-        for (TsResult tsr : this.tsResults) {
+        for (TSuiteResult tsr : this.tsResults) {
             if (tsr == tsResult) {
                 found = true
             }
@@ -257,8 +257,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    TsResult getTsResult(TsName tsName, TsTimestamp tsTimestamp) {
-        for (TsResult tsr : this.tsResults) {
+    TSuiteResult getTsResult(TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
+        for (TSuiteResult tsr : this.tsResults) {
             if (tsr.getTsName() == tsName && tsr.getTsTimestamp() == tsTimestamp) {
                 return tsr
             }
@@ -269,12 +269,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     // -------------------------- do the business -----------------------------
     @Override
     Path resolveMaterialFilePath(String testCaseId, String url, FileType ext) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '', ext)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', ext)
     }
 
     @Override
     Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType ext) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, ext)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, ext)
     }
 
     /**
@@ -282,7 +282,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path resolvePngFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), '', FileType.PNG)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', FileType.PNG)
     }
 
     /**
@@ -290,7 +290,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path resolvePngFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TcName(testCaseId), new URL(url), suffix, FileType.PNG)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, FileType.PNG)
     }
 
     /**
@@ -300,10 +300,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TcName testCaseName, URL url, String suffix, FileType ext) {
-        TsResult currentTestSuiteResult = this.getCurrentTsResult()
+    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, String suffix, FileType ext) {
+        TSuiteResult currentTestSuiteResult = this.getCurrentTsResult()
         assert currentTestSuiteResult != null
-        TcResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
+        TCaseResult tcr = currentTestSuiteResult.findOrNewTcResult(testCaseName)
         if (tcr != null) {
             MaterialWrapper sw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, ext)
             Path screenshotFilePath = sw.getMaterialFilePath()
@@ -323,12 +323,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     @Override
     Path report() throws IOException {
         if (currentTsName != null && currentTsTimestamp != null) {
-            List<TsResult> tsrList =
+            List<TSuiteResult> tsrList =
                 this.tsResults.stream()
                     .filter({tsr -> tsr.getTsName() == currentTsName && tsr.getTsTimestamp() == currentTsTimestamp })
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
-                TsResult tsr = tsrList[0]
+                TSuiteResult tsr = tsrList[0]
                 Path html = tsr.getTsTimestampDir().resolve("Result.html")
                 Helpers.ensureDirs(tsr.getTsTimestampDir())
                 //
@@ -341,10 +341,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
 
     // ----------------------------- helpers ----------------------------------
 
-    TsResult getCurrentTsResult() {
+    TSuiteResult getCurrentTsResult() {
         if (this.currentTsName != null) {
             if (this.currentTsTimestamp != null) {
-                TsResult tsr = getTsResult(this.currentTsName, this.currentTsTimestamp)
+                TSuiteResult tsr = getTsResult(this.currentTsName, this.currentTsTimestamp)
                 assert tsr != null
                 return tsr
             } else {
@@ -355,13 +355,13 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
     }
 
-    TcResult getTcResult(String testCaseId) {
-        return this.getTcResult(new TcName(testCaseId))
+    TCaseResult getTcResult(String testCaseId) {
+        return this.getTcResult(new TCaseName(testCaseId))
     }
 
-    TcResult getTcResult(TcName tcName) {
+    TCaseResult getTcResult(TCaseName tcName) {
         if (tcName != null) {
-            TsResult tsr = this.getCurrentTsResult()
+            TSuiteResult tsr = this.getCurrentTsResult()
             assert tsr != null
             return tsr.getTcResult(tcName)
         }
@@ -393,7 +393,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
             Helpers.escapeAsJsonText(this.currentTsTimestamp.toString()) + '",')
         sb.append('"tsResults":[')
         def counter = 0
-        for (TsResult tsr : this.tsResults) {
+        for (TSuiteResult tsr : this.tsResults) {
             if (counter > 0) { sb.append(',') }
             sb.append(tsr.toJson())
             counter += 1
@@ -411,7 +411,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @returns Path of the created Results.html file
      * @throws IOException
      */
-    private void createIndex(TsResult tsResult, OutputStream os) throws IOException {
+    private void createIndex(TSuiteResult tsResult, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         def builder = new MarkupBuilder(writer)
         builder.doubleQuotes = true
@@ -486,8 +486,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                         }
                     }
                     //
-                    List<TcResult> tcResults = tsResult.getTcResults()
-                    for (TcResult tcResult : tcResults) {
+                    List<TCaseResult> tcResults = tsResult.getTcResults()
+                    for (TCaseResult tcResult : tcResults) {
                         div('class':'row') {
                             div('class':'col-sm-12') {
                                 h4("Test Case name : ${tcResult.getTcName().toString()}")

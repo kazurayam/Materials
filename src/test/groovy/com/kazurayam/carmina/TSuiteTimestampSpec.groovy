@@ -2,7 +2,7 @@ package com.kazurayam.carmina
 
 import java.time.LocalDateTime
 
-import com.kazurayam.carmina.TsTimestamp
+import com.kazurayam.carmina.TSuiteTimestamp
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -14,7 +14,7 @@ import spock.lang.Specification
  *
  */
 //@Ignore
-class TsTimestampSpec extends Specification {
+class TSuiteTimestampSpec extends Specification {
 
     // fields
 
@@ -30,7 +30,7 @@ class TsTimestampSpec extends Specification {
         String fixture = '20180529_143459'
         LocalDateTime expected = LocalDateTime.of(2018, 5, 29, 14, 34, 59)
         when:
-        LocalDateTime actual = TsTimestamp.parse(fixture)
+        LocalDateTime actual = TSuiteTimestamp.parse(fixture)
         then:
         actual == expected
     }
@@ -41,7 +41,7 @@ class TsTimestampSpec extends Specification {
         LocalDateTime expected1 = LocalDateTime.of(2018, 5, 29, 11, 22, 33)
         LocalDateTime expected2 = LocalDateTime.of(2018, 5, 29, 11, 22, 33, 00)
         when:
-        TsTimestamp ts = new TsTimestamp(source)
+        TSuiteTimestamp ts = new TSuiteTimestamp(source)
         then:
         ts.getValue() == expected1
         ts.getValue() == expected2
@@ -52,7 +52,7 @@ class TsTimestampSpec extends Specification {
         setup:
         LocalDateTime source = LocalDateTime.of(2018, 6, 5, 9, 2, 13)
         when:
-        TsTimestamp ts = new TsTimestamp(source)
+        TSuiteTimestamp ts = new TSuiteTimestamp(source)
         def str = ts.toString()
         System.out.println("${JsonOutput.prettyPrint(str)}")
         then:
@@ -64,12 +64,12 @@ class TsTimestampSpec extends Specification {
 
     def testFormatOfTimeless() {
         expect:
-        TsTimestamp.TIMELESS.format() == TsTimestamp.TIMELESS_DIRNAME
+        TSuiteTimestamp.TIMELESS.format() == TSuiteTimestamp.TIMELESS_DIRNAME
     }
 
     def testParseDirnameOfTimeless() {
         expect:
-        TsTimestamp.parse(TsTimestamp.TIMELESS_DIRNAME) == LocalDateTime.MIN
+        TSuiteTimestamp.parse(TSuiteTimestamp.TIMELESS_DIRNAME) == LocalDateTime.MIN
     }
 
     // helper methods

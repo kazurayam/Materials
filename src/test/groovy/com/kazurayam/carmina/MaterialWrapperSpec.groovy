@@ -7,13 +7,13 @@ import com.kazurayam.carmina.FileType
 import com.kazurayam.carmina.Helpers
 import com.kazurayam.carmina.MaterialWrapper
 import com.kazurayam.carmina.TargetURL
-import com.kazurayam.carmina.TcName
-import com.kazurayam.carmina.TcResult
+import com.kazurayam.carmina.TCaseName
+import com.kazurayam.carmina.TCaseResult
 import com.kazurayam.carmina.TestResultsRepositoryFactory
 import com.kazurayam.carmina.TestResultsRepositoryImpl
-import com.kazurayam.carmina.TsName
-import com.kazurayam.carmina.TsResult
-import com.kazurayam.carmina.TsTimestamp
+import com.kazurayam.carmina.TSuiteName
+import com.kazurayam.carmina.TSuiteResult
+import com.kazurayam.carmina.TSuiteTimestamp
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -29,9 +29,9 @@ class MaterialWrapperSpec extends Specification {
 
     // fixture methods
     def setup() {
-        TsTimestamp tstamp = new TsTimestamp('20180530_130419')
-        TsResult tsr = tri.getTsResult(new TsName('TS1'), tstamp)
-        TcResult tcr = tsr.findOrNewTcResult(new TcName('TC1'))
+        TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
+        TSuiteResult tsr = tri.getTsResult(new TSuiteName('TS1'), tstamp)
+        TCaseResult tcr = tsr.findOrNewTcResult(new TCaseName('TC1'))
         assert tcr != null
         tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
     }
@@ -41,7 +41,7 @@ class MaterialWrapperSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        tri = TestResultsRepositoryFactory.createInstance(workdir, new TsName('TS1'))
+        tri = TestResultsRepositoryFactory.createInstance(workdir, new TSuiteName('TS1'))
     }
 
     // feature methods

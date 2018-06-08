@@ -1,6 +1,6 @@
 package com.kazurayam.carmina
 
-enum TcStatus {
+enum TCaseStatus {
 
     TO_BE_EXECUTED,
     FAILED,

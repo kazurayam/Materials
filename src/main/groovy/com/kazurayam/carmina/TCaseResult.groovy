@@ -5,37 +5,37 @@ import java.nio.file.Path
 /**
  *
  */
-class TcResult {
+class TCaseResult {
 
-    private TsResult parent
-    private TcName tcName
+    private TSuiteResult parent
+    private TCaseName tcName
     private Path tcDir
     private List<TargetURL> targetURLs
-    private TcStatus tcStatus
+    private TCaseStatus tcStatus
 
     // --------------------- constructors and initializer ---------------------
-    TcResult(TcName tcName) {
+    TCaseResult(TCaseName tcName) {
         this.tcName = tcName
         this.targetURLs = new ArrayList<TargetURL>()
-        this.tcStatus = TcStatus.TO_BE_EXECUTED
+        this.tcStatus = TCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
-    TcResult setParent(TsResult parent) {
+    TCaseResult setParent(TSuiteResult parent) {
         this.parent = parent
         this.tcDir = parent.getTsTimestampDir().resolve(this.tcName.toString())
         return this
     }
 
-    TsResult getParent() {
+    TSuiteResult getParent() {
         return this.parent
     }
 
-    TsResult getTsResult() {
+    TSuiteResult getTsResult() {
         return this.getParent()
     }
 
-    TcName getTcName() {
+    TCaseName getTcName() {
         return tcName
     }
 
@@ -45,16 +45,16 @@ class TcResult {
 
     void setTcStatus(String tcStatus) {
         assert tcStatus != null
-        TcStatus tcs = TcStatus.valueOf(tcStatus)  // this may throw IllegalArgumentException
+        TCaseStatus tcs = TCaseStatus.valueOf(tcStatus)  // this may throw IllegalArgumentException
         this.setTcStatus(tcs)
     }
 
-    void setTcStatus(TcStatus tcStatus) {
+    void setTcStatus(TCaseStatus tcStatus) {
         assert tcStatus != null
         this.tcStatus = tcStatus
     }
 
-    TcStatus getTcStatus() {
+    TCaseStatus getTcStatus() {
         return this.tcStatus
     }
 
@@ -103,10 +103,10 @@ class TcResult {
         //if (this == obj) {
         //    return true
         //}
-        if (!(obj instanceof TcResult)) {
+        if (!(obj instanceof TCaseResult)) {
             return false
         }
-        TcResult other = (TcResult) obj
+        TCaseResult other = (TCaseResult) obj
         if (this.tcName == other.getTcName()) {
             return true
         } else {

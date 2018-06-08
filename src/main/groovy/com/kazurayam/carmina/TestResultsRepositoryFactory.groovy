@@ -10,16 +10,16 @@ class TestResultsRepositoryFactory {
         return createInstance(baseDir)
     }
 
-    static TestResultsRepository createInstance(Path baseDir, TsName tsName) {
+    static TestResultsRepository createInstance(Path baseDir, TSuiteName tsName) {
         return new TestResultsRepositoryImpl(baseDir, tsName)
     }
 
-    static TestResultsRepository createInstance(Path baseDir, TsName tsName, TsTimestamp tsTimestamp) {
+    static TestResultsRepository createInstance(Path baseDir, TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
         return new TestResultsRepositoryImpl(baseDir, tsName, tsTimestamp)
     }
 
     static TestResultsRepository createInstance(Path baseDir, String testSuiteId) {
-        return createInstance(baseDir, new TsName(testSuiteId))
+        return createInstance(baseDir, new TSuiteName(testSuiteId))
     }
 
 }

@@ -84,7 +84,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolveMaterialFilePath() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
         Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
@@ -94,7 +94,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolveMaterialFilePathWithSuffix() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
         Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
@@ -104,7 +104,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolvePngFilePath() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
         then:
@@ -114,7 +114,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolvePngFilePathWithSuffix() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
@@ -124,7 +124,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolvePngFilePathBySuitelessTimeless() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, TsName.SUITELESS, TsTimestamp.TIMELESS)
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
@@ -134,30 +134,30 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testScanBaseDir() {
         when:
-        List<TsResult> tsrList = TestResultsRepositoryImpl.scanBaseDir(workdir)
+        List<TSuiteResult> tsrList = TestResultsRepositoryImpl.scanBaseDir(workdir)
         then:
         tsrList != null
         tsrList.size() == 3
         when:
-        TsResult tsr =
-                lookupTestSuiteResult(tsrList, new TsName('TS1'),
-                        new TsTimestamp('20180530_130419'))
+        TSuiteResult tsr =
+                lookupTestSuiteResult(tsrList, new TSuiteName('TS1'),
+                        new TSuiteTimestamp('20180530_130419'))
         then:
         tsr != null
         tsr.getBaseDir() == workdir
-        tsr.getTsName() == new TsName('TS1')
-        tsr.getTsTimestamp() == new TsTimestamp('20180530_130419')
+        tsr.getTsName() == new TSuiteName('TS1')
+        tsr.getTsTimestamp() == new TSuiteTimestamp('20180530_130419')
         tsr.getTsTimestampDir() == workdir.resolve('TS1/20180530_130419')
         when:
-        TcName tcn = new TcName('TC1')
-        TcResult tcr = tsr.getTcResult(tcn)
+        TCaseName tcn = new TCaseName('TC1')
+        TCaseResult tcr = tsr.getTcResult(tcn)
         then:
         tcr != null
         System.out.println("tcr=\n${JsonOutput.prettyPrint(tcr.toString())}")
         tcr.getTsResult() == tsr
         tcr.getTcName() == tcn
         tcr.getTcDir() == tsr.getTsTimestampDir().resolve('TC1')
-        tcr.getTcStatus() == TcStatus.TO_BE_EXECUTED
+        tcr.getTcStatus() == TCaseStatus.TO_BE_EXECUTED
         /*
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
@@ -174,7 +174,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testToJson() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
         when:
         def str = tri.toJson()
         //System.err.println("str=\n${str}")
@@ -190,7 +190,7 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testReport() {
         setup:
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TsName('TS1'), new TsTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
         Path html = tri.report()
         then:
@@ -198,8 +198,8 @@ class TestResultsRepositoryImplSpec extends Specification {
     }
 
     // helper methods
-    TsResult lookupTestSuiteResult(List<TsResult> tsrList, TsName tsn, TsTimestamp tst) {
-        for (TsResult tsr : tsrList ) {
+    TSuiteResult lookupTestSuiteResult(List<TSuiteResult> tsrList, TSuiteName tsn, TSuiteTimestamp tst) {
+        for (TSuiteResult tsr : tsrList ) {
             if (tsr.getTsName() == tsn && tsr.getTsTimestamp() == tst) {
                 return tsr
             }
