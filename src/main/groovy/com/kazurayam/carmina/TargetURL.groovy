@@ -32,7 +32,6 @@ class TargetURL {
         return this.url
     }
 
-
     // --------------------- create/add/get child nodes -----------------------
 
     /**

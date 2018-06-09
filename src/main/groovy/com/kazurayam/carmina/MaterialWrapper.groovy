@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 class MaterialWrapper {
 
     static Logger logger = LoggerFactory.getLogger(this.getClass());
+
     protected static final String MAGIC_DELIMITER = '§'
 
     private TargetURL targetURL

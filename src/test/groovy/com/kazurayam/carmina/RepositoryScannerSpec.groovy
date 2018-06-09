@@ -10,7 +10,6 @@ class RepositoryScannerSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static RepositoryScanner scanner
 
     // fixture methods
     def setup() {
@@ -22,16 +21,62 @@ class RepositoryScannerSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        scanner = new RepositoryScanner(workdir)
     }
     def cleanupSpec() {}
 
     // feature methods
     def testScan() {
         when:
+        RepositoryScanner scanner = new RepositoryScanner(workdir)
         List<TSuiteResult> tSuiteResults = scanner.scan()
         then:
         tSuiteResults != null
+        tSuiteResults.size() == 2
+        //
+        when:
+        TSuiteResult tSuiteResult = tSuiteResults.get(0)
+        then:
+        tSuiteResult.getBaseDir() == workdir
+        tSuiteResult.getParent() == workdir
+        tSuiteResult.getTSuiteName() == new TSuiteName('TS1')
+        tSuiteResult.getTSuiteTimestamp() != null
+        //
+        when:
+        List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
+        then:
+        tCaseResults.size() == 1
+        //
+        when:
+        TCaseResult tCaseResult = tCaseResults[0]
+        then:
+        tCaseResult.getParent() == tSuiteResult
+        tCaseResult.getTCaseName() == new TCaseName('TC1')
+        tCaseResult.getTCaseDir() != null
+        //
+        when:
+        List<TargetURL> targetURLs = tCaseResult.getTargetURLs()
+        then:
+        targetURLs.size() == 1
+        //
+        when:
+        TargetURL tu = targetURLs[0]
+        then:
+        tu.getParent() == tCaseResult
+        tu.getUrl() == new URL('http://demoaut.katalon.com/')
+        //
+        when:
+        List<MaterialWrapper> materialWrappers = tu.getMaterialWrappers()
+        then:
+        materialWrappers.size() == 1
+        //
+        when:
+        MaterialWrapper mw = materialWrappers[0]
+        String p = './' + Helpers.getClassShortName(this.class) + '/TS1/20180530_130419' +
+                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+        then:
+        mw.getParent() == tu
+        mw.getMaterialFilePath().toString().replace('\\', '/') == p
+        mw.getFileType() == FileType.PNG
     }
 
     // helper methods
