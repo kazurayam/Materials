@@ -4,6 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import static java.nio.file.FileVisitResult.*
+import java.time.LocalDateTime
 import java.nio.file.FileVisitOption
 import java.nio.file.Files
 import java.nio.file.FileVisitResult
@@ -38,6 +39,13 @@ class RepositoryScanner {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
         depth = new Stack<Layer>()
         depth.push(Layer.BASEDIR)
+        TSuiteName tsn = null
+        TSuiteTimestamp tst = null
+        TSuiteResult tsr = null
+        TCaseName tcn = null
+        TCaseResult tcr = null
+        TargetURL tu = null
+        MaterialWrapper mw = null
         Files.walkFileTree(
                 this.baseDir,
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS),
@@ -53,10 +61,15 @@ class RepositoryScanner {
                                 depth.push(Layer.TESTSUITE)
                                 break
                             case Layer.TESTSUITE :
-                                Path suite = baseDir.resolve()
+                                tsn = new TSuiteName(dir.getFileName())
                                 depth.push(Layer.TIMESTAMP)
                                 break
                             case Layer.TIMESTAMP :
+                                LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName())
+                                if (ldt != null) {
+                                    tst = new TSuiteTimestamp(ldt)
+                                    tsr = new TSuiteResult(tns, tst).setParent(baseDir)
+                                }
                                 depth.push(Layer.TESTCASE)
                                 break
                             case Layer.TESTCASE :
@@ -64,7 +77,6 @@ class RepositoryScanner {
                                 shift = new Stack<Layer>()
                                 break
                             case Layer.MATERIALS :
-
                                 break
                         }
                         return CONTINUE
@@ -79,8 +91,13 @@ class RepositoryScanner {
                             case Layer.BASEDIR :
                                 break
                             case Layer.TESTSUITE :
+                                tsn = null
+                                depth.pop()
                                 break
                             case Layer.TIMESTAMP :
+                                tSuiteResults.add(tsr)
+                                tst = null
+                                depth.pop()
                                 break
                             case Layer.TESTCASE :
                                 break
