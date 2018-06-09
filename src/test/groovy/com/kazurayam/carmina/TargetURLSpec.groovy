@@ -40,6 +40,15 @@ class TargetURLSpec extends Specification {
         modified.getParent() == tcr
     }
 
+    def testFindOrNewMaterialWrapper() {
+        when:
+        TargetURL tu = new TargetURL(new URL('http://demoaut.katalon.com/'))
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        String fileName = mw.materialFilePath().getFileName()
+        then:
+        fileName.endsWith(MaterialWrapper.MAGIC_DELIMITER + '1' + '.' + FileType.PNG.extension)
+    }
+
     def testToJson() {
         setup:
         TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))

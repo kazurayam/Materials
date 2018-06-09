@@ -44,8 +44,10 @@ class TargetURL {
     MaterialWrapper findOrNewMaterialWrapper(String suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
 
-        String filteredSuffix = suffix.trim().replace('.', '')
-        String ammendedSuffix = (filteredSuffix.length() > 0) ? '.' + filteredSuffix : ''
+        String filteredSuffix =
+                suffix.trim().replace(MaterialWrapper.MAGIC_DELIMITER, '')
+        String ammendedSuffix = (filteredSuffix.length() > 0) ?
+                MaterialWrapper.MAGIC_DELIMITER + filteredSuffix : ''
 
         Path p = this.tCaseResult.getTCaseDir().resolve(
             "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"

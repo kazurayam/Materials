@@ -33,6 +33,7 @@ class MaterialWrapperSpec extends Specification {
     }
 
     // feature methods
+
     def testSetParent_GetParent() {
         when:
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
@@ -42,11 +43,70 @@ class MaterialWrapperSpec extends Specification {
 
     }
 
+    def testParseFileNameForFileType_png() {
+        when:
+        FileType ft = MaterialWrapper.parseFileNameForFileType('a.png')
+        then:
+        ft == FileType.PNG
+    }
+
+    def testParseFileNameForFileType_none() {
+        when:
+        FileType ft = MaterialWrapper.parseFileNameForFileType('a')
+        then:
+        ft == FileType.NULL
+    }
+
+    def testParseFileNameForFileType_unknown() {
+        when:
+        FileType ft = MaterialWrapper.parseFileNameForFileType('a.foo')
+        then:
+        ft == FileType.NULL
+    }
+
+    def testParseFileNameForSuffix_atoz() {
+        when:
+        String suffix = MaterialWrapper.parseFileNameForSuffix('a§atoz.png')
+        then:
+        suffix == 'atoz'
+    }
+
+    def testParseFileNameForSuffix_none() {
+        when:
+        String suffix = MaterialWrapper.parseFileNameForSuffix('a.png')
+        then:
+        suffix == null
+    }
+
+    def testParseFileNameForURL_http() {
+        when:
+        URL url = MaterialWrapper.parseFileNameForURL('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        then:
+        url == new URL('http://demoaut.katalon.com/')
+    }
+
+    def testParseFileNameForURL_https() {
+        when:
+        URL url = MaterialWrapper.parseFileNameForURL('https%3A%2F%2Fwww.google.com%2F.png')
+        then:
+        url == new URL('https://www.google.com/')
+    }
+    
+    def testParseFileNameForURL_Malformed() {
+        when:
+        URL url = MaterialWrapper.parseFileNameForURL('demoaut.katalon.com.png')
+        then:
+        url == null
+    }
+
+
+
+
     def testToJson() {
         when:
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         def str = mw.toString()
-        System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
+        //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"MaterialWrapper":{"materialFilePath":"')
         str.contains(Helpers.escapeAsJsonText(mw.getMaterialFilePath().toString()))
@@ -58,7 +118,7 @@ class MaterialWrapperSpec extends Specification {
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         Path p = mw.getRelativePathToTsTimestampDir()
         then:
-        p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
     }
 
     def testGetRelativePathAsString() {
@@ -66,7 +126,7 @@ class MaterialWrapperSpec extends Specification {
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         String s = mw.getRelativePathAsString()
         then:
-        s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png'
+        s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
     }
 
     def testGetRelativeUrlAsString() {
@@ -74,7 +134,7 @@ class MaterialWrapperSpec extends Specification {
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
         String s = mw.getRelativeUrlAsString()
         then:
-        s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F.1.png'
+        s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
 
     }
 

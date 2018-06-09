@@ -55,12 +55,12 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testIdentifySuffix_2dots() {
         expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.1.png')) == '1'
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a^1.png')) == '1'
     }
 
     def testIdentifySuffix_3dots() {
         expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.b.c.png')) == 'c'
+        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.b^c.png')) == 'c'
     }
 
     def testIdentifyURLpart_noDot() {
@@ -75,15 +75,15 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testIdentifyURLpart_2Dots() {
         expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.1.png')) == 'a'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a^1.png')) == 'a'
     }
 
     def testIdentifyURLpart_3Dots() {
         expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.b.c.png')) == 'a.b'
+        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.b^c.png')) == 'a.b'
     }
 
-    @Ignore
+
     def testIdentifyURLpart_realistic() {
         expect:
         TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) == 'http%3A%2F%2Fdemoaut.katalon.com%2F'

@@ -17,7 +17,9 @@ enum FileType {
     JSON('json',   'application/json'),
     XML('xml',     'application/xml' ),
     XHTML('xhtml', 'application/xhtml+html'),
-    PDF('pdf',     'application/pdf');
+    PDF('pdf',     'application/pdf'),
+
+    NULL('', '') ;
 
     private final String extension
     private final String mimeType
@@ -25,10 +27,6 @@ enum FileType {
     FileType(String extension, String mimeType) {
         this.extension = extension
         this.mimeType  = mimeType
-    }
-
-    String toString() {
-        return this.getExtension()
     }
 
     String getExtension() {
@@ -39,14 +37,25 @@ enum FileType {
         return this.mimeType
     }
 
+    @Override
+    String toString() {
+        return toJson() //this.getExtension()
+    }
+
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"FileType":{')
+        sb.append('"extension":"' + this.getExtension() + '","mimeType":"' + this.getMimeType() + '"')
+        sb.append('}}')
+        return sb.toString()
+    }
     static FileType getByExtension(String ext) {
         for (FileType v : values()) {
-            if (v.getExtension() == ext) {
+            if (v.getExtension().toLowerCase() == ext.toLowerCase()) {
                 return v
             }
         }
-        System.err.println("FileType#getByExtension: undefined: ${ext}")
-        return null
+        return FileType.NULL
     }
 
     static FileType getByMimeType(String mime) {
