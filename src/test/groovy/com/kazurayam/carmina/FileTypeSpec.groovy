@@ -8,7 +8,7 @@ class FileTypeSpec extends Specification {
 
     def testToString() {
         expect:
-        FileType.PNG.toString() == 'png'
+        FileType.PNG.toString() == '{"FileType":{"extension":"png","mimeType":"image/png"}}'
     }
 
     def testGetExtension() {

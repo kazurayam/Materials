@@ -30,8 +30,6 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
     }
 
     def cleanup() {
-        System.out.println("out=${out.toString()}")
-        System.err.println("err=${err.toString()}")
         out.close()
         err.close()
     }

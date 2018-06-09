@@ -52,7 +52,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testResolvePngFilePath() {
@@ -72,7 +72,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testResolvePngFilePathBySuitelessTimeless() {
@@ -82,7 +82,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.1.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testScanBaseDir() {
