@@ -62,6 +62,7 @@ class MiscSpec extends Specification {
     def boolean usableAsFileName(String str) {
         Path target = workdir.resolve(str)
         try {
+            Files.delete(target)
             Files.copy(source, target)
             return true
         } catch (IOException e) {

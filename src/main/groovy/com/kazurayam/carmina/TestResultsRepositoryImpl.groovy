@@ -127,10 +127,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                     //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
                             .collect(Collectors.toList())
             for (Path materialFilePath : materialFilePaths) {
-                String urlPart = this.identifyURLpart(materialFilePath)
-                String suffix = this.identifySuffix(materialFilePath)
-                FileType ft = this.identifyFileType(materialFilePath)
-                URL url = new URL(URLDecoder.decode(urlPart, 'UTF-8'))
+                String materialFileName = materialFilePath.getFileName()
+                FileType ft = MaterialWrapper.parseFileNameForFileType(materialFileName)
+                String suffix = MaterialWrapper.parseFileNameForSuffix(materialFileName)
+                URL url = MaterialWrapper.parseFileNameForURL(materialFileName)
                 TargetURL targetURL = new TargetURL(url).setParent(tcr)
                 tcr.addTargetURL(targetURL)
                 MaterialWrapper mw = new MaterialWrapper(materialFilePath, ft).setParent(targetURL)
@@ -138,69 +138,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
             }
         }
         return tcResults
-    }
-
-    /**
-     * check the file name extension (.png, .pdf, etc) and identify the FileType
-     * @param p
-     * @return
-     */
-    static FileType identifyFileType(Path p) {
-        String fileName = p.getFileName().toString().trim()
-        if (fileName.lastIndexOf('.') < 0) {
-            return FileType.OCTET
-        } else {
-            String ext = fileName.substring(fileName.lastIndexOf('.') + 1)
-            def ft = FileType.getByExtension(ext)
-            if (ft != null) {
-                return ft
-            } else {
-                return FileType.OCTET
-            }
-        }
-    }
-
-    /**
-     * if p is /temp/abd.de.fg then return 'de' which is enclosed by a pair of dot(.) characters
-     *
-     * @param p
-     * @return
-     */
-    static String identifySuffix(Path p) {
-        String fileName = p.getFileName().toString().trim()
-        List<String> tokens = Arrays.asList(fileName.split('\\.'))
-        Collections.reverse(tokens)
-        if (tokens.size() >= 3) {
-            //   /temp/a.b.c.png => ['png', 'c', 'b', 'a'] => 'c'
-            //   /temp/a.1.png => ['png', '1', 'a'] =>'1'
-            return tokens.get(1)
-        } else {
-            //   /temp/a.png => ['png', 'a'] => ''
-            //   /temp/a => ['a']
-            return ''
-        }
-    }
-
-    static String identifyURLpart(Path p) {
-        String fileName = p.getFileName().toString().trim()
-        List<String> tokens = Arrays.asList(fileName.split('\\.'))
-        Collections.reverse(tokens)
-        if (tokens.size() >= 3) {
-            //   /temp/a.b.c.png => ['png', 'c', 'b', 'a']
-            //   /temp/a.1.png => ['png', '1', 'a']
-            List<String> sublist = tokens.subList(2, tokens.size())
-            Collections.reverse(sublist)
-            String[] sarray = sublist.toArray()
-            return String.join('.', sarray)
-        } else if (tokens.size() == 2) {
-            //   /temp/a.png => ['png', 'a']
-            return tokens[1]
-        } else if (tokens.size() == 1) {
-            //   /temp/a => ['a']
-            return tokens[0]
-        } else {
-            return ''
-        }
     }
 
 

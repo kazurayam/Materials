@@ -35,60 +35,6 @@ class TestResultsRepositoryImplSpec extends Specification {
         trri.getBaseDir() == workdir
     }
 
-    def testIdentifyFileType() {
-        expect:
-        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.png')) == FileType.PNG
-        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.pdf')) == FileType.PDF
-        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a.csv')) == FileType.CSV
-        TestResultsRepositoryImpl.identifyFileType(Paths.get('/temp/a')) == FileType.OCTET
-    }
-
-    def testIdentifySuffix_noDot() {
-        expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a')) == ''
-    }
-
-    def testIdentifySuffix_1dot() {
-        expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.png')) == ''
-    }
-
-    def testIdentifySuffix_2dots() {
-        expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a^1.png')) == '1'
-    }
-
-    def testIdentifySuffix_3dots() {
-        expect:
-        TestResultsRepositoryImpl.identifySuffix(Paths.get('/temp/a.b^c.png')) == 'c'
-    }
-
-    def testIdentifyURLpart_noDot() {
-        expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a')) == 'a'
-    }
-
-    def testIdentifyURLpart_1Dot() {
-        expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.png')) == 'a'
-    }
-
-    def testIdentifyURLpart_2Dots() {
-        expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a^1.png')) == 'a'
-    }
-
-    def testIdentifyURLpart_3Dots() {
-        expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/a.b^c.png')) == 'a.b'
-    }
-
-
-    def testIdentifyURLpart_realistic() {
-        expect:
-        TestResultsRepositoryImpl.identifyURLpart(Paths.get('/temp/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) == 'http%3A%2F%2Fdemoaut.katalon.com%2F'
-    }
-
     def testResolveMaterialFilePath() {
         setup:
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
@@ -160,7 +106,6 @@ class TestResultsRepositoryImplSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(tcn)
         then:
         tcr != null
-        System.out.println("tcr=\n${JsonOutput.prettyPrint(tcr.toString())}")
         tcr.getTSuiteResult() == tsr
         tcr.getTCaseName() == tcn
         tcr.getTCaseDir() == tsr.getTsTimestampDir().resolve('TC1')
@@ -184,13 +129,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
         when:
         def str = tri.toJson()
-        //System.err.println("str=\n${str}")
-        //System.out.println("str=\n${JsonOutput.prettyPrint(str)}")
         then:
         str != null
         str.contains('{"TestResultsImpl":{')
         str.contains(Helpers.escapeAsJsonText(workdir.toString()))
-        // TODO
         str.contains('}}')
     }
 

@@ -42,9 +42,9 @@ class TargetURLSpec extends Specification {
 
     def testFindOrNewMaterialWrapper() {
         when:
-        TargetURL tu = new TargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tu = new TargetURL(new URL('http://demoaut.katalon.com/')).setParent(tcr)
         MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
-        String fileName = mw.materialFilePath().getFileName()
+        String fileName = mw.getMaterialFilePath().getFileName()
         then:
         fileName.endsWith(MaterialWrapper.MAGIC_DELIMITER + '1' + '.' + FileType.PNG.extension)
     }

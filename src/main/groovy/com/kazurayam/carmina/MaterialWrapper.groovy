@@ -110,9 +110,7 @@ class MaterialWrapper {
             } else {
                 str = fileName.substring(0, fileName.lastIndexOf('.'))
             }
-            println("str:${str}")
             String decoded = URLDecoder.decode(str, 'UTF-8')
-            println("decoded:${decoded}")
             try {
                 URL url = new URL(decoded)
                 return url

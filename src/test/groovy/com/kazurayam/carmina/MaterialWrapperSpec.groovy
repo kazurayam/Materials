@@ -91,7 +91,7 @@ class MaterialWrapperSpec extends Specification {
         then:
         url == new URL('https://www.google.com/')
     }
-    
+
     def testParseFileNameForURL_Malformed() {
         when:
         URL url = MaterialWrapper.parseFileNameForURL('demoaut.katalon.com.png')
