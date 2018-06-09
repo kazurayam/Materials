@@ -15,10 +15,14 @@ gradle-app.setting
 .classpath
 .project
 .settings
+/bin
 
 # IntelliJ IDEA
-.idea/
-*.iml
+/.idea/
+/*.iml
+/*.ipr
+/*.iws
+/out
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
