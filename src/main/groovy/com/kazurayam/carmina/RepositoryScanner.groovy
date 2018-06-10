@@ -13,14 +13,15 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 /**
- * RepositoryScanner scans file system tree under the baseDir directory, and it builds object trees of
- * TSuiteResult + TCaseResult + TargetURL + MaterialWrapper
+ * RepositoryScanner scans a file system tree under the baseDir directory, and it builds object trees of
+ * TSuiteResult under which contained objects of TCaseResult + TargetURL + MaterialWrapper as found in the
+ * local storage.
  *
  * @author kazurayam
  */
 class RepositoryScanner {
 
-    static Logger logger = LoggerFactory.getLogger(this.getClass());
+    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class);
 
     private enum Layer {
         BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIALS
@@ -36,39 +37,45 @@ class RepositoryScanner {
     }
 
     List<TSuiteResult> scan() {
+        TSuiteName tSuiteName = null
+        TSuiteTimestamp tSuiteTimestamp = null
+        TSuiteResult tSuiteResult = null
+        TCaseName tCaseName = null
+        TCaseResult tCaseResult = null
+        TargetURL targetURL = null
+        MaterialWrapper materialWrapper = null
+
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
+
         depth = new Stack<Layer>()
         depth.push(Layer.BASEDIR)
-        TSuiteName tsn = null
-        TSuiteTimestamp tst = null
-        TSuiteResult tsr = null
-        TCaseName tcn = null
-        TCaseResult tcr = null
-        TargetURL tu = null
-        MaterialWrapper mw = null
-        Files.walkFileTree(
-                this.baseDir,
-                EnumSet.of(FileVisitOption.FOLLOW_LINKS),
-                Integer.MAX_VALUE,
+
+        Files.walkFileTree(this.baseDir,
+                EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
                 new SimpleFileVisitor<Path>() {
                     /**
                      * Invoked for a directory before entries in the directory are visited.
                      */
                     @Override
                     FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                        logger.debug("#scan()/preVisitDirectory dir=${dir}")
                         switch (depth.peek()) {
                             case Layer.BASEDIR :
                                 depth.push(Layer.TESTSUITE)
                                 break
                             case Layer.TESTSUITE :
-                                tsn = new TSuiteName(dir.getFileName())
+                                tSuiteName = new TSuiteName(dir.getFileName().toString())
                                 depth.push(Layer.TIMESTAMP)
                                 break
                             case Layer.TIMESTAMP :
-                                LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName())
+                                LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                                 if (ldt != null) {
-                                    tst = new TSuiteTimestamp(ldt)
-                                    tsr = new TSuiteResult(tns, tst).setParent(baseDir)
+                                    tSuiteTimestamp = new TSuiteTimestamp(ldt)
+                                    tSuiteResult = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
+                                    tSuiteResults.add(tSuiteResult)
+                                } else {
+                                    logger.info("#scan() ${dir} is ignored, as it's name is not compliant to" +
+                                            " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                                 }
                                 depth.push(Layer.TESTCASE)
                                 break
@@ -91,12 +98,12 @@ class RepositoryScanner {
                             case Layer.BASEDIR :
                                 break
                             case Layer.TESTSUITE :
-                                tsn = null
+                                tSuiteName = null
                                 depth.pop()
                                 break
                             case Layer.TIMESTAMP :
-                                tSuiteResults.add(tsr)
-                                tst = null
+                                tSuiteResults.add(tSuiteResult)
+                                tSuiteTimestamp = null
                                 depth.pop()
                                 break
                             case Layer.TESTCASE :
@@ -133,7 +140,8 @@ class RepositoryScanner {
                     @Override
                     FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {}
                      */
-                })
+                }
+        )
 
         return tSuiteResults
     }

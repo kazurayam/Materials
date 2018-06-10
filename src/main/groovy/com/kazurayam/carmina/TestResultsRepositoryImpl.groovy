@@ -141,6 +141,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
 
+
     // -------------------------- attribute getters & setters ------------------------
     Path getBaseDir() {
         return this.baseDir
