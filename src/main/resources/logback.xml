@@ -3,7 +3,10 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
+            <!--
             <pattern>%c %p %msg%n</pattern>
+            -->
+            <pattern>%p %msg%n</pattern> <!-- %c classname, %p level, %msg message -->
         </encoder>
     </appender>
     <logger name="root" level="debug" />

@@ -38,7 +38,7 @@ class RepositoryScannerSpec extends Specification {
         logger.info("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 1
+        tSuiteResults.size() == 2
         //
         when:
         TSuiteResult tSuiteResult = tSuiteResults.get(0)
@@ -47,12 +47,13 @@ class RepositoryScannerSpec extends Specification {
         tSuiteResult.getParent() == workdir
         tSuiteResult.getTSuiteName() == new TSuiteName('TS1')
         tSuiteResult.getTSuiteTimestamp() != null
-        /*
+
         //
         when:
         List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
         then:
         tCaseResults.size() == 1
+        /*
         //
         when:
         TCaseResult tCaseResult = tCaseResults[0]
