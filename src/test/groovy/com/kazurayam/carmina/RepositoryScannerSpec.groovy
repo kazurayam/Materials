@@ -1,5 +1,7 @@
 package com.kazurayam.carmina
 
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
@@ -28,6 +30,7 @@ class RepositoryScannerSpec extends Specification {
     }
     def cleanupSpec() {}
 
+
     // feature methods
     def testScan() {
         setup:
@@ -35,7 +38,8 @@ class RepositoryScannerSpec extends Specification {
         when:
         RepositoryScanner scanner = new RepositoryScanner(workdir)
         List<TSuiteResult> tSuiteResults = scanner.scan()
-        logger.info("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
+        logger.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
+        logger.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
         tSuiteResults.size() == 2
@@ -87,7 +91,23 @@ class RepositoryScannerSpec extends Specification {
         mw.getMaterialFilePath().toString().replace('\\', '/') == p
         mw.getFileType() == FileType.PNG
         */
+
     }
 
     // helper methods
+    private def String prettyPrint(List<TSuiteResult> tSuiteResults) {
+        StringBuilder sb = new StringBuilder()
+        sb.append("[")
+        def count = 0
+        for (TSuiteResult tSuiteResult: tSuiteResults) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            sb.append(tSuiteResult.toJson())
+            count += 1
+        }
+        sb.append("]")
+        return JsonOutput.prettyPrint(sb.toString())
+    }
+
 }

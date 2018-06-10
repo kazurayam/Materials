@@ -24,23 +24,29 @@ class RepositoryScanner {
     static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class);
 
     private static enum Layer {
-        BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL, ELEMENT
+        INIT, BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
     }
 
     private Path baseDir
 
     RepositoryScanner(Path baseDir) {
         assert baseDir != null
+        if (!Files.exists(baseDir)) {
+            throw IllegalArgumentException("${baseDir} does not exist")
+        }
+        if (!Files.isDirectory(baseDir)) {
+            throw new IllegalArgumentException("${baseDir} is not a directory")
+        }
         this.baseDir = baseDir
     }
 
     List<TSuiteResult> scan() {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
-        RepositoryVisitor visitor = new RepositoryVisitor(baseDir, tSuiteResults)
         Files.walkFileTree(
                 this.baseDir,
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                visitor)
+                new RepositoryVisitor(baseDir, tSuiteResults)
+        )
         return tSuiteResults
     }
 
@@ -48,16 +54,16 @@ class RepositoryScanner {
      *
      */
     static class RepositoryVisitor extends SimpleFileVisitor<Path> {
-        private TSuiteName tSuiteName = null
-        private TSuiteTimestamp tSuiteTimestamp = null
-        private TSuiteResult tSuiteResult = null
-        private TCaseName tCaseName = null
-        private TCaseResult tCaseResult = null
-        private TargetURL targetURL = null
-        private MaterialWrapper materialWrapper = null
 
-        private Stack<Layer> depth = null
-        private Stack<Layer> shift = null
+        private TSuiteName tSuiteName
+        private TSuiteTimestamp tSuiteTimestamp
+        private TSuiteResult tSuiteResult
+        private TCaseName tCaseName
+        private TCaseResult tCaseResult
+        private TargetURL targetURL
+        private MaterialWrapper materialWrapper
+
+        private Stack<Layer> directoryTransition
 
         private Path baseDir
         private List<TSuiteResult> tSuiteResults
@@ -65,8 +71,9 @@ class RepositoryScanner {
         RepositoryVisitor(Path baseDir, List<TSuiteResult> tSuiteResults) {
             this.baseDir = baseDir
             this.tSuiteResults = tSuiteResults
-            depth = new Stack<Layer>()
-            depth.push(Layer.BASEDIR)
+            directoryTransition = new Stack<Layer>()
+            directoryTransition.push(Layer.INIT)
+            logger.debug("baseDir=${baseDir}")
         }
 
         /**
@@ -74,41 +81,41 @@ class RepositoryScanner {
          */
         @Override
         FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            switch (depth.peek()) {
+            def from = directoryTransition.peek()
+            switch (from) {
+                case Layer.INIT :
+                    logger.debug("preVisitDirectory visiting ${dir} as BASEDIR")
+                    directoryTransition.push(Layer.BASEDIR)
+                    break
                 case Layer.BASEDIR :
-                    logger.debug("#scan()/preVisitDirectory ${dir} BASEDIR")
-                    depth.push(Layer.TESTSUITE)
-                    break
-                case Layer.TESTSUITE :
-                    logger.debug("#scan()/preVisitDirectory ${dir} TESTSUITE")
+                    logger.debug("preVisitDirectory visiting ${dir} as TESTSUITE")
                     tSuiteName = new TSuiteName(dir.getFileName().toString())
-                    depth.push(Layer.TIMESTAMP)
+                    directoryTransition.push(Layer.TESTSUITE)
                     break
-                case Layer.TIMESTAMP :
-                    logger.debug("#scan()/preVisitDirectory ${dir} TIMESTAMP")
+                case Layer.TESTSUITE:
+                    logger.debug("preVisitDirectory visiting ${dir} as TIMESTAMP")
                     LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                     if (ldt != null) {
                         tSuiteTimestamp = new TSuiteTimestamp(ldt)
                         tSuiteResult = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
+                        tSuiteResults.add(tSuiteResult)
                     } else {
-                        logger.info("#scan() ${dir} is ignored, as it's name is not compliant to" +
+                        logger.info("${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                                 " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                     }
-                    depth.push(Layer.TESTCASE)
+                    directoryTransition.push(Layer.TIMESTAMP)
+                    break
+                case Layer.TIMESTAMP :
+                    logger.debug("preVisitDirectory visiting ${dir} as TESTCASE")
+                    tCaseName = new TCaseName(dir.getFileName().toString())
+                    tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+                    tSuiteResult.addTCaseResult(tCaseResult)
+                    directoryTransition.push(Layer.TESTCASE)
                     break
                 case Layer.TESTCASE :
-                    logger.debug("#scan()/preVisitDirectory ${dir} TESTCASE")
-                    //depth.push(Layer.MATERIAL)
-                    shift = new Stack<Layer>()
-                    shift.push(Layer.MATERIAL)
-                    break
-                case Layer.MATERIAL :
-                    logger.debug("#scan()/preVisitDirectory ${dir} MATERIAL")
-                    shift.push(Layer.ELEMENT)
-                    break
-                case Layer.ELEMENT:
-                    logger.debug("#scan()/preVisitDirectory ${dir} ELEMENT")
-                    shift.push(Layer.ELEMENT)
+                    logger.debug("preVisitDirectory visiting ${dir} as MATERIAL")
+                    //
+                    directoryTransition.push(Layer.MATERIAL)
                     break
             }
             return CONTINUE
@@ -119,33 +126,23 @@ class RepositoryScanner {
          */
         @Override
         FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
-            switch (depth.peek()) {
-                case Layer.BASEDIR :
-                    logger.debug("#scan()/postVisitDirectory ${dir} BASEDIR")
-                    depth.pop()
-                    break
-                case Layer.TESTSUITE :
-                    logger.debug("#scan()/postVisitDirectory ${dir} TESTSUITE")
-                    tSuiteName = null
-                    depth.pop()
+            def to = directoryTransition.peek()
+            switch (to) {
+                case Layer.TESTCASE :
+                    directoryTransition.pop()
+                    logger.debug("postVisitDirectory back to ${dir} as TESTCASE")
                     break
                 case Layer.TIMESTAMP :
-                    logger.debug("#scan()/postVisitDirectory ${dir} TIMESTAMP")
-                    tSuiteResults.add(tSuiteResult)
-                    tSuiteTimestamp = null
-                    depth.pop()
+                    directoryTransition.pop()
+                    logger.debug("postVisitDirectory back to ${dir} as TIMESTAMP")
                     break
-                case Layer.TESTCASE :
-                    logger.debug("#scan()/postVisitDirectory ${dir} TESTCASE")
-                    depth.pop()
+                case Layer.TESTSUITE :
+                    directoryTransition.pop()
+                    logger.debug("postVisitDirectory back to ${dir} as TESTSUITE")
                     break
-                case Layer.MATERIAL :
-                    logger.debug("#scan()/postVisitDirectory ${dir} MATERIAL")
-                    depth.pop()
-                    break
-                case Layer.ELEMENT :
-                    logger.debug("#scan()/postVisitDirectory dir=${dir} ELEMENT")
-                    shift.pop()
+                case Layer.BASEDIR :
+                    directoryTransition.pop()
+                    logger.debug("postVisitDirectory back to ${dir} as BASEDIR")
                     break
             }
             return CONTINUE
@@ -155,17 +152,19 @@ class RepositoryScanner {
          * Invoked for a file in a directory.
          */
         @Override
-        FileVisitResult visitFile(Path path, BasicFileAttributes attributes) throws IOException {
-            switch (depth.peek()) {
+        FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+            switch (directoryTransition.peek()) {
                 case Layer.BASEDIR :
+                    logger.debug("visitFile ${file} in BASEDIR")
                     break
                 case Layer.TESTSUITE :
+                    logger.debug("visitFile ${file} in TESTSUITE")
                     break
                 case Layer.TIMESTAMP :
+                    logger.debug("visitFile ${file} in TIMESTAMP")
                     break
                 case Layer.TESTCASE :
-                    break
-                case Layer.MATERIAL :
+                    logger.debug("visitFile ${file} in TESTCASE")
                     break
             }
             return CONTINUE

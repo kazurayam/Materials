@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -12,6 +15,8 @@ import java.time.temporal.TemporalAccessor
  *
  */
 class TSuiteTimestamp {
+
+    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class);
 
     static final String TIMELESS_DIRNAME = '_'
 
@@ -81,7 +86,7 @@ class TSuiteTimestamp {
                 return LocalDateTime.from(parsed)
             }
         } catch (DateTimeParseException ex) {
-            System.err.println("unable to parse '${str}' as LocalDateTime")
+            logger.info("unable to parse '${str}' as LocalDateTime")
             return null
         }
     }
@@ -109,7 +114,7 @@ class TSuiteTimestamp {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TsTimestamp":')
+        sb.append('{"TSuiteTimestamp":')
         sb.append('{"timestamp":"' + this.format()+ '"}' )
         sb.append('}')
         return sb.toString()

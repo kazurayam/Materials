@@ -101,7 +101,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                     //System.out.println("tsr=${tsr}")
                     List<TCaseResult> tcResults = scanTsResult(tsr)
                     for (TCaseResult tcr : tcResults) {
-                        tsr.addTcResult(tcr)
+                        tsr.addTCaseResult(tcr)
                     }
                 } else {
                     // ignore directories not in the format of yyyyMMdd_hhmmss

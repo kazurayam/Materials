@@ -56,7 +56,7 @@ class TSuiteTimestampSpec extends Specification {
         def str = ts.toString()
         System.out.println("${JsonOutput.prettyPrint(str)}")
         then:
-        str.contains('{"TsTimestamp":')
+        str.contains('{"TSuiteTimestamp":')
         str.contains('{"timestamp":')
         str.contains('20180605_090213')
         str.contains('}}')

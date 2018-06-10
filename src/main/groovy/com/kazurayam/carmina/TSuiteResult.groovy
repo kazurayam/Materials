@@ -73,7 +73,7 @@ final class TSuiteResult {
         return tcr
     }
 
-    void addTcResult(TCaseResult tCaseResult) {
+    void addTCaseResult(TCaseResult tCaseResult) {
         boolean found = false
         for (TCaseResult tcr : this.tCaseResults) {
             if (tcr == tCaseResult) {
