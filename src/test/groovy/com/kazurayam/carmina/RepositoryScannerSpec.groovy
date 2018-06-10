@@ -57,7 +57,6 @@ class RepositoryScannerSpec extends Specification {
         List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
         then:
         tCaseResults.size() == 1
-        /*
         //
         when:
         TCaseResult tCaseResult = tCaseResults[0]
@@ -66,11 +65,13 @@ class RepositoryScannerSpec extends Specification {
         tCaseResult.getTCaseName() == new TCaseName('TC1')
         tCaseResult.getTCaseDir() != null
         //
+
         when:
         List<TargetURL> targetURLs = tCaseResult.getTargetURLs()
         then:
         targetURLs.size() == 1
         //
+        /*
         when:
         TargetURL tu = targetURLs[0]
         then:
