@@ -6,7 +6,7 @@
             <pattern>%c %p %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="sampleLogger" level="info" />
+    <logger name="root" level="debug" />
     <root>
         <appender-ref ref="STDOUT" />
     </root>
