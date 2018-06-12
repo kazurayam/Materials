@@ -1,6 +1,11 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class TCaseName {
+
+    static Logger logger = LoggerFactory.getLogger(TCaseName.class)
 
     private String value
 

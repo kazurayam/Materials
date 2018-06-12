@@ -1,8 +1,13 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 
 class TargetURL {
+
+    static Logger logger = LoggerFactory.getLogger(TargetURL.class)
 
     private TCaseResult parent
     private URL url

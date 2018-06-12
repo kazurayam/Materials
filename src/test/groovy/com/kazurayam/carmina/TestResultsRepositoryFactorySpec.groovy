@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -12,6 +15,8 @@ import spock.lang.Specification
 class TestResultsRepositoryFactorySpec extends Specification {
 
     // fields
+    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryFactorySpec.class)
+
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 

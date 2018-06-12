@@ -1,8 +1,13 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 
 class TestResultsRepositoryFactory {
+
+    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryFactory.class)
 
     private TestResultsRepositoryFactory() {}
 

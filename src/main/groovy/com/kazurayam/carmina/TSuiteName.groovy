@@ -1,6 +1,11 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class TSuiteName {
+
+    static Logger logger = LoggerFactory.getLogger(TSuiteName.class)
 
     static final String SUITELESS_DIRNAME = '_'
 

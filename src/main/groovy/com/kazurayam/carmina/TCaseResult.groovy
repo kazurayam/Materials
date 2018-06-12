@@ -1,11 +1,16 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 
 /**
  *
  */
 class TCaseResult {
+
+    static Logger logger = LoggerFactory.getLogger(TCaseResult.class)
 
     private TSuiteResult parent
     private TCaseName tCaseName

@@ -25,7 +25,7 @@ import groovy.json.JsonOutput
  */
 class RepositoryScanner {
 
-    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class);
+    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class)
 
     private static enum Layer {
         INIT, BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
@@ -113,11 +113,11 @@ class RepositoryScanner {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("Hello, I am Carmina RepositoryScanner.")
+        logger.info("#main " + ("Hello, I am Carmina RepositoryScanner."))
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Results')
         RepositoryScanner scanner = new RepositoryScanner(baseDir)
         scanner.scan()
-        System.out.println(JsonOutput.prettyPrint(scanner.toJson()))
+        logger.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))
     }
 
     /**

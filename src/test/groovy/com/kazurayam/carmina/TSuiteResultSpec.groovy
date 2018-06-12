@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -9,6 +12,8 @@ import spock.lang.Specification
 
 //@Ignore
 class TSuiteResultSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(TSuiteResultSpec.class);
 
     // fields
     private static Path workdir
@@ -64,8 +69,8 @@ class TSuiteResultSpec extends Specification {
         TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
         MaterialWrapper sw = tu.findOrNewMaterialWrapper('', FileType.PNG)
         def s = tsr.toString()
-        System.err.println("${s}")
-        System.out.println("${JsonOutput.prettyPrint(s)}")
+        logger.debug("#testToJson ${s}")
+        logger.debug("#testToJson ${JsonOutput.prettyPrint(s)}")
         then:
         s.startsWith('{"TSuiteResult":{')
         s.contains('tSuiteName')

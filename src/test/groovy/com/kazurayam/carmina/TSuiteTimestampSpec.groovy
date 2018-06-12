@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.time.LocalDateTime
 
 import com.kazurayam.carmina.TSuiteTimestamp
@@ -17,6 +20,7 @@ import spock.lang.Specification
 class TSuiteTimestampSpec extends Specification {
 
     // fields
+    static Logger logger = LoggerFactory.getLogger(TSuiteTimestampSpec);
 
     // fixture methods
     def setup() {}
@@ -54,7 +58,7 @@ class TSuiteTimestampSpec extends Specification {
         when:
         TSuiteTimestamp ts = new TSuiteTimestamp(source)
         def str = ts.toString()
-        System.out.println("${JsonOutput.prettyPrint(str)}")
+        logger.debug("#testToJson ${JsonOutput.prettyPrint(str)}")
         then:
         str.contains('{"TSuiteTimestamp":')
         str.contains('{"timestamp":')

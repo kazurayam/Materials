@@ -1,8 +1,12 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
 
 class TestCaseStatusSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(TestCaseStatusSpec.class)
 
     def testValueOf() {
         expect:

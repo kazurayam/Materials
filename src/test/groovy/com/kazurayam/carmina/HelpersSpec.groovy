@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -15,6 +18,8 @@ import spock.lang.Specification
  */
 //@Ignore
 class HelpersSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(HelpersSpec.class)
 
     // fields
     private static Path workdir

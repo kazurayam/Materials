@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 class MaterialWrapper {
 
-    static Logger logger = LoggerFactory.getLogger(this.getClass());
+    static Logger logger = LoggerFactory.getLogger(MaterialWrapper.class);
 
     protected static final String MAGIC_DELIMITER = '§'
 
@@ -48,7 +48,9 @@ class MaterialWrapper {
             Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
             return path
         } else {
-            throw new IllegalStateException('parent TargetURL is null')
+            def msg = "parent TargetURL is null"
+            logger.error(msg)
+            throw new IllegalStateException(msg)
         }
     }
 
@@ -117,7 +119,7 @@ class MaterialWrapper {
                 URL url = new URL(decoded)
                 return url
             } catch (MalformedURLException e) {
-                logger.info("unknown protocol in '${decoded}'")
+                logger.warn("unknown protocol in '${decoded}'")
                 return null
             }
         } else {

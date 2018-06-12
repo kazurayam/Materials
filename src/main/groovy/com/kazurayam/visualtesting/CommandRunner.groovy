@@ -1,6 +1,11 @@
 package com.kazurayam.visualtesting
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class CommandRunner {
+    
+    static Logger logger = LoggerFactory.getLogger(CommandRunner.class)
 
     private CommandRunner() {}
 

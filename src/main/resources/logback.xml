@@ -4,10 +4,11 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- %c classname, %p level, %msg message -->
-            <!--
+
             <pattern>%c %p %msg%n</pattern>
-            -->
+            <!--
             <pattern>%p %msg%n</pattern>
+            -->
         </encoder>
     </appender>
 

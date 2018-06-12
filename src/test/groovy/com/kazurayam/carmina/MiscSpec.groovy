@@ -14,7 +14,8 @@ import spock.lang.Specification
  */
 class MiscSpec extends Specification {
     // fields
-    static Logger logger = LoggerFactory.getLogger(MiscSpec.class);
+    static Logger logger = LoggerFactory.getLogger(MiscSpec.class)
+
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
     private static Path source

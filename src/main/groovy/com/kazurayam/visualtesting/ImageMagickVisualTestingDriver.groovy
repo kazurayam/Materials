@@ -1,5 +1,8 @@
 package com.kazurayam.visualtesting
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 
 import com.kazurayam.carmina.TestResultsRepository
@@ -11,6 +14,8 @@ import com.kazurayam.carmina.TestResultsRepository
  *
  */
 class ImageMagickVisualTestingDriver implements VisualTestingDriver {
+
+    static Logger logger = LoggerFactory.getLogger(ImageMagickVisualTestingDriver.class)
 
     private TestResultsRepository target
     private TestResultsRepository basis

@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import static java.nio.file.FileVisitResult.*
 
 import java.nio.file.FileAlreadyExistsException
@@ -13,6 +16,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 final class Helpers {
+
+    static Logger logger = LoggerFactory.getLogger(Helpers.class)
 
     /**
      * not to be instanciated

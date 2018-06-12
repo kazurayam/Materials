@@ -1,10 +1,13 @@
 package com.kazurayam.carmina
 
 import com.kazurayam.carmina.FileType
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
 
 class FileTypeSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(FileTypeSpec.class)
 
     def testToString() {
         expect:

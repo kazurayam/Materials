@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -8,6 +11,8 @@ import spock.lang.Specification
 
 //@Ignore
 class TargetURLSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(TargetURLSpec.class);
 
     // fields
     private static Path workdir
@@ -56,7 +61,7 @@ class TargetURLSpec extends Specification {
         when:
         def str = tp.toString()
         def pretty = JsonOutput.prettyPrint(str)
-        System.out.println("#testToJson: ${pretty}")
+        logger.debug("#testToJson: ${pretty}")
         then:
         str.startsWith('{"TargetURL":{')
         str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))

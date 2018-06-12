@@ -1,5 +1,8 @@
 package com.kazurayam.visualtesting
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -14,6 +17,8 @@ import spock.lang.Specification
 class ImageMagickVisualTestingDriverSpec extends Specification {
 
     // fields
+    static Logger logger = LoggerFactory.getLogger(ImageMagickVisualTestingDriverSpec.class)
+
     private static Path workdir
     private static Path mask
     private static Path resourcesdir

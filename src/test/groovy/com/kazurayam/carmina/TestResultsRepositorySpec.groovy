@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Path
@@ -15,6 +18,8 @@ import spock.lang.Specification
 
 //@Ignore
 class TestResultsRepositorySpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(TestResultsRepositorySpec.class);
 
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
@@ -43,7 +48,7 @@ class TestResultsRepositorySpec extends Specification {
         when:
         TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
         def str = JsonOutput.prettyPrint(sr.toString())
-        System.out.println(JsonOutput.prettyPrint(str))
+        logger.debug(JsonOutput.prettyPrint(str))
         then:
         str.contains('TS1')
     }

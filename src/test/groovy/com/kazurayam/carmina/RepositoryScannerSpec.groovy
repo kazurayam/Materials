@@ -39,7 +39,6 @@ class RepositoryScannerSpec extends Specification {
      *
      * @return
      */
-    @Ignore
     def testScan() {
         setup:
         Path casedir = workdir.resolve("testScan")
@@ -111,7 +110,6 @@ class RepositoryScannerSpec extends Specification {
      *
      * @return
      */
-    @Ignore
     def testGetTSuiteResults_noArg() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_noArg')
@@ -126,7 +124,7 @@ class RepositoryScannerSpec extends Specification {
         // TS2/20180612_111256
     }
 
-    @Ignore
+
     def testGetTSuiteResults_byTSuiteName() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteName')
@@ -140,7 +138,7 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130604
     }
 
-    @Ignore
+
     def testGetTSuiteResults_byTSuiteTimestamp() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteTimestamp')
@@ -153,7 +151,7 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130419
     }
 
-    @Ignore
+
     def testGetTSuiteResult() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResult')
@@ -191,7 +189,7 @@ class RepositoryScannerSpec extends Specification {
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         when:
-        System.out.println(JsonOutput.prettyPrint(scanner.toJson()))
+        logger.debug(JsonOutput.prettyPrint(scanner.toJson()))
         then:
         true == true
     }

@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -8,6 +11,8 @@ import spock.lang.Specification
 
 //@Ignore
 class TCaseResultSpec extends Specification {
+
+    static Logger logger = LoggerFactory.getLogger(TCaseResultSpec.class);
 
     // fields
     private static Path workdir
@@ -45,7 +50,7 @@ class TCaseResultSpec extends Specification {
         when:
         def str = tcr.toString()
         def pretty = JsonOutput.prettyPrint(str)
-        System.out.println("#testToString: \n${pretty}")
+        logger.debug("#testToString: \n${pretty}")
         then:
         str.startsWith('{"TCaseResult":{')
         str.contains('tCaseName')

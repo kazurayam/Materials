@@ -1,5 +1,8 @@
 package com.kazurayam.carmina
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -8,6 +11,8 @@ import java.util.stream.Collectors
 import groovy.xml.MarkupBuilder
 
 final class TestResultsRepositoryImpl implements TestResultsRepository {
+
+    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryImpl.class)
 
     private Path baseDir
     private TSuiteName currentTSuiteName
