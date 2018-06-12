@@ -11,7 +11,7 @@
         </encoder>
     </appender>
 
-
+    <logger name="com.kazurayam.carmina.RepositoryScanner" level="info"/>
     <logger name="root" level="debug" />
     <!--
     <logger name="root" level="info" />

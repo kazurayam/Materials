@@ -166,7 +166,7 @@ class RepositoryScannerSpec extends Specification {
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
     }
 
-    def testFindMaterials() {
+    def testFind2MaterialsIn1TestCase() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResult')
         Helpers.copyDirectory(fixture, casedir)
@@ -184,6 +184,18 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png
     }
 
+    def testPrettyPrint() {
+        setup:
+        Path casedir = workdir.resolve('testPrettyPrint')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        when:
+        System.out.println(JsonOutput.prettyPrint(scanner.toJson()))
+        then:
+        true == true
+    }
+    
     // helper methods
     private def String prettyPrint(List<TSuiteResult> tSuiteResults) {
         StringBuilder sb = new StringBuilder()

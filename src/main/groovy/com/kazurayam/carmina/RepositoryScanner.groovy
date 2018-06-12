@@ -238,23 +238,27 @@ class RepositoryScanner {
                     break
                 case Layer.TESTCASE :
                     logger.debug("#visitFile ${file} in TESTCASE")
+                    //logger.debug("#visitFile tCaseResult=${tCaseResult.toString()}")
                     String fileName = file.getFileName()
                     FileType fileType = MaterialWrapper.parseFileNameForFileType(fileName)
                     if (fileType != FileType.NULL) {
                         URL url = MaterialWrapper.parseFileNameForURL(fileName)
+                        //logger.debug("#visitFile url=${url.toString()}")
                         if (url != null) {
                             TargetURL targetURL = this.tCaseResult.getTargetURL(url)
+                            //logger.debug("#visitFile targetURL=${targetURL.toString()} pre")
                             if (targetURL == null) {
                                 targetURL = new TargetURL(url).setParent(this.tCaseResult)
                                 tCaseResult.addTargetURL(targetURL)
                             }
                             MaterialWrapper mw = new MaterialWrapper(file, fileType).setParent(targetURL)
                             targetURL.addMaterialWrapper(mw)
+                            //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
                         } else {
-                            logger.debugEnabled("#visitFile ${file} unable to convert to a URL object")
+                            logger.warn("#visitFile unable to parse ${file} into a URL")
                         }
                     } else {
-                        logger.debug("#visitFile ${file} does not have known file name extension")
+                        logger.warn("#visitFile ${file} has no known FileType")
                     }
                     break
             }
