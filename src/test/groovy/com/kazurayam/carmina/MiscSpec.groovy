@@ -1,16 +1,20 @@
 package com.kazurayam.carmina
 
-import spock.lang.Specification
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import spock.lang.Specification
 
 /**
  * Miscelleneous tests
  */
 class MiscSpec extends Specification {
-// fields
+    // fields
+    static Logger logger = LoggerFactory.getLogger(MiscSpec.class);
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
     private static Path source
@@ -61,8 +65,14 @@ class MiscSpec extends Specification {
 
     def boolean usableAsFileName(String str) {
         Path target = workdir.resolve(str)
+        if (Files.exists(target)) {
+            try {
+                Files.delete(target)
+            } catch (IOException e) {
+                logger.debugEnabled('no need to delete ${target.toString()} as it is not there')
+            }
+        }
         try {
-            Files.delete(target)
             Files.copy(source, target)
             return true
         } catch (IOException e) {
