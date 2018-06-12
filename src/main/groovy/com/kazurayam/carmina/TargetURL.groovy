@@ -130,7 +130,9 @@ class TargetURL {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TargetURL":{')
-        sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
+        if (url != null) {
+            sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
+        }
         sb.append('"materialWrappers":[')
         def count = 0
         for (MaterialWrapper mw : materialWrappers) {

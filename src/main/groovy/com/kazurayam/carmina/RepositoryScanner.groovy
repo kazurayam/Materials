@@ -29,25 +29,38 @@ class RepositoryScanner {
     }
 
     private Path baseDir
+    private List<TSuiteResult> tSuiteResults
 
     RepositoryScanner(Path baseDir) {
         assert baseDir != null
         if (!Files.exists(baseDir)) {
-            throw IllegalArgumentException("${baseDir} does not exist")
+            throw new IllegalArgumentException("${baseDir} does not exist")
         }
         if (!Files.isDirectory(baseDir)) {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
         this.baseDir = baseDir
+        tSuiteResults = new ArrayList<TSuiteResult>()
     }
 
-    List<TSuiteResult> scan() {
-        List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
+    void scan() {
         Files.walkFileTree(
                 this.baseDir,
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                new RepositoryVisitor(baseDir, tSuiteResults)
+                new RepositoryVisitor(this.baseDir, this.tSuiteResults)
         )
+    }
+
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName) {
+        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+            if (tSuiteName == tSuiteResult.getTSuiteName()) {
+                return tSuiteResult
+            }
+        }
+        return null
+    }
+
+    List<TSuiteResult> getTSuiteResults() {
         return tSuiteResults
     }
 

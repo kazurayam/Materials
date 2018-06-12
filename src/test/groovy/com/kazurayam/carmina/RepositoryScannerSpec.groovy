@@ -1,12 +1,12 @@
 package com.kazurayam.carmina
 
-import groovy.json.JsonBuilder
-import groovy.json.JsonOutput
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 class RepositoryScannerSpec extends Specification {
@@ -37,12 +37,13 @@ class RepositoryScannerSpec extends Specification {
         Helpers.ensureDirs(workdir.resolve("TS1/timestamp"))
         when:
         RepositoryScanner scanner = new RepositoryScanner(workdir)
-        List<TSuiteResult> tSuiteResults = scanner.scan()
+        scanner.scan()
+        List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
         logger.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
         logger.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 2
+        tSuiteResults.size() == 3 // TS1/20180530_130419, TS1/20180530_130604, TS1/ timestamp
         //
         when:
         TSuiteResult tSuiteResult = tSuiteResults.get(0)
@@ -59,7 +60,7 @@ class RepositoryScannerSpec extends Specification {
         tCaseResults.size() == 1
         //
         when:
-        TCaseResult tCaseResult = tCaseResults[0]
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
         then:
         tCaseResult.getParent() == tSuiteResult
         tCaseResult.getTCaseName() == new TCaseName('TC1')
@@ -69,7 +70,7 @@ class RepositoryScannerSpec extends Specification {
         when:
         List<TargetURL> targetURLs = tCaseResult.getTargetURLs()
         then:
-        targetURLs.size() == 1
+        targetURLs.size() == 2   //
         //
         /*
         when:
