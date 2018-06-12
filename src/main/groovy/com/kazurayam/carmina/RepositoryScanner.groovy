@@ -43,6 +43,7 @@ class RepositoryScanner {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
         this.baseDir = baseDir
+        tSuiteResults = new ArrayList<TSuiteResult>()
     }
 
     /**
@@ -91,6 +92,20 @@ class RepositoryScanner {
         return null
     }
 
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('[')
+        def count = 0
+        for (TSuiteResult tSuiteResult : tSuiteResults) {
+            if (count > 0) {
+                sb.append(',')
+            }
+            count += 1
+            sb.append(tSuiteResult.toJson())
+        }
+        sb.append(']')
+        return sb.toString()
+    }
 
     /**
      * entry point for performance profiling
@@ -102,10 +117,7 @@ class RepositoryScanner {
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Results')
         RepositoryScanner scanner = new RepositoryScanner(baseDir)
         scanner.scan()
-        List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
-        for (TSuiteResult tSuiteResult : tSuiteResults) {
-            System.out.println(JsonOutput.prettyPrint(tSuiteResult.toJson()))
-        }
+        System.out.println(JsonOutput.prettyPrint(scanner.toJson()))
     }
 
     /**
