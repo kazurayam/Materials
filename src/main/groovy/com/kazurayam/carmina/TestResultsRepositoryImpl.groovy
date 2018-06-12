@@ -114,7 +114,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     private static List<TCaseResult> scanTsResult(TSuiteResult tsr) {
         List<TCaseResult> tcResults = new ArrayList<TCaseResult>()
         List<Path> tcDirs =
-                Files.list(tsr.getTsTimestampDir())
+                Files.list(tsr.getTSuiteTimestampDir())
                         .filter({ p -> Files.isDirectory(p) })
                         .collect(Collectors.toList())
         for (Path tcDir : tcDirs) {
@@ -267,8 +267,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
                 TSuiteResult tsr = tsrList[0]
-                Path html = tsr.getTsTimestampDir().resolve("Result.html")
-                Helpers.ensureDirs(tsr.getTsTimestampDir())
+                Path html = tsr.getTSuiteTimestampDir().resolve("Result.html")
+                Helpers.ensureDirs(tsr.getTSuiteTimestampDir())
                 //
                 createIndex(tsr, Files.newOutputStream(html))
                 return html
@@ -436,7 +436,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                                     List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
                                     for (MaterialWrapper materialWrapper : materialWrappers) {
                                         Path file = materialWrapper.getMaterialFilePath()
-                                        Path relative = tSuiteResult.getTsTimestampDir().relativize(file).normalize()
+                                        Path relative = tSuiteResult.getTSuiteTimestampDir().relativize(file).normalize()
                                         h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
                                             alt:"${targetURL.getUrl().toExternalForm()}",

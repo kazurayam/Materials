@@ -44,7 +44,7 @@ class MaterialWrapper {
     Path getRelativePathToTsTimestampDir() {
         if (parent != null) {
             Path tsTimestampDir =
-                this.getTargetURL().getTCaseResult().getTSuiteResult().getTsTimestampDir()
+                this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDir()
             Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
             return path
         } else {

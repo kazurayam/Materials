@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class RepositoryScannerSpec extends Specification {
@@ -32,6 +33,13 @@ class RepositoryScannerSpec extends Specification {
 
 
     // feature methods
+
+    /**
+     * test RepositoryScanner#scan() method ; an ordinal case
+     *
+     * @return
+     */
+    @Ignore
     def testScan() {
         setup:
         Path casedir = workdir.resolve("testScan")
@@ -99,6 +107,11 @@ class RepositoryScannerSpec extends Specification {
         mw.getFileType() == FileType.PNG
     }
 
+    /**
+     *
+     * @return
+     */
+    @Ignore
     def testGetTSuiteResults_noArg() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_noArg')
@@ -113,6 +126,7 @@ class RepositoryScannerSpec extends Specification {
         // TS2/20180612_111256
     }
 
+    @Ignore
     def testGetTSuiteResults_byTSuiteName() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteName')
@@ -125,7 +139,8 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130419
         // TS1/20180530_130604
     }
-    
+
+    @Ignore
     def testGetTSuiteResults_byTSuiteTimestamp() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteTimestamp')
@@ -138,6 +153,7 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130419
     }
 
+    @Ignore
     def testGetTSuiteResult() {
         setup:
         Path casedir = workdir.resolve('testGetTSuiteResult')
@@ -147,7 +163,25 @@ class RepositoryScannerSpec extends Specification {
         scanner.scan()
         then:
         TSuiteResult tSuiteResult = scanner.getTSuiteResult(
-            new TSuiteName('TS1'),new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+    }
+
+    def testFindMaterials() {
+        setup:
+        Path casedir = workdir.resolve('testGetTSuiteResult')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        when:
+        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+            new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
+        TargetURL targetUrl = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        List<MaterialWrapper> materialWrappers = targetUrl.getMaterialWrappers()
+        then:
+        materialWrappers.size() == 2
+        // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
+        // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png
     }
 
     // helper methods

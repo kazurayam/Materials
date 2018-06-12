@@ -112,7 +112,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         tsr.getBaseDir() == casedir
         tsr.getTSuiteName() == new TSuiteName('TS1')
         tsr.getTSuiteTimestamp() == new TSuiteTimestamp('20180530_130419')
-        tsr.getTsTimestampDir() == casedir.resolve('TS1/20180530_130419')
+        tsr.getTSuiteTimestampDir() == casedir.resolve('TS1/20180530_130419')
         when:
         TCaseName tcn = new TCaseName('TC1')
         TCaseResult tcr = tsr.getTCaseResult(tcn)
@@ -120,7 +120,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         tcr != null
         tcr.getTSuiteResult() == tsr
         tcr.getTCaseName() == tcn
-        tcr.getTCaseDir() == tsr.getTsTimestampDir().resolve('TC1')
+        tcr.getTCaseDir() == tsr.getTSuiteTimestampDir().resolve('TC1')
         tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
         /*
         when:

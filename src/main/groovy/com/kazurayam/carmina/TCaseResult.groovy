@@ -27,7 +27,7 @@ class TCaseResult {
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
         this.parent = parent
-        this.tCaseDir = parent.getTsTimestampDir().resolve(this.tCaseName.toString())
+        this.tCaseDir = parent.getTSuiteTimestampDir().resolve(this.tCaseName.toString())
         return this
     }
 

@@ -5,6 +5,7 @@ apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -35,3 +36,5 @@ test {
     include '**/RepositoryScannerSpec.class'
     exclude '**/CommandRunnerSpec.class'
 }
+
+mainClassName = "com.kazurayam.carmina.RepositoryScanner"

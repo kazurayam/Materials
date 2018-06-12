@@ -6,12 +6,15 @@ import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import groovy.json.JsonOutput
 
 /**
  * RepositoryScanner scans a file system tree under the baseDir directory, and it builds object trees of
@@ -42,6 +45,10 @@ class RepositoryScanner {
         this.baseDir = baseDir
     }
 
+    /**
+     * initialize the internal List<TSuiteResult> object, and scan the baseDir
+     * to instanciate trees of TSuiteResults
+     */
     void scan() {
         tSuiteResults = new ArrayList<TSuiteResult>()
         Files.walkFileTree(
@@ -50,11 +57,11 @@ class RepositoryScanner {
                 new RepositoryVisitor(this.baseDir, this.tSuiteResults)
         )
     }
-    
+
     List<TSuiteResult> getTSuiteResults() {
         return tSuiteResults
     }
-    
+
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
         for (TSuiteResult tSuiteResult : this.tSuiteResults) {
@@ -64,7 +71,7 @@ class RepositoryScanner {
         }
         return tSuiteResults
     }
-    
+
     List<TSuiteResult> getTSuiteResults(TSuiteTimestamp tSuiteTimestamp) {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
         for (TSuiteResult tSuiteResult : this.tSuiteResults) {
@@ -84,7 +91,22 @@ class RepositoryScanner {
         return null
     }
 
-    
+
+    /**
+     * entry point for performance profiling
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        System.out.println("Hello, I am Carmina RepositoryScanner.")
+        Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Results')
+        RepositoryScanner scanner = new RepositoryScanner(baseDir)
+        scanner.scan()
+        List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
+        for (TSuiteResult tSuiteResult : tSuiteResults) {
+            System.out.println(JsonOutput.prettyPrint(tSuiteResult.toJson()))
+        }
+    }
 
     /**
      *
@@ -144,8 +166,11 @@ class RepositoryScanner {
                 case Layer.TIMESTAMP :
                     logger.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                     tCaseName = new TCaseName(dir.getFileName().toString())
-                    tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
-                    tSuiteResult.addTCaseResult(tCaseResult)
+                    tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+                    if (tCaseResult == null) {
+                        tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+                        tSuiteResult.addTCaseResult(tCaseResult)
+                    }
                     directoryTransition.push(Layer.TESTCASE)
                     break
                 case Layer.TESTCASE :

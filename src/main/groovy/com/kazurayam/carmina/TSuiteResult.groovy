@@ -38,7 +38,7 @@ final class TSuiteResult {
         return this.baseDir
     }
 
-    Path getTsTimestampDir() {
+    Path getTSuiteTimestampDir() {
         return this.tSuiteTimestampDir
     }
 
