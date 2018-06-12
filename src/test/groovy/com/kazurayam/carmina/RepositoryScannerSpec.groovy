@@ -26,7 +26,7 @@ class RepositoryScannerSpec extends Specification {
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+
     }
     def cleanupSpec() {}
 
@@ -34,9 +34,11 @@ class RepositoryScannerSpec extends Specification {
     // feature methods
     def testScan() {
         setup:
-        Helpers.ensureDirs(workdir.resolve("TS1/timestamp"))
+        Path casedir = workdir.resolve("testScan")
+        Helpers.copyDirectory(fixture, casedir)
+
         when:
-        RepositoryScanner scanner = new RepositoryScanner(workdir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
         logger.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
@@ -44,12 +46,14 @@ class RepositoryScannerSpec extends Specification {
         then:
         tSuiteResults != null
         tSuiteResults.size() == 3 // TS1/20180530_130419, TS1/20180530_130604, TS1/ timestamp
+
         //
         when:
-        TSuiteResult tSuiteResult = tSuiteResults.get(0)
+        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+            new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
         then:
-        tSuiteResult.getBaseDir() == workdir
-        tSuiteResult.getParent() == workdir
+        tSuiteResult.getBaseDir() == casedir
+        tSuiteResult.getParent() == casedir
         tSuiteResult.getTSuiteName() == new TSuiteName('TS1')
         tSuiteResult.getTSuiteTimestamp() != null
 
@@ -72,7 +76,7 @@ class RepositoryScannerSpec extends Specification {
         then:
         targetURLs.size() == 2   //
         //
-        /*
+
         when:
         TargetURL tu = targetURLs[0]
         then:
@@ -86,14 +90,64 @@ class RepositoryScannerSpec extends Specification {
         //
         when:
         MaterialWrapper mw = materialWrappers[0]
-        String p = './' + Helpers.getClassShortName(this.class) + '/TS1/20180530_130419' +
-                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+        String p = './build/tmp/' + Helpers.getClassShortName(this.class) +
+            '/testScan/TS1/20180530_130419' +
+            '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mw.getParent() == tu
         mw.getMaterialFilePath().toString().replace('\\', '/') == p
         mw.getFileType() == FileType.PNG
-        */
+    }
 
+    def testGetTSuiteResults_noArg() {
+        setup:
+        Path casedir = workdir.resolve('testGetTSuiteResults_noArg')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        when:
+        scanner.scan()
+        then:
+        scanner.getTSuiteResults().size() == 3
+        // TS1/20180530_130419
+        // TS1/20180530_130604
+        // TS2/20180612_111256
+    }
+
+    def testGetTSuiteResults_byTSuiteName() {
+        setup:
+        Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteName')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        when:
+        scanner.scan()
+        then:
+        scanner.getTSuiteResults(new TSuiteName('TS1')).size() == 2
+        // TS1/20180530_130419
+        // TS1/20180530_130604
+    }
+    
+    def testGetTSuiteResults_byTSuiteTimestamp() {
+        setup:
+        Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteTimestamp')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        when:
+        scanner.scan()
+        then:
+        scanner.getTSuiteResults(new TSuiteTimestamp('20180530_130419')).size() == 1
+        // TS1/20180530_130419
+    }
+
+    def testGetTSuiteResult() {
+        setup:
+        Path casedir = workdir.resolve('testGetTSuiteResult')
+        Helpers.copyDirectory(fixture, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        when:
+        scanner.scan()
+        then:
+        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+            new TSuiteName('TS1'),new TSuiteTimestamp('20180530_130419'))
     }
 
     // helper methods

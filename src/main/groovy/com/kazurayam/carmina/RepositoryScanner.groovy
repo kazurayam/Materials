@@ -40,29 +40,51 @@ class RepositoryScanner {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
         this.baseDir = baseDir
-        tSuiteResults = new ArrayList<TSuiteResult>()
     }
 
     void scan() {
+        tSuiteResults = new ArrayList<TSuiteResult>()
         Files.walkFileTree(
                 this.baseDir,
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
                 new RepositoryVisitor(this.baseDir, this.tSuiteResults)
         )
     }
-
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName) {
+    
+    List<TSuiteResult> getTSuiteResults() {
+        return tSuiteResults
+    }
+    
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+        List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
         for (TSuiteResult tSuiteResult : this.tSuiteResults) {
             if (tSuiteName == tSuiteResult.getTSuiteName()) {
+                tSuiteResults.add(tSuiteResult)
+            }
+        }
+        return tSuiteResults
+    }
+    
+    List<TSuiteResult> getTSuiteResults(TSuiteTimestamp tSuiteTimestamp) {
+        List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+            if (tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
+                tSuiteResults.add(tSuiteResult)
+            }
+        }
+        return tSuiteResults
+    }
+
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+            if (tSuiteName == tSuiteResult.getTSuiteName() && tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
                 return tSuiteResult
             }
         }
         return null
     }
 
-    List<TSuiteResult> getTSuiteResults() {
-        return tSuiteResults
-    }
+    
 
     /**
      *
