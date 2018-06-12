@@ -1,6 +1,7 @@
 package com.kazurayam.carmina
 
 import java.nio.file.Path
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,7 @@ class MaterialWrapper {
 
     protected static final String MAGIC_DELIMITER = '§'
 
-    private TargetURL targetURL
+    private TargetURL parent
     private Path materialFilePath
     private FileType fileType
 
@@ -20,7 +21,7 @@ class MaterialWrapper {
     }
 
     MaterialWrapper setParent(TargetURL parent) {
-        this.targetURL = parent
+        this.parent = parent
         return this
     }
 
@@ -29,7 +30,7 @@ class MaterialWrapper {
     }
 
     TargetURL getTargetURL() {
-        return this.targetURL
+        return this.parent
     }
 
     Path getMaterialFilePath() {
@@ -41,7 +42,7 @@ class MaterialWrapper {
     }
 
     Path getRelativePathToTsTimestampDir() {
-        if (targetURL != null) {
+        if (parent != null) {
             Path tsTimestampDir =
                 this.getTargetURL().getTCaseResult().getTSuiteResult().getTsTimestampDir()
             Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
@@ -154,9 +155,10 @@ class MaterialWrapper {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"MaterialWrapper":')
-        sb.append('{"materialFilePath":"' + Helpers.escapeAsJsonText(materialFilePath.toString()) + '"}')
-        sb.append('}')
+        sb.append('"MaterialWrapper":{')
+        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.materialFilePath.toString()) + '",')
+        sb.append('"fileType":"' + Helpers.escapeAsJsonText(this.fileType.toString()) + '"')
+        sb.append('}}')
         return sb.toString()
     }
 }

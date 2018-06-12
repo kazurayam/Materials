@@ -1,16 +1,17 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import static java.nio.file.FileVisitResult.*
-import java.time.LocalDateTime
+
 import java.nio.file.FileVisitOption
-import java.nio.file.Files
 import java.nio.file.FileVisitResult
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+import java.time.LocalDateTime
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * RepositoryScanner scans a file system tree under the baseDir directory, and it builds object trees of
@@ -84,36 +85,36 @@ class RepositoryScanner {
             def from = directoryTransition.peek()
             switch (from) {
                 case Layer.INIT :
-                    logger.debug("preVisitDirectory visiting ${dir} as BASEDIR")
+                    logger.debug("#preVisitDirectory visiting ${dir} as BASEDIR")
                     directoryTransition.push(Layer.BASEDIR)
                     break
                 case Layer.BASEDIR :
-                    logger.debug("preVisitDirectory visiting ${dir} as TESTSUITE")
+                    logger.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                     tSuiteName = new TSuiteName(dir.getFileName().toString())
                     directoryTransition.push(Layer.TESTSUITE)
                     break
                 case Layer.TESTSUITE:
-                    logger.debug("preVisitDirectory visiting ${dir} as TIMESTAMP")
+                    logger.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                     LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                     if (ldt != null) {
                         tSuiteTimestamp = new TSuiteTimestamp(ldt)
                         tSuiteResult = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
                         tSuiteResults.add(tSuiteResult)
                     } else {
-                        logger.info("${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
+                        logger.info("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                                 " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                     }
                     directoryTransition.push(Layer.TIMESTAMP)
                     break
                 case Layer.TIMESTAMP :
-                    logger.debug("preVisitDirectory visiting ${dir} as TESTCASE")
+                    logger.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                     tCaseName = new TCaseName(dir.getFileName().toString())
                     tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
                     tSuiteResult.addTCaseResult(tCaseResult)
                     directoryTransition.push(Layer.TESTCASE)
                     break
                 case Layer.TESTCASE :
-                    logger.debug("preVisitDirectory visiting ${dir} as MATERIAL")
+                    logger.debug("#preVisitDirectory visiting ${dir} as MATERIAL")
                     //
                     directoryTransition.push(Layer.MATERIAL)
                     break
@@ -130,19 +131,19 @@ class RepositoryScanner {
             switch (to) {
                 case Layer.TESTCASE :
                     directoryTransition.pop()
-                    logger.debug("postVisitDirectory back to ${dir} as TESTCASE")
+                    logger.debug("#postVisitDirectory back to ${dir} as TESTCASE")
                     break
                 case Layer.TIMESTAMP :
                     directoryTransition.pop()
-                    logger.debug("postVisitDirectory back to ${dir} as TIMESTAMP")
+                    logger.debug("#postVisitDirectory back to ${dir} as TIMESTAMP")
                     break
                 case Layer.TESTSUITE :
                     directoryTransition.pop()
-                    logger.debug("postVisitDirectory back to ${dir} as TESTSUITE")
+                    logger.debug("#postVisitDirectory back to ${dir} as TESTSUITE")
                     break
                 case Layer.BASEDIR :
                     directoryTransition.pop()
-                    logger.debug("postVisitDirectory back to ${dir} as BASEDIR")
+                    logger.debug("#postVisitDirectory back to ${dir} as BASEDIR")
                     break
             }
             return CONTINUE
@@ -155,16 +156,34 @@ class RepositoryScanner {
         FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
             switch (directoryTransition.peek()) {
                 case Layer.BASEDIR :
-                    logger.debug("visitFile ${file} in BASEDIR")
+                    logger.debug("#visitFile ${file} in BASEDIR")
                     break
                 case Layer.TESTSUITE :
-                    logger.debug("visitFile ${file} in TESTSUITE")
+                    logger.debug("#visitFile ${file} in TESTSUITE")
                     break
                 case Layer.TIMESTAMP :
-                    logger.debug("visitFile ${file} in TIMESTAMP")
+                    logger.debug("#visitFile ${file} in TIMESTAMP")
                     break
                 case Layer.TESTCASE :
-                    logger.debug("visitFile ${file} in TESTCASE")
+                    logger.debug("#visitFile ${file} in TESTCASE")
+                    String fileName = file.getFileName()
+                    FileType fileType = MaterialWrapper.parseFileNameForFileType(fileName)
+                    if (fileType != FileType.NULL) {
+                        URL url = MaterialWrapper.parseFileNameForURL(fileName)
+                        if (url != null) {
+                            TargetURL targetURL = this.tCaseResult.getTargetURL(url)
+                            if (targetURL == null) {
+                                targetURL = new TargetURL(url).setParent(this.tCaseResult)
+                                tCaseResult.addTargetURL(targetURL)
+                            }
+                            MaterialWrapper mw = new MaterialWrapper(file, fileType).setParent(targetURL)
+                            targetURL.addMaterialWrapper(mw)
+                        } else {
+                            logger.debugEnabled("#visitFile ${file} unable to convert to a URL object")
+                        }
+                    } else {
+                        logger.debug("#visitFile ${file} does not have known file name extension")
+                    }
                     break
             }
             return CONTINUE

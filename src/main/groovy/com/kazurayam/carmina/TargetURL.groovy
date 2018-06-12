@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 class TargetURL {
 
-    private TCaseResult tCaseResult
+    private TCaseResult parent
     private URL url
     private List<MaterialWrapper> materialWrappers
 
@@ -15,7 +15,7 @@ class TargetURL {
     }
 
     TargetURL setParent(TCaseResult parent) {
-        this.tCaseResult = parent
+        this.parent = parent
         return this
     }
 
@@ -25,7 +25,7 @@ class TargetURL {
     }
 
     TCaseResult getTCaseResult() {
-        return this.tCaseResult
+        return this.parent
     }
 
     URL getUrl() {
@@ -48,7 +48,7 @@ class TargetURL {
         String ammendedSuffix = (filteredSuffix.length() > 0) ?
                 MaterialWrapper.MAGIC_DELIMITER + filteredSuffix : ''
 
-        Path p = this.tCaseResult.getTCaseDir().resolve(
+        Path p = this.parent.getTCaseDir().resolve(
             "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
             )
         if (this.getMaterialWrapper(p) != null) {
@@ -105,7 +105,7 @@ class TargetURL {
         //if (this == obj) { return true }
         if (!(obj instanceof TargetURL)) { return false }
         TargetURL other = (TargetURL)obj
-        if (this.tCaseResult == other.getTCaseResult()
+        if (this.parent == other.getTCaseResult()
             && this.url == other.getUrl()) {
             return true
         } else {
@@ -133,11 +133,11 @@ class TargetURL {
         sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
         sb.append('"materialWrappers":[')
         def count = 0
-        for (MaterialWrapper sw : materialWrappers) {
+        for (MaterialWrapper mw : materialWrappers) {
             if (count > 0) {
                 sb.append(',')
             }
-            sb.append(sw.toJson())
+            sb.append(mw.toJson())
             count += 1
         }
         sb.append(']')
