@@ -94,11 +94,14 @@ class MaterialWrapper {
             String[] arr = str.split(MaterialWrapper.MAGIC_DELIMITER)
             if (arr.length < 2) {
                 return null
-            } else {
-                Arrays.sort(arr, Collections.reverseOrder())
-                String candidate = arr[0]
-                return URLDecoder.decode(candidate, 'UTF-8')
             }
+            if (arr.length > 3) {
+                logger.warn("${fileName} contains 2 or more ${MaterialWrapper.MAGIC_DELIMITER} character. " +
+                        "Valid but unexpected.")
+            }
+            Arrays.sort(arr, Collections.reverseOrder())
+            String candidate = arr[0]
+            return URLDecoder.decode(candidate, 'UTF-8')
         } else {
             return null
         }
