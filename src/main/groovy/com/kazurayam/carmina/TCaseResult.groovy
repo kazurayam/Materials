@@ -67,7 +67,9 @@ class TCaseResult {
     }
 
     // --------------------- create/add/get child nodes ----------------------
+    /*
     TargetURL findOrNewTargetURL(URL url) {
+
         TargetURL ntp = this.getTargetURL(url)
         if (ntp == null) {
             ntp = new TargetURL(url).setParent(this)
@@ -75,6 +77,7 @@ class TCaseResult {
         }
         return ntp
     }
+    */
 
     TargetURL getTargetURL(URL url) {
         for (TargetURL tp : this.targetURLs) {
@@ -115,11 +118,7 @@ class TCaseResult {
             return false
         }
         TCaseResult other = (TCaseResult) obj
-        if (this.tCaseName == other.getTCaseName()) {
-            return true
-        } else {
-            return false
-        }
+        return this.tCaseName == other.getTCaseName()
     }
 
     @Override
