@@ -63,7 +63,11 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveScreenshotFilePath() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
+                workdir,
+                new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419')
+        )
         Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         scfp != null

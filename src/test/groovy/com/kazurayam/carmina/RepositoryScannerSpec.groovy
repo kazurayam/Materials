@@ -50,7 +50,7 @@ class RepositoryScannerSpec extends Specification {
         logger.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 3 // TS1/20180530_130419, TS1/20180530_130604, TS1/ timestamp
+        tSuiteResults.size() == 5 // _/_, TS1/20180530_130419, TS1/20180530_130604, TS2/20180612_111256, §A/20180616_170941
 
         //
         when:
@@ -128,10 +128,12 @@ class RepositoryScannerSpec extends Specification {
         when:
         scanner.scan()
         then:
-        scanner.getTSuiteResults().size() == 3
+        scanner.getTSuiteResults().size() == 5
+        // _/_
         // TS1/20180530_130419
         // TS1/20180530_130604
         // TS2/20180612_111256
+        // §A/20180616_170941
     }
 
 
