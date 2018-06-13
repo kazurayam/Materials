@@ -171,7 +171,13 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         assert currentTestSuiteResult != null
         TCaseResult tcr = currentTestSuiteResult.getTCaseResult(testCaseName)
         if (tcr != null) {
-            MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, fileType)
+            //MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, fileType)
+            TargetURL ntp = tcr.getTargetURL(url)
+            if (ntp == null) {
+                ntp = new TargetURL(url).setParent(tcr)
+                tcr.getTargetURLs().add(ntp)
+            }
+            MaterialWrapper mw = ntp.findOrNewMaterialWrapper(suffix, fileType)
             Path screenshotFilePath = mw.getMaterialFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath

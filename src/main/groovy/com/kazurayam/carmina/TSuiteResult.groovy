@@ -80,6 +80,7 @@ final class TSuiteResult {
     }
      */
 
+
     void addTCaseResult(TCaseResult tCaseResult) {
         boolean found = false
         for (TCaseResult tcr : this.tCaseResults) {

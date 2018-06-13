@@ -34,7 +34,8 @@ class MaterialWrapperSpec extends Specification {
         TSuiteResult tsr = trri.getTsResult(new TSuiteName('TS1'), tstamp)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         assert tcr != null
-        tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+        //tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+        tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
     }
 
 
