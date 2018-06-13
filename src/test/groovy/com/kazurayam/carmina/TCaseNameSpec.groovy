@@ -16,6 +16,15 @@ class TCaseNameSpec extends Specification {
         name == 'TS1'
     }
 
+    def testStripParentDir2() {
+        setup:
+        TSuiteName tsn = new TSuiteName('foo\\bar\\TS1')
+        when:
+        String name = tsn.getValue()
+        then:
+        name == 'TS1'
+    }
+
     /**
      * '§A' ==> '%C2%A7A'
      */
@@ -25,6 +34,6 @@ class TCaseNameSpec extends Specification {
         when:
         String name = tsn.getValue()
         then:
-        name == '%C2%A7A'
+        name == '§A'
     }
 }

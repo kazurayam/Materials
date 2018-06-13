@@ -14,8 +14,8 @@ class TSuiteName {
     private String value
 
     TSuiteName(String testSuiteId) {
-        String[] arr = testSuiteId.split('/')
-        this.value = URLEncoder.encode(arr[arr.size() - 1], 'UTF-8')
+        String[] arr = testSuiteId.split('[/\\\\]')
+        this.value = arr[arr.size() - 1]
     }
 
     String getValue() {
