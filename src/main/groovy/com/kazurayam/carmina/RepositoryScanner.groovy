@@ -255,10 +255,10 @@ class RepositoryScanner {
                             targetURL.addMaterialWrapper(mw)
                             //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
                         } else {
-                            logger.warn("#visitFile unable to parse ${file} into a URL")
+                            logger.info("#visitFile unable to parse ${file} into a URL")
                         }
                     } else {
-                        logger.warn("#visitFile ${file} has no known FileType")
+                        logger.info("#visitFile ${file} has no known FileType")
                     }
                     break
             }

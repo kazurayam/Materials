@@ -67,14 +67,20 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
         this.baseDir = baseDir
 
+        // load data from the local disk
         RepositoryScanner scanner = new RepositoryScanner(this.baseDir)
         scanner.scan()
         this.tSuiteResults = scanner.getTSuiteResults()
 
-        //
+        // memorize the specified TestSuite
         this.currentTSuiteName = tsName
         this.currentTSuiteTimestamp = tsTimestamp
-        TSuiteResult tsr = this.findOrNewTsResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
+
+        // add the specified TestSuite
+        TSuiteResult tsr = this.getTsResult(tsName, tsTimestamp)
+        if (tsr == null) {
+            tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
+        }
         this.addTsResult(tsr)
     }
 
@@ -92,19 +98,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     // --------------------- create/add/get child nodes -----------------------
-    /**
-     *
-     * @param testSuiteId
-     * @param timestamp
-     * @return
-     */
-    TSuiteResult findOrNewTsResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        TSuiteResult tsr = this.getTsResult(tSuiteName, tSuiteTimestamp)
-        if (tsr == null) {
-            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
-        }
-        return tsr
-    }
 
     /**
      *
