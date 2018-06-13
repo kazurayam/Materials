@@ -67,7 +67,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
         this.baseDir = baseDir
 
-        //this.tSuiteResults = scanBaseDir(this.baseDir)
         RepositoryScanner scanner = new RepositoryScanner(this.baseDir)
         scanner.scan()
         this.tSuiteResults = scanner.getTSuiteResults()
@@ -78,80 +77,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         TSuiteResult tsr = this.findOrNewTsResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
         this.addTsResult(tsr)
     }
-
-    /**
-     * ./Results/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-     * ./Results/TS1/20180530_130604/TC1/1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-     * ./Results/TS1/20180530_130604/TC1/2/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-     *
-     * <baseDir>/<Test Suite Name>/<Timestamp>/<Test Case Name>/<subpath>
-     *
-     * @param baseDir
-     * @returns the tree
-     *
-     *
-    static List<TSuiteResult> scanBaseDir(Path baseDir) {
-        List<TSuiteResult> tsResults_work = new ArrayList<TSuiteResult>()
-        List<Path> tsNamePaths =
-                Files.list(baseDir)
-                        .filter({ p -> Files.isDirectory(p) })
-                        .collect(Collectors.toList())
-        for (Path tsNamePath : tsNamePaths) {
-            TSuiteName tsName = new TSuiteName(tsNamePath.getFileName().toString())
-            List<Path> tsTimestampPaths =
-                    Files.list(tsNamePath)
-                            .filter( { p -> Files.isDirectory(p) })
-                            .collect(Collectors.toList())
-            for (Path tsTimestampPath : tsTimestampPaths) {
-                LocalDateTime ldt = TSuiteTimestamp.parse(tsTimestampPath.getFileName().toString())
-                if (ldt != null) {
-                    TSuiteTimestamp tsTimestamp = new TSuiteTimestamp(ldt)
-                    TSuiteResult tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
-                    tsResults_work.add(tsr)
-                    //System.out.println("tsr=${tsr}")
-                    List<TCaseResult> tcResults = scanTsResult(tsr)
-                    for (TCaseResult tcr : tcResults) {
-                        tsr.addTCaseResult(tcr)
-                    }
-                } else {
-                    // ignore directories not in the format of yyyyMMdd_hhmmss
-                }
-            }
-        }
-        return tsResults_work
-    }
-     */
-    /*
-    private static List<TCaseResult> scanTsResult(TSuiteResult tsr) {
-        List<TCaseResult> tcResults = new ArrayList<TCaseResult>()
-        List<Path> tcDirs =
-                Files.list(tsr.getTSuiteTimestampDir())
-                        .filter({ p -> Files.isDirectory(p) })
-                        .collect(Collectors.toList())
-        for (Path tcDir : tcDirs) {
-            TCaseResult tcr =
-                    new TCaseResult(new TCaseName(tcDir.getFileName().toString())).setParent(tsr)
-            tcResults.add(tcr)
-            List<Path> materialFilePaths =
-                    Files.list(tcDir)
-                            .filter({ p -> Files.isRegularFile(p) })
-                    //.filter({ p -> p.getFileName().endsWith(IMAGE_FILE_EXTENSION) })
-                            .collect(Collectors.toList())
-            for (Path materialFilePath : materialFilePaths) {
-                String materialFileName = materialFilePath.getFileName()
-                FileType ft = MaterialWrapper.parseFileNameForFileType(materialFileName)
-                String suffix = MaterialWrapper.parseFileNameForSuffix(materialFileName)
-                URL url = MaterialWrapper.parseFileNameForURL(materialFileName)
-                TargetURL targetURL = new TargetURL(url).setParent(tcr)
-                tcr.addTargetURL(targetURL)
-                MaterialWrapper mw = new MaterialWrapper(materialFilePath, ft).setParent(targetURL)
-                targetURL.addMaterialWrapper(mw)
-            }
-        }
-        return tcResults
-    }
-     */
-
 
     // -------------------------- attribute getters & setters ------------------------
     Path getBaseDir() {
@@ -165,7 +90,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     TSuiteTimestamp getCurrentTSuiteTimestamp() {
         return this.currentTSuiteTimestamp
     }
-
 
     // --------------------- create/add/get child nodes -----------------------
     /**
