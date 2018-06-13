@@ -12,7 +12,7 @@ import spock.lang.Specification
 
 class RepositoryScannerSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(RepositoryScannerSpec.class);
+    static Logger logger = LoggerFactory.getLogger(RepositoryScannerSpec.class)
 
     // fields
     private static Path workdir
@@ -81,7 +81,7 @@ class RepositoryScannerSpec extends Specification {
         when:
         List<TargetURL> targetURLs = tCaseResult.getTargetURLs()
         then:
-        targetURLs.size() == 2   //
+        targetURLs.size() == 1   //     http://demoaut.katalon.com/
         //
 
         when:
@@ -93,17 +93,29 @@ class RepositoryScannerSpec extends Specification {
         when:
         List<MaterialWrapper> materialWrappers = tu.getMaterialWrappers()
         then:
-        materialWrappers.size() == 1
+        materialWrappers.size() == 2
         //
         when:
-        MaterialWrapper mw = materialWrappers[0]
-        String p = './build/tmp/' + Helpers.getClassShortName(this.class) +
+        MaterialWrapper mw0 = materialWrappers[0]
+        String p0 = './build/tmp/' + Helpers.getClassShortName(this.class) +
             '/testScan/TS1/20180530_130419' +
             '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
-        mw.getParent() == tu
-        mw.getMaterialFilePath().toString().replace('\\', '/') == p
-        mw.getFileType() == FileType.PNG
+        mw0.getParent() == tu
+        mw0.getMaterialFilePath().toString().replace('\\', '/') == p0
+        mw0.getFileType() == FileType.PNG
+
+        //
+        when:
+        MaterialWrapper mw1 = materialWrappers[1]
+        String p1 = './build/tmp/' + Helpers.getClassShortName(this.class) +
+                '/testScan/TS1/20180530_130419' +
+                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png'
+        then:
+        mw1.getParent() == tu
+        mw1.getMaterialFilePath().toString().replace('\\', '/') == p1
+        mw1.getFileType() == FileType.PNG
+
     }
 
     /**
@@ -159,9 +171,10 @@ class RepositoryScannerSpec extends Specification {
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         when:
         scanner.scan()
-        then:
         TSuiteResult tSuiteResult = scanner.getTSuiteResult(
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        then:
+        tSuiteResult != null
     }
 
     def testFind2MaterialsIn1TestCase() {
@@ -191,11 +204,11 @@ class RepositoryScannerSpec extends Specification {
         when:
         logger.debug(JsonOutput.prettyPrint(scanner.toJson()))
         then:
-        true == true
+        true
     }
     
     // helper methods
-    private def String prettyPrint(List<TSuiteResult> tSuiteResults) {
+    private static String prettyPrint(List<TSuiteResult> tSuiteResults) {
         StringBuilder sb = new StringBuilder()
         sb.append("[")
         def count = 0

@@ -4,7 +4,6 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- %c classname, %p level, %msg message -->
-
             <pattern>%c %p %msg%n</pattern>
             <!--
             <pattern>%p %msg%n</pattern>
@@ -13,10 +12,10 @@
     </appender>
 
     <logger name="com.kazurayam.carmina.RepositoryScanner" level="info"/>
-    <logger name="root" level="debug" />
     <!--
-    <logger name="root" level="info" />
+    <logger name="root" level="debug" />
     -->
+    <logger name="root" level="info" />
 
     <root>
         <appender-ref ref="STDOUT" />
