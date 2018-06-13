@@ -66,7 +66,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         this.baseDir = baseDir
-        this.tSuiteResults = scanBaseDir(this.baseDir)
+
+        //this.tSuiteResults = scanBaseDir(this.baseDir)
+        RepositoryScanner scanner = new RepositoryScanner(this.baseDir)
+        scanner.scan()
+        this.tSuiteResults = scanner.getTSuiteResults()
+
         //
         this.currentTSuiteName = tsName
         this.currentTSuiteTimestamp = tsTimestamp
@@ -84,7 +89,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param baseDir
      * @returns the tree
      *
-     */
+     *
     static List<TSuiteResult> scanBaseDir(Path baseDir) {
         List<TSuiteResult> tsResults_work = new ArrayList<TSuiteResult>()
         List<Path> tsNamePaths =
@@ -115,7 +120,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
         return tsResults_work
     }
-
+     */
+    /*
     private static List<TCaseResult> scanTsResult(TSuiteResult tsr) {
         List<TCaseResult> tcResults = new ArrayList<TCaseResult>()
         List<Path> tcDirs =
@@ -144,7 +150,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
         return tcResults
     }
-
+     */
 
 
     // -------------------------- attribute getters & setters ------------------------
@@ -278,7 +284,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 createIndex(tsr, Files.newOutputStream(html))
                 return html
             }
+            return null
         }
+        return null
     }
 
 
@@ -354,7 +362,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @returns Path of the created Results.html file
      * @throws IOException
      */
-    private void createIndex(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
+    private static void createIndex(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         def builder = new MarkupBuilder(writer)
         builder.doubleQuotes = true
@@ -422,8 +430,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                                 div('class': 'item active') {
 
                                 }
-                            } else {
-
                             }
                             count += 1
                         }

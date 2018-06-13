@@ -100,6 +100,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
+    /*
     def testScanBaseDir() {
         when:
         Path casedir = workdir.resolve('testScanBaseDir')
@@ -127,7 +128,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         tcr.getTCaseName() == tcn
         tcr.getTCaseDir() == tsr.getTSuiteTimestampDir().resolve('TC1')
         tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
-        /*
+
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
         then:
@@ -137,9 +138,9 @@ class TestResultsRepositoryImplSpec extends Specification {
         MaterialWrapper sw = tp.getMaterialWrapper(imageFilePath)
         then:
         sw.getMaterialFilePath() == imageFilePath
-        */
-    }
 
+    }
+*/
 
     def testToJson() {
         setup:
