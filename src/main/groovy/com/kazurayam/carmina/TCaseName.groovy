@@ -10,7 +10,8 @@ class TCaseName {
     private String value
 
     TCaseName(String testCaseId) {
-        this.value = testCaseId.replaceFirst('^Test Cases/', '')
+        String[] arr = testCaseId.split('/')
+        this.value = URLEncoder.encode(arr[arr.size() - 1], 'UTF-8')
     }
 
     String getValue() {
