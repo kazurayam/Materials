@@ -17,15 +17,10 @@ class TargetURLSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static RepositoryScanner scanner
     private static TCaseResult tcr
     
     // fixture methods
-    def setup() {
-        TestResultsRepositoryImpl strri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
-        TSuiteResult tsr = strri.getCurrentTSuiteResult()
-        tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
-    }
-    def cleanup() {}
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetURLSpec.class)}")
         if (!workdir.toFile().exists()) {
@@ -33,6 +28,14 @@ class TargetURLSpec extends Specification {
         }
         Helpers.copyDirectory(fixture, workdir)
     }
+    def setup() {
+        scanner = new RepositoryScanner(workdir)
+        scanner.scan()
+        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419'))
+        tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+    }
+    def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
@@ -45,20 +48,22 @@ class TargetURLSpec extends Specification {
         modified.getParent() == tcr
     }
 
-    def testFindOrNewMaterialWrapper() {
+    def testGetMaterialWrappers() {
         when:
-        TargetURL tu = new TargetURL(new URL('http://demoaut.katalon.com/')).setParent(tcr)
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
-        String fileName = mw.getMaterialFilePath().getFileName()
+        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        assert tu != null
+        List<MaterialWrapper> materialWrappers = tu.getMaterialWrappers()
         then:
-        fileName.endsWith(MaterialWrapper.MAGIC_DELIMITER + '1' + '.' + FileType.PNG.extension)
+        materialWrappers.size() == 2
+        when:
+        Path file = materialWrappers.get(0).getMaterialFilePath()
+        then:
+        file.getFileName().endsWith('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
     }
 
     def testToJson() {
-        setup:
-        TargetURL tp = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper mw = tp.findOrNewMaterialWrapper('', FileType.PNG)
         when:
+        TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
         def str = tp.toString()
         def pretty = JsonOutput.prettyPrint(str)
         logger.debug("#testToJson: ${pretty}")

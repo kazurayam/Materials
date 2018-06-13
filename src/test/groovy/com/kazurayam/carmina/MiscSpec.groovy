@@ -21,9 +21,6 @@ class MiscSpec extends Specification {
     private static Path source
 
     // fixture methods
-    def setup() {
-    }
-    def cleanup() {}
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MiscSpec.class)}")
         if (!workdir.toFile().exists()) {
@@ -36,6 +33,8 @@ class MiscSpec extends Specification {
         wt.flush()
         wt.close()
     }
+    def setup() {}
+    def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods

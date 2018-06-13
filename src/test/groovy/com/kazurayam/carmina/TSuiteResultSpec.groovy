@@ -18,56 +18,39 @@ class TSuiteResultSpec extends Specification {
     // fields
     private static Path workdir
     private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private TestResultsRepositoryImpl trri
+    private RepositoryScanner scanner
 
     // fixture methods
-    def setup() {
+    def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TSuiteResultSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        trri = new TestResultsRepositoryImpl(workdir, new TSuiteName('TS1'))
-
+    }
+    def setup() {
+        scanner = new RepositoryScanner(workdir)
+        scanner.scan()
     }
     def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods
     def testSetParent_getParent() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp(LocalDateTime.now()))
+        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS3'),
+                new TSuiteTimestamp(LocalDateTime.now()))
         TSuiteResult modified = tsr.setParent(workdir)
         then:
         modified.getParent() == workdir
-
-    }
-
-    def testFindOrNewTcResult() {
-        when:
-        TSuiteResult tsr = trri.getCurrentTSuiteResult()
-        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
-        then:
-        tcr != null
-        tcr.getTCaseName() == new TCaseName('TC1')
-        when:
-        TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        then:
-        tu != null
-        when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('', FileType.PNG)
-        then:
-        mw != null
     }
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = trri.getCurrentTSuiteResult()
+        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419'))
         when:
-        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
-        TargetURL tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper sw = tu.findOrNewMaterialWrapper('', FileType.PNG)
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         def s = tsr.toString()
         logger.debug("#testToJson ${s}")
         logger.debug("#testToJson ${JsonOutput.prettyPrint(s)}")

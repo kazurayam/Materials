@@ -19,9 +19,6 @@ class TSuiteNameSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
-    def setup() {
-    }
-    def cleanup() {}
     def setupSpec() {
         //workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TsNameSpec.class)}")
         //if (!workdir.toFile().exists()) {
@@ -29,6 +26,8 @@ class TSuiteNameSpec extends Specification {
         //}
         //Helpers.copyDirectory(fixture, workdir)
     }
+    def setup() {}
+    def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods

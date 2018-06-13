@@ -21,13 +21,6 @@ class MaterialWrapperSpec extends Specification {
     private static TargetURL tu
 
     // fixture methods
-    def setup() {
-        TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = trri.getTsResult(new TSuiteName('TS1'), tstamp)
-        TCaseResult tcr = tsr.findOrNewTCaseResult(new TCaseName('TC1'))
-        assert tcr != null
-        tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-    }
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialWrapperSpec.class)}")
         if (!workdir.toFile().exists()) {
@@ -36,6 +29,14 @@ class MaterialWrapperSpec extends Specification {
         Helpers.copyDirectory(fixture, workdir)
         trri = TestResultsRepositoryFactory.createInstance(workdir, new TSuiteName('TS1'))
     }
+    def setup() {
+        TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
+        TSuiteResult tsr = trri.getTsResult(new TSuiteName('TS1'), tstamp)
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        assert tcr != null
+        tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
+    }
+
 
     // feature methods
 

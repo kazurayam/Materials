@@ -23,9 +23,9 @@ class TSuiteTimestampSpec extends Specification {
     static Logger logger = LoggerFactory.getLogger(TSuiteTimestampSpec);
 
     // fixture methods
+    def setupSpec() {}
     def setup() {}
     def cleanup() {}
-    def setupSpec() {}
     def cleanupSpec() {}
 
     // feature methods

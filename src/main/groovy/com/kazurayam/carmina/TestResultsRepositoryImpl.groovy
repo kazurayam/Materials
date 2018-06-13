@@ -169,7 +169,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     Path resolveMaterialFilePath(TCaseName testCaseName, URL url, String suffix, FileType fileType) {
         TSuiteResult currentTestSuiteResult = this.getCurrentTSuiteResult()
         assert currentTestSuiteResult != null
-        TCaseResult tcr = currentTestSuiteResult.findOrNewTCaseResult(testCaseName)
+        TCaseResult tcr = currentTestSuiteResult.getTCaseResult(testCaseName)
         if (tcr != null) {
             MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, fileType)
             Path screenshotFilePath = mw.getMaterialFilePath()

@@ -69,6 +69,7 @@ final class TSuiteResult {
         return tCaseResults
     }
 
+    /*
     TCaseResult findOrNewTCaseResult(TCaseName tCaseName) {
         TCaseResult tcr = this.getTCaseResult(tCaseName)
         if (tcr == null) {
@@ -77,6 +78,7 @@ final class TSuiteResult {
         }
         return tcr
     }
+     */
 
     void addTCaseResult(TCaseResult tCaseResult) {
         boolean found = false

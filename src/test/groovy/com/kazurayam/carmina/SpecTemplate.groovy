@@ -21,9 +21,6 @@ class SpecTemplate extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
-    def setup() {
-    }
-    def cleanup() {}
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
         if (!workdir.toFile().exists()) {
@@ -31,6 +28,8 @@ class SpecTemplate extends Specification {
         }
         Helpers.copyDirectory(fixture, workdir)
     }
+    def setup() {}
+    def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods

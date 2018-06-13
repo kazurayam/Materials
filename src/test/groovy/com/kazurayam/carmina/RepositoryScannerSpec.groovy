@@ -19,16 +19,14 @@ class RepositoryScannerSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
-    def setup() {
-    }
-    def cleanup() {}
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryScannerSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
-
     }
+    def setup() {}
+    def cleanup() {}
     def cleanupSpec() {}
 
 

@@ -19,14 +19,14 @@ class TestResultsRepositoryImplSpec extends Specification {
     private static String classShortName = Helpers.getClassShortName(TestResultsRepositoryImplSpec.class)
 
     // fixture methods
-    def setup() {}
-    def cleanup() {}
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${classShortName}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
     }
+    def setup() {}
+    def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
