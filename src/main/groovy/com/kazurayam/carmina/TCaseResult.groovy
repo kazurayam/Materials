@@ -16,7 +16,7 @@ class TCaseResult {
     private TCaseName tCaseName
     private Path tCaseDir
     private List<TargetURL> targetURLs
-    private TestCaseStatus tCaseStatus
+    private TCaseStatus tCaseStatus
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -26,7 +26,7 @@ class TCaseResult {
     TCaseResult(TCaseName tCaseName) {
         this.tCaseName = tCaseName
         this.targetURLs = new ArrayList<TargetURL>()
-        this.tCaseStatus = TestCaseStatus.TO_BE_EXECUTED
+        this.tCaseStatus = TCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -53,16 +53,16 @@ class TCaseResult {
     }
 
     void setTestCaseStatus(String str) {
-        TestCaseStatus tcs = TCaseStatus.valueOf(str)  // this may throw IllegalArgumentException
+        TCaseStatus tcs = TCaseStatus.valueOf(str)  // this may throw IllegalArgumentException
         this.setTestCaseStatus(tcs)
     }
 
-    void setTestCaseStatus(TestCaseStatus tCaseStatus) {
+    void setTestCaseStatus(TCaseStatus tCaseStatus) {
         assert tCaseStatus != null
         this.tCaseStatus = tCaseStatus
     }
 
-    TestCaseStatus getTestCaseStatus() {
+    TCaseStatus getTestCaseStatus() {
         return this.tCaseStatus
     }
 
