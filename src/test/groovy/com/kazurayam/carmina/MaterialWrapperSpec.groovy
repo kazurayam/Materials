@@ -42,7 +42,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testSetParent_GetParent() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
         MaterialWrapper modified = mw.setParent(tu)
         then:
         modified.getParent() == tu
@@ -117,7 +117,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testToJson() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
         def str = mw.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
@@ -128,7 +128,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativePathToTsTimestampDir() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
         Path p = mw.getRelativePathToTsTimestampDir()
         then:
         p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -136,7 +136,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativePathAsString() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativePathAsString()
         then:
         s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -144,7 +144,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativeUrlAsString() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativeUrlAsString()
         then:
         s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'

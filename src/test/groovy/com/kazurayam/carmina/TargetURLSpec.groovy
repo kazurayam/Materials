@@ -77,7 +77,21 @@ class TargetURLSpec extends Specification {
         then:
         mw != null
     }
-
+    
+    /**
+     * @return
+     */
+    def testResolveMaterialWrapperPath() {
+        when:
+        Path p = TargetURL.resolveMaterialWrapperPath(
+            tcr, 
+            new URL('http://demoaut.katalon.com/'), 
+            new Suffix('foo'), 
+            FileType.PNG)
+        then:
+        p.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F§foo.png')
+    }
+    
     def testToJson() {
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))

@@ -39,14 +39,24 @@ class TargetURL {
 
     // --------------------- create/add/get child nodes -----------------------
 
-    /**
-     * This is a TRICKY part.
-     *
-     * @param targetPageUrl
-     * @return
-     */
 
-
+    static Path resolveMaterialWrapperPath(TCaseResult tCaseResult, URL url, Suffix suffix, FileType fileType) {
+        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+        Path p
+        if (suffix != Suffix.NULL) {
+            p = tCaseResult.getTCaseDir().resolve(
+                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+                )
+        } else {
+            p = tCaseResult.getTCaseDir().resolve(
+                "${encodedUrl}.${fileType.getExtension()}"
+                )
+        }
+        return p
+    }
+    
+    
+    /*
     MaterialWrapper findOrNewMaterialWrapper(Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p
@@ -67,6 +77,7 @@ class TargetURL {
             return mw
         }
     }
+     */
 
 
 

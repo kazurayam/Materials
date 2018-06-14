@@ -175,11 +175,14 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 targetURL = new TargetURL(url).setParent(tCaseResult)
                 tCaseResult.getTargetURLs().add(targetURL)
             }
-            MaterialWrapper mw = targetURL.findOrNewMaterialWrapper(suffix, fileType)
-
-            Path screenshotFilePath = mw.getMaterialFilePath()
-            Helpers.ensureDirs(screenshotFilePath.getParent())
-            return screenshotFilePath
+            //MaterialWrapper mw = targetURL.findOrNewMaterialWrapper(suffix, fileType)
+            MaterialWrapper mw = targetURL.getMaterialWrapper(suffix, fileType)
+            if (mw == null) {
+                Path materialPath = TargetURL.resolveMaterialWrapperPath(tCaseResult, url, suffix, fileType)
+                mw = new MaterialWrapper(materialPath, fileType).setParent(targetURL)
+                Helpers.ensureDirs(materialPath.getParent())
+            }
+            return mw.getMaterialFilePath()
         } else {
             throw new IllegalArgumentException("testCase ${testCaseName} is not found")
         }
