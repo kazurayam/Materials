@@ -1,12 +1,11 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.LocalDateTime
 import java.util.stream.Collectors
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import groovy.xml.MarkupBuilder
 
@@ -135,12 +134,12 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     // -------------------------- do the business -----------------------------
     @Override
     Path resolveMaterialFilePath(String testCaseId, String url, FileType fileType) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', fileType)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, fileType)
     }
 
     @Override
     Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType fileType) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, fileType)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), fileType)
     }
 
     /**
@@ -148,7 +147,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path resolvePngFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), '', FileType.PNG)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.PNG)
     }
 
     /**
@@ -156,7 +155,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path resolvePngFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), suffix, FileType.PNG)
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.PNG)
     }
 
     /**
@@ -166,18 +165,18 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, String suffix, FileType fileType) {
+    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, Suffix suffix, FileType fileType) {
         TSuiteResult currentTestSuiteResult = this.getCurrentTSuiteResult()
         assert currentTestSuiteResult != null
-        TCaseResult tcr = currentTestSuiteResult.getTCaseResult(testCaseName)
-        if (tcr != null) {
-            //MaterialWrapper mw = tcr.findOrNewTargetURL(url).findOrNewMaterialWrapper(suffix, fileType)
-            TargetURL ntp = tcr.getTargetURL(url)
-            if (ntp == null) {
-                ntp = new TargetURL(url).setParent(tcr)
-                tcr.getTargetURLs().add(ntp)
+        TCaseResult tCaseResult = currentTestSuiteResult.getTCaseResult(testCaseName)
+        if (tCaseResult != null) {
+            TargetURL targetURL = tCaseResult.getTargetURL(url)
+            if (targetURL == null) {
+                targetURL = new TargetURL(url).setParent(tCaseResult)
+                tCaseResult.getTargetURLs().add(targetURL)
             }
-            MaterialWrapper mw = ntp.findOrNewMaterialWrapper(suffix, fileType)
+            MaterialWrapper mw = targetURL.findOrNewMaterialWrapper(suffix, fileType)
+
             Path screenshotFilePath = mw.getMaterialFilePath()
             Helpers.ensureDirs(screenshotFilePath.getParent())
             return screenshotFilePath

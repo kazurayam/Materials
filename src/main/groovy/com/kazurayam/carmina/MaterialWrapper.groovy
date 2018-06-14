@@ -2,12 +2,12 @@ package com.kazurayam.carmina
 
 import java.nio.file.Path
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class MaterialWrapper {
 
-    static Logger logger = LoggerFactory.getLogger(MaterialWrapper.class);
+    static Logger logger = LoggerFactory.getLogger(MaterialWrapper.class)
 
     protected static final String MAGIC_DELIMITER = '§'
 
@@ -87,7 +87,7 @@ class MaterialWrapper {
         }
     }
 
-    static String parseFileNameForSuffix(String fileName) {
+    static Suffix parseFileNameForSuffix(String fileName) {
         FileType ft = parseFileNameForFileType(fileName)
         if (ft != FileType.NULL) {
             String str = fileName.substring(0, fileName.lastIndexOf('.'))
@@ -100,8 +100,7 @@ class MaterialWrapper {
                         "Valid but unexpected.")
             }
             Arrays.sort(arr, Collections.reverseOrder())
-            String candidate = arr[0]
-            return URLDecoder.decode(candidate, 'UTF-8')
+            return new Suffix(arr[0])
         } else {
             return null
         }
@@ -136,11 +135,7 @@ class MaterialWrapper {
         //if (this == obj) { return true }
         if (!(obj instanceof MaterialWrapper)) { return false }
         MaterialWrapper other = (MaterialWrapper)obj
-        if (this.materialFilePath == other.getMaterialFilePath()) {
-            return true
-        } else {
-            return false
-        }
+        return this.materialFilePath == other.getMaterialFilePath()
     }
 
     @Override

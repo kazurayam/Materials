@@ -1,9 +1,9 @@
 package com.kazurayam.carmina
 
+import java.nio.file.Path
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.nio.file.Path
 
 class TargetURL {
 
@@ -45,17 +45,18 @@ class TargetURL {
      * @param targetPageUrl
      * @return
      */
-    MaterialWrapper findOrNewMaterialWrapper(String suffix, FileType fileType) {
+    MaterialWrapper findOrNewMaterialWrapper(Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-
-        String filteredSuffix =
-                suffix.trim().replace(MaterialWrapper.MAGIC_DELIMITER, '')
-        String ammendedSuffix = (filteredSuffix.length() > 0) ?
-                MaterialWrapper.MAGIC_DELIMITER + filteredSuffix : ''
-
-        Path p = this.parent.getTCaseDir().resolve(
-            "${encodedUrl}${ammendedSuffix}.${fileType.getExtension()}"
-            )
+        Path p
+        if (suffix != Suffix.NULL) {
+            p = this.parent.getTCaseDir().resolve(
+                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+                )
+        } else {
+            p = this.parent.getTCaseDir().resolve(
+                "${encodedUrl}.${fileType.getExtension()}"
+                )
+        }
         if (this.getMaterialWrapper(p) != null) {
             return this.getMaterialWrapper(p)
         } else {
@@ -63,15 +64,6 @@ class TargetURL {
             this.materialWrappers.add(mw)
             return mw
         }
-    }
-
-    MaterialWrapper findOrNewMaterialWrapper(Path materialFilePath) {
-        MaterialWrapper mw = this.getMaterialWrapper(materialFilePath)
-        if (mw == null) {
-            mw = new MaterialWrapper(materialFilePath).setParent(this)
-            this.materialWrappers.add(mw)
-        }
-        return mw
     }
 
     void addMaterialWrapper(MaterialWrapper materialWrapper) {

@@ -1,12 +1,11 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import groovy.json.JsonOutput
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import spock.lang.Specification
 
 //@Ignore
@@ -43,7 +42,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testSetParent_GetParent() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
         MaterialWrapper modified = mw.setParent(tu)
         then:
         modified.getParent() == tu
@@ -73,14 +72,21 @@ class MaterialWrapperSpec extends Specification {
 
     def testParseFileNameForSuffix_atoz() {
         when:
-        String suffix = MaterialWrapper.parseFileNameForSuffix('a§atoz.png')
+        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a§atoz.png')
         then:
-        suffix == 'atoz'
+        suffix == new Suffix('atoz')
+    }
+
+    def testParseFileNameForSuffix_Nihonngo() {
+        when:
+        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a§あ.png')
+        then:
+        suffix == new Suffix('あ')
     }
 
     def testParseFileNameForSuffix_none() {
         when:
-        String suffix = MaterialWrapper.parseFileNameForSuffix('a.png')
+        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a.png')
         then:
         suffix == null
     }
@@ -111,7 +117,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testToJson() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
         def str = mw.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
@@ -122,7 +128,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativePathToTsTimestampDir() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
         Path p = mw.getRelativePathToTsTimestampDir()
         then:
         p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -130,7 +136,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativePathAsString() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativePathAsString()
         then:
         s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -138,7 +144,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativeUrlAsString() {
         when:
-        MaterialWrapper mw = tu.findOrNewMaterialWrapper('1', FileType.PNG)
+        MaterialWrapper mw = tu.findOrNewMaterialWrapper(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativeUrlAsString()
         then:
         s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'

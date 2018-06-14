@@ -1,9 +1,9 @@
 package com.kazurayam.carmina
 
+import java.nio.file.Path
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.nio.file.Path
 
 /**
  *
@@ -67,17 +67,6 @@ class TCaseResult {
     }
 
     // --------------------- create/add/get child nodes ----------------------
-    /*
-    TargetURL findOrNewTargetURL(URL url) {
-
-        TargetURL ntp = this.getTargetURL(url)
-        if (ntp == null) {
-            ntp = new TargetURL(url).setParent(this)
-            this.targetURLs.add(ntp)
-        }
-        return ntp
-    }
-    */
 
     TargetURL getTargetURL(URL url) {
         for (TargetURL tp : this.targetURLs) {

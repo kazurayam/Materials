@@ -1,10 +1,10 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -19,7 +19,7 @@ class TargetURLSpec extends Specification {
     private static Path fixture = Paths.get("./src/test/fixture/Results")
     private static RepositoryScanner scanner
     private static TCaseResult tcr
-    
+
     // fixture methods
     def setupSpec() {
         workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetURLSpec.class)}")
@@ -60,6 +60,14 @@ class TargetURLSpec extends Specification {
         then:
         file.getFileName().endsWith('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
     }
+
+    /*
+    def testGetMaterialWrapperBySuffixAndFileType() {
+        when:
+        TargetURL tu = tcr.getTargetURL(new URL('http://demoauto.katalon.com/'))
+        MaterialWrapper mw = tu.getMaterialWrapper(suffix, fileType)
+    }
+    */
 
     def testToJson() {
         when:
