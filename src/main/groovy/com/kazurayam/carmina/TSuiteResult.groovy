@@ -1,9 +1,9 @@
 package com.kazurayam.carmina
 
+import java.nio.file.Path
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.nio.file.Path
 
 /**
  *
@@ -95,16 +95,16 @@ final class TSuiteResult {
 
 
     // ------------------- helpers -----------------------------------------------
-    List<MaterialWrapper> getMaterialWrappers() {
-        List<MaterialWrapper> materialWrappers = new ArrayList<MaterialWrapper>()
+    List<Material> getMaterials() {
+        List<Material> materials = new ArrayList<Material>()
         for (TCaseResult tcr : this.getTCaseResults()) {
             for (TargetURL targetURL : tcr.getTargetURLs()) {
-                for (MaterialWrapper mw : targetURL.getMaterialWrappers()) {
-                    materialWrappers.add(mw)
+                for (Material mw : targetURL.getMaterials()) {
+                    materials.add(mw)
                 }
             }
         }
-        return materialWrappers
+        return materials
     }
 
     // -------------------- overriding Object properties ----------------------

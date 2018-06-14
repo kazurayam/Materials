@@ -29,7 +29,7 @@ class MiscSpec extends Specification {
         //Helpers.copyDirectory(fixture, workdir)
         source = workdir.resolve('source')
         Writer wt = Files.newBufferedWriter(source)
-        wt.write(MaterialWrapper.MAGIC_DELIMITER + ' is usable as a part of file name')
+        wt.write(Material.MAGIC_DELIMITER + ' is usable as a part of file name')
         wt.flush()
         wt.close()
     }

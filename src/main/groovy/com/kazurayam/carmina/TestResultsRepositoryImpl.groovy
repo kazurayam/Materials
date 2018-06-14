@@ -175,15 +175,14 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 targetURL = new TargetURL(url).setParent(tCaseResult)
                 tCaseResult.getTargetURLs().add(targetURL)
             }
-            //MaterialWrapper mw = targetURL.findOrNewMaterialWrapper(suffix, fileType)
-            MaterialWrapper mw = targetURL.getMaterialWrapper(suffix, fileType)
-            if (mw == null) {
-                String fileName = MaterialWrapper.resolveMaterialWrapperFileName(url, suffix, fileType)
+            Material material = targetURL.getMaterial(suffix, fileType)
+            if (material == null) {
+                String fileName = Material.resolveMaterialFileName(url, suffix, fileType)
                 Path materialPath = tCaseResult.getTCaseDir().resolve(fileName)
-                mw = new MaterialWrapper(materialPath, fileType).setParent(targetURL)
+                material = new Material(materialPath, fileType).setParent(targetURL)
                 Helpers.ensureDirs(materialPath.getParent())
             }
-            return mw.getMaterialFilePath()
+            return material.getMaterialFilePath()
         } else {
             throw new IllegalArgumentException("testCase ${testCaseName} is not found")
         }
@@ -332,10 +331,10 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                     div('id':'carousel0', 'class':'carousel slide', 'data-ride':'carousel') {
                         ol('class':'carousel-indicators') {
                             // TODO このTSuiteResultのなかにScreenshotが百個もあったらどうしよう?
-                            List<MaterialWrapper> mwList = tSuiteResult.getMaterialWrappers()
+                            List<Material> mwList = tSuiteResult.getMaterials()
                             // TODO 画像じゃないPDFやJSONやXMLファイルを除外したい
                             def count = 0
-                            for (MaterialWrapper mw: mwList) {
+                            for (Material mw: mwList) {
                                 if (count == 0) {
                                     li('data-target':'#carousel0',
                                         'data-slide-to':"${count}",
@@ -349,9 +348,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                         }
                     }
                     div('class':'carousel-inner') {
-                        List<MaterialWrapper> mwList = tSuiteResult.getMaterialWrappers()
+                        List<Material> mwList = tSuiteResult.getMaterials()
                         def count = 0
-                        for (MaterialWrapper mw: mwList) {
+                        for (Material mw: mwList) {
                             if (count == 0) {
                                 div('class': 'item active') {
 
@@ -370,9 +369,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                                 List<TargetURL> targetURLs = tcResult.getTargetURLs()
                                 for (TargetURL targetURL : targetURLs) {
                                     h5("URL : ${targetURL.getUrl().toExternalForm()}")
-                                    List<MaterialWrapper> materialWrappers = targetURL.getMaterialWrappers()
-                                    for (MaterialWrapper materialWrapper : materialWrappers) {
-                                        Path file = materialWrapper.getMaterialFilePath()
+                                    List<Material> materials = targetURL.getMaterials()
+                                    for (Material material : materials) {
+                                        Path file = material.getMaterialFilePath()
                                         Path relative = tSuiteResult.getTSuiteTimestampDir().relativize(file).normalize()
                                         h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",

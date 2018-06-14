@@ -18,7 +18,7 @@ import groovy.json.JsonOutput
 
 /**
  * RepositoryScanner scans a file system tree under the baseDir directory, and it builds object trees of
- * TSuiteResult under which contained objects of TCaseResult + TargetURL + MaterialWrapper as found in the
+ * TSuiteResult under which contained objects of TCaseResult + TargetURL + Material as found in the
  * local storage.
  *
  * @author kazurayam
@@ -131,7 +131,7 @@ class RepositoryScanner {
         private TCaseName tCaseName
         private TCaseResult tCaseResult
         private TargetURL targetURL
-        private MaterialWrapper materialWrapper
+        private Material material
 
         private Stack<Layer> directoryTransition
 
@@ -240,9 +240,9 @@ class RepositoryScanner {
                     logger.debug("#visitFile ${file} in TESTCASE")
                     //logger.debug("#visitFile tCaseResult=${tCaseResult.toString()}")
                     String fileName = file.getFileName()
-                    FileType fileType = MaterialWrapper.parseFileNameForFileType(fileName)
+                    FileType fileType = Material.parseFileNameForFileType(fileName)
                     if (fileType != FileType.NULL) {
-                        URL url = MaterialWrapper.parseFileNameForURL(fileName)
+                        URL url = Material.parseFileNameForURL(fileName)
                         //logger.debug("#visitFile url=${url.toString()}")
                         if (url != null) {
                             TargetURL targetURL = this.tCaseResult.getTargetURL(url)
@@ -251,8 +251,8 @@ class RepositoryScanner {
                                 targetURL = new TargetURL(url).setParent(this.tCaseResult)
                                 tCaseResult.addTargetURL(targetURL)
                             }
-                            MaterialWrapper mw = new MaterialWrapper(file, fileType).setParent(targetURL)
-                            targetURL.addMaterialWrapper(mw)
+                            Material mw = new Material(file, fileType).setParent(targetURL)
+                            targetURL.addMaterial(mw)
                             //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
                         } else {
                             logger.info("#visitFile unable to parse ${file} into a URL")

@@ -51,7 +51,7 @@ class TCaseResultSpec extends Specification {
                 new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         TargetURL targetURL = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper mw = targetURL.getMaterialWrappers().get(0)
+        Material mw = targetURL.getMaterials().get(0)
         when:
         def str = tcr.toString()
         logger.debug("#testToString: \n${JsonOutput.prettyPrint(str)}")

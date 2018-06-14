@@ -11,12 +11,12 @@ class TargetURL {
 
     private TCaseResult parent
     private URL url
-    private List<MaterialWrapper> materialWrappers
+    private List<Material> materials
 
     // ---------------------- constructors & initializers ---------------------
     TargetURL(URL url) {
         this.url = url
-        this.materialWrappers = new ArrayList<MaterialWrapper>()
+        this.materials = new ArrayList<Material>()
     }
 
     TargetURL setParent(TCaseResult parent) {
@@ -40,24 +40,24 @@ class TargetURL {
     // --------------------- create/add/get child nodes -----------------------
 
 
-    MaterialWrapper getMaterialWrapper(Suffix suffix, FileType fileType) {
+    Material getMaterial(Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p
         if (suffix != Suffix.NULL) {
             p = this.parent.getTCaseDir().resolve(
-                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+                "${encodedUrl}${Material.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
                 )
         } else {
             p = this.parent.getTCaseDir().resolve(
                 "${encodedUrl}.${fileType.getExtension()}"
                 )
         }
-        logger.debug("#getMaterialWrapper(Suffix,FileType) p=${p.toString()}")
-        return this.getMaterialWrapper(p)
+        logger.debug("#getMaterial(Suffix,FileType) p=${p.toString()}")
+        return this.getMaterial(p)
     }
 
-    MaterialWrapper getMaterialWrapper(Path materialFilePath) {
-        for (MaterialWrapper mw : this.materialWrappers) {
+    Material getMaterial(Path materialFilePath) {
+        for (Material mw : this.materials) {
             if (mw.getMaterialFilePath() == materialFilePath) {
                 return mw
             }
@@ -65,19 +65,19 @@ class TargetURL {
         return null
     }
 
-    List<MaterialWrapper> getMaterialWrappers() {
-        return this.materialWrappers
+    List<Material> getMaterials() {
+        return this.materials
     }
 
-    void addMaterialWrapper(MaterialWrapper materialWrapper) {
+    void addMaterial(Material material) {
         boolean found = false
-        for (MaterialWrapper mw : this.materialWrappers) {
-            if (mw == materialWrapper) {
+        for (Material mw : this.materials) {
+            if (mw == material) {
                 found = true
             }
         }
         if (!found) {
-            this.materialWrappers.add(materialWrapper)
+            this.materials.add(material)
         }
     }
 
@@ -120,9 +120,9 @@ class TargetURL {
         if (url != null) {
             sb.append('"url":"' + Helpers.escapeAsJsonText(url.toExternalForm()) + '",')
         }
-        sb.append('"materialWrappers":[')
+        sb.append('"materials":[')
         def count = 0
-        for (MaterialWrapper mw : materialWrappers) {
+        for (Material mw : materials) {
             if (count > 0) {
                 sb.append(',')
             }

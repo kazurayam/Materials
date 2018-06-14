@@ -48,38 +48,38 @@ class TargetURLSpec extends Specification {
         modified.getParent() == tcr
     }
 
-    def testGetMaterialWrappers() {
+    def testGetMaterials() {
         when:
         TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
         assert tu != null
-        List<MaterialWrapper> materialWrappers = tu.getMaterialWrappers()
+        List<Material> materials = tu.getMaterials()
         then:
-        materialWrappers.size() == 2
+        materials.size() == 2
         when:
-        Path file = materialWrappers.get(0).getMaterialFilePath()
+        Path file = materials.get(0).getMaterialFilePath()
         then:
         file.getFileName().endsWith('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
     }
 
 
-    def testGetMaterialWrapperBySuffixAndFileType_withoutSuffix() {
+    def testGetMaterialBySuffixAndFileType_withoutSuffix() {
         when:
         TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper mw = tu.getMaterialWrapper(Suffix.NULL, FileType.PNG)
+        Material mw = tu.getMaterial(Suffix.NULL, FileType.PNG)
         then:
         mw != null
     }
 
-    def testGetMaterialWrapperBySuffixAndFileType_withSuffix() {
+    def testGetMaterialBySuffixAndFileType_withSuffix() {
         when:
         TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         then:
         mw != null
     }
-    
- 
-    
+
+
+
     def testToJson() {
         when:
         TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))

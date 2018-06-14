@@ -13,9 +13,9 @@ class Suffix {
 
     Suffix(String value) {
         this.value = value
-        if (value.contains(MaterialWrapper.MAGIC_DELIMITER)) {
-            logger.warn("value '${value}' contained one or more '${MaterialWrapper.MAGIC_DELIMITER}' which were stripped")
-            this.value = this.value.replace(MaterialWrapper.MAGIC_DELIMITER, '')
+        if (value.contains(Material.MAGIC_DELIMITER)) {
+            logger.warn("value '${value}' contained one or more '${Material.MAGIC_DELIMITER}' which were stripped")
+            this.value = this.value.replace(Material.MAGIC_DELIMITER, '')
         }
         if (value.contains('/')) {
             logger.warn("value '${value}' contained one or more '/' character(s) which were stripped")

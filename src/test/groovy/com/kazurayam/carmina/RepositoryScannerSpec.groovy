@@ -88,30 +88,30 @@ class RepositoryScannerSpec extends Specification {
         tu.getUrl() == new URL('http://demoaut.katalon.com/')
         //
         when:
-        List<MaterialWrapper> materialWrappers = tu.getMaterialWrappers()
+        List<Material> materials = tu.getMaterials()
         then:
-        materialWrappers.size() == 2
+        materials.size() == 2
         //
         when:
-        MaterialWrapper mw0 = materialWrappers[0]
+        Material mate0 = materials[0]
         String p0 = './build/tmp/' + Helpers.getClassShortName(this.class) +
             '/testScan/TS1/20180530_130419' +
             '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
-        mw0.getParent() == tu
-        mw0.getMaterialFilePath().toString().replace('\\', '/') == p0
-        mw0.getFileType() == FileType.PNG
+        mate0.getParent() == tu
+        mate0.getMaterialFilePath().toString().replace('\\', '/') == p0
+        mate0.getFileType() == FileType.PNG
 
         //
         when:
-        MaterialWrapper mw1 = materialWrappers[1]
+        Material mate1 = materials[1]
         String p1 = './build/tmp/' + Helpers.getClassShortName(this.class) +
                 '/testScan/TS1/20180530_130419' +
                 '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
         then:
-        mw1.getParent() == tu
-        mw1.getMaterialFilePath().toString().replace('\\', '/') == p1
-        mw1.getFileType() == FileType.PNG
+        mate1.getParent() == tu
+        mate1.getMaterialFilePath().toString().replace('\\', '/') == p1
+        mate1.getFileType() == FileType.PNG
 
     }
 
@@ -187,9 +187,9 @@ class RepositoryScannerSpec extends Specification {
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
         TargetURL targetUrl = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        List<MaterialWrapper> materialWrappers = targetUrl.getMaterialWrappers()
+        List<Material> materials = targetUrl.getMaterials()
         then:
-        materialWrappers.size() == 2
+        materials.size() == 2
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png
     }
@@ -205,7 +205,7 @@ class RepositoryScannerSpec extends Specification {
         then:
         true
     }
-    
+
     // helper methods
     private static String prettyPrint(List<TSuiteResult> tSuiteResults) {
         StringBuilder sb = new StringBuilder()

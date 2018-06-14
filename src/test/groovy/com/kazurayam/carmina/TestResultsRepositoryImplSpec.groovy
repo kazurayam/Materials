@@ -1,10 +1,10 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import spock.lang.Specification
 
@@ -99,48 +99,6 @@ class TestResultsRepositoryImplSpec extends Specification {
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
-
-    /*
-    def testScanBaseDir() {
-        when:
-        Path casedir = workdir.resolve('testScanBaseDir')
-        Helpers.copyDirectory(fixture, casedir)
-        List<TSuiteResult> tsrList = TestResultsRepositoryImpl.scanBaseDir(casedir)
-        then:
-        tsrList != null
-        tsrList.size() == 3
-        when:
-        TSuiteResult tsr =
-                lookupTestSuiteResult(tsrList, new TSuiteName('TS1'),
-                        new TSuiteTimestamp('20180530_130419'))
-        then:
-        tsr != null
-        tsr.getBaseDir() == casedir
-        tsr.getTSuiteName() == new TSuiteName('TS1')
-        tsr.getTSuiteTimestamp() == new TSuiteTimestamp('20180530_130419')
-        tsr.getTSuiteTimestampDir() == casedir.resolve('TS1/20180530_130419')
-        when:
-        TCaseName tcn = new TCaseName('TC1')
-        TCaseResult tcr = tsr.getTCaseResult(tcn)
-        then:
-        tcr != null
-        tcr.getTSuiteResult() == tsr
-        tcr.getTCaseName() == tcn
-        tcr.getTCaseDir() == tsr.getTSuiteTimestampDir().resolve('TC1')
-        tcr.getTestCaseStatus() == TestCaseStatus.TO_BE_EXECUTED
-
-        when:
-        TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        then:
-        tp != null
-        when:
-        Path imageFilePath = tcr.getTcDir().resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
-        MaterialWrapper sw = tp.getMaterialWrapper(imageFilePath)
-        then:
-        sw.getMaterialFilePath() == imageFilePath
-
-    }
-*/
 
     def testToJson() {
         setup:

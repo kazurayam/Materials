@@ -5,9 +5,9 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class MaterialWrapper {
+class Material {
 
-    static Logger logger = LoggerFactory.getLogger(MaterialWrapper.class)
+    static Logger logger = LoggerFactory.getLogger(Material.class)
 
     protected static final String MAGIC_DELIMITER = '§'
 
@@ -15,12 +15,12 @@ class MaterialWrapper {
     private Path materialFilePath
     private FileType fileType
 
-    MaterialWrapper(Path materialFilePath, FileType fileType) {
+    Material(Path materialFilePath, FileType fileType) {
         this.materialFilePath = materialFilePath
         this.fileType = fileType
     }
 
-    MaterialWrapper setParent(TargetURL parent) {
+    Material setParent(TargetURL parent) {
         this.parent = parent
         return this
     }
@@ -91,12 +91,12 @@ class MaterialWrapper {
         FileType ft = parseFileNameForFileType(fileName)
         if (ft != FileType.NULL) {
             String str = fileName.substring(0, fileName.lastIndexOf('.'))
-            String[] arr = str.split(MaterialWrapper.MAGIC_DELIMITER)
+            String[] arr = str.split(Material.MAGIC_DELIMITER)
             if (arr.length < 2) {
                 return null
             }
             if (arr.length > 3) {
-                logger.warn("${fileName} contains 2 or more ${MaterialWrapper.MAGIC_DELIMITER} character. " +
+                logger.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
                         "Valid but unexpected.")
             }
             Arrays.sort(arr, Collections.reverseOrder())
@@ -112,7 +112,7 @@ class MaterialWrapper {
             Suffix suffix = parseFileNameForSuffix(fileName)
             String urlstr
             if (suffix != null) {
-                urlstr = fileName.substring(0, fileName.lastIndexOf(MaterialWrapper.MAGIC_DELIMITER))
+                urlstr = fileName.substring(0, fileName.lastIndexOf(Material.MAGIC_DELIMITER))
             } else {
                 urlstr = fileName.substring(0, fileName.lastIndexOf('.'))
             }
@@ -129,10 +129,10 @@ class MaterialWrapper {
         }
     }
 
-    static String resolveMaterialWrapperFileName(URL url, Suffix suffix, FileType fileType) {
+    static String resolveMaterialFileName(URL url, Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         if (suffix != Suffix.NULL) {
-            return "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+            return "${encodedUrl}${Material.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
         } else {
             return "${encodedUrl}.${fileType.getExtension()}"
         }
@@ -142,8 +142,8 @@ class MaterialWrapper {
     @Override
     boolean equals(Object obj) {
         //if (this == obj) { return true }
-        if (!(obj instanceof MaterialWrapper)) { return false }
-        MaterialWrapper other = (MaterialWrapper)obj
+        if (!(obj instanceof Material)) { return false }
+        Material other = (Material)obj
         return this.materialFilePath == other.getMaterialFilePath()
     }
 
@@ -164,7 +164,7 @@ class MaterialWrapper {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"MaterialWrapper":{')
+        sb.append('"Material":{')
         sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.materialFilePath.toString()) + '",')
         sb.append('"fileType":"' + Helpers.escapeAsJsonText(this.fileType.toString()) + '"')
         sb.append('}}')

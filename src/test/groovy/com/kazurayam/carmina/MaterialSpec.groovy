@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory
 import spock.lang.Specification
 
 //@Ignore
-class MaterialWrapperSpec extends Specification {
+class MaterialSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(MaterialWrapperSpec.class)
+    static Logger logger = LoggerFactory.getLogger(MaterialSpec.class)
 
     // fields
     private static Path workdir
@@ -21,7 +21,7 @@ class MaterialWrapperSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialWrapperSpec.class)}")
+        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialSpec.class)}")
         if (!workdir.toFile().exists()) {
             workdir.toFile().mkdirs()
         }
@@ -42,8 +42,8 @@ class MaterialWrapperSpec extends Specification {
 
     def testSetParent_GetParent() {
         when:
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
-        MaterialWrapper modified = mw.setParent(tu)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
+        Material modified = mw.setParent(tu)
         then:
         modified.getParent() == tu
 
@@ -51,63 +51,63 @@ class MaterialWrapperSpec extends Specification {
 
     def testParseFileNameForFileType_png() {
         when:
-        FileType ft = MaterialWrapper.parseFileNameForFileType('a.png')
+        FileType ft = Material.parseFileNameForFileType('a.png')
         then:
         ft == FileType.PNG
     }
 
     def testParseFileNameForFileType_none() {
         when:
-        FileType ft = MaterialWrapper.parseFileNameForFileType('a')
+        FileType ft = Material.parseFileNameForFileType('a')
         then:
         ft == FileType.NULL
     }
 
     def testParseFileNameForFileType_unknown() {
         when:
-        FileType ft = MaterialWrapper.parseFileNameForFileType('a.foo')
+        FileType ft = Material.parseFileNameForFileType('a.foo')
         then:
         ft == FileType.NULL
     }
 
     def testParseFileNameForSuffix_atoz() {
         when:
-        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a§atoz.png')
+        Suffix suffix = Material.parseFileNameForSuffix('a§atoz.png')
         then:
         suffix == new Suffix('atoz')
     }
 
     def testParseFileNameForSuffix_Nihonngo() {
         when:
-        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a§あ.png')
+        Suffix suffix = Material.parseFileNameForSuffix('a§あ.png')
         then:
         suffix == new Suffix('あ')
     }
 
     def testParseFileNameForSuffix_none() {
         when:
-        Suffix suffix = MaterialWrapper.parseFileNameForSuffix('a.png')
+        Suffix suffix = Material.parseFileNameForSuffix('a.png')
         then:
         suffix == null
     }
 
     def testParseFileNameForURL_http() {
         when:
-        URL url = MaterialWrapper.parseFileNameForURL('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        URL url = Material.parseFileNameForURL('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         then:
         url == new URL('http://demoaut.katalon.com/')
     }
 
     def testParseFileNameForURL_https() {
         when:
-        URL url = MaterialWrapper.parseFileNameForURL('https%3A%2F%2Fwww.google.com%2F.png')
+        URL url = Material.parseFileNameForURL('https%3A%2F%2Fwww.google.com%2F.png')
         then:
         url == new URL('https://www.google.com/')
     }
 
     def testParseFileNameForURL_Malformed() {
         when:
-        URL url = MaterialWrapper.parseFileNameForURL('demoaut.katalon.com.png')
+        URL url = Material.parseFileNameForURL('demoaut.katalon.com.png')
         then:
         url == null
     }
@@ -115,9 +115,9 @@ class MaterialWrapperSpec extends Specification {
     /**
      * @return
      */
-    def testResolveMaterialWrapperFileName() {
+    def testResolveMaterialFileName() {
         when:
-        String fileName = MaterialWrapper.resolveMaterialWrapperFileName(
+        String fileName = Material.resolveMaterialFileName(
             new URL('http://demoaut.katalon.com/'),
             new Suffix('foo'),
             FileType.PNG)
@@ -128,18 +128,18 @@ class MaterialWrapperSpec extends Specification {
 
     def testToJson() {
         when:
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         def str = mw.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
-        str.startsWith('{"MaterialWrapper":{"materialFilePath":"')
+        str.startsWith('{"Material":{"materialFilePath":"')
         str.contains(Helpers.escapeAsJsonText(mw.getMaterialFilePath().toString()))
         str.endsWith('"}}')
     }
 
     def testGetRelativePathToTsTimestampDir() {
         when:
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         Path p = mw.getRelativePathToTsTimestampDir()
         then:
         p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -147,7 +147,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativePathAsString() {
         when:
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativePathAsString()
         then:
         s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
@@ -155,7 +155,7 @@ class MaterialWrapperSpec extends Specification {
 
     def testGetRelativeUrlAsString() {
         when:
-        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         String s = mw.getRelativeUrlAsString()
         then:
         s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
