@@ -54,30 +54,8 @@ class TargetURL {
         }
         return p
     }
-    
-    
-    /*
-    MaterialWrapper findOrNewMaterialWrapper(Suffix suffix, FileType fileType) {
-        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p
-        if (suffix != Suffix.NULL) {
-            p = this.parent.getTCaseDir().resolve(
-                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
-                )
-        } else {
-            p = this.parent.getTCaseDir().resolve(
-                "${encodedUrl}.${fileType.getExtension()}"
-                )
-        }
-        if (this.getMaterialWrapper(p) != null) {
-            return this.getMaterialWrapper(p)
-        } else {
-            MaterialWrapper mw = new MaterialWrapper(p, fileType).setParent(this)
-            this.materialWrappers.add(mw)
-            return mw
-        }
-    }
-     */
+
+
 
 
 
