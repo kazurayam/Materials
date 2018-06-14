@@ -112,7 +112,18 @@ class MaterialWrapperSpec extends Specification {
         url == null
     }
 
-
+    /**
+     * @return
+     */
+    def testResolveMaterialWrapperFileName() {
+        when:
+        String fileName = MaterialWrapper.resolveMaterialWrapperFileName(
+            new URL('http://demoaut.katalon.com/'),
+            new Suffix('foo'),
+            FileType.PNG)
+        then:
+        fileName.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F§foo.png')
+    }
 
 
     def testToJson() {

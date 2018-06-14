@@ -178,7 +178,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
             //MaterialWrapper mw = targetURL.findOrNewMaterialWrapper(suffix, fileType)
             MaterialWrapper mw = targetURL.getMaterialWrapper(suffix, fileType)
             if (mw == null) {
-                Path materialPath = TargetURL.resolveMaterialWrapperPath(tCaseResult, url, suffix, fileType)
+                String fileName = MaterialWrapper.resolveMaterialWrapperFileName(url, suffix, fileType)
+                Path materialPath = tCaseResult.getTCaseDir().resolve(fileName)
                 mw = new MaterialWrapper(materialPath, fileType).setParent(targetURL)
                 Helpers.ensureDirs(materialPath.getParent())
             }

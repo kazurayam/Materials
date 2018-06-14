@@ -129,6 +129,15 @@ class MaterialWrapper {
         }
     }
 
+    static String resolveMaterialWrapperFileName(URL url, Suffix suffix, FileType fileType) {
+        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+        if (suffix != Suffix.NULL) {
+            return "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+        } else {
+            return "${encodedUrl}.${fileType.getExtension()}"
+        }
+    }
+
     // ---------------- overriding Object properties --------------------------
     @Override
     boolean equals(Object obj) {

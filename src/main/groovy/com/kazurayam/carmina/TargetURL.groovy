@@ -40,25 +40,6 @@ class TargetURL {
     // --------------------- create/add/get child nodes -----------------------
 
 
-    static Path resolveMaterialWrapperPath(TCaseResult tCaseResult, URL url, Suffix suffix, FileType fileType) {
-        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        Path p
-        if (suffix != Suffix.NULL) {
-            p = tCaseResult.getTCaseDir().resolve(
-                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
-                )
-        } else {
-            p = tCaseResult.getTCaseDir().resolve(
-                "${encodedUrl}.${fileType.getExtension()}"
-                )
-        }
-        return p
-    }
-
-
-
-
-
     MaterialWrapper getMaterialWrapper(Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p
