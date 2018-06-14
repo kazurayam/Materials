@@ -61,13 +61,22 @@ class TargetURLSpec extends Specification {
         file.getFileName().endsWith('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
     }
 
-    /*
-    def testGetMaterialWrapperBySuffixAndFileType() {
+
+    def testGetMaterialWrapperBySuffixAndFileType_withoutSuffix() {
         when:
-        TargetURL tu = tcr.getTargetURL(new URL('http://demoauto.katalon.com/'))
-        MaterialWrapper mw = tu.getMaterialWrapper(suffix, fileType)
+        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        MaterialWrapper mw = tu.getMaterialWrapper(Suffix.NULL, FileType.PNG)
+        then:
+        mw != null
     }
-    */
+
+    def testGetMaterialWrapperBySuffixAndFileType_withSuffix() {
+        when:
+        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        MaterialWrapper mw = tu.getMaterialWrapper(new Suffix('1'), FileType.PNG)
+        then:
+        mw != null
+    }
 
     def testToJson() {
         when:

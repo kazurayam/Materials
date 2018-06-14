@@ -45,6 +45,8 @@ class TargetURL {
      * @param targetPageUrl
      * @return
      */
+
+
     MaterialWrapper findOrNewMaterialWrapper(Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         Path p
@@ -66,16 +68,22 @@ class TargetURL {
         }
     }
 
-    void addMaterialWrapper(MaterialWrapper materialWrapper) {
-        boolean found = false
-        for (MaterialWrapper mw : this.materialWrappers) {
-            if (mw == materialWrapper) {
-                found = true
-            }
+
+
+    MaterialWrapper getMaterialWrapper(Suffix suffix, FileType fileType) {
+        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+        Path p
+        if (suffix != Suffix.NULL) {
+            p = this.parent.getTCaseDir().resolve(
+                "${encodedUrl}${MaterialWrapper.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+                )
+        } else {
+            p = this.parent.getTCaseDir().resolve(
+                "${encodedUrl}.${fileType.getExtension()}"
+                )
         }
-        if (!found) {
-            this.materialWrappers.add(materialWrapper)
-        }
+        logger.debug("#getMaterialWrapper(Suffix,FileType) p=${p.toString()}")
+        return this.getMaterialWrapper(p)
     }
 
     MaterialWrapper getMaterialWrapper(Path materialFilePath) {
@@ -89,6 +97,18 @@ class TargetURL {
 
     List<MaterialWrapper> getMaterialWrappers() {
         return this.materialWrappers
+    }
+
+    void addMaterialWrapper(MaterialWrapper materialWrapper) {
+        boolean found = false
+        for (MaterialWrapper mw : this.materialWrappers) {
+            if (mw == materialWrapper) {
+                found = true
+            }
+        }
+        if (!found) {
+            this.materialWrappers.add(materialWrapper)
+        }
     }
 
 

@@ -109,14 +109,14 @@ class MaterialWrapper {
     static URL parseFileNameForURL(String fileName) {
         FileType ft = parseFileNameForFileType(fileName)
         if (ft != FileType.NULL) {
-            String suffix = parseFileNameForSuffix(fileName)
-            String str
+            Suffix suffix = parseFileNameForSuffix(fileName)
+            String urlstr
             if (suffix != null) {
-                str = fileName.substring(0, fileName.lastIndexOf(MaterialWrapper.MAGIC_DELIMITER))
+                urlstr = fileName.substring(0, fileName.lastIndexOf(MaterialWrapper.MAGIC_DELIMITER))
             } else {
-                str = fileName.substring(0, fileName.lastIndexOf('.'))
+                urlstr = fileName.substring(0, fileName.lastIndexOf('.'))
             }
-            String decoded = URLDecoder.decode(str, 'UTF-8')
+            String decoded = URLDecoder.decode(urlstr, 'UTF-8')
             try {
                 URL url = new URL(decoded)
                 return url

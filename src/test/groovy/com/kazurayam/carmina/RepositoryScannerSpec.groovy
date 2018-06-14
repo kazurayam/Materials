@@ -7,7 +7,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class RepositoryScannerSpec extends Specification {
@@ -108,7 +107,7 @@ class RepositoryScannerSpec extends Specification {
         MaterialWrapper mw1 = materialWrappers[1]
         String p1 = './build/tmp/' + Helpers.getClassShortName(this.class) +
                 '/testScan/TS1/20180530_130419' +
-                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png'
+                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
         then:
         mw1.getParent() == tu
         mw1.getMaterialFilePath().toString().replace('\\', '/') == p1
