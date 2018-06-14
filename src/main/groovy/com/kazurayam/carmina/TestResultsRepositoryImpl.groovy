@@ -76,11 +76,11 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         this.currentTSuiteTimestamp = tsTimestamp
 
         // add the specified TestSuite
-        TSuiteResult tsr = this.getTsResult(tsName, tsTimestamp)
+        TSuiteResult tsr = this.getTSuiteResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
         if (tsr == null) {
             tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
         }
-        this.addTsResult(tsr)
+        this.addTSuiteResult(tsr)
     }
 
     // -------------------------- attribute getters & setters ------------------------
@@ -104,7 +104,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    void addTsResult(TSuiteResult tSuiteResult) {
+    void addTSuiteResult(TSuiteResult tSuiteResult) {
         boolean found = false
         for (TSuiteResult tsr : this.tSuiteResults) {
             if (tsr == tSuiteResult) {
@@ -122,7 +122,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param timestamp
      * @return
      */
-    TSuiteResult getTsResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         for (TSuiteResult tsr : this.tSuiteResults) {
             if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
@@ -132,14 +132,36 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     // -------------------------- do the business -----------------------------
-    @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, FileType fileType) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, fileType)
-    }
+    /**
+     *
+     * @param testCaseName
+     * @param url
+     * @param postFix
+     * @return
+     */
+    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, Suffix suffix, FileType fileType) {
+        TSuiteResult tSuiteResult = this.getCurrentTSuiteResult()
+        assert tSuiteResult != null
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(testCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = new TCaseResult(testCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        TargetURL targetURL = tCaseResult.getTargetURL(url)
+        if (targetURL == null) {
+            targetURL = new TargetURL(url).setParent(tCaseResult)
+            tCaseResult.getTargetURLs().add(targetURL)
+        }
+        Material material = targetURL.getMaterial(suffix, fileType)
+        if (material == null) {
+            String fileName = Material.resolveMaterialFileName(url, suffix, fileType)
+            Path materialPath = tCaseResult.getTCaseDir().resolve(fileName)
+            material = new Material(materialPath, fileType).setParent(targetURL)
 
-    @Override
-    Path resolveMaterialFilePath(String testCaseId, String url, String suffix, FileType fileType) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), fileType)
+            // Here we create the parent directory for the material
+            Helpers.ensureDirs(materialPath.getParent())
+        }
+        return material.getMaterialFilePath()
     }
 
     /**
@@ -151,7 +173,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     /**
-     * return a Path to save a screenshot of the URL appended with the suffix in PNG format
+     * return a Path to save a screenshot of the URL in PNG format appended with the suffix
      */
     @Override
     Path resolvePngFilePath(String testCaseId, String url, String suffix) {
@@ -159,34 +181,53 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     /**
-     *
-     * @param testCaseName
-     * @param url
-     * @param postFix
-     * @return
+     * returns a Path to save a JSON response from the URL
      */
-    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, Suffix suffix, FileType fileType) {
-        TSuiteResult currentTestSuiteResult = this.getCurrentTSuiteResult()
-        assert currentTestSuiteResult != null
-        TCaseResult tCaseResult = currentTestSuiteResult.getTCaseResult(testCaseName)
-        if (tCaseResult != null) {
-            TargetURL targetURL = tCaseResult.getTargetURL(url)
-            if (targetURL == null) {
-                targetURL = new TargetURL(url).setParent(tCaseResult)
-                tCaseResult.getTargetURLs().add(targetURL)
-            }
-            Material material = targetURL.getMaterial(suffix, fileType)
-            if (material == null) {
-                String fileName = Material.resolveMaterialFileName(url, suffix, fileType)
-                Path materialPath = tCaseResult.getTCaseDir().resolve(fileName)
-                material = new Material(materialPath, fileType).setParent(targetURL)
-                Helpers.ensureDirs(materialPath.getParent())
-            }
-            return material.getMaterialFilePath()
-        } else {
-            throw new IllegalArgumentException("testCase ${testCaseName} is not found")
-        }
+    @Override
+    Path resolveJsonFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.JSON)
     }
+
+    /**
+     * return a Path to save a JSON response from the URL appended with the suffix
+     */
+    @Override
+    Path resolveJsonFilePath(String testCaseId, String url, String suffix) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.JSON)
+    }
+
+    /**
+     * returns a Path to save a XML response from the URL
+     */
+    @Override
+    Path resolveXmlFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.XML)
+    }
+
+    /**
+     * return a Path to save a XML response from the URL appended with the suffix
+     */
+    @Override
+    Path resolveXmlFilePath(String testCaseId, String url, String suffix) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.XML)
+    }
+
+    /**
+     * returns a Path to save a XML response from the URL
+     */
+    @Override
+    Path resolvePdfFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.PDF)
+    }
+
+    /**
+     * return a Path to save a XML response from the URL appended with the suffix
+     */
+    @Override
+    Path resolvePdfFilePath(String testCaseId, String url, String suffix) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.PDF)
+    }
+
 
     /**
      * create a Result.html file under the directory ${baseDir}/${Test Suite name}/${Test Suite timestamp}/
@@ -220,7 +261,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     TSuiteResult getCurrentTSuiteResult() {
         if (this.currentTSuiteName != null) {
             if (this.currentTSuiteTimestamp != null) {
-                TSuiteResult tsr = getTsResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
+                TSuiteResult tsr = getTSuiteResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
                 assert tsr != null
                 return tsr
             } else {

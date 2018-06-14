@@ -1,5 +1,6 @@
 package com.kazurayam.carmina
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -46,10 +47,15 @@ class TestResultsRepositoryImplSpec extends Specification {
         Helpers.copyDirectory(fixture, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
-        Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
+        Path p = tri.resolveMaterialFilePath(
+            new TCaseName('TC1'),
+            new URL('http://demoaut.katalon.com/'),
+            Suffix.NULL,
+            FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolveMaterialFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        p.toString().replace('\\', '/') ==
+            "./build/tmp/${classShortName}/testResolveMaterialFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolveMaterialFilePathWithSuffix() {
@@ -58,10 +64,51 @@ class TestResultsRepositoryImplSpec extends Specification {
         Helpers.copyDirectory(fixture, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
         when:
-        Path p = tri.resolveMaterialFilePath('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        Path p = tri.resolveMaterialFilePath(
+            new TCaseName('TC1'),
+            new URL('http://demoaut.katalon.com/'),
+            new Suffix('1'),
+            FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        p.toString().replace('\\', '/') ==
+            "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+    }
+
+    def testResolveMaterialFilePath_new() {
+        setup:
+        Path casedir = workdir.resolve('testResolveMaterialFilePath_new')
+        Helpers.copyDirectory(fixture, casedir)
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS3'), new TSuiteTimestamp('20180614_152000'))
+        when:
+        Path p = tri.resolveMaterialFilePath(
+            new TCaseName('TC1'),
+            new URL('http://demoaut.katalon.com/'),
+            Suffix.NULL,
+            FileType.PNG)
+        then:
+        p != null
+        p.toString().replace('\\', '/') ==
+            "./build/tmp/${classShortName}/testResolveMaterialFilePath_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        Files.exists(p.getParent())
+    }
+
+    def testResolveMaterialFilePathWithSuffix_new() {
+        setup:
+        Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix_new')
+        Helpers.copyDirectory(fixture, casedir)
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS3'), new TSuiteTimestamp('20180614_152000'))
+        when:
+        Path p = tri.resolveMaterialFilePath(
+            new TCaseName('TC1'),
+            new URL('http://demoaut.katalon.com/'),
+            new Suffix('1'),
+            FileType.PNG)
+        then:
+        p != null
+        p.toString().replace('\\', '/') ==
+            "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        Files.exists(p.getParent())
     }
 
     def testResolvePngFilePath() {

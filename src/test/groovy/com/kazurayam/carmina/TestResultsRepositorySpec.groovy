@@ -1,17 +1,12 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.FileType
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.TestResultsRepository
-import com.kazurayam.carmina.TestResultsRepositoryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -61,19 +56,60 @@ class TestResultsRepositorySpec extends Specification {
         str.contains('TS1')
     }
 
-    def testResolveScreenshotFilePath() {
+    def testResolvePngFilePath() {
         when:
         TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
                 workdir,
                 new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419')
         )
-        Path scfp = sr.resolveMaterialFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
+        Path scfp = sr.resolvePngFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         scfp != null
         scfp.toString().contains('TC1')
         scfp.toString().contains('demoaut.katalon.com')
     }
-
+    
+    def testResolveJsonFilePath() {
+        when:
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
+                workdir,
+                new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419')
+        )
+        Path scfp = sr.resolveJsonFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        then:
+        scfp != null
+        scfp.toString().contains('TC1')
+        scfp.toString().contains('demoaut.katalon.com')
+    }
+    
+    def testResolveXmlFilePath() {
+        when:
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
+                workdir,
+                new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419')
+        )
+        Path scfp = sr.resolveXmlFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        then:
+        scfp != null
+        scfp.toString().contains('TC1')
+        scfp.toString().contains('demoaut.katalon.com')
+    }
+    
+    def testResolvePdfFilePath() {
+        when:
+        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
+                workdir,
+                new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419')
+        )
+        Path scfp = sr.resolvePdfFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        then:
+        scfp != null
+        scfp.toString().contains('TC1')
+        scfp.toString().contains('demoaut.katalon.com')
+    }
 }
 
