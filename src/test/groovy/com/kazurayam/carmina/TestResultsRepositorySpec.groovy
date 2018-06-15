@@ -103,6 +103,17 @@ class TestResultsRepositorySpec extends Specification {
         pdf.toString().contains('demoaut.katalon.com')
     }
 
+    def testResolveTxtFilePath() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path txt = trr.resolvePdfFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        then:
+        txt != null
+        txt.toString().contains('TC1')
+        txt.toString().contains('demoaut.katalon.com')
+    }
+
     def testGetCurrentTestSuiteDirectory() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
