@@ -15,6 +15,7 @@ enum FileType {
     SVG('svg',     'image/svg+xml'),
     OCTET('bin',   'application/octet-stream'),
     JSON('json',   'application/json'),
+    XLS('.xls',    'application/vnd.ms-excel'),
     XML('xml',     'application/xml' ),
     XHTML('xhtml', 'application/xhtml+html'),
     PDF('pdf',     'application/pdf'),

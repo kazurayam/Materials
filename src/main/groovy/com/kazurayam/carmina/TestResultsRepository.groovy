@@ -28,5 +28,8 @@ interface TestResultsRepository {
     Path resolveTxtFilePath(String testCaseId, String url)
     Path resolveTxtFilePath(String testCaseId, String url, String suffix)
 
+    Path resolveXlsFilePath(String testCaseId, String url)
+    Path resolveXlsFilePath(String testCaseId, String url, String suffix)
+
     Path report() throws IOException
 }

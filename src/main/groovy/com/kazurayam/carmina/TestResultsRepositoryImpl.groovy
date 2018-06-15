@@ -242,6 +242,26 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     /**
+     * returns a Path to save a txt file somehow obtained while processing the url
+     */
+    @Override
+    Path resolveXlsFilePath(String testCaseId, String url) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.XLS)
+    }
+
+    /**
+     * return a Path to save a XML response from the URL appended with the suffix
+     */
+    @Override
+    Path resolveXlsFilePath(String testCaseId, String url, String suffix) {
+        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.XLS)
+    }
+
+
+
+
+
+    /**
      * create a Result.html file under the directory ${baseDir}/${Test Suite name}/${Test Suite timestamp}/
      * The Result.html file is an index to the Material files created by the TestResultsImpl at this time of execution
      *
