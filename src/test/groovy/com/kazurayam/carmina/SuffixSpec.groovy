@@ -47,6 +47,13 @@ class SuffixSpec extends Specification {
         then:
         suffix.getValue() == 'xy'
     }
+
+    def testCaseWithBackDot() {
+        when:
+        Suffix suffix = new Suffix("x.y")
+        then:
+        suffix.getValue() == 'xy'
+    }
     
     def testCaseWithNihongo() {
         when:

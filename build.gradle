@@ -39,6 +39,6 @@ test.outputs.upToDateWhen {false}
 test {
     //include '**/*Spec.class'
     //include '**/TestResultsRepository*Spec.class'
-    include '**/TestResultsRepositorySpec.class'
+    include '**/SuffixSpec.class'
     exclude '**/CommandRunnerSpec.class'
 }

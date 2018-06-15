@@ -13,10 +13,6 @@ class Suffix {
 
     Suffix(String value) {
         value_ = value
-        if (value.contains(Material.MAGIC_DELIMITER)) {
-            logger_.warn("value '${value}' contained one or more '${Material.MAGIC_DELIMITER}' which were stripped")
-            value_ = value_.replace(Material.MAGIC_DELIMITER, '')
-        }
         if (value.contains('/')) {
             logger_.warn("value '${value}' contained one or more '/' character(s) which were stripped")
             value_ = value_.replace('/', '')
@@ -24,6 +20,14 @@ class Suffix {
         if (value.contains('\\')) {
             logger_.warn("value '${value}' contained one or more '\\' character(s) which were stripped")
             value_ = value_.replace('\\', '')
+        }
+        if (value.contains(Material.MAGIC_DELIMITER)) {
+            logger_.warn("value '${value}' contained one or more '${Material.MAGIC_DELIMITER}' character(s) which were stripped")
+            value_ = value_.replace(Material.MAGIC_DELIMITER, '')
+        }
+        if (value.contains('.')) {
+            logger_.warn("value '${value}' contained one or more '.' character(s) which were stripped")
+            value_ = value_.replace('.', '')
         }
     }
 
