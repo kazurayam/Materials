@@ -15,7 +15,7 @@ final class TSuiteResult {
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
     private Path baseDir_
-    private Path tSuiteTimestampDir_
+    private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
 
 
@@ -31,7 +31,7 @@ final class TSuiteResult {
     // ------------------ attribute setter & getter -------------------------------
     TSuiteResult setParent(Path baseDir) {
         baseDir_ = baseDir
-        tSuiteTimestampDir_ = baseDir.resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
+        tSuiteTimestampDirectory_ = baseDir.resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
         return this
     }
 
@@ -43,8 +43,8 @@ final class TSuiteResult {
         return baseDir_
     }
 
-    Path getTSuiteTimestampDir() {
-        return tSuiteTimestampDir_
+    Path getTSuiteTimestampDirectory() {
+        return tSuiteTimestampDirectory_
     }
 
     TSuiteName getTSuiteName() {
@@ -128,7 +128,7 @@ final class TSuiteResult {
         sb.append('"baseDir": "' + Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
         sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(tSuiteName_.toString()) + '",')
         sb.append('"tSuiteTimestamp": ' + tSuiteTimestamp_.toString() + ',')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDir_.toString()) + '",')
+        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0
         for (TCaseResult tcr : tCaseResults_) {

@@ -71,6 +71,15 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         this.addTSuiteResult(tsr)
     }
 
+    @Override
+    Path getCurrentTestSuiteDirectory() {
+        TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
+        if (tsr != null) {
+            return tsr.getTSuiteTimestampDirectory()
+        }
+        return null
+    }
+
     // -------------------------- attribute getters & setters ------------------------
     Path getBaseDir() {
         return baseDir_
@@ -143,7 +152,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         Material material = targetURL.getMaterial(suffix, fileType)
         if (material == null) {
             String fileName = Material.resolveMaterialFileName(url, suffix, fileType)
-            Path materialPath = tCaseResult.getTCaseDir().resolve(fileName)
+            Path materialPath = tCaseResult.getTCaseDirectory().resolve(fileName)
             material = new Material(materialPath, fileType).setParent(targetURL)
 
             // Here we create the parent directory for the material
@@ -232,8 +241,8 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
                 TSuiteResult tsr = tsrList[0]
-                Path html = tsr.getTSuiteTimestampDir().resolve("Result.html")
-                Helpers.ensureDirs(tsr.getTSuiteTimestampDir())
+                Path html = tsr.getTSuiteTimestampDirectory().resolve("Result.html")
+                Helpers.ensureDirs(tsr.getTSuiteTimestampDirectory())
                 //
                 createIndex(tsr, Files.newOutputStream(html))
                 return html
@@ -276,9 +285,15 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     @Override
+    Path getTestCaseDirectory(String testCaseId) {
+        return this.getTCaseResult(testCaseId).getTCaseDirectory()
+    }
+
+    @Override
     void setTestCaseStatus(String testCaseId, String testCaseStatus) {
         this.getTCaseResult(testCaseId).setTestCaseStatus(testCaseStatus)
     }
+
 
 
     // ---------------------- overriding Object properties --------------------
@@ -401,7 +416,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                                     List<Material> materials = targetURL.getMaterials()
                                     for (Material material : materials) {
                                         Path file = material.getMaterialFilePath()
-                                        Path relative = tSuiteResult.getTSuiteTimestampDir().relativize(file).normalize()
+                                        Path relative = tSuiteResult.getTSuiteTimestampDirectory().relativize(file).normalize()
                                         h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
                                             alt:"${targetURL.getUrl().toExternalForm()}",

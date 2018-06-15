@@ -15,7 +15,7 @@ class TSuiteName {
 
     TSuiteName(String testSuiteId) {
         String[] arr = testSuiteId.split('[/\\\\]')
-        value_ = arr[arr.size() - 1]
+        value_ = arr[arr.size() - 1].trim()
     }
 
     String getValue() {

@@ -7,6 +7,10 @@ interface TestResultsRepository {
     void setCurrentTestSuite(String testSuiteId)
     void setCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
 
+    Path getCurrentTestSuiteDirectory()
+
+    Path getTestCaseDirectory(String testCaseId)
+
     void setTestCaseStatus(String testCaseId, String testCaseStatus)
 
     Path resolvePngFilePath(String testCaseId, String url)
@@ -22,5 +26,4 @@ interface TestResultsRepository {
     Path resolvePdfFilePath(String testCaseId, String url, String suffix)
 
     Path report() throws IOException
-
 }

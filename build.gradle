@@ -37,9 +37,9 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/*Spec.class'
+    //include '**/*Spec.class'
     //include '**/TestResultsRepository*Spec.class'
-    //include '**/TestResultsRepositorySpec.class'
+    include '**/TestResultsRepositorySpec.class'
     exclude '**/CommandRunnerSpec.class'
 }
 

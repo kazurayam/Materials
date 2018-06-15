@@ -72,7 +72,7 @@ class RepositoryScannerSpec extends Specification {
         then:
         tCaseResult.getParent() == tSuiteResult
         tCaseResult.getTCaseName() == new TCaseName('TC1')
-        tCaseResult.getTCaseDir() != null
+        tCaseResult.getTCaseDirectory() != null
         //
 
         when:

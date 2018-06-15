@@ -44,11 +44,11 @@ class TargetURL {
         String encodedUrl = URLEncoder.encode(url_.toExternalForm(), 'UTF-8')
         Path p
         if (suffix != Suffix.NULL) {
-            p = parent_.getTCaseDir().resolve(
+            p = parent_.getTCaseDirectory().resolve(
                 "${encodedUrl}${Material.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
                 )
         } else {
-            p = parent_.getTCaseDir().resolve(
+            p = parent_.getTCaseDirectory().resolve(
                 "${encodedUrl}.${fileType.getExtension()}"
                 )
         }

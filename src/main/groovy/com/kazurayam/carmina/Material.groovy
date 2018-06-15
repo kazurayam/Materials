@@ -44,7 +44,7 @@ class Material {
     Path getRelativePathToTsTimestampDir() {
         if (parent_ != null) {
             Path tsTimestampDir =
-                this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDir()
+                this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDirectory()
             Path path = tsTimestampDir.relativize(materialFilePath_).normalize()
             return path
         } else {

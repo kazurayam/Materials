@@ -14,7 +14,7 @@ class TCaseResult {
 
     private TSuiteResult parent_
     private TCaseName tCaseName_
-    private Path tCaseDir_
+    private Path tCaseDirectory_
     private List<TargetURL> targetURLs_
     private TCaseStatus tCaseStatus_
 
@@ -32,7 +32,7 @@ class TCaseResult {
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
         parent_ = parent
-        tCaseDir_ = parent.getTSuiteTimestampDir().resolve(tCaseName_.toString())
+        tCaseDirectory_ = parent.getTSuiteTimestampDirectory().resolve(tCaseName_.toString())
         return this
     }
 
@@ -48,8 +48,8 @@ class TCaseResult {
         return tCaseName_
     }
 
-    Path getTCaseDir() {
-        return tCaseDir_
+    Path getTCaseDirectory() {
+        return tCaseDirectory_
     }
 
     void setTestCaseStatus(String str) {
@@ -124,7 +124,7 @@ class TCaseResult {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')
         sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(tCaseName_.toString())   + '",')
-        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDir_.toString())    + '",')
+        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDirectory_.toString())    + '",')
         sb.append('"tCaseStatus":"' + tCaseStatus_.toString() + '",')
         sb.append('"targetURLs":[')
         def count = 0

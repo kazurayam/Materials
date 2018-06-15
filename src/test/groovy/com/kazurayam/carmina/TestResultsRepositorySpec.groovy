@@ -2,6 +2,7 @@ package com.kazurayam.carmina
 
 import static groovy.json.JsonOutput.*
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -100,6 +101,48 @@ class TestResultsRepositorySpec extends Specification {
         pdf != null
         pdf.toString().contains('TC1')
         pdf.toString().contains('demoaut.katalon.com')
+    }
+
+    def testGetCurrentTestSuiteDirectory() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path testSuiteDir = trr.getCurrentTestSuiteDirectory()
+        then:
+        testSuiteDir == workdir_.resolve('TS1/20180530_130419')
+    }
+
+    def testGetTestCaseDirectory() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path testCaseDir = trr.getTestCaseDirectory('Test Cases/TC1')
+        then:
+        testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1')
+    }
+
+    def testSetTestCaseStatus() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        trr.setTestCaseStatus('Test Cases/TC1','PASSED')
+        TestResultsRepositoryImpl trri = (TestResultsRepositoryImpl)trr
+        TCaseResult tcr = trri.getTCaseResult(new TCaseName('Test Cases/TC1'))
+        then:
+        tcr.getTestCaseStatus() == TCaseStatus.PASSED
+    }
+
+    def testReport() {
+        setup:
+        Path dir = workdir_.resolve('testReport')
+        Helpers.ensureDirs(dir)
+        Helpers.copyDirectory(fixture_, dir)
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(dir)
+        when:
+        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        trr.report()
+        then:
+        Files.exists(trr.getCurrentTestSuiteDirectory().resolve('Result.html'))
     }
 }
 
