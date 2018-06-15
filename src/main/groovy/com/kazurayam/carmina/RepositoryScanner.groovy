@@ -1,15 +1,9 @@
 package com.kazurayam.carmina
 
-import static java.nio.file.FileVisitResult.*
-
 import java.nio.file.FileVisitOption
-import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,14 +19,10 @@ import groovy.json.JsonOutput
  */
 class RepositoryScanner {
 
-    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class)
 
-    private static enum Layer {
-        INIT, BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
-    }
-
-    private Path baseDir
-    private List<TSuiteResult> tSuiteResults
+    private Path baseDir_
+    private List<TSuiteResult> tSuiteResults_
 
     RepositoryScanner(Path baseDir) {
         assert baseDir != null
@@ -42,8 +32,8 @@ class RepositoryScanner {
         if (!Files.isDirectory(baseDir)) {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
-        this.baseDir = baseDir
-        tSuiteResults = new ArrayList<TSuiteResult>()
+        baseDir_ = baseDir
+        tSuiteResults_ = new ArrayList<TSuiteResult>()
     }
 
     /**
@@ -51,21 +41,21 @@ class RepositoryScanner {
      * to instanciate trees of TSuiteResults
      */
     void scan() {
-        tSuiteResults = new ArrayList<TSuiteResult>()
+        tSuiteResults_ = new ArrayList<TSuiteResult>()
         Files.walkFileTree(
-                this.baseDir,
+                baseDir_,
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                new RepositoryVisitor(this.baseDir, this.tSuiteResults)
+                new RepositoryVisitor(baseDir_, tSuiteResults_)
         )
     }
 
     List<TSuiteResult> getTSuiteResults() {
-        return tSuiteResults
+        return tSuiteResults_
     }
 
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+        for (TSuiteResult tSuiteResult : tSuiteResults_) {
             if (tSuiteName == tSuiteResult.getTSuiteName()) {
                 tSuiteResults.add(tSuiteResult)
             }
@@ -75,7 +65,7 @@ class RepositoryScanner {
 
     List<TSuiteResult> getTSuiteResults(TSuiteTimestamp tSuiteTimestamp) {
         List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+        for (TSuiteResult tSuiteResult : tSuiteResults_) {
             if (tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
                 tSuiteResults.add(tSuiteResult)
             }
@@ -84,7 +74,7 @@ class RepositoryScanner {
     }
 
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        for (TSuiteResult tSuiteResult : this.tSuiteResults) {
+        for (TSuiteResult tSuiteResult : tSuiteResults_) {
             if (tSuiteName == tSuiteResult.getTSuiteName() && tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
                 return tSuiteResult
             }
@@ -96,7 +86,7 @@ class RepositoryScanner {
         StringBuilder sb = new StringBuilder()
         sb.append('[')
         def count = 0
-        for (TSuiteResult tSuiteResult : tSuiteResults) {
+        for (TSuiteResult tSuiteResult : tSuiteResults_) {
             if (count > 0) {
                 sb.append(',')
             }
@@ -113,163 +103,11 @@ class RepositoryScanner {
      * @param args
      */
     public static void main(String[] args) {
-        logger.info("#main " + ("Hello, I am Carmina RepositoryScanner."))
+        logger_.info("#main " + ("Hello, I am Carmina RepositoryScanner."))
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Results')
         RepositoryScanner scanner = new RepositoryScanner(baseDir)
         scanner.scan()
-        logger.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))
+        logger_.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))
     }
 
-    /**
-     *
-     */
-    static class RepositoryVisitor extends SimpleFileVisitor<Path> {
-
-        private TSuiteName tSuiteName
-        private TSuiteTimestamp tSuiteTimestamp
-        private TSuiteResult tSuiteResult
-        private TCaseName tCaseName
-        private TCaseResult tCaseResult
-        private TargetURL targetURL
-        private Material material
-
-        private Stack<Layer> directoryTransition
-
-        private Path baseDir
-        private List<TSuiteResult> tSuiteResults
-
-        RepositoryVisitor(Path baseDir, List<TSuiteResult> tSuiteResults) {
-            this.baseDir = baseDir
-            this.tSuiteResults = tSuiteResults
-            directoryTransition = new Stack<Layer>()
-            directoryTransition.push(Layer.INIT)
-            logger.debug("baseDir=${baseDir}")
-        }
-
-        /**
-         * Invoked for a directory before entries in the directory are visited.
-         */
-        @Override
-        FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            def from = directoryTransition.peek()
-            switch (from) {
-                case Layer.INIT :
-                    logger.debug("#preVisitDirectory visiting ${dir} as BASEDIR")
-                    directoryTransition.push(Layer.BASEDIR)
-                    break
-                case Layer.BASEDIR :
-                    logger.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
-                    tSuiteName = new TSuiteName(dir.getFileName().toString())
-                    directoryTransition.push(Layer.TESTSUITE)
-                    break
-                case Layer.TESTSUITE:
-                    logger.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
-                    LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
-                    if (ldt != null) {
-                        tSuiteTimestamp = new TSuiteTimestamp(ldt)
-                        tSuiteResult = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir)
-                        tSuiteResults.add(tSuiteResult)
-                    } else {
-                        logger.info("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
-                                " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
-                    }
-                    directoryTransition.push(Layer.TIMESTAMP)
-                    break
-                case Layer.TIMESTAMP :
-                    logger.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
-                    tCaseName = new TCaseName(dir.getFileName().toString())
-                    tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-                    if (tCaseResult == null) {
-                        tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
-                        tSuiteResult.addTCaseResult(tCaseResult)
-                    }
-                    directoryTransition.push(Layer.TESTCASE)
-                    break
-                case Layer.TESTCASE :
-                    logger.debug("#preVisitDirectory visiting ${dir} as MATERIAL")
-                    //
-                    directoryTransition.push(Layer.MATERIAL)
-                    break
-            }
-            return CONTINUE
-        }
-
-        /**
-         * Invoked for a directory after entries in the directory, and all of their descendants, have been visited.
-         */
-        @Override
-        FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
-            def to = directoryTransition.peek()
-            switch (to) {
-                case Layer.TESTCASE :
-                    directoryTransition.pop()
-                    logger.debug("#postVisitDirectory back to ${dir} as TESTCASE")
-                    break
-                case Layer.TIMESTAMP :
-                    directoryTransition.pop()
-                    logger.debug("#postVisitDirectory back to ${dir} as TIMESTAMP")
-                    break
-                case Layer.TESTSUITE :
-                    directoryTransition.pop()
-                    logger.debug("#postVisitDirectory back to ${dir} as TESTSUITE")
-                    break
-                case Layer.BASEDIR :
-                    directoryTransition.pop()
-                    logger.debug("#postVisitDirectory back to ${dir} as BASEDIR")
-                    break
-            }
-            return CONTINUE
-        }
-
-        /**
-         * Invoked for a file in a directory.
-         */
-        @Override
-        FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
-            switch (directoryTransition.peek()) {
-                case Layer.BASEDIR :
-                    logger.debug("#visitFile ${file} in BASEDIR")
-                    break
-                case Layer.TESTSUITE :
-                    logger.debug("#visitFile ${file} in TESTSUITE")
-                    break
-                case Layer.TIMESTAMP :
-                    logger.debug("#visitFile ${file} in TIMESTAMP")
-                    break
-                case Layer.TESTCASE :
-                    logger.debug("#visitFile ${file} in TESTCASE")
-                    //logger.debug("#visitFile tCaseResult=${tCaseResult.toString()}")
-                    String fileName = file.getFileName()
-                    FileType fileType = Material.parseFileNameForFileType(fileName)
-                    if (fileType != FileType.NULL) {
-                        URL url = Material.parseFileNameForURL(fileName)
-                        //logger.debug("#visitFile url=${url.toString()}")
-                        if (url != null) {
-                            TargetURL targetURL = this.tCaseResult.getTargetURL(url)
-                            //logger.debug("#visitFile targetURL=${targetURL.toString()} pre")
-                            if (targetURL == null) {
-                                targetURL = new TargetURL(url).setParent(this.tCaseResult)
-                                tCaseResult.addTargetURL(targetURL)
-                            }
-                            Material mw = new Material(file, fileType).setParent(targetURL)
-                            targetURL.addMaterial(mw)
-                            //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
-                        } else {
-                            logger.info("#visitFile unable to parse ${file} into a URL")
-                        }
-                    } else {
-                        logger.info("#visitFile ${file} has no known FileType")
-                    }
-                    break
-            }
-            return CONTINUE
-        }
-
-        /**
-         * Invoked for a file that could not be visited.
-         *
-         @Override
-          FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {}
-         */
-    }
 }

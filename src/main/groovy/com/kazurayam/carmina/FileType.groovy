@@ -21,20 +21,20 @@ enum FileType {
 
     NULL('', '') ;
 
-    private final String extension
-    private final String mimeType
+    private final String extension_
+    private final String mimeType_
 
     FileType(String extension, String mimeType) {
-        this.extension = extension
-        this.mimeType  = mimeType
+        this.extension_ = extension
+        this.mimeType_  = mimeType
     }
 
     String getExtension() {
-        return this.extension
+        return this.extension_
     }
 
     String getMimeType() {
-        return this.mimeType
+        return this.mimeType_
     }
 
     @Override

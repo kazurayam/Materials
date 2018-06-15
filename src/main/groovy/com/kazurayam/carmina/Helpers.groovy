@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter
 
 final class Helpers {
 
-    static Logger logger = LoggerFactory.getLogger(Helpers.class)
+    static Logger logger_ = LoggerFactory.getLogger(Helpers.class)
 
     /**
      * not to be instanciated

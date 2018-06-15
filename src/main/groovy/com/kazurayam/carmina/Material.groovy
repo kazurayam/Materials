@@ -7,21 +7,21 @@ import org.slf4j.LoggerFactory
 
 class Material {
 
-    static Logger logger = LoggerFactory.getLogger(Material.class)
+    static Logger logger_ = LoggerFactory.getLogger(Material.class)
 
     protected static final String MAGIC_DELIMITER = '§'
 
-    private TargetURL parent
-    private Path materialFilePath
-    private FileType fileType
+    private TargetURL parent_
+    private Path materialFilePath_
+    private FileType fileType_
 
     Material(Path materialFilePath, FileType fileType) {
-        this.materialFilePath = materialFilePath
-        this.fileType = fileType
+        materialFilePath_ = materialFilePath
+        fileType_ = fileType
     }
 
     Material setParent(TargetURL parent) {
-        this.parent = parent
+        parent_ = parent
         return this
     }
 
@@ -30,26 +30,26 @@ class Material {
     }
 
     TargetURL getTargetURL() {
-        return this.parent
+        return parent_
     }
 
     Path getMaterialFilePath() {
-        return materialFilePath
+        return materialFilePath_
     }
 
     FileType getFileType() {
-        return fileType
+        return fileType_
     }
 
     Path getRelativePathToTsTimestampDir() {
-        if (parent != null) {
+        if (parent_ != null) {
             Path tsTimestampDir =
                 this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDir()
-            Path path = tsTimestampDir.relativize(this.materialFilePath).normalize()
+            Path path = tsTimestampDir.relativize(materialFilePath_).normalize()
             return path
         } else {
             def msg = "parent TargetURL is null"
-            logger.error(msg)
+            logger_.error(msg)
             throw new IllegalStateException(msg)
         }
     }
@@ -81,7 +81,7 @@ class Material {
                 FileType ft = FileType.getByExtension(candidate)
                 return ft
             } catch (IllegalArgumentException e) {
-                logger.info("unknown file extension '${candidate}' in the file name '${fileName}'")
+                logger_.info("unknown file extension '${candidate}' in the file name '${fileName}'")
                 return FileType.NULL
             }
         }
@@ -96,7 +96,7 @@ class Material {
                 return null
             }
             if (arr.length > 3) {
-                logger.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
+                logger_.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
                         "Valid but unexpected.")
             }
             Arrays.sort(arr, Collections.reverseOrder())
@@ -121,7 +121,7 @@ class Material {
                 URL url = new URL(decoded)
                 return url
             } catch (MalformedURLException e) {
-                logger.warn("unknown protocol in '${decoded}'")
+                logger_.warn("unknown protocol in '${decoded}'")
                 return null
             }
         } else {
@@ -144,7 +144,7 @@ class Material {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        return this.materialFilePath == other.getMaterialFilePath()
+        return materialFilePath_ == other.getMaterialFilePath()
     }
 
     @Override
@@ -165,8 +165,8 @@ class Material {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Material":{')
-        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.materialFilePath.toString()) + '",')
-        sb.append('"fileType":"' + Helpers.escapeAsJsonText(this.fileType.toString()) + '"')
+        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(materialFilePath_.toString()) + '",')
+        sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '"')
         sb.append('}}')
         return sb.toString()
     }
