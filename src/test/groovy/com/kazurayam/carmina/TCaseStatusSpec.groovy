@@ -6,7 +6,7 @@ import spock.lang.Specification
 
 class TCaseStatusSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(TCaseStatusSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TCaseStatusSpec.class)
 
     def testValueOf() {
         expect:

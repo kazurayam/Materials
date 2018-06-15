@@ -13,10 +13,10 @@ import spock.lang.Specification
 class TSuiteNameSpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(TSuiteNameSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteNameSpec.class)
 
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setupSpec() {

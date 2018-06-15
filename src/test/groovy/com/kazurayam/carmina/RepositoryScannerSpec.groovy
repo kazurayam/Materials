@@ -11,17 +11,17 @@ import spock.lang.Specification
 
 class RepositoryScannerSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(RepositoryScannerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryScannerSpec.class)
 
     // fields
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryScannerSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryScannerSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
     }
     def setup() {}
@@ -38,15 +38,15 @@ class RepositoryScannerSpec extends Specification {
      */
     def testScan() {
         setup:
-        Path casedir = workdir.resolve("testScan")
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve("testScan")
+        Helpers.copyDirectory(fixture_, casedir)
 
         when:
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
-        logger.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
-        logger.debug(prettyPrint(tSuiteResults))
+        logger_.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
+        logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
         tSuiteResults.size() == 5 // _/_, TS1/20180530_130419, TS1/20180530_130604, TS2/20180612_111256, §A/20180616_170941
@@ -121,8 +121,8 @@ class RepositoryScannerSpec extends Specification {
      */
     def testGetTSuiteResults_noArg() {
         setup:
-        Path casedir = workdir.resolve('testGetTSuiteResults_noArg')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetTSuiteResults_noArg')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         when:
         scanner.scan()
@@ -138,8 +138,8 @@ class RepositoryScannerSpec extends Specification {
 
     def testGetTSuiteResults_byTSuiteName() {
         setup:
-        Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteName')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetTSuiteResults_byTSuiteName')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         when:
         scanner.scan()
@@ -152,8 +152,8 @@ class RepositoryScannerSpec extends Specification {
 
     def testGetTSuiteResults_byTSuiteTimestamp() {
         setup:
-        Path casedir = workdir.resolve('testGetTSuiteResults_byTSuiteTimestamp')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetTSuiteResults_byTSuiteTimestamp')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         when:
         scanner.scan()
@@ -165,8 +165,8 @@ class RepositoryScannerSpec extends Specification {
 
     def testGetTSuiteResult() {
         setup:
-        Path casedir = workdir.resolve('testGetTSuiteResult')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetTSuiteResult')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         when:
         scanner.scan()
@@ -178,8 +178,8 @@ class RepositoryScannerSpec extends Specification {
 
     def testFind2MaterialsIn1TestCase() {
         setup:
-        Path casedir = workdir.resolve('testGetTSuiteResult')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetTSuiteResult')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         when:
@@ -196,12 +196,12 @@ class RepositoryScannerSpec extends Specification {
 
     def testPrettyPrint() {
         setup:
-        Path casedir = workdir.resolve('testPrettyPrint')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testPrettyPrint')
+        Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         when:
-        logger.debug(JsonOutput.prettyPrint(scanner.toJson()))
+        logger_.debug(JsonOutput.prettyPrint(scanner.toJson()))
         then:
         true
     }

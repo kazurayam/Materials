@@ -17,34 +17,34 @@ import spock.lang.Specification
 class ImageMagickVisualTestingDriverSpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(ImageMagickVisualTestingDriverSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(ImageMagickVisualTestingDriverSpec.class)
 
-    private static Path workdir
-    private static Path mask
-    private static Path resourcesdir
-    private static OutputStream out
-    private static OutputStream err
+    private static Path workdir_
+    private static Path mask_
+    private static Path resourcesdir_
+    private static OutputStream out_
+    private static OutputStream err_
 
     private ImageMagickVisualTestingDriver imvtd
 
     // fixture methods
     def setup() {
-        out = new ByteArrayOutputStream()
-        err = new ByteArrayOutputStream()
+        out_ = new ByteArrayOutputStream()
+        err_ = new ByteArrayOutputStream()
         imvtd = new ImageMagickVisualTestingDriver()
     }
 
     def cleanup() {
-        out.close()
-        err.close()
+        out_.close()
+        err_.close()
     }
 
     def setupSpec() {
-        resourcesdir = Paths.get("./src/test/fixture")
-        workdir = Paths.get("./build/tmp/${ImageMagickVisualTestingDriver.getName()}")
-        Helpers.deleteDirectory(workdir)
-        workdir.toFile().mkdirs()
-        mask = workdir.resolve('mask.png')
+        resourcesdir_ = Paths.get("./src/test/fixture")
+        workdir_ = Paths.get("./build/tmp/${ImageMagickVisualTestingDriver.getName()}")
+        Helpers.deleteDirectory(workdir_)
+        workdir_.toFile().mkdirs()
+        mask_ = workdir_.resolve('mask.png')
     }
 
     def cleanupSpec() {}
@@ -55,7 +55,7 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
         setup:
         String[] args = ['convert'] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 1
     }
@@ -73,14 +73,14 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step1() {
         setup:
-        Path photo1 = resourcesdir.resolve('photo1.png')
+        Path photo1 = resourcesdir_.resolve('photo1.png')
         String[] args = ['convert',
             "${photo1.toString()}",
             '-fill', 'white', '-colorize', '100%',
-            "${mask.toString()}"
+            "${mask_.toString()}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }
@@ -93,11 +93,11 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
     def testRunImagemagickCommand_step2() {
         setup:
         String[] args = ['convert',
-            "${mask.toString()}",
+            "${mask_.toString()}",
             '-fill', 'black', '-draw', 'rectangle 0,0 480,32',
-            "${mask.toString()}"] as String[]
+            "${mask_.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }
@@ -108,15 +108,15 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step3() {
         setup:
-        Path photo1 = resourcesdir.resolve('photo1.png')
-        Path masked = workdir.resolve('photo1.png')
+        Path photo1 = resourcesdir_.resolve('photo1.png')
+        Path masked = workdir_.resolve('photo1.png')
         String[] args = ['convert',
             "${photo1.toString()}",
-            "${mask.toString()}",
+            "${mask_.toString()}",
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }
@@ -127,15 +127,15 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step4() {
         setup:
-        Path photo2 = resourcesdir.resolve('photo2.png')
-        Path masked = workdir.resolve('photo2.png')
+        Path photo2 = resourcesdir_.resolve('photo2.png')
+        Path masked = workdir_.resolve('photo2.png')
         String[] args = ['convert',
             "${photo2.toString()}",
-            "${mask.toString()}",
+            "${mask_.toString()}",
             '-compose', 'copy-opacity', '-composite',
             "${masked.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }
@@ -147,15 +147,15 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step5() {
         setup:
-        Path masked1 = workdir.resolve('photo1.png')
-        Path masked2 = workdir.resolve('photo2.png')
-        Path delta = workdir.resolve('delta.png')
+        Path masked1 = workdir_.resolve('photo1.png')
+        Path masked2 = workdir_.resolve('photo2.png')
+        Path delta = workdir_.resolve('delta.png')
         String[] args = ['compare',
             "${masked1.toString()}",
             "${masked2.toString()}",
             "${delta.toString()}"] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         // ふたつの画像を比較して差異があるので1がreturnされるはず。
         ret == 1
@@ -168,14 +168,14 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step6() {
         setup:
-        Path masked1 = workdir.resolve('photo1.png')
+        Path masked1 = workdir_.resolve('photo1.png')
         String[] args = ['convert',
             "${masked1}",
             '-alpha', 'off',
             "${masked1}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }
@@ -187,14 +187,14 @@ class ImageMagickVisualTestingDriverSpec extends Specification {
      */
     def testRunImagemagickCommand_step7() {
         setup:
-        Path masked2 = workdir.resolve('photo2.png')
+        Path masked2 = workdir_.resolve('photo2.png')
         String[] args = ['convert',
             "${masked2}",
             '-alpha', 'off',
             "${masked2}"
             ] as String[]
         when:
-        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out, err)
+        int ret = ImageMagickVisualTestingDriver.runImageMagickCommand(args, out_, err_)
         then:
         ret == 0
     }

@@ -19,16 +19,16 @@ import spock.lang.Specification
 //@Ignore
 class HelpersSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(HelpersSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(HelpersSpec.class)
 
     // fields
-    private static Path workdir
+    private static Path workdir_
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(HelpersSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(HelpersSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
     }
     def setup() {}
@@ -42,7 +42,7 @@ class HelpersSpec extends Specification {
      */
     def testEnsureDirs() {
         setup:
-        Path subdir = workdir.resolve('testEnsureDirs')
+        Path subdir = workdir_.resolve('testEnsureDirs')
         when:
         Helpers.ensureDirs(subdir)
         then:
@@ -53,7 +53,7 @@ class HelpersSpec extends Specification {
 
     def testTouch() {
         setup:
-        Path subdir = workdir.resolve('testTouch')
+        Path subdir = workdir_.resolve('testTouch')
         Helpers.ensureDirs(subdir)
         Path file = subdir.resolve('dummy')
         when:
@@ -66,7 +66,7 @@ class HelpersSpec extends Specification {
 
     def testDeleteDirectory() {
         setup:
-        Path subdir = workdir.resolve('testDeleteDirectory')
+        Path subdir = workdir_.resolve('testDeleteDirectory')
         Helpers.ensureDirs(subdir)
         Path file = subdir.resolve('dummy')
         Helpers.touch(file)
@@ -89,7 +89,7 @@ class HelpersSpec extends Specification {
     def testCopyDirectory() {
         setup:
         Path sourceDir = Paths.get('./src/test/fixture/Results')
-        Path targetDir = workdir.resolve('testCopyDirectory')
+        Path targetDir = workdir_.resolve('testCopyDirectory')
         when:
         Helpers.copyDirectory(sourceDir, targetDir)
         then:

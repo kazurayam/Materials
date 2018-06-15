@@ -5,23 +5,23 @@ import org.slf4j.LoggerFactory
 
 class TCaseName {
 
-    static Logger logger = LoggerFactory.getLogger(TCaseName.class)
+    static Logger logger_ = LoggerFactory.getLogger(TCaseName.class)
 
-    private String value
+    private String value_
 
     TCaseName(String testCaseId) {
         String[] arr = testCaseId.split('[/\\\\]')
-        this.value = arr[arr.size() - 1]
+        value_ = arr[arr.size() - 1]
     }
 
     String getValue() {
-        return value
+        return value_
     }
 
     // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
-        return value
+        return value_
     }
 
     @Override

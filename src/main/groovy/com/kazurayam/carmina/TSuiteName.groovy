@@ -5,27 +5,27 @@ import org.slf4j.LoggerFactory
 
 class TSuiteName {
 
-    static Logger logger = LoggerFactory.getLogger(TSuiteName.class)
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteName.class)
 
     static final String SUITELESS_DIRNAME = '_'
 
     static final TSuiteName SUITELESS = new TSuiteName(SUITELESS_DIRNAME)
 
-    private String value
+    private String value_
 
     TSuiteName(String testSuiteId) {
         String[] arr = testSuiteId.split('[/\\\\]')
-        this.value = arr[arr.size() - 1]
+        value_ = arr[arr.size() - 1]
     }
 
     String getValue() {
-        return value
+        return value_
     }
 
     // -------------------- overriding Object properties ----------------------
     @Override
     String toString() {
-        return value
+        return value_
     }
 
     @Override

@@ -12,28 +12,28 @@ import spock.lang.Specification
 //@Ignore
 class TargetURLSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(TargetURLSpec.class);
+    static Logger logger_ = LoggerFactory.getLogger(TargetURLSpec.class);
 
     // fields
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static RepositoryScanner scanner
-    private static TCaseResult tcr
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static RepositoryScanner scanner_
+    private static TCaseResult tCaseResult
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetURLSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TargetURLSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+        Helpers.copyDirectory(fixture_, workdir_)
     }
     def setup() {
-        scanner = new RepositoryScanner(workdir)
-        scanner.scan()
-        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+        scanner_ = new RepositoryScanner(workdir_)
+        scanner_.scan()
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
-        tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        tCaseResult = tsr.getTCaseResult(new TCaseName('TC1'))
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -42,15 +42,15 @@ class TargetURLSpec extends Specification {
     def testSetParent_GetParent() {
         when:
         TargetURL tu = new TargetURL(new URL('http://demoaut.katalon.com/'))
-        TargetURL modified = tu.setParent(tcr)
+        TargetURL modified = tu.setParent(tCaseResult)
         then:
         modified == tu
-        modified.getParent() == tcr
+        modified.getParent() == tCaseResult
     }
 
     def testGetMaterials() {
         when:
-        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tu = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
         assert tu != null
         List<Material> materials = tu.getMaterials()
         then:
@@ -64,7 +64,7 @@ class TargetURLSpec extends Specification {
 
     def testGetMaterialBySuffixAndFileType_withoutSuffix() {
         when:
-        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tu = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
         Material mw = tu.getMaterial(Suffix.NULL, FileType.PNG)
         then:
         mw != null
@@ -72,7 +72,7 @@ class TargetURLSpec extends Specification {
 
     def testGetMaterialBySuffixAndFileType_withSuffix() {
         when:
-        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tu = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
         Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
         then:
         mw != null
@@ -82,10 +82,10 @@ class TargetURLSpec extends Specification {
 
     def testToJson() {
         when:
-        TargetURL tp = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        TargetURL tp = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
         def str = tp.toString()
         def pretty = JsonOutput.prettyPrint(str)
-        logger.debug("#testToJson: ${pretty}")
+        logger_.debug("#testToJson: ${pretty}")
         then:
         str.startsWith('{"TargetURL":{')
         str.contains(Helpers.escapeAsJsonText('http://demoaut.katalon.com/'))

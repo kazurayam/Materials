@@ -13,17 +13,17 @@ import spock.lang.Specification
 class TestResultsRepositoryImplSpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryImplSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryImplSpec.class)
 
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static String classShortName = Helpers.getClassShortName(TestResultsRepositoryImplSpec.class)
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static String classShortName_ = Helpers.getClassShortName(TestResultsRepositoryImplSpec.class)
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${classShortName}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${classShortName_}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
     }
     def setup() {}
@@ -33,8 +33,8 @@ class TestResultsRepositoryImplSpec extends Specification {
     // feature methods
     def testGetBaseDir() {
         setup:
-        Path casedir = workdir.resolve('testGetBaseDir')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testGetBaseDir')
+        Helpers.copyDirectory(fixture_, casedir)
         when:
         TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir)
         then:
@@ -43,8 +43,8 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testResolveMaterialFilePath() {
         setup:
-        Path casedir = workdir.resolve('testResolveMaterialFilePath')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolveMaterialFilePath')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -56,13 +56,13 @@ class TestResultsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "./build/tmp/${classShortName}/testResolveMaterialFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "./build/tmp/${classShortName_}/testResolveMaterialFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolveMaterialFilePathWithSuffix() {
         setup:
-        Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -74,13 +74,13 @@ class TestResultsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "./build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testResolveMaterialFilePath_new() {
         setup:
-        Path casedir = workdir.resolve('testResolveMaterialFilePath_new')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolveMaterialFilePath_new')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
@@ -92,14 +92,14 @@ class TestResultsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "./build/tmp/${classShortName}/testResolveMaterialFilePath_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "./build/tmp/${classShortName_}/testResolveMaterialFilePath_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         Files.exists(p.getParent())
     }
 
     def testResolveMaterialFilePathWithSuffix_new() {
         setup:
-        Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix_new')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix_new')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
@@ -111,53 +111,53 @@ class TestResultsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "./build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
         Files.exists(p.getParent())
     }
 
     def testResolvePngFilePath() {
         setup:
-        Path casedir = workdir.resolve('testResolvePngFilePath')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolvePngFilePath')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolvePngFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolvePngFilePathWithSuffix() {
         setup:
-        Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testResolvePngFilePathBySuitelessTimeless() {
         setup:
-        Path casedir = workdir.resolve('testResolvePngFilePathBySuitelessTimeless')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testResolvePngFilePathBySuitelessTimeless')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
         p != null
-        p.toString().replace('\\', '/') == "./build/tmp/${classShortName}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
     def testToJson() {
         setup:
-        Path casedir = workdir.resolve('testToJson')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testToJson')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir)
         trri.setCurrentTestSuite('TS1')
         when:
@@ -172,8 +172,8 @@ class TestResultsRepositoryImplSpec extends Specification {
 
     def testReport() {
         setup:
-        Path casedir = workdir.resolve('testReport')
-        Helpers.copyDirectory(fixture, casedir)
+        Path casedir = workdir_.resolve('testReport')
+        Helpers.copyDirectory(fixture_, casedir)
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:

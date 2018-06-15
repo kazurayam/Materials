@@ -11,31 +11,31 @@ import spock.lang.Specification
 //@Ignore
 class MaterialSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(MaterialSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(MaterialSpec.class)
 
     // fields
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static TestResultsRepositoryImpl trri
-    private static TargetURL tu
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static TestResultsRepositoryImpl trri_
+    private static TargetURL tu_
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
-        trri = TestResultsRepositoryFactory.createInstance(workdir)
-        trri.setCurrentTestSuite('TS1')
+        Helpers.copyDirectory(fixture_, workdir_)
+        trri_ = TestResultsRepositoryFactory.createInstance(workdir_)
+        trri_.setCurrentTestSuite('TS1')
     }
     def setup() {
         TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = trri.getTSuiteResult(new TSuiteName('TS1'), tstamp)
+        TSuiteResult tsr = trri_.getTSuiteResult(new TSuiteName('TS1'), tstamp)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         assert tcr != null
         //tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        tu_ = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
     }
 
 
@@ -43,10 +43,10 @@ class MaterialSpec extends Specification {
 
     def testSetParent_GetParent() {
         when:
-        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
-        Material modified = mw.setParent(tu)
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        Material modified = mate.setParent(tu_)
         then:
-        modified.getParent() == tu
+        modified.getParent() == tu_
 
     }
 
@@ -129,35 +129,35 @@ class MaterialSpec extends Specification {
 
     def testToJson() {
         when:
-        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
-        def str = mw.toString()
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        def str = mate.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"Material":{"materialFilePath":"')
-        str.contains(Helpers.escapeAsJsonText(mw.getMaterialFilePath().toString()))
+        str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().toString()))
         str.endsWith('"}}')
     }
 
     def testGetRelativePathToTsTimestampDir() {
         when:
-        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
-        Path p = mw.getRelativePathToTsTimestampDir()
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        Path p = mate.getRelativePathToTsTimestampDir()
         then:
         p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
     }
 
     def testGetRelativePathAsString() {
         when:
-        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
-        String s = mw.getRelativePathAsString()
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        String s = mate.getRelativePathAsString()
         then:
         s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
     }
 
     def testGetRelativeUrlAsString() {
         when:
-        Material mw = tu.getMaterial(new Suffix('1'), FileType.PNG)
-        String s = mw.getRelativeUrlAsString()
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        String s = mate.getRelativeUrlAsString()
         then:
         s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
 

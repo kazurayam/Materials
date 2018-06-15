@@ -14,21 +14,21 @@ import spock.lang.Specification
  */
 class MiscSpec extends Specification {
     // fields
-    static Logger logger = LoggerFactory.getLogger(MiscSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(MiscSpec.class)
 
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private static Path source
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path source_
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(MiscSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MiscSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
         //Helpers.copyDirectory(fixture, workdir)
-        source = workdir.resolve('source')
-        Writer wt = Files.newBufferedWriter(source)
+        source_ = workdir_.resolve('source')
+        Writer wt = Files.newBufferedWriter(source_)
         wt.write(Material.MAGIC_DELIMITER + ' is usable as a part of file name')
         wt.flush()
         wt.close()
@@ -64,16 +64,16 @@ class MiscSpec extends Specification {
     }
 
     def boolean usableAsFileName(String str) {
-        Path target = workdir.resolve(str)
+        Path target = workdir_.resolve(str)
         if (Files.exists(target)) {
             try {
                 Files.delete(target)
             } catch (IOException e) {
-                logger.debugEnabled('no need to delete ${target.toString()} as it is not there')
+                logger_.debugEnabled('no need to delete ${target.toString()} as it is not there')
             }
         }
         try {
-            Files.copy(source, target)
+            Files.copy(source_, target)
             return true
         } catch (IOException e) {
             return false

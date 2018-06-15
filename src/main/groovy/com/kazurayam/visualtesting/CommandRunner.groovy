@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 
 class CommandRunner {
     
-    static Logger logger = LoggerFactory.getLogger(CommandRunner.class)
+    static Logger logger_ = LoggerFactory.getLogger(CommandRunner.class)
 
     private CommandRunner() {}
 

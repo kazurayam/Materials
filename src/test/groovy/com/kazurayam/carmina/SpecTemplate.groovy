@@ -14,19 +14,19 @@ import spock.lang.Specification
 @Ignore
 class SpecTemplate extends Specification {
     
-    static Logger logger = LoggerFactory.getLogger(SpecTemplate.class)
+    static Logger logger_ = LoggerFactory.getLogger(SpecTemplate.class)
 
     // fields
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+        Helpers.copyDirectory(fixture_, workdir_)
     }
     def setup() {}
     def cleanup() {}

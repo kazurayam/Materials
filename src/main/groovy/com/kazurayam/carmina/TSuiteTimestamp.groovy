@@ -1,12 +1,12 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.TemporalAccessor
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Timestamp of a Test Suite
@@ -16,7 +16,7 @@ import java.time.temporal.TemporalAccessor
  */
 class TSuiteTimestamp {
 
-    static Logger logger = LoggerFactory.getLogger(RepositoryScanner.class);
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class);
 
     static final String TIMELESS_DIRNAME = '_'
 
@@ -24,7 +24,7 @@ class TSuiteTimestamp {
 
     static final String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
 
-    private LocalDateTime timestamp
+    private LocalDateTime timestamp_
 
     /**
      * create a Timestamp object based on the LocalDateTime of now
@@ -36,7 +36,7 @@ class TSuiteTimestamp {
     TSuiteTimestamp(String timestamp) {
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
-            this.timestamp = ignoreMilliseconds(ldt)
+            timestamp_ = ignoreMilliseconds(ldt)
         } else {
             throw new IllegalArgumentException("unable to parse '${timestamp}' as TestSuiteTimestamp")
         }
@@ -48,7 +48,7 @@ class TSuiteTimestamp {
      * @param ts
      */
     TSuiteTimestamp(LocalDateTime ts) {
-        this.timestamp = ignoreMilliseconds(ts)
+        timestamp_ = ignoreMilliseconds(ts)
     }
 
     private LocalDateTime ignoreMilliseconds(LocalDateTime ts) {
@@ -57,7 +57,7 @@ class TSuiteTimestamp {
     }
 
     LocalDateTime getValue() {
-        return this.timestamp
+        return timestamp_
     }
 
     /**
@@ -65,10 +65,10 @@ class TSuiteTimestamp {
      * @return
      */
     String format() {
-        if (timestamp == LocalDateTime.MIN) {
+        if (timestamp_ == LocalDateTime.MIN) {
             return TIMELESS_DIRNAME
         } else {
-            return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp)
+            return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp_)
         }
     }
 
@@ -86,7 +86,7 @@ class TSuiteTimestamp {
                 return LocalDateTime.from(parsed)
             }
         } catch (DateTimeParseException ex) {
-            logger.info("unable to parse '${str}' as LocalDateTime")
+            logger_.info("unable to parse '${str}' as LocalDateTime")
             return null
         }
     }

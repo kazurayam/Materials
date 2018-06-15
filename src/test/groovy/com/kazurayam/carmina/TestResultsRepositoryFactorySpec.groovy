@@ -11,18 +11,18 @@ import spock.lang.Specification
 class TestResultsRepositoryFactorySpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryFactorySpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryFactorySpec.class)
 
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositoryFactorySpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositoryFactorySpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+        Helpers.copyDirectory(fixture_, workdir_)
     }
     def setup() {}
     def cleanup() {}
@@ -31,11 +31,11 @@ class TestResultsRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        TestResultsRepository trs = TestResultsRepositoryFactory.createInstance(workdir)
-        trs.setCurrentTestSuite('Test Suites/TS1')
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1')
         then:
-        trs != null
-        trs.toString().contains('TS1')
+        trr != null
+        trr.toString().contains('TS1')
     }
 
     // helper methods

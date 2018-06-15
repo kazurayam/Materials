@@ -10,28 +10,28 @@ import org.slf4j.LoggerFactory
  */
 final class TSuiteResult {
 
-    static Logger logger = LoggerFactory.getLogger(TSuiteResult.class)
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
-    private TSuiteName tSuiteName
-    private TSuiteTimestamp tSuiteTimestamp
-    private Path baseDir
-    private Path tSuiteTimestampDir
-    private List<TCaseResult> tCaseResults
+    private TSuiteName tSuiteName_
+    private TSuiteTimestamp tSuiteTimestamp_
+    private Path baseDir_
+    private Path tSuiteTimestampDir_
+    private List<TCaseResult> tCaseResults_
 
 
     // ------------------ constructors & initializer -------------------------------
     TSuiteResult(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
         assert testSuiteName != null
         assert testSuiteTimestamp != null
-        this.tSuiteName = testSuiteName
-        this.tSuiteTimestamp = testSuiteTimestamp
-        this.tCaseResults = new ArrayList<TCaseResult>()
+        tSuiteName_ = testSuiteName
+        tSuiteTimestamp_ = testSuiteTimestamp
+        tCaseResults_ = new ArrayList<TCaseResult>()
     }
 
     // ------------------ attribute setter & getter -------------------------------
     TSuiteResult setParent(Path baseDir) {
-        this.baseDir = baseDir
-        this.tSuiteTimestampDir = baseDir.resolve(tSuiteName.toString()).resolve(tSuiteTimestamp.format())
+        baseDir_ = baseDir
+        tSuiteTimestampDir_ = baseDir.resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
         return this
     }
 
@@ -40,24 +40,24 @@ final class TSuiteResult {
     }
 
     Path getBaseDir() {
-        return this.baseDir
+        return baseDir_
     }
 
     Path getTSuiteTimestampDir() {
-        return this.tSuiteTimestampDir
+        return tSuiteTimestampDir_
     }
 
     TSuiteName getTSuiteName() {
-        return tSuiteName
+        return tSuiteName_
     }
 
     TSuiteTimestamp getTSuiteTimestamp() {
-        return tSuiteTimestamp
+        return tSuiteTimestamp_
     }
 
     // ------------------ create/add/get child nodes ------------------------------
     TCaseResult getTCaseResult(TCaseName tCaseName) {
-        for (TCaseResult tcr : this.tCaseResults) {
+        for (TCaseResult tcr : tCaseResults_) {
             if (tcr.getTCaseName() == tCaseName) {
                 return tcr
             }
@@ -66,30 +66,18 @@ final class TSuiteResult {
     }
 
     List<TCaseResult> getTCaseResults() {
-        return tCaseResults
+        return tCaseResults_
     }
-
-    /*
-    TCaseResult findOrNewTCaseResult(TCaseName tCaseName) {
-        TCaseResult tcr = this.getTCaseResult(tCaseName)
-        if (tcr == null) {
-            tcr = new TCaseResult(tCaseName).setParent(this)
-            this.tCaseResults.add(tcr)
-        }
-        return tcr
-    }
-     */
-
 
     void addTCaseResult(TCaseResult tCaseResult) {
         boolean found = false
-        for (TCaseResult tcr : this.tCaseResults) {
+        for (TCaseResult tcr : tCaseResults_) {
             if (tcr == tCaseResult) {
                 found = true
             }
         }
         if (!found) {
-            this.tCaseResults.add(tCaseResult)
+            tCaseResults_.add(tCaseResult)
         }
     }
 
@@ -113,7 +101,7 @@ final class TSuiteResult {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (this.tSuiteName == other.getTSuiteName() && this.tSuiteTimestamp == other.getTSuiteTimestamp()) {
+        if (tSuiteName_ == other.getTSuiteName() && tSuiteTimestamp_ == other.getTSuiteTimestamp()) {
             return true
         } else {
             return false
@@ -137,13 +125,13 @@ final class TSuiteResult {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"baseDir": "' + Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.tSuiteName.toString()) + '",')
-        sb.append('"tSuiteTimestamp": ' + this.tSuiteTimestamp.toString() + ',')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.tSuiteTimestampDir.toString()) + '",')
+        sb.append('"baseDir": "' + Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
+        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(tSuiteName_.toString()) + '",')
+        sb.append('"tSuiteTimestamp": ' + tSuiteTimestamp_.toString() + ',')
+        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDir_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0
-        for (TCaseResult tcr : this.tCaseResults) {
+        for (TCaseResult tcr : tCaseResults_) {
             if (count > 0) { sb.append(',') }
             count += 1
             sb.append(tcr.toJson())

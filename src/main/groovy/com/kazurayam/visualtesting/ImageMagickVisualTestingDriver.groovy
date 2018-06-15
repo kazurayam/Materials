@@ -1,9 +1,9 @@
 package com.kazurayam.visualtesting
 
+import java.nio.file.Path
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.nio.file.Path
 
 import com.kazurayam.carmina.TestResultsRepository
 
@@ -22,11 +22,11 @@ class ImageMagickVisualTestingDriver implements VisualTestingDriver {
     private Path outputDir_
 
     ImageMagickVisualTestingDriver(TestResultsRepository target) {
-        this.target_ = target
+        target_ = target
     }
 
     void setOutput(Path outputDir) {
-        this.outputDir_ = outputDir
+        outputDir_ = outputDir
     }
 
     void execute() {

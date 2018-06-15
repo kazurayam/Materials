@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory
  */
 class TCaseResult {
 
-    static Logger logger = LoggerFactory.getLogger(TCaseResult.class)
+    static Logger logger_ = LoggerFactory.getLogger(TCaseResult.class)
 
-    private TSuiteResult parent
-    private TCaseName tCaseName
-    private Path tCaseDir
-    private List<TargetURL> targetURLs
-    private TCaseStatus tCaseStatus
+    private TSuiteResult parent_
+    private TCaseName tCaseName_
+    private Path tCaseDir_
+    private List<TargetURL> targetURLs_
+    private TCaseStatus tCaseStatus_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -24,20 +24,20 @@ class TCaseResult {
      * @param tCaseName
      */
     TCaseResult(TCaseName tCaseName) {
-        this.tCaseName = tCaseName
-        this.targetURLs = new ArrayList<TargetURL>()
-        this.tCaseStatus = TCaseStatus.TO_BE_EXECUTED
+        tCaseName_ = tCaseName
+        targetURLs_ = new ArrayList<TargetURL>()
+        tCaseStatus_ = TCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
-        this.parent = parent
-        this.tCaseDir = parent.getTSuiteTimestampDir().resolve(this.tCaseName.toString())
+        parent_ = parent
+        tCaseDir_ = parent.getTSuiteTimestampDir().resolve(tCaseName_.toString())
         return this
     }
 
     TSuiteResult getParent() {
-        return this.parent
+        return parent_
     }
 
     TSuiteResult getTSuiteResult() {
@@ -45,11 +45,11 @@ class TCaseResult {
     }
 
     TCaseName getTCaseName() {
-        return tCaseName
+        return tCaseName_
     }
 
     Path getTCaseDir() {
-        return tCaseDir
+        return tCaseDir_
     }
 
     void setTestCaseStatus(String str) {
@@ -59,17 +59,17 @@ class TCaseResult {
 
     void setTestCaseStatus(TCaseStatus tCaseStatus) {
         assert tCaseStatus != null
-        this.tCaseStatus = tCaseStatus
+        tCaseStatus_ = tCaseStatus
     }
 
     TCaseStatus getTestCaseStatus() {
-        return this.tCaseStatus
+        return tCaseStatus_
     }
 
     // --------------------- create/add/get child nodes ----------------------
 
     TargetURL getTargetURL(URL url) {
-        for (TargetURL tp : this.targetURLs) {
+        for (TargetURL tp : targetURLs_) {
             // you MUST NOT evaluate 'tp.getUrl() == url'
             // because it will take more than 10 seconds for DNS Hostname resolution
             if (tp.getUrl().toString() == url.toString()) {
@@ -80,18 +80,18 @@ class TCaseResult {
     }
 
     List<TargetURL> getTargetURLs() {
-        return this.targetURLs
+        return targetURLs_
     }
 
     void addTargetURL(TargetURL targetPage) {
         boolean found = false
-        for (TargetURL tp : this.targetURLs) {
+        for (TargetURL tp : targetURLs_) {
             if (tp == targetPage) {
                 found = true
             }
         }
         if (!found) {
-            this.targetURLs.add(targetPage)
+            targetURLs_.add(targetPage)
         }
     }
 
@@ -107,12 +107,12 @@ class TCaseResult {
             return false
         }
         TCaseResult other = (TCaseResult) obj
-        return this.tCaseName == other.getTCaseName()
+        return tCaseName_ == other.getTCaseName()
     }
 
     @Override
     int hashCode() {
-        return this.tCaseName.hashCode()
+        return tCaseName_.hashCode()
     }
 
     @Override
@@ -123,12 +123,12 @@ class TCaseResult {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')
-        sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(this.tCaseName.toString())   + '",')
-        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(this.tCaseDir.toString())    + '",')
-        sb.append('"tCaseStatus":"' + this.tCaseStatus.toString() + '",')
+        sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(tCaseName_.toString())   + '",')
+        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDir_.toString())    + '",')
+        sb.append('"tCaseStatus":"' + tCaseStatus_.toString() + '",')
         sb.append('"targetURLs":[')
         def count = 0
-        for (TargetURL tp : this.targetURLs) {
+        for (TargetURL tp : targetURLs_) {
             if (count > 0) { sb.append(',') }
             sb.append(tp.toJson())
             count += 1

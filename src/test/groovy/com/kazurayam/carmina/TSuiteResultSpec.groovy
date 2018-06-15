@@ -13,24 +13,24 @@ import spock.lang.Specification
 //@Ignore
 class TSuiteResultSpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(TSuiteResultSpec.class);
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteResultSpec.class);
 
     // fields
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
-    private RepositoryScanner scanner
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private RepositoryScanner scanner_
 
     // fixture methods
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TSuiteResultSpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TSuiteResultSpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+        Helpers.copyDirectory(fixture_, workdir_)
     }
     def setup() {
-        scanner = new RepositoryScanner(workdir)
-        scanner.scan()
+        scanner_ = new RepositoryScanner(workdir_)
+        scanner_.scan()
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -40,20 +40,20 @@ class TSuiteResultSpec extends Specification {
         when:
         TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS3'),
                 new TSuiteTimestamp(LocalDateTime.now()))
-        TSuiteResult modified = tsr.setParent(workdir)
+        TSuiteResult modified = tsr.setParent(workdir_)
         then:
-        modified.getParent() == workdir
+        modified.getParent() == workdir_
     }
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
         when:
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         def s = tsr.toString()
-        logger.debug("#testToJson ${s}")
-        logger.debug("#testToJson ${JsonOutput.prettyPrint(s)}")
+        logger_.debug("#testToJson ${s}")
+        logger_.debug("#testToJson ${JsonOutput.prettyPrint(s)}")
         then:
         s.startsWith('{"TSuiteResult":{')
         s.contains('tSuiteName')

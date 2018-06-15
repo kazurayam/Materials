@@ -9,7 +9,7 @@ import spock.lang.Specification
 //@Ignore
 class SuffixSpec extends Specification {
     
-    static Logger logger = LoggerFactory.getLogger(SuffixSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(SuffixSpec.class)
 
     // fields
     

@@ -7,7 +7,7 @@ import spock.lang.Specification
 class CommandRunnerSpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(CommandRunnerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(CommandRunnerSpec.class)
 
     // fixture methods
     def setup() {}

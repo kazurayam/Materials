@@ -20,7 +20,7 @@ import spock.lang.Specification
 class TSuiteTimestampSpec extends Specification {
 
     // fields
-    static Logger logger = LoggerFactory.getLogger(TSuiteTimestampSpec);
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteTimestampSpec);
 
     // fixture methods
     def setupSpec() {}
@@ -58,7 +58,7 @@ class TSuiteTimestampSpec extends Specification {
         when:
         TSuiteTimestamp ts = new TSuiteTimestamp(source)
         def str = ts.toString()
-        logger.debug("#testToJson ${JsonOutput.prettyPrint(str)}")
+        logger_.debug("#testToJson ${JsonOutput.prettyPrint(str)}")
         then:
         str.contains('{"TSuiteTimestamp":')
         str.contains('{"timestamp":')
