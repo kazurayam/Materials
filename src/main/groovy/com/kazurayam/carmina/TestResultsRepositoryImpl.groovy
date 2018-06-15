@@ -2,6 +2,7 @@ package com.kazurayam.carmina
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 import org.slf4j.Logger
@@ -11,48 +12,16 @@ import groovy.xml.MarkupBuilder
 
 final class TestResultsRepositoryImpl implements TestResultsRepository {
 
-    static Logger logger = LoggerFactory.getLogger(TestResultsRepositoryImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryImpl.class)
 
-    private Path baseDir
-    private TSuiteName currentTSuiteName
-    private TSuiteTimestamp currentTSuiteTimestamp
-    private List<TSuiteResult> tSuiteResults
+    private Path baseDir_
+    private TSuiteName currentTSuiteName_
+    private TSuiteTimestamp currentTSuiteTimestamp_
+    private List<TSuiteResult> tSuiteResults_
 
     static final String IMAGE_FILE_EXTENSION = '.png'
 
     // ---------------------- constructors & initializer ----------------------
-
-    TestResultsRepositoryImpl(Path baseDir) {
-        this(baseDir, TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
-    }
-
-    /**
-     * You are supposed to call this in the TestListener@BeforeTestSuite as follows:
-     *
-     * <PRE>
-     * import java.nio.file.Path
-     * import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
-     * import katalonimport com.kms.katalon.core.configuration.RunConfiguration
-     * import ScreenshotRepositoryImpl
-     * ...
-     * class TL {
-     *     @BeforeTestSuite
-     *     def beforeTestSuite(TestSuiteContext testSuiteContext) {
-     *         GlobalVariable.CURRENT_TESTSUITE_ID = testSuiteContext.getTestSuiteId()
-     *         Path resultsDir = Paths.get(RunConfiguration.getProjectDir()).resolve('Results')
-     *         Helpers.ensureDirs(resultsDir)
-     *         TestResults trs =
-     *             TestResultsFactory.createInstance(resultsDir, testSuiteContext.getTestSuiteId())
-     *         GlobalVariable.TESTRESULTS = trs
-     *     }
-     * </PRE>
-     *
-     * @param baseDir
-     * @param tsName
-     */
-    TestResultsRepositoryImpl(Path baseDir, TSuiteName tsName) {
-        this(baseDir, tsName, new TSuiteTimestamp())
-    }
 
     /**
      *
@@ -60,40 +29,59 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    TestResultsRepositoryImpl(Path baseDir, TSuiteName tsName, TSuiteTimestamp tsTimestamp) {
+    TestResultsRepositoryImpl(Path baseDir) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
-        this.baseDir = baseDir
+        baseDir_ = baseDir
+        currentTSuiteName_ = TSuiteName.SUITELESS
+        currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
 
         // load data from the local disk
-        RepositoryScanner scanner = new RepositoryScanner(this.baseDir)
+        RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
-        this.tSuiteResults = scanner.getTSuiteResults()
+        tSuiteResults_ = scanner.getTSuiteResults()
+    }
 
+
+    @Override
+    void setCurrentTestSuite(String testSuiteId) {
+        this.setCurrentTSuiteResult(new TSuiteName(testSuiteId), new TSuiteTimestamp(LocalDateTime.now()))
+    }
+
+    @Override
+    void setCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
+        this.setCurrentTSuiteResult(new TSuiteName(testSuiteId), new TSuiteTimestamp(testSuiteTimestampString))
+    }
+
+    void setCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        this.setCurrentTSuiteResult(tSuiteName, tSuiteTimestamp)
+    }
+
+    void setCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         // memorize the specified TestSuite
-        this.currentTSuiteName = tsName
-        this.currentTSuiteTimestamp = tsTimestamp
+        currentTSuiteName_ = tSuiteName
+        currentTSuiteTimestamp_ = tSuiteTimestamp
 
         // add the specified TestSuite
-        TSuiteResult tsr = this.getTSuiteResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
+        TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
         if (tsr == null) {
-            tsr = new TSuiteResult(tsName, tsTimestamp).setParent(baseDir)
+            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir_)
         }
         this.addTSuiteResult(tsr)
     }
 
     // -------------------------- attribute getters & setters ------------------------
     Path getBaseDir() {
-        return this.baseDir
+        return baseDir_
     }
 
     TSuiteName getCurrentTSuiteName() {
-        return this.currentTSuiteName
+        return currentTSuiteName_
     }
 
     TSuiteTimestamp getCurrentTSuiteTimestamp() {
-        return this.currentTSuiteTimestamp
+        return currentTSuiteTimestamp_
     }
 
     // --------------------- create/add/get child nodes -----------------------
@@ -106,13 +94,13 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     void addTSuiteResult(TSuiteResult tSuiteResult) {
         boolean found = false
-        for (TSuiteResult tsr : this.tSuiteResults) {
+        for (TSuiteResult tsr : tSuiteResults_) {
             if (tsr == tSuiteResult) {
                 found = true
             }
         }
         if (!found) {
-            this.tSuiteResults.add(tSuiteResult)
+            tSuiteResults_.add(tSuiteResult)
         }
     }
 
@@ -123,7 +111,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @return
      */
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        for (TSuiteResult tsr : this.tSuiteResults) {
+        for (TSuiteResult tsr : tSuiteResults_) {
             if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
             }
@@ -140,7 +128,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @return
      */
     Path resolveMaterialFilePath(TCaseName testCaseName, URL url, Suffix suffix, FileType fileType) {
-        TSuiteResult tSuiteResult = this.getCurrentTSuiteResult()
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         assert tSuiteResult != null
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(testCaseName)
         if (tCaseResult == null) {
@@ -237,9 +225,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path report() throws IOException {
-        if (currentTSuiteName != null && currentTSuiteTimestamp != null) {
+        if (currentTSuiteName_ != null && currentTSuiteTimestamp_ != null) {
             List<TSuiteResult> tsrList =
-                this.tSuiteResults.stream()
+                tSuiteResults_.stream()
                     .filter({tsr -> tsr.getTSuiteName() == currentTSuiteName && tsr.getTSuiteTimestamp() == currentTSuiteTimestamp })
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
@@ -259,9 +247,9 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     // ----------------------------- helpers ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {
-        if (this.currentTSuiteName != null) {
-            if (this.currentTSuiteTimestamp != null) {
-                TSuiteResult tsr = getTSuiteResult(this.currentTSuiteName, this.currentTSuiteTimestamp)
+        if (currentTSuiteName_ != null) {
+            if (currentTSuiteTimestamp_ != null) {
+                TSuiteResult tsr = getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
                 assert tsr != null
                 return tsr
             } else {
@@ -303,14 +291,14 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TestResultsImpl":{')
         sb.append('"baseDir":"' +
-            Helpers.escapeAsJsonText(this.baseDir.toString()) + '",')
+            Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
         sb.append('"currentTsName":"' +
-            Helpers.escapeAsJsonText(this.currentTSuiteName.toString()) + '",')
+            Helpers.escapeAsJsonText(currentTSuiteName_.toString()) + '",')
         sb.append('"currentTsTimestamp":"' +
-            Helpers.escapeAsJsonText(this.currentTSuiteTimestamp.toString()) + '",')
+            Helpers.escapeAsJsonText(currentTSuiteTimestamp_.toString()) + '",')
         sb.append('"tsResults":[')
         def counter = 0
-        for (TSuiteResult tsr : this.tSuiteResults) {
+        for (TSuiteResult tsr : tSuiteResults_) {
             if (counter > 0) { sb.append(',') }
             sb.append(tsr.toJson())
             counter += 1

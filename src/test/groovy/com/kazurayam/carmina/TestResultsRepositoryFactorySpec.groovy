@@ -1,14 +1,10 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.Helpers
-import com.kazurayam.carmina.TestResultsRepository
-import com.kazurayam.carmina.TestResultsRepositoryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import spock.lang.Specification
 //@Ignore
@@ -35,7 +31,8 @@ class TestResultsRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        TestResultsRepository trs = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
+        TestResultsRepository trs = TestResultsRepositoryFactory.createInstance(workdir)
+        trs.setCurrentTestSuite('Test Suites/TS1')
         then:
         trs != null
         trs.toString().contains('TS1')

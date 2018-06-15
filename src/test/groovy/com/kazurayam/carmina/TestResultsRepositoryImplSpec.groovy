@@ -45,7 +45,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolveMaterialFilePath')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolveMaterialFilePath(
             new TCaseName('TC1'),
@@ -62,7 +63,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolveMaterialFilePath(
             new TCaseName('TC1'),
@@ -79,7 +81,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolveMaterialFilePath_new')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS3'), new TSuiteTimestamp('20180614_152000'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
         Path p = tri.resolveMaterialFilePath(
             new TCaseName('TC1'),
@@ -97,7 +100,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix_new')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS3'), new TSuiteTimestamp('20180614_152000'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
         Path p = tri.resolveMaterialFilePath(
             new TCaseName('TC1'),
@@ -115,7 +119,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolvePngFilePath')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
         then:
@@ -127,7 +132,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
@@ -139,7 +145,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testResolvePngFilePathBySuitelessTimeless')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
         then:
@@ -151,7 +158,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testToJson')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'))
+        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir)
+        trri.setCurrentTestSuite('TS1')
         when:
         def str = trri.toJson()
         then:
@@ -166,7 +174,8 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir.resolve('testReport')
         Helpers.copyDirectory(fixture, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir, new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
+        tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path html = tri.report()
         then:

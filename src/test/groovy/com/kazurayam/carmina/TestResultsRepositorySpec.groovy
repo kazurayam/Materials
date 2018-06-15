@@ -14,17 +14,17 @@ import spock.lang.Specification
 //@Ignore
 class TestResultsRepositorySpec extends Specification {
 
-    static Logger logger = LoggerFactory.getLogger(TestResultsRepositorySpec.class);
+    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositorySpec.class);
 
-    private static Path workdir
-    private static Path fixture = Paths.get("./src/test/fixture/Results")
+    private static Path workdir_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
 
     def setupSpec() {
-        workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositorySpec.class)}")
-        if (!workdir.toFile().exists()) {
-            workdir.toFile().mkdirs()
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositorySpec.class)}")
+        if (!workdir_.toFile().exists()) {
+            workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture, workdir)
+        Helpers.copyDirectory(fixture_, workdir_)
     }
 
     def testJsonOutput() {
@@ -41,75 +41,65 @@ class TestResultsRepositorySpec extends Specification {
 
     def testToJson() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
-        def str = JsonOutput.prettyPrint(sr.toString())
-        logger.debug(JsonOutput.prettyPrint(str))
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1')
+        def str = JsonOutput.prettyPrint(trr.toString())
+        logger_.debug(JsonOutput.prettyPrint(str))
         then:
         str.contains('TS1')
     }
 
     def testConstructor_Path_tsn() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(workdir, 'Test Suites/TS1')
-        String str = sr.toString()
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('Test Suites/TS1')
+        String str = trr.toString()
         then:
         str.contains('TS1')
     }
 
     def testResolvePngFilePath() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
-                workdir,
-                new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419')
-        )
-        Path scfp = sr.resolvePngFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path png = trr.resolvePngFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
-        scfp != null
-        scfp.toString().contains('TC1')
-        scfp.toString().contains('demoaut.katalon.com')
+        png != null
+        png.toString().contains('TC1')
+        png.toString().contains('demoaut.katalon.com')
     }
-    
+
     def testResolveJsonFilePath() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
-                workdir,
-                new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419')
-        )
-        Path scfp = sr.resolveJsonFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path json = trr.resolveJsonFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
-        scfp != null
-        scfp.toString().contains('TC1')
-        scfp.toString().contains('demoaut.katalon.com')
+        json != null
+        json.toString().contains('TC1')
+        json.toString().contains('demoaut.katalon.com')
     }
-    
+
     def testResolveXmlFilePath() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
-                workdir,
-                new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419')
-        )
-        Path scfp = sr.resolveXmlFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xml = trr.resolveXmlFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
-        scfp != null
-        scfp.toString().contains('TC1')
-        scfp.toString().contains('demoaut.katalon.com')
+        xml != null
+        xml.toString().contains('TC1')
+        xml.toString().contains('demoaut.katalon.com')
     }
-    
+
     def testResolvePdfFilePath() {
         when:
-        TestResultsRepository sr = TestResultsRepositoryFactory.createInstance(
-                workdir,
-                new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419')
-        )
-        Path scfp = sr.resolvePdfFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path pdf = trr.resolvePdfFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
-        scfp != null
-        scfp.toString().contains('TC1')
-        scfp.toString().contains('demoaut.katalon.com')
+        pdf != null
+        pdf.toString().contains('TC1')
+        pdf.toString().contains('demoaut.katalon.com')
     }
 }
 

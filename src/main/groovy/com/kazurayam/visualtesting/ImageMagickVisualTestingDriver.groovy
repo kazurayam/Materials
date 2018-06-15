@@ -15,18 +15,18 @@ import com.kazurayam.carmina.TestResultsRepository
  */
 class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
-    static Logger logger = LoggerFactory.getLogger(ImageMagickVisualTestingDriver.class)
+    static Logger logger_ = LoggerFactory.getLogger(ImageMagickVisualTestingDriver.class)
 
-    private TestResultsRepository target
-    private TestResultsRepository basis
-    private Path outputDir
+    private TestResultsRepository target_
+    private TestResultsRepository basis_
+    private Path outputDir_
 
     ImageMagickVisualTestingDriver(TestResultsRepository target) {
-        this.target = target
+        this.target_ = target
     }
 
     void setOutput(Path outputDir) {
-        this.outputDir = outputDir
+        this.outputDir_ = outputDir
     }
 
     void execute() {

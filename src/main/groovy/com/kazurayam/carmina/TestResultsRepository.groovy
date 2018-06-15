@@ -4,6 +4,9 @@ import java.nio.file.Path
 
 interface TestResultsRepository {
 
+    void setCurrentTestSuite(String testSuiteId)
+    void setCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
+
     void setTestCaseStatus(String testCaseId, String testCaseStatus)
 
     Path resolvePngFilePath(String testCaseId, String url)

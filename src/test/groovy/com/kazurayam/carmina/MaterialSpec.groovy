@@ -26,7 +26,8 @@ class MaterialSpec extends Specification {
             workdir.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture, workdir)
-        trri = TestResultsRepositoryFactory.createInstance(workdir, new TSuiteName('TS1'))
+        trri = TestResultsRepositoryFactory.createInstance(workdir)
+        trri.setCurrentTestSuite('TS1')
     }
     def setup() {
         TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
