@@ -160,4 +160,13 @@ final class Helpers {
         return sb.toString()
     }
 
+    /**
+     * returns the time stamp of 'now' in the format of 'yyyyMMdd_HHmmss'
+     *
+     * @return e.g., '20180616_070237'
+     */
+    static String now() {
+        return DateTimeFormatter.ofPattern(TSuiteTimestamp.DATE_TIME_PATTERN).format(LocalDateTime.now())
+    }
+
 }

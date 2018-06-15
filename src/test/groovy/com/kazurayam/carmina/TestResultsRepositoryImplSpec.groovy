@@ -41,6 +41,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         trri.getBaseDir() == casedir
     }
 
+
     def testResolveMaterialFilePath() {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePath')

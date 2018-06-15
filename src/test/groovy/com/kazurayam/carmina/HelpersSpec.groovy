@@ -114,6 +114,15 @@ class HelpersSpec extends Specification {
         Helpers.escapeAsJsonText('"') == '\\"'
     }
 
+    def testNow() {
+        when:
+        String now = Helpers.now()
+        LocalDateTime ldt = TSuiteTimestamp.parse(now)
+        logger_.debug("#testNow now=${now},ldt=${ldt}")
+        then:
+        true
+    }
+
     // helper methods
     private boolean someHelper() {
         return true

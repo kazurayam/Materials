@@ -43,19 +43,29 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         tSuiteResults_ = scanner.getTSuiteResults()
     }
 
-
+    /**
+     * The current time now 'now' is assumed
+     *
+     * @param testSuiteId
+     */
     @Override
     void setCurrentTestSuite(String testSuiteId) {
-        this.setCurrentTSuiteResult(new TSuiteName(testSuiteId), new TSuiteTimestamp(LocalDateTime.now()))
+        this.setCurrentTestSuite(
+                testSuiteId,
+                Helpers.now())
     }
 
     @Override
     void setCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
-        this.setCurrentTSuiteResult(new TSuiteName(testSuiteId), new TSuiteTimestamp(testSuiteTimestampString))
+        this.setCurrentTSuiteResult(
+                new TSuiteName(testSuiteId),
+                new TSuiteTimestamp(testSuiteTimestampString))
     }
 
     void setCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        this.setCurrentTSuiteResult(tSuiteName, tSuiteTimestamp)
+        this.setCurrentTSuiteResult(
+                tSuiteName,
+                tSuiteTimestamp)
     }
 
     void setCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {

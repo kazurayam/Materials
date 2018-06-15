@@ -151,10 +151,10 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                         targetURL.addMaterial(mw)
                         //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
                     } else {
-                        logger_.info("#visitFile unable to parse ${file} into a URL")
+                        logger_.debug("#visitFile unable to parse ${file} into a URL")
                     }
                 } else {
-                    logger_.info("#visitFile ${file} has no known FileType")
+                    logger_.debug("#visitFile ${file} has no known FileType")
                 }
                 break
         }

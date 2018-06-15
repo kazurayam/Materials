@@ -5,6 +5,7 @@ import static groovy.json.JsonOutput.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,6 +29,48 @@ class TestResultsRepositorySpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
     }
 
+    def testSetCurrentTestSuite_oneStringArg() {
+        setup:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        when:
+        trr.setCurrentTestSuite('oneStringArg')
+        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
+        then:
+        timestampdir.toString().contains('oneStringArg')
+        when:
+        String dirName = timestampdir.getFileName()
+        LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
+        then:
+        true
+    }
+
+    def testSetCurrentTestSuite_twoStringArg() {
+        setup:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        when:
+        trr.setCurrentTestSuite('oneStringArg', '20180616_160000')
+        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
+        then:
+        timestampdir.toString().contains('oneStringArg')
+        timestampdir.getFileName().toString().contains('20180616_160000')
+    }
+
+    def testSetCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
+        setup:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        when:
+        trr.setCurrentTestSuite(
+                new TSuiteName('oneStringArg'),
+                new TSuiteTimestamp('20180616_160000'))
+        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
+        then:
+        timestampdir.toString().contains('oneStringArg')
+        timestampdir.getFileName().toString().contains('20180616_160000')
+    }
+
     def testJsonOutput() {
         setup:
         List<String> errors = []
@@ -45,7 +88,7 @@ class TestResultsRepositorySpec extends Specification {
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('Test Suites/TS1')
         def str = JsonOutput.prettyPrint(trr.toString())
-        logger_.debug(JsonOutput.prettyPrint(str))
+        //logger_.debug(JsonOutput.prettyPrint(str))
         then:
         str.contains('TS1')
     }

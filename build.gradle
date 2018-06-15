@@ -42,5 +42,3 @@ test {
     include '**/TestResultsRepositorySpec.class'
     exclude '**/CommandRunnerSpec.class'
 }
-
-
