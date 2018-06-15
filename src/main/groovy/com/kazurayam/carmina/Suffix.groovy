@@ -13,21 +13,18 @@ class Suffix {
 
     Suffix(String value) {
         value_ = value
-        if (value.contains('/')) {
-            logger_.warn("value '${value}' contained one or more '/' character(s) which were stripped")
-            value_ = value_.replace('/', '')
-        }
-        if (value.contains('\\')) {
-            logger_.warn("value '${value}' contained one or more '\\' character(s) which were stripped")
-            value_ = value_.replace('\\', '')
-        }
-        if (value.contains(Material.MAGIC_DELIMITER)) {
-            logger_.warn("value '${value}' contained one or more '${Material.MAGIC_DELIMITER}' character(s) which were stripped")
-            value_ = value_.replace(Material.MAGIC_DELIMITER, '')
-        }
-        if (value.contains('.')) {
-            logger_.warn("value '${value}' contained one or more '.' character(s) which were stripped")
-            value_ = value_.replace('.', '')
+        value_ = stripChars(value_, '/')
+        value_ = stripChars(value_, '\\')
+        value_ = stripChars(value_, Material.MAGIC_DELIMITER)
+        value_ = stripChars(value_, '.')
+    }
+
+    private String stripChars(String source, String ch) {
+        if (source.contains(ch)) {
+            logger_.warn("'${source}' contained one or more '${ch}' character(s) which were stripped")
+            return source.replace(ch, '')
+        } else {
+            return source
         }
     }
 
