@@ -13,23 +13,8 @@ interface TestResultsRepository {
 
     void setTestCaseStatus(String testCaseId, String testCaseStatus)
 
-    Path resolvePngFilePath(String testCaseId, String url)
-    Path resolvePngFilePath(String testCaseId, String url, String suffix)
-
-    Path resolveJsonFilePath(String testCaseId, String url)
-    Path resolveJsonFilePath(String testCaseId, String url, String suffix)
-
-    Path resolveXmlFilePath(String testCaseId, String url)
-    Path resolveXmlFilePath(String testCaseId, String url, String suffix)
-
-    Path resolvePdfFilePath(String testCaseId, String url)
-    Path resolvePdfFilePath(String testCaseId, String url, String suffix)
-
-    Path resolveTxtFilePath(String testCaseId, String url)
-    Path resolveTxtFilePath(String testCaseId, String url, String suffix)
-
-    Path resolveXlsFilePath(String testCaseId, String url)
-    Path resolveXlsFilePath(String testCaseId, String url, String suffix)
+    Path resolveMaterial(String testCaseId, String url, FileType fileType)
+    Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)
 
     Path report() throws IOException
 }

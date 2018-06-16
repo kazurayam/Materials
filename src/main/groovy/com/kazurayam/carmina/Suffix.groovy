@@ -21,7 +21,7 @@ class Suffix {
 
     private String stripChars(String source, String ch) {
         if (source.contains(ch)) {
-            logger_.warn("'${source}' contained one or more '${ch}' character(s) which were stripped")
+            logger_.warn("Suffix:'${source}' contained one or more '${ch}' character(s) which were stripped")
             return source.replace(ch, '')
         } else {
             return source

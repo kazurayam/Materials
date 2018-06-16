@@ -75,8 +75,7 @@ class Material {
         if (arr.length < 2) {
             return FileType.NULL
         } else {
-            Arrays.sort(arr, Collections.reverseOrder())
-            String candidate = arr[0]
+            String candidate = arr[arr.length - 1]
             try {
                 FileType ft = FileType.getByExtension(candidate)
                 return ft
@@ -99,8 +98,7 @@ class Material {
                 logger_.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
                         "Valid but unexpected.")
             }
-            Arrays.sort(arr, Collections.reverseOrder())
-            return new Suffix(arr[0])
+            return new Suffix(arr[arr.length - 1])
         } else {
             return null
         }

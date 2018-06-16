@@ -49,7 +49,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterialFilePath(
+        Path p = tri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             Suffix.NULL,
@@ -67,7 +67,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterialFilePath(
+        Path p = tri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             new Suffix('1'),
@@ -85,7 +85,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
-        Path p = tri.resolveMaterialFilePath(
+        Path p = tri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             Suffix.NULL,
@@ -104,7 +104,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
-        Path p = tri.resolveMaterialFilePath(
+        Path p = tri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             new Suffix('1'),
@@ -123,7 +123,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/')
+        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
@@ -136,7 +136,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
+        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
@@ -149,7 +149,7 @@ class TestResultsRepositoryImplSpec extends Specification {
         TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
         tri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
-        Path p = tri.resolvePngFilePath('TC1', 'http://demoaut.katalon.com/', '1')
+        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"

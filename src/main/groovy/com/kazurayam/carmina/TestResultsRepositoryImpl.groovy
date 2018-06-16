@@ -139,19 +139,37 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
     }
 
     // -------------------------- do the business -----------------------------
+    @Override
+    Path resolveMaterial(String testCaseName, String url, FileType fileType) {
+        return this.resolveMaterial(
+                new TCaseName(testCaseName),
+                new URL(url),
+                Suffix.NULL,
+                fileType)
+    }
+
+    @Override
+    Path resolveMaterial(String testCaseName, String url, String suffix, FileType fileType) {
+        return this.resolveMaterial(
+                new TCaseName(testCaseName),
+                new URL(url),
+                new Suffix(suffix),
+                fileType)
+    }
+
     /**
      *
-     * @param testCaseName
+     * @param tCaseName
      * @param url
      * @param postFix
      * @return
      */
-    Path resolveMaterialFilePath(TCaseName testCaseName, URL url, Suffix suffix, FileType fileType) {
+    Path resolveMaterial(TCaseName tCaseName, URL url, Suffix suffix, FileType fileType) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         assert tSuiteResult != null
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(testCaseName)
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(testCaseName).setParent(tSuiteResult)
+            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
         TargetURL targetURL = tCaseResult.getTargetURL(url)
@@ -170,106 +188,6 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
         }
         return material.getMaterialFilePath()
     }
-
-    /**
-     * returns a Path to save a screenshot of the URL in PNG format
-     */
-    @Override
-    Path resolvePngFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.PNG)
-    }
-
-    /**
-     * return a Path to save a screenshot of the URL in PNG format appended with the suffix
-     */
-    @Override
-    Path resolvePngFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.PNG)
-    }
-
-    /**
-     * returns a Path to save a JSON response from the URL
-     */
-    @Override
-    Path resolveJsonFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.JSON)
-    }
-
-    /**
-     * return a Path to save a JSON response from the URL appended with the suffix
-     */
-    @Override
-    Path resolveJsonFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.JSON)
-    }
-
-    /**
-     * returns a Path to save a XML response from the URL
-     */
-    @Override
-    Path resolveXmlFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.XML)
-    }
-
-    /**
-     * return a Path to save a XML response from the URL appended with the suffix
-     */
-    @Override
-    Path resolveXmlFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.XML)
-    }
-
-    /**
-     * returns a Path to save a XML response from the URL
-     */
-    @Override
-    Path resolvePdfFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.PDF)
-    }
-
-    /**
-     * return a Path to save a XML response from the URL appended with the suffix
-     */
-    @Override
-    Path resolvePdfFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.PDF)
-    }
-
-    /**
-     * returns a Path to save a txt file somehow obtained while processing the url
-     */
-    @Override
-    Path resolveTxtFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.PLAIN)
-    }
-
-    /**
-     * return a Path to save a XML response from the URL appended with the suffix
-     */
-    @Override
-    Path resolveTxtFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.PLAIN)
-    }
-
-    /**
-     * returns a Path to save a txt file somehow obtained while processing the url
-     */
-    @Override
-    Path resolveXlsFilePath(String testCaseId, String url) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), Suffix.NULL, FileType.XLS)
-    }
-
-    /**
-     * return a Path to save a XML response from the URL appended with the suffix
-     */
-    @Override
-    Path resolveXlsFilePath(String testCaseId, String url, String suffix) {
-        this.resolveMaterialFilePath(new TCaseName(testCaseId), new URL(url), new Suffix(suffix), FileType.XLS)
-    }
-
-
-
-
 
     /**
      * create a Result.html file under the directory ${baseDir}/${Test Suite name}/${Test Suite timestamp}/

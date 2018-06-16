@@ -2,7 +2,7 @@ package com.kazurayam.carmina
 
 enum FileType {
 
-    PLAIN('txt',   'text/plain'),
+    TXT('txt',     'text/plain'),
     CSV('csv',     'text/plain'),
     HTML('html',   'text/html'),
     CSS('css',     'text/css'),
@@ -16,6 +16,8 @@ enum FileType {
     OCTET('bin',   'application/octet-stream'),
     JSON('json',   'application/json'),
     XLS('.xls',    'application/vnd.ms-excel'),
+    XLSM('.xlsm',  'application/vnd.ms-excel'),
+    XLSX('.xlsx',  'application/vnd.ms-excel'),
     XML('xml',     'application/xml' ),
     XHTML('xhtml', 'application/xhtml+html'),
     PDF('pdf',     'application/pdf'),

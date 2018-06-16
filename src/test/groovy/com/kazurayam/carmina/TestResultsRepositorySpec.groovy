@@ -102,71 +102,102 @@ class TestResultsRepositorySpec extends Specification {
         str.contains('TS1')
     }
 
-    def testResolvePngFilePath() {
+    def testResolveMaterial_png() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path png = trr.resolvePngFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path png = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         png != null
         png.toString().contains('TC1')
         png.toString().contains('demoaut.katalon.com')
+        png.toString().contains('png')
     }
 
-    def testResolveJsonFilePath() {
+    def testResolveMaterial_json() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path json = trr.resolveJsonFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path json = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.JSON)
         then:
         json != null
         json.toString().contains('TC1')
         json.toString().contains('demoaut.katalon.com')
+        json.toString().contains('json')
     }
 
-    def testResolveXmlFilePath() {
+    def testResolveMaterial_xml() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xml = trr.resolveXmlFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path xml = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', '1', FileType.XML)
         then:
         xml != null
         xml.toString().contains('TC1')
         xml.toString().contains('demoaut.katalon.com')
+        xml.toString().contains('xml')
     }
 
-    def testResolvePdfFilePath() {
+    def testResolveMaterial_pdf() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path pdf = trr.resolvePdfFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path pdf = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PDF)
         then:
         pdf != null
         pdf.toString().contains('TC1')
         pdf.toString().contains('demoaut.katalon.com')
+        pdf.toString().contains('pdf')
     }
 
-    def testResolveTxtFilePath() {
+    def testResolveMaterial_txt() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path txt = trr.resolveTxtFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path txt = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 'x', FileType.TXT)
         then:
         txt != null
         txt.toString().contains('TC1')
         txt.toString().contains('demoaut.katalon.com')
+        txt.toString().contains('txt')
     }
     
-    def testResolveXlsFilePath() {
+    def testResolveMaterial_xls() {
         when:
         TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
         trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xls = trr.resolveXlsFilePath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLS)
         then:
         xls != null
         xls.toString().contains('TC1')
         xls.toString().contains('demoaut.katalon.com')
+        xls.toString().contains('xls')
     }
+
+    def testResolveMaterial_xlsx() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSX)
+        then:
+        xls != null
+        xls.toString().contains('TC1')
+        xls.toString().contains('demoaut.katalon.com')
+        xls.toString().contains('xlsx')
+    }
+
+    def testResolveMaterial_xlsm() {
+        when:
+        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        trr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSM)
+        then:
+        xls != null
+        xls.toString().contains('TC1')
+        xls.toString().contains('demoaut.katalon.com')
+        xls.toString().contains('xlsm')
+    }
+
 
     def testGetCurrentTestSuiteDirectory() {
         when:
