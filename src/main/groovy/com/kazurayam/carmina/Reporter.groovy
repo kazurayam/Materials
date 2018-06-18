@@ -1,10 +1,15 @@
 package com.kazurayam.carmina
 
-import groovy.xml.MarkupBuilder
-
 import java.nio.file.Path
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import groovy.xml.MarkupBuilder
+
 class Reporter {
+
+    static Logger logger_ = LoggerFactory.getLogger(Reporter.class)
 
     private Reporter() {}
 
@@ -21,7 +26,7 @@ class Reporter {
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("Katalon Studio Test Results ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
+                title("Test Results ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -97,6 +102,7 @@ class Reporter {
                                 for (TargetURL targetURL : targetURLs) {
                                     h5("URL : ${targetURL.getUrl().toExternalForm()}")
                                     List<Material> materials = targetURL.getMaterials()
+                                    logger_.info("#report materials=${materials.toString()}")
                                     for (Material material : materials) {
                                         Path file = material.getMaterialFilePath()
                                         Path relative = tSuiteResult.getTSuiteTimestampDirectory().relativize(file).normalize()

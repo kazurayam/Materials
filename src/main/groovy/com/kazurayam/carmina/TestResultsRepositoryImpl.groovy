@@ -2,13 +2,10 @@ package com.kazurayam.carmina
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import groovy.xml.MarkupBuilder
 
 final class TestResultsRepositoryImpl implements TestResultsRepository {
 
@@ -198,6 +195,11 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      */
     @Override
     Path report() throws IOException {
+        // reload the latest Test Results Repository from the local disk
+        RepositoryScanner scanner = new RepositoryScanner(baseDir_)
+        scanner.scan()
+        tSuiteResults_ = scanner.getTSuiteResults()
+        //
         if (currentTSuiteName_ != null && currentTSuiteTimestamp_ != null) {
             List<TSuiteResult> tsrList =
                 tSuiteResults_.stream()
