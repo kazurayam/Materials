@@ -34,14 +34,13 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         baseDir_ = baseDir
         Helpers.ensureDirs(baseDir_)
 
-        //
-        currentTSuiteName_ = TSuiteName.SUITELESS
-        currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
-
         // load data from the local disk
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
         tSuiteResults_ = scanner.getTSuiteResults()
+
+        // set default Material path to the "./${baseDir name}/_/_" directory
+        this.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -169,7 +168,9 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
      */
     Path resolveMaterial(TCaseName tCaseName, URL url, Suffix suffix, FileType fileType) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
-        assert tSuiteResult != null
+        if (tSuiteResult == null) {
+            logger_.error("tSuiteResult is null")
+        }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
             tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
