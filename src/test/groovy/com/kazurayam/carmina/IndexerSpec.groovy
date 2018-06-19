@@ -10,9 +10,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 //@Ignore
-class ReporterSpec extends Specification {
+class IndexerSpec extends Specification {
     
-    static Logger logger_ = LoggerFactory.getLogger(ReporterSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerSpec.class)
 
     // fields
     private static Path workdir_
@@ -21,7 +21,7 @@ class ReporterSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(ReporterSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -33,7 +33,7 @@ class ReporterSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    def testReport() {
+    def testMakeIndex() {
         setup:
         TSuiteResult tsr = trri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
         Path file = tsr.getTSuiteTimestampDirectory().resolve('Result.html')
@@ -42,7 +42,7 @@ class ReporterSpec extends Specification {
         }
         OutputStream os = Files.newOutputStream(file)
         when:
-        Reporter.report(tsr, os)
+        Indexer.makeIndex(tsr, os)
         then:
         Files.exists(file)
     }

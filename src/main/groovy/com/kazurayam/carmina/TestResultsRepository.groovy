@@ -16,5 +16,5 @@ interface TestResultsRepository {
     Path resolveMaterial(String testCaseId, String url, FileType fileType)
     Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)
 
-    Path report() throws IOException
+    Path makeIndex() throws IOException
 }

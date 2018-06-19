@@ -194,7 +194,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @returns Path of the Results.html file
      */
     @Override
-    Path report() throws IOException {
+    Path makeIndex() throws IOException {
         // reload the latest Test Results Repository from the local disk
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
@@ -210,7 +210,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
                 Path html = tsr.getTSuiteTimestampDirectory().resolve("Result.html")
                 Helpers.ensureDirs(tsr.getTSuiteTimestampDirectory())
                 //
-                Reporter.report(tsr, Files.newOutputStream(html))
+                Indexer.makeIndex(tsr, Files.newOutputStream(html))
                 return html
             }
             return null

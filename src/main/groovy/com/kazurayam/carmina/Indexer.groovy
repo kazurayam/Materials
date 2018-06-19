@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory
 
 import groovy.xml.MarkupBuilder
 
-class Reporter {
+class Indexer {
 
-    static Logger logger_ = LoggerFactory.getLogger(Reporter.class)
+    static Logger logger_ = LoggerFactory.getLogger(Indexer.class)
 
-    private Reporter() {}
+    private Indexer() {}
 
     /**
      *
@@ -19,7 +19,7 @@ class Reporter {
      * @param os
      * @throws IOException
      */
-    static void report(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
+    static void makeIndex(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         def builder = new MarkupBuilder(writer)
         builder.doubleQuotes = true
@@ -102,7 +102,6 @@ class Reporter {
                                 for (TargetURL targetURL : targetURLs) {
                                     h5("URL : ${targetURL.getUrl().toExternalForm()}")
                                     List<Material> materials = targetURL.getMaterials()
-                                    logger_.info("#report materials=${materials.toString()}")
                                     for (Material material : materials) {
                                         Path file = material.getMaterialFilePath()
                                         Path relative = tSuiteResult.getTSuiteTimestampDirectory().relativize(file).normalize()
