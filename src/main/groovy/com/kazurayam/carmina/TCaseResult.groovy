@@ -111,13 +111,32 @@ class TCaseResult {
         sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDirectory_.toString())    + '",')
         sb.append('"targetURLs":[')
         def count = 0
-        for (TargetURL tp : targetURLs_) {
+        for (TargetURL tu : targetURLs_) {
             if (count > 0) { sb.append(',') }
-            sb.append(tp.toJson())
+            sb.append(tu.toJson())
             count += 1
         }
         sb.append(']')
         sb.append('}}')
+        return sb.toString()
+    }
+
+    String toBootstrapTreeviewData() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.toString())+ '",')
+        sb.append('"nodes":[')
+        def mate_count = 0
+        for (TargetURL tu : targetURLs_) {
+            List<Material> materials = tu.getMaterials()
+            for (Material material : materials) {
+                if (mate_count > 0) { sb.append(',') }
+                sb.append(material.toBootstrapTreeviewData())
+                mate_count += 1
+            }
+        }
+        sb.append(']')
+        sb.append('}')
         return sb.toString()
     }
 }

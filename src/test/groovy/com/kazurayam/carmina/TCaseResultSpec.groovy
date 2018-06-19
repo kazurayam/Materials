@@ -64,6 +64,19 @@ class TCaseResultSpec extends Specification {
         str.endsWith('}}')
     }
 
+    def testToBootstrapTreeviewData() {
+        setup:
+        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        when:
+        def str = tcr.toBootstrapTreeviewData()
+        logger_.debug("#testToBootstrapTreeviewData: \n${JsonOutput.prettyPrint(str)}")
+        then:
+        str.contains('text')
+        str.contains('nodes')
+    }
+
 
 
     // helper methods

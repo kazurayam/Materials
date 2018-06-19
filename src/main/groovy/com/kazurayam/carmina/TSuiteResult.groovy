@@ -95,6 +95,7 @@ final class TSuiteResult {
         return materials
     }
 
+
     // -------------------- overriding Object properties ----------------------
     @Override
     boolean equals(Object obj) {
@@ -127,7 +128,7 @@ final class TSuiteResult {
         sb.append('{"TSuiteResult":{')
         sb.append('"baseDir": "' + Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
         sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(tSuiteName_.toString()) + '",')
-        sb.append('"tSuiteTimestamp": ' + tSuiteTimestamp_.toString() + ',')
+        sb.append('"tSuiteTimestamp": "' + tSuiteTimestamp_.format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0
@@ -138,6 +139,55 @@ final class TSuiteResult {
         }
         sb.append(']')
         sb.append('}}')
+        return sb.toString()
+    }
+
+
+
+    /**
+     * generate a JSON text for bootstrap-treeview
+     *
+     * <pre>
+     * {@code
+     * [
+     *   {
+     *     text: "TC1",
+     *     nodes: [
+     *       {
+     *         text: 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+     *       },
+     *       {
+     *         text: 'http%3A%2F%2Fdemoaut.katalon.com§1.png'
+     *       }
+     *     ]
+     *   },
+     *   {
+     *     text: "TC2,
+     *     nodes: [
+     *       {
+     *         text: 'http%3A%2F%2Fdemoaut.katalon.com§atoz.png'
+     *       }
+     *     ]
+     *   }
+     * ]
+     * }
+     * </pre>
+     * @return
+     */
+    String toBootstrapTreeviewData() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('[{')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteName_.toString() +
+            '/' + tSuiteTimestamp_.format()) + '",')
+        sb.append('"nodes":[')
+        def count = 0
+        for (TCaseResult tcr : tCaseResults_) {
+            if (count > 0) { sb.append(',') }
+            count += 1
+            sb.append(tcr.toBootstrapTreeviewData())
+        }
+        sb.append(']')
+        sb.append('}]')
         return sb.toString()
     }
 

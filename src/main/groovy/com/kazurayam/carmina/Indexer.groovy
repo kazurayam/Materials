@@ -5,6 +5,7 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
 
 class Indexer {
@@ -29,7 +30,7 @@ class Indexer {
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("Test Materials ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
+                title("Test Materials ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -51,7 +52,6 @@ class Indexer {
             body() {
                 div('class':'container') {
                     h3('Test Materials')
-                    h5("Test Suite : ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
                     div('id':'tree')
                 }
                 mkp.comment('SCRIPTS')
@@ -72,10 +72,15 @@ class Indexer {
 '''
 function getTree() {
     // Some logic to retrieve, or generate tree structure
-    var data = [{ text: "Node 1" }]
+    var data = ''' + JsonOutput.prettyPrint(tSuiteResult.toBootstrapTreeviewData()) + ''';
     return data;
 }
-$('#tree').treeview({data: getTree()});
+$('#tree').treeview({
+    data: getTree(),
+    enableLinks: false,
+    levels: 3,
+    showTags: true
+});
 ''')
                 }
             }

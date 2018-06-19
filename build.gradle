@@ -38,6 +38,9 @@ test.outputs.upToDateWhen {false}
 
 test {
     include '**/carmina/IndexerSpec.class'
+    //include '**/carmina/MaterialSpec.class'
+    //include '**/carmina/TCaseResultSpec.class'
+    //include '**/carmina/TSuiteResultSpec.class'
     exclude '**/visualtesting/*Spec.class'
 
 }

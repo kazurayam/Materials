@@ -137,6 +137,17 @@ class MaterialSpec extends Specification {
         str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().toString()))
         str.endsWith('"}}')
     }
+    
+    def testToBootstrapTreeviewData() {
+        when:
+        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        def str = mate.toBootstrapTreeviewData()
+        //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
+        then:
+        str.startsWith('{"text":"')
+        str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().getFileName().toString()))
+        str.endsWith('"}')
+    }
 
     def testGetRelativePathToTsTimestampDir() {
         when:

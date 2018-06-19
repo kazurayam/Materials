@@ -168,4 +168,12 @@ class Material {
         sb.append('}}')
         return sb.toString()
     }
+
+    String toBootstrapTreeviewData() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(materialFilePath_.getFileName().toString())+ '"')
+        sb.append('}')
+        return sb.toString()
+    }
 }

@@ -64,5 +64,18 @@ class TSuiteResultSpec extends Specification {
         s.endsWith('}}')
     }
 
+    def testToBootstrapTreeviewData() {
+        setup:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
+                new TSuiteTimestamp('20180530_130419'))
+        when:
+        def s = tsr.toBootstrapTreeviewData()
+        logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")
+        then:
+        s.contains('text')
+        s.contains('nodes')
+    }
+
+
     // helper methods
 }
