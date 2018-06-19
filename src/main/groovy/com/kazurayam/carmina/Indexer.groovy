@@ -97,7 +97,6 @@ class Indexer {
                         div('class':'row') {
                             div('class':'col-sm-12') {
                                 h4("Test Case name : ${tcResult.getTCaseName().toString()}")
-                                h4("Test Case status : ${tcResult.getTestCaseStatus()}")
                                 List<TargetURL> targetURLs = tcResult.getTargetURLs()
                                 for (TargetURL targetURL : targetURLs) {
                                     h5("URL : ${targetURL.getUrl().toExternalForm()}")

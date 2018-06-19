@@ -27,10 +27,14 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
      * @param tsTimestamp required
      */
     TestMaterialsRepositoryImpl(Path baseDir) {
+        //
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         baseDir_ = baseDir
+        Helpers.ensureDirs(baseDir_)
+
+        //
         currentTSuiteName_ = TSuiteName.SUITELESS
         currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
 
@@ -88,6 +92,7 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
     }
 
     // -------------------------- attribute getters & setters ------------------------
+    @Override
     Path getBaseDir() {
         return baseDir_
     }
@@ -225,7 +230,6 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         if (currentTSuiteName_ != null) {
             if (currentTSuiteTimestamp_ != null) {
                 TSuiteResult tsr = getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
-                assert tsr != null
                 return tsr
             } else {
                 throw new IllegalStateException('currentTSuiteTimestamp is not set')
@@ -242,7 +246,6 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
     TCaseResult getTCaseResult(TCaseName tCaseName) {
         if (tCaseName != null) {
             TSuiteResult tsr = this.getCurrentTSuiteResult()
-            assert tsr != null
             return tsr.getTCaseResult(tCaseName)
         }
         else {
@@ -254,13 +257,6 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
     Path getTestCaseDirectory(String testCaseId) {
         return this.getTCaseResult(testCaseId).getTCaseDirectory()
     }
-
-    @Override
-    void setTestCaseStatus(String testCaseId, String testCaseStatus) {
-        this.getTCaseResult(testCaseId).setTestCaseStatus(testCaseStatus)
-    }
-
-
 
     // ---------------------- overriding Object properties --------------------
     @Override

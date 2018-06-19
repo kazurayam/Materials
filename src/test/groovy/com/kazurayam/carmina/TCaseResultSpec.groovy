@@ -61,8 +61,6 @@ class TCaseResultSpec extends Specification {
         str.contains('TC1')
         str.contains('tCaseDir')
         str.contains(Helpers.escapeAsJsonText( mate.getMaterialFilePath().toString()))
-        str.contains('tCaseStatus')
-        str.contains(TCaseStatus.TO_BE_EXECUTED.toString())
         str.endsWith('}}')
     }
 

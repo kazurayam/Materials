@@ -39,5 +39,5 @@ test.outputs.upToDateWhen {false}
 test {
     include '**/carmina/*Spec.class'
     exclude '**/visualtesting/*Spec.class'
-    
+
 }

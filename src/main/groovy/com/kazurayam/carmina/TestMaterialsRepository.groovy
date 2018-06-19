@@ -7,11 +7,9 @@ interface TestMaterialsRepository {
     void setCurrentTestSuite(String testSuiteId)
     void setCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
 
+    Path getBaseDir()
     Path getCurrentTestSuiteDirectory()
-
     Path getTestCaseDirectory(String testCaseId)
-
-    void setTestCaseStatus(String testCaseId, String testCaseStatus)
 
     Path resolveMaterial(String testCaseId, String url, FileType fileType)
     Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)

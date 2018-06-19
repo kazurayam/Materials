@@ -217,17 +217,6 @@ class TestMaterialsRepositorySpec extends Specification {
         testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1')
     }
 
-    def testSetTestCaseStatus() {
-        when:
-        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
-        tmr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        tmr.setTestCaseStatus('Test Cases/TC1','PASSED')
-        TestMaterialsRepositoryImpl tmri = (TestMaterialsRepositoryImpl)tmr
-        TCaseResult tcr = tmri.getTCaseResult(new TCaseName('Test Cases/TC1'))
-        then:
-        tcr.getTestCaseStatus() == TCaseStatus.PASSED
-    }
-
     def testMakeIndex() {
         setup:
         Path dir = workdir_.resolve('testReport')

@@ -16,7 +16,6 @@ class TCaseResult {
     private TCaseName tCaseName_
     private Path tCaseDirectory_
     private List<TargetURL> targetURLs_
-    private TCaseStatus tCaseStatus_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -26,7 +25,6 @@ class TCaseResult {
     TCaseResult(TCaseName tCaseName) {
         tCaseName_ = tCaseName
         targetURLs_ = new ArrayList<TargetURL>()
-        tCaseStatus_ = TCaseStatus.TO_BE_EXECUTED
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -50,20 +48,6 @@ class TCaseResult {
 
     Path getTCaseDirectory() {
         return tCaseDirectory_
-    }
-
-    void setTestCaseStatus(String str) {
-        TCaseStatus tcs = TCaseStatus.valueOf(str)  // this may throw IllegalArgumentException
-        this.setTestCaseStatus(tcs)
-    }
-
-    void setTestCaseStatus(TCaseStatus tCaseStatus) {
-        assert tCaseStatus != null
-        tCaseStatus_ = tCaseStatus
-    }
-
-    TCaseStatus getTestCaseStatus() {
-        return tCaseStatus_
     }
 
     // --------------------- create/add/get child nodes ----------------------
@@ -125,7 +109,6 @@ class TCaseResult {
         sb.append('{"TCaseResult":{')
         sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(tCaseName_.toString())   + '",')
         sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDirectory_.toString())    + '",')
-        sb.append('"tCaseStatus":"' + tCaseStatus_.toString() + '",')
         sb.append('"targetURLs":[')
         def count = 0
         for (TargetURL tp : targetURLs_) {
