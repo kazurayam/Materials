@@ -34,10 +34,11 @@ class IndexerSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
+    @Ignore
     def testMakeIndex() {
         setup:
         TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
-        Path file = tsr.getTSuiteTimestampDirectory().resolve('Result.html')
+        Path file = tsr.getTSuiteTimestampDirectory().resolve('Materials.html')
         if (Files.exists(file)) {
             Files.delete(file)
         }
@@ -46,6 +47,51 @@ class IndexerSpec extends Specification {
         Indexer.makeIndex(tsr, os)
         then:
         Files.exists(file)
+    }
+
+    def testMakeIndex2() {
+        setup:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
+        Path file = tsr.getTSuiteTimestampDirectory().resolve('Materials.html')
+        if (Files.exists(file)) {
+            Files.delete(file)
+        }
+        OutputStream os = Files.newOutputStream(file)
+        Indexer indexer = new Indexer()
+        when:
+        indexer.makeIndex2(tsr, os)
+        then:
+        Files.exists(file)
+    }
+
+    /**
+     * test loading content of the bootstram-treeview.js file from Java CLASSPATH
+     *
+     * @return
+     */
+    def testLoadingBootstrapTreeviewJsFromClasspath() {
+        setup:
+        Indexer indexer = new Indexer()
+        when:
+        String jsContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.js")
+        logger_.debug("bootstrap-treeview.js:\n${jsContent}")
+        then:
+        jsContent.length() > 0
+    }
+
+    /**
+     * test loading content of the bootstram-treeview.css file from Java CLASSPATH
+     *
+     * @return
+     */
+    def testLoadingBootstrapTreeviewCssFromClasspath() {
+        setup:
+        Indexer indexer = new Indexer()
+        when:
+        String cssContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.css")
+        logger_.debug("bootstrap-treeview.js:\n${cssContent}")
+        then:
+        cssContent.length() > 0
     }
 
     @Ignore
