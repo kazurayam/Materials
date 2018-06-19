@@ -7,9 +7,9 @@ import java.util.stream.Collectors
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-final class TestResultsRepositoryImpl implements TestResultsRepository {
+final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
 
-    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositoryImpl.class)
 
     private Path baseDir_
     private TSuiteName currentTSuiteName_
@@ -26,7 +26,7 @@ final class TestResultsRepositoryImpl implements TestResultsRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    TestResultsRepositoryImpl(Path baseDir) {
+    TestMaterialsRepositoryImpl(Path baseDir) {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }

@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory
 import spock.lang.Specification
 
 //@Ignore
-class TestResultsRepositoryImplSpec extends Specification {
+class TestMaterialsRepositoryImplSpec extends Specification {
 
     // fields
-    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryImplSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositoryImplSpec.class)
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
-    private static String classShortName_ = Helpers.getClassShortName(TestResultsRepositoryImplSpec.class)
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static String classShortName_ = Helpers.getClassShortName(TestMaterialsRepositoryImplSpec.class)
 
     // fixture methods
     def setupSpec() {
@@ -36,9 +36,9 @@ class TestResultsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testGetBaseDir')
         Helpers.copyDirectory(fixture_, casedir)
         when:
-        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir)
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
         then:
-        trri.getBaseDir() == casedir
+        tmri.getBaseDir() == casedir
     }
 
 
@@ -46,10 +46,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePath')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS1', '20180530_130604')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterial(
+        Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             Suffix.NULL,
@@ -64,10 +64,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS1', '20180530_130604')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterial(
+        Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             new Suffix('1'),
@@ -82,10 +82,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePath_new')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS3', '20180614_152000')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
-        Path p = tri.resolveMaterial(
+        Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             Suffix.NULL,
@@ -101,10 +101,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix_new')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS3', '20180614_152000')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS3', '20180614_152000')
         when:
-        Path p = tri.resolveMaterial(
+        Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
             new Suffix('1'),
@@ -120,10 +120,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolvePngFilePath')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS1', '20180530_130604')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
+        Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
@@ -133,10 +133,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS1', '20180530_130604')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
@@ -146,10 +146,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testResolvePngFilePathBySuitelessTimeless')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
-        Path p = tri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') == "./build/tmp/${classShortName_}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
@@ -159,10 +159,10 @@ class TestResultsRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testToJson')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl trri = new TestResultsRepositoryImpl(casedir)
-        trri.setCurrentTestSuite('TS1')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1')
         when:
-        def str = trri.toJson()
+        def str = tmri.toJson()
         then:
         str != null
         str.contains('{"TestResultsImpl":{')
@@ -171,14 +171,14 @@ class TestResultsRepositoryImplSpec extends Specification {
     }
 
 
-    def testReport() {
+    def testMakeIndex() {
         setup:
         Path casedir = workdir_.resolve('testReport')
         Helpers.copyDirectory(fixture_, casedir)
-        TestResultsRepositoryImpl tri = new TestResultsRepositoryImpl(casedir)
-        tri.setCurrentTestSuite('TS1', '20180530_130604')
+        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
+        tmri.setCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path html = tri.report()
+        Path html = tmri.makeIndex()
         then:
         html.toFile().exists()
     }

@@ -26,7 +26,7 @@ class Indexer {
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("Test Results ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
+                title("Test Materials ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().toString()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -57,7 +57,7 @@ class Indexer {
             body() {
                 mkp.comment('Place your content here')
                 div('class':'container') {
-                    h1('Katalon Studio Test Results')
+                    h1('Katalon Studio Test Materials')
                     h3("Test Suite : ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
                     // Slideshow
                     div('id':'carousel0', 'class':'carousel slide', 'data-ride':'carousel') {

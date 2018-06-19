@@ -1,15 +1,13 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
-import com.kazurayam.carmina.Helpers
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import spock.lang.Specification
 
@@ -88,7 +86,7 @@ class HelpersSpec extends Specification {
 
     def testCopyDirectory() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Results')
+        Path sourceDir = Paths.get('./src/test/fixture/Materials')
         Path targetDir = workdir_.resolve('testCopyDirectory')
         when:
         Helpers.copyDirectory(sourceDir, targetDir)

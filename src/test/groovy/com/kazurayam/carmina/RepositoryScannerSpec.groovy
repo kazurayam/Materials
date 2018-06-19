@@ -15,7 +15,7 @@ class RepositoryScannerSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     // fixture methods
     def setupSpec() {

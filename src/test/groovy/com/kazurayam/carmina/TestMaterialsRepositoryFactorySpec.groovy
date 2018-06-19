@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory
 
 import spock.lang.Specification
 //@Ignore
-class TestResultsRepositoryFactorySpec extends Specification {
+class TestMaterialsRepositoryFactorySpec extends Specification {
 
     // fields
-    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositoryFactorySpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositoryFactorySpec.class)
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositoryFactorySpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestMaterialsRepositoryFactorySpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -31,11 +31,11 @@ class TestResultsRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1')
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1')
         then:
-        trr != null
-        trr.toString().contains('TS1')
+        tmr != null
+        tmr.toString().contains('TS1')
     }
 
     // helper methods

@@ -14,15 +14,15 @@ import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
-class TestResultsRepositorySpec extends Specification {
+class TestMaterialsRepositorySpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(TestResultsRepositorySpec.class);
+    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositorySpec.class);
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestResultsRepositorySpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestMaterialsRepositorySpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -31,10 +31,10 @@ class TestResultsRepositorySpec extends Specification {
 
     def testSetCurrentTestSuite_oneStringArg() {
         setup:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
         when:
-        trr.setCurrentTestSuite('oneStringArg')
-        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        tmr.setCurrentTestSuite('oneStringArg')
+        Path timestampdir = tmr.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
         timestampdir.toString().contains('oneStringArg')
@@ -47,10 +47,10 @@ class TestResultsRepositorySpec extends Specification {
 
     def testSetCurrentTestSuite_twoStringArg() {
         setup:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
         when:
-        trr.setCurrentTestSuite('oneStringArg', '20180616_160000')
-        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        tmr.setCurrentTestSuite('oneStringArg', '20180616_160000')
+        Path timestampdir = tmr.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
         timestampdir.toString().contains('oneStringArg')
@@ -59,12 +59,12 @@ class TestResultsRepositorySpec extends Specification {
 
     def testSetCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
         setup:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
         when:
-        trr.setCurrentTestSuite(
+        tmr.setCurrentTestSuite(
                 new TSuiteName('oneStringArg'),
                 new TSuiteTimestamp('20180616_160000'))
-        Path timestampdir = trr.getCurrentTestSuiteDirectory()
+        Path timestampdir = tmr.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
         timestampdir.toString().contains('oneStringArg')
@@ -85,9 +85,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testToJson() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1')
-        def str = JsonOutput.prettyPrint(trr.toString())
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1')
+        def str = JsonOutput.prettyPrint(tmr.toString())
         //logger_.debug(JsonOutput.prettyPrint(str))
         then:
         str.contains('TS1')
@@ -95,18 +95,18 @@ class TestResultsRepositorySpec extends Specification {
 
     def testConstructor_Path_tsn() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1')
-        String str = trr.toString()
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1')
+        String str = tmr.toString()
         then:
         str.contains('TS1')
     }
 
     def testResolveMaterial_png() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path png = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path png = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
         png != null
         png.toString().contains('TC1')
@@ -116,9 +116,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_json() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path json = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.JSON)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path json = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.JSON)
         then:
         json != null
         json.toString().contains('TC1')
@@ -128,9 +128,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_xml() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xml = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', '1', FileType.XML)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xml = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', '1', FileType.XML)
         then:
         xml != null
         xml.toString().contains('TC1')
@@ -140,9 +140,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_pdf() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path pdf = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PDF)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path pdf = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PDF)
         then:
         pdf != null
         pdf.toString().contains('TC1')
@@ -152,21 +152,21 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_txt() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path txt = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 'x', FileType.TXT)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path txt = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 'x', FileType.TXT)
         then:
         txt != null
         txt.toString().contains('TC1')
         txt.toString().contains('demoaut.katalon.com')
         txt.toString().contains('txt')
     }
-    
+
     def testResolveMaterial_xls() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLS)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xls = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLS)
         then:
         xls != null
         xls.toString().contains('TC1')
@@ -176,9 +176,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_xlsx() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSX)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xls = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSX)
         then:
         xls != null
         xls.toString().contains('TC1')
@@ -188,9 +188,9 @@ class TestResultsRepositorySpec extends Specification {
 
     def testResolveMaterial_xlsm() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('TS1','20180530_130419')
-        Path xls = trr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSM)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('TS1','20180530_130419')
+        Path xls = tmr.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSM)
         then:
         xls != null
         xls.toString().contains('TC1')
@@ -201,44 +201,44 @@ class TestResultsRepositorySpec extends Specification {
 
     def testGetCurrentTestSuiteDirectory() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        Path testSuiteDir = trr.getCurrentTestSuiteDirectory()
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path testSuiteDir = tmr.getCurrentTestSuiteDirectory()
         then:
         testSuiteDir == workdir_.resolve('TS1/20180530_130419')
     }
 
     def testGetTestCaseDirectory() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        Path testCaseDir = trr.getTestCaseDirectory('Test Cases/TC1')
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path testCaseDir = tmr.getTestCaseDirectory('Test Cases/TC1')
         then:
         testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1')
     }
 
     def testSetTestCaseStatus() {
         when:
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(workdir_)
-        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        trr.setTestCaseStatus('Test Cases/TC1','PASSED')
-        TestResultsRepositoryImpl trri = (TestResultsRepositoryImpl)trr
-        TCaseResult tcr = trri.getTCaseResult(new TCaseName('Test Cases/TC1'))
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        tmr.setTestCaseStatus('Test Cases/TC1','PASSED')
+        TestMaterialsRepositoryImpl tmri = (TestMaterialsRepositoryImpl)tmr
+        TCaseResult tcr = tmri.getTCaseResult(new TCaseName('Test Cases/TC1'))
         then:
         tcr.getTestCaseStatus() == TCaseStatus.PASSED
     }
 
-    def testReport() {
+    def testMakeIndex() {
         setup:
         Path dir = workdir_.resolve('testReport')
         Helpers.ensureDirs(dir)
         Helpers.copyDirectory(fixture_, dir)
-        TestResultsRepository trr = TestResultsRepositoryFactory.createInstance(dir)
+        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(dir)
         when:
-        trr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        trr.report()
+        tmr.setCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        tmr.makeIndex()
         then:
-        Files.exists(trr.getCurrentTestSuiteDirectory().resolve('Result.html'))
+        Files.exists(tmr.getCurrentTestSuiteDirectory().resolve('Result.html'))
     }
 }
 

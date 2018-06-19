@@ -17,7 +17,7 @@ class MiscSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(MiscSpec.class)
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
     private static Path source_
 
     // fixture methods

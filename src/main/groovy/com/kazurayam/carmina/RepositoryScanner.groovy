@@ -104,7 +104,7 @@ class RepositoryScanner {
      */
     public static void main(String[] args) {
         logger_.info("#main " + ("Hello, I am Carmina RepositoryScanner."))
-        Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Results')
+        Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Materials')
         RepositoryScanner scanner = new RepositoryScanner(baseDir)
         scanner.scan()
         logger_.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))

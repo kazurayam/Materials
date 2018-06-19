@@ -1,11 +1,11 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -17,7 +17,7 @@ class TSuiteResultSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
     private RepositoryScanner scanner_
 
     // fixture methods

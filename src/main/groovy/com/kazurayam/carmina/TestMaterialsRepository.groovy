@@ -2,7 +2,7 @@ package com.kazurayam.carmina
 
 import java.nio.file.Path
 
-interface TestResultsRepository {
+interface TestMaterialsRepository {
 
     void setCurrentTestSuite(String testSuiteId)
     void setCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)

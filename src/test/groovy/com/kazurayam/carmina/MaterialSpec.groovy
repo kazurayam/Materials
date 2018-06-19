@@ -15,8 +15,8 @@ class MaterialSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
-    private static TestResultsRepositoryImpl trri_
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static TestMaterialsRepositoryImpl tmri_
     private static TargetURL tu_
 
     // fixture methods
@@ -26,12 +26,12 @@ class MaterialSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        trri_ = TestResultsRepositoryFactory.createInstance(workdir_)
-        trri_.setCurrentTestSuite('TS1')
+        tmri_ = TestMaterialsRepositoryFactory.createInstance(workdir_)
+        tmri_.setCurrentTestSuite('TS1')
     }
     def setup() {
         TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = trri_.getTSuiteResult(new TSuiteName('TS1'), tstamp)
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), tstamp)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         assert tcr != null
         //tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))

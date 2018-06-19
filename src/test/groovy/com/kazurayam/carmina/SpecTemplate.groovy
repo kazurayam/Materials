@@ -1,24 +1,22 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import com.kazurayam.carmina.Helpers
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
 @Ignore
 class SpecTemplate extends Specification {
-    
+
     static Logger logger_ = LoggerFactory.getLogger(SpecTemplate.class)
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Results")
+    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     // fixture methods
     def setupSpec() {
