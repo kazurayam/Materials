@@ -183,12 +183,9 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         }
         Material material = targetURL.getMaterial(suffix, fileType)
         if (material == null) {
-            String fileName = Material.resolveMaterialFileName(url, suffix, fileType)
-            Path materialPath = tCaseResult.getTCaseDirectory().resolve(fileName)
-            material = new Material(materialPath, fileType).setParent(targetURL)
-
+            material = new Material(url, suffix, fileType).setParent(targetURL)
             // Here we create the parent directory for the material
-            Helpers.ensureDirs(materialPath.getParent())
+            Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         }
         return material.getMaterialFilePath()
     }

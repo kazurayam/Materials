@@ -41,6 +41,7 @@ class TargetURL {
 
 
     Material getMaterial(Suffix suffix, FileType fileType) {
+        /*
         String encodedUrl = URLEncoder.encode(url_.toExternalForm(), 'UTF-8')
         Path p
         if (suffix != Suffix.NULL) {
@@ -54,6 +55,17 @@ class TargetURL {
         }
         logger_.debug("#getMaterial(Suffix,FileType) p=${p.toString()}")
         return this.getMaterial(p)
+        */
+        logger_.debug("#getMaterial materials_.size()=${materials.size()}")
+        for (Material mate : materials_) {
+            logger_.debug("#getMaterial" +
+                " mate.getSuffix()=${mate.getSuffix().toString()} arg.suffix=${suffix.toString()}" +
+                " mate.getFileType()=${mate.getFileType().toString()} arg.fileType=${fileType.toString()}")
+            if (mate.getSuffix() == suffix && mate.getFileType() == fileType) {
+                return mate
+            }
+        }
+        return null
     }
 
     Material getMaterial(Path materialFilePath) {

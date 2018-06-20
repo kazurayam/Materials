@@ -147,7 +147,8 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                             targetURL = new TargetURL(url).setParent(tCaseResult_)
                             tCaseResult_.addTargetURL(targetURL)
                         }
-                        Material mw = new Material(file, fileType).setParent(targetURL)
+                        Suffix suffix = Material.parseFileNameForSuffix(fileName)
+                        Material mw = new Material(url, suffix, fileType).setParent(targetURL)
                         targetURL.addMaterial(mw)
                         //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
                     } else {

@@ -94,7 +94,7 @@ class RepositoryScannerSpec extends Specification {
         //
         when:
         Material mate0 = materials[0]
-        String p0 = './build/tmp/' + Helpers.getClassShortName(this.class) +
+        String p0 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
             '/testScan/TS1/20180530_130419' +
             '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
@@ -105,7 +105,7 @@ class RepositoryScannerSpec extends Specification {
         //
         when:
         Material mate1 = materials[1]
-        String p1 = './build/tmp/' + Helpers.getClassShortName(this.class) +
+        String p1 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
                 '/testScan/TS1/20180530_130419' +
                 '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
         then:

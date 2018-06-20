@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -16,7 +17,8 @@ class MaterialSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
-    private static TestMaterialsRepositoryImpl tmri_
+    private static RepositoryScanner rs_
+    private static TCaseResult tcr_
     private static TargetURL tu_
 
     // fixture methods
@@ -26,24 +28,22 @@ class MaterialSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        tmri_ = TestMaterialsRepositoryFactory.createInstance(workdir_)
-        tmri_.setCurrentTestSuite('TS1')
+        rs_ = new RepositoryScanner(workdir_)
+        rs_.scan()
+        TSuiteResult tsr = rs_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        tcr_ = tsr.getTCaseResult(new TCaseName('TC1'))
+        tu_ = tcr_.getTargetURL(new URL('http://demoaut.katalon.com/'))
+        assert tu_ != null
+        logger_.debug("#setupSpec tu_=\n${JsonOutput.prettyPrint(tu_.toJson())}")
     }
-    def setup() {
-        TSuiteTimestamp tstamp = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), tstamp)
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
-        assert tcr != null
-        //tu = tcr.findOrNewTargetURL(new URL('http://demoaut.katalon.com/'))
-        tu_ = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-    }
+    def setup() {}
 
 
     // feature methods
 
     def testSetParent_GetParent() {
         when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('2'), FileType.PNG)
         Material modified = mate.setParent(tu_)
         then:
         modified.getParent() == tu_
@@ -89,7 +89,11 @@ class MaterialSpec extends Specification {
         when:
         Suffix suffix = Material.parseFileNameForSuffix('a.png')
         then:
-        suffix == null
+        suffix == Suffix.NULL
+        when:
+        suffix = Material.parseFileNameForSuffix('foo')
+        then:
+        suffix == Suffix.NULL
     }
 
     def testParseFileNameForURL_http() {
@@ -108,7 +112,7 @@ class MaterialSpec extends Specification {
 
     def testParseFileNameForURL_Malformed() {
         when:
-        URL url = Material.parseFileNameForURL('demoaut.katalon.com.png')
+        URL url = Material.parseFileNameForURL('this_is_unexpected_file_name.png')
         then:
         url == null
     }
@@ -129,15 +133,18 @@ class MaterialSpec extends Specification {
 
     def testToJson() {
         when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        Material mate = tu_.getMaterial(Suffix.NULL, FileType.PNG)
         def str = mate.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
-        str.startsWith('{"Material":{"materialFilePath":"')
+        str.startsWith('{"Material":{"url":"')
+        str.contains('"suffix":')
+        str.contains('"materialFilePath":')
         str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().toString()))
+        str.contains('"fileType":')
         str.endsWith('"}}')
     }
-    
+
     def testToBootstrapTreeviewData() {
         when:
         Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
@@ -149,6 +156,7 @@ class MaterialSpec extends Specification {
         str.endsWith('"}')
     }
 
+    /*
     def testGetRelativePathToTsTimestampDir() {
         when:
         Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
@@ -173,5 +181,6 @@ class MaterialSpec extends Specification {
         s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
 
     }
+    */
 
 }

@@ -12,11 +12,13 @@ class Material {
     protected static final String MAGIC_DELIMITER = '§'
 
     private TargetURL parent_
-    private Path materialFilePath_
+    private URL url_
+    private Suffix suffix_
     private FileType fileType_
 
-    Material(Path materialFilePath, FileType fileType) {
-        materialFilePath_ = materialFilePath
+    Material(URL url, Suffix suffix, FileType fileType) {
+        url_ = url
+        suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
     }
 
@@ -34,18 +36,34 @@ class Material {
     }
 
     Path getMaterialFilePath() {
-        return materialFilePath_
+        if (parent_ != null) {
+            String fileName = resolveMaterialFileName(url_, suffix_, fileType_)
+            Path materialPath = parent_.getParent().getTCaseDirectory().resolve(fileName).normalize()
+            return materialPath
+        } else {
+            logger_.warn("#getMaterialFilePath parent_ is null")
+            return null
+        }
+    }
+
+    URL getURL() {
+        return url_
+    }
+
+    Suffix getSuffix() {
+        return suffix_
     }
 
     FileType getFileType() {
         return fileType_
     }
 
+    /*
     Path getRelativePathToTsTimestampDir() {
         if (parent_ != null) {
             Path tsTimestampDir =
                 this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDirectory()
-            Path path = tsTimestampDir.relativize(materialFilePath_).normalize()
+            Path path = tsTimestampDir.relativize(this.getMaterialFilePath()).normalize()
             return path
         } else {
             def msg = "parent TargetURL is null"
@@ -53,21 +71,24 @@ class Material {
             throw new IllegalStateException(msg)
         }
     }
+    */
 
     /**
      * relative path to the TestSuiteName/Timestamp directory
-     */
+     *
     String getRelativePathAsString() {
         return this.getRelativePathToTsTimestampDir().toString()
     }
+    */
 
     /**
      *
      * @return
-     */
+     *
     String getRelativeUrlAsString() {
         return this.getRelativePathAsString().replace('\\','/').replace('%','%25')
     }
+    */
 
     // ---------------- helpers -----------------------------------------------
     static FileType parseFileNameForFileType(String fileName) {
@@ -92,7 +113,7 @@ class Material {
             String str = fileName.substring(0, fileName.lastIndexOf('.'))
             String[] arr = str.split(Material.MAGIC_DELIMITER)
             if (arr.length < 2) {
-                return null
+                return Suffix.NULL
             }
             if (arr.length > 3) {
                 logger_.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
@@ -100,7 +121,7 @@ class Material {
             }
             return new Suffix(arr[arr.length - 1])
         } else {
-            return null
+            return Suffix.NULL
         }
     }
 
@@ -109,7 +130,7 @@ class Material {
         if (ft != FileType.NULL) {
             Suffix suffix = parseFileNameForSuffix(fileName)
             String urlstr
-            if (suffix != null) {
+            if (suffix != Suffix.NULL) {
                 urlstr = fileName.substring(0, fileName.lastIndexOf(Material.MAGIC_DELIMITER))
             } else {
                 urlstr = fileName.substring(0, fileName.lastIndexOf('.'))
@@ -119,7 +140,7 @@ class Material {
                 URL url = new URL(decoded)
                 return url
             } catch (MalformedURLException e) {
-                logger_.warn("unknown protocol in '${decoded}'")
+                logger_.warn("#parseFileNameForURL unknown protocol in the var decoded='${decoded}'")
                 return null
             }
         } else {
@@ -142,14 +163,15 @@ class Material {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        return materialFilePath_ == other.getMaterialFilePath()
+        return this.url_ == other.url_ &&
+            this.suffix_ == other.suffix_ &&
+            this.fileType_ == other.fileType_
     }
 
     @Override
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTargetURL().hashCode()
         result = prime * result + this.getMaterialFilePath().hashCode()
         return result
     }
@@ -163,7 +185,9 @@ class Material {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Material":{')
-        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(materialFilePath_.toString()) + '",')
+        sb.append('"url":"' + Helpers.escapeAsJsonText(url_.toString())+ '",')
+        sb.append('"suffix":"' + Helpers.escapeAsJsonText(suffix_.toString())+ '",')
+        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().toString()) + '",')
         sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '"')
         sb.append('}}')
         return sb.toString()
@@ -172,7 +196,7 @@ class Material {
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(materialFilePath_.getFileName().toString())+ '"')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '"')
         sb.append('}')
         return sb.toString()
     }
