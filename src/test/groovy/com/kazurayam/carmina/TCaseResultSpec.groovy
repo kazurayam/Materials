@@ -17,7 +17,7 @@ class TCaseResultSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
-    private static RepositoryScanner scanner
+    private static RepositoryScanner scanner_
 
     // fixture methods
     def setupSpec() {
@@ -28,8 +28,8 @@ class TCaseResultSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
     }
     def setup() {
-        scanner = new RepositoryScanner(workdir_)
-        scanner.scan()
+        scanner_ = new RepositoryScanner(workdir_)
+        scanner_.scan()
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -37,7 +37,7 @@ class TCaseResultSpec extends Specification {
     // feature methods
     def testSetParent_GetParent() {
         when:
-        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = new TCaseResult(new TCaseName('TC2'))
         TCaseResult modified = tcr.setParent(tsr)
@@ -45,9 +45,50 @@ class TCaseResultSpec extends Specification {
         modified.getParent() == tsr
     }
 
+    def testGetMaterial() {
+        when:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
+            new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        URL url = new URL('http://demoaut.katalon.com/')
+        Material mate = tcr.getMaterial(url, Suffix.NULL, FileType.PNG)
+        then:
+        mate != null
+        mate.getURL().toString() == url.toString()
+        mate.getSuffix() == Suffix.NULL
+        mate.getFileType() == FileType.PNG
+    }
+
+    def testAddMaterial() {
+        when:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
+            new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        URL url = new URL('http://demoaut.katalon.com/')
+        Suffix suffix = new Suffix('testAddMaterial')
+        Material mate = new Material(url, suffix, FileType.PNG).setParent(tcr)
+        tcr.addMaterial(mate)
+        mate = tcr.getMaterial(url, suffix, FileType.PNG)
+        then:
+        mate != null
+        mate.getURL().toString() == url.toString()
+        mate.getSuffix() == suffix
+        mate.getFileType() == FileType.PNG
+    }
+    
+    def testGetMaterials() {
+        when:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
+            new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        List<Material> materials = tcr.getMaterials()
+        then:
+        materials.size() == 2
+    }
+
     def testToJson() {
         setup:
-        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         Material mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
@@ -65,7 +106,7 @@ class TCaseResultSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         setup:
-        TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         when:

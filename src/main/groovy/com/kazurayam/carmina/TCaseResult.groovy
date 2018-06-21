@@ -15,7 +15,6 @@ class TCaseResult {
     private TSuiteResult parent_
     private TCaseName tCaseName_
     private Path tCaseDirectory_
-    //private List<TargetURL> targetURLs_
     private List<Material> materials_
 
     // --------------------- constructors and initializer ---------------------
@@ -25,7 +24,6 @@ class TCaseResult {
      */
     TCaseResult(TCaseName tCaseName) {
         tCaseName_ = tCaseName
-        //targetURLs_ = new ArrayList<TargetURL>()
         materials_ = new ArrayList<Material>()
     }
 
@@ -54,34 +52,6 @@ class TCaseResult {
 
     // --------------------- create/add/get child nodes ----------------------
 
-    /*
-    TargetURL getTargetURL(URL url) {
-        for (TargetURL tp : targetURLs_) {
-            // you MUST NOT evaluate 'tp.getUrl() == url'
-            // because it will take more than 10 seconds for DNS Hostname resolution
-            if (tp.getUrl().toString() == url.toString()) {
-                return tp
-            }
-        }
-        return null
-    }
-
-    List<TargetURL> getTargetURLs() {
-        return targetURLs_
-    }
-
-    void addTargetURL(TargetURL targetPage) {
-        boolean found = false
-        for (TargetURL tp : targetURLs_) {
-            if (tp == targetPage) {
-                found = true
-            }
-        }
-        if (!found) {
-            targetURLs_.add(targetPage)
-        }
-    }
-    */
     List<Material> getMaterials() {
         return materials_
     }
