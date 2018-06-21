@@ -115,9 +115,6 @@ class MaterialSpec extends Specification {
         url == null
     }
 
-    /**
-     * @return
-     */
     def testResolveMaterialFileName() {
         when:
         String fileName = Material.resolveMaterialFileName(

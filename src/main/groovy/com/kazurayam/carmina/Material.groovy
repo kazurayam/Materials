@@ -23,39 +23,29 @@ class Material {
         fileType_ = fileType
     }
 
-    /*
-    Material setParent(TargetURL parent) {
-        parent_ = parent
-        return this
-    }
-    */
     Material setParent(TCaseResult parent) {
         parent_ = parent
         return this
     }
 
-    /*
-    TargetURL getParent() {
-        return this.getTargetURL()
-    }
-    */
     TCaseResult getParent() {
         return this.getTCaseResult()
     }
 
-    /*
-    TargetURL getTargetURL() {
-        return parent_
-    }
-    */
     TCaseResult getTCaseResult() {
         return parent_
     }
 
+    /**
+     * Returns the java.nio.file.Path of the Material.
+     * The Path is based on the directory given to the
+     * <pre>com.kazurayam.carmina.TestMaterialsRespositoryFactory.createInstance(Path baseDir)</pre>
+     *
+     * @return the Path of the Material
+     */
     Path getMaterialFilePath() {
         if (parent_ != null) {
             String fileName = resolveMaterialFileName(url_, suffix_, fileType_)
-            //Path materialPath = parent_.getParent().getTCaseDirectory().resolve(fileName).normalize()
             Path materialPath = parent_.getTCaseDirectory().resolve(fileName).normalize()
             return materialPath
         } else {
@@ -77,6 +67,13 @@ class Material {
     }
 
     // ---------------- helpers -----------------------------------------------
+    /**
+     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.§atoz.png</pre>' is given
+     * as fileName argument, then returns com.kazurayam.carmina.FileType.PNG
+     *
+     * @param fileName
+     * @return
+     */
     static FileType parseFileNameForFileType(String fileName) {
         String[] arr = fileName.split('\\.')
         if (arr.length < 2) {
@@ -87,12 +84,23 @@ class Material {
                 FileType ft = FileType.getByExtension(candidate)
                 return ft
             } catch (IllegalArgumentException e) {
-                logger_.info("unknown file extension '${candidate}' in the file name '${fileName}'")
+                logger_.info("#parseFileNameForFileType unknown file extension '${candidate}' " +
+                    "in the file name '${fileName}'")
                 return FileType.NULL
             }
         }
     }
 
+    /**
+     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>' is given
+     * as fileName argument, then returns an instance of com.kazurayam.carmina.Suffix of '<pre>atoz</pre>'
+     *
+     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.png</pre>' is given
+     * as fileName argument, then returns com.kazurayam.carmina.Suffix.NULL
+     *
+     * @param fileName
+     * @return
+     */
     static Suffix parseFileNameForSuffix(String fileName) {
         FileType ft = parseFileNameForFileType(fileName)
         if (ft != FileType.NULL) {
@@ -102,8 +110,9 @@ class Material {
                 return Suffix.NULL
             }
             if (arr.length > 3) {
-                logger_.warn("${fileName} contains 2 or more ${Material.MAGIC_DELIMITER} character. " +
-                        "Valid but unexpected.")
+                logger_.warn("#parseFileNameForSuffix ${fileName} contains 2 or " +
+                    "more ${Material.MAGIC_DELIMITER} character. " +
+                    "Valid but unexpected.")
             }
             return new Suffix(arr[arr.length - 1])
         } else {
@@ -111,6 +120,14 @@ class Material {
         }
     }
 
+    /**
+     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>' is given
+     * as fileName argument, then returns an instance of java.net.URL of
+     * '<pre>http://demoauto.katalon.com</pre>'
+     *
+     * @param fileName
+     * @return
+     */
     static URL parseFileNameForURL(String fileName) {
         FileType ft = parseFileNameForFileType(fileName)
         if (ft != FileType.NULL) {
@@ -134,6 +151,28 @@ class Material {
         }
     }
 
+    /**
+     * Determines the file name of a Material. The file name is in the format:
+     *
+     * <pre>&lt;encoded URL string&gt;.&lt;file extension&gt;</pre>
+     *
+     * for example:
+     *
+     * <pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.png</pre>
+     *
+     * or
+     *
+     * <pre>&lt;encoded URL string&gt;§&lt;suffix string&gt;.&lt;file extension&gt;</pre>
+     *
+     * for example:
+     *
+     * <pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>
+     *
+     * @param url
+     * @param suffix
+     * @param fileType
+     * @return
+     */
     static String resolveMaterialFileName(URL url, Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         if (suffix != Suffix.NULL) {
