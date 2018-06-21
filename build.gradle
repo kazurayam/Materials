@@ -40,5 +40,9 @@ test {
     include '**/carmina/*Spec.class'
     //include '**/carmina/TestMaterialsRepositoryImplSpec.class'
     exclude '**/visualtesting/*Spec.class'
+    finalizedBy jacocoTestReport
+}
 
+task pinpoint(type: Test) {
+    include '**/carmina/MaterialSpec.class'
 }
