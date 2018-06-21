@@ -76,7 +76,21 @@ class TCaseResultSpec extends Specification {
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG
     }
-    
+
+    def testAddMaterial_parentIsNotSet() {
+        when:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
+            new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        URL url = new URL('http://demoaut.katalon.com/')
+        Suffix suffix = new Suffix('testAddMaterial')
+        //Material mate = new Material(url, suffix, FileType.PNG).setParent(tcr)
+        Material mate = new Material(url, suffix, FileType.PNG)
+        tcr.addMaterial(mate)
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     def testGetMaterials() {
         when:
         TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
@@ -107,8 +121,7 @@ class TCaseResultSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         setup:
-        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         when:
         def str = tcr.toBootstrapTreeviewData()
@@ -116,6 +129,28 @@ class TCaseResultSpec extends Specification {
         then:
         str.contains('text')
         str.contains('nodes')
+    }
+
+    def testEquals() {
+        setup:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        expect:
+        tcr != "string"
+        when:
+        TCaseResult other = new TCaseResult(new TCaseName('TC1')).setParent(tsr)
+        then:
+        tcr == other
+    }
+
+    def testHashCode() {
+        setup:
+        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        when:
+        TCaseResult other = new TCaseResult(new TCaseName('TC1')).setParent(tsr)
+        then:
+        tcr.hashCode() == other.hashCode()
     }
 
 

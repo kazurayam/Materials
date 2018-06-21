@@ -38,7 +38,6 @@ test.outputs.upToDateWhen {false}
 
 test {
     include '**/carmina/*Spec.class'
-    //include '**/carmina/TestMaterialsRepositoryImplSpec.class'
     exclude '**/visualtesting/*Spec.class'
     finalizedBy jacocoTestReport
 }

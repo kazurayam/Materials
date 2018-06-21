@@ -80,14 +80,7 @@ class Material {
             return FileType.NULL
         } else {
             String candidate = arr[arr.length - 1]
-            try {
-                FileType ft = FileType.getByExtension(candidate)
-                return ft
-            } catch (IllegalArgumentException e) {
-                logger_.info("#parseFileNameForFileType unknown file extension '${candidate}' " +
-                    "in the file name '${fileName}'")
-                return FileType.NULL
-            }
+            FileType ft = FileType.getByExtension(candidate)
         }
     }
 
@@ -188,7 +181,7 @@ class Material {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        return this.url_ == other.url_ &&
+        return this.url_.toString() == other.url_.toString() &&
             this.suffix_ == other.suffix_ &&
             this.fileType_ == other.fileType_
     }
@@ -197,7 +190,9 @@ class Material {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getMaterialFilePath().hashCode()
+        result = prime * result + this.url_.toString().hashCode()
+        result = prime * result + this.suffix_.hashCode()
+        result = prime * result + this.fileType_.hashCode()
         return result
     }
 

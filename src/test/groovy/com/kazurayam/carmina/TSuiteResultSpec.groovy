@@ -87,12 +87,42 @@ class TSuiteResultSpec extends Specification {
         tcr2.getParent() == tsr
     }
 
+    def testAddTCaseResult_parentIsNotSet() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        //TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
+        TCaseResult tcr = new TCaseResult(new TCaseName('TSX'))
+        tsr.addTCaseResult(tcr)
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     def testGetTSuiteTimestampDirectory() {
         when:
         TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         Path dir = tsr.getTSuiteTimestampDirectory()
         then:
         dir.getFileName().toString() == '20180530_130419'
+    }
+
+    def testEquals() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult other = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419')).setParent(workdir_)
+        then:
+        tsr == other
+        when:
+        TSuiteResult more = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604')).setParent(workdir_)
+        then:
+        tsr != more
+    }
+
+    def testHashCode() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult other = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419')).setParent(workdir_)
+        then:
+        tsr.hashCode() == other.hashCode()
     }
 
     def testToJson() {

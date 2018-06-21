@@ -88,10 +88,16 @@ class MaterialSpec extends Specification {
         Suffix suffix = Material.parseFileNameForSuffix('a.png')
         then:
         suffix == Suffix.NULL
+        //
         when:
         suffix = Material.parseFileNameForSuffix('foo')
         then:
         suffix == Suffix.NULL
+        //
+        when:
+        suffix = Material.parseFileNameForSuffix('a§b§c.png')
+        then:
+        suffix == new Suffix('c')
     }
 
     def testParseFileNameForURL_http() {
@@ -150,4 +156,52 @@ class MaterialSpec extends Specification {
         str.endsWith('"}')
     }
 
+    def testEquals() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1 != null
+        mate2 != null
+        mate1 == mate2
+    }
+
+    def testEquals_differentURL() {
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        when:
+        Material mate3 = new Material(new URL('https://www.yahoo.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate3 != null
+        mate1 != mate3
+    }
+
+    def testEquals_differentSuffix() {
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        when:
+        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix("foo"), FileType.PNG)
+        then:
+        mate3 != null
+        mate1 != mate3
+    }
+
+    def testEquals_differentFileType() {
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        when:
+        Material mate3 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.JPEG)
+        then:
+        mate3 != null
+        mate1 != mate3
+    }
+
+    def testHashCode() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1.hashCode() == mate2.hashCode()
+        when:
+        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix("foo"), FileType.PNG)
+        then:
+        mate1.hashCode() != mate3.hashCode()
+    }
 }
