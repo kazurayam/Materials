@@ -104,13 +104,32 @@ class HelpersSpec extends Specification {
         expect:
         Helpers.getClassShortName(Helpers.class) == 'Helpers'
     }
-
-    def testEscapeAsJsonText() {
+    
+    def testEscapeAsJsonText_reversesolidus() {
         expect:
-        Helpers.escapeAsJsonText('/') == '\\/'
         Helpers.escapeAsJsonText('\\') == '\\\\'
+    }
+    
+    def testEscapeAsJsonText_quotationmark() {
+        expect:
         Helpers.escapeAsJsonText('"') == '\\"'
     }
+    
+    def testExcapeAsJsonText_newline() {
+        expect:
+        Helpers.escapeAsJsonText('\n') == '\\n'
+    }
+    
+    def testExcapeAsJsonText_carriagereturn() {
+        expect:
+        Helpers.escapeAsJsonText('\r') == '\\r'
+    }
+    
+    def testExcapeAsJsonText_tab() {
+        expect:
+        Helpers.escapeAsJsonText('\t') == '\\t'
+    }
+
 
     def testNow() {
         when:

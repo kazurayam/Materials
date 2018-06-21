@@ -1,8 +1,5 @@
 package com.kazurayam.carmina
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import static java.nio.file.FileVisitResult.*
 
 import java.nio.file.FileAlreadyExistsException
@@ -15,19 +12,26 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import groovy.json.StringEscapeUtils
+
 final class Helpers {
 
     static Logger logger_ = LoggerFactory.getLogger(Helpers.class)
 
     /**
-     * not to be instanciated
+     * Constructor is hidden as this class is not supposed to be instanciated
      */
     private Helpers() {}
 
     /**
-     * utility method which stringifies LocalDateTime into 'yyyyMMdd_hhmmss' format
+     * utility method which stringifies a java.time.LocalDateTime object
+     * into a String of 'yyyyMMdd_HHmmss' format
+     *
      * @param timestamp
-     * @return
+     * @return string in 'yyyyMMdd_HHmmss'
      */
     static String getTimestampAsString(LocalDateTime timestamp) {
         return DateTimeFormatter
@@ -36,7 +40,7 @@ final class Helpers {
     }
 
     /**
-     * utility method which creates parent directory tree if not present
+     * utility method which creates the directory and its ancestors if not present
      *
      * @param directory
      */
@@ -68,20 +72,26 @@ final class Helpers {
     }
 
     /**
-     * simulate UNIX touch command for a Path
+     * Check if a file is present or not. If not present,
+     * create a file of 0 bytes at the specified Path with the current timestamp.
+     * This simulate UNIX touch command for a Path
      *
      * @param filePath
      * @throws IOException
      */
-    static void touch(Path filePath) throws IOException{
-        filePath.toFile().createNewFile()
-        filePath.toFile().setLastModified(System.currentTimeMillis())
+    static void touch(Path filePath) throws IOException {
+        if (Files.notExists(filePath)) {
+            filePath.toFile().createNewFile()
+            filePath.toFile().setLastModified(System.currentTimeMillis())
+        }
     }
 
     /**
+     * Copies descendent files and directories recursively
+     * from the source directory into the target directory.
      *
-     * @param dirFrom
-     * @param dirTo
+     * @param source a directory from which files and directories are copied
+     * @param target a directory into which files and directories are copied
      * @return
      */
     static boolean copyDirectory(Path source, Path target) {
@@ -128,8 +138,10 @@ final class Helpers {
     }
 
     /**
-     * clazzが com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRespsitoryImpl であるとき
-     * packageを除外した短い名前すなわち ScreenshotRepositoryImpl を返す
+     * returns a short name of the Class stripping the package.
+     * For example, if
+     * <pre>com.kazurayam.ksbackyard.screenshotsupport.ScreenshotRespsitoryImpl</pre> is given as
+     * <pre>clazz</pre>, then <pre>ScreenshotRepositoryImpl</pre> is returned.
      *
      * @param clazz
      * @return
@@ -143,25 +155,19 @@ final class Helpers {
 
 
     /**
-     * JSONの値として含まれることになるstringのなかに含まれる文字を適切にエスケープする
+     * This method converts a Java string into a JSON string.
+     * This method is implemented with groovy.json.StringEscapeUtils#escapeJava(String)
      *
+     * @see <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/json/StringEscapeUtils.html#StringEscapeUtils()">escapeJava(String)</a>
      * @param string
      * @return
      */
     static String escapeAsJsonText(String string) {
-        char[] chars = string.toCharArray()
-        StringBuilder sb = new StringBuilder()
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == '/') { sb.append('\\/') }
-            else if (chars[i] == '\\') { sb.append('\\\\') }
-            else if (chars[i] == '"') { sb.append('\\"') }
-            else { sb.append(chars[i]) }
-        }
-        return sb.toString()
+        return StringEscapeUtils.escapeJava(string)
     }
 
     /**
-     * returns the time stamp of 'now' in the format of 'yyyyMMdd_HHmmss'
+     * returns the current time stamp in the format of 'yyyyMMdd_HHmmss'
      *
      * @return e.g., '20180616_070237'
      */
