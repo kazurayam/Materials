@@ -11,6 +11,16 @@ class Suffix {
 
     private String value_
 
+    /**
+     * The following characters will be stripped out of the value
+     *
+     *   /  (a solidus character)
+     *   \  (a reverse solidus character)
+     *   §  (a section character)
+     *   .  (a dot character)
+     *
+     * @param value
+     */
     Suffix(String value) {
         value_ = value
         value_ = stripChars(value_, '/')
