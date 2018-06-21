@@ -32,7 +32,7 @@ class TestMaterialsRepositoryFactorySpec extends Specification {
     def testCreateInstance() {
         when:
         TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
-        tmr.setCurrentTestSuite('Test Suites/TS1')
+        tmr.putCurrentTestSuite('Test Suites/TS1')
         then:
         tmr != null
         tmr.toString().contains('TS1')

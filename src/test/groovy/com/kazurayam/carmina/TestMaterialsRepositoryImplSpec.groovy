@@ -47,7 +47,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolveMaterialFilePath')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1', '20180530_130604')
+        tmri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
@@ -65,7 +65,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1', '20180530_130604')
+        tmri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
@@ -83,7 +83,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolveMaterialFilePath_new')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS3', '20180614_152000')
+        tmri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
@@ -102,7 +102,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix_new')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS3', '20180614_152000')
+        tmri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         Path p = tmri.resolveMaterial(
             new TCaseName('TC1'),
@@ -121,7 +121,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolvePngFilePath')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1', '20180530_130604')
+        tmri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', FileType.PNG)
         then:
@@ -134,7 +134,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1', '20180530_130604')
+        tmri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
@@ -147,7 +147,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testResolvePngFilePathBySuitelessTimeless')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        tmri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         Path p = tmri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
         then:
@@ -160,7 +160,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testToJson')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1')
+        tmri.putCurrentTestSuite('TS1')
         when:
         def str = tmri.toJson()
         then:
@@ -173,10 +173,10 @@ class TestMaterialsRepositoryImplSpec extends Specification {
 
     def testMakeIndex() {
         setup:
-        Path casedir = workdir_.resolve('testReport')
+        Path casedir = workdir_.resolve('testMakeIndex')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.setCurrentTestSuite('TS1', '20180530_130604')
+        tmri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         Path html = tmri.makeIndex()
         then:

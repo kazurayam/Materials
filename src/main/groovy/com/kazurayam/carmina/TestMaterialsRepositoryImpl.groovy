@@ -40,7 +40,7 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         tSuiteResults_ = scanner.getTSuiteResults()
 
         // set default Material path to the "./${baseDir name}/_/_" directory
-        this.setCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -49,26 +49,26 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
      * @param testSuiteId
      */
     @Override
-    void setCurrentTestSuite(String testSuiteId) {
-        this.setCurrentTestSuite(
+    void putCurrentTestSuite(String testSuiteId) {
+        this.putCurrentTestSuite(
                 testSuiteId,
                 Helpers.now())
     }
 
     @Override
-    void setCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
-        this.setCurrentTSuiteResult(
+    void putCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
+        this.putCurrentTSuiteResult(
                 new TSuiteName(testSuiteId),
                 new TSuiteTimestamp(testSuiteTimestampString))
     }
 
-    void setCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        this.setCurrentTSuiteResult(
+    void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        this.putCurrentTSuiteResult(
                 tSuiteName,
                 tSuiteTimestamp)
     }
 
-    void setCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         // memorize the specified TestSuite
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
@@ -176,14 +176,9 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
             tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
-        TargetURL targetURL = tCaseResult.getTargetURL(url)
-        if (targetURL == null) {
-            targetURL = new TargetURL(url).setParent(tCaseResult)
-            tCaseResult.getTargetURLs().add(targetURL)
-        }
-        Material material = targetURL.getMaterial(suffix, fileType)
+        Material material = tCaseResult.getMaterial(url, suffix, fileType)
         if (material == null) {
-            material = new Material(url, suffix, fileType).setParent(targetURL)
+            material = new Material(url, suffix, fileType).setParent(tCaseResult)
             // Here we create the parent directory for the material
             Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         }
@@ -210,7 +205,7 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
                     .collect(Collectors.toList())
             if (tsrList.size() > 0) {
                 TSuiteResult tsr = tsrList[0]
-                Path html = tsr.getTSuiteTimestampDirectory().resolve("Result.html")
+                Path html = tsr.getTSuiteTimestampDirectory().resolve("Materials.html")
                 Helpers.ensureDirs(tsr.getTSuiteTimestampDirectory())
                 //
                 Indexer.makeIndex(tsr, Files.newOutputStream(html))

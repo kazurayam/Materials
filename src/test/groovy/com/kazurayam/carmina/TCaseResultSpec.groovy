@@ -50,8 +50,7 @@ class TCaseResultSpec extends Specification {
         TSuiteResult tsr = scanner.getTSuiteResult(new TSuiteName('TS1'),
                 new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
-        TargetURL tu = tcr.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        Material mate = tu.getMaterials().get(0)
+        Material mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
         def str = tcr.toString()
         logger_.debug("#testToString: \n${JsonOutput.prettyPrint(str)}")

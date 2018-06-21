@@ -73,22 +73,10 @@ class RepositoryScannerSpec extends Specification {
         tCaseResult.getParent() == tSuiteResult
         tCaseResult.getTCaseName() == new TCaseName('TC1')
         tCaseResult.getTCaseDirectory() != null
-        //
-
-        when:
-        List<TargetURL> targetURLs = tCaseResult.getTargetURLs()
-        then:
-        targetURLs.size() == 1   //     http://demoaut.katalon.com/
-        //
-
-        when:
-        TargetURL tu = targetURLs[0]
-        then:
-        tu.getParent() == tCaseResult
-        tu.getUrl() == new URL('http://demoaut.katalon.com/')
+        
         //
         when:
-        List<Material> materials = tu.getMaterials()
+        List<Material> materials = tCaseResult.getMaterials()
         then:
         materials.size() == 2
         //
@@ -98,7 +86,7 @@ class RepositoryScannerSpec extends Specification {
             '/testScan/TS1/20180530_130419' +
             '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
-        mate0.getParent() == tu
+        mate0.getParent() == tCaseResult
         mate0.getMaterialFilePath().toString().replace('\\', '/') == p0
         mate0.getFileType() == FileType.PNG
 
@@ -109,7 +97,7 @@ class RepositoryScannerSpec extends Specification {
                 '/testScan/TS1/20180530_130419' +
                 '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
         then:
-        mate1.getParent() == tu
+        mate1.getParent() == tCaseResult
         mate1.getMaterialFilePath().toString().replace('\\', '/') == p1
         mate1.getFileType() == FileType.PNG
 
@@ -186,8 +174,7 @@ class RepositoryScannerSpec extends Specification {
         TSuiteResult tSuiteResult = scanner.getTSuiteResult(
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
-        TargetURL targetUrl = tCaseResult.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        List<Material> materials = targetUrl.getMaterials()
+        List<Material> materials = tCaseResult.getMaterials()
         then:
         materials.size() == 2
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png

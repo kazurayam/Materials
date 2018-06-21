@@ -11,7 +11,8 @@ class Material {
 
     protected static final String MAGIC_DELIMITER = '§'
 
-    private TargetURL parent_
+    //private TargetURL parent_
+    private TCaseResult parent_
     private URL url_
     private Suffix suffix_
     private FileType fileType_
@@ -22,23 +23,40 @@ class Material {
         fileType_ = fileType
     }
 
+    /*
     Material setParent(TargetURL parent) {
         parent_ = parent
         return this
     }
+    */
+    Material setParent(TCaseResult parent) {
+        parent_ = parent
+        return this
+    }
 
+    /*
     TargetURL getParent() {
         return this.getTargetURL()
     }
+    */
+    TCaseResult getParent() {
+        return this.getTCaseResult()
+    }
 
+    /*
     TargetURL getTargetURL() {
+        return parent_
+    }
+    */
+    TCaseResult getTCaseResult() {
         return parent_
     }
 
     Path getMaterialFilePath() {
         if (parent_ != null) {
             String fileName = resolveMaterialFileName(url_, suffix_, fileType_)
-            Path materialPath = parent_.getParent().getTCaseDirectory().resolve(fileName).normalize()
+            //Path materialPath = parent_.getParent().getTCaseDirectory().resolve(fileName).normalize()
+            Path materialPath = parent_.getTCaseDirectory().resolve(fileName).normalize()
             return materialPath
         } else {
             logger_.warn("#getMaterialFilePath parent_ is null")
@@ -57,38 +75,6 @@ class Material {
     FileType getFileType() {
         return fileType_
     }
-
-    /*
-    Path getRelativePathToTsTimestampDir() {
-        if (parent_ != null) {
-            Path tsTimestampDir =
-                this.getTargetURL().getTCaseResult().getTSuiteResult().getTSuiteTimestampDirectory()
-            Path path = tsTimestampDir.relativize(this.getMaterialFilePath()).normalize()
-            return path
-        } else {
-            def msg = "parent TargetURL is null"
-            logger_.error(msg)
-            throw new IllegalStateException(msg)
-        }
-    }
-    */
-
-    /**
-     * relative path to the TestSuiteName/Timestamp directory
-     *
-    String getRelativePathAsString() {
-        return this.getRelativePathToTsTimestampDir().toString()
-    }
-    */
-
-    /**
-     *
-     * @return
-     *
-    String getRelativeUrlAsString() {
-        return this.getRelativePathAsString().replace('\\','/').replace('%','%25')
-    }
-    */
 
     // ---------------- helpers -----------------------------------------------
     static FileType parseFileNameForFileType(String fileName) {

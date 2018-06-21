@@ -86,10 +86,8 @@ final class TSuiteResult {
     List<Material> getMaterials() {
         List<Material> materials = new ArrayList<Material>()
         for (TCaseResult tcr : this.getTCaseResults()) {
-            for (TargetURL targetURL : tcr.getTargetURLs()) {
-                for (Material mw : targetURL.getMaterials()) {
-                    materials.add(mw)
-                }
+            for (Material mate : tcr.getMaterials()) {
+                materials.add(mate)
             }
         }
         return materials

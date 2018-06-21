@@ -34,7 +34,7 @@ class IndexerSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    @Ignore
+    
     def testMakeIndex() {
         setup:
         TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))

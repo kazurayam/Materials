@@ -4,8 +4,8 @@ import java.nio.file.Path
 
 interface TestMaterialsRepository {
 
-    void setCurrentTestSuite(String testSuiteId)
-    void setCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
+    void putCurrentTestSuite(String testSuiteId)
+    void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
 
     Path getBaseDir()
     Path getCurrentTestSuiteDirectory()

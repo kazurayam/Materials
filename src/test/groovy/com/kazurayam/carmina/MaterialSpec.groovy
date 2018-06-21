@@ -19,7 +19,7 @@ class MaterialSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
     private static RepositoryScanner rs_
     private static TCaseResult tcr_
-    private static TargetURL tu_
+
 
     // fixture methods
     def setupSpec() {
@@ -32,9 +32,7 @@ class MaterialSpec extends Specification {
         rs_.scan()
         TSuiteResult tsr = rs_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('TC1'))
-        tu_ = tcr_.getTargetURL(new URL('http://demoaut.katalon.com/'))
-        assert tu_ != null
-        logger_.debug("#setupSpec tu_=\n${JsonOutput.prettyPrint(tu_.toJson())}")
+        logger_.debug("#setupSpec tcr_:\n${JsonOutput.prettyPrint(tcr_.toJson())}")
     }
     def setup() {}
 
@@ -44,9 +42,9 @@ class MaterialSpec extends Specification {
     def testSetParent_GetParent() {
         when:
         Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('2'), FileType.PNG)
-        Material modified = mate.setParent(tu_)
+        Material modified = mate.setParent(tcr_)
         then:
-        modified.getParent() == tu_
+        modified.getParent() == tcr_
 
     }
 
@@ -100,14 +98,14 @@ class MaterialSpec extends Specification {
         when:
         URL url = Material.parseFileNameForURL('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
         then:
-        url == new URL('http://demoaut.katalon.com/')
+        url.toString() == new URL('http://demoaut.katalon.com/').toString()
     }
 
     def testParseFileNameForURL_https() {
         when:
         URL url = Material.parseFileNameForURL('https%3A%2F%2Fwww.google.com%2F.png')
         then:
-        url == new URL('https://www.google.com/')
+        url.toString() == new URL('https://www.google.com/').toString()
     }
 
     def testParseFileNameForURL_Malformed() {
@@ -130,10 +128,9 @@ class MaterialSpec extends Specification {
         fileName.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F§foo.png')
     }
 
-
     def testToJson() {
         when:
-        Material mate = tu_.getMaterial(Suffix.NULL, FileType.PNG)
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def str = mate.toString()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
@@ -147,7 +144,7 @@ class MaterialSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def str = mate.toBootstrapTreeviewData()
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
@@ -155,32 +152,5 @@ class MaterialSpec extends Specification {
         str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().getFileName().toString()))
         str.endsWith('"}')
     }
-
-    /*
-    def testGetRelativePathToTsTimestampDir() {
-        when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
-        Path p = mate.getRelativePathToTsTimestampDir()
-        then:
-        p.toString().replace('\\','/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
-    }
-
-    def testGetRelativePathAsString() {
-        when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
-        String s = mate.getRelativePathAsString()
-        then:
-        s.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
-    }
-
-    def testGetRelativeUrlAsString() {
-        when:
-        Material mate = tu_.getMaterial(new Suffix('1'), FileType.PNG)
-        String s = mate.getRelativeUrlAsString()
-        then:
-        s == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
-
-    }
-    */
 
 }

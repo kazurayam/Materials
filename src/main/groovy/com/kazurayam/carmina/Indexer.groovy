@@ -175,19 +175,14 @@ $('#tree').treeview({
                         div('class':'row') {
                             div('class':'col-sm-12') {
                                 h4("Test Case name : ${tcResult.getTCaseName().toString()}")
-                                List<TargetURL> targetURLs = tcResult.getTargetURLs()
-                                for (TargetURL targetURL : targetURLs) {
-                                    h5("URL : ${targetURL.getUrl().toExternalForm()}")
-                                    List<Material> materials = targetURL.getMaterials()
-                                    for (Material material : materials) {
+                                List<Material> materials = tcResult.getMaterials()
+                                for (Material material : materials) {
                                         Path file = material.getMaterialFilePath()
                                         Path relative = tSuiteResult.getTSuiteTimestampDirectory().relativize(file).normalize()
                                         h6("src:${relative.toString()}")
                                         img(src:"${relative.toString().replace('\\','/').replace('%','%25')}",
-                                                alt:"${targetURL.getUrl().toExternalForm()}",
                                                 border:"0",
                                                 width:"96%")
-                                    }
                                 }
                             }
                         }

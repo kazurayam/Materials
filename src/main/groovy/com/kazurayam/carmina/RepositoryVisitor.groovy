@@ -23,7 +23,6 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     private TSuiteResult tSuiteResult_
     private TCaseName tCaseName_
     private TCaseResult tCaseResult_
-    private TargetURL targetURL_
     private Material material_
 
     private static enum Layer {
@@ -66,7 +65,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                     tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(baseDir_)
                     tSuiteResults_.add(tSuiteResult_)
                 } else {
-                    logger_.info("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
+                    logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                             " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                 }
                 directoryTransition_.push(Layer.TIMESTAMP)
@@ -141,16 +140,9 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                     URL url = Material.parseFileNameForURL(fileName)
                     //logger.debug("#visitFile url=${url.toString()}")
                     if (url != null) {
-                        TargetURL targetURL = tCaseResult_.getTargetURL(url)
-                        //logger.debug("#visitFile targetURL=${targetURL.toString()} pre")
-                        if (targetURL == null) {
-                            targetURL = new TargetURL(url).setParent(tCaseResult_)
-                            tCaseResult_.addTargetURL(targetURL)
-                        }
                         Suffix suffix = Material.parseFileNameForSuffix(fileName)
-                        Material mw = new Material(url, suffix, fileType).setParent(targetURL)
-                        targetURL.addMaterial(mw)
-                        //logger.debug("#visitFile targetURL=${targetURL.toString()} post")
+                        Material material = new Material(url, suffix, fileType).setParent(tCaseResult_)
+                        tCaseResult_.addMaterial(material)
                     } else {
                         logger_.debug("#visitFile unable to parse ${file} into a URL")
                     }

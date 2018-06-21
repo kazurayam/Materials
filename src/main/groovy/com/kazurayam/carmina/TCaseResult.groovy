@@ -15,7 +15,8 @@ class TCaseResult {
     private TSuiteResult parent_
     private TCaseName tCaseName_
     private Path tCaseDirectory_
-    private List<TargetURL> targetURLs_
+    //private List<TargetURL> targetURLs_
+    private List<Material> materials_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -24,7 +25,8 @@ class TCaseResult {
      */
     TCaseResult(TCaseName tCaseName) {
         tCaseName_ = tCaseName
-        targetURLs_ = new ArrayList<TargetURL>()
+        //targetURLs_ = new ArrayList<TargetURL>()
+        materials_ = new ArrayList<Material>()
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -52,6 +54,7 @@ class TCaseResult {
 
     // --------------------- create/add/get child nodes ----------------------
 
+    /*
     TargetURL getTargetURL(URL url) {
         for (TargetURL tp : targetURLs_) {
             // you MUST NOT evaluate 'tp.getUrl() == url'
@@ -76,6 +79,35 @@ class TCaseResult {
         }
         if (!found) {
             targetURLs_.add(targetPage)
+        }
+    }
+    */
+    List<Material> getMaterials() {
+        return materials_
+    }
+
+    Material getMaterial(URL url, Suffix suffix, FileType fileType) {
+        for (Material mate : materials_) {
+            if (mate.getURL().toString() == url.toString() &&
+                mate.getSuffix() == suffix &&
+                mate.getFileType() == fileType) {
+                return mate
+            }
+        }
+        return null
+    }
+
+    void addMaterial(Material material) {
+        boolean found = false
+        for (Material mate : materials) {
+            if (mate.getURL().toString() == material.getURL().toString() &&
+                mate.getSuffix() == material.getSuffix() &&
+                mate.getFileType() == material.getFileType()) {
+                found = true
+            }
+        }
+        if (!found) {
+            materials_.add(material)
         }
     }
 
@@ -109,11 +141,11 @@ class TCaseResult {
         sb.append('{"TCaseResult":{')
         sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(tCaseName_.toString())   + '",')
         sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDirectory_.toString())    + '",')
-        sb.append('"targetURLs":[')
+        sb.append('"materials":[')
         def count = 0
-        for (TargetURL tu : targetURLs_) {
+        for (Material mate : materials_) {
             if (count > 0) { sb.append(',') }
-            sb.append(tu.toJson())
+            sb.append(mate.toJson())
             count += 1
         }
         sb.append(']')
@@ -127,13 +159,12 @@ class TCaseResult {
         sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.toString())+ '",')
         sb.append('"nodes":[')
         def mate_count = 0
-        for (TargetURL tu : targetURLs_) {
-            List<Material> materials = tu.getMaterials()
-            for (Material material : materials) {
-                if (mate_count > 0) { sb.append(',') }
-                sb.append(material.toBootstrapTreeviewData())
-                mate_count += 1
+        for (Material material : materials_) {
+            if (mate_count > 0) {
+                sb.append(',')
             }
+            sb.append(material.toBootstrapTreeviewData())
+            mate_count += 1
         }
         sb.append(']')
         sb.append('}')
