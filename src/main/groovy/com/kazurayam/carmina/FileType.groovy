@@ -2,34 +2,34 @@ package com.kazurayam.carmina
 
 enum FileType {
 
-    TXT('txt',     'text/plain'),
-    CSV('csv',     'text/plain'),
-    HTML('html',   'text/html'),
-    CSS('css',     'text/css'),
-    JS('js',       'text/javascript'),
-    GIF('gif',     'image/gif'),
-    JPG('jpg',     'image/jpeg'),
-    JPEG('jpeg',   'image/jpeg'),
-    PNG('png' ,    'image/png'),
-    BMP('bmp',     'image/bmp'),
-    SVG('svg',     'image/svg+xml'),
-    OCTET('bin',   'application/octet-stream'),
-    JSON('json',   'application/json'),
-    XLS('.xls',    'application/vnd.ms-excel'),
-    XLSM('.xlsm',  'application/vnd.ms-excel'),
-    XLSX('.xlsx',  'application/vnd.ms-excel'),
-    XML('xml',     'application/xml' ),
-    XHTML('xhtml', 'application/xhtml+html'),
-    PDF('pdf',     'application/pdf'),
+    TXT  ('txt',    'text/plain',               'Text'                            ),
+    CSV  ('csv',    'text/plain',               'Comma Separated Values'          ),
+    HTML ('html',   'text/html',                'Hyper Text Markup Language'      ),
+    CSS  ('css',    'text/css',                 'Cascading Stylesheet'            ),
+    JS   ('js',     'text/javascript',          'Javascript'                      ),
+    BMP  ('bmp',    'image/bmp',                'Bitmap'                          ),
+    GIF  ('gif',    'image/gif',                'Graphics Interchange Format'     ),
+    JPG  ('jpg',    'image/jpeg',               'Joint Photographic Experts Group'),
+    JPEG ('jpeg',   'image/jpeg',               'Joint Photographic Experts Group'),
+    PNG  ('png' ,   'image/png',                'Portable Network Graphics'       ),
+    SVG  ('svg',    'image/svg+xml',            'Scalable Vector Graphics'        ),
+    JSON ('json',   'application/json',         'Javascript Object Notation'      ),
+    PDF  ('pdf',    'application/pdf',          'Portable Document Format'        ),
+    XLS  ('xls',    'application/vnd.ms-excel', 'Microsoft Excel (-> Excel 2003)' ),
+    XLSM ('xlsm',   'application/vnd.ms-excel', 'Microsoft Excel (Excel 2007 ->)' ),
+    XLSX ('xlsx',   'application/vnd.ms-excel', 'Microsoft Excel with Macro (Excel 2007 ->)'),
+    XML  ('xml',    'application/xml',          'Extensible Markup Language'      ),
 
-    NULL('', '') ;
+    NULL ('',       '',                         'Null object'                     ) ;
 
     private final String extension_
     private final String mimeType_
+    private final String description_
 
-    FileType(String extension, String mimeType) {
+    FileType(String extension, String mimeType, String description) {
         this.extension_ = extension
         this.mimeType_  = mimeType
+        this.description_ = description
     }
 
     String getExtension() {
@@ -40,6 +40,10 @@ enum FileType {
         return this.mimeType_
     }
 
+    String getDescription() {
+        return this.description_
+    }
+
     @Override
     String toString() {
         return toJson() //this.getExtension()
@@ -48,7 +52,8 @@ enum FileType {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"FileType":{')
-        sb.append('"extension":"' + this.getExtension() + '","mimeType":"' + this.getMimeType() + '"')
+        sb.append('"extension":"' + this.getExtension() + '","mimeType":"' + this.getMimeType() +
+            '","description":"' + this.getDescription() + '"')
         sb.append('}}')
         return sb.toString()
     }
