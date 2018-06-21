@@ -11,9 +11,39 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 
 /**
- * RepositoryScanner scans a file system tree under the baseDir directory, and it builds object trees of
- * TSuiteResult under which contained objects of TCaseResult + TargetURL + Material as found in the
- * local storage.
+ * RepositoryScanner scans a file system tree under the baseDir directory.
+ * It assumes the file tree is organized in the format as this:
+ *
+ * <pre>
+ * baseDir
+ * |
+ * +-TS1
+ * |  +-20180530_130419
+ * |  |  +-TC1
+ * |  |          http%3A%2F%2Fdemoaut.katalon.com%2F.png
+ * |  |          http%3A%2F%2Fdemoaut.katalon.com%2F§1.png
+ * |  |
+ * |  +-20180530_130604
+ * |      +-TC1
+ * |      |      http%3A%2F%2Fdemoaut.katalon.com%2F.png
+ * |      |
+ * |      +-TC2
+ * |             http%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png
+ * |
+ * +-TS2
+ * |  +-20180612_111256
+ * |      |
+ * |      +-TC1
+ * |             http%3A%2F%2Fdemoaut.katalon.com%2F.png
+ * |
+ * +-_
+ *    +-_
+ *        +-TC1
+ *               http%3A%2F%2Fdemoaut.katalon.com%2F.png
+ * </pre>
+ *
+ * It makes a List of TSuiteResult which containes TCaseResult and  Material
+ * as found in the baseDir.
  *
  * @author kazurayam
  */
