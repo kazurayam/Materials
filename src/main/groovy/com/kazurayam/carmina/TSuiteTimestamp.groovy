@@ -9,7 +9,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * Timestamp of a Test Suite
+ * Wraps a time stamp when a Test Suite was executed.
+ * The time stamp value is formatted in 'yyyyMMdd_HHmmss'
  *
  * @author kazurayam
  *

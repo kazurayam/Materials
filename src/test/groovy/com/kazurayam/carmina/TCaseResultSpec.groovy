@@ -71,6 +71,7 @@ class TCaseResultSpec extends Specification {
         mate = tcr.getMaterial(url, suffix, FileType.PNG)
         then:
         mate != null
+        mate.getParent() == tcr
         mate.getURL().toString() == url.toString()
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG

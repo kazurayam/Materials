@@ -18,7 +18,7 @@ class TSuiteResultSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
-    private RepositoryScanner scanner_
+    private static TestMaterialsRepositoryImpl tmri_
 
     // fixture methods
     def setupSpec() {
@@ -27,11 +27,9 @@ class TSuiteResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
+        tmri_ = new TestMaterialsRepositoryImpl(workdir_)
     }
-    def setup() {
-        scanner_ = new RepositoryScanner(workdir_)
-        scanner_.scan()
-    }
+    def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
@@ -45,10 +43,61 @@ class TSuiteResultSpec extends Specification {
         modified.getParent() == workdir_
     }
 
+    def testGetTSuiteName() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        then:
+        tsr.getTSuiteName() == new TSuiteName('TS1')
+    }
+
+    def testGetTSuiteTimestamp() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        then:
+        tsr.getTSuiteTimestamp() == new TSuiteTimestamp('20180530_130419')
+    }
+
+    def testGetTCaseResult() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        then:
+        tcr != null
+        tcr.getTCaseName() == new TCaseName('TC1')
+        tcr.getParent() == tsr
+    }
+
+    def testGetTCaseResults() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        List<TCaseResult> tCaseResults = tsr.getTCaseResults()
+        then:
+        tCaseResults != null
+        tCaseResults.size() == 2
+    }
+
+    def testAddTCaseResult() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
+        tsr.addTCaseResult(tcr)
+        TCaseResult tcr2 = tsr.getTCaseResult(new TCaseName('TSX'))
+        then:
+        tcr2 != null
+        tcr2.getParent() == tsr
+    }
+
+    def testGetTSuiteTimestampDirectory() {
+        when:
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        Path dir = tsr.getTSuiteTimestampDirectory()
+        then:
+        dir.getFileName().toString() == '20180530_130419'
+    }
+
     def testToJson() {
         setup:
-        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         when:
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
         def s = tsr.toString()
@@ -66,8 +115,7 @@ class TSuiteResultSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         setup:
-        TSuiteResult tsr = scanner_.getTSuiteResult(new TSuiteName('TS1'),
-                new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         when:
         def s = tsr.toBootstrapTreeviewData()
         logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")

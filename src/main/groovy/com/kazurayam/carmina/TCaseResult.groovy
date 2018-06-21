@@ -68,6 +68,11 @@ class TCaseResult {
     }
 
     void addMaterial(Material material) {
+        if (material.getParent() != this) {
+            def msg = "material ${material.toJson()} does not have appropriate parent"
+            logger_.error("#addMaterial ${msg}")
+            throw new IllegalArgumentException(msg)
+        }
         boolean found = false
         for (Material mate : materials) {
             if (mate.getURL().toString() == material.getURL().toString() &&

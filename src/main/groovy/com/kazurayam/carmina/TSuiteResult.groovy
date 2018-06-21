@@ -70,6 +70,11 @@ final class TSuiteResult {
     }
 
     void addTCaseResult(TCaseResult tCaseResult) {
+        if (tCaseResult.getParent() != this) {
+            def msg = "tCaseResult ${tCaseResult.toString()} does not have appropriate parent"
+            logger_.error("#addTCaseResult ${msg}")
+            throw new IllegalArgumentException(msg)
+        }
         boolean found = false
         for (TCaseResult tcr : tCaseResults_) {
             if (tcr == tCaseResult) {
