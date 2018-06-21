@@ -1,8 +1,6 @@
 package com.kazurayam.carmina
 
-import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -181,37 +179,6 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
             Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         }
         return material.getMaterialFilePath()
-    }
-
-    /**
-     * create a Result.html file under the directory ${baseDir}/${Test Suite name}/${Test Suite timestamp}/
-     * The Result.html file is an index to the Material files created by the TestResultsImpl at this time of execution
-     *
-     * @returns Path of the Results.html file
-     */
-    @Override
-    Path makeIndex() throws IOException {
-        // reload the latest Test Results Repository from the local disk
-        RepositoryScanner scanner = new RepositoryScanner(baseDir_)
-        scanner.scan()
-        tSuiteResults_ = scanner.getTSuiteResults()
-        //
-        if (currentTSuiteName_ != null && currentTSuiteTimestamp_ != null) {
-            List<TSuiteResult> tsrList =
-                tSuiteResults_.stream()
-                    .filter({tsr -> tsr.getTSuiteName() == currentTSuiteName && tsr.getTSuiteTimestamp() == currentTSuiteTimestamp })
-                    .collect(Collectors.toList())
-            if (tsrList.size() > 0) {
-                TSuiteResult tsr = tsrList[0]
-                Path html = tsr.getTSuiteTimestampDirectory().resolve("Materials.html")
-                Helpers.ensureDirs(tsr.getTSuiteTimestampDirectory())
-                //
-                Indexer.makeIndex(tsr, Files.newOutputStream(html))
-                return html
-            }
-            return null
-        }
-        return null
     }
 
 

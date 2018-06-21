@@ -18,7 +18,6 @@ class IndexerSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
-    private static TestMaterialsRepositoryImpl tmri_
 
     // fixture methods
     def setupSpec() {
@@ -27,41 +26,21 @@ class IndexerSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        tmri_ = new TestMaterialsRepositoryImpl(workdir_)
     }
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
-    
+
     def testMakeIndex() {
         setup:
-        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
-        Path file = tsr.getTSuiteTimestampDirectory().resolve('Materials.html')
-        if (Files.exists(file)) {
-            Files.delete(file)
-        }
-        OutputStream os = Files.newOutputStream(file)
+        Indexer indexer = new Indexer(workdir_)
         when:
-        Indexer.makeIndex(tsr, os)
+        Path index = indexer.makeIndex("TS1", "20180530_130419")
         then:
-        Files.exists(file)
-    }
-
-    def testMakeIndex2() {
-        setup:
-        TSuiteResult tsr = tmri_.getTSuiteResult(new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
-        Path file = tsr.getTSuiteTimestampDirectory().resolve('Materials.html')
-        if (Files.exists(file)) {
-            Files.delete(file)
-        }
-        OutputStream os = Files.newOutputStream(file)
-        Indexer indexer = new Indexer()
-        when:
-        indexer.makeIndex2(tsr, os)
-        then:
-        Files.exists(file)
+        index != null
+        Files.exists(index)
     }
 
     /**
@@ -71,7 +50,7 @@ class IndexerSpec extends Specification {
      */
     def testLoadingBootstrapTreeviewJsFromClasspath() {
         setup:
-        Indexer indexer = new Indexer()
+        Indexer indexer = new Indexer(workdir_)
         when:
         String jsContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.js")
         logger_.debug("bootstrap-treeview.js:\n${jsContent}")
@@ -86,7 +65,7 @@ class IndexerSpec extends Specification {
      */
     def testLoadingBootstrapTreeviewCssFromClasspath() {
         setup:
-        Indexer indexer = new Indexer()
+        Indexer indexer = new Indexer(workdir_)
         when:
         String cssContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.css")
         logger_.debug("bootstrap-treeview.js:\n${cssContent}")

@@ -43,5 +43,6 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/carmina/MaterialSpec.class'
+    include '**/carmina/IndexerSpec.class'
+    include '**/carmina/TestMaterialRepository*Spec.class'
 }

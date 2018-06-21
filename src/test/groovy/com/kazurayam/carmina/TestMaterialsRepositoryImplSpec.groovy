@@ -171,18 +171,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
     }
 
 
-    def testMakeIndex() {
-        setup:
-        Path casedir = workdir_.resolve('testMakeIndex')
-        Helpers.copyDirectory(fixture_, casedir)
-        TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
-        tmri.putCurrentTestSuite('TS1', '20180530_130604')
-        when:
-        Path html = tmri.makeIndex()
-        then:
-        html.toFile().exists()
-    }
 
     // helper methods
-    
+
 }
