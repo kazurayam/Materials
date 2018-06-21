@@ -37,7 +37,7 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/carmina/*Spec.class'
+    include '**/carmina/TSuite*Spec.class'
     //include '**/carmina/TestMaterialsRepositoryImplSpec.class'
     exclude '**/visualtesting/*Spec.class'
 

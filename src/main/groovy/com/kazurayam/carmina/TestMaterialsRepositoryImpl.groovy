@@ -16,8 +16,6 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
     private TSuiteTimestamp currentTSuiteTimestamp_
     private List<TSuiteResult> tSuiteResults_
 
-    static final String IMAGE_FILE_EXTENSION = '.png'
-
     // ---------------------- constructors & initializer ----------------------
 
     /**
@@ -44,7 +42,7 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
     }
 
     /**
-     * The current time now 'now' is assumed
+     * The current time now is assumed
      *
      * @param testSuiteId
      */
@@ -77,8 +75,8 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
         if (tsr == null) {
             tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir_)
+            this.addTSuiteResult(tsr)
         }
-        this.addTSuiteResult(tsr)
     }
 
     @Override

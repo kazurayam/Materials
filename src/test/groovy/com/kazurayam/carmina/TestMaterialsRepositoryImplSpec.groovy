@@ -42,9 +42,9 @@ class TestMaterialsRepositoryImplSpec extends Specification {
     }
 
 
-    def testResolveMaterialFilePath() {
+    def testResolveMaterial() {
         setup:
-        Path casedir = workdir_.resolve('testResolveMaterialFilePath')
+        Path casedir = workdir_.resolve('testResolveMaterial')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
         tmri.putCurrentTestSuite('TS1', '20180530_130604')
@@ -57,12 +57,12 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialFilePath/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/${classShortName_}/testResolveMaterial/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
-    def testResolveMaterialFilePathWithSuffix() {
+    def testResolveMaterialWithSuffix() {
         setup:
-        Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix')
+        Path casedir = workdir_.resolve('testResolveMaterialWithSuffix')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
         tmri.putCurrentTestSuite('TS1', '20180530_130604')
@@ -75,12 +75,12 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
     }
 
-    def testResolveMaterialFilePath_new() {
+    def testResolveMaterial_new() {
         setup:
-        Path casedir = workdir_.resolve('testResolveMaterialFilePath_new')
+        Path casedir = workdir_.resolve('testResolveMaterial_new')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
         tmri.putCurrentTestSuite('TS3', '20180614_152000')
@@ -93,13 +93,13 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialFilePath_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/${classShortName_}/testResolveMaterial_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         Files.exists(p.getParent())
     }
 
-    def testResolveMaterialFilePathWithSuffix_new() {
+    def testResolveMaterialWithSuffix_new() {
         setup:
-        Path casedir = workdir_.resolve('testResolveMaterialFilePathWithSuffix_new')
+        Path casedir = workdir_.resolve('testResolveMaterialWithSuffix_new')
         Helpers.copyDirectory(fixture_, casedir)
         TestMaterialsRepositoryImpl tmri = new TestMaterialsRepositoryImpl(casedir)
         tmri.putCurrentTestSuite('TS3', '20180614_152000')
@@ -112,7 +112,7 @@ class TestMaterialsRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
         Files.exists(p.getParent())
     }
 
@@ -184,12 +184,5 @@ class TestMaterialsRepositoryImplSpec extends Specification {
     }
 
     // helper methods
-    TSuiteResult lookupTestSuiteResult(List<TSuiteResult> tsrList, TSuiteName tsn, TSuiteTimestamp tst) {
-        for (TSuiteResult tsr : tsrList ) {
-            if (tsr.getTSuiteName() == tsn && tsr.getTSuiteTimestamp() == tst) {
-                return tsr
-            }
-        }
-        return null
-    }
+    
 }
