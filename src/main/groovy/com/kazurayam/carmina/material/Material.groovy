@@ -36,6 +36,19 @@ class Material {
         return parent_
     }
 
+    URL getURL() {
+        return url_
+    }
+
+    Suffix getSuffix() {
+        return suffix_
+    }
+
+    FileType getFileType() {
+        return fileType_
+    }
+
+    // ---------------- business ----------------------------------------------
     /**
      * Returns the java.nio.file.Path of the Material.
      * The Path is based on the directory given to the
@@ -54,17 +67,29 @@ class Material {
         }
     }
 
-    URL getURL() {
-        return url_
+    /**
+     *
+     * @return
+     */
+    Path getPathRelativeToTSuiteTimestamp() {
+        Path tSuiteTimestampPath = this.getParent().getParent().getTSuiteTimestampDirectory()
+        return tSuiteTimestampPath.relativize(this.getMaterialFilePath())
     }
 
-    Suffix getSuffix() {
-        return suffix_
+    /**
+     *
+     * @return
+     */
+    String getHrefRelativeToTSuiteTimestamp() {
+        Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
+        Path tCaseResultRelativeToTSuiteTimestamp = tSuiteTimestampDir.relativize(
+            this.getParent().getTCaseDirectory())
+        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
+            this.resolveEncodedMaterialFilename(url_, suffix_, fileType_))
+        return href.normalize().toString().replace('\\', '/')
     }
 
-    FileType getFileType() {
-        return fileType_
-    }
+
 
     // ---------------- helpers -----------------------------------------------
     /**
@@ -168,14 +193,25 @@ class Material {
      */
     static String resolveMaterialFileName(URL url, Suffix suffix, FileType fileType) {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+        String encodedSuffix = URLEncoder.encode(suffix.toString(), 'UTF-8')
         if (suffix != Suffix.NULL) {
-            return "${encodedUrl}${Material.MAGIC_DELIMITER}${suffix.toString()}.${fileType.getExtension()}"
+            return "${encodedUrl}${Material.MAGIC_DELIMITER}${encodedSuffix}.${fileType.getExtension()}"
         } else {
             return "${encodedUrl}.${fileType.getExtension()}"
         }
     }
 
-    // ---------------- overriding Object properties --------------------------
+    static String resolveEncodedMaterialFilename(URL url, Suffix suffix, FileType fileType ) {
+        String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
+        String doubleEncodedSuffix = URLEncoder.encode(URLEncoder.encode(suffix.toString(), 'UTF-8'), 'UTF-8')
+        if (suffix != Suffix.NULL) {
+            return "${doubleEncodedUrl}${Material.MAGIC_DELIMITER}${doubleEncodedSuffix}.${fileType.getExtension()}"
+        } else {
+            return "${doubleEncodedUrl}.${fileType.getExtension()}"
+        }
+    }
+
+    // ---------------- overriding java.lang.Object properties --------------------------
     @Override
     boolean equals(Object obj) {
         //if (this == obj) { return true }
@@ -216,7 +252,8 @@ class Material {
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '"')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '",')
+        sb.append('"href":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToTSuiteTimestamp()) + '"')
         sb.append('}')
         return sb.toString()
     }

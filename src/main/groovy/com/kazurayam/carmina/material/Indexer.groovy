@@ -65,7 +65,7 @@ class Indexer {
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("Test Materials ${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
+                title("${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -86,7 +86,7 @@ class Indexer {
             }
             body() {
                 div('class':'container') {
-                    h3('Test Materials')
+                    h3('Materials')
                     div('id':'tree')
                 }
                 mkp.comment('SCRIPTS')
@@ -112,8 +112,9 @@ function getTree() {
 }
 $('#tree').treeview({
     data: getTree(),
-    enableLinks: false,
+    enableLinks: true,
     levels: 3,
+    multiSelect: true,
     showTags: true
 });
 ''')

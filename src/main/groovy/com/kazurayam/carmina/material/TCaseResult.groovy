@@ -47,7 +47,7 @@ class TCaseResult {
     }
 
     Path getTCaseDirectory() {
-        return tCaseDirectory_
+        return tCaseDirectory_.normalize()
     }
 
     // --------------------- create/add/get child nodes ----------------------

@@ -44,7 +44,7 @@ final class TSuiteResult {
     }
 
     Path getTSuiteTimestampDirectory() {
-        return tSuiteTimestampDirectory_
+        return tSuiteTimestampDirectory_.normalize()
     }
 
     TSuiteName getTSuiteName() {

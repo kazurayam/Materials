@@ -6,17 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.FileType
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.Material
-import com.kazurayam.carmina.material.RepositoryScanner
-import com.kazurayam.carmina.material.Suffix
-import com.kazurayam.carmina.material.TCaseName
-import com.kazurayam.carmina.material.TCaseResult
-import com.kazurayam.carmina.material.TSuiteName
-import com.kazurayam.carmina.material.TSuiteResult
-import com.kazurayam.carmina.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -142,6 +131,24 @@ class MaterialSpec extends Specification {
         fileName.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F§foo.png')
     }
 
+    def testGetPathRelativeToTSuiteTimestamp() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        Path relative = mate.getPathRelativeToTSuiteTimestamp()
+        then:
+        relative != null
+        relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
+    }
+    
+    def testGetHrefRelativeToTSuiteTimestamp() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        String href = mate.getHrefRelativeToTSuiteTimestamp()
+        then:
+        href != null
+        href == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
+    }
+    
     def testToJson() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
