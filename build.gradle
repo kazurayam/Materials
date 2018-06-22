@@ -1,5 +1,5 @@
 group 'kazurayam.com'
-version '0.1'
+version '0.2'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
@@ -45,5 +45,5 @@ test {
 task pinpoint(type: Test) {
     include '**/carmina/material/IndexerSpec.class'
     include '**/carmina/material/MaterialSpec.class'
-    
+
 }
