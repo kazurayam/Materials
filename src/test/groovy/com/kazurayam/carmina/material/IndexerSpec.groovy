@@ -7,9 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.Indexer
-
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -46,35 +43,6 @@ class IndexerSpec extends Specification {
         Files.exists(index)
     }
 
-    /**
-     * test loading content of the bootstram-treeview.js file from Java CLASSPATH
-     *
-     * @return
-     */
-    def testLoadingBootstrapTreeviewJsFromClasspath() {
-        setup:
-        Indexer indexer = new Indexer(workdir_)
-        when:
-        String jsContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.js")
-        logger_.debug("bootstrap-treeview.js:\n${jsContent}")
-        then:
-        jsContent.length() > 0
-    }
-
-    /**
-     * test loading content of the bootstram-treeview.css file from Java CLASSPATH
-     *
-     * @return
-     */
-    def testLoadingBootstrapTreeviewCssFromClasspath() {
-        setup:
-        Indexer indexer = new Indexer(workdir_)
-        when:
-        String cssContent = indexer.getResource("bootstrap-treeview/bootstrap-treeview.css")
-        logger_.debug("bootstrap-treeview.js:\n${cssContent}")
-        then:
-        cssContent.length() > 0
-    }
 
     @Ignore
     def testIgnoring() {}

@@ -10,13 +10,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.FileType
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.TSuiteName
-import com.kazurayam.carmina.material.TSuiteTimestamp
-import com.kazurayam.carmina.material.MaterialRepository
-import com.kazurayam.carmina.material.MaterialRepositoryFactory
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -200,7 +193,7 @@ class MaterialRepositorySpec extends Specification {
         mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
         Path testSuiteDir = mr_.getCurrentTestSuiteDirectory()
         then:
-        testSuiteDir == workdir_.resolve('TS1/20180530_130419')
+        testSuiteDir == workdir_.resolve('TS1/20180530_130419').normalize()
     }
 
     def testGetTestCaseDirectory() {
@@ -208,7 +201,7 @@ class MaterialRepositorySpec extends Specification {
         mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/TC1')
         then:
-        testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1')
+        testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1').normalize()
     }
 
     def testMakeIndex() {

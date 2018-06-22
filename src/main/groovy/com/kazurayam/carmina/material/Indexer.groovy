@@ -80,9 +80,8 @@ class Indexer {
                         'rel':'stylesheet',
                         'integrity':'sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB',
                         'crossorigin':'anonymous')
-                style('type':'text/css') {
-                    mkp.comment("\n" + this.getResource('bootstrap-treeview/bootstrap-treeview.css'))
-                }
+                link('href':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css',
+                    'rel':'stylesheet')
             }
             body() {
                 div('class':'container') {
@@ -99,9 +98,8 @@ class Indexer {
                 script('src':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
                     'integrity':'sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
                     'crossorigin':'anonymous') {mkp.comment('')}
-                script('type':'text/javascript') {
-                    mkp.comment("\n" + this.getResource('bootstrap-treeview/bootstrap-treeview.js'))
-                }
+                script('src': 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'
+                    ) {mkp.comment('')}
                 script('type':'text/javascript') {
                     mkp.comment(
 '''
