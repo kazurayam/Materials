@@ -37,4 +37,5 @@ interface TestMaterialsRepository {
     Path resolveMaterial(String testCaseId, String url, FileType fileType)
     Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)
 
+    Path makeIndex()
 }

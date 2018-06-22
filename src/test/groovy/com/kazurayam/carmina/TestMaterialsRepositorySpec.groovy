@@ -2,6 +2,7 @@ package com.kazurayam.carmina
 
 import static groovy.json.JsonOutput.*
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -201,6 +202,14 @@ class TestMaterialsRepositorySpec extends Specification {
         Path testCaseDir = tmr_.getTestCaseDirectory('Test Cases/TC1')
         then:
         testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1')
+    }
+
+    def testMakeIndex() {
+        when:
+        tmr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path index = tmr_.makeIndex()
+        then:
+        Files.exists(index)
     }
 
 

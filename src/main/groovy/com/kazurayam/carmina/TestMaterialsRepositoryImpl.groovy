@@ -181,6 +181,16 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
         return material.getMaterialFilePath()
     }
 
+    /**
+     * create index.html file in the current <test suite name>/<test suite timestamp>/ directory.
+     * returns the Path of the index.html
+     */
+    @Override
+    Path makeIndex() {
+        Indexer indexer = new Indexer(baseDir_)
+        Path index = indexer.makeIndex(currentTSuiteName_, currentTSuiteTimestamp_)
+        return index
+    }
 
     // ----------------------------- helpers ----------------------------------
 
