@@ -1,7 +1,7 @@
 /**
- * Carmina, a small JVM class library, includes TestMaterialsRepository class.
+ * Carmina, a small JVM class library, includes MaterialRepository class.
  *
- * TestMaterialsRepository class provides resolveMaterial() method.
+ * MaterialRepository class provides resolveMaterial() method.
  *
  */
 package com.kazurayam.carmina.material

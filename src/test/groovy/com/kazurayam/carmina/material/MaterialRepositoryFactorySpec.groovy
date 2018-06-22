@@ -6,23 +6,19 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.TestMaterialsRepository
-import com.kazurayam.carmina.material.TestMaterialsRepositoryFactory
-
 import spock.lang.Specification
 //@Ignore
-class TestMaterialsRepositoryFactorySpec extends Specification {
+class MaterialRepositoryFactorySpec extends Specification {
 
     // fields
-    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositoryFactorySpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryFactorySpec.class)
 
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(TestMaterialsRepositoryFactorySpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialRepositoryFactorySpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -35,11 +31,11 @@ class TestMaterialsRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        TestMaterialsRepository tmr = TestMaterialsRepositoryFactory.createInstance(workdir_)
-        tmr.putCurrentTestSuite('Test Suites/TS1')
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir_)
+        mr.putCurrentTestSuite('Test Suites/TS1')
         then:
-        tmr != null
-        tmr.toString().contains('TS1')
+        mr != null
+        mr.toString().contains('TS1')
     }
 
     // helper methods

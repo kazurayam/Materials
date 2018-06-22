@@ -3,7 +3,7 @@ package com.kazurayam.carmina.material
 import java.nio.file.Path
 
 /**
- * TestMaterialsRepository#resolveMaterial() method resolves Path to save your 'Material'
+ * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.
  *
  * 'Material' includes for example
@@ -25,7 +25,7 @@ import java.nio.file.Path
  * @author kazurayam
  *
  */
-interface TestMaterialsRepository {
+interface MaterialRepository {
 
     void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)

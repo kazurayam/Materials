@@ -5,9 +5,9 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
+final class MaterialRepositoryImpl implements MaterialRepository {
 
-    static Logger logger_ = LoggerFactory.getLogger(TestMaterialsRepositoryImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryImpl.class)
 
     private Path baseDir_
     private TSuiteName currentTSuiteName_
@@ -22,12 +22,13 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    TestMaterialsRepositoryImpl(Path baseDir) {
+    MaterialRepositoryImpl(Path baseDir) {
         //
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         baseDir_ = baseDir
+        // create the directory if not present
         Helpers.ensureDirs(baseDir_)
 
         // load data from the local disk
@@ -234,7 +235,7 @@ final class TestMaterialsRepositoryImpl implements TestMaterialsRepository {
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"TestResultsImpl":{')
+        sb.append('{"MaterialRepositoryImpl":{')
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
         sb.append('"currentTsName":"' +

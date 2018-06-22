@@ -5,7 +5,7 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.TestMaterialsRepository
+import com.kazurayam.carmina.material.MaterialRepository
 
 /**
  * Visual Testing engine using ImageMagick
@@ -17,11 +17,11 @@ class ImageMagickVisualTestingDriver implements VisualTestingDriver {
 
     static Logger logger_ = LoggerFactory.getLogger(ImageMagickVisualTestingDriver.class)
 
-    private TestMaterialsRepository target_
-    private TestMaterialsRepository basis_
+    private MaterialRepository target_
+    private MaterialRepository basis_
     private Path outputDir_
 
-    ImageMagickVisualTestingDriver(TestMaterialsRepository target) {
+    ImageMagickVisualTestingDriver(MaterialRepository target) {
         target_ = target
     }
 
