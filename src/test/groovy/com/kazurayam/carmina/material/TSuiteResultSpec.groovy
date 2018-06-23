@@ -42,13 +42,14 @@ class TSuiteResultSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    def testSetParent_getParent() {
+    def testSetGetParent() {
         when:
+        RepositoryRoot repoRoot = mri_.getRepositoryRoot()
         TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS3'),
                 new TSuiteTimestamp(LocalDateTime.now()))
-        TSuiteResult modified = tsr.setParent(workdir_)
+        TSuiteResult modified = tsr.setParent(repoRoot)
         then:
-        modified.getParent() == workdir_
+        modified.getParent() == repoRoot
     }
 
     def testGetTSuiteName() {
@@ -115,20 +116,26 @@ class TSuiteResultSpec extends Specification {
 
     def testEquals() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        TSuiteResult other = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419')).setParent(workdir_)
+        RepositoryRoot repoRoot = mri_.getRepositoryRoot()
+        TSuiteName tsn = new TSuiteName('TS1')
+        TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
+        TSuiteResult tsr = repoRoot.getTSuiteResult(tsn, tst)
+        TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
         then:
         tsr == other
         when:
-        TSuiteResult more = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604')).setParent(workdir_)
+        TSuiteResult more = new TSuiteResult(new TSuiteName('TS2') , tst).setParent(repoRoot)
         then:
         tsr != more
     }
 
     def testHashCode() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        TSuiteResult other = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419')).setParent(workdir_)
+        RepositoryRoot repoRoot = mri_.getRepositoryRoot()
+        TSuiteName tsn = new TSuiteName('TS1')
+        TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
+        TSuiteResult tsr = mri_.getTSuiteResult(tsn, tst)
+        TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
         then:
         tsr.hashCode() == other.hashCode()
     }

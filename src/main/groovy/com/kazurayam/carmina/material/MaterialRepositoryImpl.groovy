@@ -12,7 +12,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private Path baseDir_
     private TSuiteName currentTSuiteName_
     private TSuiteTimestamp currentTSuiteTimestamp_
-    private List<TSuiteResult> tSuiteResults_
+    private RepositoryRoot repoRoot_
 
     // ---------------------- constructors & initializer ----------------------
 
@@ -34,7 +34,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // load data from the local disk
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
-        tSuiteResults_ = scanner.getTSuiteResults()
+        repoRoot_ = scanner.getRepositoryRoot()
 
         // set default Material path to the "./${baseDir name}/_/_" directory
         this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
@@ -73,7 +73,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // add the specified TestSuite
         TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
         if (tsr == null) {
-            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(baseDir_)
+            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
         }
     }
@@ -93,6 +93,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return baseDir_
     }
 
+    RepositoryRoot getRepositoryRoot() {
+        return repoRoot_
+    }
+
     TSuiteName getCurrentTSuiteName() {
         return currentTSuiteName_
     }
@@ -110,14 +114,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @return
      */
     void addTSuiteResult(TSuiteResult tSuiteResult) {
+        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         boolean found = false
-        for (TSuiteResult tsr : tSuiteResults_) {
+        for (TSuiteResult tsr : tSuiteResults) {
             if (tsr == tSuiteResult) {
                 found = true
             }
         }
         if (!found) {
-            tSuiteResults_.add(tSuiteResult)
+            repoRoot_.addTSuiteResult(tSuiteResult)
         }
     }
 
@@ -128,7 +133,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @return
      */
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        for (TSuiteResult tsr : tSuiteResults_) {
+        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
+        for (TSuiteResult tsr : tSuiteResults) {
             if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
             }
@@ -242,14 +248,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             Helpers.escapeAsJsonText(currentTSuiteName_.toString()) + '",')
         sb.append('"currentTsTimestamp":"' +
             Helpers.escapeAsJsonText(currentTSuiteTimestamp_.toString()) + '",')
-        sb.append('"tsResults":[')
-        def counter = 0
-        for (TSuiteResult tsr : tSuiteResults_) {
-            if (counter > 0) { sb.append(',') }
-            sb.append(tsr.toJson())
-            counter += 1
-        }
-        sb.append(']')
+        sb.append('"repoRoot":' + repoRoot_.toJson() + '')
         sb.append('}}')
         return sb.toString()
     }

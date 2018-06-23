@@ -18,6 +18,8 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitor.class)
 
+    private RepositoryRoot repoRoot_
+
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
     private TSuiteResult tSuiteResult_
@@ -26,19 +28,14 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     private Material material_
 
     private static enum Layer {
-        INIT, BASEDIR, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
+        INIT, ROOT, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
     }
     private Stack<Layer> directoryTransition_
 
-    private Path baseDir_
-    private List<TSuiteResult> tSuiteResults_
-
-    RepositoryVisitor(Path baseDir, List<TSuiteResult> tSuiteResults) {
-        baseDir_ = baseDir
-        tSuiteResults_ = tSuiteResults
+    RepositoryVisitor(RepositoryRoot repoRoot) {
+        repoRoot_ = repoRoot
         directoryTransition_ = new Stack<Layer>()
         directoryTransition_.push(Layer.INIT)
-        logger_.debug("baseDir=${baseDir}")
     }
 
     /**
@@ -49,10 +46,10 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
         def from = directoryTransition_.peek()
         switch (from) {
             case Layer.INIT :
-                logger_.debug("#preVisitDirectory visiting ${dir} as BASEDIR")
-                directoryTransition_.push(Layer.BASEDIR)
+                logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
+                directoryTransition_.push(Layer.ROOT)
                 break
-            case Layer.BASEDIR :
+            case Layer.ROOT :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                 tSuiteName_ = new TSuiteName(dir.getFileName().toString())
                 directoryTransition_.push(Layer.TESTSUITE)
@@ -62,8 +59,8 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
                     tSuiteTimestamp_ = new TSuiteTimestamp(ldt)
-                    tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(baseDir_)
-                    tSuiteResults_.add(tSuiteResult_)
+                    tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
+                    repoRoot_.addTSuiteResult(tSuiteResult_)
                 } else {
                     logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                             " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
@@ -108,9 +105,9 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 directoryTransition_.pop()
                 logger_.debug("#postVisitDirectory back to ${dir} as TESTSUITE")
                 break
-            case Layer.BASEDIR :
+            case Layer.ROOT :
                 directoryTransition_.pop()
-                logger_.debug("#postVisitDirectory back to ${dir} as BASEDIR")
+                logger_.debug("#postVisitDirectory back to ${dir} as ROOT")
                 break
         }
         return CONTINUE
@@ -122,8 +119,8 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     @Override
     FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
         switch (directoryTransition_.peek()) {
-            case Layer.BASEDIR :
-                logger_.debug("#visitFile ${file} in BASEDIR")
+            case Layer.ROOT :
+                logger_.debug("#visitFile ${file} in ROOT")
                 break
             case Layer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in TESTSUITE")

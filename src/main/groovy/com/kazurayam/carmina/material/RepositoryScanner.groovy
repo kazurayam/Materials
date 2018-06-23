@@ -51,8 +51,7 @@ class RepositoryScanner {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class)
 
-    private Path baseDir_
-    private List<TSuiteResult> tSuiteResults_
+    private RepositoryRoot repoRoot_
 
     RepositoryScanner(Path baseDir) {
         assert baseDir != null
@@ -62,68 +61,31 @@ class RepositoryScanner {
         if (!Files.isDirectory(baseDir)) {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
-        baseDir_ = baseDir
-        tSuiteResults_ = new ArrayList<TSuiteResult>()
+        repoRoot_ = new RepositoryRoot(baseDir)
     }
 
     /**
-     * initialize the internal List<TSuiteResult> object, and scan the baseDir
-     * to instanciate trees of TSuiteResults
+     * scan the baseDir to return an instance of RepositoryRoot
      */
     void scan() {
-        tSuiteResults_ = new ArrayList<TSuiteResult>()
         Files.walkFileTree(
-                baseDir_,
+                repoRoot_.getBaseDir(),
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                new RepositoryVisitor(baseDir_, tSuiteResults_)
+                new RepositoryVisitor(repoRoot_)
         )
+        logger_.debug("#scan repoRoot_=${JsonOutput.prettyPrint(repoRoot_.toJson())}")
     }
 
-    List<TSuiteResult> getTSuiteResults() {
-        return tSuiteResults_
+    RepositoryRoot getRepositoryRoot() {
+        return repoRoot_
     }
 
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
-        List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tSuiteResult : tSuiteResults_) {
-            if (tSuiteName == tSuiteResult.getTSuiteName()) {
-                tSuiteResults.add(tSuiteResult)
-            }
-        }
-        return tSuiteResults
-    }
-
-    List<TSuiteResult> getTSuiteResults(TSuiteTimestamp tSuiteTimestamp) {
-        List<TSuiteResult> tSuiteResults = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tSuiteResult : tSuiteResults_) {
-            if (tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
-                tSuiteResults.add(tSuiteResult)
-            }
-        }
-        return tSuiteResults
-    }
-
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        for (TSuiteResult tSuiteResult : tSuiteResults_) {
-            if (tSuiteName == tSuiteResult.getTSuiteName() && tSuiteTimestamp == tSuiteResult.getTSuiteTimestamp()) {
-                return tSuiteResult
-            }
-        }
-        return null
-    }
 
     String toJson() {
         StringBuilder sb = new StringBuilder()
-        sb.append('[')
-        def count = 0
-        for (TSuiteResult tSuiteResult : tSuiteResults_) {
-            if (count > 0) {
-                sb.append(',')
-            }
-            count += 1
-            sb.append(tSuiteResult.toJson())
-        }
-        sb.append(']')
+        sb.append('{"RepositoryScanner":{')
+        sb.append('"repoRoot":' + repoRoot_.toJson() + '"')
+        sb.append('}}')
         return sb.toString()
     }
 

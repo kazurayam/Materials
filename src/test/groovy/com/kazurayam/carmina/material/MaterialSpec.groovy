@@ -30,7 +30,8 @@ class MaterialSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         rs_ = new RepositoryScanner(workdir_)
         rs_.scan()
-        TSuiteResult tsr = rs_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('TC1'))
         logger_.debug("#setupSpec tcr_:\n${JsonOutput.prettyPrint(tcr_.toJson())}")
     }

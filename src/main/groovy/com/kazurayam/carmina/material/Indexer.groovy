@@ -36,7 +36,8 @@ class Indexer {
     Path makeIndex(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
-        TSuiteResult tsr = scanner.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(tSuiteName, tSuiteTimestamp)
         if (tsr != null) {
             Path index = tsr.getTSuiteTimestampDirectory().resolve('index.html')
             OutputStream os = index.toFile().newOutputStream()

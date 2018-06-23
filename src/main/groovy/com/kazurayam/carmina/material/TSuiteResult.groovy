@@ -14,7 +14,7 @@ final class TSuiteResult {
 
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
-    private Path baseDir_
+    private RepositoryRoot repoRoot_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
 
@@ -29,18 +29,19 @@ final class TSuiteResult {
     }
 
     // ------------------ attribute setter & getter -------------------------------
-    TSuiteResult setParent(Path baseDir) {
-        baseDir_ = baseDir
-        tSuiteTimestampDirectory_ = baseDir.resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
+    TSuiteResult setParent(RepositoryRoot repoRoot) {
+        repoRoot_ = repoRoot
+        tSuiteTimestampDirectory_ =
+                repoRoot_.getBaseDir().resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
         return this
     }
 
-    Path getParent() {
-        return this.getBaseDir()
+    RepositoryRoot getParent() {
+        return this.getRepositoryRoot()
     }
 
-    Path getBaseDir() {
-        return baseDir_
+    RepositoryRoot getRepositoryRoot() {
+        return repoRoot_
     }
 
     Path getTSuiteTimestampDirectory() {
@@ -55,7 +56,7 @@ final class TSuiteResult {
         return tSuiteTimestamp_
     }
 
-    // ------------------ create/add/get child nodes ------------------------------
+    // ------------------ add/get child nodes ------------------------------
     TCaseResult getTCaseResult(TCaseName tCaseName) {
         for (TCaseResult tcr : tCaseResults_) {
             if (tcr.getTCaseName() == tCaseName) {
@@ -129,7 +130,6 @@ final class TSuiteResult {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"baseDir": "' + Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
         sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(tSuiteName_.toString()) + '",')
         sb.append('"tSuiteTimestamp": "' + tSuiteTimestamp_.format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')

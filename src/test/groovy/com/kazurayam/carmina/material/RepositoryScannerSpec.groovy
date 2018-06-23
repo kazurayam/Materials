@@ -54,7 +54,8 @@ class RepositoryScannerSpec extends Specification {
         when:
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
-        List<TSuiteResult> tSuiteResults = scanner.getTSuiteResults()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
         logger_.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
         logger_.debug(prettyPrint(tSuiteResults))
         then:
@@ -63,11 +64,11 @@ class RepositoryScannerSpec extends Specification {
 
         //
         when:
-        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
             new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
         then:
-        tSuiteResult.getBaseDir() == casedir
-        tSuiteResult.getParent() == casedir
+        tSuiteResult.getRepositoryRoot() == repoRoot
+        tSuiteResult.getParent() == repoRoot
         tSuiteResult.getTSuiteName() == new TSuiteName('TS1')
         tSuiteResult.getTSuiteTimestamp() != null
 
@@ -113,75 +114,33 @@ class RepositoryScannerSpec extends Specification {
 
     }
 
+
     /**
-     *
-     * @return
-     */
-    def testGetTSuiteResults_noArg() {
-        setup:
-        Path casedir = workdir_.resolve('testGetTSuiteResults_noArg')
-        Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
-        when:
-        scanner.scan()
-        then:
-        scanner.getTSuiteResults().size() == 5
-        // _/_
-        // TS1/20180530_130419
-        // TS1/20180530_130604
-        // TS2/20180612_111256
-        // §A/20180616_170941
-    }
-
-
-    def testGetTSuiteResults_byTSuiteName() {
-        setup:
-        Path casedir = workdir_.resolve('testGetTSuiteResults_byTSuiteName')
-        Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
-        when:
-        scanner.scan()
-        then:
-        scanner.getTSuiteResults(new TSuiteName('TS1')).size() == 2
-        // TS1/20180530_130419
-        // TS1/20180530_130604
-    }
-
-
-    def testGetTSuiteResults_byTSuiteTimestamp() {
-        setup:
-        Path casedir = workdir_.resolve('testGetTSuiteResults_byTSuiteTimestamp')
-        Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
-        when:
-        scanner.scan()
-        then:
-        scanner.getTSuiteResults(new TSuiteTimestamp('20180530_130419')).size() == 1
-        // TS1/20180530_130419
-    }
-
-
-    def testGetTSuiteResult() {
+    def testGetTSuiteResultOfRepositoryRoot() {
         setup:
         Path casedir = workdir_.resolve('testGetTSuiteResult')
         Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
-        when:
         scanner.scan()
-        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+        when:
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         then:
         tSuiteResult != null
     }
+     */
 
-    def testFind2MaterialsIn1TestCase() {
+    /**
+    def testFind2MaterialsIn1TestCaseOutOfRepositoryRoot() {
         setup:
         Path casedir = workdir_.resolve('testGetTSuiteResult')
         Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
         when:
-        TSuiteResult tSuiteResult = scanner.getTSuiteResult(
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
             new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
         List<Material> materials = tCaseResult.getMaterials()
@@ -190,6 +149,7 @@ class RepositoryScannerSpec extends Specification {
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
         // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png
     }
+     */
 
     def testPrettyPrint() {
         setup:
