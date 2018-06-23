@@ -88,8 +88,20 @@ class RepositoryRootSpec extends Specification {
         when:
         TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
-        logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toString())}")
+        logger_.debug("#testToString ${JsonOutput.prettyPrint(repoRoot_.toString())}")
         then:
         true
+    }
+
+    def testToBootstrapTreeviewData() {
+        when:
+        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        scanner.scan()
+        RepositoryRoot rr = scanner.getRepositoryRoot()
+        def s = rr.toBootstrapTreeviewData()
+        logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")
+        then:
+        s.contains('text')
+        s.contains('nodes')
     }
 }

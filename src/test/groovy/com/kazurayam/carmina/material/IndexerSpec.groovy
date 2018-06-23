@@ -37,10 +37,14 @@ class IndexerSpec extends Specification {
         setup:
         Indexer indexer = new Indexer(workdir_)
         when:
-        Path index = indexer.makeIndex("TS1", "20180530_130419")
+        Path index = indexer.makeIndex()
         then:
         index != null
         Files.exists(index)
+        when:
+        logger_.debug("#test makeIndex ${index.toFile().getText('UTF-8')}")
+        then:
+        true
     }
 
 

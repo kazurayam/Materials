@@ -72,8 +72,8 @@ class Material {
      * @return
      */
     Path getPathRelativeToTSuiteTimestamp() {
-        Path tSuiteTimestampPath = this.getParent().getParent().getTSuiteTimestampDirectory()
-        return tSuiteTimestampPath.relativize(this.getMaterialFilePath())
+        Path base = this.getParent().getParent().getTSuiteTimestampDirectory()
+        return base.relativize(this.getMaterialFilePath())
     }
 
     /**
@@ -81,11 +81,20 @@ class Material {
      * @return
      */
     String getHrefRelativeToTSuiteTimestamp() {
-        Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
-        Path tCaseResultRelativeToTSuiteTimestamp = tSuiteTimestampDir.relativize(
-            this.getParent().getTCaseDirectory())
+        Path timestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
+        return this.getHrefRelativeTo(timestampDir)
+    }
+
+    String getHrefRelativeToRepositoryRoot() {
+        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
+        return this.getHrefRelativeTo(rootDir)
+    }
+
+    private String getHrefRelativeTo(Path base) {
+        Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
+                this.getParent().getTCaseDirectory())
         Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
-            this.resolveEncodedMaterialFilename(url_, suffix_, fileType_))
+                this.resolveEncodedMaterialFilename(url_, suffix_, fileType_))
         return href.normalize().toString().replace('\\', '/')
     }
 
@@ -253,7 +262,7 @@ class Material {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '",')
-        sb.append('"href":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToTSuiteTimestamp()) + '"')
+        sb.append('"href":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToRepositoryRoot()) + '"')
         sb.append('}')
         return sb.toString()
     }

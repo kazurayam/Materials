@@ -95,4 +95,84 @@ class RepositoryRoot {
         sb.append('}}')
         return sb.toString()
     }
+
+    /**
+     * generate a JSON text for bootstrap-treeview
+     *
+     * <pre>
+     * {@code
+     * [
+     *   {
+     *     text: "TS1/20180530_130419",
+     *     nodes: [
+     *       {
+     *         text: "TC1",
+     *         nodes: [
+     *           {
+     *             text: 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+     *           },
+     *           {
+     *             text: 'http%3A%2F%2Fdemoaut.katalon.com§1.png'
+     *           }
+     *         ]
+     *       },
+     *       {
+     *         text: "TC2,
+     *         nodes: [
+     *           {
+     *             text: 'http%3A%2F%2Fdemoaut.katalon.com§atoz.png'
+     *           }
+     *         ]
+     *       }
+     *     ]
+     *   },
+     *   {
+     *     text: "TS2/20180612_111256",
+     *     nodes: [
+     *       {
+     *         text: "TC1",
+     *         nodes: [
+     *           {
+     *             text:  'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+     *           }
+     *         ]
+     *       }
+     *     ]
+     *   }
+     * ]
+     * }
+     * </pre>
+     * @return
+     */
+    String toBootstrapTreeviewData() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('[')
+        def count = 0
+        for (TSuiteResult tSuiteResult : tSuiteResults_) {
+            if (count > 0) { sb.append(',') }
+            count += 1
+            sb.append('{')
+            TSuiteName tsn = tSuiteResult.getTSuiteName()
+            TSuiteTimestamp tst = tSuiteResult.getTSuiteTimestamp()
+            sb.append('"text":"' +
+                    Helpers.escapeAsJsonText(tsn.toString() + '/' + tst.format())
+                    + '",')
+            //
+            sb.append('"nodes":[')
+            List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
+            def count2 = 0
+            for (TCaseResult tcr : tCaseResults) {
+                if (count2 > 0) {
+                    sb.append(',')
+                }
+                count2 += 1
+                sb.append(tcr.toBootstrapTreeviewData())
+            }
+            sb.append(']')
+            sb.append('}')
+        }
+        sb.append(']')
+        return sb.toString()
+    }
+
 }

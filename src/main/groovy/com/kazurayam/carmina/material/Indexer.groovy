@@ -29,25 +29,15 @@ class Indexer {
         baseDir_ = baseDir
     }
 
-    Path makeIndex(String testSuiteId, String testSuiteTimestamp) {
-        return this.makeIndex(new TSuiteName(testSuiteId), new TSuiteTimestamp(testSuiteTimestamp))
-    }
-
-    Path makeIndex(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
+    Path makeIndex() throws IOException {
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(tSuiteName, tSuiteTimestamp)
-        if (tsr != null) {
-            Path index = tsr.getTSuiteTimestampDirectory().resolve('index.html')
-            OutputStream os = index.toFile().newOutputStream()
-            this.generate(tsr, os)
-            logger_.info("generated ${index.toString()}")
-            return index
-        } else {
-            logger_.error("${tSuiteName.toString()}/${tSuiteTimestamp.toString()} is not found in ${baseDir_.toString()}")
-            return null
-        }
+        Path index = baseDir_.resolve('index.html')
+        OutputStream os = index.toFile().newOutputStream()
+        this.generate(repoRoot, os)
+        logger_.info("generated ${index.toString()}")
+        return index
     }
 
     /**
@@ -59,14 +49,14 @@ class Indexer {
      * @param os
      * @throws IOException
      */
-    void generate(TSuiteResult tSuiteResult, OutputStream os) throws IOException {
+    void generate(RepositoryRoot repoRoot, OutputStream os) throws IOException {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         def builder = new MarkupBuilder(writer)
         builder.doubleQuotes = true
         builder.html {
             head {
                 meta('http-equiv':'X-UA-Compatible', content:'IE=edge')
-                title("${tSuiteResult.getTSuiteName().toString()}/${tSuiteResult.getTSuiteTimestamp().format()}")
+                title("${repoRoot.getBaseDir().getFileName().toString()}")
                 meta('charset':'utf-8')
                 meta('name':'description', 'content':'')
                 meta('name':'author', 'content':'')
@@ -106,14 +96,14 @@ class Indexer {
 '''
 function getTree() {
     // Some logic to retrieve, or generate tree structure
-    var data = ''' + JsonOutput.prettyPrint(tSuiteResult.toBootstrapTreeviewData()) + ''';
+    var data = ''' + JsonOutput.prettyPrint(repoRoot.toBootstrapTreeviewData()) + ''';
     return data;
 }
 $('#tree').treeview({
     data: getTree(),
     enableLinks: true,
     levels: 3,
-    multiSelect: true,
+    multiSelect: false,
     showTags: true
 });
 ''')

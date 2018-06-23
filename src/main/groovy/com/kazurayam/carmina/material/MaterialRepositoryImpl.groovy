@@ -195,7 +195,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path makeIndex() {
         Indexer indexer = new Indexer(baseDir_)
-        Path index = indexer.makeIndex(currentTSuiteName_, currentTSuiteTimestamp_)
+        Path index = indexer.makeIndex()
         return index
     }
 

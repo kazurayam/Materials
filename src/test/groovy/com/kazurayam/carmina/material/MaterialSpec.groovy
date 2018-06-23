@@ -149,7 +149,16 @@ class MaterialSpec extends Specification {
         href != null
         href == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
     }
-    
+
+    def testGetHrefRelativeToRepositoryRoot() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        String href = mate.getHrefRelativeToRepositoryRoot()
+        then:
+        href != null
+        href == 'TS1/20180530_130419/TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
+    }
+
     def testToJson() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
