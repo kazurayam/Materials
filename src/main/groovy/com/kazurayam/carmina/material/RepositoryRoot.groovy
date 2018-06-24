@@ -51,6 +51,16 @@ class RepositoryRoot {
         return tSuiteResults_
     }
 
+    List<Material> getMaterials() {
+        List<Material> list = new ArrayList<Material>()
+        for (TSuiteResult tsr : tSuiteResults_) {
+            List<Material> mates = tsr.getMaterials()
+            for (Material mate : mates) {
+                list.add(mate)
+            }
+        }
+        return list
+    }
 
     // -------------- overriding java.lang.Object methods ---------------------
     @Override
@@ -172,6 +182,16 @@ class RepositoryRoot {
             sb.append('}')
         }
         sb.append(']')
+        return sb.toString()
+    }
+
+
+    String htmlFragmensOfMaterialsAsModal() {
+        StringBuilder sb = new StringBuilder()
+        List<Material> mates = this.getMaterials()
+        for (Material mate : mates) {
+            sb.append(mate.toHtmlAsModalWindow())
+        }
         return sb.toString()
     }
 

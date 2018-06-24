@@ -104,4 +104,16 @@ class RepositoryRootSpec extends Specification {
         s.contains('text')
         s.contains('nodes')
     }
+
+    def testHtmlFragmensOfMaterialsAsModal() {
+        when:
+        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        scanner.scan()
+        RepositoryRoot rr = scanner.getRepositoryRoot()
+        def html = rr.htmlFragmensOfMaterialsAsModal()
+        logger_.debug("#testHtmlFragmentsOfMaterialsAsModal html=\n${html}")
+        then:
+        html.contains('<div')
+    }
+
 }

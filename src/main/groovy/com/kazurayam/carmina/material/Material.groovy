@@ -233,8 +233,14 @@ class Material {
 
     @Override
     int hashCode() {
-        final int prime = 31
+        final int prime = 3
         int result = 1
+        if (this.parent_ != null) {
+            if (this.parent_.parent_ != null) {
+                result = prime * result + this.parent_.parent_.hashCode()
+            }
+            result = prime * result + this.parent_.hashCode()
+        }
         result = prime * result + this.url_.toString().hashCode()
         result = prime * result + this.suffix_.hashCode()
         result = prime * result + this.fileType_.hashCode()
@@ -262,8 +268,59 @@ class Material {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '",')
-        sb.append('"href":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToRepositoryRoot()) + '"')
+        sb.append('"href":"#",')
+        sb.append('"class":"btn btn-primary btn-lg",')
+        sb.append('"data-toggle":"modal",')
+        sb.append('"data-target":"' + this.hashCode() + '"')
+        //sb.append('"href":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToRepositoryRoot()) + '"')
         sb.append('}')
         return sb.toString()
     }
+
+    /**
+     * <pre>
+     *     <div id="XXXXXXXX" class=”modal fade”>
+     *         <div class=”modal-dialog modalcenter” role=”document”>
+     *             <div class=”modal-content”>
+     *                 <div class=”modal-header”>
+     *                     <h4 class=”modal-title” id=”XXXXXXXXtitle”>TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png</h4>
+     *                 </div>
+     *                 <div class=”modal-body”>
+     *                     <img src="TS1/TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png" alt="">
+     *                 </div>
+     *                 <div class=”modal-footer”>
+     *                     <button type=”button” class=”btn btn-default” data-dismiss=”modal”>Close</button>
+     *                 </div>
+     *             </div>
+     *         </div>
+     *     </div>
+     * </pre>
+     *
+     * @return String as a HTML fragment
+     */
+    String toHtmlAsModalWindow() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('<div id="' + this.hashCode() + '" class="modal fade">' + "\n")
+        sb.append('  <div class="modal-dialog modalcenter" role="document">' + "\n")
+        sb.append('    <div class="modal-content">' + "\n")
+        sb.append('      <div class="modal-header">' + "\n")
+        sb.append('        <h4 class=”modal-title” id=”')
+        sb.append(this.hashCode() + 'title')
+        sb.append('”>')
+        sb.append(this.getHrefRelativeToRepositoryRoot())
+        sb.append('</h4>' + "\n")
+        sb.append('      </div>' + "\n")
+        sb.append('      <div class="modal-body">' + "\n")
+        sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() + '" alt=""></img>' + "\n")
+        sb.append('      </div>' + "\n")
+        sb.append('      <div class="modal-footer">' + "\n")
+        sb.append('        <button type=”button” class=”btn btn-default” data-dismiss=”modal”>Close</button>' + "\n")
+        sb.append('      </div>' + "\n")
+        sb.append('    </div>' + "\n")
+        sb.append('  </div>' + "\n")
+        sb.append('</div>' + "\n")
+        return sb.toString()
+    }
+
+
 }

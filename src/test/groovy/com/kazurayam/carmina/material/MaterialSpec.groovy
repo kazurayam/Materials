@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import groovy.xml.*
 import spock.lang.Specification
 
 //@Ignore
@@ -184,6 +185,18 @@ class MaterialSpec extends Specification {
         str.endsWith('"}')
     }
 
+    def testToHtmlAsModalWindow() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        String str = mate.toHtmlAsModalWindow()
+        logger_.debug("#testToHtmlAsModalWindow str=${str}")
+        //Node node = new XmlParser().parseText(str)
+        //logger_.debug("#testToHtmlAsModalWindow str parsed as XML =${XmlUtil.serialize(node)}")
+        then:
+        str.startsWith('<div')
+        str.contains(mate.getHrefRelativeToRepositoryRoot())
+    }
+
     def testEquals() {
         when:
         Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
@@ -232,4 +245,22 @@ class MaterialSpec extends Specification {
         then:
         mate1.hashCode() != mate3.hashCode()
     }
+
+    def testHashCodeWithAncestors() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr1 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot.getTSuiteResult(new TSuiteName('TS2'), new TSuiteTimestamp('20180612_111256'))
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('TC1'))
+        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('TC1'))
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr1)
+        Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr2)
+        logger_.debug("#testHashCodeWithAncestors mate1.hashCode()=${mate1.hashCode()}")
+        logger_.debug("#testHashCodeWithAncestors mate2.hashCode()=${mate2.hashCode()}")
+        then:
+        mate1.hashCode() != mate2.hashCode()
+    }
+
+
 }

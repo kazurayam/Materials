@@ -77,8 +77,10 @@ class Indexer {
             body() {
                 div('class':'container') {
                     h3('Materials')
-                    div('id':'tree')
+                    div('id':'tree') { mkp.yield('') }
+                    div('id': 'modal-windows') { mkp.yield('') }
                 }
+
                 mkp.comment('SCRIPTS')
                 script('src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
                     'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
@@ -108,32 +110,25 @@ $('#tree').treeview({
 });
 ''')
                 }
+                script('type':'text/javascript') {
+                    mkp.comment('''
+$('#modal-windows').append($(` ''' + repoRoot.htmlFragmensOfMaterialsAsModal() + ''' `));
+
+//$(function() {
+//    $('.pop').on('click', function() {
+//        $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+//        $('#imagemodal').modal('show');   
+//    });
+     
+});
+
+'''
+                    )
+                }
             }
         }
         writer.flush()
         writer.close()
 
-    }
-
-    /**
-     * load javascript and css file as resource from the JVM classpath
-     *
-     * @param resourceName
-     * @return
-     */
-    String getResource(String resourceName) {
-        ClassLoader classLoader = getClass().getClassLoader()
-        File file = new File(classLoader.getResource(resourceName).getFile())
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), 'UTF-8'))
-        StringBuilder sb = new StringBuilder()
-        try {
-            for (String line; (line = br.readLine()) != null; ) {
-                sb.append(line)
-                sb.append('\n')
-            }
-        } catch (IOException ex) {
-            logger_.error(ex.getMessage())
-        }
-        return sb.toString()
     }
 }

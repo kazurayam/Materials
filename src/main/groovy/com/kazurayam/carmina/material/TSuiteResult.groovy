@@ -182,6 +182,7 @@ final class TSuiteResult {
         sb.append('[{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteName_.toString() +
             '/' + tSuiteTimestamp_.format()) + '",')
+        sb.append('"backColor":"#CCCCCC",')
         sb.append('"nodes":[')
         def count = 0
         for (TCaseResult tcr : tCaseResults_) {
