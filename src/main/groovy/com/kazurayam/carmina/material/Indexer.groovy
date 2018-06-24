@@ -78,6 +78,7 @@ class Indexer {
                 div('class':'container') {
                     h3('Materials')
                     div('id':'tree') { mkp.yield('') }
+                    div('id':'footer') { mkp.yield('') }
                     div('id': 'modal-windows') { mkp.yield('') }
                 }
 
@@ -112,15 +113,21 @@ $('#tree').treeview({
                 }
                 script('type':'text/javascript') {
                     mkp.comment('''
+// insert modal windows
 $('#modal-windows').append($(` ''' + repoRoot.htmlFragmensOfMaterialsAsModal() + ''' `));
+
+// modify attributes in the anchor in the treeview
+$(function() {
+    $('#tree a').attr('data-toggle','modal');
+    $('#tree a').attr('data-target', $(this).attr('href'));
+    //$('#tree a').attr('href','#');
+});
 
 //$(function() {
 //    $('.pop').on('click', function() {
 //        $('.imagepreview').attr('src', $(this).find('img').attr('src'));
 //        $('#imagemodal').modal('show');   
 //    });
-     
-});
 
 '''
                     )
