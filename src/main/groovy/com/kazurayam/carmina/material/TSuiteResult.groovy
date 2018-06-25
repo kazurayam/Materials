@@ -148,41 +148,14 @@ final class TSuiteResult {
 
 
     /**
-     * generate a JSON text for bootstrap-treeview
-     *
-     * <pre>
-     * {@code
-     * [
-     *   {
-     *     text: "TC1",
-     *     nodes: [
-     *       {
-     *         text: 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
-     *       },
-     *       {
-     *         text: 'http%3A%2F%2Fdemoaut.katalon.com§1.png'
-     *       }
-     *     ]
-     *   },
-     *   {
-     *     text: "TC2,
-     *     nodes: [
-     *       {
-     *         text: 'http%3A%2F%2Fdemoaut.katalon.com§atoz.png'
-     *       }
-     *     ]
-     *   }
-     * ]
-     * }
-     * </pre>
      * @return
      */
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
-        sb.append('[{')
+        sb.append('{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteName_.toString() +
             '/' + tSuiteTimestamp_.format()) + '",')
-        sb.append('"backColor":"#CCCCCC",')
+        sb.append('"backColor":"#CCDDFF",')
         sb.append('"nodes":[')
         def count = 0
         for (TCaseResult tcr : tCaseResults_) {
@@ -191,7 +164,7 @@ final class TSuiteResult {
             sb.append(tcr.toBootstrapTreeviewData())
         }
         sb.append(']')
-        sb.append('}]')
+        sb.append('}')
         return sb.toString()
     }
 

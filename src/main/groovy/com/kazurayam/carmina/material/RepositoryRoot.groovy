@@ -176,29 +176,11 @@ class RepositoryRoot {
         StringBuilder sb = new StringBuilder()
         sb.append('[')
         def count = 0
-        def tSuiteResultsOrdered = this.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
+        List<TSuiteResult> tSuiteResultsOrdered = this.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
         for (TSuiteResult tSuiteResult : tSuiteResultsOrdered) {
             if (count > 0) { sb.append(',') }
             count += 1
-            sb.append('{')
-            TSuiteName tsn = tSuiteResult.getTSuiteName()
-            TSuiteTimestamp tst = tSuiteResult.getTSuiteTimestamp()
-            sb.append('"text":"' +
-                    Helpers.escapeAsJsonText(tsn.toString() + '/' + tst.format())
-                    + '",')
-            //
-            sb.append('"nodes":[')
-            List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
-            def count2 = 0
-            for (TCaseResult tcr : tCaseResults) {
-                if (count2 > 0) {
-                    sb.append(',')
-                }
-                count2 += 1
-                sb.append(tcr.toBootstrapTreeviewData())
-            }
-            sb.append(']')
-            sb.append('}')
+            sb.append(tSuiteResult.toBootstrapTreeviewData())
         }
         sb.append(']')
         return sb.toString()
