@@ -119,10 +119,18 @@ $('#modal-windows').append($(` ''' + repoRoot.htmlFragmensOfMaterialsAsModal() +
 // modify anchor tags in the treeview
 $(function() {
     $('#tree a').each(function() {
-        $(this).attr('data-toggle', 'modal');
-        $(this).attr('data-target', $(this).attr('href'));
-        $(this).attr('href', '#');
+        if ($(this).attr('href') && $(this).attr('href') != '#') {
+            $(this).attr('data-toggle', 'modal');
+            $(this).attr('data-target', $(this).attr('href'));
+            $(this).attr('href', '#');
+        }
     });
+
+    // reload the document on closing the Modal window
+    $('.modal').on('hidden.bs.modal', function () {
+        location.reload();
+    });
+
 });
 '''
                     )
