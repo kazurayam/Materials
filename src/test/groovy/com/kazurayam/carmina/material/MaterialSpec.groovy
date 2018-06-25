@@ -141,7 +141,7 @@ class MaterialSpec extends Specification {
         relative != null
         relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
     }
-    
+
     def testGetHrefRelativeToTSuiteTimestamp() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
@@ -262,5 +262,16 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
+    def testMarkupInModalWindow_PNG() {
+        setup:
+        Material mate = new Material(new URL('http://demoaut.katalon.com'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        when:
+        String markup = mate.markupInModalWindow()
+        logger_.debug("#testMarkupInModalWindow_png markup=\n${markup}")
+        then:
+        markup.contains('<img')
+        markup.contains('class="img-fluid"')
+        markup.contains(FileType.PNG.getExtension())
+    }
 
 }

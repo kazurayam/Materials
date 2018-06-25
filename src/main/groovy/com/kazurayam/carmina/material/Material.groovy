@@ -307,8 +307,7 @@ class Material {
         sb.append('</p>' + "\n")
         sb.append('      </div>' + "\n")
         sb.append('      <div class="modal-body">' + "\n")
-        sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
-            '" class="img-fluid" alt="material"></img>' + "\n")
+        sb.append('        ' + this.markupInModalWindow() + "\n")
         sb.append('      </div>' + "\n")
         sb.append('      <div class="modal-footer">' + "\n")
         sb.append('        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' + "\n")
@@ -319,5 +318,10 @@ class Material {
         return sb.toString()
     }
 
-
+    String markupInModalWindow() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
+        '" class="img-fluid" alt="material"></img>' + "\n")
+        return sb.toString()
+    }
 }
