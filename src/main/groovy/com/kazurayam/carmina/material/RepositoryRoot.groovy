@@ -1,7 +1,7 @@
 package com.kazurayam.carmina.material
 
-import java.nio.file.Files
 import java.nio.file.Path
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,6 +49,24 @@ class RepositoryRoot {
 
     List<TSuiteResult> getTSuiteResults() {
         return tSuiteResults_
+    }
+
+    /**
+     * returns the sorted list of TSuiteResults ordered by TSuiteTimestamp in the reverse order
+     * @return
+     */
+    List<TSuiteResult> getTSuiteResultsSortedByTSuiteTimestampReverseOrder() {
+        Comparator<TSuiteResult> comparator = new Comparator<TSuiteResult>() {
+            @Override
+            public int compare(TSuiteResult o1, TSuiteResult o2) {
+                LocalDateTime ldt1 = o1.getTSuiteTimestamp().getValue()
+                LocalDateTime ldt2 = o2.getTSuiteTimestamp().getValue()
+                return ldt1.compareTo(ldt2) * -1
+            }
+        }
+        List<TSuiteResult> sorted = tSuiteResults_
+        Collections.sort(sorted, comparator)
+        return sorted
     }
 
     List<Material> getMaterials() {
@@ -158,7 +176,8 @@ class RepositoryRoot {
         StringBuilder sb = new StringBuilder()
         sb.append('[')
         def count = 0
-        for (TSuiteResult tSuiteResult : tSuiteResults_) {
+        def tSuiteResultsOrdered = this.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
+        for (TSuiteResult tSuiteResult : tSuiteResultsOrdered) {
             if (count > 0) { sb.append(',') }
             count += 1
             sb.append('{')

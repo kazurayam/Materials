@@ -1,12 +1,14 @@
 package com.kazurayam.carmina.material
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import spock.lang.Ignore
-import spock.lang.Specification
-import groovy.json.JsonOutput
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import groovy.json.JsonOutput
+import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
 
@@ -51,6 +53,32 @@ class RepositoryRootSpec extends Specification {
         then:
         tSuiteResults != null
         tSuiteResults.size() > 0
+    }
+    
+    def testGetTSuiteResultsSortedByTSuiteTimestampReverseOrder() {
+        when:
+        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
+        then:
+        tSuiteResults.size() > 3
+        when:
+        def count = 0
+        for (TSuiteResult tsr : tSuiteResults) {
+            TSuiteTimestamp tst = tsr.getTSuiteTimestamp()
+            logger_.debug("#testGetTSuiteResultsSortedByTSuiteTimestampReverseOrder tst${count}=${tst}")
+            count += 1
+        }
+        then:
+        true
+        when:
+        LocalDateTime ldt0 = tSuiteResults.get(0).getTSuiteTimestamp().getValue()
+        LocalDateTime ldt1 = tSuiteResults.get(1).getTSuiteTimestamp().getValue()
+        LocalDateTime ldt2 = tSuiteResults.get(2).getTSuiteTimestamp().getValue()
+        then:
+        ldt0 > ldt1
+        ldt1 > ldt2
     }
 
     def testEquals() {
