@@ -185,7 +185,7 @@ class MaterialSpec extends Specification {
         str.endsWith('"}')
     }
 
-    def testToHtmlAsModalWindow() {
+    def testToHtmlAsModalWindow_PNG() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         String str = mate.toHtmlAsModalWindow()
@@ -194,7 +194,54 @@ class MaterialSpec extends Specification {
         //logger_.debug("#testToHtmlAsModalWindow str parsed as XML =${XmlUtil.serialize(node)}")
         then:
         str.startsWith('<div')
+        str.contains('<img')
         str.contains(mate.getHrefRelativeToRepositoryRoot())
+    }
+
+    def testToHtmlAsModalWindows_miscellaneousImages() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        assert tcr != null
+         //
+        expect:
+        tcr.getMaterials().size() == 5
+        when:
+        Material mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        String str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<img')
+        str.contains('.png')
+        //
+        when:
+        mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.BMP)
+        str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<img')
+        str.contains('.bmp')
+        //
+        when:
+        mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.GIF)
+        str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<img')
+        str.contains('.gif')
+        //
+        when:
+        mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPEG)
+        str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<img')
+        str.contains('.jpeg')
+        //
+        when:
+        mate = tcr.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPG)
+        str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<img')
+        str.contains('.jpg')
+        //
     }
 
     def testEquals() {

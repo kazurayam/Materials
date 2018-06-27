@@ -320,8 +320,20 @@ class Material {
 
     String markupInModalWindow() {
         StringBuilder sb = new StringBuilder()
-        sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
-        '" class="img-fluid" alt="material"></img>' + "\n")
+        switch (fileType_) {
+            case FileType.BMP:
+            case FileType.GIF:
+            case FileType.JPG:
+            case FileType.JPEG:
+            case FileType.PNG:
+                sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
+                    '" class="img-fluid" alt="material"></img>' + "\n")
+                break
+            default:
+                def msg = "fileType_  '${fileType_}' is unexpected"
+                logger_.warn('#markupInModalWindow ' + msg)
+                sb.append("        <p>${msg}</p>")
+        }
         return sb.toString()
     }
 }

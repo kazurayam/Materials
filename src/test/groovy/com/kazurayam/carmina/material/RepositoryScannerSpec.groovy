@@ -6,16 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.FileType
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.Material
-import com.kazurayam.carmina.material.RepositoryScanner
-import com.kazurayam.carmina.material.TCaseName
-import com.kazurayam.carmina.material.TCaseResult
-import com.kazurayam.carmina.material.TSuiteName
-import com.kazurayam.carmina.material.TSuiteResult
-import com.kazurayam.carmina.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -84,7 +74,7 @@ class RepositoryScannerSpec extends Specification {
         tCaseResult.getParent() == tSuiteResult
         tCaseResult.getTCaseName() == new TCaseName('TC1')
         tCaseResult.getTCaseDirectory() != null
-        
+
         //
         when:
         List<Material> materials = tCaseResult.getMaterials()
@@ -114,42 +104,22 @@ class RepositoryScannerSpec extends Specification {
 
     }
 
-
-    /**
-    def testGetTSuiteResultOfRepositoryRoot() {
+    def testScanForMiscellaneousImages() {
         setup:
-        Path casedir = workdir_.resolve('testGetTSuiteResult')
+        Path casedir = workdir_.resolve("testScanForMiscellaneousImages")
         Helpers.copyDirectory(fixture_, casedir)
         RepositoryScanner scanner = new RepositoryScanner(casedir)
         scanner.scan()
-        when:
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
-            new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        when:
+        List<Material> materials = tcr.getMaterials()
         then:
-        tSuiteResult != null
+        materials.size() == 5
     }
-     */
 
-    /**
-    def testFind2MaterialsIn1TestCaseOutOfRepositoryRoot() {
-        setup:
-        Path casedir = workdir_.resolve('testGetTSuiteResult')
-        Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
-        scanner.scan()
-        when:
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
-            new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
-        List<Material> materials = tCaseResult.getMaterials()
-        then:
-        materials.size() == 2
-        // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png
-        // TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§%C2%A71.png
-    }
-     */
 
     def testPrettyPrint() {
         setup:
