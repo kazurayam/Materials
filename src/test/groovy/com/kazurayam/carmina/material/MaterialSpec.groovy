@@ -198,7 +198,19 @@ class MaterialSpec extends Specification {
         str.contains(mate.getHrefRelativeToRepositoryRoot())
     }
 
-    def testToHtmlAsModalWindows_miscellaneousImages() {
+    def testEscapeHtml() {
+        expect:
+        Material.escapeHtml("This is a test") == 'This&nbsp;is&nbsp;a&nbsp;test'
+        Material.escapeHtml("&") == '&amp;'
+        Material.escapeHtml("<") == '&lt;'
+        Material.escapeHtml(">") == '&gt;'
+        Material.escapeHtml('"') == '&quot;'
+        Material.escapeHtml(" ") == '&nbsp;'
+        Material.escapeHtml("©") == '&copy;'
+        Material.escapeHtml("<xml>") == '&lt;xml&gt;'
+    }
+
+    def testToHtmlAsModalWindow_miscellaneousImages() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
@@ -242,6 +254,26 @@ class MaterialSpec extends Specification {
         str.contains('<img')
         str.contains('.jpg')
         //
+    }
+
+    def testToHtmlAsModalWindow_PDF() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        assert tcr != null
+        //
+        when:
+        String url = 'http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'
+        Material mate = tcr.getMaterial(new URL(url), Suffix.NULL, FileType.PDF)
+        String str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('<object')
+        str.contains('type="application/pdf"')
+    }
+
+    def testToHtmlAsModalWindow_Excel() {
+        // http://www.kazurayam.com/carmina/example/Book1.xlsx
     }
 
     def testEquals() {

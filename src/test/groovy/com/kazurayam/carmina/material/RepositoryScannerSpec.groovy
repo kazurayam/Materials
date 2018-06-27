@@ -50,7 +50,7 @@ class RepositoryScannerSpec extends Specification {
         logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 5 // _/_, TS1/20180530_130419, TS1/20180530_130604, TS2/20180612_111256, §A/20180616_170941
+        tSuiteResults.size() == 6 // _/_, TS1/20180530_130419, TS1/20180530_130604, TS2/20180612_111256, TS3/20180627_140853, §A/20180616_170941
 
         //
         when:
@@ -120,6 +120,53 @@ class RepositoryScannerSpec extends Specification {
         materials.size() == 5
     }
 
+    def testScanForPDF() {
+        setup:
+        Path casedir = workdir_.resolve("testScanForPDF")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName("TS3"), new TSuiteTimestamp("20180627_140853"))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("TC3"))
+        when:
+        Material mate = tcr.getMaterial(
+            new URL("http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf"),
+            Suffix.NULL,
+            FileType.PDF)
+        then:
+        assert mate != null
+    }
+
+    def testScanForExcel() {
+        setup:
+        Path casedir = workdir_.resolve("testScanForExcel")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName("TS3"), new TSuiteTimestamp("20180627_140853"))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("TC3"))
+        // .xlsx
+        when:
+        Material mate = tcr.getMaterial(
+            new URL("http://www.kazurayam.com/carmina/example/Book1.xlsx"),
+            Suffix.NULL,
+            FileType.XLSX)
+        then:
+        assert mate != null
+        // .xlsm
+        when:
+        mate = tcr.getMaterial(
+            new URL("http://www.kazurayam.com/carmina/example/Book1.xlsm"),
+            Suffix.NULL,
+            FileType.XLSM)
+        then:
+        assert mate != null
+        //
+    }
 
     def testPrettyPrint() {
         setup:

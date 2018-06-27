@@ -5,6 +5,9 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import groovy.json.JsonOutput
+import groovy.xml.XmlUtil
+
 class Material {
 
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
@@ -72,7 +75,15 @@ class Material {
      * @return
      */
     Path getPathRelativeToTSuiteTimestamp() {
-        Path base = this.getParent().getParent().getTSuiteTimestampDirectory()
+        return getPathRelativeTo(this.getParent().getParent().getTSuiteTimestampDirectory())
+    }
+
+    Path getPathRelativeToRepositoryRoot() {
+        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
+        return getPathRelativeTo(rootDir)
+    }
+
+    Path getPathRelativeTo(Path base) {
         return base.relativize(this.getMaterialFilePath())
     }
 
@@ -329,11 +340,74 @@ class Material {
                 sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
                     '" class="img-fluid" alt="material"></img>' + "\n")
                 break
+            case FileType.CSS:
+            case FileType.CSV:
+            case FileType.JS:
+            case FileType.TXT:
+                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                sb.append('<pre><code>')
+                sb.append(escapeHtml(content))
+                sb.append('</pre></pre>')
+                break
+            case FileType.JSON:
+                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                content = JsonOutput.prettyPrint(content)
+                sb.append('<pre><code>')
+                sb.append(escapeHtml(content))
+                sb.append('</pre></pre>')
+                break
+            case FileType.XML:
+                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                content = XmlUtil.serialize(content)
+                sb.append('<pre><code>')
+                sb.append(escapeHtml(content))
+                sb.append('</pre></pre>')
+                break
+            case FileType.PDF:
+                sb.append('        <div class="embed-responsive" style="padding-bottom:150%">' + "\n")
+                sb.append('            <object data="')
+                //sb.append(this.getHrefRelativeToRepositoryRoot())
+                sb.append('" type="application/pdf" width="100%" height="100%"></object>' + "\n")
+                sb.append('        </div>' + "\n")
+                sb.append('        <div><a href="' + this.getHrefRelativeToRepositoryRoot() + '">')
+                //sb.append(this.getPathRelativeToRepositoryRoot())
+                sb.append('</a></div>')
+                break
             default:
                 def msg = "fileType_  '${fileType_}' is unexpected"
                 logger_.warn('#markupInModalWindow ' + msg)
                 sb.append("        <p>${msg}</p>")
         }
         return sb.toString()
+    }
+
+
+    /**
+     * Escape HTML angle brackets in the given string. For example.,
+     * & --- &amp;
+     * < --- &lt;
+     * > --- &gt;
+     * " --- &quot;
+     *   --- &nbsp;
+     * © --- &copy;
+     *
+     * @param str
+     * @return
+     */
+    static String escapeHtml(String str) {
+        StringBuilder sb = new StringBuilder();
+        char[] charArray = str.toCharArray();
+        for (char ch : charArray) {
+            switch (ch) {
+                case '&': sb.append('&amp;'); break;
+                case '<': sb.append('&lt;'); break;
+                case '>': sb.append('&gt;'); break;
+                case '"': sb.append('&quot;'); break;
+                case ' ': sb.append('&nbsp;'); break;
+                case '©': sb.append('&copy;'); break;
+                default : sb.append(ch); break;
+            }
+        }
+        return sb.toString();
     }
 }
