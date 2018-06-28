@@ -404,6 +404,15 @@ class Material {
                 //sb.append(this.getPathRelativeToRepositoryRoot())
                 sb.append('</a></div>')
                 break
+            case FileType.XLS:
+            case FileType.XLSM:
+            case FileType.XLSX:
+                sb.append('        <a class="btn btn-primary btn-lg" target="_blank" href="')
+                sb.append(this.getHrefRelativeToRepositoryRoot())
+                sb.append('">')
+                sb.append('Download')
+                sb.append('</a>')
+                break
             default:
                 def msg = "fileType_  '${fileType_}' is unexpected"
                 logger_.warn('#markupInModalWindow ' + msg)

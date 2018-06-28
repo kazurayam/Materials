@@ -181,7 +181,7 @@ class MaterialSpec extends Specification {
         //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"text":"')
-        str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().getFileName().toString()))
+        str.contains('http://demoaut.katalon.com/')
         str.endsWith('"}')
     }
 
@@ -272,8 +272,36 @@ class MaterialSpec extends Specification {
         str.contains('type="application/pdf"')
     }
 
-    def testToHtmlAsModalWindow_Excel() {
-        // http://www.kazurayam.com/carmina/example/Book1.xlsx
+
+    def testToHtmlAsModalWindow_CSV() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        assert tcr != null
+        //
+        when:
+        String url = 'https://fixturedownload.com/download/csv/fifa-world-cup-2018/japan'
+        Material mate = tcr.getMaterial(new URL(url), Suffix.NULL, FileType.CSV)
+        String str = mate.toHtmlAsModalWindow()
+        then:
+        str.contains('3,28/06/2018&nbsp;17:00,Volgograd&nbsp;Stadium,Japan,Poland,Group&nbsp;H,')
+    }
+
+    def testToHtmlAsModalWindow_XLSX() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        assert tcr != null
+        //
+        when:
+        String url = 'https://fixturedownload.com/download/xlsx/fifa-world-cup-2018/japan'
+        Material mate = tcr.getMaterial(new URL(url), Suffix.NULL, FileType.XLSX)
+        String str = mate.toHtmlAsModalWindow()
+        logger_.debug("#testToHtmlAsModalWindow_XLSX str=${str}")
+        then:
+        str != null
     }
 
     def testEquals() {
