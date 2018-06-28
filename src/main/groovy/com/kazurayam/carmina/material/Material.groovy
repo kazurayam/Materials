@@ -278,7 +278,7 @@ class Material {
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().getFileName().toString())+ '",')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(this.getIdentifier())+ '",')
         sb.append('"href":"#' + this.hashCode() + '"')
         sb.append('}')
         return sb.toString()
@@ -290,7 +290,7 @@ class Material {
      *         <div class=”modal-dialog modalcenter” role=”document”>
      *             <div class=”modal-content”>
      *                 <div class=”modal-header”>
-     *                     <h4 class=”modal-title” id=”XXXXXXXXtitle”>TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png</h4>
+     *                     <h4 class=”modal-title” id=”XXXXXXXXtitle”>http://demoaut.katalon.com/</h4>
      *                 </div>
      *                 <div class=”modal-body”>
      *                     <img src="TS1/TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png" alt="">
@@ -314,7 +314,7 @@ class Material {
         sb.append('        <p class="modal-title" id="')
         sb.append(this.hashCode() + 'title')
         sb.append('">')
-        sb.append(this.getHrefRelativeToRepositoryRoot())
+        sb.append(this.getIdentifier())
         sb.append('</p>' + "\n")
         sb.append('      </div>' + "\n")
         sb.append('      <div class="modal-body">' + "\n")
@@ -329,6 +329,29 @@ class Material {
         return sb.toString()
     }
 
+    /**
+     * returns the identifier of the Material which is used as
+     * - the name in the Bootstrap Treeview
+     * - the title of Modal window
+     *
+     * @return
+     */
+    String getIdentifier() {
+        StringBuilder sb = new StringBuilder()
+        String urlStr = url_.toString()
+        sb.append(urlStr)
+        if (suffix_ != Suffix.NULL) {
+            sb.append(' ')
+            sb.append(MAGIC_DELIMITER)
+            sb.append(suffix_.getValue())
+        }
+        if (!urlStr.endsWith(fileType_.getExtension())) {
+            sb.append(' ')
+            sb.append(fileType_.name())
+        }
+        return sb.toString()
+    }
+
     String markupInModalWindow() {
         StringBuilder sb = new StringBuilder()
         switch (fileType_) {
@@ -340,28 +363,36 @@ class Material {
                 sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
                     '" class="img-fluid" alt="material"></img>' + "\n")
                 break
-            case FileType.CSS:
             case FileType.CSV:
-            case FileType.JS:
-            case FileType.TXT:
                 def content = this.getMaterialFilePath().toFile().getText('UTF-8')
-                sb.append('<pre><code>')
+                sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
-                sb.append('</pre></pre>')
+                sb.append('</code></pre>')
+                break
+            case FileType.TXT:
+                sb.append('<div style="height:350px;overflow:auto;">' + "\n")
+                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                def file = this.getMaterialFilePath().toFile()
+                file.readLines('UTF-8').each { line ->
+                    sb.append('<p>')
+                    sb.append(escapeHtml(line))
+                    sb.append('</p>' + "\n")
+                }
+                sb.append('</div>' + "\n")
                 break
             case FileType.JSON:
                 def content = this.getMaterialFilePath().toFile().getText('UTF-8')
                 content = JsonOutput.prettyPrint(content)
-                sb.append('<pre><code>')
+                sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
-                sb.append('</pre></pre>')
+                sb.append('</code></pre>')
                 break
             case FileType.XML:
                 def content = this.getMaterialFilePath().toFile().getText('UTF-8')
                 content = XmlUtil.serialize(content)
-                sb.append('<pre><code>')
+                sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
-                sb.append('</pre></pre>')
+                sb.append('</code></pre>')
                 break
             case FileType.PDF:
                 sb.append('        <div class="embed-responsive" style="padding-bottom:150%">' + "\n")

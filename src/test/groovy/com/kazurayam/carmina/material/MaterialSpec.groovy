@@ -343,7 +343,7 @@ class MaterialSpec extends Specification {
 
     def testMarkupInModalWindow_PNG() {
         setup:
-        Material mate = new Material(new URL('http://demoaut.katalon.com'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         when:
         String markup = mate.markupInModalWindow()
         logger_.debug("#testMarkupInModalWindow_png markup=\n${markup}")
@@ -353,4 +353,35 @@ class MaterialSpec extends Specification {
         markup.contains(FileType.PNG.getExtension())
     }
 
+    def testGetIdentifier_withoutSuffix() {
+        setup:
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        when:
+        String title = mate.getIdentifier()
+        then:
+        title == 'http://demoaut.katalon.com/ PNG'
+    }
+
+    def testGetIdentifier_withSuffix() {
+        setup:
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG).setParent(tcr_)
+        when:
+        String title = mate.getIdentifier()
+        then:
+        title == 'http://demoaut.katalon.com/ §1 PNG'
+    }
+
+    def testGetIdentifier_FileTypeOmmited() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        Material mate = tcr.getMaterial(new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),
+            Suffix.NULL, FileType.PDF)
+        when:
+        String title = mate.getIdentifier()
+        logger_.debug("#testGetModalWindowTitle_FileTypeOmmited title=${title}")
+        then:
+        title == 'http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'
+    }
 }
