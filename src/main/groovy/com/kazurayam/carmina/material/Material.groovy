@@ -397,11 +397,11 @@ class Material {
             case FileType.PDF:
                 sb.append('        <div class="embed-responsive" style="padding-bottom:150%">' + "\n")
                 sb.append('            <object data="')
-                //sb.append(this.getHrefRelativeToRepositoryRoot())
+                sb.append(this.getHrefRelativeToRepositoryRoot())
                 sb.append('" type="application/pdf" width="100%" height="100%"></object>' + "\n")
                 sb.append('        </div>' + "\n")
                 sb.append('        <div><a href="' + this.getHrefRelativeToRepositoryRoot() + '">')
-                //sb.append(this.getPathRelativeToRepositoryRoot())
+                sb.append(this.getPathRelativeToRepositoryRoot())
                 sb.append('</a></div>')
                 break
             case FileType.XLS:
