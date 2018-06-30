@@ -170,6 +170,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteName_.toString() +
             '/' + tSuiteTimestamp_.format()) + '",')
         sb.append('"backColor":"#CCDDFF",')
+        sb.append('"selectable":false,')
         sb.append('"nodes":[')
         def count = 0
         for (TCaseResult tcr : tCaseResults_) {

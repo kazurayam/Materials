@@ -299,6 +299,7 @@ class Material implements Comparable<Material> {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(this.getIdentifier())+ '",')
+        sb.append('"selectable":true,')
         sb.append('"href":"#' + this.hashCode() + '"')
         sb.append('}')
         return sb.toString()

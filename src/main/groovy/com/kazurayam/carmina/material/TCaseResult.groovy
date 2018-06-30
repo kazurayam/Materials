@@ -139,6 +139,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.toString())+ '",')
+        sb.append('"selectable":false,')
         sb.append('"nodes":[')
         def mate_count = 0
         for (Material material : materials_) {
