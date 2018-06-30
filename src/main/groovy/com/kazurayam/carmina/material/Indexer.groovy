@@ -213,10 +213,20 @@ $(function() {
         sb.append('    <script type="text/javascript"><!--'                                       + "\n")
         sb.append('''
 function getTree() {
-    // Some logic to retrieve, or generate tree structure
     var data = ''' + JsonOutput.prettyPrint(repoRoot.toBootstrapTreeviewData()) + ''';
     return data;
 }
+//
+function modalize() {
+    $('#tree a').each(function() {
+        if ($(this).attr('href') && $(this).attr('href') != '#') {
+            $(this).attr('data-toggle', 'modal');
+            $(this).attr('data-target', $(this).attr('href'));
+            $(this).attr('href', '#');
+        }
+    });
+}
+//
 $('#tree').treeview({
     data: getTree(),
     enableLinks: true,
@@ -224,22 +234,11 @@ $('#tree').treeview({
     multiSelect: false,
     showTags: true,
     onNodeSelected: function(event, data) {
-        $('#tree a').each(function() {
-            if ($(this).attr('href') && $(this).attr('href') != '#') {
-                $(this).attr('data-toggle', 'modal');
-                $(this).attr('data-target', $(this).attr('href'));
-                $(this).attr('href', '#');
-            }
-        });
+        modalize();
     }
 });
-$('#tree a').each(function() {
-    if ($(this).attr('href') && $(this).attr('href') != '#') {
-        $(this).attr('data-toggle', 'modal');
-        $(this).attr('data-target', $(this).attr('href'));
-        $(this).attr('href', '#');
-    }
-});
+//
+modalize();
 ''')
         sb.append('--></script>'                                                              + "\n")
         sb.append('  </body>'                                                                 + "\n")
