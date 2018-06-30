@@ -60,6 +60,30 @@ class MiscSpec extends Specification {
         !resistant('§')
         usableAsFileName('§')
     }
+
+    def testURLEncoder_colon() {
+        expect:
+        URLEncoder.encode(':', 'UTF-8') == '%3A'
+    }
+
+    def testURLEncoder_solidus() {
+        expect:
+        URLEncoder.encode('/', 'UTF-8') == '%2F'
+    }
+
+    def testURLEncoder_hyphen() {
+        expect:
+        URLEncoder.encode('-', 'UTF-8') == '-'
+    }
+
+    def testURLEncoder_period() {
+        expect:
+        URLEncoder.encode('.', 'UTF-8') == '.'
+    }
+
+
+
+
     // helper methods
     def boolean resistant(String s) {
         String encoded = URLEncoder.encode(s, 'UTF-8')
