@@ -44,11 +44,6 @@ class FileTypeSpec extends Specification {
         FileType.BMP.getExtension() == 'bmp'
     }
 
-    def testCSS() {
-        expect:
-        FileType.CSS.getExtension() == 'css'
-    }
-
     def testCSV() {
         expect:
         FileType.CSV.getExtension() == 'csv'
@@ -59,11 +54,6 @@ class FileTypeSpec extends Specification {
         FileType.GIF.getExtension() == 'gif'
     }
 
-    def testHTML() {
-        expect:
-        FileType.HTML.getExtension() == 'html'
-    }
-
     def testJPEG() {
         expect:
         FileType.JPEG.getExtension() == 'jpeg'
@@ -72,11 +62,6 @@ class FileTypeSpec extends Specification {
     def testJPG() {
         expect:
         FileType.JPG.getExtension() == 'jpg'
-    }
-
-    def testJS() {
-        expect:
-        FileType.JS.getExtension() == 'js'
     }
 
     def testJSON() {
@@ -97,11 +82,6 @@ class FileTypeSpec extends Specification {
     def testPNG() {
         expect:
         FileType.PNG.getExtension() == 'png'
-    }
-
-    def testSVG() {
-        expect:
-        FileType.SVG.getExtension() == 'svg'
     }
 
     def testTXT() {

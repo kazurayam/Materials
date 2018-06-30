@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 /**
  *
  */
-class TCaseResult {
+class TCaseResult implements Comparable<TCaseResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TCaseResult.class)
 
@@ -83,6 +83,8 @@ class TCaseResult {
         }
         if (!found) {
             materials_.add(material)
+            // sort the list materials by Material#compareTo()
+            Collections.sort(materials_)
         }
     }
 
@@ -104,6 +106,11 @@ class TCaseResult {
     @Override
     int hashCode() {
         return tCaseName_.hashCode()
+    }
+
+    @Override
+    int compareTo(TCaseResult other) {
+        return tCaseName_.compareTo(other.getTCaseName())
     }
 
     @Override

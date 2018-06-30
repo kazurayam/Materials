@@ -35,6 +35,7 @@ class RepositoryRoot {
         }
         if (!found) {
             tSuiteResults_.add(tSuiteResult)
+            Collections.sort(tSuiteResults_)
         }
     }
 
@@ -59,9 +60,14 @@ class RepositoryRoot {
         Comparator<TSuiteResult> comparator = new Comparator<TSuiteResult>() {
             @Override
             public int compare(TSuiteResult o1, TSuiteResult o2) {
-                LocalDateTime ldt1 = o1.getTSuiteTimestamp().getValue()
-                LocalDateTime ldt2 = o2.getTSuiteTimestamp().getValue()
-                return ldt1.compareTo(ldt2) * -1
+                int v = o1.getTSuiteName().compareTo(o2.getTSuiteName())
+                if (v == 0) {
+                    LocalDateTime ldt1 = o1.getTSuiteTimestamp().getValue()
+                    LocalDateTime ldt2 = o2.getTSuiteTimestamp().getValue()
+                    return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
+                } else {
+                    return v  // natural order of TSuiteName
+                }
             }
         }
         List<TSuiteResult> sorted = tSuiteResults_

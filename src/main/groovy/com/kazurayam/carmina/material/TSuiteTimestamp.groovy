@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
  * @author kazurayam
  *
  */
-class TSuiteTimestamp {
+class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class);
 
@@ -108,6 +108,11 @@ class TSuiteTimestamp {
     @Override
     public int hashCode() {
         return this.getValue().hashCode()
+    }
+
+    @Override
+    int compareTo(TSuiteTimestamp other) {
+        return this.getValue().compareTo(other.getValue())
     }
 
     @Override

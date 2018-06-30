@@ -353,6 +353,44 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate3.hashCode()
     }
 
+    def testCompareTo_equal() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1.compareTo(mate2) == 0
+    }
+
+    def testCompareTo_byURL() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/abc'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1.compareTo(mate2) < 0
+        when:
+        Material mate3 = new Material(new URL('https://aaa.google.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1.compareTo(mate3) > 0
+    }
+
+    def testCompareTo_byFileType() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.JPG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate1.compareTo(mate2) < 0
+        mate2.compareTo(mate1) > 0
+    }
+
+    def testCompareTo_bySuffix() {
+        when:
+        Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), new Suffix('atoz'), FileType.PNG)
+        then:
+        mate1.compareTo(mate2) < 0
+        mate2.compareTo(mate1) > 0
+    }
+
     def testHashCodeWithAncestors() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()

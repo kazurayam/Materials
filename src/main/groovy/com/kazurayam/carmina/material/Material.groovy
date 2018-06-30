@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
 
-class Material {
+class Material implements Comparable<Material> {
 
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
 
@@ -256,6 +256,26 @@ class Material {
         result = prime * result + this.suffix_.hashCode()
         result = prime * result + this.fileType_.hashCode()
         return result
+    }
+
+    @Override
+    int compareTo(Material other) {
+        int v = url_.toString().compareTo(other.getURL().toString())
+        if (v < 0) {
+            return v
+        } else if (v == 0) {
+            v = suffix_.compareTo(other.getSuffix())
+            if (v < 0) {
+                return v
+            } else if (v == 0) {
+                return fileType_.compareTo(other.getFileType())
+            } else {
+                return v
+            }
+        } else {
+            return v
+        }
+
     }
 
     @Override

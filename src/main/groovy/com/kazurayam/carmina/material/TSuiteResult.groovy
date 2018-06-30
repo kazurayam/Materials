@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 /**
  *
  */
-final class TSuiteResult {
+final class TSuiteResult implements Comparable<TSuiteResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
@@ -84,6 +84,7 @@ final class TSuiteResult {
         }
         if (!found) {
             tCaseResults_.add(tCaseResult)
+            Collections.sort(tCaseResults_)
         }
     }
 
@@ -120,6 +121,19 @@ final class TSuiteResult {
         result = prime * result + this.getTSuiteName().hashCode()
         result = prime * result + this.getTSuiteTimestamp().hashCode()
         return result
+    }
+
+    @Override
+    int compareTo(TSuiteResult other) {
+        int v = this.getTSuiteName().compareTo(other.getTSuiteName())
+        if (v < 0) {
+            return v
+        } else if (v == 0) {
+            v = this.getTSuiteTimestamp().compareTo(other.getTSuiteTimestamp())
+            return v
+        } else {
+            return v
+        }
     }
 
     @Override

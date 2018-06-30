@@ -3,7 +3,7 @@ package com.kazurayam.carmina.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class TSuiteName {
+class TSuiteName implements Comparable<TSuiteName> {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteName.class)
 
@@ -41,5 +41,10 @@ class TSuiteName {
     @Override
     public int hashCode() {
         return this.getValue().hashCode()
+    }
+
+    @Override
+    int compareTo(TSuiteName other) {
+        return this.getValue().compareTo(other.getValue())
     }
 }

@@ -3,7 +3,7 @@ package com.kazurayam.carmina.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class Suffix {
+class Suffix implements Comparable<Suffix> {
 
     static Logger logger_ = LoggerFactory.getLogger(Suffix.class)
 
@@ -53,6 +53,11 @@ class Suffix {
     @Override
     int hashCode() {
         return value_.hashCode()
+    }
+
+    @Override
+    int compareTo(Suffix other) {
+        return this.getValue().compareTo(other.getValue())
     }
 
     @Override
