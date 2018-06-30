@@ -220,43 +220,28 @@ function getTree() {
 $('#tree').treeview({
     data: getTree(),
     enableLinks: true,
-    levels: 3,
+    levels: 1,
     multiSelect: false,
     showTags: true,
     onNodeSelected: function(event, data) {
-        var d = data
-        console.log("node selected; Object.keys(event)=" + Object.keys(event));
-        console.log("Object.keys(event.target)=" + Object.keys(event.target));
-        console.log("Object.keys(d)=" + Object.keys(d));
-        console.log("d.text='" + d.text +
-            "' d.href=" + d.href +
-            " $(d).attr('data-toggle')=" + $(d).attr('data-toggle') +
-            " $(d).attr('data-target')=" + $(d).attr('data-target')
-            );
+        $('#tree a').each(function() {
+            if ($(this).attr('href') && $(this).attr('href') != '#') {
+                $(this).attr('data-toggle', 'modal');
+                $(this).attr('data-target', $(this).attr('href'));
+                $(this).attr('href', '#');
+            }
+        });
+    }
+});
+$('#tree a').each(function() {
+    if ($(this).attr('href') && $(this).attr('href') != '#') {
+        $(this).attr('data-toggle', 'modal');
+        $(this).attr('data-target', $(this).attr('href'));
+        $(this).attr('href', '#');
     }
 });
 ''')
         sb.append('--></script>'                                                              + "\n")
-        sb.append('    <script type="text/javascript"><!--'                                   + "\n")
-        sb.append('''
-// modify anchor tags in the treeview
-$(function() {
-    $('#tree a').each(function() {
-        if ($(this).attr('href') && $(this).attr('href') != '#') {
-            $(this).attr('data-toggle', 'modal');
-            $(this).attr('data-target', $(this).attr('href'));
-            $(this).attr('href', '#');
-        }
-    });
-
-    // reload the document on closing the Modal window
-    $('.modal').on('hidden.bs.modal', function () {
-        location.reload();
-    });
-
-});
-''')
-        sb.append('    --></script>'                                                          + "\n")
         sb.append('  </body>'                                                                 + "\n")
         sb.append('</html>'                                                                   + "\n")
 
