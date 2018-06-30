@@ -204,7 +204,7 @@ $(function() {
         sb.append(' crossorigin="anonymous"></script>'                                        + "\n")
         sb.append('    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"')
         sb.append(' integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"')
-        sb.append(' crossorigin="anonymous"></scprit>'                                        + "\n")
+        sb.append(' crossorigin="anonymous"></script>'                                        + "\n")
         sb.append('    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"')
         sb.append(' integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"')
         sb.append(' crossorigin="anonymous"></script>'                                        + "\n")
@@ -222,7 +222,18 @@ $('#tree').treeview({
     enableLinks: true,
     levels: 3,
     multiSelect: false,
-    showTags: true
+    showTags: true,
+    onNodeSelected: function(event, data) {
+        var d = data
+        console.log("node selected; Object.keys(event)=" + Object.keys(event));
+        console.log("Object.keys(event.target)=" + Object.keys(event.target));
+        console.log("Object.keys(d)=" + Object.keys(d));
+        console.log("d.text='" + d.text +
+            "' d.href=" + d.href +
+            " $(d).attr('data-toggle')=" + $(d).attr('data-toggle') +
+            " $(d).attr('data-target')=" + $(d).attr('data-target')
+            );
+    }
 });
 ''')
         sb.append('--></script>'                                                              + "\n")
