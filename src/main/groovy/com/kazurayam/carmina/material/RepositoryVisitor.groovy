@@ -139,6 +139,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                     if (url != null) {
                         Suffix suffix = Material.parseFileNameForSuffix(fileName)
                         Material material = new Material(url, suffix, fileType).setParent(tCaseResult_)
+                        material.setLastModified(file.toFile().lastModified())
                         tCaseResult_.addMaterial(material)
                     } else {
                         logger_.debug("#visitFile unable to parse ${file} into a URL")

@@ -2,6 +2,9 @@ package com.kazurayam.carmina.material
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -449,5 +452,17 @@ class MaterialSpec extends Specification {
         logger_.debug("#testGetModalWindowTitle_FileTypeOmmited title=${title}")
         then:
         title == 'http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'
+    }
+
+    def testSetGetLastModified_long() {
+        setup:
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('3'), FileType.PNG).setParent(tcr_)
+        LocalDateTime ldtNow = LocalDateTime.now()
+        Instant instantNow = ldtNow.toInstant(ZoneOffset.UTC)
+        long longNow = instantNow.toEpochMilli()
+        when:
+        mate.setLastModified(longNow)
+        then:
+        mate.getLastModified() == ldtNow
     }
 }

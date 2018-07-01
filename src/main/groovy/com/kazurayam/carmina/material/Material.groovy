@@ -1,12 +1,17 @@
 package com.kazurayam.carmina.material
 
 import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneOffset
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
+
+import java.time.ZoneOffset
 
 class Material implements Comparable<Material> {
 
@@ -19,6 +24,7 @@ class Material implements Comparable<Material> {
     private URL url_
     private Suffix suffix_
     private FileType fileType_
+    private LocalDateTime lastModified_
 
     Material(URL url, Suffix suffix, FileType fileType) {
         url_ = url
@@ -49,6 +55,22 @@ class Material implements Comparable<Material> {
 
     FileType getFileType() {
         return fileType_
+    }
+
+    //
+    Material setLastModified(long lastModified) {
+        Instant instant = Instant.ofEpochMilli(lastModified)
+        this.setLastModified(instant)
+        return this
+    }
+
+    Material setLastModified(Instant lastModified) {
+        lastModified_ = LocalDateTime.ofInstant(lastModified, ZoneOffset.UTC);
+        return this
+    }
+
+    LocalDateTime getLastModified() {
+        return lastModified_
     }
 
     // ---------------- business ----------------------------------------------
@@ -290,7 +312,8 @@ class Material implements Comparable<Material> {
         sb.append('"url":"' + Helpers.escapeAsJsonText(url_.toString())+ '",')
         sb.append('"suffix":"' + Helpers.escapeAsJsonText(suffix_.toString())+ '",')
         sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().toString()) + '",')
-        sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '"')
+        sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '",')
+        sb.append('"lastModified":"' + lastModified_.toString() + '"')
         sb.append('}}')
         return sb.toString()
     }
