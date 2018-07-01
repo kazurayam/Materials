@@ -1,6 +1,7 @@
 package com.kazurayam.carmina.material
 
 import java.nio.file.Path
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,6 +17,7 @@ class TCaseResult implements Comparable<TCaseResult> {
     private TCaseName tCaseName_
     private Path tCaseDirectory_
     private List<Material> materials_
+    private LocalDateTime lastModified_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -48,6 +50,10 @@ class TCaseResult implements Comparable<TCaseResult> {
 
     Path getTCaseDirectory() {
         return tCaseDirectory_.normalize()
+    }
+
+    LocalDateTime getLastModified() {
+        return lastModified_
     }
 
     // --------------------- create/add/get child nodes ----------------------
@@ -85,10 +91,21 @@ class TCaseResult implements Comparable<TCaseResult> {
             materials_.add(material)
             // sort the list materials by Material#compareTo()
             Collections.sort(materials_)
+            //
+            lastModified_ = resolveLastModified(materials_)
         }
     }
 
     // -------------------------- helpers -------------------------------------
+    LocalDateTime resolveLastModified(List<Material> materials) {
+        LocalDateTime ldt = LocalDateTime.MIN
+        for (Material mate : materials) {
+            if (mate.getLastModified() > ldt) {
+                ldt = mate.getLastModified()
+            }
+        }
+        return ldt
+    }
 
     // ------------------ overriding Object properties ------------------------
     @Override
@@ -130,7 +147,8 @@ class TCaseResult implements Comparable<TCaseResult> {
             sb.append(mate.toJson())
             count += 1
         }
-        sb.append(']')
+        sb.append('],')
+        sb.append('"lastModified":"' + lastModified_.toString() + '"')
         sb.append('}}')
         return sb.toString()
     }
