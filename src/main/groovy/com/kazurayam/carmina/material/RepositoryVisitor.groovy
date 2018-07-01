@@ -94,20 +94,20 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
         def to = directoryTransition_.peek()
         switch (to) {
             case Layer.TESTCASE :
-                directoryTransition_.pop()
                 logger_.debug("#postVisitDirectory back to ${dir} as TESTCASE")
+                directoryTransition_.pop()
                 break
             case Layer.TIMESTAMP :
-                directoryTransition_.pop()
                 logger_.debug("#postVisitDirectory back to ${dir} as TIMESTAMP")
+                directoryTransition_.pop()
                 break
             case Layer.TESTSUITE :
-                directoryTransition_.pop()
                 logger_.debug("#postVisitDirectory back to ${dir} as TESTSUITE")
+                directoryTransition_.pop()
                 break
             case Layer.ROOT :
-                directoryTransition_.pop()
                 logger_.debug("#postVisitDirectory back to ${dir} as ROOT")
+                directoryTransition_.pop()
                 break
         }
         return CONTINUE

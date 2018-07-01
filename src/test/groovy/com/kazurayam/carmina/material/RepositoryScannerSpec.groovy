@@ -1,5 +1,7 @@
 package com.kazurayam.carmina.material
 
+import com.sun.xml.internal.bind.v2.TODO
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -102,6 +104,11 @@ class RepositoryScannerSpec extends Specification {
         mate1.getMaterialFilePath().toString().replace('\\', '/') == p1
         mate1.getFileType() == FileType.PNG
 
+    }
+
+    def testScan_resolveLastModifiedOfTCaseResult() {
+        expect:
+        false
     }
 
     def testScanForMiscellaneousImages() {

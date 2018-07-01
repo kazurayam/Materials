@@ -1,6 +1,7 @@
 package com.kazurayam.carmina.material
 
 import java.nio.file.Path
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,6 +18,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     private RepositoryRoot repoRoot_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
+    private LocalDateTime lastModified_
 
 
     // ------------------ constructors & initializer -------------------------------
@@ -26,6 +28,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         tSuiteName_ = testSuiteName
         tSuiteTimestamp_ = testSuiteTimestamp
         tCaseResults_ = new ArrayList<TCaseResult>()
+        lastModified_ = LocalDateTime.MIN
     }
 
     // ------------------ attribute setter & getter -------------------------------
@@ -54,6 +57,15 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     TSuiteTimestamp getTSuiteTimestamp() {
         return tSuiteTimestamp_
+    }
+
+    TSuiteResult setLastModified(LocalDateTime lastModified) {
+        lastModified_ = lastModified
+        return this
+    }
+
+    LocalDateTime getLastModified() {
+        return lastModified_
     }
 
     // ------------------ add/get child nodes ------------------------------
@@ -99,7 +111,6 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         }
         return materials
     }
-
 
     // -------------------- overriding Object properties ----------------------
     @Override
@@ -154,7 +165,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             count += 1
             sb.append(tcr.toJson())
         }
-        sb.append(']')
+        sb.append('],')
+        sb.append('"lastModified":"' + lastModified_.toString() + '"')
         sb.append('}}')
         return sb.toString()
     }

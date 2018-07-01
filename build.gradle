@@ -43,8 +43,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/carmina/material/MaterialSpec.class'
+    //include '**/carmina/material/MaterialSpec.class'
     include '**/carmina/material/RepositoryScannerSpec.class'
-    include '**/carmina/material/TCaseResultSpec.class'
+    //include '**/carmina/material/TCaseResultSpec.class'
     //include '**/carmina/material/TSuiteResultSpec.class'
 }

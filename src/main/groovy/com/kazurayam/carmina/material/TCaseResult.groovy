@@ -27,6 +27,7 @@ class TCaseResult implements Comparable<TCaseResult> {
     TCaseResult(TCaseName tCaseName) {
         tCaseName_ = tCaseName
         materials_ = new ArrayList<Material>()
+        lastModified_ = LocalDateTime.MIN
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -50,6 +51,11 @@ class TCaseResult implements Comparable<TCaseResult> {
 
     Path getTCaseDirectory() {
         return tCaseDirectory_.normalize()
+    }
+
+    TCaseResult setLastModified(LocalDateTime lastModified) {
+        lastModified_ = lastModified
+        return this
     }
 
     LocalDateTime getLastModified() {
@@ -91,21 +97,10 @@ class TCaseResult implements Comparable<TCaseResult> {
             materials_.add(material)
             // sort the list materials by Material#compareTo()
             Collections.sort(materials_)
-            //
-            lastModified_ = resolveLastModified(materials_)
         }
     }
 
     // -------------------------- helpers -------------------------------------
-    LocalDateTime resolveLastModified(List<Material> materials) {
-        LocalDateTime ldt = LocalDateTime.MIN
-        for (Material mate : materials) {
-            if (mate.getLastModified() > ldt) {
-                ldt = mate.getLastModified()
-            }
-        }
-        return ldt
-    }
 
     // ------------------ overriding Object properties ------------------------
     @Override
