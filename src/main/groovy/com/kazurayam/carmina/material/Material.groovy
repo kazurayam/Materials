@@ -416,8 +416,8 @@ class Material implements Comparable<Material> {
                 sb.append('</code></pre>')
                 break
             case FileType.PDF:
-                sb.append('        <div class="embed-responsive" style="padding-bottom:150%">' + "\n")
-                sb.append('            <object data="')
+                sb.append('        <div class="embed-responsive embed-responsive-16by9" style="padding-bottom:150%">' + "\n")
+                sb.append('            <object class="embed-responsive-item" data="')
                 sb.append(this.getHrefRelativeToRepositoryRoot())
                 sb.append('" type="application/pdf" width="100%" height="100%"></object>' + "\n")
                 sb.append('        </div>' + "\n")
