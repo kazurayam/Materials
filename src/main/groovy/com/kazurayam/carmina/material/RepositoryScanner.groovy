@@ -73,6 +73,9 @@ class RepositoryScanner {
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
                 new RepositoryVisitor(repoRoot_)
         )
+        //
+        repoRoot_.getLatestModifiedTSuiteResult().setLatestModified(true)
+        //
         logger_.debug("#scan repoRoot_=${JsonOutput.prettyPrint(repoRoot_.toJson())}")
     }
 

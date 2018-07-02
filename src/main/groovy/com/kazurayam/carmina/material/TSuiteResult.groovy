@@ -19,6 +19,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
+    private Boolean latestModified_
 
 
     // ------------------ constructors & initializer -------------------------------
@@ -29,6 +30,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         tSuiteTimestamp_ = testSuiteTimestamp
         tCaseResults_ = new ArrayList<TCaseResult>()
         lastModified_ = LocalDateTime.MIN
+        latestModified_ = false
     }
 
     // ------------------ attribute setter & getter -------------------------------
@@ -66,6 +68,11 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     LocalDateTime getLastModified() {
         return lastModified_
+    }
+
+    TSuiteResult setLatestModified(Boolean isLatest) {
+        latestModified_ = isLatest
+        return this
     }
 
     // ------------------ add/get child nodes ------------------------------
@@ -179,10 +186,12 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteName_.toString() +
-            '/' + tSuiteTimestamp_.format()) + '",')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(this.treeviewTitle()) + '",')
         sb.append('"backColor":"#CCDDFF",')
         sb.append('"selectable":false,')
+        sb.append('"state":{')
+        sb.append('    "expanded":' + latestModified_ + ',')
+        sb.append('},')
         sb.append('"nodes":[')
         def count = 0
         for (TCaseResult tcr : tCaseResults_) {
@@ -195,5 +204,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         return sb.toString()
     }
 
+    String treeviewTitle() {
+        return tSuiteName_.toString() + '/' + tSuiteTimestamp_.format()
+    }
 }
 

@@ -80,6 +80,19 @@ class RepositoryRoot {
         return sorted
     }
 
+    TSuiteResult getLatestModifiedTSuiteResult() {
+        LocalDateTime lastModified = LocalDateTime.MIN
+        TSuiteResult result = null
+        List<TSuiteResult> tSuiteResults = this.getTSuiteResults()
+        for (TSuiteResult tsr : tSuiteResults) {
+            if (tsr.getLastModified() > lastModified) {
+                result = tsr
+                lastModified = tsr.getLastModified()
+            }
+        }
+        return result
+    }
+
     List<Material> getMaterials() {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr : tSuiteResults_) {
@@ -90,6 +103,8 @@ class RepositoryRoot {
         }
         return list
     }
+
+
 
     // -------------- overriding java.lang.Object methods ---------------------
     @Override
@@ -198,6 +213,10 @@ class RepositoryRoot {
     }
 
 
+    /**
+     *
+     * @return
+     */
     String htmlFragmensOfMaterialsAsModal() {
         StringBuilder sb = new StringBuilder()
         List<Material> mates = this.getMaterials()
@@ -206,5 +225,10 @@ class RepositoryRoot {
         }
         return sb.toString()
     }
+
+
+    /**
+     *
+     */
 
 }
