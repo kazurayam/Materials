@@ -1,9 +1,8 @@
 package com.kazurayam.carmina.material
 
-import com.sun.xml.internal.bind.v2.TODO
-
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,6 +37,7 @@ class RepositoryScannerSpec extends Specification {
      *
      * @return
      */
+    
     def testScan() {
         setup:
         Path casedir = workdir_.resolve("testScan")
@@ -106,11 +106,65 @@ class RepositoryScannerSpec extends Specification {
 
     }
 
-    def testScan_resolveLastModifiedOfTCaseResult() {
-        expect:
-        false
+    /**
+     * execute RepositoryScanner.scan() then check the result
+     * if a TCaseResult object has a lastModified property with appropriate value which
+     * must be equal to the maximum value of contained Materials.
+     *
+     */
+    def testScan_lastModifiedOfTCaseResult() {
+        setup:
+        Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        when:
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('TC1'))
+        LocalDateTime lastModifiedOfTCaseResult = tcr.getLastModified()
+        LocalDateTime lastModifiedOfMaterials = LocalDateTime.MIN
+        List<Material> materials = tcr.getMaterials()
+        for (Material mate : materials) {
+            if (mate.getLastModified() > lastModifiedOfMaterials) {
+                lastModifiedOfMaterials = mate.getLastModified()
+            }
+        }
+        then:
+        lastModifiedOfTCaseResult == lastModifiedOfMaterials
     }
 
+    /**
+     * execuite RepositoryScanner.scan() then check the result
+     * if a TSuiteResult object has a lastModified property with appropriate value which
+     * must be equal to the maximum value of contained TCaseResults.
+     *
+     */
+    def testScan_lastModifiedOfTSuiteResult() {
+        setup:
+        Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        when:
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
+        LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
+        List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResults()
+        for (TCaseResult tcr : tCaseResults) {
+            if (tcr.getLastModified() > lastModifiedOfTCaseResults) {
+                lastModifiedOfTCaseResults = tcr.getLastModified()
+            }
+        }
+        then:
+        lastModifiedOfTSuiteResult == lastModifiedOfTCaseResults
+
+    }
+
+    
     def testScanForMiscellaneousImages() {
         setup:
         Path casedir = workdir_.resolve("testScanForMiscellaneousImages")
@@ -127,6 +181,7 @@ class RepositoryScannerSpec extends Specification {
         materials.size() == 5
     }
 
+    
     def testScanForPDF() {
         setup:
         Path casedir = workdir_.resolve("testScanForPDF")
@@ -146,6 +201,7 @@ class RepositoryScannerSpec extends Specification {
         assert mate != null
     }
 
+    
     def testScanForExcel() {
         setup:
         Path casedir = workdir_.resolve("testScanForExcel")
@@ -175,6 +231,7 @@ class RepositoryScannerSpec extends Specification {
         //
     }
 
+    
     def testPrettyPrint() {
         setup:
         Path casedir = workdir_.resolve('testPrettyPrint')

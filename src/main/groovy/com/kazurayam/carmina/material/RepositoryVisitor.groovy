@@ -94,19 +94,28 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
         def to = directoryTransition_.peek()
         switch (to) {
             case Layer.TESTCASE :
-                logger_.debug("#postVisitDirectory back to ${dir} as TESTCASE")
+                logger_.debug("#postVisitDirectory leaving ${dir} as TESTCASE")
+                // resolve the lastModified property of the TCaseResult
+                LocalDateTime lastModified = resolveLastModifiedOfTCaseResult(tCaseResult_)
+                tCaseResult_.setLastModified(lastModified)
+                logger_.debug("#postVisitDirectory set lastModified=${lastModified} to ${tCaseResult_.getTCaseName()}")
                 directoryTransition_.pop()
                 break
             case Layer.TIMESTAMP :
-                logger_.debug("#postVisitDirectory back to ${dir} as TIMESTAMP")
+                logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
+                // resolve the lastModified property of the TSuiteResult
+                LocalDateTime lastModified = resolveLastModifiedOfTSuiteResult(tSuiteResult_)
+                tSuiteResult_.setLastModified(lastModified)
+                logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
+                    " ${tSuiteResult_.getTSuiteName()}/${tSuiteResult_.getTSuiteTimestamp().format()}")
                 directoryTransition_.pop()
                 break
             case Layer.TESTSUITE :
-                logger_.debug("#postVisitDirectory back to ${dir} as TESTSUITE")
+                logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
                 directoryTransition_.pop()
                 break
             case Layer.ROOT :
-                logger_.debug("#postVisitDirectory back to ${dir} as ROOT")
+                logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
                 directoryTransition_.pop()
                 break
         }
@@ -158,4 +167,41 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
      @Override
       FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {}
      */
+
+
+
+    // helpers
+
+    /**
+     *
+     * @param a instance of TCaseResult
+     * @return LocalDateTime for TCaseResult's lastModified property
+     */
+    LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tcr) {
+        LocalDateTime lastModified = LocalDateTime.MIN
+        List<Material> materials = tcr.getMaterials()
+        for (Material mate : materials) {
+            if (mate.getLastModified() > lastModified) {
+                lastModified = mate.getLastModified()
+            }
+        }
+        return lastModified
+    }
+
+    /**
+     *
+     * @param an instance of TSuiteResult
+     * @return LocalDateTime for TSuiteResutl's lastModified property
+     */
+    LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
+        LocalDateTime lastModified = LocalDateTime.MIN
+        List<TCaseResult> tCaseResults = tsr.getTCaseResults()
+        for (TCaseResult tcr : tCaseResults) {
+            if (tcr.getLastModified() > lastModified) {
+                lastModified = tcr.getLastModified()
+            }
+        }
+        return lastModified
+    }
+
 }

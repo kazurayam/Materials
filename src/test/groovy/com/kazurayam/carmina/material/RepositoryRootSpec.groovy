@@ -54,13 +54,13 @@ class RepositoryRootSpec extends Specification {
         tSuiteResults != null
         tSuiteResults.size() > 0
     }
-    
-    def testGetTSuiteResultsSortedByTSuiteTimestampReverseOrder() {
+
+    def testGetSortedTSuiteResults() {
         when:
         RepositoryScanner scanner = new RepositoryScanner(workdir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
+        List<TSuiteResult> tSuiteResults = repoRoot.getSortedTSuiteResults()
         then:
         tSuiteResults.size() > 3
         when:
@@ -73,12 +73,19 @@ class RepositoryRootSpec extends Specification {
         then:
         true
         when:
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(0) : ${tSuiteResults.get(0)}") // TS1 20180530_130604
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(1) : ${tSuiteResults.get(1)}") // TS1 20180530_130419
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(2) : ${tSuiteResults.get(2)}") // TS2 20180612_111256
+        TSuiteName tsn0 = tSuiteResults.get(0).getTSuiteName()
+        TSuiteName tsn1 = tSuiteResults.get(1).getTSuiteName()
+        TSuiteName tsn2 = tSuiteResults.get(2).getTSuiteName()
         LocalDateTime ldt0 = tSuiteResults.get(0).getTSuiteTimestamp().getValue()
         LocalDateTime ldt1 = tSuiteResults.get(1).getTSuiteTimestamp().getValue()
         LocalDateTime ldt2 = tSuiteResults.get(2).getTSuiteTimestamp().getValue()
         then:
-        ldt0 > ldt1
-        ldt1 > ldt2
+        tsn0 <= tsn1  // TS1 == TS1
+        tsn1 <= tsn2  // TS1 <= TS2
+        ldt0 >= ldt1  // 20180530_130604 >= 20180530_130419
     }
 
     def testEquals() {

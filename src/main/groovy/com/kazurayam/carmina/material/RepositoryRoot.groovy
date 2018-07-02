@@ -53,15 +53,20 @@ class RepositoryRoot {
     }
 
     /**
-     * returns the sorted list of TSuiteResults ordered by TSuiteTimestamp in the reverse order
+     * returns the sorted list of TSuiteResults ordered by
+     * (1) TSuiteName in natural order
+     * (2) TSuiteTimestamp in the reverse order
+     *
      * @return
      */
-    List<TSuiteResult> getTSuiteResultsSortedByTSuiteTimestampReverseOrder() {
+    List<TSuiteResult> getSortedTSuiteResults() {
         Comparator<TSuiteResult> comparator = new Comparator<TSuiteResult>() {
             @Override
             public int compare(TSuiteResult o1, TSuiteResult o2) {
                 int v = o1.getTSuiteName().compareTo(o2.getTSuiteName())
-                if (v == 0) {
+                if (v < 0) {
+                    return v // natural order of TSuiteName
+                } else if (v == 0) {
                     LocalDateTime ldt1 = o1.getTSuiteTimestamp().getValue()
                     LocalDateTime ldt2 = o2.getTSuiteTimestamp().getValue()
                     return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
@@ -182,7 +187,7 @@ class RepositoryRoot {
         StringBuilder sb = new StringBuilder()
         sb.append('[')
         def count = 0
-        List<TSuiteResult> tSuiteResultsOrdered = this.getTSuiteResultsSortedByTSuiteTimestampReverseOrder()
+        List<TSuiteResult> tSuiteResultsOrdered = this.getSortedTSuiteResults()
         for (TSuiteResult tSuiteResult : tSuiteResultsOrdered) {
             if (count > 0) { sb.append(',') }
             count += 1
