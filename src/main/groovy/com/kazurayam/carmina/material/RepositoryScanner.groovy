@@ -74,7 +74,9 @@ class RepositoryScanner {
                 new RepositoryVisitor(repoRoot_)
         )
         //
-        repoRoot_.getLatestModifiedTSuiteResult().setLatestModified(true)
+        if (repoRoot_.getLatestModifiedTSuiteResult() != null) {
+            repoRoot_.getLatestModifiedTSuiteResult().setLatestModified(true)
+        }
         //
         logger_.debug("#scan repoRoot_=${JsonOutput.prettyPrint(repoRoot_.toJson())}")
     }
