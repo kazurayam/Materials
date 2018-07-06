@@ -3,8 +3,6 @@ package com.kazurayam.carmina.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.FileType
-
 import spock.lang.Specification
 
 class FileTypeSpec extends Specification {
@@ -15,7 +13,7 @@ class FileTypeSpec extends Specification {
         setup:
         logger_.debug("FileType.PNG.toString():\n${FileType.PNG.toString()}")
         expect:
-        FileType.PNG.toString() == '{"FileType":{"extension":"png","mimeType":"image/png","description":"Portable Network Graphics"}}'
+        FileType.PNG.toString() == '{"FileType":{"extension":"png","mimeTypes":["image/png"]}}'
     }
 
     def testGetExtension() {
@@ -23,9 +21,9 @@ class FileTypeSpec extends Specification {
         FileType.PNG.getExtension() == 'png'
     }
 
-    def testGetMimeType() {
+    def testGetMimeTypes() {
         expect:
-        FileType.PNG.getMimeType() == 'image/png'
+        FileType.PNG.getMimeTypes() == ['image/png']
     }
 
     def testGetByExtension() {
@@ -33,9 +31,12 @@ class FileTypeSpec extends Specification {
         FileType.getByExtension('png') == FileType.PNG
     }
 
-    def testGetByMimeType() {
+    def testGetAllMimeTypes() {
+        setup:
+        def all = FileType.getAllMimeTypes()
+        logger_.debug("#testGetAllMimeTypes all=${all}")
         expect:
-        FileType.getByMimeType('image/png') == FileType.PNG
+        all.contains('text/plain')
     }
 
     // -----------------------------------------------------------------------

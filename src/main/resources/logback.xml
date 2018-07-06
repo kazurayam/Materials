@@ -11,9 +11,11 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.carmina.RepositoryVisitor" level="debug"/>
+    <logger name="com.kazurayam.carmina.material.RepositoryVisitor" level="info"/>
 
-    <logger name="com.kazurayam.carmina.TargetURL" level="info"/>
+    <logger name="com.kazurayam.carmina.material.TargetURL" level="info"/>
+
+    <logger name="com.kazurayam.carmina.util.BrowserSupport" level="info"/>
 
     <logger name="root" level="debug" />
     <!--
