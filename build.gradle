@@ -1,3 +1,7 @@
+plugins {
+    id "com.energizedwork.webdriver-binaries" version "1.4"
+}
+
 group 'kazurayam.com'
 version '0.7.1'
 
@@ -8,6 +12,13 @@ apply plugin: 'jacoco'
 
 apply plugin: 'application'
 mainClassName='com.kazurayam.carmina.RepositoryScanner'
+
+
+
+ext {
+    // The drivers we want to use
+    drivers = ["firefox"]
+}
 
 repositories {
     mavenCentral()
@@ -27,6 +38,22 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+
+    testCompile "org.gebish:geb-spock:2.1"
+    testCompile "org.gebish:geb-junit4:2.1"
+}
+
+webdriverBinaries {
+    geckodriver '0.18.0'
+}
+
+drivers.each { driver ->
+    task "${driver}Test"(type: Test) {
+        group JavaBasePlugin.VERIFICATION_GROUP
+        outputs.upToDateWhen { false }  // Always run tests
+        systemProperty "geb.build.reportsDir", reporting.file("geb/$name")
+        systemProperty "geb.env", driver
+    }
 }
 
 sourceCompatibility = '1.8'
