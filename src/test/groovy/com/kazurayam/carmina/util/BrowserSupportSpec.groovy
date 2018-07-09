@@ -10,7 +10,14 @@ import org.slf4j.LoggerFactory
 import spock.lang.Ignore
 import spock.lang.Specification
 
-
+/**
+ * This Spock spec tests the com.kazurayam.carmina.util.BrowserSupport class.
+ * Methods tested include:
+ *
+ * - BrowserSupport#findLastModifiedFileInDirectory(Path)
+ * - BrowserSupport#waitForFileDownloaded(Path, int, int)
+ *
+ */
 class BrowserSupportSpec extends Specification {
 
     static Logger logger_ = LoggerFactory.getLogger(BrowserSupportSpec.class)

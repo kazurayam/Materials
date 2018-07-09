@@ -31,10 +31,10 @@ class FileTypeSpec extends Specification {
         FileType.getByExtension('png') == FileType.PNG
     }
 
-    def testGetAllMimeTypes() {
+    def testGetAllMimeTypesAsString() {
         setup:
-        def all = FileType.getAllMimeTypes()
-        logger_.debug("#testGetAllMimeTypes all=${all}")
+        def all = FileType.getAllMimeTypesAsString()
+        logger_.debug("#testGetAllMimeTypesAsString all=${all}")
         expect:
         all.contains('text/plain')
     }

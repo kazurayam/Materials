@@ -33,7 +33,7 @@ enum FileType {
         'application/zip',
         'application/x-zip-compressed']),
     TGZ  ('tgz',    [
-        'applicati/zlib',
+        'application/zlib',
         'application/gzip']),
     DOC  ('doc',    ['application/msword']),
     PPT  ('ppt',    ['application/vnd.ms-powerpoint']),
@@ -95,13 +95,18 @@ enum FileType {
      * <pre>application/json,application/msexcel,application/pdf,application/vnd-ms-office,application/vnd-xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/x-dos_mx_excel,application/x-excel,application/x-ms-excel,application/x-msexcel,application/x-xls,application/xls,application/xml,image/bmp,image/gif,image/jpeg,image/png,text/plain</pre>
      * @return
      */
-    static String getAllMimeTypes() {
+    static List<String> getAllMimeTypes() {
         Set<String> mimetypeSet = new HashSet<String>()
         for (FileType v : values()) {
             mimetypeSet.addAll(v.getMimeTypes())
         }
         List<String> mimetypeList = new ArrayList(mimetypeSet)
         Collections.sort(mimetypeList)
+        return mimetypeList
+    }
+
+    static String getAllMimeTypesAsString() {
+        List<String> mimetypeList = getAllMimeTypes()
         StringBuilder sb = new StringBuilder()
         int count = 0
         for (String mimetype : mimetypeList) {

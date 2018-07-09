@@ -2,8 +2,8 @@ plugins {
     id "com.energizedwork.webdriver-binaries" version "1.4"
 }
 
-group 'kazurayam.com'
-version '0.7.1'
+project.group 'kazurayam.com'
+project.version '0.7.1'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
@@ -13,11 +13,19 @@ apply plugin: 'jacoco'
 apply plugin: 'application'
 mainClassName='com.kazurayam.carmina.RepositoryScanner'
 
-
-
 ext {
     // The drivers we want to use
-    drivers = ["firefox"]
+    drivers = ["firefox", "chrome", "chromeHeadless"]
+    ext {
+
+        groovyVersion = '2.4.9'
+        logbackVersion = '1.2.3'
+        slf4jVersion = '1.7.2'
+        gebVersion = '2.1'
+        seleniumVersion = '3.13.0'
+        chromeDriverVersion = '2.40'
+        geckoDriverVersion = '0.21.0'
+    }
 }
 
 repositories {
@@ -25,29 +33,35 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.9'
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
-    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: "${logbackVersion}"
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 
-    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.13.0'
 
-    testCompile "org.gebish:geb-spock:2.1"
-    testCompile "org.gebish:geb-junit4:2.1"
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: "${seleniumVersion}"
+
+    testCompile "org.gebish:geb-spock:${gebVersion}"
+    testCompile "org.gebish:geb-junit4:${gebVersion}"
+
+    // Drivers
+    testCompile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
+    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
 }
 
 webdriverBinaries {
-    geckodriver '0.18.0'
+    geckodriver geckoDriverVersion
+    chromedriver chromeDriverVersion
 }
 
 drivers.each { driver ->
@@ -73,5 +87,26 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/carmina/util/*Spec.class'
+    include '**/carmina/material/FileTypeSpec.class'
+}
+
+// run firefoxTest or run chromeTest
+firefoxTest {
+    include '**/carmina/util/BrowserSupportGebSpec.class'
+}
+
+chromeTest {
+    include '**/carmina/util/BrowserSupportGebSpec.class'
+}
+
+tasks.withType(Test) {
+    maxHeapSize = "1g"
+    jvmArgs '-XX:MaxMetaspaceSize=128m'
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+tasks.withType(GroovyCompile) {
+    groovyOptions.forkOptions.memoryMaximumSize = '256m'
 }

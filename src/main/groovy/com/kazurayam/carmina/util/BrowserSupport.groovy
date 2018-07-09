@@ -14,10 +14,15 @@ class BrowserSupport {
     static Logger logger_ = LoggerFactory.getLogger(BrowserSupport.class)
 
     /**
+     * look at the "Downloads" directory where browser store downloaded files.
+     * repeat identifying the last modified file in the directory with 1000 milli sec interval.
+     * continue monitoring the directory for the requiredStabilityInMillis milli-senconds.
+     * If a file is found which continously identified as the last modified, then return the Path of the file.
+     * the monitoring continues for totalTimeoutInMillis as maximum. If expired null is returned.
      *
      * @param downloadsDirectory
      * @param totalTimeoutInMillis
-     * @return
+     * @return Path of the last modified file
      * @throws IOException
      */
     static Path waitForFileDownloaded(Path downloadsDirectory, int requiredStabilityInMillis, int totalTimeoutInMillis) throws IOException {
@@ -32,20 +37,17 @@ class BrowserSupport {
             Path f = findLastModifiedFileInDirectory(downloadsDirectory)
             FileBeingDownloaded lastModifiedFile = new FileBeingDownloaded(f)
             logger_.debug("#waitForFileDownloaded fbd=${fbd} lastModifiedFile=${lastModifiedFile}")
-            logger_.debug("#waitForFileDownloaded stablePeriodSinceInMillis=${stablePeriodSinceInMillis}" +
-                " stablePeriodUntilInMillis=${stablePeriodUntilInMillis}")
+            logger_.debug("#waitForFileDownloaded stablePeriodSinceInMillis=${stablePeriodSinceInMillis}" + " stablePeriodUntilInMillis=${stablePeriodUntilInMillis}")
             if (fbd == null || fbd != lastModifiedFile) {
-                logger_.debug("#waitForFileDownloaded fbd != lastModifiedFile")
+                //logger_.debug("#waitForFileDownloaded fbd != lastModifiedFile")
                 fbd = lastModifiedFile
                 stablePeriodSinceInMillis = System.currentTimeMillis()
                 stablePeriodUntilInMillis = stablePeriodSinceInMillis
             } else {
-                logger_.debug("#waitForFileDownloaded fbd == lastModifiedFile")
+                //logger_.debug("#waitForFileDownloaded fbd == lastModifiedFile")
                 stablePeriodUntilInMillis = System.currentTimeMillis()
                 stablePeriodInMillis = stablePeriodUntilInMillis - stablePeriodSinceInMillis
-                logger_.debug("#waitForFileDownloaded period=${stablePeriodInMillis} " +
-                    ((stablePeriodInMillis < requiredStabilityInMillis) ? '<' : '>') +
-                    " requiredStabilityInMillis=${requiredStabilityInMillis}")
+                logger_.debug("#waitForFileDownloaded period=${stablePeriodInMillis} " + ((stablePeriodInMillis < requiredStabilityInMillis) ? '<' : '>') + " requiredStabilityInMillis=${requiredStabilityInMillis}")
                 if (stablePeriodInMillis > requiredStabilityInMillis) {
                     return fbd.getPath()
                 }
