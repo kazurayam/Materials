@@ -23,29 +23,42 @@ class BrowserSupportGebSpec extends GebSpec {
 
     // fields
     static Logger logger_ = LoggerFactory.getLogger(BrowserSupportGebSpec.class)
-    static Path downloadsDir_ = Paths.get(System.getProperty('user.home'), 'Downloads')
 
     // fixture methods
-    def setupSpec() {}
+    def setupSpec() {
+        logger_.debug("#setupSpec going to modify browser.driver")
+        browser.config.cacheDriver = false
+        browser.driver = browser.config.driver
+        logger_.debug("#setupSpec modified browser.driver")
+    }
     def setup() {}
     def cleanup() {}
-    def cleanupSpec() {}
+    def cleanupSpec() {
+        logger_.debug("#cleanupSpec going to browser.close()")
+        browser.close()
+        logger_.debug("#cleanupSpec done browser.close()")
+    }
 
     // feature methods
-    @Timeout(32)
+    @Timeout(16)
     def testDownloadCsvFileAndGetItAsAPath() {
 
         when:
         to FIFAWorldCup2018JapanPage
 
-        printFirefoxProfiles('testDownloadCsvFileAndGetItAsAPath')
+        // for debug
+        //printFirefoxProfiles('testDownloadCsvFileAndGetItAsAPath')
 
         then:
         title.contains('Download the Japan FIFA World Cup 2018 fixture as CSV, XLSX and ICS | Fixture Download')
 
         when:
+        logger_.debug("#testDownloadCsvFileAndGetItAsAPath going to click the anchor")
+        //waitFor(20) {
+        //    anchorDownloadCsv.isDisplayed()
+        //}
         anchorDownloadCsv.click()
-        Thread.sleep(3000)
+        logger_.debug("#testDownloadCsvFileAndGetItAsAPath clicked the anchor")
         //Path downloadedFile = BrowserSupport.waitForFileDownloaded(downloadsDir_, 3000, 10000)
 
         then:
@@ -55,7 +68,7 @@ class BrowserSupportGebSpec extends GebSpec {
         true
 
         cleanup:
-        driver.quit()
+        logger_.debug("#testDownloadCsvFileAndGetItAsAPath cleaning up")
     }
 
     private def printFirefoxProfiles(String methodName) {

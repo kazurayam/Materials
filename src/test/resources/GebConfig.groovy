@@ -13,9 +13,23 @@ import org.openqa.selenium.firefox.FirefoxProfile
 import com.kazurayam.carmina.material.FileType
 
 waiting {
-
-        timeout = 2
+    presets {
+        slow {
+            timeout = 15
+            retryInterval = 1
+        }
+        quick {
+            timeout = 1
+        }
+    }
 }
+
+waiting {
+    timeout = 60
+    retryInterval = 0.5
+}
+
+atCheckWaiting = true
 
 environments {
 
@@ -35,7 +49,6 @@ environments {
 
     // run via "./gradlew firefoxTest"
     firefox {
-        atCheckWaiting = 1
         driver = {
             /**
              * see https://stackoverflow.com/questions/36309314/set-firefox-profile-to-download-files-automatically-using-selenium-and-java
@@ -61,44 +74,10 @@ environments {
             profile.setPreference("browser.helperApps.neverAsk.saveToDisk", mimeTypes)
             profile.setPreference("browser.helperApps.neverAsk.openFile", mimeTypes)
             profile.setPreference("browser.download.manager.showWhenStarting", false)
-            //profile.setPreference("pdfjs.disable", true)
+            profile.setPreference("pdfjs.disable", true)
             FirefoxOptions options = new FirefoxOptions()
             options.setProfile(profile)
             new FirefoxDriver(options)
         }
     }
 }
-
-// To run the tests with all briwser just run "./gradlew test"
-
-baseUrl = "http://gebish.org"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
