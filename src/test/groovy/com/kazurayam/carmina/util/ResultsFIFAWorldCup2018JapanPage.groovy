@@ -2,7 +2,7 @@ package com.kazurayam.carmina.util
 
 import geb.Page
 
-class FIFAWorldCup2018JapanPage extends Page {
+class ResultsFIFAWorldCup2018JapanPage extends Page {
 
     static url = 'https://fixturedownload.com/results/fifa-world-cup-2018/japan'
 

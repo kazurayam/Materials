@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.firefox.FirefoxProfile
+import org.openqa.selenium.remote.CapabilityType
+import org.openqa.selenium.remote.DesiredCapabilities
 
 import com.kazurayam.carmina.material.FileType
 
@@ -35,7 +37,24 @@ environments {
 
     // run via "./gradlew chromeTest"
     chrome {
-        driver = { new ChromeDriver() }
+        //driver = { new ChromeDriver() }
+        driver = {
+            Map<String, Object> chromePreferences = new HashMap<>()
+            // Below two preference settings will disable popup dialog when download file
+            chromePreferences.put('profile.default_content_settings.popups', 0)
+            chromePreferences.put('download.prompt_for_download', false)
+            // set directory to save files
+            Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
+            chromePreferences.put('download.default_directory', downloads.toString())
+            //
+            ChromeOptions chromeOptions = new ChromeOptions()
+            chromeOptions.setExperimentalOption('prefs', chromePreferences)
+            //
+            DesiredCapabilities cap = DesiredCapabilities.chrome()
+            cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true)
+            cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions)
+            new ChromeDriver(cap)
+        }
     }
 
     // run via "./gradlew chromeHeadlessTest"
@@ -62,6 +81,7 @@ environments {
              * - browser.helperApps.neverAsk.saveToDisk :
              *
              */
+
             FirefoxProfile profile = new FirefoxProfile()
             // set location to store files after downloading
             profile.setPreference("browser.download.useDownloadDir", true)

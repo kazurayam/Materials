@@ -26,49 +26,45 @@ class BrowserSupportGebSpec extends GebSpec {
 
     // fixture methods
     def setupSpec() {
+        /*
         logger_.debug("#setupSpec going to modify browser.driver")
         browser.config.cacheDriver = false
         browser.driver = browser.config.driver
         logger_.debug("#setupSpec modified browser.driver")
+        */
     }
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {
+        /*
         logger_.debug("#cleanupSpec going to browser.close()")
-        browser.close()
+        browser.close()   # close the browser leaving the driver instance still running
         logger_.debug("#cleanupSpec done browser.close()")
+        */
     }
 
     // feature methods
-    @Timeout(16)
+    @Timeout(32)
     def testDownloadCsvFileAndGetItAsAPath() {
 
         when:
-        to FIFAWorldCup2018JapanPage
-
         // for debug
         //printFirefoxProfiles('testDownloadCsvFileAndGetItAsAPath')
-
-        then:
-        title.contains('Download the Japan FIFA World Cup 2018 fixture as CSV, XLSX and ICS | Fixture Download')
-
-        when:
-        logger_.debug("#testDownloadCsvFileAndGetItAsAPath going to click the anchor")
-        //waitFor(20) {
-        //    anchorDownloadCsv.isDisplayed()
-        //}
+        to ResultsFIFAWorldCup2018JapanPage
+        waitFor(10) {
+            anchorDownloadCsv
+        }
+        logger_.debug("#testDownloadCsvFileAndGetItAsAPath before anchorDownloadCsv.click")
         anchorDownloadCsv.click()
-        logger_.debug("#testDownloadCsvFileAndGetItAsAPath clicked the anchor")
+        logger_.debug("#testDownloadCsvFileAndGetItAsAPath after anchorDownloadCsv.click")
+
         //Path downloadedFile = BrowserSupport.waitForFileDownloaded(downloadsDir_, 3000, 10000)
 
         then:
+        at DownloadCsvFIFAWorldCup2018JapanPage
         //downloadedFile != null
         //logger_.debug("#download CSV file and get its Path downloadedFile=${downloadedFile.toString()}")
         //Files.exists(downloadedFile)
-        true
-
-        cleanup:
-        logger_.debug("#testDownloadCsvFileAndGetItAsAPath cleaning up")
     }
 
     private def printFirefoxProfiles(String methodName) {

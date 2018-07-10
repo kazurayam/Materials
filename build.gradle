@@ -23,8 +23,8 @@ ext {
         slf4jVersion = '1.7.2'
         gebVersion = '2.1'
         seleniumVersion = '3.13.0'
-        chromeDriverVersion = '2.40'
-        geckoDriverVersion = '0.21.0'
+        chromeDriverVersion = '2.40'   // 2.35.528161 in Katalon Studio 5.4.2
+        geckoDriverVersion = '0.21.0'  // 0.19.0 in Katalon Studio 5.4.2
     }
 }
 
