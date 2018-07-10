@@ -5,13 +5,14 @@ enum FileType {
     TXT  ('txt',    ['text/plain']),
     CSV  ('csv',    [
         'text/csv',
-        'text/plain',
-        'application/octet-stream']),
+        'text/plain']),
+    BIN  ('bin',    ['application/octet-stream']),
     BMP  ('bmp',    ['image/bmp']),
     GIF  ('gif',    ['image/gif']),
     JPG  ('jpg',    ['image/jpeg']),
     JPEG ('jpeg',   ['image/jpeg']),
     PNG  ('png' ,   ['image/png']),
+    SVG  ('.svg',   ['image/svg+xml']),
     JSON ('json',   ['application/json']),
     PDF  ('pdf',    ['application/pdf']),
     XLS  ('xls',    [
@@ -32,6 +33,7 @@ enum FileType {
     XML  ('xml',    ['application/xml']),
     POM  ('pom',    ['application/xml']),
     JAR  ('jar',    ['application/java-archive']),
+    TAR  ('tar',    ['application/x-tar']),
     ZIP  ('zip',    [
         'application/zip',
         'application/x-zip-compressed']),
