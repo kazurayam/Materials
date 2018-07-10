@@ -46,6 +46,9 @@ environments {
             // set directory to save files
             Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
             chromePreferences.put('download.default_directory', downloads.toString())
+            // disable flash and pdf viewer
+            chromePreferences.put('plugins.plugins_disabled', 
+                ['Adobe Flash Player', 'Chrome PDF Viewer'])
             //
             ChromeOptions chromeOptions = new ChromeOptions()
             chromeOptions.setExperimentalOption('prefs', chromePreferences)
