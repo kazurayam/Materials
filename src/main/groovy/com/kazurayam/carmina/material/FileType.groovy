@@ -3,7 +3,10 @@ package com.kazurayam.carmina.material
 enum FileType {
 
     TXT  ('txt',    ['text/plain']),
-    CSV  ('csv',    ['text/plain']),
+    CSV  ('csv',    [
+        'text/csv',
+        'text/plain',
+        'application/octet-stream']),
     BMP  ('bmp',    ['image/bmp']),
     GIF  ('gif',    ['image/gif']),
     JPG  ('jpg',    ['image/jpeg']),

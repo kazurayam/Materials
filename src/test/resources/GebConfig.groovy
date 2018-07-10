@@ -1,6 +1,9 @@
 /**
  * This is the Geb configuration file
  */
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
@@ -49,7 +52,9 @@ environments {
             FirefoxProfile profile = new FirefoxProfile()
             // set location to store files after downloading
             profile.setPreference("browser.download.useDownloadDir", true)
-            profile.setPreference("browser.download.folderList", 1)
+            profile.setPreference("browser.download.folderList", 2)
+            Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
+            profile.setPreference("browser.download.dir", downloads.toString())
             // set preference not to show file download donfirmation dialog
             def mimeTypes = FileType.getAllMimeTypesAsString()
             //println "mimeTypes=${mimeTypes}"

@@ -1,8 +1,12 @@
 package com.kazurayam.carmina.util
 
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.openqa.selenium.Capabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -32,8 +36,9 @@ class BrowserSupportGebSpec extends GebSpec {
     def testDownloadCsvFileAndGetItAsAPath() {
 
         when:
-        logger_.debug("#testDownloadCsvFileAndGetItAsAPath")
         to FIFAWorldCup2018JapanPage
+
+        printFirefoxProfiles('testDownloadCsvFileAndGetItAsAPath')
 
         then:
         title.contains('Download the Japan FIFA World Cup 2018 fixture as CSV, XLSX and ICS | Fixture Download')
@@ -53,4 +58,16 @@ class BrowserSupportGebSpec extends GebSpec {
         driver.quit()
     }
 
+    private def printFirefoxProfiles(String methodName) {
+        Capabilities capabilities = ((RemoteWebDriver)driver).getCapabilities()
+        String preferencePath = (String)capabilities.getCapability("moz:profile") + "\\user.js"
+        Path preference = Paths.get(preferencePath)
+        assert Files.exists(preference)
+        List<String> lines = Files.readAllLines(preference, StandardCharsets.UTF_8)
+        def count = 0
+        for (String line : lines) {
+            count += 1
+            logger_.debug("#${methodName} FirefoxProfile:${count} ${line}")
+        }
+    }
 }
