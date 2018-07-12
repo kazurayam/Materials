@@ -3,7 +3,6 @@ package com.kazurayam.carmina.material
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.Instant
-import java.time.ZoneOffset
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,8 +15,6 @@ import java.time.ZoneOffset
 class Material implements Comparable<Material> {
 
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
-
-    protected static final String MAGIC_DELIMITER = '§'
 
     //private TargetURL parent_
     private TCaseResult parent_
@@ -134,82 +131,6 @@ class Material implements Comparable<Material> {
 
 
     // ---------------- helpers -----------------------------------------------
-    /**
-     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.§atoz.png</pre>' is given
-     * as fileName argument, then returns com.kazurayam.carmina.FileType.PNG
-     *
-     * @param fileName
-     * @return
-     */
-    static FileType parseFileNameForFileType(String fileName) {
-        String[] arr = fileName.split('\\.')
-        if (arr.length < 2) {
-            return FileType.NULL
-        } else {
-            String candidate = arr[arr.length - 1]
-            FileType ft = FileType.getByExtension(candidate)
-        }
-    }
-
-    /**
-     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>' is given
-     * as fileName argument, then returns an instance of com.kazurayam.carmina.Suffix of '<pre>atoz</pre>'
-     *
-     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.png</pre>' is given
-     * as fileName argument, then returns com.kazurayam.carmina.Suffix.NULL
-     *
-     * @param fileName
-     * @return
-     */
-    static Suffix parseFileNameForSuffix(String fileName) {
-        FileType ft = parseFileNameForFileType(fileName)
-        if (ft != FileType.NULL) {
-            String str = fileName.substring(0, fileName.lastIndexOf('.'))
-            String[] arr = str.split(Material.MAGIC_DELIMITER)
-            if (arr.length < 2) {
-                return Suffix.NULL
-            }
-            if (arr.length > 3) {
-                logger_.warn("#parseFileNameForSuffix ${fileName} contains 2 or " +
-                    "more ${Material.MAGIC_DELIMITER} character. " +
-                    "Valid but unexpected.")
-            }
-            return new Suffix(arr[arr.length - 1])
-        } else {
-            return Suffix.NULL
-        }
-    }
-
-    /**
-     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>' is given
-     * as fileName argument, then returns an instance of java.net.URL of
-     * '<pre>http://demoauto.katalon.com</pre>'
-     *
-     * @param fileName
-     * @return
-     */
-    static URL parseFileNameForURL(String fileName) {
-        FileType ft = parseFileNameForFileType(fileName)
-        if (ft != FileType.NULL) {
-            Suffix suffix = parseFileNameForSuffix(fileName)
-            String urlstr
-            if (suffix != Suffix.NULL) {
-                urlstr = fileName.substring(0, fileName.lastIndexOf(Material.MAGIC_DELIMITER))
-            } else {
-                urlstr = fileName.substring(0, fileName.lastIndexOf('.'))
-            }
-            String decoded = URLDecoder.decode(urlstr, 'UTF-8')
-            try {
-                URL url = new URL(decoded)
-                return url
-            } catch (MalformedURLException e) {
-                logger_.warn("#parseFileNameForURL unknown protocol in the var decoded='${decoded}'")
-                return null
-            }
-        } else {
-            return null
-        }
-    }
 
     /**
      * Determines the file name of a Material. The file name is in the format:
@@ -237,7 +158,7 @@ class Material implements Comparable<Material> {
         String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
         String encodedSuffix = URLEncoder.encode(suffix.toString(), 'UTF-8')
         if (suffix != Suffix.NULL) {
-            return "${encodedUrl}${Material.MAGIC_DELIMITER}${encodedSuffix}.${fileType.getExtension()}"
+            return "${encodedUrl}${MaterialFileNameFormatter.MAGIC_DELIMITER}${encodedSuffix}.${fileType.getExtension()}"
         } else {
             return "${encodedUrl}.${fileType.getExtension()}"
         }
@@ -247,7 +168,7 @@ class Material implements Comparable<Material> {
         String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
         String doubleEncodedSuffix = URLEncoder.encode(URLEncoder.encode(suffix.toString(), 'UTF-8'), 'UTF-8')
         if (suffix != Suffix.NULL) {
-            return "${doubleEncodedUrl}${Material.MAGIC_DELIMITER}${doubleEncodedSuffix}.${fileType.getExtension()}"
+            return "${doubleEncodedUrl}${MaterialFileNameFormatter.MAGIC_DELIMITER}${doubleEncodedSuffix}.${fileType.getExtension()}"
         } else {
             return "${doubleEncodedUrl}.${fileType.getExtension()}"
         }
@@ -386,7 +307,7 @@ class Material implements Comparable<Material> {
         sb.append(urlStr)
         if (suffix_ != Suffix.NULL) {
             sb.append(' ')
-            sb.append(MAGIC_DELIMITER)
+            sb.append(MaterialFileNameFormatter.MAGIC_DELIMITER)
             sb.append(suffix_.getValue())
         }
         if (!urlStr.endsWith(fileType_.getExtension())) {

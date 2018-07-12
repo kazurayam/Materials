@@ -141,12 +141,12 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 logger_.debug("#visitFile ${file} in TESTCASE")
                 //logger.debug("#visitFile tCaseResult=${tCaseResult.toString()}")
                 String fileName = file.getFileName()
-                FileType fileType = Material.parseFileNameForFileType(fileName)
+                FileType fileType = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
                 if (fileType != FileType.NULL) {
-                    URL url = Material.parseFileNameForURL(fileName)
+                    URL url = MaterialFileNameFormatter.parseFileNameForURL(fileName)
                     //logger.debug("#visitFile url=${url.toString()}")
                     if (url != null) {
-                        Suffix suffix = Material.parseFileNameForSuffix(fileName)
+                        Suffix suffix = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
                         Material material = new Material(url, suffix, fileType).setParent(tCaseResult_)
                         material.setLastModified(file.toFile().lastModified())
                         tCaseResult_.addMaterial(material)
