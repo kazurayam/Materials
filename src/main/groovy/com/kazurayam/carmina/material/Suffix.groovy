@@ -3,43 +3,44 @@ package com.kazurayam.carmina.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+/**
+ * Given the following files in a directory:
+ *
+ * - smilechart (1).xls
+ * - smilechart (2).xls
+ * - smilechart(1).xls
+ * - smilechart(2).xls
+ * - smilechart(3).xls
+ * - smilechart.xls
+ *
+ * We call the portions of file names (1) and (2) as 'Suffix'.
+ *
+ * Suffix is an additive to the original file name 'smilechart.xls'
+ * to make the name unique in the directory
+ * so that the a sibling file can be saved in the directory.
+ *
+ */
 class Suffix implements Comparable<Suffix> {
 
     static Logger logger_ = LoggerFactory.getLogger(Suffix.class)
 
-    static Suffix NULL = new Suffix('')
+    static Suffix NULL = new Suffix(0)
 
-    private String value_
+    private int value_ = 0
 
     /**
-     * The following characters will be stripped out of the value
-     *
-     *   /  (a solidus character)
-     *   \  (a reverse solidus character)
-     *   §  (a section character)
-     *   .  (a dot character)
      *
      * @param value
      */
-    Suffix(String value) {
-        value_ = value
-        value_ = stripChars(value_, '/')
-        value_ = stripChars(value_, '\\')
-        value_ = stripChars(value_, Material.MAGIC_DELIMITER)
-        value_ = stripChars(value_, '.')
-    }
-
-    private String stripChars(String source, String ch) {
-        if (source.contains(ch)) {
-            logger_.warn("Suffix:'${source}' contained one or more '${ch}' character(s) which were stripped")
-            return source.replace(ch, '')
-        } else {
-            return source
+    Suffix(int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("value should be greater than or equal to 0")
         }
+        value_ = value
     }
 
-    String getValue() {
-        return this.value_
+    int getValue() {
+        return value_
     }
 
     @Override
@@ -62,10 +63,25 @@ class Suffix implements Comparable<Suffix> {
 
     @Override
     String toString() {
-        return this.value_
+        StringBuilder sb = new StringBuilder()
+        if (value_ == 0) {
+            sb.append('')
+        } else {
+            sb.append('(')
+            sb.append(value_)
+            sb.append(')')
+        }
+        return sb.toString()
     }
 
     String toJson() {
-        return this.value_
+        StringBuilder sb = new StringBuilder()
+        sb.append('{')
+        sb.append('"Suffix":')
+        sb.append('"')
+        sb.append(this.toString())
+        sb.append('"')
+        sb.append('}')
+        return sb.toString()
     }
 }

@@ -3,18 +3,16 @@ package com.kazurayam.carmina.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.Suffix
-
-import spock.lang.Ignore
 import spock.lang.Specification
+
 
 //@Ignore
 class SuffixSpec extends Specification {
-    
+
     static Logger logger_ = LoggerFactory.getLogger(SuffixSpec.class)
 
     // fields
-    
+
     // fixture methods
     def setupSpec() {}
     def setup() {}
@@ -24,50 +22,36 @@ class SuffixSpec extends Specification {
     // feature methods
     def testUsualCase() {
         when:
-        Suffix suffix = new Suffix("abc")
+        Suffix suffix = new Suffix(1)
         then:
-        suffix.getValue() == 'abc'
-    }
-    
-    def testCaseWithSection() {
-        when:
-        Suffix suffix = new Suffix("§A")
-        then:
-        suffix.getValue() == 'A'
-    }
-    
-    def testCaseWithSlash() {
-        when:
-        Suffix suffix = new Suffix("a/b")
-        then:
-        suffix.getValue() == 'ab'
-    }
-    
-    def testCaseWithBackSlash() {
-        when:
-        Suffix suffix = new Suffix("x\\y")
-        then:
-        suffix.getValue() == 'xy'
+        suffix.getValue() == 1
+        suffix.toString() == '(1)'
     }
 
-    def testCaseWithBackDot() {
+    def testNullObject() {
         when:
-        Suffix suffix = new Suffix("x.y")
+        Suffix suffix = Suffix.NULL
         then:
-        suffix.getValue() == 'xy'
-    }
-    
-    def testCaseWithNihongo() {
-        when:
-        Suffix suffix = new Suffix("あ")
-        then:
-        suffix.getValue() == 'あ'
+        suffix.getValue() == 0
+        suffix.toString() == ''
     }
 
-    
-    @Ignore
-    def testIgnoring() {}
+    def testIllegalArgument_minusInt() {
+        when:
+        Suffix suffix = new Suffix(-1)
 
-    // helper methods
-    def void anything() {}
+        then:
+        IllegalArgumentException e = thrown()
+        e.cause ==null
+    }
+
+    def testIllegalArugment_StringArgument() {
+        when:
+        Suffix suffix = new Suffix('abc')
+
+        then:
+        groovy.lang.GroovyRuntimeException e = thrown()
+        e.cause ==null
+    }
+
 }

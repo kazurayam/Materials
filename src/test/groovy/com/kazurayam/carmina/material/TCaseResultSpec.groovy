@@ -6,17 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.FileType
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.Material
-import com.kazurayam.carmina.material.RepositoryScanner
-import com.kazurayam.carmina.material.Suffix
-import com.kazurayam.carmina.material.TCaseName
-import com.kazurayam.carmina.material.TCaseResult
-import com.kazurayam.carmina.material.TSuiteName
-import com.kazurayam.carmina.material.TSuiteResult
-import com.kazurayam.carmina.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -115,6 +104,10 @@ class TCaseResultSpec extends Specification {
         List<Material> materials = tcr.getMaterials()
         then:
         materials.size() == 2
+    }
+
+    def testAllocateNewSuffix() {
+
     }
 
     def testToJson() {

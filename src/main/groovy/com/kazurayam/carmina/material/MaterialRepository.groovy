@@ -37,5 +37,13 @@ interface MaterialRepository {
     Path resolveMaterial(String testCaseId, String url, FileType fileType)
     Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)
 
+    Path resolveScreenshotMaterialPath(String testCaseId, String url)
+
+    /*
+    Path resolveDownloadedMaterialPath(String testCaseId, Path downloadsDir, String fileName)
+    Path resolveDownloadedMaterialPath(String testCaseId, Path downloadsDir)
+    Path resolveDownloadedMaterialPath(String testCaseId)
+     */
+
     Path makeIndex()
 }

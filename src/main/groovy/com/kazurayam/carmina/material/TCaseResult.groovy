@@ -101,6 +101,9 @@ class TCaseResult implements Comparable<TCaseResult> {
     }
 
     // -------------------------- helpers -------------------------------------
+    Suffix allocateNewSuffix(URL url, FileType fileType) {
+        throw new UnsupportedOperationException("todo")
+    }
 
     // ------------------ overriding Object properties ------------------------
     @Override

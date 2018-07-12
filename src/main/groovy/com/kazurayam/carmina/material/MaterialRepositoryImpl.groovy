@@ -172,7 +172,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     Path resolveMaterial(TCaseName tCaseName, URL url, Suffix suffix, FileType fileType) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
-            logger_.error("tSuiteResult is null")
+            throw new IllegalStateException("tSuiteResult is null")
         }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
@@ -185,6 +185,35 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             // Here we create the parent directory for the material
             Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         }
+        return material.getMaterialFilePath()
+    }
+
+
+    /**
+     *
+     */
+    Path resolveScreenshotMaterialPath(String testCaseName, String url) {
+        return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(url))
+    }
+
+    Path resolveScreenshotMaterialPath(TCaseName tCaseName, URL url) {
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
+        if (tSuiteResult == null) {
+            throw new IllegalStateException("tSuiteResult is null")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        Material material = tCaseResult.getMaterial(url, Suffix.NULL, FileType.PNG)
+        if (material == 0) {
+            material = new Material(url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
+        } else {
+            Suffix newSuffix = tCaseResult.allocateNewSuffix(url, FileType.PNG)
+            material = new Material(url, newSuffix, FileType.PNG).setParent(tCaseResult)
+        }
+        Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         return material.getMaterialFilePath()
     }
 
