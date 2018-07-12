@@ -47,7 +47,7 @@ environments {
             Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
             chromePreferences.put('download.default_directory', downloads.toString())
             // disable flash and pdf viewer
-            chromePreferences.put('plugins.plugins_disabled', 
+            chromePreferences.put('plugins.plugins_disabled',
                 ['Adobe Flash Player', 'Chrome PDF Viewer'])
             //
             ChromeOptions chromeOptions = new ChromeOptions()
@@ -93,10 +93,10 @@ environments {
             profile.setPreference("browser.download.dir", downloads.toString())
             // set preference not to show file download donfirmation dialog
             def mimeTypes = FileType.getAllMimeTypesAsString()
-            //println "mimeTypes=${mimeTypes}"
+            println "mimeTypes=${mimeTypes}"
             profile.setPreference("browser.helperApps.neverAsk.saveToDisk", mimeTypes)
             profile.setPreference("browser.helperApps.neverAsk.openFile", mimeTypes)
-            profile.setPreference("browser.download.manager.showWhenStarting", false)
+            // profile.setPreference("browser.download.manager.showWhenStarting", false) // you can not modify this particular profile any more
             profile.setPreference("pdfjs.disable", true)
             FirefoxOptions options = new FirefoxOptions()
             options.setProfile(profile)

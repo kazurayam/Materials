@@ -6,7 +6,6 @@ enum FileType {
     CSV  ('csv',    [
         'text/csv',
         'text/plain']),
-    BIN  ('bin',    ['application/octet-stream']),
     BMP  ('bmp',    ['image/bmp']),
     GIF  ('gif',    ['image/gif']),
     JPG  ('jpg',    ['image/jpeg']),
@@ -25,7 +24,8 @@ enum FileType {
         'application/xls',
         'application/x-xls',
         'application/vnd-ms-office',
-        'application/vnd-xls']),
+        'application/vnd-xls',
+        'application/octet-stream']),
     XLSM ('xlsm',   ['application/vnd.ms-excel']),
     XLSX ('xlsx',   [
         'application/vnd.ms-excel',

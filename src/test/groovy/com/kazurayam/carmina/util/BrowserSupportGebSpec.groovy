@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import org.openqa.selenium.Capabilities
-import org.openqa.selenium.Keys
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import geb.spock.GebSpec
+import spock.lang.Ignore
 import spock.lang.Timeout
 
 /**
@@ -26,50 +26,51 @@ class BrowserSupportGebSpec extends GebSpec {
 
     // fields
     static Logger logger_ = LoggerFactory.getLogger(BrowserSupportGebSpec.class)
+    static Path downloadsDir_ = Paths.get(System.getProperty('user.home'), 'Downloads')
 
     // fixture methods
-    def setupSpec() {
-        /*
-        logger_.debug("#setupSpec going to modify browser.driver")
-        browser.config.cacheDriver = false
-        browser.driver = browser.config.driver
-        logger_.debug("#setupSpec modified browser.driver")
-        */
-    }
+    def setupSpec() {}
     def setup() {}
     def cleanup() {}
-    def cleanupSpec() {
-        /*
-        logger_.debug("#cleanupSpec going to browser.close()")
-        browser.close()   # close the browser leaving the driver instance still running
-        logger_.debug("#cleanupSpec done browser.close()")
-        */
-    }
+    def cleanupSpec() {}
 
     // feature methods
-    @Timeout(32)
-    def testDownloadCsvFileAndGetItAsAPath() {
-
+    def testDownloadXls_SmileyChart() {
         when:
+        browser.driver.manage().window().maximize()
+        to SpreadsheetComSmileyChartPage
+        waitFor(10) {
+            anchorDownloadXls
+        }
+        anchorDownloadXls.click()
+        Thread.sleep(1000)
+        Path xlsFile = downloadsDir_.resolve('smilechart.xls')
+
+        then:
+        Files.exists(xlsFile)
+    }
+
+    @Ignore
+    @Timeout(32)
+    def testDownloadCsvFileAndGetItAsAPath_FIFA() {
+        when:
+        browser.driver.manage().window().maximize()
         // for debug
         //printFirefoxProfiles('testDownloadCsvFileAndGetItAsAPath')
-        to ResultsFIFAWorldCup2018JapanPage
-        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath before waitFor anchorDownloadCsv")
+        to FIFAWorldCup2018ResultsPage
+        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath_FIFA before waitFor anchorDownloadCsv")
         waitFor(10) {
             anchorDownloadCsv
         }
-        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath before anchorDownloadCsv.click")
-
-        anchorDownloadCsv.sendKeys(Keys.chord(Keys.ENTER))
+        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath_FIFA before anchorDownloadCsv.click")
+        anchorDownloadCsv.click()
+        //anchorDownloadCsv.sendKeys(Keys.chord(Keys.ENTER))
         // anchorDownloadCsv.click() is problematic. Invoking click() gets stuck in there and does not continue the execution till the timeout.
         // see https://stackoverflow.com/questions/46939451/timeout-when-using-click-webdriver-selenium-function-python
-
-        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath after anchorDownloadCsv.click")
-
+        logger_.debug("${getTimestampOfNow()} #testDownloadCsvFileAndGetItAsAPath_FIFA after anchorDownloadCsv.click")
         //Path downloadedFile = BrowserSupport.waitForFileDownloaded(downloadsDir_, 3000, 10000)
-
         then:
-        at DownloadCsvFIFAWorldCup2018JapanPage
+        at FIFAWorldCup2018DownloadCsvPage
         //downloadedFile != null
         //logger_.debug("#download CSV file and get its Path downloadedFile=${downloadedFile.toString()}")
         //Files.exists(downloadedFile)
