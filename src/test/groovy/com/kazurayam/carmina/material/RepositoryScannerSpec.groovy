@@ -52,7 +52,7 @@ class RepositoryScannerSpec extends Specification {
         logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 6 // _/_, TS1/20180530_130419, TS1/20180530_130604, TS2/20180612_111256, TS3/20180627_140853, §A/20180616_170941
+        tSuiteResults.size() == 7 // _, §A, TS1, TS2, TS3, TS4
 
         //
         when:
@@ -87,7 +87,7 @@ class RepositoryScannerSpec extends Specification {
         Material mate0 = materials[0]
         String p0 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
             '/testScan/TS1/20180530_130419' +
-            '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+            '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
         mate0.getParent() == tCaseResult
         mate0.getMaterialFilePath().toString().replace('\\', '/') == p0
@@ -98,7 +98,7 @@ class RepositoryScannerSpec extends Specification {
         Material mate1 = materials[1]
         String p1 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
                 '/testScan/TS1/20180530_130419' +
-                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
+                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mate1.getParent() == tCaseResult
         mate1.getMaterialFilePath().toString().replace('\\', '/') == p1

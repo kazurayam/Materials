@@ -143,16 +143,16 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 String fileName = file.getFileName()
                 FileType fileType = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
                 if (fileType != FileType.NULL) {
+                    Suffix suffix = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
                     URL url = MaterialFileNameFormatter.parseFileNameForURL(fileName)
-                    //logger.debug("#visitFile url=${url.toString()}")
+                    Material material = null
                     if (url != null) {
-                        Suffix suffix = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
-                        Material material = new Material(url, suffix, fileType).setParent(tCaseResult_)
-                        material.setLastModified(file.toFile().lastModified())
-                        tCaseResult_.addMaterial(material)
+                        material = new Material(url, suffix, fileType).setParent(tCaseResult_)
                     } else {
-                        logger_.debug("#visitFile unable to parse ${file} into a URL")
+                        material = new Material(file.getFileName().toString()).setParent(tCaseResult_)
                     }
+                    material.setLastModified(file.toFile().lastModified())
+                    tCaseResult_.addMaterial(material)
                 } else {
                     logger_.debug("#visitFile ${file} has no known FileType")
                 }

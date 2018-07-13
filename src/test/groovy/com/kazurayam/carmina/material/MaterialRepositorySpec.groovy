@@ -124,7 +124,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveMaterial_xml() {
         when:
         mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path xml = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', '1', FileType.XML)
+        Path xml = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 1, FileType.XML)
         then:
         xml != null
         xml.toString().contains('TC1')
@@ -146,7 +146,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveMaterial_txt() {
         when:
         mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path txt = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 'x', FileType.TXT)
+        Path txt = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 1, FileType.TXT)
         then:
         txt != null
         txt.toString().contains('TC1')

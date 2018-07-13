@@ -45,7 +45,7 @@ class MaterialSpec extends Specification {
 
     def testSetParent_GetParent() {
         when:
-        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('2'), FileType.PNG)
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
         Material modified = mate.setParent(tcr_)
         then:
         modified.getParent() == tcr_
@@ -54,41 +54,31 @@ class MaterialSpec extends Specification {
 
 
 
-    def testResolveMaterialFileName() {
-        when:
-        String fileName = Material.resolveMaterialFileName(
-            new URL('http://demoaut.katalon.com/'),
-            new Suffix('foo'),
-            FileType.PNG)
-        then:
-        fileName.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F§foo.png')
-    }
-
     def testGetPathRelativeToTSuiteTimestamp() {
         when:
-        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         Path relative = mate.getPathRelativeToTSuiteTimestamp()
         then:
         relative != null
-        relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png'
+        relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
     def testGetHrefRelativeToTSuiteTimestamp() {
         when:
-        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         String href = mate.getHrefRelativeToTSuiteTimestamp()
         then:
         href != null
-        href == 'TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
+        href == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
     def testGetHrefRelativeToRepositoryRoot() {
         when:
-        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG)
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         String href = mate.getHrefRelativeToRepositoryRoot()
         then:
         href != null
-        href == 'TS1/20180530_130419/TC1/http%253A%252F%252Fdemoaut.katalon.com%252F§1.png'
+        href == 'TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
     def testToJson() {
@@ -257,7 +247,7 @@ class MaterialSpec extends Specification {
     def testEquals_differentSuffix() {
         Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
         when:
-        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix("foo"), FileType.PNG)
+        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix(1), FileType.PNG)
         then:
         mate3 != null
         mate1 != mate3
@@ -279,7 +269,7 @@ class MaterialSpec extends Specification {
         then:
         mate1.hashCode() == mate2.hashCode()
         when:
-        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix("foo"), FileType.PNG)
+        Material mate3 = new Material(new URL('https://www.google.com/'), new Suffix(1), FileType.PNG)
         then:
         mate1.hashCode() != mate3.hashCode()
     }
@@ -316,10 +306,10 @@ class MaterialSpec extends Specification {
     def testCompareTo_bySuffix() {
         when:
         Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG)
-        Material mate2 = new Material(new URL('https://www.google.com/'), new Suffix('atoz'), FileType.PNG)
+        Material mate2 = new Material(new URL('https://www.google.com/'), new Suffix(1), FileType.PNG)
         then:
-        mate1.compareTo(mate2) < 0
-        mate2.compareTo(mate1) > 0
+        mate1.compareTo(mate2) > 0
+        mate2.compareTo(mate1) < 0
     }
 
     def testHashCodeWithAncestors() {
@@ -335,7 +325,8 @@ class MaterialSpec extends Specification {
         logger_.debug("#testHashCodeWithAncestors mate1.hashCode()=${mate1.hashCode()}")
         logger_.debug("#testHashCodeWithAncestors mate2.hashCode()=${mate2.hashCode()}")
         then:
-        mate1.hashCode() != mate2.hashCode()
+        // if the fileName is equal then the same hashCode returned
+        mate1.hashCode() == mate2.hashCode()
     }
 
     def testMarkupInModalWindow_PNG() {
@@ -361,7 +352,7 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifier_withSuffix() {
         setup:
-        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('1'), FileType.PNG).setParent(tcr_)
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
         when:
         String title = mate.getIdentifier()
         then:
@@ -384,7 +375,7 @@ class MaterialSpec extends Specification {
 
     def testSetGetLastModified_long() {
         setup:
-        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix('3'), FileType.PNG).setParent(tcr_)
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
         LocalDateTime ldtNow = LocalDateTime.now()
         Instant instantNow = ldtNow.toInstant(ZoneOffset.UTC)
         long longNow = instantNow.toEpochMilli()

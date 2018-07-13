@@ -70,12 +70,12 @@ class MaterialRepositoryImplSpec extends Specification {
         Path p = mri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
-            new Suffix('1'),
+            new Suffix(1),
             FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testResolveMaterial_new() {
@@ -107,12 +107,12 @@ class MaterialRepositoryImplSpec extends Specification {
         Path p = mri.resolveMaterial(
             new TCaseName('TC1'),
             new URL('http://demoaut.katalon.com/'),
-            new Suffix('1'),
+            new Suffix(1),
             FileType.PNG)
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+            "build/tmp/${classShortName_}/testResolveMaterialWithSuffix_new/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
         Files.exists(p.getParent())
     }
 
@@ -136,10 +136,10 @@ class MaterialRepositoryImplSpec extends Specification {
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = mri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        Path p = mri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', 1, FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == "build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        p.toString().replace('\\', '/') == "build/tmp/${classShortName_}/testResolveMaterialFilePathWithSuffix/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testResolvePngFilePathBySuitelessTimeless() {
@@ -149,10 +149,10 @@ class MaterialRepositoryImplSpec extends Specification {
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
-        Path p = mri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', '1', FileType.PNG)
+        Path p = mri.resolveMaterial('TC1', 'http://demoaut.katalon.com/', 1, FileType.PNG)
         then:
         p != null
-        p.toString().replace('\\', '/') == "build/tmp/${classShortName_}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F§1.png"
+        p.toString().replace('\\', '/') == "build/tmp/${classShortName_}/testResolvePngFilePathBySuitelessTimeless/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testToJson() {

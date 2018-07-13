@@ -153,7 +153,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
-    Path resolveMaterial(String testCaseName, String url, String suffix, FileType fileType) {
+    Path resolveMaterial(String testCaseName, String url, int suffix, FileType fileType) {
         return this.resolveMaterial(
                 new TCaseName(testCaseName),
                 new URL(url),

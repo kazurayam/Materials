@@ -1,8 +1,9 @@
 package com.kazurayam.carmina.material
 
 import java.nio.file.Path
-import java.time.LocalDateTime
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,23 +11,25 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
 
-import java.time.ZoneOffset
-
 class Material implements Comparable<Material> {
 
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
 
-    //private TargetURL parent_
     private TCaseResult parent_
     private URL url_
     private Suffix suffix_
     private FileType fileType_
+    private String fileName_
     private LocalDateTime lastModified_
 
     Material(URL url, Suffix suffix, FileType fileType) {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
+    }
+
+    Material(String fileName) {
+        fileName_ = fileName
     }
 
     Material setParent(TCaseResult parent) {
@@ -43,15 +46,39 @@ class Material implements Comparable<Material> {
     }
 
     URL getURL() {
-        return url_
+        if (url_ != null) {
+            return url_
+        } else {
+            return MaterialFileNameFormatter.parseFileNameForURL(fileName_)
+        }
     }
 
     Suffix getSuffix() {
-        return suffix_
+        if (suffix_ != null) {
+            return suffix_
+        } else {
+            return MaterialFileNameFormatter.parseFileNameForSuffix(fileName_)
+        }
     }
 
     FileType getFileType() {
-        return fileType_
+        if (fileType_ != null) {
+            return fileType_
+        } else {
+            return MaterialFileNameFormatter.parseFileNameForFileType(fileName_)
+        }
+    }
+
+    String getFileNameBody() {
+        return MaterialFileNameFormatter.parseFileNameForBody(this.getFileName())
+    }
+
+    String getFileName() {
+        if (fileName_ != null) {
+            return fileName_
+        } else {
+            return MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_)
+        }
     }
 
     //
@@ -80,7 +107,7 @@ class Material implements Comparable<Material> {
      */
     Path getMaterialFilePath() {
         if (parent_ != null) {
-            String fileName = resolveMaterialFileName(url_, suffix_, fileType_)
+            String fileName = fileName_ ?: MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_)
             Path materialPath = parent_.getTCaseDirectory().resolve(fileName).normalize()
             return materialPath
         } else {
@@ -124,7 +151,7 @@ class Material implements Comparable<Material> {
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
                 this.getParent().getTCaseDirectory())
         Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
-                this.resolveEncodedMaterialFilename(url_, suffix_, fileType_))
+                MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_))
         return href.normalize().toString().replace('\\', '/')
     }
 
@@ -132,47 +159,6 @@ class Material implements Comparable<Material> {
 
     // ---------------- helpers -----------------------------------------------
 
-    /**
-     * Determines the file name of a Material. The file name is in the format:
-     *
-     * <pre>&lt;encoded URL string&gt;.&lt;file extension&gt;</pre>
-     *
-     * for example:
-     *
-     * <pre>http:%3A%2F%2Fdemoaut.katalon.com%2F.png</pre>
-     *
-     * or
-     *
-     * <pre>&lt;encoded URL string&gt;§&lt;suffix string&gt;.&lt;file extension&gt;</pre>
-     *
-     * for example:
-     *
-     * <pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>
-     *
-     * @param url
-     * @param suffix
-     * @param fileType
-     * @return
-     */
-    static String resolveMaterialFileName(URL url, Suffix suffix, FileType fileType) {
-        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        String encodedSuffix = URLEncoder.encode(suffix.toString(), 'UTF-8')
-        if (suffix != Suffix.NULL) {
-            return "${encodedUrl}${MaterialFileNameFormatter.MAGIC_DELIMITER}${encodedSuffix}.${fileType.getExtension()}"
-        } else {
-            return "${encodedUrl}.${fileType.getExtension()}"
-        }
-    }
-
-    static String resolveEncodedMaterialFilename(URL url, Suffix suffix, FileType fileType ) {
-        String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
-        String doubleEncodedSuffix = URLEncoder.encode(URLEncoder.encode(suffix.toString(), 'UTF-8'), 'UTF-8')
-        if (suffix != Suffix.NULL) {
-            return "${doubleEncodedUrl}${MaterialFileNameFormatter.MAGIC_DELIMITER}${doubleEncodedSuffix}.${fileType.getExtension()}"
-        } else {
-            return "${doubleEncodedUrl}.${fileType.getExtension()}"
-        }
-    }
 
     // ---------------- overriding java.lang.Object properties --------------------------
     @Override
@@ -187,6 +173,8 @@ class Material implements Comparable<Material> {
 
     @Override
     int hashCode() {
+        return this.getFileName().hashCode()
+        /*
         final int prime = 3
         int result = 1
         if (this.parent_ != null) {
@@ -199,10 +187,13 @@ class Material implements Comparable<Material> {
         result = prime * result + this.suffix_.hashCode()
         result = prime * result + this.fileType_.hashCode()
         return result
+        */
     }
 
     @Override
     int compareTo(Material other) {
+        return this.getFileName().compareTo(other.getFileName())
+        /*
         int v = url_.toString().compareTo(other.getURL().toString())
         if (v < 0) {
             return v
@@ -218,7 +209,7 @@ class Material implements Comparable<Material> {
         } else {
             return v
         }
-
+        */
     }
 
     @Override
@@ -303,16 +294,19 @@ class Material implements Comparable<Material> {
      */
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
-        String urlStr = url_.toString()
-        sb.append(urlStr)
-        if (suffix_ != Suffix.NULL) {
-            sb.append(' ')
-            sb.append(MaterialFileNameFormatter.MAGIC_DELIMITER)
-            sb.append(suffix_.getValue())
-        }
-        if (!urlStr.endsWith(fileType_.getExtension())) {
-            sb.append(' ')
-            sb.append(fileType_.name())
+        if (url_ != null) {
+            String urlStr = url_.toString()
+            sb.append(urlStr)
+            if (suffix_ != Suffix.NULL) {
+                sb.append(' ')
+                sb.append(suffix_.toString())
+            }
+            if (!urlStr.endsWith(fileType_.getExtension())) {
+                sb.append(' ')
+                sb.append(fileType_.name())
+            }
+        } else {
+            sb.append(this.getFileName())
         }
         return sb.toString()
     }

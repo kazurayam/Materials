@@ -6,6 +6,7 @@ import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 import spock.lang.Specification
 
 /**
@@ -28,7 +29,7 @@ class MiscSpec extends Specification {
         //Helpers.copyDirectory(fixture, workdir)
         source_ = workdir_.resolve('source')
         Writer wt = Files.newBufferedWriter(source_)
-        wt.write(MaterialFileNameFormatter.MAGIC_DELIMITER + ' is usable as a part of file name')
+        wt.write("Hello, world")
         wt.flush()
         wt.close()
     }

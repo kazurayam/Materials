@@ -35,7 +35,7 @@ interface MaterialRepository {
     Path getTestCaseDirectory(String testCaseId)
 
     Path resolveMaterial(String testCaseId, String url, FileType fileType)
-    Path resolveMaterial(String testCaseId, String url, String suffix, FileType fileType)
+    Path resolveMaterial(String testCaseId, String url, int suffix, FileType fileType)
 
     Path resolveScreenshotMaterialPath(String testCaseId, String url)
 
