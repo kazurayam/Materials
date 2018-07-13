@@ -146,7 +146,7 @@ class Material implements Comparable<Material> {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
     }
-
+    
     private String getHrefRelativeTo(Path base) {
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
                 this.getParent().getTCaseDirectory())
@@ -155,6 +155,18 @@ class Material implements Comparable<Material> {
         return href.normalize().toString().replace('\\', '/')
     }
 
+    String getEncodedHrefRelativeTo(Path base) {
+        Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
+            this.getParent().getTCaseDirectory())
+        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
+            MaterialFileNameFormatter.resolveEncodedMaterialFileName(url_, suffix_, fileType_))
+        return href.normalize().toString().replace('\\', '/')
+    }
+    
+    String getEncodedHrefRelativeToRepositoryRoot() {
+        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
+        return this.getEncodedHrefRelativeTo(rootDir)
+    }
 
 
     // ---------------- helpers -----------------------------------------------
@@ -174,42 +186,11 @@ class Material implements Comparable<Material> {
     @Override
     int hashCode() {
         return this.getFileName().hashCode()
-        /*
-        final int prime = 3
-        int result = 1
-        if (this.parent_ != null) {
-            if (this.parent_.parent_ != null) {
-                result = prime * result + this.parent_.parent_.hashCode()
-            }
-            result = prime * result + this.parent_.hashCode()
-        }
-        result = prime * result + this.url_.toString().hashCode()
-        result = prime * result + this.suffix_.hashCode()
-        result = prime * result + this.fileType_.hashCode()
-        return result
-        */
     }
 
     @Override
     int compareTo(Material other) {
         return this.getFileName().compareTo(other.getFileName())
-        /*
-        int v = url_.toString().compareTo(other.getURL().toString())
-        if (v < 0) {
-            return v
-        } else if (v == 0) {
-            v = suffix_.compareTo(other.getSuffix())
-            if (v < 0) {
-                return v
-            } else if (v == 0) {
-                return fileType_.compareTo(other.getFileType())
-            } else {
-                return v
-            }
-        } else {
-            return v
-        }
-        */
     }
 
     @Override
@@ -319,7 +300,7 @@ class Material implements Comparable<Material> {
             case FileType.JPG:
             case FileType.JPEG:
             case FileType.PNG:
-                sb.append('        <img src="' + this.getHrefRelativeToRepositoryRoot() +
+                sb.append('        <img src="' + this.getEncodedHrefRelativeToRepositoryRoot() +
                     '" class="img-fluid" alt="material"></img>' + "\n")
                 break
             case FileType.CSV:
@@ -356,10 +337,10 @@ class Material implements Comparable<Material> {
             case FileType.PDF:
                 sb.append('        <div class="embed-responsive embed-responsive-16by9" style="padding-bottom:150%">' + "\n")
                 sb.append('            <object class="embed-responsive-item" data="')
-                sb.append(this.getHrefRelativeToRepositoryRoot())
+                sb.append(this.getEncodedHrefRelativeToRepositoryRoot())
                 sb.append('" type="application/pdf" width="100%" height="100%"></object>' + "\n")
                 sb.append('        </div>' + "\n")
-                sb.append('        <div><a href="' + this.getHrefRelativeToRepositoryRoot() + '">')
+                sb.append('        <div><a href="' + this.getEncodedHrefRelativeToRepositoryRoot() + '">')
                 sb.append(this.getPathRelativeToRepositoryRoot())
                 sb.append('</a></div>')
                 break
@@ -367,7 +348,7 @@ class Material implements Comparable<Material> {
             case FileType.XLSM:
             case FileType.XLSX:
                 sb.append('        <a class="btn btn-primary btn-lg" target="_blank" href="')
-                sb.append(this.getHrefRelativeToRepositoryRoot())
+                sb.append(this.getEncodedHrefRelativeToRepositoryRoot())
                 sb.append('">')
                 sb.append('Download')
                 sb.append('</a>')
