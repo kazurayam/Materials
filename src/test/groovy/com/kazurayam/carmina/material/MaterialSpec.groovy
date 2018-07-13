@@ -116,7 +116,7 @@ class MaterialSpec extends Specification {
         then:
         str.startsWith('<div')
         str.contains('<img')
-        str.contains(mate.getHrefRelativeToRepositoryRoot())
+        str.contains(mate.getEncodedHrefRelativeToRepositoryRoot())
     }
 
     def testEscapeHtml() {
@@ -356,7 +356,7 @@ class MaterialSpec extends Specification {
         when:
         String title = mate.getIdentifier()
         then:
-        title == 'http://demoaut.katalon.com/ §1 PNG'
+        title == 'http://demoaut.katalon.com/ (1) PNG'
     }
 
     def testGetIdentifier_FileTypeOmmited() {
