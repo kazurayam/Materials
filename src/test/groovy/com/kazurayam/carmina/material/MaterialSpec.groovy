@@ -63,6 +63,7 @@ class MaterialSpec extends Specification {
         relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
+    /*
     def testGetHrefRelativeToTSuiteTimestamp() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
@@ -71,6 +72,7 @@ class MaterialSpec extends Specification {
         href != null
         href == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
+     */
 
     def testGetHrefRelativeToRepositoryRoot() {
         when:

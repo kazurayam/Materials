@@ -26,13 +26,14 @@ class Material implements Comparable<Material> {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
+        fileName_ = MaterialFileNameFormatter.format(url, suffix, fileType)
     }
 
     Material(String fileName) {
         fileName_ = fileName
-        //fileType_ = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
-        //suffix_   = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
-        //url_      = MaterialFileNameFormatter.parseFileNameForURL(fileName)
+        fileType_ = MaterialFileNameFormatter.parseFileNameForFileType(fileName)  // FileType.UNSUPPORTED or other
+        suffix_   = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)    // Suffix.NULL or other
+        url_      = MaterialFileNameFormatter.parseFileNameForURL(fileName)       // null or other
     }
 
     Material setParent(TCaseResult parent) {
@@ -49,27 +50,15 @@ class Material implements Comparable<Material> {
     }
 
     URL getURL() {
-        if (url_ != null) {
-            return url_
-        } else {
-            return MaterialFileNameFormatter.parseFileNameForURL(fileName_)
-        }
+        return url_
     }
 
     Suffix getSuffix() {
-        if (suffix_ != null) {
-            return suffix_
-        } else {
-            return MaterialFileNameFormatter.parseFileNameForSuffix(fileName_)
-        }
+        return suffix_
     }
 
     FileType getFileType() {
-        if (fileType_ != null) {
-            return fileType_
-        } else {
-            return MaterialFileNameFormatter.parseFileNameForFileType(fileName_)
-        }
+        return fileType_
     }
 
     String getFileNameBody() {
@@ -77,11 +66,7 @@ class Material implements Comparable<Material> {
     }
 
     String getFileName() {
-        if (fileName_ != null) {
-            return fileName_
-        } else {
-            return MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_)
-        }
+        return fileName_
     }
 
     //
@@ -110,7 +95,7 @@ class Material implements Comparable<Material> {
      */
     Path getMaterialFilePath() {
         if (parent_ != null) {
-            String fileName = fileName_ ?: MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_)
+            String fileName = fileName_ ?: MaterialFileNameFormatter.format(url_, suffix_, fileType_)
             Path materialPath = parent_.getTCaseDirectory().resolve(fileName).normalize()
             return materialPath
         } else {
@@ -139,30 +124,43 @@ class Material implements Comparable<Material> {
     /**
      *
      * @return
-     */
+     *
     String getHrefRelativeToTSuiteTimestamp() {
         Path timestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
         return this.getHrefRelativeTo(timestampDir)
     }
+     */
 
+    //
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
     }
     
     private String getHrefRelativeTo(Path base) {
+        String fileName
+        if (url_ != null) {
+            fileName = MaterialFileNameFormatter.format(url_, suffix_, fileType_)
+        } else {
+            fileName = fileName_
+        }
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
                 this.getParent().getTCaseDirectory())
-        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
-                MaterialFileNameFormatter.resolveMaterialFileName(url_, suffix_, fileType_))
+        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(fileName)
         return href.normalize().toString().replace('\\', '/')
     }
 
+    //
     String getEncodedHrefRelativeTo(Path base) {
+        String encodedFileName
+        if (url_ != null) {
+            encodedFileName = MaterialFileNameFormatter.formatEncoded(url_, suffix_, fileType_)
+        } else {
+            encodedFileName = fileName_
+        }
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
             this.getParent().getTCaseDirectory())
-        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(
-            MaterialFileNameFormatter.resolveEncodedMaterialFileName(url_, suffix_, fileType_))
+        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(encodedFileName)
         return href.normalize().toString().replace('\\', '/')
     }
     

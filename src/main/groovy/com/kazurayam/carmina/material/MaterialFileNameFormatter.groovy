@@ -122,21 +122,29 @@ class MaterialFileNameFormatter {
      * @param fileType
      * @return
      */
-    static String resolveMaterialFileName(URL url, Suffix suffix, FileType fileType) {
-        String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
-        if (suffix != Suffix.NULL) {
-            return "${encodedUrl}${suffix.toString()}.${fileType.getExtension()}"
+    static String format(URL url, Suffix suffix, FileType fileType) {
+        if (url != null) {
+            String encodedUrl = URLEncoder.encode(url.toExternalForm(), 'UTF-8')
+            if (suffix != Suffix.NULL) {
+                return "${encodedUrl}${suffix.toString()}.${fileType.getExtension()}"
+            } else {
+                return "${encodedUrl}.${fileType.getExtension()}"
+            }
         } else {
-            return "${encodedUrl}.${fileType.getExtension()}"
+            return null
         }
     }
 
-    static String resolveEncodedMaterialFileName(URL url, Suffix suffix, FileType fileType ) {
-        String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
-        if (suffix != Suffix.NULL) {
-            return "${doubleEncodedUrl}${suffix.toString()}.${fileType.getExtension()}"
+    static String formatEncoded(URL url, Suffix suffix, FileType fileType ) {
+        if (url != null) {
+            String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
+            if (suffix != Suffix.NULL) {
+                return "${doubleEncodedUrl}${suffix.toString()}.${fileType.getExtension()}"
+            } else {
+                return "${doubleEncodedUrl}.${fileType.getExtension()}"
+            }
         } else {
-            return "${doubleEncodedUrl}.${fileType.getExtension()}"
+            return null
         }
     }
 

@@ -45,6 +45,7 @@ enum FileType {
     DOCX ('docx',   ['application/vnd.openxmlformats-officedocument.wordprocessingml.document']),
     PPTX ('pptx',   ['application/vnd.openxmlformats-officedocument.presentationml.presentation']),
 
+    UNSUPPORTED ('',    ['']),
     NULL ('',       ['']) ;
 
     private final String extension_
@@ -91,7 +92,7 @@ enum FileType {
                 return v
             }
         }
-        return FileType.NULL
+        return FileType.UNSUPPORTED
     }
 
     /**

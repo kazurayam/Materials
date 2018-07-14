@@ -30,7 +30,7 @@ class MaterialFileNameFormatterSpec extends Specification {
         when:
         FileType ft = MaterialFileNameFormatter.parseFileNameForFileType('a.foo')
         then:
-        ft == FileType.NULL
+        ft == FileType.UNSUPPORTED
     }
 
     def testPTN_SUFFIX_withoutLeadingWhiteSpace() {
@@ -158,15 +158,6 @@ class MaterialFileNameFormatterSpec extends Specification {
         url.toString() == new URL('https://www.google.com/').toString()
     }
 
-    @Ignore
-    def testParseFileNameForURL_withWhiteSpace() {
-        when:
-        URL url = MaterialFileNameFormatter.parseFileNameForURL('FIFA World Cup 2018 (1).png')
-        then:
-        url.toString() == new URL('https://www.google.com/').toString()
-    }
-
-    @Ignore
     def testParseFileNameForURL_Malformed() {
         when:
         URL url = MaterialFileNameFormatter.parseFileNameForURL('this_is_unexpected_file_name.png')
@@ -175,9 +166,9 @@ class MaterialFileNameFormatterSpec extends Specification {
     }
 
 
-    def testResolveMaterialFileName() {
+    def testFormat() {
         when:
-        String fileName = MaterialFileNameFormatter.resolveMaterialFileName(
+        String fileName = MaterialFileNameFormatter.format(
             new URL('http://demoaut.katalon.com/'),
             new Suffix(1),
             FileType.PNG)
@@ -185,9 +176,9 @@ class MaterialFileNameFormatterSpec extends Specification {
         fileName.toString().contains('http%3A%2F%2Fdemoaut.katalon.com%2F(1).png')
     }
     
-    def testResolveEncodedMaterialFileName() {
+    def testFormatEncoded() {
         when:
-        String fileName = MaterialFileNameFormatter.resolveEncodedMaterialFileName(
+        String fileName = MaterialFileNameFormatter.formatEncoded(
             new URL('http://demoaut.katalon.com/'),
             new Suffix(1),
             FileType.PNG)
