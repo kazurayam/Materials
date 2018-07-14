@@ -143,14 +143,6 @@ class HelpersSpec extends Specification {
         true
     }
 
-    def testEscapeAsUri() {
-        expect:
-        Helpers.escapeAsUri('/a/b/c.def') == '/a/b/c.def'
-        Helpers.escapeAsUri('a/b/c/') == 'a/b/c/'
-        Helpers.escapeAsUri('/a/b/c (1).def') == '/a/b/c%20(1).def'
-        Helpers.escapeAsUri('/a/http%3A%2F%2Fdemoaut.katalon.com%2F (1).png') ==
-                '/a/http%253A%252F%252Fdemoaut.katalon.com%252F%20(1).png'
-    }
 
     // helper methods
     private boolean someHelper() {

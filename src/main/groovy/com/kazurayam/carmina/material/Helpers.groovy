@@ -175,24 +175,5 @@ final class Helpers {
         return DateTimeFormatter.ofPattern(TSuiteTimestamp.DATE_TIME_PATTERN).format(LocalDateTime.now())
     }
 
-    /**
-     *
-     * @param url
-     * @return
-     */
-    static String escapeAsUri(String str) {
-        String[] array = str.split('/', -1)
-        //logger_.debug("array is ${array}")
-        StringBuilder sb = new StringBuilder()
-        int count = 0
-        for (String s : array) {
-            if (count > 0) {
-                sb.append('/')
-            }
-            count += 1
-            sb.append(URLEncoder.encode(s, 'UTF-8'))
-        }
-        return sb.toString()
-    }
 
 }
