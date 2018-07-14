@@ -30,6 +30,9 @@ class Material implements Comparable<Material> {
 
     Material(String fileName) {
         fileName_ = fileName
+        //fileType_ = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
+        //suffix_   = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
+        //url_      = MaterialFileNameFormatter.parseFileNameForURL(fileName)
     }
 
     Material setParent(TCaseResult parent) {
@@ -178,19 +181,29 @@ class Material implements Comparable<Material> {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        return this.url_.toString() == other.url_.toString() &&
-            this.suffix_ == other.suffix_ &&
-            this.fileType_ == other.fileType_
+        if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
+            return this.getMaterialFilePath() == other.getMaterialFilePath()
+        } else {
+            return this.getFileName() == other.getFileName()
+        }
     }
 
     @Override
     int hashCode() {
-        return this.getFileName().hashCode()
+        if (this.getMaterialFilePath() != null) {
+            return this.getMaterialFilePath().hashCode()
+        } else {
+            return this.getFileName().hashCode()
+        }
     }
 
     @Override
     int compareTo(Material other) {
-        return this.getFileName().compareTo(other.getFileName())
+        if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
+            return this.getMaterialFilePath().compareTo(other.getMaterialFilePath())
+        } else {
+            return this.getFileName().compareTo(other.getFileName())
+        }
     }
 
     @Override

@@ -325,8 +325,8 @@ class MaterialSpec extends Specification {
         logger_.debug("#testHashCodeWithAncestors mate1.hashCode()=${mate1.hashCode()}")
         logger_.debug("#testHashCodeWithAncestors mate2.hashCode()=${mate2.hashCode()}")
         then:
-        // if the fileName is equal then the same hashCode returned
-        mate1.hashCode() == mate2.hashCode()
+        // Path determines the hashCode value.
+        mate1.hashCode() != mate2.hashCode()
     }
 
     def testMarkupInModalWindow_PNG() {

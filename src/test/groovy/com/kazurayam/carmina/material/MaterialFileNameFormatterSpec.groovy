@@ -106,14 +106,14 @@ class MaterialFileNameFormatterSpec extends Specification {
         when:
         String fileNameBody = MaterialFileNameFormatter.parseFileNameForBody('abc def .png')
         then:
-        fileNameBody == 'abc def'
+        fileNameBody == 'abc def '
     }
 
     def testParseFileNameForBody_withSuffix_nonURL() {
         when:
         String fileNameBody = MaterialFileNameFormatter.parseFileNameForBody('abc def (2).png')
         then:
-        fileNameBody == 'abc def'
+        fileNameBody == 'abc def '
     }
 
     def testParseFileNameForBody_withoutSuffix_validURL() {
@@ -134,7 +134,7 @@ class MaterialFileNameFormatterSpec extends Specification {
         when:
         String fileNameBody = MaterialFileNameFormatter.parseFileNameForBody('http%3A%2F%2Fdemoaut.katalon.com%2F (1).png')
         then:
-        fileNameBody == 'http%3A%2F%2Fdemoaut.katalon.com%2F'
+        fileNameBody == 'http%3A%2F%2Fdemoaut.katalon.com%2F '
     }
 
     def testParseFileNameForURL_http() {
@@ -192,6 +192,6 @@ class MaterialFileNameFormatterSpec extends Specification {
             new Suffix(1),
             FileType.PNG)
         then:
-        fileName.toString().contains('http%253A%252F%252Fdemoaut.katalon.com%252F%281%29.png')
+        fileName.toString().contains('http%253A%252F%252Fdemoaut.katalon.com%252F(1).png')
     }
 }

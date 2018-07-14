@@ -59,8 +59,7 @@ class MaterialFileNameFormatter {
      * if 'abc def (1).txt' is given as fileName, then return 'abc def'.
      *
      * - chomp the file name extension '.txt'
-     * - chomp the suffix '(1)'
-     * - trim leading and trailing white spaces
+     * - chomp the suffix. E.g., '(1)'
      *
      * @param fileName
      * @return
@@ -71,9 +70,9 @@ class MaterialFileNameFormatter {
             String str = fileName.substring(0, fileName.lastIndexOf('.'))
             Matcher m = PTN_SUFFIX.matcher(str)
             if (m.matches()) {
-                return m.group(1).trim()
+                return m.group(1)
             } else {
-                return str.trim()
+                return str
             }
         } else {
             return fileName
@@ -81,9 +80,9 @@ class MaterialFileNameFormatter {
     }
 
     /**
-     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F§atoz.png</pre>' is given
+     * When '<pre>http:%3A%2F%2Fdemoaut.katalon.com%2F(1).png</pre>' is given
      * as fileName argument, then returns an instance of java.net.URL of
-     * '<pre>http://demoauto.katalon.com</pre>'
+     * '<pre>http://demoauto.katalon.com/</pre>'
      *
      * @param fileName
      * @return
@@ -134,9 +133,8 @@ class MaterialFileNameFormatter {
 
     static String resolveEncodedMaterialFileName(URL url, Suffix suffix, FileType fileType ) {
         String doubleEncodedUrl = URLEncoder.encode(URLEncoder.encode(url.toExternalForm(), 'UTF-8'), 'UTF-8')
-        String encodedSuffix = URLEncoder.encode(suffix.toString(), 'UTF-8')
         if (suffix != Suffix.NULL) {
-            return "${doubleEncodedUrl}${encodedSuffix}.${fileType.getExtension()}"
+            return "${doubleEncodedUrl}${suffix.toString()}.${fileType.getExtension()}"
         } else {
             return "${doubleEncodedUrl}.${fileType.getExtension()}"
         }
