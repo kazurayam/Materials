@@ -192,8 +192,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     /**
      *
      */
-    Path resolveScreenshotMaterialPath(String testCaseName, String url) {
-        return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(url))
+    @Override
+    Path resolveScreenshotMaterialPath(String testCaseName, String urlStr) {
+        return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(urlStr))
     }
 
     Path resolveScreenshotMaterialPath(TCaseName tCaseName, URL url) {
@@ -206,13 +207,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
+
         Material material = tCaseResult.getMaterial(url, Suffix.NULL, FileType.PNG)
-        if (material == 0) {
+        if (material == null) {
             material = new Material(url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
         } else {
             Suffix newSuffix = tCaseResult.allocateNewSuffix(url, FileType.PNG)
             material = new Material(url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
+
         Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         return material.getMaterialFilePath()
     }

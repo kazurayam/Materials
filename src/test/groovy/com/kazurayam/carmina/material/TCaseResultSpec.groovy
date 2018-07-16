@@ -106,8 +106,14 @@ class TCaseResultSpec extends Specification {
         materials.size() == 2
     }
 
-    def testAllocateNewSuffix() {
+    def testGetMaterialsWithArgs() {
+        expect: "todo"
+        false
+    }
 
+    def testAllocateNewSuffix() {
+        expect: "todo"
+        false
     }
 
     def testToJson() {

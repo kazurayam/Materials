@@ -68,6 +68,17 @@ class TCaseResult implements Comparable<TCaseResult> {
         return materials_
     }
 
+    List<Material> getMaterials(URL url, FileType fileType) {
+        List<Material> list = new ArrayList<Material>()
+        for (Material mate : materials_) {
+            if (mate.getURL().toString() == url.toString() &&
+                    mate.getFileType() == fileType) {
+                list.add(mate)
+            }
+        }
+        return list
+    }
+
     Material getMaterial(URL url, Suffix suffix, FileType fileType) {
         for (Material mate : materials_) {
             if (mate.getURL().toString() == url.toString() &&
@@ -79,7 +90,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         return null
     }
 
-    void addMaterial(Material material) {
+    boolean addMaterial(Material material) {
         if (material.getParent() != this) {
             def msg = "material ${material.toJson()} does not have appropriate parent"
             logger_.error("#addMaterial ${msg}")
@@ -98,11 +109,24 @@ class TCaseResult implements Comparable<TCaseResult> {
             // sort the list materials by Material#compareTo()
             Collections.sort(materials_)
         }
+        return found
     }
 
     // -------------------------- helpers -------------------------------------
     Suffix allocateNewSuffix(URL url, FileType fileType) {
-        throw new UnsupportedOperationException("todo")
+        List<Suffix> suffixList = new ArrayList<>()
+        for (Material mate : this.getMaterials(url, fileType)) {
+            suffixList.add(mate.getSuffix())
+        }
+        Collections.sort(suffixList)
+        Suffix newSuffix
+        for (Suffix su : suffixList) {
+            int next = su.getValue() + 1
+            newSuffix = new Suffix(next)
+            if (!suffixList.contains(newSuffix)) {
+                return newSuffix
+            }
+        }
     }
 
     // ------------------ overriding Object properties ------------------------
