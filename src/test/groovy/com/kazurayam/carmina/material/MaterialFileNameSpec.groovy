@@ -10,50 +10,52 @@ class MaterialFileNameSpec extends Specification {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialFileNameSpec.class)
 
-    def testParse_full() {
+    def testFull() {
         when:
-        List<String> groups = MaterialFileName.parse('http%3A%2F%2Fdemoaut.katalon.com%2F (1).png')
+        MaterialFileName mfn = new MaterialFileName('http%3A%2F%2Fdemoaut.katalon.com%2F (1).png')
         then:
-        groups[1] == 'http%3A%2F%2Fdemoaut.katalon.com%2F '
-        groups[2] == '(1)'
-        groups[3] == '1'
-        groups[4] == '.png'
-        groups[5] == 'png'
+        mfn.parts[0]      == 'http%3A%2F%2Fdemoaut.katalon.com%2F (1).png'
+        mfn.parts[1]      == 'http%3A%2F%2Fdemoaut.katalon.com%2F '
+        mfn.parts[2]      == '(1)'
+        mfn.parts[3]      == '.png'
+        mfn.getSuffix()   == new Suffix(1)
+        mfn.getFileType() == FileType.PNG
     }
 
-    def testParse_withoutExtension() {
+    def testUnknowExtension() {
         when:
-        List<String> groups = MaterialFileName.parse('foo')
+        MaterialFileName mfn = new MaterialFileName('abc.defghij')
         then:
-        groups[1] == 'foo'
-        groups[2] == null
-        groups[3] == null
-        groups[4] == null
-        groups[5] == null
+        mfn.parts[0]      == 'abc.defghij'
+        mfn.parts[1]      == 'abc'
+        mfn.parts[2]      == null
+        mfn.parts[3]      == '.defghij'
+        mfn.getSuffix()   == Suffix.NULL
+        mfn.getFileType() == FileType.UNSUPPORTED
     }
 
-    def testParse_bodyPlusExtension() {
+    def testWithoutExtension() {
         when:
-        List<String> groups = MaterialFileName.parse('foo.png1')
+        MaterialFileName mfn = new MaterialFileName('abcdef')
         then:
-        groups[1] == 'foo'
-        groups[2] == null
-        groups[3] == null
-        groups[4] == '.png1'
-        groups[5] == 'png1'
+        mfn.parts[0]      == 'abcdef'
+        mfn.parts[1]      == 'abcdef'
+        mfn.parts[2]      == null
+        mfn.parts[3]      == null
+        mfn.getSuffix()   == Suffix.NULL
+        mfn.getFileType() == FileType.NULL
     }
 
-    def testParse_unpairingParenthis() {
+    def testWithDualParenthis() {
         when:
-        List<String> groups = MaterialFileName.parse('foo(9.png')
+        MaterialFileName mfn = new MaterialFileName('abc (1)(2).txt')
         then:
-        groups[1] == 'foo(9'
-        groups[2] == null
-        groups[3] == null
-        groups[4] == '.png'
-        groups[5] == 'png'
+        mfn.parts[0]      == 'abc (1)(2).txt'
+        mfn.parts[1]      == 'abc (1)'
+        mfn.parts[2]      == '(2)'
+        mfn.parts[3]      == '.txt'
+        mfn.getSuffix()   == new Suffix(2)
+        mfn.getFileType() == FileType.TXT
     }
-
-
 
 }
