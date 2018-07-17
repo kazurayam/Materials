@@ -106,16 +106,6 @@ class TCaseResultSpec extends Specification {
         materials.size() == 2
     }
 
-    def testGetMaterialsWithArgs() {
-        expect: "todo"
-        false
-    }
-
-    def testAllocateNewSuffix() {
-        expect: "todo"
-        false
-    }
-
     def testToJson() {
         setup:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()

@@ -138,9 +138,11 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 logger_.debug("#visitFile ${file} in TIMESTAMP")
                 break
             case Layer.TESTCASE :
-                logger_.debug("#visitFile ${file} in TESTCASE")
-                //logger.debug("#visitFile tCaseResult=${tCaseResult.toString()}")
-                String fileName = file.getFileName()
+                logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
+                Material material = new Material(file.getFileName().toString()).setParent(tCaseResult_)
+                material.setLastModified(file.toFile().lastModified())
+                tCaseResult_.addMaterial(material)
+                /*
                 FileType fileType = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
                 if (fileType != FileType.NULL) {
                     Suffix suffix = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
@@ -156,6 +158,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 } else {
                     logger_.debug("#visitFile ${file} has no known FileType")
                 }
+                */
                 break
         }
         return CONTINUE
