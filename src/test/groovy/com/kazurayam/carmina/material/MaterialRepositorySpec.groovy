@@ -99,94 +99,6 @@ class MaterialRepositorySpec extends Specification {
         str.contains('TS1')
     }
 
-    def testResolveMaterial_png() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path png = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PNG)
-        then:
-        png != null
-        png.toString().contains('TC1')
-        png.toString().contains('demoaut.katalon.com')
-        png.toString().contains('png')
-    }
-
-    def testResolveMaterial_json() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path json = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.JSON)
-        then:
-        json != null
-        json.toString().contains('TC1')
-        json.toString().contains('demoaut.katalon.com')
-        json.toString().contains('json')
-    }
-
-    def testResolveMaterial_xml() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path xml = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 1, FileType.XML)
-        then:
-        xml != null
-        xml.toString().contains('TC1')
-        xml.toString().contains('demoaut.katalon.com')
-        xml.toString().contains('xml')
-    }
-
-    def testResolveMaterial_pdf() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path pdf = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.PDF)
-        then:
-        pdf != null
-        pdf.toString().contains('TC1')
-        pdf.toString().contains('demoaut.katalon.com')
-        pdf.toString().contains('pdf')
-    }
-
-    def testResolveMaterial_txt() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path txt = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', 1, FileType.TXT)
-        then:
-        txt != null
-        txt.toString().contains('TC1')
-        txt.toString().contains('demoaut.katalon.com')
-        txt.toString().contains('txt')
-    }
-
-    def testResolveMaterial_xls() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path xls = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLS)
-        then:
-        xls != null
-        xls.toString().contains('TC1')
-        xls.toString().contains('demoaut.katalon.com')
-        xls.toString().contains('xls')
-    }
-
-    def testResolveMaterial_xlsx() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path xls = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSX)
-        then:
-        xls != null
-        xls.toString().contains('TC1')
-        xls.toString().contains('demoaut.katalon.com')
-        xls.toString().contains('xlsx')
-    }
-
-    def testResolveMaterial_xlsm() {
-        when:
-        mr_.putCurrentTestSuite('TS1','20180530_130419')
-        Path xls = mr_.resolveMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/', FileType.XLSM)
-        then:
-        xls != null
-        xls.toString().contains('TC1')
-        xls.toString().contains('demoaut.katalon.com')
-        xls.toString().contains('xlsm')
-    }
-
 
     def testGetCurrentTestSuiteDirectory() {
         when:
@@ -202,6 +114,51 @@ class MaterialRepositorySpec extends Specification {
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/TC1')
         then:
         testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1').normalize()
+    }
+
+    def testResolveScreenshotFileAsMaterial() {
+        when:
+        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path path = mr_.resolveScreenshotFileAsMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        then:
+        path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
+    }
+
+    def testDeleteDownloadedFilesFromDownloadsDir() {
+        when:
+        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
+        Path sourceFile   = downloadsDir.resolve('myFunnyDays.txt')
+        Helpers.touch(sourceFile)
+        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
+        then:
+        list.size() >= 1
+        when:
+        int count = mr_.deleteDownloadedFilesFromDownloadsDir('myFunnyDays.txt')
+        then:
+        count > 0
+        when:
+        list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
+        then:
+        list.size() == 0
+    }
+
+    def testImportDownloadedFileAsMaterial() {
+        when:
+        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
+        Path sourceFile   = downloadsDir.resolve('downloaded.pdf')
+        Helpers.touch(sourceFile)
+        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('downloaded.pdf')
+        then:
+        list.size() >= 1
+        when:
+        Path path = mr_.importDownloadedFileAsMaterial('Test Cases/TC1', 'downloaded.pdf')
+        then:
+        path != null
+        path.toString().contains('TS1')
+        path.toString().contains('20180530_130419')
+        path.toString().contains('TC1')
+        path.toString().contains('downloaded.pdf')
     }
 
     def testMakeIndex() {

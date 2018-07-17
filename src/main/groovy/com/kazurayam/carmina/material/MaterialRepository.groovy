@@ -34,16 +34,12 @@ interface MaterialRepository {
     Path getCurrentTestSuiteDirectory()
     Path getTestCaseDirectory(String testCaseId)
 
-    Path resolveMaterial(String testCaseId, String url, FileType fileType)
-    Path resolveMaterial(String testCaseId, String url, int suffix, FileType fileType)
+    Path resolveScreenshotFileAsMaterial(String testCaseId, String url)
 
-    Path resolveScreenshotMaterialPath(String testCaseId, String url)
+    int deleteDownloadedFilesFromDownloadsDir(String fileName)
+    Path importDownloadedFileAsMaterial(String testCaseId, String fileName)
 
-    /*
-    Path resolveDownloadedMaterialPath(String testCaseId, Path downloadsDir, String fileName)
-    Path resolveDownloadedMaterialPath(String testCaseId, Path downloadsDir)
-    Path resolveDownloadedMaterialPath(String testCaseId)
-     */
+    Path createFileAsMaterial(String testCaseId, String fileName)
 
     Path makeIndex()
 }

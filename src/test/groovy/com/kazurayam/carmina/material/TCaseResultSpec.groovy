@@ -61,6 +61,20 @@ class TCaseResultSpec extends Specification {
         mate.getFileType() == FileType.PNG
     }
 
+    def testGetMaterial_fileName() {
+        when:
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'),
+            new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        Material mate = tcr.getMaterial('http%3A%2F%2Fdemoaut.katalon.com%2F(1).png')
+        then:
+        mate != null
+        mate.getURL().toString() == new URL('http://demoaut.katalon.com/').toString()
+        mate.getSuffix() == new Suffix(1)
+        mate.getFileType() == FileType.PNG
+    }
+
     def testAddMaterial() {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()

@@ -1,6 +1,9 @@
 package com.kazurayam.carmina.material
 
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -143,7 +146,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     // -------------------------- do the business -----------------------------
-    @Override
+
     Path resolveMaterial(String testCaseName, String url, FileType fileType) {
         return this.resolveMaterial(
                 new TCaseName(testCaseName),
@@ -152,7 +155,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 fileType)
     }
 
-    @Override
+
     Path resolveMaterial(String testCaseName, String url, int suffix, FileType fileType) {
         return this.resolveMaterial(
                 new TCaseName(testCaseName),
@@ -193,7 +196,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      *
      */
     @Override
-    Path resolveScreenshotMaterialPath(String testCaseName, String urlStr) {
+    Path resolveScreenshotFileAsMaterial(String testCaseName, String urlStr) {
         return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(urlStr))
     }
 
@@ -219,6 +222,53 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(material.getMaterialFilePath().getParent())
         return material.getMaterialFilePath()
     }
+
+
+    @Override
+    int deleteDownloadedFilesFromDownloadsDir(String fileName) {
+        DownloadsDirectoryHelper.deleteSuffixedFiles(fileName)
+    }
+
+    @Override
+    Path importDownloadedFileAsMaterial(String testCaseId, String fileName) {
+        Path downloadsDir = Paths.get(System.getProperty("user.home"), "Downloads")
+        Path sourceFile = downloadsDir.resolve(fileName)
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
+        if (tSuiteResult == null) {
+            throw new IllegalStateException("tSuiteResult is null")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
+        //
+        Path targetFile = tCaseResult.getTCaseDirectory().resolve(fileName)
+        Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING)
+        return targetFile
+    }
+
+    @Override
+    Path createFileAsMaterial(String testCaseId, String fileName) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
+        if (tSuiteResult == null) {
+            throw new IllegalStateException("tSuiteResult is null")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
+        //
+        Path targetFile = tCaseResult.getTCaseDirectory().resolve(fileName)
+        Helpers.touch(targetFile)
+        return targetFile
+    }
+
 
     /**
      * create index.html file in the current <test suite name>/<test suite timestamp>/ directory.
