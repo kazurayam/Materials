@@ -9,9 +9,6 @@ import java.util.regex.Pattern
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.Helpers
-import com.kazurayam.carmina.material.TSuiteTimestamp
-
 import spock.lang.Specification
 
 /**
@@ -107,27 +104,27 @@ class HelpersSpec extends Specification {
         expect:
         Helpers.getClassShortName(Helpers.class) == 'Helpers'
     }
-    
+
     def testEscapeAsJsonText_reversesolidus() {
         expect:
         Helpers.escapeAsJsonText('\\') == '\\\\'
     }
-    
+
     def testEscapeAsJsonText_quotationmark() {
         expect:
         Helpers.escapeAsJsonText('"') == '\\"'
     }
-    
+
     def testExcapeAsJsonText_newline() {
         expect:
         Helpers.escapeAsJsonText('\n') == '\\n'
     }
-    
+
     def testExcapeAsJsonText_carriagereturn() {
         expect:
         Helpers.escapeAsJsonText('\r') == '\\r'
     }
-    
+
     def testExcapeAsJsonText_tab() {
         expect:
         Helpers.escapeAsJsonText('\t') == '\\t'
@@ -142,6 +139,7 @@ class HelpersSpec extends Specification {
         then:
         true
     }
+
 
 
     // helper methods

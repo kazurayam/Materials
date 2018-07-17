@@ -87,13 +87,14 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/carmina/material/MaterialFileNameSpec.class'
-    include '**/carmina/material/MaterialSpec.class'
+    //include '**/carmina/material/MaterialFileNameSpec.class'
+    //include '**/carmina/material/MaterialSpec.class'
     //include '**/carmina/material/RepositoryScannerSpec.class'
     //include '**/carmina/material/TCaseResultSpec.class'
     //include '**/carmina/material/RepositoryRootSpec.class'
     //include '**/carmina/material/MaterialRepositorySpec.class'
     //include '**/carmina/material/MaterialRepositoryImplSpec.class'
+    include '**/carmina/material/DownloadsDirectoryHelperSpec.class'
 }
 
 // run firefoxTest or run chromeTest
