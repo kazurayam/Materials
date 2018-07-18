@@ -1,3 +1,4 @@
+package com.kazurayam.material.demo
 import geb.Page
 
 class GebishOrgHomePage extends Page {

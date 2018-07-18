@@ -1,3 +1,4 @@
+package com.kazurayam.material.demo
 import geb.spock.GebSpec
 
 class GebishOrgSpec extends GebSpec {

@@ -1,3 +1,4 @@
+package com.kazurayam.material.demo
 import geb.Module
 
 class ManualsMenuModule extends Module {

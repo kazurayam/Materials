@@ -87,14 +87,13 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/material/MaterialFileNameSpec.class'
-    //include '**/material/MaterialSpec.class'
-    //include '**/material/RepositoryScannerSpec.class'
+    include '**/material/MaterialSpec.class'
+    include '**/material/RepositoryRootSpec.class'
+    include '**/material/RepositoryScannerSpec.class'
     //include '**/material/TCaseResultSpec.class'
-    //include '**/material/RepositoryRootSpec.class'
-    include '**/material/MaterialRepositorySpec.class'
+    //include '**/material/MaterialRepositorySpec.class'
     //include '**/material/MaterialRepositoryImplSpec.class'
-    //include '**/material/DownloadsDirectoryHelperSpec.class'
+
 }
 
 // run firefoxTest or run chromeTest

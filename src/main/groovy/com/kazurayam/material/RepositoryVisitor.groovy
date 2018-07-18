@@ -93,6 +93,10 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
         def to = directoryTransition_.peek()
         switch (to) {
+            case Layer.MATERIAL :
+                logger_.debug("#postVisitDirectory leaving ${dir} as MATERIAL")
+                directoryTransition_.pop()
+                break
             case Layer.TESTCASE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTCASE")
                 // resolve the lastModified property of the TCaseResult
@@ -142,23 +146,6 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 Material material = new Material(file.getFileName().toString()).setParent(tCaseResult_)
                 material.setLastModified(file.toFile().lastModified())
                 tCaseResult_.addMaterial(material)
-                /*
-                FileType fileType = MaterialFileNameFormatter.parseFileNameForFileType(fileName)
-                if (fileType != FileType.NULL) {
-                    Suffix suffix = MaterialFileNameFormatter.parseFileNameForSuffix(fileName)
-                    URL url = MaterialFileNameFormatter.parseFileNameForURL(fileName)
-                    Material material = null
-                    if (url != null) {
-                        material = new Material(url, suffix, fileType).setParent(tCaseResult_)
-                    } else {
-                        material = new Material(file.getFileName().toString()).setParent(tCaseResult_)
-                    }
-                    material.setLastModified(file.toFile().lastModified())
-                    tCaseResult_.addMaterial(material)
-                } else {
-                    logger_.debug("#visitFile ${file} has no known FileType")
-                }
-                */
                 break
         }
         return CONTINUE
