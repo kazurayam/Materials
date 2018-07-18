@@ -1,9 +1,9 @@
-package com.kazurayam.carmina.visualtesting
+package com.kazurayam.material.visualtesting
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.visualtesting.CommandRunner
+import com.kazurayam.material.visualtesting.CommandRunner
 
 import spock.lang.Specification
 

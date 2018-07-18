@@ -1,4 +1,4 @@
-package com.kazurayam.carmina.visualtesting
+package com.kazurayam.material.visualtesting
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

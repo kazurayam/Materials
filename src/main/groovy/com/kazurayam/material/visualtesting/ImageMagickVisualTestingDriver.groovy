@@ -1,4 +1,4 @@
-package com.kazurayam.carmina.visualtesting
+package com.kazurayam.material.visualtesting
 
 import java.nio.file.Path
 

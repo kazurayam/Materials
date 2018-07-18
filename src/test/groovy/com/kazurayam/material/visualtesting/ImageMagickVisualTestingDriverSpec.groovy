@@ -1,4 +1,4 @@
-package com.kazurayam.carmina.visualtesting
+package com.kazurayam.material.visualtesting
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.material.Helpers
+import com.kazurayam.material.visualtesting.ImageMagickVisualTestingDriver
 
 import spock.lang.Ignore
 import spock.lang.Specification
