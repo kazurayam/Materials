@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.carmina.material.Helpers
+import com.kazurayam.material.Helpers
 
 import spock.lang.Ignore
 import spock.lang.Specification

@@ -3,7 +3,7 @@ plugins {
 }
 
 project.group 'kazurayam.com'
-project.version '0.7.3'
+project.version '0.7.4'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
@@ -81,29 +81,29 @@ def defaultEncoding = 'UTF-8'
 test.outputs.upToDateWhen {false}
 
 test {
-    include '**/carmina/material/*Spec.class'
-    exclude '**/carmina/visualtesting/*Spec.class'
+    include '**/material/*Spec.class'
+    exclude '**/material/visualtesting/*Spec.class'
     finalizedBy jacocoTestReport
 }
 
 task pinpoint(type: Test) {
-    //include '**/carmina/material/MaterialFileNameSpec.class'
-    //include '**/carmina/material/MaterialSpec.class'
-    //include '**/carmina/material/RepositoryScannerSpec.class'
-    //include '**/carmina/material/TCaseResultSpec.class'
-    //include '**/carmina/material/RepositoryRootSpec.class'
-    include '**/carmina/material/MaterialRepositorySpec.class'
-    //include '**/carmina/material/MaterialRepositoryImplSpec.class'
-    //include '**/carmina/material/DownloadsDirectoryHelperSpec.class'
+    //include '**/material/MaterialFileNameSpec.class'
+    //include '**/material/MaterialSpec.class'
+    //include '**/material/RepositoryScannerSpec.class'
+    //include '**/material/TCaseResultSpec.class'
+    //include '**/material/RepositoryRootSpec.class'
+    include '**/material/MaterialRepositorySpec.class'
+    //include '**/material/MaterialRepositoryImplSpec.class'
+    //include '**/material/DownloadsDirectoryHelperSpec.class'
 }
 
 // run firefoxTest or run chromeTest
 firefoxTest {
-    include '**/carmina/util/BrowserSupportGebSpec.class'
+    include '**/material/BrowserSupportGebSpec.class'
 }
 
 chromeTest {
-    include '**/carmina/util/BrowserSupportGebSpec.class'
+    include '**/material/BrowserSupportGebSpec.class'
 }
 
 tasks.withType(Test) {
