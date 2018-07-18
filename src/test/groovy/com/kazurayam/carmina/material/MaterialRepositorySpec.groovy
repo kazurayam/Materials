@@ -116,15 +116,15 @@ class MaterialRepositorySpec extends Specification {
         testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1').normalize()
     }
 
-    def testResolveScreenshotFileAsMaterial() {
+    def testResolveScreenshotMaterialPath() {
         when:
         mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        Path path = mr_.resolveScreenshotFileAsMaterial('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        Path path = mr_.resolveScreenshotMaterialPath('Test Cases/TC1', 'http://demoaut.katalon.com/')
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
 
-    def testDeleteDownloadedFilesFromDownloadsDir() {
+    def testDeleteFilesInDownloadsDir() {
         when:
         Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
         Path sourceFile   = downloadsDir.resolve('myFunnyDays.txt')
@@ -133,7 +133,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         list.size() >= 1
         when:
-        int count = mr_.deleteDownloadedFilesFromDownloadsDir('myFunnyDays.txt')
+        int count = mr_.deleteFilesInDownloadsDir('myFunnyDays.txt')
         then:
         count > 0
         when:
@@ -142,7 +142,7 @@ class MaterialRepositorySpec extends Specification {
         list.size() == 0
     }
 
-    def testImportDownloadedFileAsMaterial() {
+    def testImportFileFromDownloadsDir() {
         when:
         mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
         Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
@@ -152,7 +152,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         list.size() >= 1
         when:
-        Path path = mr_.importDownloadedFileAsMaterial('Test Cases/TC1', 'downloaded.pdf')
+        Path path = mr_.importFileFromDownloadsDir('Test Cases/TC1', 'downloaded.pdf')
         then:
         path != null
         path.toString().contains('TS1')

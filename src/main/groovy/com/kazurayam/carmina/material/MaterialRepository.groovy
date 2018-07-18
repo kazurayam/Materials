@@ -34,12 +34,41 @@ interface MaterialRepository {
     Path getCurrentTestSuiteDirectory()
     Path getTestCaseDirectory(String testCaseId)
 
-    Path resolveScreenshotFileAsMaterial(String testCaseId, String url)
+    /**
+     *
+     * @param testCaseId e.g., 'Test Cases/TC1'
+     * @param url e.g., 'http://demoaut.katalon.com/'
+     * @return
+     */
+    Path resolveScreenshotMaterialPath(String testCaseId, String url)
 
-    int deleteDownloadedFilesFromDownloadsDir(String fileName)
-    Path importDownloadedFileAsMaterial(String testCaseId, String fileName)
+    /**
+     *
+     * @param testCaseId e.g., 'Test Cases/TC1'
+     * @param fileName 'mymemo.txt'
+     * @return
+     */
+    Path resolveMaterialPath(String testCaseId, String fileName)
 
-    Path createFileAsMaterial(String testCaseId, String fileName)
+    /**
+     *
+     * @param fileName e.g., 'smilechart.xls'
+     * @return
+     */
+    int deleteFilesInDownloadsDir(String fileName)
 
+    /**
+     *
+     * @param testCaseId e.g., 'Test Cases/TC1'
+     * @param fileName e.g., 'smilechart.xls'
+     * @return
+     */
+    Path importFileFromDownloadsDir(String testCaseId, String fileName)
+
+
+    /**
+     * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
+     * @return
+     */
     Path makeIndex()
 }

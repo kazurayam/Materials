@@ -196,7 +196,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      *
      */
     @Override
-    Path resolveScreenshotFileAsMaterial(String testCaseName, String urlStr) {
+    Path resolveScreenshotMaterialPath(String testCaseName, String urlStr) {
         return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(urlStr))
     }
 
@@ -225,12 +225,12 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
 
     @Override
-    int deleteDownloadedFilesFromDownloadsDir(String fileName) {
+    int deleteFilesInDownloadsDir(String fileName) {
         DownloadsDirectoryHelper.deleteSuffixedFiles(fileName)
     }
 
     @Override
-    Path importDownloadedFileAsMaterial(String testCaseId, String fileName) {
+    Path importFileFromDownloadsDir(String testCaseId, String fileName) {
         Path downloadsDir = Paths.get(System.getProperty("user.home"), "Downloads")
         Path sourceFile = downloadsDir.resolve(fileName)
         TCaseName tCaseName = new TCaseName(testCaseId)
@@ -251,7 +251,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
-    Path createFileAsMaterial(String testCaseId, String fileName) {
+    Path resolveMaterialPath(String testCaseId, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
