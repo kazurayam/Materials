@@ -92,7 +92,7 @@ class TCaseResult implements Comparable<TCaseResult> {
 
     Material getMaterial(String fileName) {
         for (Material mate : materials_) {
-            if (mate.getFileName() == fileName) {
+            if (mate.getPath().getFileName().toString() == fileName) {
                 return mate
             }
         }

@@ -1,6 +1,7 @@
 package com.kazurayam.material
 
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -19,19 +20,19 @@ class Material implements Comparable<Material> {
     private URL url_
     private Suffix suffix_
     private FileType fileType_
-    private String fileName_
+    private Path path_
     private LocalDateTime lastModified_
 
     Material(URL url, Suffix suffix, FileType fileType) {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
-        fileName_ = MaterialFileName.format(url, suffix, fileType)
+        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType))
     }
 
-    Material(String fileName) {
-        fileName_ = fileName
-        MaterialFileName mfn = new MaterialFileName(fileName)
+    Material(String first, String... more) {
+        path_ = Paths.get(first, more)
+        MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
         fileType_ = mfn.getFileType()  // FileType.UNSUPPORTED or other
         suffix_   = mfn.getSuffix()    // Suffix.NULL or other
         url_      = mfn.getURL()       // null or other
@@ -62,12 +63,8 @@ class Material implements Comparable<Material> {
         return fileType_
     }
 
-    String getFileNameBody() {
-        return MaterialFileNameFormatter.parseFileNameForBody(this.getFileName())
-    }
-
-    String getFileName() {
-        return fileName_
+    Path getPath() {
+        return path_
     }
 
     //
@@ -96,8 +93,7 @@ class Material implements Comparable<Material> {
      */
     Path getMaterialFilePath() {
         if (parent_ != null) {
-            String fileName = fileName_ ?: MaterialFileName.format(url_, suffix_, fileType_)
-            Path materialPath = parent_.getTCaseDirectory().resolve(fileName).normalize()
+            Path materialPath = parent_.getTCaseDirectory().resolve(path_).normalize()
             return materialPath
         } else {
             logger_.warn("#getMaterialFilePath parent_ is null")
@@ -122,16 +118,6 @@ class Material implements Comparable<Material> {
         return base.relativize(this.getMaterialFilePath())
     }
 
-    /**
-     *
-     * @return
-     *
-    String getHrefRelativeToTSuiteTimestamp() {
-        Path timestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
-        return this.getHrefRelativeTo(timestampDir)
-    }
-     */
-
     //
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
@@ -139,30 +125,18 @@ class Material implements Comparable<Material> {
     }
 
     private String getHrefRelativeTo(Path base) {
-        String fileName
-        if (url_ != null) {
-            fileName = MaterialFileName.format(url_, suffix_, fileType_)
-        } else {
-            fileName = fileName_
-        }
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
                 this.getParent().getTCaseDirectory())
-        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(fileName)
+        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(path_)
         return href.normalize().toString().replace('\\', '/')
     }
 
     //
     String getEncodedHrefRelativeTo(Path base) {
-        String encodedFileName
-        if (url_ != null) {
-            encodedFileName = MaterialFileName.formatEncoded(url_, suffix_, fileType_)
-        } else {
-            encodedFileName = fileName_
-        }
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
             this.getParent().getTCaseDirectory())
-        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(encodedFileName)
-        return href.normalize().toString().replace('\\', '/')
+        Path path = tCaseResultRelativeToTSuiteTimestamp.resolve(path_)
+        return path.toUri()
     }
 
     String getEncodedHrefRelativeToRepositoryRoot() {
@@ -183,7 +157,7 @@ class Material implements Comparable<Material> {
         if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
             return this.getMaterialFilePath() == other.getMaterialFilePath()
         } else {
-            return this.getFileName() == other.getFileName()
+            return this.getPath() == other.getPath()
         }
     }
 
@@ -192,7 +166,7 @@ class Material implements Comparable<Material> {
         if (this.getMaterialFilePath() != null) {
             return this.getMaterialFilePath().hashCode()
         } else {
-            return this.getFileName().hashCode()
+            return this.getPath().hashCode()
         }
     }
 
@@ -201,7 +175,7 @@ class Material implements Comparable<Material> {
         if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
             return this.getMaterialFilePath().compareTo(other.getMaterialFilePath())
         } else {
-            return this.getFileName().compareTo(other.getFileName())
+            return this.getPath().compareTo(other.getPath())
         }
     }
 
@@ -299,7 +273,7 @@ class Material implements Comparable<Material> {
                 sb.append(fileType_.name())
             }
         } else {
-            sb.append(this.getFileName())
+            sb.append(this.getPath().toString())
         }
         return sb.toString()
     }

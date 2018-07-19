@@ -87,8 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/PathSpec.class'
-    //include '**/material/MaterialSpec.class'
+    include '**/material/MaterialSpec.class'
     //include '**/material/RepositoryRootSpec.class'
     //include '**/material/RepositoryScannerSpec.class'
     //include '**/material/TCaseResultSpec.class'
