@@ -251,7 +251,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
-    Path resolveMaterialPath(String testCaseId, String fileName) {
+    Path resolveMaterialPath(String testCaseId, String first, String... more) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -264,7 +264,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         //
-        Path targetFile = tCaseResult.getTCaseDirectory().resolve(fileName)
+        Path targetFile = tCaseResult.getTCaseDirectory().resolve(first, more)
         Helpers.touch(targetFile)
         return targetFile
     }

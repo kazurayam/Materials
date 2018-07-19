@@ -90,9 +90,9 @@ class TCaseResult implements Comparable<TCaseResult> {
         return null
     }
 
-    Material getMaterial(String fileName) {
+    Material getMaterial(Path subpathUnderTCaseResultDirectory) {
         for (Material mate : materials_) {
-            if (mate.getPath().getFileName().toString() == fileName) {
+            if (mate.getPath() == subpathUnderTCaseResultDirectory) {
                 return mate
             }
         }

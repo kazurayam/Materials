@@ -48,11 +48,12 @@ interface MaterialRepository {
      * @param fileName 'mymemo.txt'
      * @return
      */
-    Path resolveMaterialPath(String testCaseId, String fileName)
+    Path resolveMaterialPath(String testCaseId, String first, String... more)
 
     /**
      *
-     * @param fileName e.g., 'smilechart.xls'
+     * @param first
+     * @param more
      * @return
      */
     int deleteFilesInDownloadsDir(String fileName)

@@ -6,18 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.FileType
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.Material
-import com.kazurayam.material.RepositoryRoot
-import com.kazurayam.material.RepositoryScanner
-import com.kazurayam.material.Suffix
-import com.kazurayam.material.TCaseName
-import com.kazurayam.material.TCaseResult
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteResult
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -73,13 +61,13 @@ class TCaseResultSpec extends Specification {
         mate.getFileType() == FileType.PNG
     }
 
-    def testGetMaterial_fileName() {
+    def testGetMaterial_subpath() {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'),
             new TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
-        Material mate = tcr.getMaterial('http%3A%2F%2Fdemoaut.katalon.com%2F(1).png')
+        Material mate = tcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'))
         then:
         mate != null
         mate.getURL().toString() == new URL('http://demoaut.katalon.com/').toString()
