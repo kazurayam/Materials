@@ -31,7 +31,11 @@ class Material implements Comparable<Material> {
     }
 
     Material(String first, String... more) {
-        path_ = Paths.get(first, more)
+        this(Paths.get(first, more))
+    }
+
+    Material(Path path) {
+        path_ = path
         MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
         fileType_ = mfn.getFileType()  // FileType.UNSUPPORTED or other
         suffix_   = mfn.getSuffix()    // Suffix.NULL or other

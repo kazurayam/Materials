@@ -7,18 +7,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.FileType
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.Material
-import com.kazurayam.material.RepositoryRoot
-import com.kazurayam.material.RepositoryScanner
-import com.kazurayam.material.Suffix
-import com.kazurayam.material.TCaseName
-import com.kazurayam.material.TCaseResult
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteResult
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -64,7 +52,15 @@ class RepositoryScannerSpec extends Specification {
         logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 7 // _, §A, TS1, TS2, TS3, TS4
+        tSuiteResults.size() == 8
+        // _/_
+        // §A/20180616_170941
+        // TS1/20180530_130419
+        // TS1/20180530_130604
+        // TS1/20180717_142832
+        // TS2/20180612_111256
+        // TS3/20180627_140853
+        // TS4/20180712_142755
 
         //
         when:

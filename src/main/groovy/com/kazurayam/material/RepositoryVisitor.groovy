@@ -28,8 +28,9 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     private Material material_
 
     private static enum Layer {
-        INIT, ROOT, TESTSUITE, TIMESTAMP, TESTCASE, MATERIAL
+        INIT, ROOT, TESTSUITE, TIMESTAMP, TESTCASE, SUBDIR
     }
+    private int subdirDepth_ = 0
     private Stack<Layer> directoryTransition_
 
     RepositoryVisitor(RepositoryRoot repoRoot) {
@@ -78,9 +79,14 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 directoryTransition_.push(Layer.TESTCASE)
                 break
             case Layer.TESTCASE :
-                logger_.debug("#preVisitDirectory visiting ${dir} as MATERIAL")
+                logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 //
-                directoryTransition_.push(Layer.MATERIAL)
+                subdirDepth_ += 1
+                directoryTransition_.push(Layer.SUBDIR)
+                break
+            case Layer.SUBDIR :
+                logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
+                subdirDepth_ += 1
                 break
         }
         return CONTINUE
@@ -93,9 +99,12 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
         def to = directoryTransition_.peek()
         switch (to) {
-            case Layer.MATERIAL :
-                logger_.debug("#postVisitDirectory leaving ${dir} as MATERIAL")
-                directoryTransition_.pop()
+            case Layer.SUBDIR :
+                logger_.debug("#postVisitDirectory leaving ${dir} as SUBDIR(${subdirDepth_})")
+                subdirDepth_ -= 1
+                if (subdirDepth_ == 0) {
+                    directoryTransition_.pop()
+                }
                 break
             case Layer.TESTCASE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTCASE")
@@ -133,17 +142,19 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
         switch (directoryTransition_.peek()) {
             case Layer.ROOT :
-                logger_.debug("#visitFile ${file} in ROOT")
+                logger_.debug("#visitFile ${file} in ROOT; this file is ignored")
                 break
             case Layer.TESTSUITE :
-                logger_.debug("#visitFile ${file} in TESTSUITE")
+                logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
                 break
             case Layer.TIMESTAMP :
-                logger_.debug("#visitFile ${file} in TIMESTAMP")
+                logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
                 break
             case Layer.TESTCASE :
+            case Layer.SUBDIR :
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
-                Material material = new Material(file.getFileName().toString()).setParent(tCaseResult_)
+                Path path = tCaseResult_.getTCaseDirectory().relativize(file)
+                Material material = new Material(path).setParent(tCaseResult_)
                 material.setLastModified(file.toFile().lastModified())
                 tCaseResult_.addMaterial(material)
                 break

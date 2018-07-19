@@ -11,16 +11,14 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.carmina.material.RepositoryVisitor" level="info"/>
+    <logger name="com.kazurayam.material.RepositoryScanner" level="info"/>
+    <logger name="com.kazurayam.material.RepositoryVisitor" level="info"/>
+    <logger name="com.kazurayam.material.MaterialFileName" level="info"/>
 
-    <logger name="com.kazurayam.carmina.material.TargetURL" level="info"/>
-    <logger name="com.kazurayam.carmina.material.MaterialFileName" level="info"/>
-    <logger name="com.kazurayam.carmina.util.BrowserSupport" level="debug"/>
-
-    <logger name="root" level="debug" />
     <!--
-    <logger name="root" level="info" />
+    <logger name="root" level="debug" />
     -->
+    <logger name="root" level="info" />
 
     <root>
         <appender-ref ref="STDOUT" />

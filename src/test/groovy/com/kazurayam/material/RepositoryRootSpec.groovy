@@ -7,13 +7,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.RepositoryRoot
-import com.kazurayam.material.RepositoryScanner
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteResult
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
