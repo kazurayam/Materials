@@ -27,7 +27,7 @@ class Material implements Comparable<Material> {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
-        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType))
+        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType)).normalize()
     }
 
     Material(String first, String... more) {
@@ -35,7 +35,7 @@ class Material implements Comparable<Material> {
     }
 
     Material(Path path) {
-        path_ = path
+        path_ = path.normalize()
         MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
         fileType_ = mfn.getFileType()  // FileType.UNSUPPORTED or other
         suffix_   = mfn.getSuffix()    // Suffix.NULL or other
@@ -122,11 +122,12 @@ class Material implements Comparable<Material> {
         return base.relativize(this.getMaterialFilePath())
     }
 
-    //
+    /*
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
     }
+    */
 
     private String getHrefRelativeTo(Path base) {
         Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(

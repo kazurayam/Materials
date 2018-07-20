@@ -9,18 +9,6 @@ import java.time.ZoneOffset
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.FileType
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.Material
-import com.kazurayam.material.RepositoryRoot
-import com.kazurayam.material.RepositoryScanner
-import com.kazurayam.material.Suffix
-import com.kazurayam.material.TCaseName
-import com.kazurayam.material.TCaseResult
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteResult
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -86,6 +74,7 @@ class MaterialSpec extends Specification {
     }
      */
 
+    /*
     def testGetHrefRelativeToRepositoryRoot() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
@@ -94,6 +83,7 @@ class MaterialSpec extends Specification {
         href != null
         href == 'TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
+    */
 
     def testToJson() {
         when:

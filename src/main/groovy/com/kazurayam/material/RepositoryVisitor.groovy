@@ -153,7 +153,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
             case Layer.TESTCASE :
             case Layer.SUBDIR :
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
-                Path path = tCaseResult_.getTCaseDirectory().relativize(file)
+                Path path = tCaseResult_.getTCaseDirectory().relativize(file).normalize()
                 Material material = new Material(path).setParent(tCaseResult_)
                 material.setLastModified(file.toFile().lastModified())
                 tCaseResult_.addMaterial(material)
