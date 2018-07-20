@@ -1,12 +1,12 @@
-material
+Materials
 ====
 
 # What is this?
 
-'material' is a small JVM library coded in Groovy, that implements Test Results Repository.
+'Materials' is a small JVM library coded in Groovy, that implements Test Results Repository.
 
 
-Material help you to resolve a file path for a screenshot in the following format:
+A material help you to resolve a file path for a screenshot in the following format:
 
 ```
 ${base directory}/${test suite name}/${test suite timestamp}/${test case name}/${prefix}/${material file name}
@@ -20,7 +20,7 @@ For example:
 You can use carmina to save any material files (PNG, JPEG, JSON, XML, PDF, HTML, CSV etc.) which
 you obtained during testing with WebDriver in JUnit, Spock and Katalon Studio.
 
-Material requires Java8+
+Materials project requires Java8+
 
 Bootstrap Treeview, Bootstrap Modal
 
