@@ -61,6 +61,19 @@ class TCaseResultSpec extends Specification {
         mate.getFileType() == FileType.PNG
     }
 
+    def testGetMaterialByPath() {
+        setup:
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS4'),
+            new TSuiteTimestamp('20180712_142755'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        logger_.debug("#testGetMaterialByPath tcr=${JsonOutput.prettyPrint(tcr.toJson())}")
+        when:
+        Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
+        then:
+        mate != null
+        mate.getHrefRelativeToRepositoryRoot() == 'TS4/20180712_142755/TC1/smilechart.xls'
+    }
 
     def testAddMaterial() {
         when:
@@ -122,7 +135,7 @@ class TCaseResultSpec extends Specification {
         str.contains('tCaseName')
         str.contains('TC1')
         str.contains('tCaseDir')
-        str.contains(Helpers.escapeAsJsonText( mate.getMaterialFilePath().toString()))
+        str.contains(Helpers.escapeAsJsonText( mate.getPath().toString()))
         str.endsWith('}}')
     }
 

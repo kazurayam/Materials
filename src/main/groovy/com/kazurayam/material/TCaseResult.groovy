@@ -90,7 +90,23 @@ class TCaseResult implements Comparable<TCaseResult> {
         return null
     }
 
-    
+    Material getMaterial(Path subpathUnderTCaseResult) {
+        if (parent_ == null) {
+            throw new IllegalStateException("parent_ is null")
+        }
+        List<Material> materials = this.getMaterials()
+        //logger_.debug("#getMaterial materials.size()=${materials.size()}")
+        for (Material mate : materials) {
+            Path matePath = mate.getPath()
+            Path subpath = this.getTCaseDirectory().relativize(matePath)
+            logger_.debug("#getMaterial(Path) matePath=${matePath} subpath=${subpath} subpathUnderTCaseResult=${subpathUnderTCaseResult}")
+            if (subpath == subpathUnderTCaseResult) {
+                return mate
+            }
+        }
+        return null
+    }
+
     boolean addMaterial(Material material) {
         if (material.getParent() != this) {
             def msg = "material ${material.toJson()} does not have appropriate parent"

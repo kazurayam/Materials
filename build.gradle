@@ -87,21 +87,18 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/material/IndexerSpec.class'
     include '**/material/MaterialSpec.class'
-    //include '**/material/RepositoryRootSpec.class'
-    //include '**/material/RepositoryScannerSpec.class'
     include '**/material/TCaseResultSpec.class'
-    //include '**/material/MaterialRepositorySpec.class'
-    //include '**/material/MaterialRepositoryImplSpec.class'
 }
 
 // run firefoxTest or run chromeTest
 firefoxTest {
-    include '**/material/BrowserSupportGebSpec.class'
+    include '**/material/demo/GebishOrgSpec.class'
 }
 
 chromeTest {
-    include '**/material/BrowserSupportGebSpec.class'
+    include '**/material/demo/GebishOrgSpec.class'
 }
 
 tasks.withType(Test) {

@@ -37,7 +37,7 @@ class RepositoryScannerSpec extends Specification {
      *
      * @return
      */
-    
+
     def testScan() {
         setup:
         Path casedir = workdir_.resolve("testScan")
@@ -98,7 +98,7 @@ class RepositoryScannerSpec extends Specification {
             '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
         mate0.getParent() == tCaseResult
-        mate0.getMaterialFilePath().toString().replace('\\', '/') == p0
+        mate0.getPath().toString().replace('\\', '/') == p0
         mate0.getFileType() == FileType.PNG
 
         //
@@ -109,7 +109,7 @@ class RepositoryScannerSpec extends Specification {
                 '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mate1.getParent() == tCaseResult
-        mate1.getMaterialFilePath().toString().replace('\\', '/') == p1
+        mate1.getPath().toString().replace('\\', '/') == p1
         mate1.getFileType() == FileType.PNG
 
     }
@@ -172,7 +172,7 @@ class RepositoryScannerSpec extends Specification {
 
     }
 
-    
+
     def testScanForMiscellaneousImages() {
         setup:
         Path casedir = workdir_.resolve("testScanForMiscellaneousImages")
@@ -189,7 +189,7 @@ class RepositoryScannerSpec extends Specification {
         materials.size() == 5
     }
 
-    
+
     def testScanForPDF() {
         setup:
         Path casedir = workdir_.resolve("testScanForPDF")
@@ -209,7 +209,7 @@ class RepositoryScannerSpec extends Specification {
         assert mate != null
     }
 
-    
+
     def testScanForExcel() {
         setup:
         Path casedir = workdir_.resolve("testScanForExcel")
@@ -239,7 +239,7 @@ class RepositoryScannerSpec extends Specification {
         //
     }
 
-    
+
     def testPrettyPrint() {
         setup:
         Path casedir = workdir_.resolve('testPrettyPrint')

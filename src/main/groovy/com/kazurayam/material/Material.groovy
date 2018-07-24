@@ -27,13 +27,17 @@ class Material implements Comparable<Material> {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
-        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType)).normalize()
+        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType)) // interim setting, will be overriden by setParent(TCaseResult)
     }
 
     Material(String first, String... more) {
         this(Paths.get(first, more))
     }
 
+    /**
+     *
+     * @param path
+     */
     Material(Path path) {
         path_ = path.normalize()
         MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
@@ -44,6 +48,10 @@ class Material implements Comparable<Material> {
 
     Material setParent(TCaseResult parent) {
         parent_ = parent
+        if (url_ != null && suffix_ != null && fileType_ != null) {
+            Path subpath = Paths.get(MaterialFileName.format(url_, suffix_, fileType_))
+            path_ = parent_.getTCaseDirectory().resolve(subpath).normalize()
+        }
         return this
     }
 
@@ -88,65 +96,49 @@ class Material implements Comparable<Material> {
     }
 
     // ---------------- business ----------------------------------------------
-    /**
-     * Returns the java.nio.file.Path of the Material.
-     * The Path is based on the directory given to the
-     * <pre>com.kazurayam.carmina.TestMaterialsRespositoryFactory.createInstance(Path baseDir)</pre>
-     *
-     * @return the Path of the Material
-     */
-    Path getMaterialFilePath() {
-        if (parent_ != null) {
-            Path materialPath = parent_.getTCaseDirectory().resolve(path_).normalize()
-            return materialPath
-        } else {
-            logger_.warn("#getMaterialFilePath parent_ is null")
-            return null
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
     Path getPathRelativeToTSuiteTimestamp() {
-        return getPathRelativeTo(this.getParent().getParent().getTSuiteTimestampDirectory())
+        Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
+        Path path = getPathRelativeTo(tSuiteTimestampDir)
+        logger_.debug("#getPathRelativeToTSuiteTimestamp path=${path}")
+        return path
     }
 
     Path getPathRelativeToRepositoryRoot() {
-        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
+        Path rootDir            = this.getParent().getParent().getParent().getBaseDir()
         return getPathRelativeTo(rootDir)
     }
 
-    Path getPathRelativeTo(Path base) {
-        return base.relativize(this.getMaterialFilePath())
+    private Path getPathRelativeTo(Path base) {
+        Path path =  base.relativize(this.getPath())
+        logger_.debug("#getPathRelativeTo base=${base} this.getPath()=${this.getPath()} path=${path}")
+        return path
     }
 
-    /*
+    // --------------------------------------
+
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
     }
-    */
 
     private String getHrefRelativeTo(Path base) {
-        Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
-                this.getParent().getTCaseDirectory())
-        Path href = tCaseResultRelativeToTSuiteTimestamp.resolve(path_)
+        Path href = base.relativize(this.getPath())
         return href.normalize().toString().replace('\\', '/')
     }
 
-    //
-    String getEncodedHrefRelativeTo(Path base) {
-        Path tCaseResultRelativeToTSuiteTimestamp = base.relativize(
-            this.getParent().getTCaseDirectory())
-        Path path = tCaseResultRelativeToTSuiteTimestamp.resolve(path_)
-        return path.toUri()
-    }
+    // ---------------------------------------------
 
     String getEncodedHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getEncodedHrefRelativeTo(rootDir)
+    }
+
+    private String getEncodedHrefRelativeTo(Path base) {
+        String baseUri = base.toUri()
+        String mateUri = this.getPath().toUri()
+        String result = mateUri.substring(baseUri.length())
+        logger_.debug("#getEncodedHrefRelativeTo baseUri=${baseUri} mateUri=${mateUri} result={result}")
+        return result
     }
 
 
@@ -159,29 +151,17 @@ class Material implements Comparable<Material> {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
-            return this.getMaterialFilePath() == other.getMaterialFilePath()
-        } else {
-            return this.getPath() == other.getPath()
-        }
+        return this.getPath() == other.getPath()
     }
 
     @Override
     int hashCode() {
-        if (this.getMaterialFilePath() != null) {
-            return this.getMaterialFilePath().hashCode()
-        } else {
-            return this.getPath().hashCode()
-        }
+        return this.getPath().hashCode()
     }
 
     @Override
     int compareTo(Material other) {
-        if (this.getMaterialFilePath() != null && other.getMaterialFilePath() != null) {
-            return this.getMaterialFilePath().compareTo(other.getMaterialFilePath())
-        } else {
-            return this.getPath().compareTo(other.getPath())
-        }
+        return this.getPath().compareTo(other.getPath())
     }
 
     @Override
@@ -195,8 +175,8 @@ class Material implements Comparable<Material> {
         sb.append('"Material":{')
         sb.append('"url":"' + Helpers.escapeAsJsonText(url_.toString())+ '",')
         sb.append('"suffix":"' + Helpers.escapeAsJsonText(suffix_.toString())+ '",')
-        sb.append('"materialFilePath":"' + Helpers.escapeAsJsonText(this.getMaterialFilePath().toString()) + '",')
         sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '",')
+        sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
         sb.append('"lastModified":"' + lastModified_.toString() + '"')
         sb.append('}}')
         return sb.toString()
@@ -278,7 +258,8 @@ class Material implements Comparable<Material> {
                 sb.append(fileType_.name())
             }
         } else {
-            sb.append(this.getPath().toString())
+            Path subpath = parent_.getTCaseDirectory().relativize(this.getPath())
+            sb.append(subpath.toString())
         }
         return sb.toString()
     }
@@ -291,19 +272,19 @@ class Material implements Comparable<Material> {
             case FileType.JPG:
             case FileType.JPEG:
             case FileType.PNG:
-                sb.append('        <img src="' + this.getEncodedHrefRelativeToRepositoryRoot() +
-                    '" class="img-fluid" alt="material"></img>' + "\n")
+                sb.append('<img src="' + this.getEncodedHrefRelativeToRepositoryRoot() +
+                    '" class="img-fluid" alt="material"></img>')
                 break
             case FileType.CSV:
-                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                def content = this.getPath().toFile().getText('UTF-8')
                 sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
                 sb.append('</code></pre>')
                 break
             case FileType.TXT:
-                sb.append('<div style="height:350px;overflow:auto;">' + "\n")
-                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
-                def file = this.getMaterialFilePath().toFile()
+                sb.append('<div style="height:350px;overflow:auto;">')
+                def content = this.getPath().toFile().getText('UTF-8')
+                def file = this.getPath().toFile()
                 file.readLines('UTF-8').each { line ->
                     sb.append('<p>')
                     sb.append(escapeHtml(line))
@@ -312,33 +293,33 @@ class Material implements Comparable<Material> {
                 sb.append('</div>' + "\n")
                 break
             case FileType.JSON:
-                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                def content = this.getPath().toFile().getText('UTF-8')
                 content = JsonOutput.prettyPrint(content)
                 sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
                 sb.append('</code></pre>')
                 break
             case FileType.XML:
-                def content = this.getMaterialFilePath().toFile().getText('UTF-8')
+                def content = this.getPath().toFile().getText('UTF-8')
                 content = XmlUtil.serialize(content)
                 sb.append('<pre class="pre-scrollable"><code>')
                 sb.append(escapeHtml(content))
                 sb.append('</code></pre>')
                 break
             case FileType.PDF:
-                sb.append('        <div class="embed-responsive embed-responsive-16by9" style="padding-bottom:150%">' + "\n")
-                sb.append('            <object class="embed-responsive-item" data="')
+                sb.append('<div class="embed-responsive embed-responsive-16by9" style="padding-bottom:150%">' + "\n")
+                sb.append('  <object class="embed-responsive-item" data="')
                 sb.append(this.getEncodedHrefRelativeToRepositoryRoot())
                 sb.append('" type="application/pdf" width="100%" height="100%"></object>' + "\n")
-                sb.append('        </div>' + "\n")
-                sb.append('        <div><a href="' + this.getEncodedHrefRelativeToRepositoryRoot() + '">')
+                sb.append('</div>' + "\n")
+                sb.append('<div><a href="' + this.getEncodedHrefRelativeToRepositoryRoot() + '">')
                 sb.append(this.getPathRelativeToRepositoryRoot())
                 sb.append('</a></div>')
                 break
             case FileType.XLS:
             case FileType.XLSM:
             case FileType.XLSX:
-                sb.append('        <a class="btn btn-primary btn-lg" target="_blank" href="')
+                sb.append('<a class="btn btn-primary btn-lg" target="_blank" href="')
                 sb.append(this.getEncodedHrefRelativeToRepositoryRoot())
                 sb.append('">')
                 sb.append('Download')

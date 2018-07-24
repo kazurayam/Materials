@@ -43,16 +43,42 @@ class MaterialSpec extends Specification {
 
     // feature methods
 
+    def testGetPath() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        then:
+        mate != null
+        when:
+        Path path = mate.getPath()
+        logger_.debug("#testGetPath path=${path.toString()}")
+        then:
+        path.toString().contains('MaterialSpec\\TS1\\20180530_130419\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        !path.toString().contains('..')   // should be normalized
+    }
+
+    def testGetPath_Excel() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS4'), new TSuiteTimestamp('20180712_142755'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        when:
+        List<Material> materials = tcr.getMaterials()
+        for (Material mate : materials) {
+            logger_.debug("#testGetPath_Excel mate.getPath()=${mate.getPath()}")
+            assert !mate.getPath().contains('..')
+        }
+        then:
+        true
+    }
+
+
     def testSetParent_GetParent() {
         when:
         Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
         Material modified = mate.setParent(tcr_)
         then:
         modified.getParent() == tcr_
-
     }
-
-
 
     def testGetPathRelativeToTSuiteTimestamp() {
         when:
@@ -63,18 +89,6 @@ class MaterialSpec extends Specification {
         relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
-    /*
-    def testGetHrefRelativeToTSuiteTimestamp() {
-        when:
-        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
-        String href = mate.getHrefRelativeToTSuiteTimestamp()
-        then:
-        href != null
-        href == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
-    }
-     */
-
-    /*
     def testGetHrefRelativeToRepositoryRoot() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
@@ -82,8 +96,19 @@ class MaterialSpec extends Specification {
         then:
         href != null
         href == 'TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+        !href.contains('file:///')
     }
-    */
+
+    def testGetEncodedHrefRelativeToRepositoryRoot() {
+        when:
+        Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
+        String href = mate.getEncodedHrefRelativeToRepositoryRoot()
+        then:
+        href != null
+        href == 'TS1/20180530_130419/TC1/http%253A%252F%252Fdemoaut.katalon.com%252F(1).png'
+        !href.contains('file:///')
+    }
+
 
     def testToJson() {
         when:
@@ -93,8 +118,8 @@ class MaterialSpec extends Specification {
         then:
         str.startsWith('{"Material":{"url":"')
         str.contains('"suffix":')
-        str.contains('"materialFilePath":')
-        str.contains(Helpers.escapeAsJsonText(mate.getMaterialFilePath().toString()))
+        str.contains('"path":')
+        str.contains(Helpers.escapeAsJsonText(mate.getPath().toString()))
         str.contains('"fileType":')
         str.endsWith('"}}')
     }
@@ -343,6 +368,21 @@ class MaterialSpec extends Specification {
         markup.contains('<img')
         markup.contains('class="img-fluid"')
         markup.contains(FileType.PNG.getExtension())
+    }
+
+    def testGetIdentifierOfExcelFile() {
+        setup:
+        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS4'), new TSuiteTimestamp('20180712_142755'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        when:
+        Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
+        then:
+        mate != null
+        when:
+        String id = mate.getIdentifier()
+        then:
+        id == 'smilechart.xls'
     }
 
     def testGetIdentifier_withoutSuffix() {

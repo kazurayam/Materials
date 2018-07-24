@@ -186,9 +186,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (material == null) {
             material = new Material(url, suffix, fileType).setParent(tCaseResult)
             // Here we create the parent directory for the material
-            Helpers.ensureDirs(material.getMaterialFilePath().getParent())
+            Helpers.ensureDirs(material.getPath().getParent())
         }
-        return material.getMaterialFilePath()
+        return material.getPath()
     }
 
 
@@ -219,8 +219,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             material = new Material(url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
 
-        Helpers.ensureDirs(material.getMaterialFilePath().getParent())
-        return material.getMaterialFilePath()
+        Helpers.ensureDirs(material.getPath().getParent())
+        return material.getPath()
     }
 
 
