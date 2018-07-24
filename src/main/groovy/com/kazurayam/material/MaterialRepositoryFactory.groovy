@@ -12,6 +12,7 @@ class MaterialRepositoryFactory {
     private MaterialRepositoryFactory() {}
 
     static MaterialRepository createInstance(Path baseDir) {
+        Helpers.ensureDirs(baseDir)
         return new MaterialRepositoryImpl(baseDir)
     }
 
