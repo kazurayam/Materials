@@ -21,7 +21,7 @@ class TCaseNameSpec extends Specification {
     /**
      * 'Test Cases/main/TC1' -> 'main.TC1'
      */
-    def testSubdirectory() {
+    def testFlattenSubdirectory() {
         setup:
         TCaseName tcn = new TCaseName('Test Cases/main/TC1')
         when:
@@ -35,7 +35,7 @@ class TCaseNameSpec extends Specification {
      *
      * 'Test Cases/foo bar/baz TC1' -> 'foobar.bazTC1'
      */
-    def testWhiteSpaces() {
+    def testIgnoreWhiteSpaces() {
         setup:
         TCaseName tcn = new TCaseName('Test Cases/foo bar /baz TC1 ')
         when:
@@ -50,7 +50,7 @@ class TCaseNameSpec extends Specification {
      *
      * 'Test Cases/main/テスト1' -> 'main.テスト1'
      */
-    def testMainNonLatinCharacters() {
+    def testNonLatinCharacters() {
         setup:
         TCaseName tcn = new TCaseName('Test Cases/main/テスト1')
         when:

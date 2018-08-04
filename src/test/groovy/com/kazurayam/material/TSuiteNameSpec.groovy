@@ -30,6 +30,42 @@ class TSuiteNameSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
 
+    def testChompPrefix() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/TS1')
+        when:
+        String name = tsn.getValue()
+        then:
+        name == 'TS1'
+    }
+
+    def testFlattenSubdirectory() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        when:
+        String name = tsn.getValue()
+        then:
+        name == 'main.TS1'
+    }
+
+    def testIgnoreWhitespaces() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/foo bar /baz TS1 ')
+        when:
+        String name = tsn.getValue()
+        then:
+        name == 'foobar.bazTS1'
+    }
+
+    def testNonLatinCharacters() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/テスト1')
+        when:
+        String name = tsn.getValue()
+        then:
+        name == 'main.テスト1'
+    }
+
     // feature methods
     def testGetValueOfSuiteless() {
         expect:
@@ -37,40 +73,4 @@ class TSuiteNameSpec extends Specification {
 
     }
 
-    /**
-     * 'Test Suites/TS1' ==> 'TS1'
-     */
-    def testStripParentDir() {
-        setup:
-        TSuiteName tsn = new TSuiteName('foo/bar/TS1')
-        when:
-        String name = tsn.getValue()
-        then:
-        name == 'TS1'
-    }
-
-    def testStripParentDir2() {
-        setup:
-        TSuiteName tsn = new TSuiteName('foo\\bar\\TS1')
-        when:
-        String name = tsn.getValue()
-        then:
-        name == 'TS1'
-    }
-
-
-    /**
-     * '§A' ==> '%C2%A7A'
-     */
-    def testEncoding() {
-        setup:
-        TSuiteName tsn = new TSuiteName('§A')
-        when:
-        String name = tsn.getValue()
-        then:
-        name == '§A'
-    }
-
-    // helper methods
-    def void anything() {}
 }

@@ -14,8 +14,14 @@ class TSuiteName implements Comparable<TSuiteName> {
     private String value_
 
     TSuiteName(String testSuiteId) {
-        String[] arr = testSuiteId.split('[/\\\\]')
-        value_ = arr[arr.size() - 1].trim()
+        def s = testSuiteId
+        def prefix = 'Test Suites/'
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length())
+        }
+        s = s.replace('/', '.')
+        s = s.replace(' ', '')
+        value_ = s
     }
 
     String getValue() {

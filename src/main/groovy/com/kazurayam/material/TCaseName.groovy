@@ -15,12 +15,13 @@ class TCaseName implements Comparable<TCaseName> {
      */
     TCaseName(String testCaseId) {
         def s = testCaseId
-        if (s.startsWith('Test Cases/')) {
-            s = s.substring('Test Cases/'.length())
+        def prefix = 'Test Cases/'
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length())
         }
         s = s.replace('/', '.')
         s = s.replace(' ', '')
-        value_ = s.trim()
+        value_ = s
     }
 
     String getValue() {
