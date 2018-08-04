@@ -7,35 +7,55 @@ import spock.lang.Specification
 class TCaseNameSpec extends Specification {
 
     /**
-     * 'Test Suites/TS1' ==> 'TS1'
+     * 'Test Cases/TC1' -> 'TC1'
      */
-    def testStripParentDir() {
+    def testChompPrefix() {
         setup:
-        TSuiteName tsn = new TSuiteName('foo/bar/TS1')
+        TCaseName tcn = new TCaseName('Test Cases/TC1')
         when:
-        String name = tsn.getValue()
+        String name = tcn.getValue()
         then:
-        name == 'TS1'
-    }
-
-    def testStripParentDir2() {
-        setup:
-        TSuiteName tsn = new TSuiteName('foo\\bar\\TS1')
-        when:
-        String name = tsn.getValue()
-        then:
-        name == 'TS1'
+        name == 'TC1'
     }
 
     /**
-     * '§A' ==> '%C2%A7A'
+     * 'Test Cases/main/TC1' -> 'main.TC1'
      */
-    def testEncoding() {
+    def testSubdirectory() {
         setup:
-        TSuiteName tsn = new TSuiteName('§A')
+        TCaseName tcn = new TCaseName('Test Cases/main/TC1')
         when:
-        String name = tsn.getValue()
+        String name = tcn.getValue()
         then:
-        name == '§A'
+        name == 'main.TC1'
+    }
+
+    /**
+     * ignore whitespaces
+     *
+     * 'Test Cases/foo bar/baz TC1' -> 'foobar.bazTC1'
+     */
+    def testWhiteSpaces() {
+        setup:
+        TCaseName tcn = new TCaseName('Test Cases/foo bar /baz TC1 ')
+        when:
+        String name = tcn.getValue()
+        then:
+        name == 'foobar.bazTC1'
+    }
+
+
+    /**
+     * Non Latin characters
+     *
+     * 'Test Cases/main/テスト1' -> 'main.テスト1'
+     */
+    def testMainNonLatinCharacters() {
+        setup:
+        TCaseName tcn = new TCaseName('Test Cases/main/テスト1')
+        when:
+        String name = tcn.getValue()
+        then:
+        name == 'main.テスト1'
     }
 }

@@ -9,9 +9,18 @@ class TCaseName implements Comparable<TCaseName> {
 
     private String value_
 
+    /**
+     *
+     * @param testCaseId
+     */
     TCaseName(String testCaseId) {
-        String[] arr = testCaseId.split('[/\\\\]')
-        value_ = arr[arr.size() - 1].trim()
+        def s = testCaseId
+        if (s.startsWith('Test Cases/')) {
+            s = s.substring('Test Cases/'.length())
+        }
+        s = s.replace('/', '.')
+        s = s.replace(' ', '')
+        value_ = s.trim()
     }
 
     String getValue() {
