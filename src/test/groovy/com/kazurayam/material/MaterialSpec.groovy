@@ -52,7 +52,7 @@ class MaterialSpec extends Specification {
         Path path = mate.getPath()
         logger_.debug("#testGetPath path=${path.toString()}")
         then:
-        path.toString().contains('MaterialSpec\\TS1\\20180530_130419\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png')
+        path.toString().contains('MaterialSpec\\TS1\\20180530_130419\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
         !path.toString().contains('..')   // should be normalized
     }
 

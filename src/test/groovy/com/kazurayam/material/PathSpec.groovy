@@ -42,7 +42,12 @@ class PathSpec extends Specification {
 
     def testPathOperations() {
         when:
-        Path path = Paths.get('C:\\home\\joe\\foo')
+        Path path
+        if (System.getProperty('os.name').startsWith('Windows')) {
+            path = Paths.get('C:\\home\\joe\\foo')
+        } else {
+            path = Paths.get('/home/joe/foo')
+        }
         logger_.debug("#testPathOperations toString: ${path.toString()}")
         logger_.debug("#testPathOperations getFileName: ${path.getFileName()}")
         logger_.debug("#testPathOperations getName(0): ${path.getName(0)}")
@@ -83,7 +88,8 @@ class PathSpec extends Specification {
         when:
         Path path1 = Paths.get("/home/logfile")
         then:
-        path1.toUri().toString() == 'file:///C:/home/logfile'
+        path1.toUri().toString().contains('file://')
+        path1.toUri().toString().contains('/home/logfile')
     }
 
     def testToUri_Material() {
