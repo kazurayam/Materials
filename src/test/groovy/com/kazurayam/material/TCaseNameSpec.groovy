@@ -6,6 +6,15 @@ import spock.lang.Specification
 
 class TCaseNameSpec extends Specification {
 
+    def testGetId() {
+        setup:
+        TCaseName tcn = new TCaseName('Test Cases/main/TC1')
+        when:
+        String id = tcn.getId()
+        then:
+        id == 'Test Cases/main/TC1'
+    }
+
     /**
      * 'Test Cases/TC1' -> 'TC1'
      */

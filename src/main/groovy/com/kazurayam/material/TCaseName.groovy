@@ -7,6 +7,7 @@ class TCaseName implements Comparable<TCaseName> {
 
     static Logger logger_ = LoggerFactory.getLogger(TCaseName.class)
 
+    private String id_
     private String value_
 
     /**
@@ -14,6 +15,7 @@ class TCaseName implements Comparable<TCaseName> {
      * @param testCaseId
      */
     TCaseName(String testCaseId) {
+        id_ = testCaseId
         def s = testCaseId
         def prefix = 'Test Cases/'
         if (s.startsWith(prefix)) {
@@ -22,6 +24,10 @@ class TCaseName implements Comparable<TCaseName> {
         s = s.replace('/', '.')
         s = s.replace(' ', '')
         value_ = s
+    }
+
+    String getId() {
+        return id_
     }
 
     String getValue() {

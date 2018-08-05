@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="TS1" time="49" tests="1" failures="1" errors="0">
+   <testsuite name="TS1" tests="1" failures="1" errors="0" time="49" timestamp="2018-08-05 08:19:15" hostname="urayamakazuaki - 10.0.1.8" id="Test Suites/main/TS1">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform" value=""/>
+         <property name="logFolder" value="/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908"/>
+         <property name="logFiles" value="/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908/execution0.log"/>
+         <property name="attachments" value="/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png, /Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png, /Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908/1533424803716.png, /Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908/1533424803984.png"/>
+         <property name="hostName" value="urayamakazuaki - 10.0.1.8"/>
+         <property name="os" value="Mac OS X 64bit"/>
+         <property name="katalonVersion" value="5.4.2.1"/>
+         <property name="browser" value="Firefox 61.0"/>
+         <property name="hostAddress" value="10.0.1.8"/>
+         <property name="sessionId" value="0aa92281-1dc3-164d-b669-22941cad4c0e"/>
+         <property name="seleniumVersion" value="3.7.1"/>
+         <property name="proxyInformation" value="ProxyInformation{proxyOption=NO_PROXY, proxyServerType=HTTP, password=, proxyServerAddress=, proxyServerPort=0}"/>
+         <property name="platform" value="Mac OS X"/>
+      </properties>
+      <testcase name="Test Cases/main/TC1" classname="Test Cases/main/TC1" status="PASSED">
+         <system-out><![CDATA[2018-08-05 08:19:18 - [TEST_CASE][PASSED] - Test Cases/main/TC1: Test Cases/main/TC1
+
+2018-08-05 08:19:18 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-08-05 08:19:18 - [TEST_STEP][PASSED] - Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId(): Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-08-05 08:19:18 - [TEST_STEP][PASSED] - openBrowser: Browser is opened with url: ''
+
+2018-08-05 08:19:31 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2018-08-05 08:19:31 - [TEST_STEP][PASSED] - navigateToUrl: Navigate to 'http://demoaut.katalon.com/' successfully
+
+2018-08-05 08:19:35 - [MESSAGE][PASSED] - Navigate to 'http://demoaut.katalon.com/' successfully
+
+2018-08-05 08:19:35 - [TEST_STEP][PASSED] - maximizeWindow: Current window maximized
+
+2018-08-05 08:19:35 - [MESSAGE][PASSED] - Current window maximized
+
+2018-08-05 08:19:35 - [TEST_STEP][PASSED] - verifyElementPresent: Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-08-05 08:19:36 - [MESSAGE][PASSED] - Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-08-05 08:19:36 - [TEST_STEP][PASSED] - Statement - mr = MATERIAL_REPOSITORY: null
+
+2018-08-05 08:19:36 - [TEST_STEP][PASSED] - Statement - assert mr != null: null
+
+2018-08-05 08:19:36 - [TEST_STEP][PASSED] - comment: Test Case 'Test Cases/main/TC1' started
+
+2018-08-05 08:19:36 - [TEST_STEP][PASSED] - Statement - pngFile = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'
+
+2018-08-05 08:19:36 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'
+
+2018-08-05 08:19:36 - [TEST_STEP][PASSED] - takeScreenshot: Taking screenshot successfully
+
+2018-08-05 08:19:39 - [MESSAGE][PASSED] - Taking screenshot successfully
+[[ATTACHMENT|/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png]]
+
+2018-08-05 08:19:39 - [TEST_STEP][PASSED] - comment: saved a screenshot into /Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png
+
+2018-08-05 08:19:39 - [TEST_STEP][PASSED] - Statement - pngFileOnceMore = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'
+
+2018-08-05 08:19:39 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'
+
+2018-08-05 08:19:39 - [TEST_STEP][PASSED] - takeScreenshot: Taking screenshot successfully
+
+2018-08-05 08:19:42 - [MESSAGE][PASSED] - Taking screenshot successfully
+[[ATTACHMENT|/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png]]
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - comment: saved a screenshot into /Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - closeBrowser: Browser is closed
+
+2018-08-05 08:19:42 - [MESSAGE][PASSED] - Browser is closed
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Start listener action : afterTestCase: Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <testcase name="Test Cases/main/TC2" classname="Test Cases/main/TC2" status="FAILED">
+         <failure type="FAILED" message="Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)"/>
+         <system-out><![CDATA[2018-08-05 08:19:42 - [TEST_CASE][FAILED] - Test Cases/main/TC2: Test Cases/main/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId(): Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - pageUrl = "http://spreadsheetpage.com/index.php/file/C35/P10/": null
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - openMyBrowser(): null
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - executedBrowser = com.kms.katalon.core.webui.driver.DriverFactory.getExecutedBrowser(): null
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - switch (executedBrowser): Browser is opened with url: ''
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - Statement - Default: Browser is opened with url: ''
+
+2018-08-05 08:19:42 - [TEST_STEP][PASSED] - openBrowser: Browser is opened with url: ''
+
+2018-08-05 08:19:49 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2018-08-05 08:19:49 - [TEST_STEP][PASSED] - maximizeWindow: Current window maximized
+
+2018-08-05 08:19:49 - [MESSAGE][PASSED] - Current window maximized
+
+2018-08-05 08:19:49 - [TEST_STEP][PASSED] - navigateToUrl: Navigate to 'http://spreadsheetpage.com/index.php/file/C35/P10/' successfully
+
+2018-08-05 08:19:54 - [MESSAGE][PASSED] - Navigate to 'http://spreadsheetpage.com/index.php/file/C35/P10/' successfully
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - Statement - testObject = new com.kms.katalon.core.testobject.TestObject(myTestObject): null
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - Statement - testObject.addProperty("xpath", EQUALS, "//a[text()="smilechart.xls"]"): null
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - verifyElementPresent: Object 'myTestObject' is present
+
+2018-08-05 08:19:54 - [MESSAGE][PASSED] - Object 'myTestObject' is present
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - Statement - mr = MATERIAL_REPOSITORY: null
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - Statement - assert mr != null: null
+
+2018-08-05 08:19:54 - [TEST_STEP][PASSED] - Statement - mr.deleteFilesInDownloadsDir("smilechart.xls"): null
+
+2018-08-05 08:19:55 - [TEST_STEP][PASSED] - click: Object: 'myTestObject' is clicked on
+
+2018-08-05 08:20:00 - [MESSAGE][PASSED] - Object: 'myTestObject' is clicked on
+
+2018-08-05 08:20:00 - [TEST_STEP][PASSED] - delay: Delayed 3 second(s)
+
+2018-08-05 08:20:03 - [MESSAGE][PASSED] - Delayed 3 second(s)
+
+2018-08-05 08:20:03 - [TEST_STEP][PASSED] - Statement - xlsFile = mr.importFileFromDownloadsDir(CURRENT_TESTCASE_ID, "smilechart.xls"): null
+
+2018-08-05 08:20:03 - [TEST_STEP][FAILED] - verifyElementText: Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)
+
+2018-08-05 08:20:03 - [MESSAGE][FAILED] - Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.
+[[ATTACHMENT|/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908/1533424803716.png]]
+
+2018-08-05 08:20:04 - [MESSAGE][FAILED] - Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)
+[[ATTACHMENT|/Users/urayamakazuaki/katalon-workspace/UsingMaterialsDemo/Reports/main/TS1/20180805_081908/1533424803984.png]]
+
+2018-08-05 08:20:04 - [TEST_STEP][PASSED] - Start listener action : afterTestCase: Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.]]></system-out>
+         <system-err><![CDATA[2018-08-05 08:19:42 - [TEST_CASE][FAILED] - Test Cases/main/TC2: Test Cases/main/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)]]></system-err>
+      </testcase>
+      <system-out><![CDATA[2018-08-05 08:19:15 - [TEST_SUITE][FAILED] - TS1: Test Cases/main/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)]]></system-out>
+      <system-err><![CDATA[2018-08-05 08:19:15 - [TEST_SUITE][FAILED] - TS1: Test Cases/main/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)]]></system-err>
+   </testsuite>
+</testsuites>

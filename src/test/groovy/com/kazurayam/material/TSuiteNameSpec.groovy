@@ -30,6 +30,15 @@ class TSuiteNameSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
 
+    def testGetId() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        when:
+        String id = tsn.getId()
+        then:
+        id == 'Test Suites/main/TS1'
+    }
+
     def testChompPrefix() {
         setup:
         TSuiteName tsn = new TSuiteName('Test Suites/TS1')

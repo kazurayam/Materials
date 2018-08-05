@@ -1,0 +1,40 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+TS1,Firefox 61.0,,2018-08-05 08:19:15,2018-08-05 08:20:04,49.279s,FAILED
+,,,,,,
+Test Cases/main/TC1,Firefox 61.0,,2018-08-05 08:19:18,2018-08-05 08:19:42,24.375s,PASSED
+Start listener action : beforeTestCase,Firefox 61.0,,2018-08-05 08:19:18,2018-08-05 08:19:18,0.030s,PASSED
+openBrowser,Firefox 61.0,,2018-08-05 08:19:18,2018-08-05 08:19:31,12.944s,PASSED
+navigateToUrl,Firefox 61.0,,2018-08-05 08:19:31,2018-08-05 08:19:35,4.021s,PASSED
+maximizeWindow,Firefox 61.0,,2018-08-05 08:19:35,2018-08-05 08:19:35,0.640s,PASSED
+verifyElementPresent,Firefox 61.0,,2018-08-05 08:19:35,2018-08-05 08:19:36,0.259s,PASSED
+Statement - mr = MATERIAL_REPOSITORY,Firefox 61.0,,2018-08-05 08:19:36,2018-08-05 08:19:36,0.002s,PASSED
+Statement - assert mr != null,Firefox 61.0,,2018-08-05 08:19:36,2018-08-05 08:19:36,0.013s,PASSED
+comment,Firefox 61.0,,2018-08-05 08:19:36,2018-08-05 08:19:36,0.004s,PASSED
+"Statement - pngFile = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl())",Firefox 61.0,,2018-08-05 08:19:36,2018-08-05 08:19:36,0.198s,PASSED
+takeScreenshot,Firefox 61.0,,2018-08-05 08:19:36,2018-08-05 08:19:39,2.955s,PASSED
+comment,Firefox 61.0,,2018-08-05 08:19:39,2018-08-05 08:19:39,0.017s,PASSED
+"Statement - pngFileOnceMore = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl())",Firefox 61.0,,2018-08-05 08:19:39,2018-08-05 08:19:39,0.016s,PASSED
+takeScreenshot,Firefox 61.0,,2018-08-05 08:19:39,2018-08-05 08:19:42,2.565s,PASSED
+comment,Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.003s,PASSED
+closeBrowser,Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.456s,PASSED
+Start listener action : afterTestCase,Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.012s,PASSED
+,,,,,,
+Test Cases/main/TC2,Firefox 61.0,download a XSL file to make it a Material,2018-08-05 08:19:42,2018-08-05 08:20:04,21.674s,FAILED
+Start listener action : beforeTestCase,Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.007s,PASSED
+"Statement - pageUrl = ""http://spreadsheetpage.com/index.php/file/C35/P10/""",Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.003s,PASSED
+Statement - openMyBrowser(),Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.001s,PASSED
+Statement - executedBrowser = com.kms.katalon.core.webui.driver.DriverFactory.getExecutedBrowser(),Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:42,0.014s,PASSED
+Statement - switch (executedBrowser),Firefox 61.0,,2018-08-05 08:19:42,2018-08-05 08:19:49,6.295s,PASSED
+maximizeWindow,Firefox 61.0,,2018-08-05 08:19:49,2018-08-05 08:19:49,0.356s,PASSED
+navigateToUrl,Firefox 61.0,,2018-08-05 08:19:49,2018-08-05 08:19:54,5.218s,PASSED
+Statement - testObject = new com.kms.katalon.core.testobject.TestObject(myTestObject),Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:54,0.036s,PASSED
+"Statement - testObject.addProperty(""xpath"", EQUALS, ""//a[text()=""smilechart.xls""]"")",Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:54,0.052s,PASSED
+verifyElementPresent,Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:54,0.063s,PASSED
+Statement - mr = MATERIAL_REPOSITORY,Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:54,0.002s,PASSED
+Statement - assert mr != null,Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:54,0.003s,PASSED
+"Statement - mr.deleteFilesInDownloadsDir(""smilechart.xls"")",Firefox 61.0,,2018-08-05 08:19:54,2018-08-05 08:19:55,0.365s,PASSED
+click,Firefox 61.0,,2018-08-05 08:19:55,2018-08-05 08:20:00,5.346s,PASSED
+delay,Firefox 61.0,,2018-08-05 08:20:00,2018-08-05 08:20:03,3.020s,PASSED
+"Statement - xlsFile = mr.importFileFromDownloadsDir(CURRENT_TESTCASE_ID, ""smilechart.xls"")",Firefox 61.0,,2018-08-05 08:20:03,2018-08-05 08:20:03,0.018s,PASSED
+verifyElementText,Firefox 61.0,,2018-08-05 08:20:03,2018-08-05 08:20:04,0.529s,FAILED
+Start listener action : afterTestCase,Firefox 61.0,,2018-08-05 08:20:04,2018-08-05 08:20:04,0.006s,PASSED

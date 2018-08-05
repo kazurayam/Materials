@@ -11,9 +11,11 @@ class TSuiteName implements Comparable<TSuiteName> {
 
     static final TSuiteName SUITELESS = new TSuiteName(SUITELESS_DIRNAME)
 
+    private String id_
     private String value_
 
     TSuiteName(String testSuiteId) {
+        id_ = testSuiteId
         def s = testSuiteId
         def prefix = 'Test Suites/'
         if (s.startsWith(prefix)) {
@@ -22,6 +24,10 @@ class TSuiteName implements Comparable<TSuiteName> {
         s = s.replace('/', '.')
         s = s.replace(' ', '')
         value_ = s
+    }
+
+    String getId() {
+        return id_
     }
 
     String getValue() {

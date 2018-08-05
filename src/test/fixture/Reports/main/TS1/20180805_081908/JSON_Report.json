@@ -1,0 +1,799 @@
+{
+    "devicePlatform": "",
+    "logFolder": "\/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Reports\/main\/TS1\/20180805_081908",
+    "runData": {
+        "hostName": "urayamakazuaki - 10.0.1.8",
+        "os": "Mac OS X 64bit",
+        "katalonVersion": "5.4.2.1",
+        "browser": "Firefox 61.0",
+        "hostAddress": "10.0.1.8",
+        "sessionId": "0aa92281-1dc3-164d-b669-22941cad4c0e",
+        "seleniumVersion": "3.7.1",
+        "proxyInformation": "ProxyInformation{proxyOption=NO_PROXY, proxyServerType=HTTP, password=, proxyServerAddress=, proxyServerPort=0}",
+        "platform": "Mac OS X"
+    },
+    "type": "TEST_SUITE",
+    "name": "TS1",
+    "id": "Test Suites\/main\/TS1",
+    "source": "",
+    "message": "Test Cases\/main\/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)",
+    "description": "",
+    "startTime": 1533424755568,
+    "endTime": 1533424804847,
+    "childRecords": [
+        {
+            "isOptional": false,
+            "type": "TEST_CASE",
+            "name": "Test Cases\/main\/TC1",
+            "id": "Test Cases\/main\/TC1",
+            "source": "\\\\Users\\\\urayamakazuaki\\\\katalon-workspace\\\\UsingMaterialsDemo\\\\Test Cases\\\\main\\\\TC1.tc",
+            "message": "Test Cases\/main\/TC1",
+            "description": "",
+            "startTime": 1533424758119,
+            "endTime": 1533424782494,
+            "childRecords": [
+                {
+                    "testStatus": {
+                        "stackTrace": "",
+                        "statusValue": "INFO"
+                    },
+                    "type": "MESSAGE",
+                    "name": "",
+                    "message": "Evaluating variables for test case",
+                    "startTime": 1533424758176,
+                    "endTime": 0,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": -1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Start listener action : beforeTestCase",
+                    "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.",
+                    "description": "",
+                    "startTime": 1533424758180,
+                    "endTime": 1533424758210,
+                    "childRecords": [
+                        {
+                            "index": 1,
+                            "isIgnoredIfFailed": false,
+                            "type": "TEST_STEP",
+                            "name": "Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId()",
+                            "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.",
+                            "description": "",
+                            "startTime": 1533424758182,
+                            "endTime": 1533424758207,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "openBrowser",
+                    "message": "Browser is opened with url: ''",
+                    "description": "",
+                    "startTime": 1533424758364,
+                    "endTime": 1533424771308,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Browser is opened with url: ''",
+                            "startTime": 1533424771305,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 2,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "navigateToUrl",
+                    "message": "Navigate to 'http:\/\/demoaut.katalon.com\/' successfully",
+                    "description": "",
+                    "startTime": 1533424771308,
+                    "endTime": 1533424775329,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Navigate to 'http:\/\/demoaut.katalon.com\/' successfully",
+                            "startTime": 1533424775327,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 3,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "maximizeWindow",
+                    "message": "Current window maximized",
+                    "description": "",
+                    "startTime": 1533424775330,
+                    "endTime": 1533424775970,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Current window maximized",
+                            "startTime": 1533424775966,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 4,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "verifyElementPresent",
+                    "message": "Object 'Object Repository\/Page_CURA Healthcare Service\/a_Make Appointment' is present",
+                    "description": "",
+                    "startTime": 1533424775970,
+                    "endTime": 1533424776229,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Object 'Object Repository\/Page_CURA Healthcare Service\/a_Make Appointment' is present",
+                            "startTime": 1533424776228,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 5,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - mr = MATERIAL_REPOSITORY",
+                    "description": "",
+                    "startTime": 1533424776230,
+                    "endTime": 1533424776232,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 6,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - assert mr != null",
+                    "description": "",
+                    "startTime": 1533424776245,
+                    "endTime": 1533424776258,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 7,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "comment",
+                    "message": "Test Case 'Test Cases\/main\/TC1' started",
+                    "description": "",
+                    "startTime": 1533424776259,
+                    "endTime": 1533424776263,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 8,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - pngFile = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl())",
+                    "message": "Current window's url is: 'https:\/\/katalon-demo-cura.herokuapp.com\/'",
+                    "description": "",
+                    "startTime": 1533424776264,
+                    "endTime": 1533424776462,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Current window's url is: 'https:\/\/katalon-demo-cura.herokuapp.com\/'",
+                            "startTime": 1533424776393,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "attachment": "\/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                    "index": 9,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "takeScreenshot",
+                    "message": "Taking screenshot successfully",
+                    "description": "",
+                    "startTime": 1533424776463,
+                    "endTime": 1533424779418,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "attachment": "\/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Taking screenshot successfully",
+                            "startTime": 1533424779411,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 10,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "comment",
+                    "message": "saved a screenshot into \/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                    "description": "",
+                    "startTime": 1533424779418,
+                    "endTime": 1533424779435,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 11,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - pngFileOnceMore = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl())",
+                    "message": "Current window's url is: 'https:\/\/katalon-demo-cura.herokuapp.com\/'",
+                    "description": "",
+                    "startTime": 1533424779439,
+                    "endTime": 1533424779455,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Current window's url is: 'https:\/\/katalon-demo-cura.herokuapp.com\/'",
+                            "startTime": 1533424779452,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "attachment": "\/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                    "index": 12,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "takeScreenshot",
+                    "message": "Taking screenshot successfully",
+                    "description": "",
+                    "startTime": 1533424779455,
+                    "endTime": 1533424782020,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "attachment": "\/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Taking screenshot successfully",
+                            "startTime": 1533424782018,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 13,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "comment",
+                    "message": "saved a screenshot into \/Users\/urayamakazuaki\/katalon-workspace\/UsingMaterialsDemo\/Materials\/main.TS1\/20180805_081908\/main.TC1\/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png",
+                    "description": "",
+                    "startTime": 1533424782021,
+                    "endTime": 1533424782024,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 14,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "closeBrowser",
+                    "message": "Browser is closed",
+                    "description": "",
+                    "startTime": 1533424782025,
+                    "endTime": 1533424782481,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Browser is closed",
+                            "startTime": 1533424782480,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "testStatus": {
+                        "stackTrace": "",
+                        "statusValue": "PASSED"
+                    },
+                    "type": "MESSAGE",
+                    "name": "",
+                    "message": "Test Cases\/main\/TC1",
+                    "startTime": 1533424782481,
+                    "endTime": 0,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": -1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Start listener action : afterTestCase",
+                    "message": "Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.",
+                    "description": "",
+                    "startTime": 1533424782482,
+                    "endTime": 1533424782494,
+                    "childRecords": [],
+                    "interuppted": false
+                }
+            ],
+            "interuppted": false
+        },
+        {
+            "isOptional": false,
+            "type": "TEST_CASE",
+            "name": "Test Cases\/main\/TC2",
+            "id": "Test Cases\/main\/TC2",
+            "source": "\\\\Users\\\\urayamakazuaki\\\\katalon-workspace\\\\UsingMaterialsDemo\\\\Test Cases\\\\main\\\\TC2.tc",
+            "message": "Test Cases\/main\/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)",
+            "description": "download a XSL file to make it a Material",
+            "startTime": 1533424782500,
+            "endTime": 1533424804174,
+            "childRecords": [
+                {
+                    "testStatus": {
+                        "stackTrace": "",
+                        "statusValue": "INFO"
+                    },
+                    "type": "MESSAGE",
+                    "name": "",
+                    "message": "Evaluating variables for test case",
+                    "startTime": 1533424782538,
+                    "endTime": 0,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": -1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Start listener action : beforeTestCase",
+                    "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.",
+                    "description": "",
+                    "startTime": 1533424782539,
+                    "endTime": 1533424782546,
+                    "childRecords": [
+                        {
+                            "index": 1,
+                            "isIgnoredIfFailed": false,
+                            "type": "TEST_STEP",
+                            "name": "Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId()",
+                            "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.",
+                            "description": "",
+                            "startTime": 1533424782541,
+                            "endTime": 1533424782542,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - pageUrl = \"http:\/\/spreadsheetpage.com\/index.php\/file\/C35\/P10\/\"",
+                    "description": "",
+                    "startTime": 1533424782803,
+                    "endTime": 1533424782806,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 2,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - openMyBrowser()",
+                    "description": "",
+                    "startTime": 1533424782807,
+                    "endTime": 1533424782808,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - executedBrowser = com.kms.katalon.core.webui.driver.DriverFactory.getExecutedBrowser()",
+                    "description": "",
+                    "startTime": 1533424782809,
+                    "endTime": 1533424782823,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 2,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - switch (executedBrowser)",
+                    "message": "Browser is opened with url: ''",
+                    "description": "",
+                    "startTime": 1533424782824,
+                    "endTime": 1533424789119,
+                    "childRecords": [
+                        {
+                            "index": 2,
+                            "isIgnoredIfFailed": false,
+                            "type": "TEST_STEP",
+                            "name": "Statement - Default",
+                            "message": "Browser is opened with url: ''",
+                            "description": "",
+                            "startTime": 1533424782828,
+                            "endTime": 1533424789110,
+                            "childRecords": [
+                                {
+                                    "index": 1,
+                                    "isIgnoredIfFailed": false,
+                                    "type": "TEST_STEP",
+                                    "name": "openBrowser",
+                                    "message": "Browser is opened with url: ''",
+                                    "description": "",
+                                    "startTime": 1533424782830,
+                                    "endTime": 1533424789107,
+                                    "childRecords": [
+                                        {
+                                            "testStatus": {
+                                                "stackTrace": "",
+                                                "statusValue": "PASSED"
+                                            },
+                                            "type": "MESSAGE",
+                                            "name": "",
+                                            "message": "Browser is opened with url: ''",
+                                            "startTime": 1533424789102,
+                                            "endTime": 0,
+                                            "childRecords": [],
+                                            "interuppted": false
+                                        }
+                                    ],
+                                    "interuppted": false
+                                }
+                            ],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 3,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "maximizeWindow",
+                    "message": "Current window maximized",
+                    "description": "",
+                    "startTime": 1533424789123,
+                    "endTime": 1533424789479,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Current window maximized",
+                            "startTime": 1533424789476,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 4,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "navigateToUrl",
+                    "message": "Navigate to 'http:\/\/spreadsheetpage.com\/index.php\/file\/C35\/P10\/' successfully",
+                    "description": "",
+                    "startTime": 1533424789480,
+                    "endTime": 1533424794698,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Navigate to 'http:\/\/spreadsheetpage.com\/index.php\/file\/C35\/P10\/' successfully",
+                            "startTime": 1533424794694,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 5,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - testObject = new com.kms.katalon.core.testobject.TestObject(myTestObject)",
+                    "description": "",
+                    "startTime": 1533424794709,
+                    "endTime": 1533424794745,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 6,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - testObject.addProperty(\"xpath\", EQUALS, \"\/\/a[text()=\"smilechart.xls\"]\")",
+                    "description": "",
+                    "startTime": 1533424794746,
+                    "endTime": 1533424794798,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 7,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "verifyElementPresent",
+                    "message": "Object 'myTestObject' is present",
+                    "description": "",
+                    "startTime": 1533424794801,
+                    "endTime": 1533424794864,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Object 'myTestObject' is present",
+                            "startTime": 1533424794864,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 8,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - mr = MATERIAL_REPOSITORY",
+                    "description": "",
+                    "startTime": 1533424794865,
+                    "endTime": 1533424794867,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 9,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - assert mr != null",
+                    "description": "",
+                    "startTime": 1533424794867,
+                    "endTime": 1533424794870,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 10,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - mr.deleteFilesInDownloadsDir(\"smilechart.xls\")",
+                    "description": "",
+                    "startTime": 1533424794871,
+                    "endTime": 1533424795236,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": 11,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "click",
+                    "message": "Object: 'myTestObject' is clicked on",
+                    "description": "",
+                    "startTime": 1533424795236,
+                    "endTime": 1533424800582,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Object: 'myTestObject' is clicked on",
+                            "startTime": 1533424800578,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 12,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "delay",
+                    "message": "Delayed 3 second(s)",
+                    "description": "",
+                    "startTime": 1533424800582,
+                    "endTime": 1533424803602,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "PASSED"
+                            },
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Delayed 3 second(s)",
+                            "startTime": 1533424803601,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "index": 13,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Statement - xlsFile = mr.importFileFromDownloadsDir(CURRENT_TESTCASE_ID, \"smilechart.xls\")",
+                    "description": "",
+                    "startTime": 1533424803602,
+                    "endTime": 1533424803620,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "attachment": "1533424803984.png",
+                    "index": 14,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "verifyElementText",
+                    "message": "Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)",
+                    "description": "",
+                    "startTime": 1533424803621,
+                    "endTime": 1533424804150,
+                    "childRecords": [
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "FAILED"
+                            },
+                            "attachment": "1533424803716.png",
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.",
+                            "startTime": 1533424803982,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        },
+                        {
+                            "testStatus": {
+                                "stackTrace": "",
+                                "statusValue": "FAILED"
+                            },
+                            "attachment": "1533424803984.png",
+                            "type": "MESSAGE",
+                            "name": "",
+                            "message": "Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)",
+                            "startTime": 1533424804148,
+                            "endTime": 0,
+                            "childRecords": [],
+                            "interuppted": false
+                        }
+                    ],
+                    "interuppted": false
+                },
+                {
+                    "testStatus": {
+                        "stackTrace": "",
+                        "statusValue": "FAILED"
+                    },
+                    "type": "MESSAGE",
+                    "name": "",
+                    "message": "Test Cases\/main\/TC2 FAILED because (of) Verify element text of test object 'myTestObject' FAILED. (Root cause: Actual text 'smilechart.xls' and expected text 'foo' of test object 'myTestObject' are NOT matched.)",
+                    "startTime": 1533424804151,
+                    "endTime": 0,
+                    "childRecords": [],
+                    "interuppted": false
+                },
+                {
+                    "index": -1,
+                    "isIgnoredIfFailed": false,
+                    "type": "TEST_STEP",
+                    "name": "Start listener action : afterTestCase",
+                    "message": "Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.",
+                    "description": "",
+                    "startTime": 1533424804154,
+                    "endTime": 1533424804160,
+                    "childRecords": [],
+                    "interuppted": false
+                }
+            ],
+            "interuppted": false
+        }
+    ],
+    "interuppted": false
+}
