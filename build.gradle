@@ -87,7 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/RepositoryRootSpec.class'
+    include '**/material/MaterialRepositorySpec.class'
 }
 
 // run firefoxTest or run chromeTest

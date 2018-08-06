@@ -93,27 +93,27 @@ class MaterialRepositorySpec extends Specification {
 
     def testConstructor_Path_tsn() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1')
         String str = mr_.toString()
         then:
-        str.contains('TS1')
+        str.contains('main.TS1')
     }
 
 
     def testGetCurrentTestSuiteDirectory() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path testSuiteDir = mr_.getCurrentTestSuiteDirectory()
         then:
-        testSuiteDir == workdir_.resolve('TS1/20180530_130419').normalize()
+        testSuiteDir == workdir_.resolve('main.TS1').resolve('20180530_130419').normalize()
     }
 
     def testGetTestCaseDirectory() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/TC1')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+        Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
         then:
-        testCaseDir == workdir_.resolve('TS1/20180530_130419/TC1').normalize()
+        testCaseDir == workdir_.resolve('main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
 
     def testResolveScreenshotMaterialPath() {
@@ -144,7 +144,7 @@ class MaterialRepositorySpec extends Specification {
 
     def testImportFileFromDownloadsDir() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
         Path sourceFile   = downloadsDir.resolve('downloaded.pdf')
         Helpers.touch(sourceFile)
@@ -152,18 +152,18 @@ class MaterialRepositorySpec extends Specification {
         then:
         list.size() >= 1
         when:
-        Path path = mr_.importFileFromDownloadsDir('Test Cases/TC1', 'downloaded.pdf')
+        Path path = mr_.importFileFromDownloadsDir('Test Cases/main/TC1', 'downloaded.pdf')
         then:
         path != null
-        path.toString().contains('TS1')
+        path.toString().contains('main.TS1')
         path.toString().contains('20180530_130419')
-        path.toString().contains('TC1')
+        path.toString().contains('main.TC1')
         path.toString().contains('downloaded.pdf')
     }
 
     def testMakeIndex() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path index = mr_.makeIndex()
         then:
         Files.exists(index)
