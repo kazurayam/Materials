@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.w3c.dom.Document
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -17,7 +18,7 @@ class TSuiteResultSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepositoryImpl mri_
 
     // fixture methods
@@ -27,7 +28,7 @@ class TSuiteResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        mri_ = new MaterialRepositoryImpl(workdir_)
+        mri_ = new MaterialRepositoryImpl(workdir_.resolve('Materials'))
     }
     def setup() {}
     def cleanup() {}
@@ -168,6 +169,16 @@ class TSuiteResultSpec extends Specification {
         then:
         s.contains('text')
         s.contains('nodes')
+    }
+
+    def testCreateReportDocument() {
+        setup:
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180805_081908'))
+        when:
+        Document doc = tsr.createReportDocument()
+        then:
+        doc != null
     }
 
 

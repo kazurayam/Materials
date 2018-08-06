@@ -33,7 +33,7 @@ class TCaseResult implements Comparable<TCaseResult> {
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
         parent_ = parent
-        tCaseDirectory_ = parent.getTSuiteTimestampDirectory().resolve(tCaseName_.toString())
+        tCaseDirectory_ = parent.getTSuiteTimestampDirectory().resolve(tCaseName_.getValue())
         return this
     }
 
@@ -195,7 +195,7 @@ class TCaseResult implements Comparable<TCaseResult> {
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.toString())+ '",')
+        sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.getValue())+ '",')
         sb.append('"selectable":false,')
         sb.append('"nodes":[')
         def mate_count = 0

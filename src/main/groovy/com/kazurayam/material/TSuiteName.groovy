@@ -1,5 +1,7 @@
 package com.kazurayam.material
 
+import java.nio.file.Path
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -11,19 +13,28 @@ class TSuiteName implements Comparable<TSuiteName> {
 
     static final TSuiteName SUITELESS = new TSuiteName(SUITELESS_DIRNAME)
 
+    static final String prefix_ = 'Test Suites/'
+
     private String id_
     private String value_
 
     TSuiteName(String testSuiteId) {
         id_ = testSuiteId
         def s = testSuiteId
-        def prefix = 'Test Suites/'
-        if (s.startsWith(prefix)) {
-            s = s.substring(prefix.length())
+        if (s.startsWith(prefix_)) {
+            s = s.substring(prefix_.length())
         }
         s = s.replace('/', '.')
-        s = s.replace(' ', '')
         value_ = s
+    }
+
+    /**
+     *
+     * @param path ./Materials/<TSuiteName>/ where <TSuiteName> is 'main.TC1' for example
+     */
+    TSuiteName(Path path) {
+        value_ = path.getFileName().toString()
+        id_ = prefix_ + value_.replace('.', '/')
     }
 
     String getId() {
@@ -37,7 +48,16 @@ class TSuiteName implements Comparable<TSuiteName> {
     // -------------------- overriding Object properties ----------------------
     @Override
     String toString() {
-        return value_
+        StringBuilder sb = new StringBuilder()
+        sb.append('{')
+        sb.append('"id": "')
+        sb.append(this.getId())
+        sb.append('",')
+        sb.append('"value": "')
+        sb.append(this.getValue())
+        sb.append('"')
+        sb.append('}')
+        return sb.toString()
     }
 
     @Override

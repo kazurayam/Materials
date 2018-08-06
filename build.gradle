@@ -90,6 +90,9 @@ task pinpoint(type: Test) {
     include '**/material/IndexerSpec.class'
 }
 
+
+
+
 // run firefoxTest or run chromeTest
 firefoxTest {
     include '**/material/demo/GebishOrgSpec.class'

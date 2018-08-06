@@ -13,7 +13,9 @@
 
     <logger name="com.kazurayam.material.RepositoryScanner" level="info"/>
     <logger name="com.kazurayam.material.RepositoryVisitor" level="info"/>
-    <logger name="com.kazurayam.material.MaterialFileName" level="info"/>
+    <logger name="com.kazurayam.material.Material"          level="info"/>
+    <logger name="com.kazurayam.material.MaterialFileName"  level="info"/>
+
 
     <logger name="root" level="debug" />
 

@@ -95,7 +95,7 @@ class RepositoryRoot {
 
     List<Material> getMaterials() {
         List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr : tSuiteResults_) {
+        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
             List<Material> mates = tsr.getMaterials()
             for (Material mate : mates) {
                 list.add(mate)
@@ -220,6 +220,7 @@ class RepositoryRoot {
     String htmlFragmensOfMaterialsAsModal() {
         StringBuilder sb = new StringBuilder()
         List<Material> mates = this.getMaterials()
+
         for (Material mate : mates) {
             sb.append(mate.toHtmlAsModalWindow())
         }

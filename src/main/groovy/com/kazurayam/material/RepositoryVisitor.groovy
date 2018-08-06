@@ -52,7 +52,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.ROOT :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
-                tSuiteName_ = new TSuiteName(dir.getFileName().toString())
+                tSuiteName_ = new TSuiteName(dir)
                 directoryTransition_.push(Layer.TESTSUITE)
                 break
             case Layer.TESTSUITE:
@@ -70,7 +70,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TIMESTAMP :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
-                tCaseName_ = new TCaseName(dir.getFileName().toString())
+                tCaseName_ = new TCaseName(dir)
                 tCaseResult_ = tSuiteResult_.getTCaseResult(tCaseName_)
                 if (tCaseResult_ == null) {
                     tCaseResult_ = new TCaseResult(tCaseName_).setParent(tSuiteResult_)

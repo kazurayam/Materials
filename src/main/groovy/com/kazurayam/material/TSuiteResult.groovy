@@ -1,10 +1,16 @@
 package com.kazurayam.material
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.w3c.dom.Document
+import org.xml.sax.SAXException
 
 /**
  *
@@ -13,6 +19,13 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
+    static DocumentBuilderFactory dbFactory_
+
+    static {
+        dbFactory_ = DocumentBuilderFactory.newInstance()
+        dbFactory_.setNamespaceAware(true)
+    }
+
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
     private RepositoryRoot repoRoot_
@@ -20,6 +33,11 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
     private Boolean latestModified_
+
+    /*
+     * ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
+     */
+    private JUnitReport junitReport_
 
 
     // ------------------ constructors & initializer -------------------------------
@@ -37,9 +55,14 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
-                repoRoot_.getBaseDir().resolve(tSuiteName_.toString()).resolve(tSuiteTimestamp_.format())
+                repoRoot_.getBaseDir().resolve(tSuiteName_.getValue()).resolve(tSuiteTimestamp_.format())
+        Document doc = createReportDocument()
+        if (doc != null) {
+            junitReport_ = new JUnitReport(doc)
+        }
         return this
     }
+
 
     RepositoryRoot getParent() {
         return this.getRepositoryRoot()
@@ -73,6 +96,44 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     TSuiteResult setLatestModified(Boolean isLatest) {
         latestModified_ = isLatest
         return this
+    }
+
+    JUnitReport getJUnitReport() {
+        return junitReport_
+    }
+
+    /**
+     *
+     * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
+     */
+    Document createReportDocument() {
+        if (this.getRepositoryRoot() != null) {
+            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
+            Path reportFilePath = reportsDirPath.
+                    resolve(this.getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getTSuiteTimestamp().format()).
+                    resolve('JUnit_Report.xml')
+            if (Files.exists(reportFilePath)) {
+                try {
+                    DocumentBuilder db = dbFactory_.newDocumentBuilder()
+                    Document doc = db.parse(reportFilePath.toFile())
+                    return doc
+                } catch (IOException e) {
+                    logger_.warn("#createReportDocument raised IOException for ${reportFilePath}")
+                    return null
+                } catch (SAXException e) {
+                    logger_.warn("#createReportDocument raised SAXException for ${reportFilePath}")
+                    e.printStackTrace()
+                    return null
+                }
+            } else {
+                logger_.debug("#createReportDocument ${reportFilePath} does not exist")
+                return null
+            }
+        } else {
+            logger_.debug("#createReportDocument this.getRepositoryRoot() returned null")
+            return null
+        }
     }
 
     // ------------------ add/get child nodes ------------------------------
@@ -200,12 +261,19 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             sb.append(tcr.toBootstrapTreeviewData())
         }
         sb.append(']')
+        if (this.getJUnitReport() != null) {
+            sb.append(',')
+            sb.append('"tags": ["')
+            logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${this.getTSuiteName()}'")
+            sb.append(this.getJUnitReport().getTestSuiteSummary(this.getTSuiteName().getId()))
+            sb.append('"]')
+        }
         sb.append('}')
         return sb.toString()
     }
 
     String treeviewTitle() {
-        return tSuiteName_.toString() + '/' + tSuiteTimestamp_.format()
+        return tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format()
     }
 }
 
