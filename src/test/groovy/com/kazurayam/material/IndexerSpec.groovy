@@ -7,9 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.Indexer
-
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -20,7 +17,7 @@ class IndexerSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
 
     // fixture methods
     def setupSpec() {
@@ -38,7 +35,7 @@ class IndexerSpec extends Specification {
 
     def testMakeIndex() {
         setup:
-        Indexer indexer = new Indexer(workdir_)
+        Indexer indexer = new Indexer(workdir_.resolve('Materials'))
         when:
         Path index = indexer.makeIndex()
         then:

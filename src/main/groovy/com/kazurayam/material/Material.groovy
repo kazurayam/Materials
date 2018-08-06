@@ -1,5 +1,6 @@
 package com.kazurayam.material
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
@@ -201,7 +202,8 @@ class Material implements Comparable<Material> {
      *                     <h4 class=”modal-title” id=”XXXXXXXXtitle”>http://demoaut.katalon.com/</h4>
      *                 </div>
      *                 <div class=”modal-body”>
-     *                     <img src="TS1/TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png" alt="">
+     *                     <img src="TS1/TS1/20180624_043621/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+     *                         class="img-fluid" style="border: 1px solid #ddd" alt="material">
      *                 </div>
      *                 <div class=”modal-footer”>
      *                     <button type=”button” class=”btn btn-default” data-dismiss=”modal”>Close</button>
@@ -229,12 +231,51 @@ class Material implements Comparable<Material> {
         sb.append('        ' + this.markupInModalWindow() + "\n")
         sb.append('      </div>' + "\n")
         sb.append('      <div class="modal-footer">' + "\n")
-        sb.append('        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' + "\n")
+        sb.append('        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>' + "\n")
+        def ar = this.anchorToReport()
+        if (ar != null) {
+            sb.append('        ' + ar + "\n")
+        }
         sb.append('      </div>' + "\n")
         sb.append('    </div>' + "\n")
         sb.append('  </div>' + "\n")
         sb.append('</div>' + "\n")
         return sb.toString()
+    }
+
+    String anchorToReport() {
+        String reportHref = this.hrefToReport()
+        if (reportHref != null) {
+            Path p = this.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
+            if (Files.exists(p)) {
+                StringBuilder sb = new StringBuilder()
+                sb.append('<a href="')
+                sb.append(reportHref)
+                sb.append('" class="btn btn-default" role="button" target="_blank">Report</a>')
+                return sb.toString()
+            } else {
+                logger_.debug("#anchorToReport ${p} does not exist")
+                return null
+            }
+        } else {
+            logger_.debug("#anchorToReport this.hrefToReport() returned null")
+            return null
+        }
+    }
+
+    String hrefToReport() {
+        TSuiteResult tsr = this.getParent().getParent()
+        if (tsr != null) {
+            StringBuilder sb = new StringBuilder()
+            sb.append('../Reports/')
+            sb.append(tsr.getTSuiteName().getValue().replace('.', '/'))
+            sb.append('/')
+            sb.append(tsr.getTSuiteTimestamp().format())
+            sb.append('/Report.html')
+        return sb.toString()
+        } else {
+            return null
+        }
     }
 
     /**
@@ -273,7 +314,7 @@ class Material implements Comparable<Material> {
             case FileType.JPEG:
             case FileType.PNG:
                 sb.append('<img src="' + this.getEncodedHrefRelativeToRepositoryRoot() +
-                    '" class="img-fluid" alt="material"></img>')
+                    '" class="img-fluid" style="border: 1px solid #ddd" alt="material"></img>')
                 break
             case FileType.CSV:
                 def content = this.getPath().toFile().getText('UTF-8')
