@@ -62,7 +62,7 @@ class RepositoryRootSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getSortedTSuiteResults()
         then:
-        tSuiteResults.size() > 3
+        tSuiteResults.size() == 9
         when:
         def count = 0
         for (TSuiteResult tsr : tSuiteResults) {
@@ -73,9 +73,9 @@ class RepositoryRootSpec extends Specification {
         then:
         true
         when:
-        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(0) : ${tSuiteResults.get(0)}") // TS1 20180530_130604
-        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(1) : ${tSuiteResults.get(1)}") // TS1 20180530_130419
-        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(2) : ${tSuiteResults.get(2)}") // TS2 20180612_111256
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(0) : ${tSuiteResults.get(0)}") // _/_
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(1) : ${tSuiteResults.get(1)}") // main.TS1 20180805_081908
+        logger_.debug("#testGetSortedTSuiteResults tSuiteResults.get(2) : ${tSuiteResults.get(2)}") // main.TS1 20180718_142832
         TSuiteName tsn0 = tSuiteResults.get(0).getTSuiteName()
         TSuiteName tsn1 = tSuiteResults.get(1).getTSuiteName()
         TSuiteName tsn2 = tSuiteResults.get(2).getTSuiteName()
@@ -83,17 +83,19 @@ class RepositoryRootSpec extends Specification {
         LocalDateTime ldt1 = tSuiteResults.get(1).getTSuiteTimestamp().getValue()
         LocalDateTime ldt2 = tSuiteResults.get(2).getTSuiteTimestamp().getValue()
         then:
-        tsn0 <= tsn1  // TS1 == TS1
-        tsn1 <= tsn2  // TS1 <= TS2
-        ldt0 >= ldt1  // 20180530_130604 >= 20180530_130419
+        tsn0 <= tsn1  // _ == main.TS1
+        tsn1 <= tsn2  // main.TS1 <= main.TS2
+        ldt1 >= ldt2  // 20180805_081908 >= 20180718_142832
     }
 
     def testEquals() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
-        TSuiteResult otherTsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult otherTsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         repoRoot_ == otherRoot
@@ -101,10 +103,12 @@ class RepositoryRootSpec extends Specification {
 
     def testHashCode() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
-        TSuiteResult otherTsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult otherTsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         repoRoot_.hashCode() == otherRoot.hashCode()
@@ -112,7 +116,8 @@ class RepositoryRootSpec extends Specification {
 
     def testToJson() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toJson())}")
         then:
@@ -121,7 +126,8 @@ class RepositoryRootSpec extends Specification {
 
     def testToString() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = new TSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToString ${JsonOutput.prettyPrint(repoRoot_.toString())}")
         then:

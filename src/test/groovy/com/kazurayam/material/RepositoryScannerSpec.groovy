@@ -52,24 +52,26 @@ class RepositoryScannerSpec extends Specification {
         logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
-        tSuiteResults.size() == 8
+        tSuiteResults.size() == 9
         // _/_
-        // §A/20180616_170941
-        // TS1/20180530_130419
-        // TS1/20180530_130604
-        // TS1/20180717_142832
-        // TS2/20180612_111256
-        // TS3/20180627_140853
-        // TS4/20180712_142755
+        // main.§A/20180616_170941
+        // main.TS1/20180530_130419
+        // main.TS1/20180530_130604
+        // main.TS1/20180717_142832
+        // main.TS1/20180805_081908
+        // main.TS2/20180612_111256
+        // main.TS3/20180627_140853
+        // main.TS4/20180712_142755
 
         //
         when:
         TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
-            new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName("Test Suites/main/TS1"), new TSuiteTimestamp('20180530_130419'))
         then:
+        tSuiteResult != null
         tSuiteResult.getRepositoryRoot() == repoRoot
         tSuiteResult.getParent() == repoRoot
-        tSuiteResult.getTSuiteName() == new TSuiteName('TS1')
+        tSuiteResult.getTSuiteName() == new TSuiteName('Test Suites/main/TS1')
         tSuiteResult.getTSuiteTimestamp() != null
 
         //
@@ -79,10 +81,10 @@ class RepositoryScannerSpec extends Specification {
         tCaseResults.size() == 1
         //
         when:
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('TC1'))
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         then:
         tCaseResult.getParent() == tSuiteResult
-        tCaseResult.getTCaseName() == new TCaseName('TC1')
+        tCaseResult.getTCaseName() == new TCaseName('Test Cases/main/TC1')
         tCaseResult.getTCaseDirectory() != null
 
         //
@@ -94,8 +96,8 @@ class RepositoryScannerSpec extends Specification {
         when:
         Material mate0 = materials[0]
         String p0 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
-            '/testScan/TS1/20180530_130419' +
-            '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+            '/testScan/main.TS1/20180530_130419' +
+            '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
         mate0.getParent() == tCaseResult
         mate0.getPath().toString().replace('\\', '/') == p0
@@ -105,8 +107,8 @@ class RepositoryScannerSpec extends Specification {
         when:
         Material mate1 = materials[1]
         String p1 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
-                '/testScan/TS1/20180530_130419' +
-                '/TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+                '/testScan/main.TS1/20180530_130419' +
+                '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mate1.getParent() == tCaseResult
         mate1.getPath().toString().replace('\\', '/') == p1
@@ -129,8 +131,8 @@ class RepositoryScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
         when:
-        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
-        TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         LocalDateTime lastModifiedOfTCaseResult = tcr.getLastModified()
         LocalDateTime lastModifiedOfMaterials = LocalDateTime.MIN
         List<Material> materials = tcr.getMaterials()
@@ -158,7 +160,8 @@ class RepositoryScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
         when:
-        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
         LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
         LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
         List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResults()
@@ -181,8 +184,8 @@ class RepositoryScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("TS1"), new TSuiteTimestamp('20180530_130604'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+            new TSuiteName("Test Suites/main/TS1"), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterials()
         then:
@@ -198,8 +201,8 @@ class RepositoryScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("TS3"), new TSuiteTimestamp("20180627_140853"))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("TC3"))
+            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         when:
         Material mate = tcr.getMaterial(
             new URL("http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf"),
@@ -218,8 +221,8 @@ class RepositoryScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("TS3"), new TSuiteTimestamp("20180627_140853"))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("TC3"))
+            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         // .xlsx
         when:
         Material mate = tcr.getMaterial(

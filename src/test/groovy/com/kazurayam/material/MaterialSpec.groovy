@@ -34,8 +34,8 @@ class MaterialSpec extends Specification {
         rs_ = new RepositoryScanner(workdir_)
         rs_.scan()
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        tcr_ = tsr.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         logger_.debug("#setupSpec tcr_:\n${JsonOutput.prettyPrint(tcr_.toJson())}")
     }
     def setup() {}
@@ -52,15 +52,15 @@ class MaterialSpec extends Specification {
         Path path = mate.getPath()
         logger_.debug("#testGetPath path=${path.toString()}")
         then:
-        path.toString().contains('MaterialSpec\\TS1\\20180530_130419\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
+        path.toString().contains('MaterialSpec\\main.TS1\\20180530_130419\\main.TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
         !path.toString().contains('..')   // should be normalized
     }
 
     def testGetPath_Excel() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS4'), new TSuiteTimestamp('20180712_142755'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterials()
         for (Material mate : materials) {
@@ -72,21 +72,15 @@ class MaterialSpec extends Specification {
     }
 
 
-    def testSetParent_GetParent() {
-        when:
-        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
-        Material modified = mate.setParent(tcr_)
-        then:
-        modified.getParent() == tcr_
-    }
 
-    def testGetPathRelativeToTSuiteTimestamp() {
+    def testGetEncodedHrefRelativeToRepositoryRoot() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
-        Path relative = mate.getPathRelativeToTSuiteTimestamp()
+        String href = mate.getEncodedHrefRelativeToRepositoryRoot()
         then:
-        relative != null
-        relative.toString().replace('\\', '/') == 'TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+        href != null
+        href == 'main.TS1/20180530_130419/main.TC1/http%253A%252F%252Fdemoaut.katalon.com%252F(1).png'
+        !href.contains('file:///')
     }
 
     def testGetHrefRelativeToRepositoryRoot() {
@@ -95,18 +89,25 @@ class MaterialSpec extends Specification {
         String href = mate.getHrefRelativeToRepositoryRoot()
         then:
         href != null
-        href == 'TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+        href == 'main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         !href.contains('file:///')
     }
 
-    def testGetEncodedHrefRelativeToRepositoryRoot() {
+    def testGetPathRelativeToTSuiteTimestamp() {
         when:
         Material mate = tcr_.getMaterial(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
-        String href = mate.getEncodedHrefRelativeToRepositoryRoot()
+        Path relative = mate.getPathRelativeToTSuiteTimestamp()
         then:
-        href != null
-        href == 'TS1/20180530_130419/TC1/http%253A%252F%252Fdemoaut.katalon.com%252F(1).png'
-        !href.contains('file:///')
+        relative != null
+        relative.toString().replace('\\', '/') == 'main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+    }
+
+    def testSetParent_GetParent() {
+        when:
+        Material mate = new Material(new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
+        Material modified = mate.setParent(tcr_)
+        then:
+        modified.getParent() == tcr_
     }
 
 
@@ -163,8 +164,8 @@ class MaterialSpec extends Specification {
     def testToHtmlAsModalWindow_miscellaneousImages() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         assert tcr != null
          //
         expect:
@@ -209,8 +210,8 @@ class MaterialSpec extends Specification {
     def testToHtmlAsModalWindow_PDF() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
         //
         when:
@@ -226,8 +227,8 @@ class MaterialSpec extends Specification {
     def testToHtmlAsModalWindow_CSV() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
         //
         when:
@@ -241,8 +242,8 @@ class MaterialSpec extends Specification {
     def testToHtmlAsModalWindow_XLSX() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
         //
         when:
@@ -344,10 +345,10 @@ class MaterialSpec extends Specification {
     def testHashCodeWithAncestors() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr1 = repoRoot.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        TSuiteResult tsr2 = repoRoot.getTSuiteResult(new TSuiteName('TS2'), new TSuiteTimestamp('20180612_111256'))
-        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('TC1'))
-        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr1 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), new TSuiteTimestamp('20180612_111256'))
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         Material mate1 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr1)
         Material mate2 = new Material(new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr2)
@@ -373,8 +374,8 @@ class MaterialSpec extends Specification {
     def testGetIdentifierOfExcelFile() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS4'), new TSuiteTimestamp('20180712_142755'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
         then:
@@ -406,8 +407,8 @@ class MaterialSpec extends Specification {
     def testGetIdentifier_FileTypeOmmited() {
         setup:
         RepositoryRoot repoRoot = rs_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('TS3'), new TSuiteTimestamp('20180627_140853'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC3'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         Material mate = tcr.getMaterial(new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),
             Suffix.NULL, FileType.PDF)
         when:

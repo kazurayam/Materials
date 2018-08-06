@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="TS1" time="34" tests="1" failures="1" errors="0">
+   <testsuite name="TS1" tests="1" failures="1" errors="0" time="34" timestamp="2018-07-24 17:20:28" hostname="QCQ0264 - N01-0370.quick.local" id="Test Suites/TS1">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform" value=""/>
+         <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Reports\\TS1\\20180724_172025"/>
+         <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Reports\\TS1\\20180724_172025\\execution0.log"/>
+         <property name="attachments" value="C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Materials\\TS1\\20180724_172025\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png, C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Materials\\TS1\\20180724_172025\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png"/>
+         <property name="hostName" value="QCQ0264 - N01-0370.quick.local"/>
+         <property name="os" value="Windows 7 64bit"/>
+         <property name="katalonVersion" value="5.4.2.1"/>
+         <property name="browser" value="Firefox 61.0"/>
+         <property name="hostAddress" value="192.168.56.1"/>
+         <property name="sessionId" value="84015db2-6b09-4de5-8381-4207c0d87df6"/>
+         <property name="seleniumVersion" value="3.7.1"/>
+         <property name="proxyInformation" value="ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}"/>
+         <property name="platform" value="Windows 7"/>
+      </properties>
+      <testcase name="Test Cases/TC1" classname="Test Cases/TC1" status="PASSED">
+         <system-out><![CDATA[2018-07-24 17:20:29 - [TEST_CASE][PASSED] - Test Cases/TC1: Test Cases/TC1
+
+2018-07-24 17:20:29 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-07-24 17:20:29 - [TEST_STEP][PASSED] - Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId(): Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-07-24 17:20:29 - [TEST_STEP][PASSED] - openBrowser: Browser is opened with url: ''
+
+2018-07-24 17:20:36 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2018-07-24 17:20:36 - [TEST_STEP][PASSED] - navigateToUrl: Navigate to 'http://demoaut.katalon.com/' successfully
+
+2018-07-24 17:20:38 - [MESSAGE][PASSED] - Navigate to 'http://demoaut.katalon.com/' successfully
+
+2018-07-24 17:20:38 - [TEST_STEP][PASSED] - maximizeWindow: Current window maximized
+
+2018-07-24 17:20:38 - [MESSAGE][PASSED] - Current window maximized
+
+2018-07-24 17:20:38 - [TEST_STEP][PASSED] - verifyElementPresent: Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-07-24 17:20:38 - [MESSAGE][PASSED] - Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-07-24 17:20:38 - [TEST_STEP][PASSED] - Statement - mr = MATERIAL_REPOSITORY: null
+
+2018-07-24 17:20:38 - [TEST_STEP][PASSED] - Statement - assert mr != null: null
+
+2018-07-24 17:20:38 - [TEST_STEP][PASSED] - Statement - pngFile = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()): Current window's url is: 'http://demoaut.katalon.com/'
+
+2018-07-24 17:20:38 - [MESSAGE][PASSED] - Current window's url is: 'http://demoaut.katalon.com/'
+
+2018-07-24 17:20:39 - [TEST_STEP][PASSED] - takeScreenshot: Taking screenshot successfully
+
+2018-07-24 17:20:40 - [MESSAGE][PASSED] - Taking screenshot successfully
+[[ATTACHMENT|C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Materials\\TS1\\20180724_172025\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png]]
+
+2018-07-24 17:20:40 - [TEST_STEP][PASSED] - comment: saved a screenshot into C:\Users\qcq0264\katalon-workspace\UsingMaterialsDemo\Materials\TS1\20180724_172025\TC1\http%3A%2F%2Fdemoaut.katalon.com%2F.png
+
+2018-07-24 17:20:40 - [TEST_STEP][PASSED] - Statement - pngFileOnceMore = mr.resolveScreenshotMaterialPath(CURRENT_TESTCASE_ID, com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()): Current window's url is: 'http://demoaut.katalon.com/'
+
+2018-07-24 17:20:40 - [MESSAGE][PASSED] - Current window's url is: 'http://demoaut.katalon.com/'
+
+2018-07-24 17:20:40 - [TEST_STEP][PASSED] - takeScreenshot: Taking screenshot successfully
+
+2018-07-24 17:20:40 - [MESSAGE][PASSED] - Taking screenshot successfully
+[[ATTACHMENT|C:\\Users\\qcq0264\\katalon-workspace\\UsingMaterialsDemo\\Materials\\TS1\\20180724_172025\\TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png]]
+
+2018-07-24 17:20:40 - [TEST_STEP][PASSED] - comment: saved a screenshot into C:\Users\qcq0264\katalon-workspace\UsingMaterialsDemo\Materials\TS1\20180724_172025\TC1\http%3A%2F%2Fdemoaut.katalon.com%2F.png
+
+2018-07-24 17:20:40 - [TEST_STEP][PASSED] - closeBrowser: Browser is closed
+
+2018-07-24 17:20:41 - [MESSAGE][PASSED] - Browser is closed
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Start listener action : afterTestCase: Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <testcase name="Test Cases/TC2" classname="Test Cases/TC2" status="FAILED">
+         <failure type="FAILED" message="Wow, FAILED"/>
+         <system-out><![CDATA[2018-07-24 17:20:41 - [TEST_CASE][FAILED] - Test Cases/TC2: Test Cases/TC2 FAILED because (of) Wow, FAILED
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId(): Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'TL.beforeTestCase(...)' completed.
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - pageUrl = "http://spreadsheetpage.com/index.php/file/C35/P10/": null
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - openMyBrowser(): null
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - executedBrowser = com.kms.katalon.core.webui.driver.DriverFactory.getExecutedBrowser(): null
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - switch (executedBrowser): Browser is opened with url: ''
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - Statement - Default: Browser is opened with url: ''
+
+2018-07-24 17:20:41 - [TEST_STEP][PASSED] - openBrowser: Browser is opened with url: ''
+
+2018-07-24 17:20:46 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2018-07-24 17:20:46 - [TEST_STEP][PASSED] - maximizeWindow: Current window maximized
+
+2018-07-24 17:20:46 - [MESSAGE][PASSED] - Current window maximized
+
+2018-07-24 17:20:46 - [TEST_STEP][PASSED] - navigateToUrl: Navigate to 'http://spreadsheetpage.com/index.php/file/C35/P10/' successfully
+
+2018-07-24 17:20:53 - [MESSAGE][PASSED] - Navigate to 'http://spreadsheetpage.com/index.php/file/C35/P10/' successfully
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - Statement - testObject = new com.kms.katalon.core.testobject.TestObject(myTestObject): null
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - Statement - testObject.addProperty("xpath", EQUALS, "//a[text()="smilechart.xls"]"): null
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - verifyElementPresent: Object 'myTestObject' is present
+
+2018-07-24 17:20:53 - [MESSAGE][PASSED] - Object 'myTestObject' is present
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - Statement - mr = MATERIAL_REPOSITORY: null
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - Statement - assert mr != null: null
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - Statement - mr.deleteFilesInDownloadsDir("smilechart.xls"): null
+
+2018-07-24 17:20:53 - [TEST_STEP][PASSED] - click: Object: 'myTestObject' is clicked on
+
+2018-07-24 17:20:58 - [MESSAGE][PASSED] - Object: 'myTestObject' is clicked on
+
+2018-07-24 17:20:58 - [TEST_STEP][PASSED] - delay: Delayed 3 second(s)
+
+2018-07-24 17:21:01 - [MESSAGE][PASSED] - Delayed 3 second(s)
+
+2018-07-24 17:21:01 - [TEST_STEP][PASSED] - Statement - xlsFile = mr.importFileFromDownloadsDir(CURRENT_TESTCASE_ID, "smilechart.xls"): null
+
+2018-07-24 17:21:01 - [TEST_STEP][PASSED] - Statement - com.kms.katalon.core.util.KeywordUtil.markFailed("Wow, FAILED"): null
+
+2018-07-24 17:21:01 - [TEST_STEP][PASSED] - closeBrowser: Browser is closed
+
+2018-07-24 17:21:02 - [MESSAGE][PASSED] - Browser is closed
+
+2018-07-24 17:21:02 - [TEST_STEP][PASSED] - Start listener action : afterTestCase: Invoke 'com.kms.katalon.core.annotation.AfterTestCase' method: 'TL.afterTestCase(...)' completed.]]></system-out>
+         <system-err><![CDATA[2018-07-24 17:20:41 - [TEST_CASE][FAILED] - Test Cases/TC2: Test Cases/TC2 FAILED because (of) Wow, FAILED]]></system-err>
+      </testcase>
+      <system-out><![CDATA[2018-07-24 17:20:28 - [TEST_SUITE][FAILED] - TS1: Test Cases/TC2 FAILED because (of) Wow, FAILED]]></system-out>
+      <system-err><![CDATA[2018-07-24 17:20:28 - [TEST_SUITE][FAILED] - TS1: Test Cases/TC2 FAILED because (of) Wow, FAILED]]></system-err>
+   </testsuite>
+</testsuites>

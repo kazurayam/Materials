@@ -87,9 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/DownloadsDirectoryHelperSpec.class'
-    include '**/material/Path.class'
-    inlucde '**/material/RepositoryScannerSpec.class'
+    include '**/material/RepositoryRootSpec.class'
 }
 
 // run firefoxTest or run chromeTest

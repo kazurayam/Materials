@@ -10,13 +10,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.DownloadsDirectoryHelper
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.MaterialRepository
-import com.kazurayam.material.MaterialRepositoryFactory
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -125,8 +118,8 @@ class MaterialRepositorySpec extends Specification {
 
     def testResolveScreenshotMaterialPath() {
         when:
-        mr_.putCurrentTestSuite('Test Suites/TS1','20180530_130419')
-        Path path = mr_.resolveScreenshotMaterialPath('Test Cases/TC1', 'http://demoaut.katalon.com/')
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+        Path path = mr_.resolveScreenshotMaterialPath('Test Cases/main/TC1', 'http://demoaut.katalon.com/')
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }

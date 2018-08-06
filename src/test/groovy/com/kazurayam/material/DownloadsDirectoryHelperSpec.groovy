@@ -7,9 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.DownloadsDirectoryHelper
-import com.kazurayam.material.Helpers
-
 import spock.lang.Specification
 
 class DownloadsDirectoryHelperSpec extends Specification {
@@ -27,7 +24,7 @@ class DownloadsDirectoryHelperSpec extends Specification {
 
     def testListSuffixedFiles() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials/TS4/20180712_142755/TC1')
+        Path sourceDir = Paths.get('./src/test/fixture/Materials/main.TS4/20180712_142755/main.TC1')
         Path targetDir = workdir_.resolve('testListSuffixedFiles')
         when:
         Helpers.copyDirectory(sourceDir, targetDir)
@@ -48,7 +45,7 @@ class DownloadsDirectoryHelperSpec extends Specification {
 
     def testListSuffixedFiles_DownloadsDir() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials/TS4/20180712_142755/TC1')
+        Path sourceDir = Paths.get('./src/test/fixture/Materials/main.TS4/20180712_142755/main.TC1')
         Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
         when:
         Helpers.copyDirectory(sourceDir, downloads)
@@ -69,7 +66,7 @@ class DownloadsDirectoryHelperSpec extends Specification {
 
     def testDeleteSuffixedFiles() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials/TS4/20180712_142755/TC1')
+        Path sourceDir = Paths.get('./src/test/fixture/Materials/main.TS4/20180712_142755/main.TC1')
         Path targetDir = workdir_.resolve('testDeleteSuffixedFiles')
         String pngFileName = 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         String xlsFileName = 'smilechart.xls'
@@ -102,7 +99,7 @@ class DownloadsDirectoryHelperSpec extends Specification {
 
     def testDeleteSuffixedFiles_DownloadsDir() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials/TS4/20180712_142755/TC1')
+        Path sourceDir = Paths.get('./src/test/fixture/Materials/main.TS4/20180712_142755/main.TC1')
         Path downloads = Paths.get(System.getProperty('user.home'), 'Downloads')
         String pngFileName = 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         String xlsFileName = 'smilechart.xls'

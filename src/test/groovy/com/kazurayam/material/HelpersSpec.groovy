@@ -9,9 +9,6 @@ import java.util.regex.Pattern
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.TSuiteTimestamp
-
 import spock.lang.Specification
 
 /**
@@ -94,13 +91,13 @@ class HelpersSpec extends Specification {
         when:
         Helpers.copyDirectory(sourceDir, targetDir)
         then:
-        Files.exists(targetDir.resolve('TS1'))
-        Files.exists(targetDir.resolve('TS1/20180530_130419'))
-        Files.exists(targetDir.resolve('TS1/20180530_130419/TC1'))
-        Files.exists(targetDir.resolve('TS1/20180530_130419/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
-        Files.exists(targetDir.resolve('TS1/20180530_130604'))
-        Files.exists(targetDir.resolve('TS1/20180530_130604/TC1'))
-        Files.exists(targetDir.resolve('TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        Files.exists(targetDir.resolve('main.TS1'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130419'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130604'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1'))
+        Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
 
     def testGetClassShortName() {

@@ -7,15 +7,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.Helpers
-import com.kazurayam.material.MaterialRepositoryImpl
-import com.kazurayam.material.RepositoryRoot
-import com.kazurayam.material.TCaseName
-import com.kazurayam.material.TCaseResult
-import com.kazurayam.material.TSuiteName
-import com.kazurayam.material.TSuiteResult
-import com.kazurayam.material.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -55,31 +46,35 @@ class TSuiteResultSpec extends Specification {
 
     def testGetTSuiteName() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         then:
-        tsr.getTSuiteName() == new TSuiteName('TS1')
+        tsr.getTSuiteName() == new TSuiteName('Test Suites/main/TS1')
     }
 
     def testGetTSuiteTimestamp() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         then:
         tsr.getTSuiteTimestamp() == new TSuiteTimestamp('20180530_130419')
     }
 
     def testGetTCaseResult() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         then:
         tcr != null
-        tcr.getTCaseName() == new TCaseName('TC1')
+        tcr.getTCaseName() == new TCaseName('Test Cases/main/TC1')
         tcr.getParent() == tsr
     }
 
     def testGetTCaseResults() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
         List<TCaseResult> tCaseResults = tsr.getTCaseResults()
         then:
         tCaseResults != null
@@ -88,7 +83,8 @@ class TSuiteResultSpec extends Specification {
 
     def testAddTCaseResult() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
         TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
         tsr.addTCaseResult(tcr)
         TCaseResult tcr2 = tsr.getTCaseResult(new TCaseName('TSX'))
@@ -99,7 +95,8 @@ class TSuiteResultSpec extends Specification {
 
     def testAddTCaseResult_parentIsNotSet() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130604'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
         //TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
         TCaseResult tcr = new TCaseResult(new TCaseName('TSX'))
         tsr.addTCaseResult(tcr)
@@ -109,7 +106,8 @@ class TSuiteResultSpec extends Specification {
 
     def testGetTSuiteTimestampDirectory() {
         when:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         Path dir = tsr.getTSuiteTimestampDirectory()
         then:
         dir.getFileName().toString() == '20180530_130419'
@@ -118,14 +116,14 @@ class TSuiteResultSpec extends Specification {
     def testEquals() {
         when:
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
-        TSuiteName tsn = new TSuiteName('TS1')
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
         TSuiteResult tsr = repoRoot.getTSuiteResult(tsn, tst)
         TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
         then:
         tsr == other
         when:
-        TSuiteResult more = new TSuiteResult(new TSuiteName('TS2') , tst).setParent(repoRoot)
+        TSuiteResult more = new TSuiteResult(new TSuiteName('Test Suites/main/TS2') , tst).setParent(repoRoot)
         then:
         tsr != more
     }
@@ -133,7 +131,7 @@ class TSuiteResultSpec extends Specification {
     def testHashCode() {
         when:
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
-        TSuiteName tsn = new TSuiteName('TS1')
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
         TSuiteResult tsr = mri_.getTSuiteResult(tsn, tst)
         TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
@@ -143,9 +141,10 @@ class TSuiteResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         when:
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('TC1'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         def s = tsr.toString()
         logger_.debug("#testToJson ${s}")
         logger_.debug("#testToJson ${JsonOutput.prettyPrint(s)}")
@@ -161,7 +160,8 @@ class TSuiteResultSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         setup:
-        TSuiteResult tsr = mri_.getTSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         when:
         def s = tsr.toBootstrapTreeviewData()
         logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")
