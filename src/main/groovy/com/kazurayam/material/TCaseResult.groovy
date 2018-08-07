@@ -207,6 +207,26 @@ class TCaseResult implements Comparable<TCaseResult> {
             mate_count += 1
         }
         sb.append(']')
+        if (this.getParent() != null && this.getParent().getJUnitReport() != null) {
+            def status = this.getParent().getJUnitReport().getTestCaseStatus(this.getTCaseName().getId())
+            sb.append(',')
+            sb.append('"tags": ["')
+            sb.append(status)
+            sb.append('"]')
+            /*
+             * #1BC98E; グリーン
+             * #E64759; レッド
+             * #9F86FF; パープル
+             * #E4D836; イエロー
+             */
+            if (status == 'FAILED') {
+                sb.append(',')
+                sb.append('"backColor": "#E4D836"')
+            } else if (status == 'ERROR') {
+                sb.append(',')
+                sb.append('"backColor": "#E64759"')
+            }
+        }
         sb.append('}')
         return sb.toString()
     }

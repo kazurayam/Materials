@@ -36,11 +36,11 @@ class JUnitReport {
         String location = "/testsuites/testsuite[@id='${testSuiteId}']"
         Node testSuiteNode = (Node)xpath_.evaluate(location, document_, XPathConstants.NODE)
         if (testSuiteNode != null) {
-            String tests    = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@tests", document_)
-            String failures = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@failures", document_)
-            String errors   = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@errors", document_)
+            Integer tests    = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@tests", document_).toInteger()
+            Integer failures = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@failures", document_).toInteger()
+            Integer errors   = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@errors", document_).toInteger()
             StringBuilder sb = new StringBuilder()
-            sb.append("PASSED: ${tests}, FAILED: ${failures}, ERROR: ${errors}")
+            sb.append("EXECUTED: ${tests + failures + errors}, FAILED: ${failures}, ERROR: ${errors}")
             return sb.toString()
         } else {
             logger_.debug("#getTestSuiteSummary testSuiteId='${testSuiteId}' is not found in the document")

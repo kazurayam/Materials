@@ -50,7 +50,7 @@ class JUnitReportSpec extends Specification {
         when:
         String summary = obj.getTestSuiteSummary('Test Suites/main/TS1')
         then:
-        summary == 'PASSED: 1, FAILED: 1, ERROR: 0'
+        summary == 'EXECUTED: 2, FAILED: 1, ERROR: 0'
     }
 
     def testGetTestCaseStatus_PASSED() {
