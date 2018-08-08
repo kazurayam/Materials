@@ -171,16 +171,24 @@ class TSuiteResultSpec extends Specification {
         s.contains('nodes')
     }
 
-    def testCreateReportDocument() {
+    def testCreateJunitReportWrapper() {
         setup:
         TSuiteResult tsr = mri_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180805_081908'))
+                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180805_081908'))
         when:
-        Document doc = tsr.createReportDocument()
+        JUnitReportWrapper instance = tsr.createJUnitReportWrapper()
         then:
-        doc != null
+        instance != null
     }
 
-
+    def testCreateExecutionPropertiesWrapper() {
+        setup:
+        TSuiteResult tsr = mri_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180805_081908'))
+        when:
+        ExecutionPropertiesWrapper instance = tsr.createExecutionPropertiesWrapper()
+        then:
+        instance != null
+    }
     // helper methods
 }

@@ -1,5 +1,7 @@
 package com.kazurayam.material
 
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPath
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -8,25 +10,42 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-
+import java.nio.file.Path
 /**
  *
  * @author kazurayam
  *
  */
-class JUnitReport {
+class JUnitReportWrapper {
 
-    static Logger logger_ = LoggerFactory.getLogger(JUnitReport.class)
+    static Logger logger_ = LoggerFactory.getLogger(JUnitReportWrapper.class)
 
+    static final DocumentBuilderFactory dbFactory_
+    static {
+        dbFactory_ = DocumentBuilderFactory.newInstance()
+        dbFactory_.setNamespaceAware(true)
+    }
     private Document document_
     private XPath xpath_
 
-    JUnitReport(Document document) {
-        document_ = document
-        //
-        xpath_ = XPathFactory.newInstance().newXPath()
+    JUnitReportWrapper(Path path) {
+        this(path.toFile())
     }
 
+    JUnitReportWrapper(File file) {
+        DocumentBuilder db = dbFactory_.newDocumentBuilder()
+        Document document = db.parse(file)
+        init(document)
+    }
+
+    JUnitReportWrapper(Document document) {
+        init(document)
+    }
+
+    private void init(Document document) {
+        document_ = document
+        xpath_ = XPathFactory.newInstance().newXPath()
+    }
     /**
      *
      * @param testSuiteId e.g., 'Test Suites/main/TS1'
@@ -40,7 +59,7 @@ class JUnitReport {
             Integer failures = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@failures", document_).toInteger()
             Integer errors   = xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@errors", document_).toInteger()
             StringBuilder sb = new StringBuilder()
-            sb.append("EXECUTED: ${tests + failures + errors}, FAILED: ${failures}, ERROR: ${errors}")
+            sb.append("EXECUTED:${tests + failures + errors},FAILED:${failures},ERROR:${errors}")
             return sb.toString()
         } else {
             logger_.debug("#getTestSuiteSummary testSuiteId='${testSuiteId}' is not found in the document")

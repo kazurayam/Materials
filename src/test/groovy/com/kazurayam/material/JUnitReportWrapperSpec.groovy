@@ -10,63 +10,56 @@ import org.w3c.dom.Document
 import spock.lang.Specification
 
 //@Ignore
-class JUnitReportSpec extends Specification {
+class JUnitReportWrapperSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(JUnitReportSpec.class);
+    static Logger logger_ = LoggerFactory.getLogger(JUnitReportWrapperSpec.class);
 
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepositoryImpl mri_
-    private static Document doc_
+    private static JUnitReportWrapper instance_
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(JUnitReportSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(JUnitReportWrapperSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
         mri_ = new MaterialRepositoryImpl(workdir_.resolve('Materials'))
-        TSuiteResult tsr = mri_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180805_081908'))
-        doc_ = tsr.createReportDocument()
+
     }
-    def setup() {}
+    def setup() {
+        Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+        instance_ = new JUnitReportWrapper(p)
+    }
     def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
     def testConstructor() {
-        when:
-        JUnitReport obj = new JUnitReport(doc_)
-        then:
-        obj != null
+        expect:
+        instance_ != null
     }
 
     def testGetTestSuiteSummary() {
-        setup:
-        JUnitReport obj = new JUnitReport(doc_)
         when:
-        String summary = obj.getTestSuiteSummary('Test Suites/main/TS1')
+        String summary = instance_.getTestSuiteSummary('Test Suites/main/TS1')
         then:
-        summary == 'EXECUTED: 2, FAILED: 1, ERROR: 0'
+        summary == 'EXECUTED:2,FAILED:1,ERROR:0'
     }
 
     def testGetTestCaseStatus_PASSED() {
-        setup:
-        JUnitReport obj = new JUnitReport(doc_)
         when:
-        String status = obj.getTestCaseStatus('Test Cases/main/TC1')
+        String status = instance_.getTestCaseStatus('Test Cases/main/TC1')
         then:
         status == 'PASSED'
     }
 
     def testGetTestCaseStatus_FAILED() {
-        setup:
-        JUnitReport obj = new JUnitReport(doc_)
         when:
-        String status = obj.getTestCaseStatus('Test Cases/main/TC2')
+        String status = instance_.getTestCaseStatus('Test Cases/main/TC2')
         then:
         status == 'FAILED'
     }
