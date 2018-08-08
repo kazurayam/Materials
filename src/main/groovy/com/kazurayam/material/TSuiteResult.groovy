@@ -3,14 +3,10 @@ package com.kazurayam.material
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
-
-import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.w3c.dom.Document
-import org.xml.sax.SAXException
 
 /**
  *
@@ -18,13 +14,6 @@ import org.xml.sax.SAXException
 final class TSuiteResult implements Comparable<TSuiteResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
-
-    static DocumentBuilderFactory dbFactory_
-
-    static {
-        dbFactory_ = DocumentBuilderFactory.newInstance()
-        dbFactory_.setNamespaceAware(true)
-    }
 
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
@@ -35,10 +24,14 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     private Boolean latestModified_
 
     /*
-     * ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
+     * wraps ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
      */
-    private JUnitReport junitReport_
+    private JUnitReportWrapper junitReportWrapper_
 
+    /*
+     *  wraps ./Reports/xxx/xxx/yyyMMdd_hhmmss/execution.properties
+     */
+    private ExecutionPropertiesWrapper executionPropertiesWrapper_
 
     // ------------------ constructors & initializer -------------------------------
     TSuiteResult(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
@@ -56,10 +49,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
                 repoRoot_.getBaseDir().resolve(tSuiteName_.getValue()).resolve(tSuiteTimestamp_.format())
-        Document doc = createReportDocument()
-        if (doc != null) {
-            junitReport_ = new JUnitReport(doc)
-        }
+        junitReportWrapper_ = createJUnitReportWrapper()
+        executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
         return this
     }
 
@@ -98,15 +89,19 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         return this
     }
 
-    JUnitReport getJUnitReport() {
-        return junitReport_
+    JUnitReportWrapper getJUnitReportWrapper() {
+        return this.junitReportWrapper_
+    }
+
+    ExecutionPropertiesWrapper getExecutionPropertiesWrapper() {
+        return this.executionPropertiesWrapper_
     }
 
     /**
      *
      * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
      */
-    Document createReportDocument() {
+    JUnitReportWrapper createJUnitReportWrapper() {
         if (this.getRepositoryRoot() != null) {
             Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
             Path reportFilePath = reportsDirPath.
@@ -114,24 +109,32 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
                     resolve(this.getTSuiteTimestamp().format()).
                     resolve('JUnit_Report.xml')
             if (Files.exists(reportFilePath)) {
-                try {
-                    DocumentBuilder db = dbFactory_.newDocumentBuilder()
-                    Document doc = db.parse(reportFilePath.toFile())
-                    return doc
-                } catch (IOException e) {
-                    logger_.warn("#createReportDocument raised IOException for ${reportFilePath}")
-                    return null
-                } catch (SAXException e) {
-                    logger_.warn("#createReportDocument raised SAXException for ${reportFilePath}")
-                    e.printStackTrace()
-                    return null
-                }
+                return new JUnitReportWrapper(reportFilePath)
             } else {
-                logger_.debug("#createReportDocument ${reportFilePath} does not exist")
+                logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
                 return null
             }
         } else {
-            logger_.debug("#createReportDocument this.getRepositoryRoot() returned null")
+            logger_.debug("#createJUnitReportWrapper this.getRepositoryRoot() returned null")
+            return null
+        }
+    }
+
+    ExecutionPropertiesWrapper createExecutionPropertiesWrapper() {
+        if (this.getRepositoryRoot() != null) {
+            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
+            Path expropFilePath = reportsDirPath.
+                    resolve(this.getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getTSuiteTimestamp().format()).
+                    resolve('execution.properties')
+            if (Files.exists(expropFilePath)) {
+                return new ExecutionPropertiesWrapper(expropFilePath)
+            } else {
+                logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
+                return null
+            }
+        } else {
+            logger_.debug("#createExecutionPropertiesWrapper this.getRepositoryRoot() returned null")
             return null
         }
     }
@@ -261,12 +264,17 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             sb.append(tcr.toBootstrapTreeviewData())
         }
         sb.append(']')
-        if (this.getJUnitReport() != null) {
+        if (this.getJUnitReportWrapper() != null) {
             sb.append(',')
             sb.append('"tags": ["')
             logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${this.getTSuiteName()}'")
-            sb.append(this.getJUnitReport().getTestSuiteSummary(this.getTSuiteName().getId()))
-            sb.append('"]')
+            sb.append(this.getJUnitReportWrapper().getTestSuiteSummary(this.getTSuiteName().getId()))
+            sb.append('"')
+            sb.append(',')
+            sb.append('"')
+            sb.append("profile:${this.getExecutionPropertiesWrapper().getExecutionProfile()}")
+            sb.append('"')
+            sb.append(']')
         }
         sb.append('}')
         return sb.toString()
