@@ -57,6 +57,7 @@ class TSuiteNameSpec extends Specification {
         name == 'main.TS1'
     }
 
+    /*
     def testIgnoreWhitespaces() {
         setup:
         TSuiteName tsn = new TSuiteName('Test Suites/foo bar /baz TS1 ')
@@ -65,6 +66,7 @@ class TSuiteNameSpec extends Specification {
         then:
         name == 'foobar.bazTS1'
     }
+     */
 
     def testNonLatinCharacters() {
         setup:

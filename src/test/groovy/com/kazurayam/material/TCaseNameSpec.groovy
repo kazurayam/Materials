@@ -43,7 +43,7 @@ class TCaseNameSpec extends Specification {
      * ignore whitespaces
      *
      * 'Test Cases/foo bar/baz TC1' -> 'foobar.bazTC1'
-     */
+     *
     def testIgnoreWhiteSpaces() {
         setup:
         TCaseName tcn = new TCaseName('Test Cases/foo bar /baz TC1 ')
@@ -52,6 +52,7 @@ class TCaseNameSpec extends Specification {
         then:
         name == 'foobar.bazTC1'
     }
+     */
 
 
     /**
