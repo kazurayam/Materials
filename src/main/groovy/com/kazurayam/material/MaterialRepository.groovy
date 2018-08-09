@@ -40,15 +40,24 @@ interface MaterialRepository {
      * @param url e.g., 'http://demoaut.katalon.com/'
      * @return
      */
-    Path resolveScreenshotMaterialPath(String testCaseId, String url)
+    Path resolveScreenshotPath(String testCaseId, URL url)
+
+    /**
+     *
+     * @param testCaseId
+     * @param fileName
+     * @return
+     */
+    Path resolveMaterialPath(String testCaseId, String fileName)
 
     /**
      *
      * @param testCaseId e.g., 'Test Cases/TC1'
-     * @param fileName 'mymemo.txt'
+     * @param subpath '.', 'foo' or 'foo/bar'
+     * @param fileName 'myfile.xls'
      * @return
      */
-    Path resolveMaterialPath(String testCaseId, String first, String... more)
+    Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
 
     /**
      *

@@ -164,14 +164,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 fileType)
     }
 
-    /**
-     * This is the core value of the Carmina package.
-     *
-     * @param tCaseName
-     * @param url
-     * @param postFix
-     * @return
-     */
     Path resolveMaterial(TCaseName tCaseName, URL url, Suffix suffix, FileType fileType) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -196,11 +188,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      *
      */
     @Override
-    Path resolveScreenshotMaterialPath(String testCaseName, String urlStr) {
-        return this.resolveScreenshotMaterialPath(new TCaseName(testCaseName), new URL(urlStr))
+    Path resolveScreenshotPath(String testCaseName, URL url) {
+        return this.resolveScreenshotPath(new TCaseName(testCaseName), url)
     }
 
-    Path resolveScreenshotMaterialPath(TCaseName tCaseName, URL url) {
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -223,6 +215,29 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return material.getPath()
     }
 
+    @Override
+    Path resolveMaterialPath(String testCaseId, String fileName) {
+        return resolveMaterialPath(testCaseId, Paths.get('.'), fileName)
+    }
+
+    @Override
+    Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
+        if (tSuiteResult == null) {
+            throw new IllegalStateException("tSuiteResult is null")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
+        //
+        Path targetFile = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName)
+        Helpers.touch(targetFile)
+        return targetFile
+    }
 
     @Override
     int deleteFilesInDownloadsDir(String fileName) {
@@ -250,24 +265,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return targetFile
     }
 
-    @Override
-    Path resolveMaterialPath(String testCaseId, String first, String... more) {
-        TCaseName tCaseName = new TCaseName(testCaseId)
-        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
-        if (tSuiteResult == null) {
-            throw new IllegalStateException("tSuiteResult is null")
-        }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
-        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
-        //
-        Path targetFile = tCaseResult.getTCaseDirectory().resolve(first, more)
-        Helpers.touch(targetFile)
-        return targetFile
-    }
 
 
     /**

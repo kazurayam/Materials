@@ -3,7 +3,6 @@ package com.kazurayam.material
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
-import javax.xml.parsers.DocumentBuilderFactory
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -272,7 +271,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             sb.append('"')
             sb.append(',')
             sb.append('"')
-            sb.append("profile:${this.getExecutionPropertiesWrapper().getExecutionProfile()}")
+            sb.append("${this.getExecutionPropertiesWrapper().getExecutionProfile()}")
             sb.append('"')
             sb.append(']')
         }
