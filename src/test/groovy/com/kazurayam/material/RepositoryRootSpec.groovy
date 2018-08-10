@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
@@ -26,17 +27,18 @@ class RepositoryRootSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
+        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        scanner.scan()
+        repoRoot_ = scanner.getRepositoryRoot()
     }
-    def setup() {
-        repoRoot_ = new RepositoryRoot(workdir_)
-    }
+    def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
     def testAddGetTSuiteResults() {
         when:
-        TSuiteName tsn = new TSuiteName('TS1')
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
         TSuiteResult tsr = new TSuiteResult(tsn, tst)
         repoRoot_.addTSuiteResult(tsr)
@@ -47,12 +49,25 @@ class RepositoryRootSpec extends Specification {
 
     def testGetTSuiteResults() {
         when:
-        TSuiteResult tsr = new TSuiteResult(new TSuiteName('TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = new TSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         then:
         tSuiteResults != null
         tSuiteResults.size() > 0
+    }
+
+
+    def testGetTSuiteResults_byTSuiteName() {
+        when:
+        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResults(new TSuiteName('TS1'))
+        then:
+        tsrList.size() == 2
+        tsrList[0].getTSuiteName() == new TSuiteName('TS1')
+        tsrList[0].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140105')
+        tsrList[1].getTSuiteName() == new TSuiteName('TS1')
+        tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140106')
     }
 
     def testGetSortedTSuiteResults() {
@@ -91,15 +106,17 @@ class RepositoryRootSpec extends Specification {
 
     def testEquals() {
         when:
+        RepositoryRoot thisRoot = new RepositoryRoot(workdir_)
         TSuiteResult tsr = new TSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
-        repoRoot_.addTSuiteResult(tsr)
+        thisRoot.addTSuiteResult(tsr)
+        //
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
         TSuiteResult otherTsr = new TSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
-        repoRoot_ == otherRoot
+        thisRoot == otherRoot
     }
 
     def testHashCode() {

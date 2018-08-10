@@ -83,7 +83,6 @@ interface MaterialRepository {
     Path makeIndex()
 
 
-
     /**
      * for ImageDiff
      *
@@ -93,5 +92,7 @@ interface MaterialRepository {
      * @return
      */
     List<MaterialPair> getRecentMaterialPairs(
-        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, String testSuiteId)
+        String expectedProfile, String actualProfile, String testSuiteId)
+
+
 }

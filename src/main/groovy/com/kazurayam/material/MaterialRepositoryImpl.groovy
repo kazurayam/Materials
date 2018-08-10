@@ -278,11 +278,75 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return index
     }
 
-
+    /**
+     * MaterialRepositoryの中にはスクリーショットが下記の形式のPathに収録されている。
+     *
+     * ./Materials/TSuiteName/TSuiteTimestamp/TCaseName/xxx/xxx/sssss.png
+     *
+     * 指定されたtestSuiteIdの中をスキャンする。TSuiteTimestampに該当する
+     * ./Reports/TSuiteName/TSuiteTimestamp の中から
+     * expectedProfileに一致するTSuiteResultと
+     * actualProfileに一致するTSuiteResultを探し
+     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを特定する。
+     * expectedTSuiteResultと
+     * actualTSuiteResultとを見比べてMaterialオブジェクトの組を生成する。
+     * Materialのパス文字列
+     * TCaseName/xxx/xxx/sssss.ext
+     * が一致するもの同士をMatrialPairオブジェクトに格納し、
+     * MaterialPairのListを組み立てる。それをreturnする。
+     *
+     * @param expectedProfile
+     * @param actualProfile
+     * @param testSuiteId
+     * @return
+     */
     @Override
     List<MaterialPair> getRecentMaterialPairs(
-        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, String testSuiteId) {
-        throw new UnsupportedOperationException("TODO")
+        String expectedProfile, String actualProfile, String testSuiteId) {
+        return this.getRecentMaterialPairs(
+                new ExecutionProfile(expectedProfile),
+                new ExecutionProfile(actualProfile),
+                new TSuiteName(testSuiteId))
+    }
+
+    List<MaterialPair> getRecentMaterialPairs(
+            ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName) {
+        List<MaterialPair> result = new ArrayList<MaterialPair>()
+        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
+        List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
+        List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : tSuiteResults) {
+            ExecutionProfile ep = tsr.getExecutionPropertiesWrapper().getExecutionProfile() ?: 'default'
+            if (ep == expectedProfile) {
+                expectedTSRList.add(tsr)
+            } else if (ep == actualProfile) {
+                actualTSRList.add(tsr)
+            }
+        }
+        if (expectedTSRList.size() == 0) {
+            logger_.debug("#getRecentMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
+            return result
+        } else {
+            Collections.sort(expectedTSRList, Comparator.reverseOrder())
+        }
+        if (actualTSRList.size() == 0) {
+            logger_.debug("#getRecentMaterialPairs actualTSRList.size() was 0 for ${tSuiteName.getValue()}:${actualProfile}")
+        } else {
+            Collections.sort(actualTSRList, Comparator.reverseOrder())
+        }
+        def expMaterials = expectedTSRList[0].getMaterials()
+        def actMaterials = actualTSRList[0].getMaterials()
+        for (Material expMate : expMaterials) {
+            Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
+            for (Material actMate : actMaterials) {
+                Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
+                // サブパスが同じだったらMaterialPairにする
+                if (expPath == actPath) {
+                    result.add(new MaterialPair().setExpected(expMate).setActual(actMate))
+                }
+            }
+        }
+        return result
     }
 
     // ----------------------------- helpers ----------------------------------

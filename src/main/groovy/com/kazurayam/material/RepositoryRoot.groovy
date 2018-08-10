@@ -48,6 +48,18 @@ class RepositoryRoot {
         return null
     }
 
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
+        for (TSuiteResult tsr : tSuiteResults_) {
+            logger_.debug("#getTSuiteResults tSuiteName=${tSuiteName}, tsr.getTSuiteName()=${tsr.getTSuiteName()}")
+            if (tSuiteName == tsr.getTSuiteName()) {
+                result.add(tsr)
+            }
+        }
+        return result
+    }
+
     List<TSuiteResult> getTSuiteResults() {
         return tSuiteResults_
     }

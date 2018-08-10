@@ -26,7 +26,7 @@ class ExecutionPropertiesWrapper {
         jsonObject = slurper.parseText(text)
     }
 
-    String getExecutionProfile() {
-        return jsonObject.execution.general.executionProfile
+    ExecutionProfile getExecutionProfile() {
+        return new ExecutionProfile(jsonObject.execution.general.executionProfile)
     }
 }

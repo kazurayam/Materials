@@ -1,5 +1,7 @@
 package com.kazurayam.material
 
+import spock.lang.IgnoreRest
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -178,6 +180,7 @@ class MaterialRepositoryImplSpec extends Specification {
         str.contains('}}')
     }
 
+    @IgnoreRest
     def testGetRecentMaterialPairs() {
         setup:
         def methodName = "testGetRecentMaterialPairs"
@@ -187,7 +190,7 @@ class MaterialRepositoryImplSpec extends Specification {
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(materials)
         when:
         List<MaterialPair> list = mri.getRecentMaterialPairs(
-            new ExecutionProfile('product'), new ExecutionProfile('demo'), 'TS1')
+            'product', 'demo', 'TS1')
         then:
         list.size() == 1
         when:
@@ -195,8 +198,8 @@ class MaterialRepositoryImplSpec extends Specification {
         Material expected = mp.getExpected()
         Material actual = mp.getActual()
         then:
-        expected.getIdentifier() == 'TS1/20180810_140105/TC1/CURA_HealthcareService.png'
-        actual.getIdentifier() == 'TS1/20180810_140106/TC1/CURA_HealthcareService.png'
+        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
+        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
 
 
