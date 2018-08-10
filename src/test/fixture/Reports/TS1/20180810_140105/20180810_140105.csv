@@ -1,0 +1,15 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+TS1,Firefox 61.0,,2018-08-10 14:01:09,2018-08-10 14:01:26,16.277s,PASSED
+,,,,,,
+Test Cases/TC1,Firefox 61.0,,2018-08-10 14:01:11,2018-08-10 14:01:26,14.451s,PASSED
+Start listener action : beforeTestCase,Firefox 61.0,,2018-08-10 14:01:11,2018-08-10 14:01:11,0.016s,PASSED
+openBrowser,Firefox 61.0,,2018-08-10 14:01:11,2018-08-10 14:01:18,6.456s,PASSED
+maximizeWindow,Firefox 61.0,,2018-08-10 14:01:18,2018-08-10 14:01:18,0.131s,PASSED
+navigateToUrl,Firefox 61.0,,2018-08-10 14:01:18,2018-08-10 14:01:21,3.112s,PASSED
+verifyElementPresent,Firefox 61.0,,2018-08-10 14:01:21,2018-08-10 14:01:21,0.138s,PASSED
+delay,Firefox 61.0,,2018-08-10 14:01:21,2018-08-10 14:01:22,1.014s,PASSED
+Statement - mr = MATERIAL_REPOSITORY,Firefox 61.0,,2018-08-10 14:01:22,2018-08-10 14:01:22,0.002s,PASSED
+Statement - assert mr != null,Firefox 61.0,,2018-08-10 14:01:22,2018-08-10 14:01:22,0.002s,PASSED
+"Statement - pngFile = mr.resolveMaterialPath(CURRENT_TESTCASE_ID, ""CURA_Healthcare_Service.png"")",Firefox 61.0,,2018-08-10 14:01:22,2018-08-10 14:01:22,0.074s,PASSED
+com.kazurayam.ksbackyard.AShotDriver.takeEntirePage,Firefox 61.0,,2018-08-10 14:01:22,2018-08-10 14:01:25,2.756s,PASSED
+closeBrowser,Firefox 61.0,,2018-08-10 14:01:25,2018-08-10 14:01:26,0.529s,PASSED

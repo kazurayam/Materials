@@ -278,6 +278,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return index
     }
 
+
+    @Override
+    List<MaterialPair> getRecentMaterialPairs(
+        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, String testSuiteId) {
+        throw new UnsupportedOperationException("TODO")
+    }
+
     // ----------------------------- helpers ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {

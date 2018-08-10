@@ -81,4 +81,17 @@ interface MaterialRepository {
      * @return
      */
     Path makeIndex()
+
+
+
+    /**
+     * for ImageDiff
+     *
+     * @param expectedProfile
+     * @param actualProfile
+     * @param testSuiteId
+     * @return
+     */
+    List<MaterialPair> getRecentMaterialPairs(
+        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, String testSuiteId)
 }

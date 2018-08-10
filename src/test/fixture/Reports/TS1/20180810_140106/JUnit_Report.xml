@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="TS1" time="15" tests="1" failures="0" errors="0">
+   <testsuite name="TS1" tests="1" failures="0" errors="0" time="15" timestamp="2018-08-10 14:01:29" hostname="QCQ0264 - N01-0370.quick.local" id="Test Suites/TS1">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform" value=""/>
+         <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\ImageDiffByAShot\\Reports\\TS1\\20180810_140106"/>
+         <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\ImageDiffByAShot\\Reports\\TS1\\20180810_140106\\execution0.log"/>
+         <property name="attachments" value=""/>
+         <property name="hostName" value="QCQ0264 - N01-0370.quick.local"/>
+         <property name="os" value="Windows 7 64bit"/>
+         <property name="katalonVersion" value="5.4.2.1"/>
+         <property name="browser" value="Firefox 61.0"/>
+         <property name="hostAddress" value="192.168.56.1"/>
+         <property name="sessionId" value="83d11361-eb92-4a4b-be10-ab0cff3bc69a"/>
+         <property name="seleniumVersion" value="3.7.1"/>
+         <property name="proxyInformation" value="ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}"/>
+         <property name="platform" value="Windows 7"/>
+      </properties>
+      <testcase name="Test Cases/TC1" classname="Test Cases/TC1" status="PASSED">
+         <system-out><![CDATA[2018-08-10 14:01:31 - [TEST_CASE][PASSED] - Test Cases/TC1: Test Cases/TC1
+
+2018-08-10 14:01:31 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'MyTestListener.beforeTestCase(...)' completed.
+
+2018-08-10 14:01:31 - [TEST_STEP][PASSED] - Statement - If (MATERIAL_REPOSITORY == null): null
+
+2018-08-10 14:01:31 - [TEST_STEP][PASSED] - Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId(): Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'MyTestListener.beforeTestCase(...)' completed.
+
+2018-08-10 14:01:31 - [TEST_STEP][PASSED] - openBrowser: Browser is opened with url: ''
+
+2018-08-10 14:01:37 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2018-08-10 14:01:37 - [TEST_STEP][PASSED] - maximizeWindow: Current window maximized
+
+2018-08-10 14:01:37 - [MESSAGE][PASSED] - Current window maximized
+
+2018-08-10 14:01:37 - [TEST_STEP][PASSED] - navigateToUrl: Navigate to 'http://demoaut-mimic.kazurayam.com' successfully
+
+2018-08-10 14:01:40 - [MESSAGE][PASSED] - Navigate to 'http://demoaut-mimic.kazurayam.com' successfully
+
+2018-08-10 14:01:40 - [TEST_STEP][PASSED] - verifyElementPresent: Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-08-10 14:01:40 - [MESSAGE][PASSED] - Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present
+
+2018-08-10 14:01:40 - [TEST_STEP][PASSED] - delay: Delayed 1 second(s)
+
+2018-08-10 14:01:41 - [MESSAGE][PASSED] - Delayed 1 second(s)
+
+2018-08-10 14:01:41 - [TEST_STEP][PASSED] - Statement - mr = MATERIAL_REPOSITORY: null
+
+2018-08-10 14:01:41 - [TEST_STEP][PASSED] - Statement - assert mr != null: null
+
+2018-08-10 14:01:41 - [TEST_STEP][PASSED] - Statement - pngFile = mr.resolveMaterialPath(CURRENT_TESTCASE_ID, "CURA_Healthcare_Service.png"): null
+
+2018-08-10 14:01:41 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.AShotDriver.takeEntirePage: com.kazurayam.ksbackyard.AShotDriver.takeEntirePage is PASSED
+
+2018-08-10 14:01:44 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.AShotDriver.takeEntirePage is PASSED
+
+2018-08-10 14:01:44 - [TEST_STEP][PASSED] - closeBrowser: Browser is closed
+
+2018-08-10 14:01:44 - [MESSAGE][PASSED] - Browser is closed]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <system-out><![CDATA[2018-08-10 14:01:29 - [TEST_SUITE][PASSED] - TS1: Test Cases/TC1]]></system-out>
+      <system-err><![CDATA[]]></system-err>
+   </testsuite>
+</testsuites>

@@ -16,7 +16,8 @@ class MaterialRepositoryImplSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryImplSpec.class)
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
+    private static Path materials_ = fixture_.resolve('Materials')
     private static String classShortName_ = Helpers.getClassShortName(MaterialRepositoryImplSpec.class)
 
     // fixture methods
@@ -34,7 +35,7 @@ class MaterialRepositoryImplSpec extends Specification {
     def testGetBaseDir() {
         setup:
         Path casedir = workdir_.resolve('testGetBaseDir')
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         when:
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         then:
@@ -46,7 +47,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName ='testResolveMaterial'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -65,7 +66,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_withSuffix'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -84,7 +85,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_new'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
@@ -104,7 +105,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_withSuffix_new'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
@@ -124,7 +125,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_png'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -138,7 +139,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_png_withSuffix'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
@@ -152,7 +153,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_png_SuitelessTimeless'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
@@ -165,7 +166,7 @@ class MaterialRepositoryImplSpec extends Specification {
     def testToJson() {
         setup:
         Path casedir = workdir_.resolve('testToJson')
-        Helpers.copyDirectory(fixture_, casedir)
+        Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
         mri.putCurrentTestSuite('TS1')
         when:
@@ -175,6 +176,27 @@ class MaterialRepositoryImplSpec extends Specification {
         str.contains('{"MaterialRepositoryImpl":{')
         str.contains(Helpers.escapeAsJsonText(casedir.toString()))
         str.contains('}}')
+    }
+
+    def testGetRecentMaterialPairs() {
+        setup:
+        def methodName = "testGetRecentMaterialPairs"
+        Path casedir = workdir_.resolve(methodName)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materials = casedir.resolve('Materials')
+        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(materials)
+        when:
+        List<MaterialPair> list = mri.getRecentMaterialPairs(
+            new ExecutionProfile('product'), new ExecutionProfile('demo'), 'TS1')
+        then:
+        list.size() == 1
+        when:
+        MaterialPair mp = list.get(0)
+        Material expected = mp.getExpected()
+        Material actual = mp.getActual()
+        then:
+        expected.getIdentifier() == 'TS1/20180810_140105/TC1/CURA_HealthcareService.png'
+        actual.getIdentifier() == 'TS1/20180810_140106/TC1/CURA_HealthcareService.png'
     }
 
 

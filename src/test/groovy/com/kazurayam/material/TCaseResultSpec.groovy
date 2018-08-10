@@ -7,7 +7,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -94,7 +93,7 @@ class TCaseResultSpec extends Specification {
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG
     }
-    
+
     def testAddMaterial_parentIsNotSet() {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
@@ -121,7 +120,7 @@ class TCaseResultSpec extends Specification {
         materials.size() == 2
     }
 
-    @IgnoreRest
+    /*
     def testGetMaterials_reproducingProblem() {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
@@ -134,6 +133,7 @@ class TCaseResultSpec extends Specification {
         then:
         materials.size() == 4
     }
+     */
 
     def testToJson() {
         setup:

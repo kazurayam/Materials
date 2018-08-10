@@ -1,0 +1,317 @@
+{
+  "devicePlatform": "",
+  "logFolder": "C:\\Users\\qcq0264\\katalon-workspace\\ImageDiffByAShot\\Reports\\TS1\\20180810_140105",
+  "runData": {
+    "hostName": "QCQ0264 - N01-0370.quick.local",
+    "os": "Windows 7 64bit",
+    "katalonVersion": "5.4.2.1",
+    "browser": "Firefox 61.0",
+    "hostAddress": "192.168.56.1",
+    "sessionId": "4eda51d7-181c-4930-85ff-8d29ead9253a",
+    "seleniumVersion": "3.7.1",
+    "proxyInformation": "ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}",
+    "platform": "Windows 7"
+  },
+  "type": "TEST_SUITE",
+  "name": "TS1",
+  "id": "Test Suites/TS1",
+  "source": "",
+  "message": "Test Cases/TC1",
+  "description": "",
+  "startTime": 1533877269768.0,
+  "endTime": 1533877286045.0,
+  "childRecords": [
+    {
+      "isOptional": false,
+      "type": "TEST_CASE",
+      "name": "Test Cases/TC1",
+      "id": "Test Cases/TC1",
+      "source": "C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\ImageDiffByAShot\\\\Test Cases\\\\TC1.tc",
+      "message": "Test Cases/TC1",
+      "description": "",
+      "startTime": 1533877271561.0,
+      "endTime": 1533877286012.0,
+      "childRecords": [
+        {
+          "testStatus": {
+            "stackTrace": "",
+            "statusValue": "INFO"
+          },
+          "type": "MESSAGE",
+          "name": "",
+          "message": "Evaluating variables for test case",
+          "startTime": 1533877271608.0,
+          "endTime": 0,
+          "childRecords": [],
+          "interuppted": false
+        },
+        {
+          "index": -1,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "Start listener action : beforeTestCase",
+          "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'MyTestListener.beforeTestCase(...)' completed.",
+          "description": "",
+          "startTime": 1533877271611.0,
+          "endTime": 1533877271627.0,
+          "childRecords": [
+            {
+              "index": 1,
+              "isIgnoredIfFailed": false,
+              "type": "TEST_STEP",
+              "name": "Statement - If (MATERIAL_REPOSITORY == null)",
+              "description": "",
+              "startTime": 1533877271613.0,
+              "endTime": 1533877271617.0,
+              "childRecords": [],
+              "interuppted": false
+            },
+            {
+              "index": 2,
+              "isIgnoredIfFailed": false,
+              "type": "TEST_STEP",
+              "name": "Statement - CURRENT_TESTCASE_ID = testCaseContext.getTestCaseId()",
+              "message": "Invoke 'com.kms.katalon.core.annotation.BeforeTestCase' method: 'MyTestListener.beforeTestCase(...)' completed.",
+              "description": "",
+              "startTime": 1533877271618.0,
+              "endTime": 1533877271626.0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 1,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "openBrowser",
+          "message": "Browser is opened with url: ''",
+          "description": "",
+          "startTime": 1533877271793.0,
+          "endTime": 1533877278249.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Browser is opened with url: ''",
+              "startTime": 1533877278248.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 2,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "maximizeWindow",
+          "message": "Current window maximized",
+          "description": "",
+          "startTime": 1533877278249.0,
+          "endTime": 1533877278380.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Current window maximized",
+              "startTime": 1533877278379.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 3,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "navigateToUrl",
+          "message": "Navigate to 'https://katalon-demo-cura.herokuapp.com' successfully",
+          "description": "",
+          "startTime": 1533877278381.0,
+          "endTime": 1533877281493.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Navigate to 'https://katalon-demo-cura.herokuapp.com' successfully",
+              "startTime": 1533877281492.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 4,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "verifyElementPresent",
+          "message": "Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present",
+          "description": "",
+          "startTime": 1533877281494.0,
+          "endTime": 1533877281632.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Object 'Object Repository/Page_CURA Healthcare Service/a_Make Appointment' is present",
+              "startTime": 1533877281631.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 5,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "delay",
+          "message": "Delayed 1 second(s)",
+          "description": "",
+          "startTime": 1533877281632.0,
+          "endTime": 1533877282646.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Delayed 1 second(s)",
+              "startTime": 1533877282645.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 6,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "Statement - mr = MATERIAL_REPOSITORY",
+          "description": "",
+          "startTime": 1533877282646.0,
+          "endTime": 1533877282648.0,
+          "childRecords": [],
+          "interuppted": false
+        },
+        {
+          "index": 7,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "Statement - assert mr != null",
+          "description": "",
+          "startTime": 1533877282648.0,
+          "endTime": 1533877282650.0,
+          "childRecords": [],
+          "interuppted": false
+        },
+        {
+          "index": 8,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "Statement - pngFile = mr.resolveMaterialPath(CURRENT_TESTCASE_ID, \"CURA_Healthcare_Service.png\")",
+          "description": "",
+          "startTime": 1533877282650.0,
+          "endTime": 1533877282724.0,
+          "childRecords": [],
+          "interuppted": false
+        },
+        {
+          "index": 9,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "com.kazurayam.ksbackyard.AShotDriver.takeEntirePage",
+          "message": "com.kazurayam.ksbackyard.AShotDriver.takeEntirePage is PASSED",
+          "description": "",
+          "startTime": 1533877282725.0,
+          "endTime": 1533877285481.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "com.kazurayam.ksbackyard.AShotDriver.takeEntirePage is PASSED",
+              "startTime": 1533877285480.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "index": 10,
+          "isIgnoredIfFailed": false,
+          "type": "TEST_STEP",
+          "name": "closeBrowser",
+          "message": "Browser is closed",
+          "description": "",
+          "startTime": 1533877285482.0,
+          "endTime": 1533877286011.0,
+          "childRecords": [
+            {
+              "testStatus": {
+                "stackTrace": "",
+                "statusValue": "PASSED"
+              },
+              "type": "MESSAGE",
+              "name": "",
+              "message": "Browser is closed",
+              "startTime": 1533877286010.0,
+              "endTime": 0,
+              "childRecords": [],
+              "interuppted": false
+            }
+          ],
+          "interuppted": false
+        },
+        {
+          "testStatus": {
+            "stackTrace": "",
+            "statusValue": "PASSED"
+          },
+          "type": "MESSAGE",
+          "name": "",
+          "message": "Test Cases/TC1",
+          "startTime": 1533877286011.0,
+          "endTime": 0,
+          "childRecords": [],
+          "interuppted": false
+        }
+      ],
+      "interuppted": false
+    }
+  ],
+  "interuppted": false
+}
