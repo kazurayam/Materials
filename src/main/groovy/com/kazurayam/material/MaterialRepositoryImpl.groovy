@@ -100,12 +100,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return repoRoot_
     }
 
-    TSuiteName getCurrentTSuiteName() {
-        return currentTSuiteName_
+    @Override
+    String getCurrentTestSuiteId() {
+        return currentTSuiteName_.getId()
     }
 
-    TSuiteTimestamp getCurrentTSuiteTimestamp() {
-        return currentTSuiteTimestamp_
+    @Override
+    String getCurrentTestSuiteTimestamp() {
+        return currentTSuiteTimestamp_.format()
     }
 
     // --------------------- create/add/get child nodes -----------------------
@@ -316,11 +318,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
         List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults) {
-            ExecutionProfile ep = tsr.getExecutionPropertiesWrapper().getExecutionProfile() ?: 'default'
-            if (ep == expectedProfile) {
-                expectedTSRList.add(tsr)
-            } else if (ep == actualProfile) {
-                actualTSRList.add(tsr)
+            ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
+            if (epw != null) {
+                ExecutionProfile ep = epw.getExecutionProfile() ?: 'default'
+                if (ep == expectedProfile) {
+                    expectedTSRList.add(tsr)
+                } else if (ep == actualProfile) {
+                    actualTSRList.add(tsr)
+                }
+            } else {
+                logger_.warn("could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
             }
         }
         if (expectedTSRList.size() == 0) {
@@ -331,6 +338,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         if (actualTSRList.size() == 0) {
             logger_.debug("#getRecentMaterialPairs actualTSRList.size() was 0 for ${tSuiteName.getValue()}:${actualProfile}")
+            return result
         } else {
             Collections.sort(actualTSRList, Comparator.reverseOrder())
         }

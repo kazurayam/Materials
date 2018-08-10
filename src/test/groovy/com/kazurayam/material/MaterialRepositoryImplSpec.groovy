@@ -180,7 +180,7 @@ class MaterialRepositoryImplSpec extends Specification {
         str.contains('}}')
     }
 
-    @IgnoreRest
+
     def testGetRecentMaterialPairs() {
         setup:
         def methodName = "testGetRecentMaterialPairs"

@@ -29,6 +29,8 @@ interface MaterialRepository {
 
     void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
+    String getCurrentTestSuiteId()
+    String getCurrentTestSuiteTimestamp()
 
     Path getBaseDir()
     Path getCurrentTestSuiteDirectory()

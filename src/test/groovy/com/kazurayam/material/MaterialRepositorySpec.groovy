@@ -1,5 +1,7 @@
 package com.kazurayam.material
 
+import spock.lang.IgnoreRest
+
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Files
@@ -19,7 +21,7 @@ class MaterialRepositorySpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositorySpec.class);
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepository mr_
 
     def setupSpec() {
@@ -31,7 +33,7 @@ class MaterialRepositorySpec extends Specification {
     }
 
     def setup() {
-        mr_ = MaterialRepositoryFactory.createInstance(workdir_)
+        mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve('Materials'))
     }
 
     def testPutCurrentTestSuite_oneStringArg() {
@@ -105,7 +107,7 @@ class MaterialRepositorySpec extends Specification {
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path testSuiteDir = mr_.getCurrentTestSuiteDirectory()
         then:
-        testSuiteDir == workdir_.resolve('main.TS1').resolve('20180530_130419').normalize()
+        testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
     }
 
     def testGetTestCaseDirectory() {
@@ -113,7 +115,7 @@ class MaterialRepositorySpec extends Specification {
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
         then:
-        testCaseDir == workdir_.resolve('main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
+        testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
 
     def testResolveScreenshotPath() {
@@ -169,6 +171,21 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
+
+    def testGetRecentMaterialPairs() {
+        when:
+        List<MaterialPair> list = mr_.getRecentMaterialPairs(
+                'product', 'demo', 'TS1')
+        then:
+        list.size() == 1
+        when:
+        MaterialPair mp = list.get(0)
+        Material expected = mp.getExpected()
+        Material actual = mp.getActual()
+        then:
+        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
+        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
+    }
 
 }
 
