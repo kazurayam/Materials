@@ -3,7 +3,7 @@ plugins {
 }
 
 project.group 'kazurayam.com'
-project.version '0.7.10'
+project.version '0.7.11'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
@@ -87,9 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/MaterialRepositorySpec.class'
-    include '**/material/MaterialRepositoryImplSpec.class'
-    include '**/material/MaterialRepositoryFactorySpec.class'
+    include '**/material/RepositoryRootSpec.class'
 }
 
 

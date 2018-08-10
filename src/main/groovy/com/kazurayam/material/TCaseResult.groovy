@@ -115,9 +115,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         }
         boolean found = false
         for (Material mate : materials) {
-            if (mate.getURL().toString() == material.getURL().toString() &&
-                mate.getSuffix() == material.getSuffix() &&
-                mate.getFileType() == material.getFileType()) {
+            if (mate == material) {
                 found = true
             }
         }

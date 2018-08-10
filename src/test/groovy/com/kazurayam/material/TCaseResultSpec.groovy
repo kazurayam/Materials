@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -93,7 +94,7 @@ class TCaseResultSpec extends Specification {
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG
     }
-
+    
     def testAddMaterial_parentIsNotSet() {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
@@ -118,6 +119,20 @@ class TCaseResultSpec extends Specification {
         List<Material> materials = tcr.getMaterials()
         then:
         materials.size() == 2
+    }
+
+    @IgnoreRest
+    def testGetMaterials_reproducingProblem() {
+        when:
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
+        logger_.debug("#testGetMaterials_reproducingProblem repoRoot is ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/AllCorps'),
+            new TSuiteTimestamp('20180810_095325'))
+        assert tsr != null
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/fnhp/ecza/visitAllFunds_ecza_pc'))
+        List<Material> materials = tcr.getMaterials()
+        then:
+        materials.size() == 4
     }
 
     def testToJson() {
@@ -152,6 +167,7 @@ class TCaseResultSpec extends Specification {
         str.contains('text')
         str.contains('nodes')
     }
+
 
     def testEquals() {
         setup:
