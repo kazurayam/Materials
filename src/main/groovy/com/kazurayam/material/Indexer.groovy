@@ -54,12 +54,14 @@ class Indexer {
      * @throws IOException
      */
     void generate(RepositoryRoot repoRoot, OutputStream os) throws IOException {
+        def dir = repoRoot.getBaseDir().resolve('../..').normalize().toAbsolutePath()
+        def title = dir.relativize(repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
         def writer = new OutputStreamWriter(os, 'UTF-8')
         StringBuilder sb = new StringBuilder()
         sb.append('<html>'                                                                    + "\n")
         sb.append('  <head>'                                                                  + "\n")
         sb.append('    <meta http-equiv="X-UA-Compatible" content="IE=edge" />'               + "\n")
-        sb.append('    <title>' + repoRoot.getBaseDir().getFileName().toString() + '</title>' + "\n")
+        sb.append('    <title>' + title + '</title>' + "\n")
         sb.append('    <meta charset="utf-8" />'                                              + "\n")
         sb.append('    <meta name="description" content="" />'                                + "\n")
         sb.append('    <meta name="author" content="" />'                                     + "\n")
@@ -84,7 +86,7 @@ class Indexer {
         sb.append('  </head>'                                                                 + "\n")
         sb.append('  <body>'                                                                  + "\n")
         sb.append('    <div class="container">'                                               + "\n")
-        sb.append('      <h3>Materials</h3>'                                                  + "\n")
+        sb.append('      <h3>' + title + '</h3>'                                              + "\n")
         sb.append('      <div id="tree"></div>'                                               + "\n")
         sb.append('      <div id="footer"></div>'                                             + "\n")
         sb.append('      <div id="modal-windows">'                                            + "\n")
