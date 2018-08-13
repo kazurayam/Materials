@@ -74,6 +74,19 @@ class HelpersSpec extends Specification {
         !subdir.toFile().exists()
     }
 
+    def testDeleteDirectoryContents() {
+        setup:
+        Path subdir = workdir_.resolve('testDeleteDirectoryContents')
+        Helpers.ensureDirs(subdir)
+        Path file = subdir.resolve('dummy')
+        Helpers.touch(file)
+        when:
+        Helpers.deleteDirectoryContents(subdir)
+        then:
+        !file.toFile().exists()
+        subdir.toFile().exists()
+    }
+
     def testGetTimestampAsString() {
         setup:
         //Pattern pattern = Pattern.compile('[12][0-9]{3}[01][0-9][0-5][0-9]_[012][0-5][0-5][0-9]') // 20180529_110342

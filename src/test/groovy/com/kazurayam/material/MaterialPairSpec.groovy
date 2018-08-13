@@ -26,9 +26,9 @@ class MaterialPairSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        RepositoryScanner rs = new RepositoryScanner(workdir_)
-        rs.scan()
-        repoRoot_ = rs.getRepositoryRoot()
+        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
+        scanner.scan()
+        repoRoot_ = scanner.getRepositoryRoot()
     }
     def setup() {
         TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(

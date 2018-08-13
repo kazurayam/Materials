@@ -64,13 +64,23 @@ final class Helpers {
      * @return
      */
     static boolean deleteDirectory(Path directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.toFile().listFiles()
+        Helpers.deleteDirectoryContents(directoryToBeDeleted)
+        return directoryToBeDeleted.toFile().delete()
+    }
+
+    /**
+     * force-delete the contents of the directory while preserving the directory undeleted
+     *
+     * @return
+     */
+    static boolean deleteDirectoryContents(Path directory) {
+        File[] allContents = directory.toFile().listFiles()
         if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file.toPath())
+            for (File child : allContents) {
+                deleteDirectory(child.toPath())
             }
         }
-        return directoryToBeDeleted.toFile().delete()
+        return true
     }
 
     /**

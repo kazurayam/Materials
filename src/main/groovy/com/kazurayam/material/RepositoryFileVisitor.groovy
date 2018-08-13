@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory
 /**
  *
  */
-class RepositoryVisitor extends SimpleFileVisitor<Path> {
+class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitor.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileVisitor.class)
 
     private RepositoryRoot repoRoot_
 
@@ -33,7 +33,7 @@ class RepositoryVisitor extends SimpleFileVisitor<Path> {
     private int subdirDepth_ = 0
     private Stack<Layer> directoryTransition_
 
-    RepositoryVisitor(RepositoryRoot repoRoot) {
+    RepositoryFileVisitor(RepositoryRoot repoRoot) {
         repoRoot_ = repoRoot
         directoryTransition_ = new Stack<Layer>()
         directoryTransition_.push(Layer.INIT)

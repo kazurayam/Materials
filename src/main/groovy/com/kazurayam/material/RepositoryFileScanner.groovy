@@ -82,13 +82,13 @@ import groovy.json.JsonOutput
  *
  * @author kazurayam
  */
-class RepositoryScanner {
+class RepositoryFileScanner {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScanner.class)
 
     private RepositoryRoot repoRoot_
 
-    RepositoryScanner(Path baseDir) {
+    RepositoryFileScanner(Path baseDir) {
         assert baseDir != null
         if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
@@ -106,7 +106,7 @@ class RepositoryScanner {
         Files.walkFileTree(
                 repoRoot_.getBaseDir(),
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                new RepositoryVisitor(repoRoot_)
+                new RepositoryFileVisitor(repoRoot_)
         )
         //
         if (repoRoot_.getLatestModifiedTSuiteResult() != null) {
@@ -137,7 +137,7 @@ class RepositoryScanner {
     public static void main(String[] args) {
         logger_.info("#main " + ("Hello, I am Carmina RepositoryScanner."))
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Materials')
-        RepositoryScanner scanner = new RepositoryScanner(baseDir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir)
         scanner.scan()
         logger_.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))
     }

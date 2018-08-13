@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-class RepositoryScannerSpec extends Specification {
+class RepositoryFileScannerSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryScannerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScannerSpec.class)
 
     // fields
     private static Path workdir_
@@ -20,7 +20,7 @@ class RepositoryScannerSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryScannerSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryFileScannerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -44,7 +44,7 @@ class RepositoryScannerSpec extends Specification {
         Helpers.copyDirectory(fixture_, casedir)
 
         when:
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
@@ -128,7 +128,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
@@ -157,7 +157,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
@@ -182,7 +182,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForMiscellaneousImages")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -199,7 +199,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForPDF")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -219,7 +219,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForExcel")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -249,7 +249,7 @@ class RepositoryScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testPrettyPrint')
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryScanner scanner = new RepositoryScanner(casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         when:
         logger_.debug(JsonOutput.prettyPrint(scanner.toJson()))

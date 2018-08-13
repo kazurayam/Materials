@@ -20,7 +20,7 @@ class MaterialSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
-    private static RepositoryScanner rs_
+    private static RepositoryFileScanner scanner_
     private static TCaseResult tcr_
 
 
@@ -31,9 +31,9 @@ class MaterialSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        rs_ = new RepositoryScanner(workdir_)
-        rs_.scan()
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        scanner_ = new RepositoryFileScanner(workdir_)
+        scanner_.scan()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         logger_.debug("#setupSpec tcr_:\n${JsonOutput.prettyPrint(tcr_.toJson())}")
@@ -58,7 +58,7 @@ class MaterialSpec extends Specification {
 
     def testGetPath_Excel() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
@@ -163,7 +163,7 @@ class MaterialSpec extends Specification {
 
     def testToHtmlAsModalWindow_miscellaneousImages() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         assert tcr != null
@@ -209,7 +209,7 @@ class MaterialSpec extends Specification {
 
     def testToHtmlAsModalWindow_PDF() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
@@ -226,7 +226,7 @@ class MaterialSpec extends Specification {
 
     def testToHtmlAsModalWindow_CSV() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
@@ -241,7 +241,7 @@ class MaterialSpec extends Specification {
 
     def testToHtmlAsModalWindow_XLSX() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         assert tcr != null
@@ -344,7 +344,7 @@ class MaterialSpec extends Specification {
 
     def testHashCodeWithAncestors() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr1 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
         TSuiteResult tsr2 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), new TSuiteTimestamp('20180612_111256'))
         TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
@@ -373,7 +373,7 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifierOfExcelFile() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
@@ -406,7 +406,7 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifier_FileTypeOmmited() {
         setup:
-        RepositoryRoot repoRoot = rs_.getRepositoryRoot()
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         Material mate = tcr.getMaterial(new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),

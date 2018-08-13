@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
  */
 class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryScanner.class);
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScanner.class);
 
     static final String TIMELESS_DIRNAME = '_'
 

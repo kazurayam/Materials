@@ -35,7 +35,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(baseDir_)
 
         // load data from the local disk
-        RepositoryScanner scanner = new RepositoryScanner(baseDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
 

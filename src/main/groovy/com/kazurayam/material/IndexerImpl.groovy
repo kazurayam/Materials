@@ -58,7 +58,7 @@ class IndexerImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
-        RepositoryScanner scanner = new RepositoryScanner(baseDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         OutputStream os = output_.toFile().newOutputStream()

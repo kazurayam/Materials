@@ -27,7 +27,7 @@ class RepositoryRootSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -72,7 +72,7 @@ class RepositoryRootSpec extends Specification {
 
     def testGetSortedTSuiteResults() {
         when:
-        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getSortedTSuiteResults()
@@ -154,7 +154,7 @@ class RepositoryRootSpec extends Specification {
 
     def testToBootstrapTreeviewData() {
         when:
-        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
         scanner.scan()
         RepositoryRoot rr = scanner.getRepositoryRoot()
         def s = rr.toBootstrapTreeviewData()
@@ -166,7 +166,7 @@ class RepositoryRootSpec extends Specification {
 
     def testHtmlFragmensOfMaterialsAsModal() {
         when:
-        RepositoryScanner scanner = new RepositoryScanner(workdir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
         scanner.scan()
         RepositoryRoot rr = scanner.getRepositoryRoot()
         def html = rr.htmlFragmensOfMaterialsAsModal()
