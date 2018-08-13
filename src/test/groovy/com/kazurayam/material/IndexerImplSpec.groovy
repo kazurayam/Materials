@@ -11,9 +11,9 @@ import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
-class IndexerSpec extends Specification {
+class IndexerImplSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(IndexerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerImplSpec.class)
 
     // fields
     private static Path workdir_
@@ -21,7 +21,7 @@ class IndexerSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerImplSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -35,9 +35,11 @@ class IndexerSpec extends Specification {
 
     def testMakeIndex() {
         setup:
-        Indexer indexer = new Indexer(workdir_.resolve('Materials'))
+        Indexer indexer = new IndexerImpl()
+        indexer.setBaseDir(workdir_.resolve('Materials'))
         when:
-        Path index = indexer.makeIndex()
+        indexer.execute()
+        Path index = indexer.getOutput()
         then:
         index != null
         Files.exists(index)

@@ -88,6 +88,7 @@ test {
 
 task pinpoint(type: Test) {
     include '**/material/IndexerSpec.class'
+    include '**/material/MaterialRepositorySpec.class'
 }
 
 

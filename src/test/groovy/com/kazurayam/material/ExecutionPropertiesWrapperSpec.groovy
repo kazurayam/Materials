@@ -1,12 +1,12 @@
 package com.kazurayam.material
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import spock.lang.Ignore
-import spock.lang.Specification
-
 import java.nio.file.Path
 import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import spock.lang.Specification
 
 class ExecutionPropertiesWrapperSpec extends Specification {
 
@@ -36,7 +36,7 @@ class ExecutionPropertiesWrapperSpec extends Specification {
         when:
         def executionProfile = epw.getExecutionProfile()
         then:
-        executionProfile == 'default'
+        executionProfile.toString() == 'default'
     }
 
 }
