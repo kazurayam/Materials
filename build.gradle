@@ -3,7 +3,7 @@ plugins {
 }
 
 project.group 'kazurayam.com'
-project.version '0.10'
+project.version '0.11'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
