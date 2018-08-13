@@ -35,6 +35,12 @@ class IndexerImpl implements Indexer {
         baseDir_ = baseDir
     }
 
+    @Override
+    void setOutput(Path outputFile) {
+        output_ = outputFile
+        Helpers.ensureDirs(outputFile.getParent())
+    }
+
     /**
      *
      * @return
@@ -47,20 +53,18 @@ class IndexerImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
+        if (output_ == null) {
+            def msg = "#execute output_ is null"
+            logger_.error(msg)
+            throw new IllegalStateException(msg)
+        }
         RepositoryScanner scanner = new RepositoryScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        output_ = baseDir_.resolve('index.html')
         OutputStream os = output_.toFile().newOutputStream()
         this.generate(repoRoot, os)
         logger_.info("generated ${output_.toString()}")
     }
-
-    @Override
-    Path getOutput() {
-        return output_
-    }
-
 
     /**
      *

@@ -36,10 +36,12 @@ class IndexerImplSpec extends Specification {
     def testMakeIndex() {
         setup:
         Indexer indexer = IndexerFactory.newIndexer()
-        indexer.setBaseDir(workdir_.resolve('Materials'))
+        Path baseDir = workdir_.resolve('Materials')
+        indexer.setBaseDir(baseDir)
+        Path index = baseDir.resolve('index.html')
+        indexer.setOutput(index)
         when:
         indexer.execute()
-        Path index = indexer.getOutput()
         then:
         index != null
         Files.exists(index)

@@ -6,8 +6,8 @@ interface Indexer {
 
     void setBaseDir(Path baseDir)
 
-    void execute() throws IOException
+    void setOutput(Path outputFile)
 
-    Path getOutput()
+    void execute() throws IOException
 
 }

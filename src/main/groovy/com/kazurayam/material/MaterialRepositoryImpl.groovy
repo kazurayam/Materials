@@ -277,8 +277,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     Path makeIndex() {
         Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(baseDir_)
+        Path index = baseDir_.resolve('index.html')
+        indexer.setOutput(index)
         indexer.execute()
-        Path index = indexer.getOutput()
         return index
     }
 
