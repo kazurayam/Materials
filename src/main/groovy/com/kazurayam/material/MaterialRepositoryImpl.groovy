@@ -275,7 +275,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     Path makeIndex() {
-        Indexer indexer = new IndexerImpl()
+        Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(baseDir_)
         indexer.execute()
         Path index = indexer.getOutput()

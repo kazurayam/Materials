@@ -35,7 +35,7 @@ class IndexerImplSpec extends Specification {
 
     def testMakeIndex() {
         setup:
-        Indexer indexer = new IndexerImpl()
+        Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(workdir_.resolve('Materials'))
         when:
         indexer.execute()

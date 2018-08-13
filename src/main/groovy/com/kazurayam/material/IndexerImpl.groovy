@@ -15,8 +15,8 @@ class IndexerImpl implements Indexer {
     private Path baseDir_
     private Path output_
 
-    IndexerImpl(Path baseDir) {
-        baseDir_ = baseDir
+    IndexerImpl() {
+        baseDir_ = null
         output_ = null
     }
 
