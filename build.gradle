@@ -87,6 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/material/MaterialSpec.class'
     include '**/material/IndexerByVisitorPatternImplSpec.class'
 }
 

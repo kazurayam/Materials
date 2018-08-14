@@ -19,7 +19,7 @@ class MaterialSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryFileScanner scanner_
     private static TCaseResult tcr_
 
@@ -31,7 +31,8 @@ class MaterialSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        scanner_ = new RepositoryFileScanner(workdir_)
+        Path materials = workdir_.resolve('Materials')
+        scanner_ = new RepositoryFileScanner(materials)
         scanner_.scan()
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
@@ -52,14 +53,32 @@ class MaterialSpec extends Specification {
         Path path = mate.getPath()
         logger_.debug("#testGetPath path=${path.toString()}")
         then:
-        path.toString().contains('MaterialSpec\\main.TS1\\20180530_130419\\main.TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
+        path.toString().contains(
+                'MaterialSpec\\main.TS1\\20180530_130419\\main.TC1\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
         !path.toString().contains('..')   // should be normalized
     }
+
+
+    def testGetPathBySubpath() {
+        setup:
+        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
+        when:
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
+        Material png = tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        then:
+        png != null
+        png.getPath().toString().contains(
+                'MaterialSpec\\main.TS4\\20180718_142832\\main.TC4\\foo\\http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('\\', File.separator))
+    }
+
 
     def testGetPath_Excel() {
         setup:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterials()
@@ -70,8 +89,6 @@ class MaterialSpec extends Specification {
         then:
         true
     }
-
-
 
     def testGetEncodedHrefRelativeToRepositoryRoot() {
         when:

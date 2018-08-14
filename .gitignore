@@ -29,3 +29,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# http://gyamin.hatenablog.com/entry/2017/04/02/103049
+gradle.properties
