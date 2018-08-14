@@ -87,7 +87,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/HelpersSpec.class'
+    include '**/material/RepositoryWalkerSpec.class'
 }
 
 

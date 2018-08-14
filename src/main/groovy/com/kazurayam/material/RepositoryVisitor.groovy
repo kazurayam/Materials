@@ -23,6 +23,6 @@ interface RepositoryVisitor {
 
     RepositoryVisitResult visitMaterial(Material material)
 
-    RepositoryVisitResult visitMaterialFailed(Material material)
+    RepositoryVisitResult visitMaterialFailed(Material material, IOException ex)
 
 }
