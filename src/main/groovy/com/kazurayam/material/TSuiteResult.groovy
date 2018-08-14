@@ -83,6 +83,10 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         return lastModified_
     }
 
+    Boolean isLatestModified() {
+        return latestModified_
+    }
+
     TSuiteResult setLatestModified(Boolean isLatest) {
         latestModified_ = isLatest
         return this

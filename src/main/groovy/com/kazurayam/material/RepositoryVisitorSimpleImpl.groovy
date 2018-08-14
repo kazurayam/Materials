@@ -7,7 +7,10 @@ class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorSimpleImpl.class)
 
-    private PrintWriter pw_
+    /**
+     * this PrintWriter instance will be reused by other RepositoryVisitor which extends this
+     */
+    protected PrintWriter pw_
 
     RepositoryVisitorSimpleImpl(Writer wr) {
         pw_ = new PrintWriter(new BufferedWriter(wr))

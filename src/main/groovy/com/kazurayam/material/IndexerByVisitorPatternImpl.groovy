@@ -182,6 +182,45 @@ modalize();
         HtmlFragmentsOfMaterialsAsModal(Writer writer) {
             super(writer)
         }
+        @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {}
+        @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {}
+        @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {}
+        @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {}
+        @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {}
+        @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {}
+
+        @Override RepositoryVisitResult visitMaterial(Material material) {
+            StringBuilder sb = new StringBuilder()
+            sb.append('<div id="' + this.hashCode() + '" class="modal fade">' + "\n")
+            sb.append('  <div class="modal-dialog modal-lg" role="document">' + "\n")
+            sb.append('    <div class="modal-content">' + "\n")
+            sb.append('      <div class="modal-header">' + "\n")
+            sb.append('        <p class="modal-title" id="')
+            sb.append(material.hashCode() + 'title')
+            sb.append('">')
+            sb.append(material.getIdentifier())
+            sb.append('</p>' + "\n")
+            sb.append('      </div>' + "\n")
+            sb.append('      <div class="modal-body">' + "\n")
+            sb.append('        ' + material.markupInModalWindow() + "\n")
+            sb.append('      </div>' + "\n")
+            sb.append('      <div class="modal-footer">' + "\n")
+            sb.append('        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>' + "\n")
+            def ar = material.anchorToReport()
+            if (ar != null) {
+                sb.append('        ' + ar + "\n")
+            }
+            sb.append('      </div>' + "\n")
+            sb.append('    </div>' + "\n")
+            sb.append('  </div>' + "\n")
+            sb.append('</div>' + "\n")
+            pw_.print(sb.toString())
+            pw_.flush()
+        }
+
+        @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
+            throw new UnsupportedOperationException("failed visiting " + material.toString())
+        }
     }
 
 
@@ -192,10 +231,118 @@ modalize();
      */
     static class BootstrapTreeviewData extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
          static Logger logger_ = LoggerFactory.getLogger(BootstrapTreeviewData.class)
+         private int tSuiteResultCount
+         private int tCaseResultCount
+         private int materialsCount
          BootstrapTreeviewData(Writer writer) {
              super(writer)
          }
-
+         @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
+             tSuiteResultCount = 0
+             pw_.print('[')
+             pw_.flush()
+         }
+         @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {
+             pw_.print(']')
+             pw_.flush()
+         }
+         @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {
+             if (tSuiteResultCount > 0) {
+                 pw_.print(',')
+             }
+             tSuiteResultCount += 1
+             //
+             StringBuilder sb = new StringBuilder()
+             sb.append('{')
+             sb.append('"text":"' + Helpers.escapeAsJsonText(tSuiteResult.treeviewTitle()) + '",')
+             sb.append('"backColor":"#CCDDFF",')
+             sb.append('"selectable":false,')
+             sb.append('"state":{')
+             sb.append('    "expanded":' + tSuiteResult.isLatestModified() + ',')
+             sb.append('},')
+             sb.append('"nodes":[')
+             pw_.print(sb.toString())
+             pw_.flush()
+             tCaseResultCount = 0
+         }
+         @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {
+             StringBuilder sb = new StringBuilder()
+             sb.append(']')
+             if (tSuiteResult.getJUnitReportWrapper() != null) {
+                 sb.append(',')
+                 sb.append('"tags": ["')
+                 logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getTSuiteName()}'")
+                 sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getTSuiteName().getId()))
+                 sb.append('"')
+                 sb.append(',')
+                 sb.append('"')
+                 sb.append("${tSuiteResult.getExecutionPropertiesWrapper().getExecutionProfile()}")
+                 sb.append('"')
+                 sb.append(']')
+             }
+             sb.append('}')
+             pw_.print(sb.toString())
+             pw_.flush()
+         }
+         @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
+             StringBuilder sb = new StringBuilder()
+             if (tCaseResultCount > 0) {
+                 sb.append(',')
+             }
+             tCaseResultCount += 1
+             //
+             sb.append('{')
+             sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseResult.getTCaseName().getValue())+ '",')
+             sb.append('"selectable":false,')
+             sb.append('"nodes":[')
+             pw_.print(sb.toString())
+             pw_.flush()
+             materialsCount = 0
+         }
+         @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
+             StringBuilder sb = new StringBuilder()
+             sb.append(']')
+             if (tCaseResult.getParent() != null && tCaseResult.getParent().getJUnitReportWrapper() != null) {
+                 def status = tCaseResult.getParent().getJUnitReportWrapper().getTestCaseStatus(tCaseResult.getTCaseName().getId())
+                 sb.append(',')
+                 sb.append('"tags": ["')
+                 sb.append(status)
+                 sb.append('"]')
+                 /*
+                  * #1BC98E; green
+                  * #E64759; red
+                  * #9F86FF; purple
+                  * #E4D836; yellow
+                  */
+                 if (status == 'FAILED') {
+                     sb.append(',')
+                     sb.append('"backColor": "#E4D836"')
+                 } else if (status == 'ERROR') {
+                     sb.append(',')
+                     sb.append('"backColor": "#E64759"')
+                 }
+             }
+             sb.append('}')
+             pw_.print(sb.toString())
+             pw_.flush()
+         }
+         @Override RepositoryVisitResult visitMaterial(Material material) {
+             StringBuilder sb = new StringBuilder()
+             if (materialsCount > 0) {
+                 sb.append(',')
+             }
+             materialsCount += 1
+             sb.append('{')
+             sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
+             sb.append('"selectable":true,')
+             sb.append('"href":"#' + material.hashCode() + '"')
+             sb.append('}')
+             pw_.print(sb.toString())
+             pw_.flush()
+         }
+         @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
+             throw new UnsupportedOperationException("failed visiting " + material.toString())
+         }
     }
 
 }
