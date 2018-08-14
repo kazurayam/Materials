@@ -37,15 +37,15 @@ class IndexerFactorySpec extends Specification {
         Indexer indexer = IndexerFactory.newIndexer()
         then:
         indexer != null
-        indexer.getClass().getName() == 'com.kazurayam.material.IndexerImpl'
+        indexer.getClass().getName() == 'com.kazurayam.material.IndexerRudimentaryImpl'
     }
 
     def testNewIndexerWithArg() {
         when:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerImpl')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerRudimentaryImpl')
         then:
         indexer != null
-        indexer.getClass().getName() == 'com.kazurayam.material.IndexerImpl'
+        indexer.getClass().getName() == 'com.kazurayam.material.IndexerRudimentaryImpl'
     }
     
     def testNewIndexerWithArg_throwsClassNotFoundException() {

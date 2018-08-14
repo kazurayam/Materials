@@ -47,9 +47,10 @@ class RepositoryWalkerSpec extends Specification {
 
     def testWalkRepositoryRoot() {
         when:
-        RepositoryVisitorSimpleImpl srv = new RepositoryVisitorSimpleImpl()
-        RepositoryWalker.walkRepository(repoRoot_, srv)
-        String output = srv.getOutput()
+        StringWriter sw = new StringWriter()
+        RepositoryVisitorSimpleImpl rv = new RepositoryVisitorSimpleImpl(sw)
+        RepositoryWalker.walkRepository(repoRoot_, rv)
+        String output = sw.toString()
         then:
         output.contains('preVisitRepositoryRoot')
         output.contains('postVisitRepositoryRoot')

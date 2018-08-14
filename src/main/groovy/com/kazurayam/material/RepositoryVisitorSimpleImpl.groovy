@@ -7,61 +7,66 @@ class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorSimpleImpl.class)
 
-    private StringBuilder sb_
+    private PrintWriter pw_
 
-    RepositoryVisitorSimpleImpl() {
-        sb_ = new StringBuilder()
+    RepositoryVisitorSimpleImpl(Writer wr) {
+        pw_ = new PrintWriter(new BufferedWriter(wr))
     }
 
     @Override
     RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
-        sb_.append("#preVisitRepositoryRoot ${repoRoot.getBaseDir().toString()}")
+        pw_.println("#preVisitRepositoryRoot ${repoRoot.getBaseDir().toString()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {
-        sb_.append("#postVisitRepositoryRoot ${repoRoot.getBaseDir().toString()}")
+        pw_.println("#postVisitRepositoryRoot ${repoRoot.getBaseDir().toString()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {
-        sb_.append("#preVisitTSuiteResult ${tSuiteResult.treeviewTitle()}")
+        pw_.println("#preVisitTSuiteResult ${tSuiteResult.treeviewTitle()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {
-        sb_.append("#postVisitTSuiteResult ${tSuiteResult.treeviewTitle()}")
+        pw_.println("#postVisitTSuiteResult ${tSuiteResult.treeviewTitle()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
-        sb_.append("#preVisitTCaseResult ${tCaseResult.getTCaseName().getValue()}")
+        pw_.println("#preVisitTCaseResult ${tCaseResult.getTCaseName().getValue()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
-        sb_.append("#postVisitTCaseResult ${tCaseResult.getTCaseName().getValue()}")
+        pw_.println("#postVisitTCaseResult ${tCaseResult.getTCaseName().getValue()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult visitMaterial(Material material) {
-        sb_.append("#visitMaterial ${material.getIdentifier()}")
+        pw_.println("#visitMaterial ${material.getIdentifier()}")
+        pw_.flush()
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override
     RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
-        sb_.append("#visitMaterialFailed ${material.getIdentifier()}")
+        pw_.println("#visitMaterialFailed ${material.getIdentifier()}")
+        pw_.flush()
         return RepositoryVisitResult.FAILURE
     }
 
-    String getOutput() {
-        return sb_.toString()
-    }
 }

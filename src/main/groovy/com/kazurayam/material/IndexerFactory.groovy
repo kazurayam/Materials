@@ -4,6 +4,7 @@ class IndexerFactory {
 
     static Indexer newIndexer() {
         return new IndexerRudimentaryImpl()
+        //return new IndexerByVisitorPatternImpl()
     }
 
     static Indexer newIndexer(String indexerClassName)
