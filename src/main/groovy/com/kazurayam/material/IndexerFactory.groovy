@@ -3,7 +3,7 @@ package com.kazurayam.material
 class IndexerFactory {
 
     static Indexer newIndexer() {
-        return new IndexerImpl()
+        return new IndexerRudimentaryImpl()
     }
 
     static Indexer newIndexer(String indexerClassName)

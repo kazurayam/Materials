@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 
-class IndexerImpl implements Indexer {
+class IndexerRudimentaryImpl implements Indexer {
 
-    static Logger logger_ = LoggerFactory.getLogger(IndexerImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerRudimentaryImpl.class)
 
     private Path baseDir_
     private Path output_
 
-    IndexerImpl() {
+    IndexerRudimentaryImpl() {
         baseDir_ = null
         output_ = null
     }
