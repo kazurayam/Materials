@@ -68,18 +68,23 @@ class TCaseResult implements Comparable<TCaseResult> {
         return materials_
     }
 
-    List<Material> getMaterials(URL url, FileType fileType) {
+    List<Material> getMaterials(Path subpath, URL url, FileType fileType) {
+        logger_.debug("#getMaterials subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Material> list = new ArrayList<Material>()
+        logger_.debug("#getMaterials materials_.size()=${materials_.size()}")
         for (Material mate : materials_) {
-            if (mate.getURL().toString() == url.toString() &&
-                    mate.getFileType() == fileType) {
+            logger_.debug("#getMaterials mate.getSubpath()=${mate.getSubpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
+            if (mate.getSubpath() == subpath &&
+                mate.getURL().toString() == url.toString() &&
+                mate.getFileType() == fileType) {
                 list.add(mate)
             }
         }
         return list
     }
 
-    Material getMaterial(URL url, Suffix suffix, FileType fileType) {
+
+    Material getMaterial(Path subpath, URL url, Suffix suffix, FileType fileType) {
         for (Material mate : materials_) {
             if (mate.getURL().toString() == url.toString() &&
                 mate.getSuffix() == suffix &&
@@ -89,6 +94,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         }
         return null
     }
+
 
     Material getMaterial(Path subpathUnderTCaseResult) {
         if (parent_ == null) {
@@ -128,13 +134,17 @@ class TCaseResult implements Comparable<TCaseResult> {
     }
 
     // -------------------------- helpers -------------------------------------
-    Suffix allocateNewSuffix(URL url, FileType fileType) {
+    Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType) {
+        logger_.debug("#allocateNewSuffix subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Suffix> suffixList = new ArrayList<>()
-        for (Material mate : this.getMaterials(url, fileType)) {
+        List<Material> mateList = this.getMaterials(subpath, url, fileType)
+        logger_.debug("#allocateNewSuffix mateList.size()=${mateList.size()}")
+        for (Material mate : mateList) {
             suffixList.add(mate.getSuffix())
         }
         Collections.sort(suffixList)
-        Suffix newSuffix
+        logger_.debug("#allocateNewSuffix suffixList is ${suffixList.toString()}")
+        Suffix newSuffix = null
         for (Suffix su : suffixList) {
             int next = su.getValue() + 1
             newSuffix = new Suffix(next)
@@ -142,6 +152,7 @@ class TCaseResult implements Comparable<TCaseResult> {
                 return newSuffix
             }
         }
+        return newSuffix
     }
 
     // ------------------ overriding Object properties ------------------------

@@ -21,26 +21,24 @@ class Material implements Comparable<Material> {
     private URL url_
     private Suffix suffix_
     private FileType fileType_
+    private Path subpath_
     private Path path_
     private LocalDateTime lastModified_
 
-    Material(URL url, Suffix suffix, FileType fileType) {
+    Material(Path subpath, URL url, Suffix suffix, FileType fileType) {
         url_ = url
         suffix_ = (suffix == null) ? Suffix.NULL : suffix
         fileType_ = fileType
-        path_ = Paths.get(MaterialFileName.format(url, suffix, fileType)) // interim setting, will be overriden by setParent(TCaseResult)
-    }
-
-    Material(String first, String... more) {
-        this(Paths.get(first, more))
+        subpath_ = subpath
+        path_ = subpath.resolve(MaterialFileName.format(url_, suffix_, fileType_)).normalize() // this value will be overriden by setParent()
     }
 
     /**
      *
      * @param path
      */
-    Material(Path path) {
-        path_ = path.normalize()
+    Material(Path fullPath) {
+        path_ = fullPath.normalize()
         MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
         fileType_ = mfn.getFileType()  // FileType.UNSUPPORTED or other
         suffix_   = mfn.getSuffix()    // Suffix.NULL or other
@@ -49,9 +47,8 @@ class Material implements Comparable<Material> {
 
     Material setParent(TCaseResult parent) {
         parent_ = parent
-        if (url_ != null && suffix_ != null && fileType_ != null) {
-            Path subpath = Paths.get(MaterialFileName.format(url_, suffix_, fileType_))
-            path_ = parent_.getTCaseDirectory().resolve(subpath).normalize()
+        if (subpath_ != null && url_ != null && suffix_ != null && fileType_ != null) {
+            path_ = parent_.getTCaseDirectory().resolve(subpath_).resolve(MaterialFileName.format(url_, suffix_, fileType_)).normalize()
         }
         return this
     }
@@ -78,6 +75,14 @@ class Material implements Comparable<Material> {
 
     Path getPath() {
         return path_
+    }
+
+    Path getSubpath() {
+        if (parent_.getTCaseDirectory() == path_.getParent()) {
+            return Paths.get('.')
+        } else {
+            return parent_.getTCaseDirectory().relativize(path_.getParent()).normalize()
+        }
     }
 
     //

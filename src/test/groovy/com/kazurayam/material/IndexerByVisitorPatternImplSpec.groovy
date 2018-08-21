@@ -57,7 +57,7 @@ class IndexerByVisitorPatternImplSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new IndexerByVisitorPatternImpl.HtmlFragmentsOfMaterialsAsModal(htmlFragments)
+        def htmlVisitor = new IndexerByVisitorPatternImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
         RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
         when:
         String content = htmlFragments.toString()
@@ -73,7 +73,7 @@ class IndexerByVisitorPatternImplSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         StringWriter jsonSnippet = new StringWriter()
-        def jsonVisitor = new IndexerByVisitorPatternImpl.HtmlFragmentsOfMaterialsAsModal(jsonSnippet)
+        def jsonVisitor = new IndexerByVisitorPatternImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(jsonSnippet)
         RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
         when:
         String content = jsonSnippet.toString()

@@ -72,11 +72,11 @@ class IndexerByVisitorPatternImpl implements Indexer {
         def writer = new OutputStreamWriter(os, 'UTF-8')
         //
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new HtmlFragmentsOfMaterialsAsModal(htmlFragments)
+        def htmlVisitor = new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
         RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
         //
         StringWriter jsonSnippet = new StringWriter()
-        def jsonVisitor = new BootstrapTreeviewData(jsonSnippet)
+        def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
         RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
         //
         StringBuilder sb = new StringBuilder()
@@ -177,9 +177,10 @@ modalize();
      * @author kazurayam
      *
      */
-    static class HtmlFragmentsOfMaterialsAsModal extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
-        static Logger logger_ = LoggerFactory.getLogger(HtmlFragmentsOfMaterialsAsModal.class)
-        HtmlFragmentsOfMaterialsAsModal(Writer writer) {
+    static class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
+            extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+        static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal.class)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(Writer writer) {
             super(writer)
         }
         @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {}
@@ -229,12 +230,13 @@ modalize();
      * @author kazurayam
      *
      */
-    static class BootstrapTreeviewData extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
-         static Logger logger_ = LoggerFactory.getLogger(BootstrapTreeviewData.class)
+    static class RepositoryVisitorGeneratingBootstrapTreeviewData
+            extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+         static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
          private int tSuiteResultCount
          private int tCaseResultCount
          private int materialsCount
-         BootstrapTreeviewData(Writer writer) {
+         RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
              super(writer)
          }
          @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {

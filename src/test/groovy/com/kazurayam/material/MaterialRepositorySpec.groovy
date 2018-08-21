@@ -1,7 +1,5 @@
 package com.kazurayam.material
 
-import spock.lang.IgnoreRest
-
 import static groovy.json.JsonOutput.*
 
 import java.nio.file.Files

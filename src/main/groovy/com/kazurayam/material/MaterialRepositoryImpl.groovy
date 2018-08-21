@@ -149,52 +149,27 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     // -------------------------- do the business -----------------------------
 
-    Path resolveMaterial(String testCaseName, String url, FileType fileType) {
-        return this.resolveMaterial(
-                new TCaseName(testCaseName),
-                new URL(url),
-                Suffix.NULL,
-                fileType)
-    }
-
-
-    Path resolveMaterial(String testCaseName, String url, int suffix, FileType fileType) {
-        return this.resolveMaterial(
-                new TCaseName(testCaseName),
-                new URL(url),
-                new Suffix(suffix),
-                fileType)
-    }
-
-    Path resolveMaterial(TCaseName tCaseName, URL url, Suffix suffix, FileType fileType) {
-        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
-        if (tSuiteResult == null) {
-            throw new IllegalStateException("tSuiteResult is null")
-        }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
-        Material material = tCaseResult.getMaterial(url, suffix, fileType)
-        if (material == null) {
-            material = new Material(url, suffix, fileType).setParent(tCaseResult)
-            // Here we create the parent directory for the material
-            Helpers.ensureDirs(material.getPath().getParent())
-        }
-        return material.getPath()
-    }
 
 
     /**
      *
      */
     @Override
-    Path resolveScreenshotPath(String testCaseName, URL url) {
-        return this.resolveScreenshotPath(new TCaseName(testCaseName), url)
+    Path resolveScreenshotPath(String testCaseId, URL url) {
+        return this.resolveScreenshotPath(testCaseId, Paths.get('.'), url)
     }
 
-    Path resolveScreenshotPath(TCaseName tCaseName, URL url) {
+
+    /**
+     *
+     * @param testCaseName
+     * @param subpath sub-path under the TCaseResult directory
+     * @param url
+     * @return
+     */
+    @Override
+    Path resolveScreenshotPath(String testCaseId, Path subpath, URL url) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -204,24 +179,36 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
-
-        Material material = tCaseResult.getMaterial(url, Suffix.NULL, FileType.PNG)
+        //
+        Material material = tCaseResult.getMaterial(subpath, url, Suffix.NULL, FileType.PNG)
+        logger_.debug("#resolveScreenshotPath material is ${material.toString()}")
         if (material == null) {
-            material = new Material(url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
+            material = new Material(subpath, url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
         } else {
-            Suffix newSuffix = tCaseResult.allocateNewSuffix(url, FileType.PNG)
-            material = new Material(url, newSuffix, FileType.PNG).setParent(tCaseResult)
+            Suffix newSuffix = tCaseResult.allocateNewSuffix(subpath, url, FileType.PNG)
+            logger_.debug("#resolveScreenshotPath newSuffix is ${newSuffix.toString()}")
+            material = new Material(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
 
         Helpers.ensureDirs(material.getPath().getParent())
         return material.getPath()
     }
 
+
+
+    /**
+     *
+     */
     @Override
     Path resolveMaterialPath(String testCaseId, String fileName) {
         return resolveMaterialPath(testCaseId, Paths.get('.'), fileName)
     }
 
+    /**
+     * @param testCaseId
+     * @param subpath sub-path under TCaseResult directory
+     * @param fileName
+     */
     @Override
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
@@ -236,11 +223,18 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         //
-        Path targetFile = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName)
+        Path targetFile = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName).normalize()
         Helpers.touch(targetFile)
         return targetFile
     }
 
+
+
+
+
+    /**
+     *
+     */
     @Override
     int deleteFilesInDownloadsDir(String fileName) {
         DownloadsDirectoryHelper.deleteSuffixedFiles(fileName)

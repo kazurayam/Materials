@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryFileScannerSpec extends Specification {
@@ -155,7 +156,7 @@ class RepositoryFileScannerSpec extends Specification {
      */
     def testScan_lastModifiedOfTSuiteResult() {
         setup:
-        Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
+        Path casedir = workdir_.resolve("testScan_lastModifiedOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
@@ -177,6 +178,36 @@ class RepositoryFileScannerSpec extends Specification {
 
     }
 
+    /**
+     * Test if the following files are recognized as Materials:
+     * "main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+     * "main.TS1/20180718_142832/main.TC4/foo/bar/smilechart.xls"
+     *
+     * These files resides under a TCaseResult directory with a subpath foo or foo/bar
+     * This test is designed to confirm the subpath is appropriately recognized
+     * by the RepositoryFileScanner
+     *
+     */
+    @IgnoreRest
+    def testScan_MaterialsUnderSubpath() {
+        setup:
+        Path casedir = workdir_.resolve("testScan_MaterialsUnderSubpath")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        when:
+        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
+        then:
+        tcr != null
+        when:
+        logger_.debug("testScan_MaterialsUnderSubpath tcr.toJson()=${JsonOutput.prettyPrint(tcr.toJson())}")
+        then:
+        tcr.getMaterials().size() == 2
+        tcr.getMaterial(Paths.get('foo\\bar\\smilechart.xls')) != null
+        tcr.getMaterial(Paths.get('foo\\http%3A%2F%2Fdemoaut.katalon.com%2F.png')) != null
+    }
 
     def testScanForMiscellaneousImages() {
         setup:

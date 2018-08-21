@@ -44,6 +44,8 @@ interface MaterialRepository {
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
 
+    Path resolveScreenshotPath(String testCaseId, Path subpath, URL url)
+
     /**
      *
      * @param testCaseId
