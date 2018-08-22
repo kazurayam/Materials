@@ -1,6 +1,5 @@
 package com.kazurayam.material
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
@@ -9,9 +8,6 @@ import java.time.ZoneOffset
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import groovy.json.JsonOutput
-import groovy.xml.XmlUtil
 
 class Material implements Comparable<Material> {
 
@@ -175,6 +171,7 @@ class Material implements Comparable<Material> {
         return sb.toString()
     }
 
+    /*
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
@@ -184,6 +181,7 @@ class Material implements Comparable<Material> {
         sb.append('}')
         return sb.toString()
     }
+    */
 
     /**
      * <pre>
@@ -207,6 +205,7 @@ class Material implements Comparable<Material> {
      *
      * @return String as a HTML fragment
      */
+    /*
     String toHtmlAsModalWindow() {
         StringBuilder sb = new StringBuilder()
         sb.append('<div id="' + this.hashCode() + '" class="modal fade">' + "\n")
@@ -234,7 +233,10 @@ class Material implements Comparable<Material> {
         sb.append('</div>' + "\n")
         return sb.toString()
     }
+    */
 
+
+    /*
     String anchorToReport() {
         String reportHref = this.hrefToReport()
         if (reportHref != null) {
@@ -254,7 +256,9 @@ class Material implements Comparable<Material> {
             return null
         }
     }
+    */
 
+    /*
     String hrefToReport() {
         TSuiteResult tsr = this.getParent().getParent()
         if (tsr != null) {
@@ -269,6 +273,7 @@ class Material implements Comparable<Material> {
             return null
         }
     }
+    */
 
     /**
      * returns the identifier of the Material which is used as
@@ -280,7 +285,7 @@ class Material implements Comparable<Material> {
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
         if (this.getURL() != null) {
-            if (this.getDirpath().toString() != '') {
+            if (this.getDirpath().toString() != '' && this.getDirpath().toString() != '.') {
                 sb.append(this.getDirpath().toString())
                 sb.append('/')
                 sb.append(' ')
@@ -302,6 +307,7 @@ class Material implements Comparable<Material> {
         return sb.toString()
     }
 
+    /*
     String markupInModalWindow() {
         StringBuilder sb = new StringBuilder()
         switch (this.getFileType()) {
@@ -370,7 +376,7 @@ class Material implements Comparable<Material> {
         }
         return sb.toString()
     }
-
+    */
 
     /**
      * Escape HTML angle brackets in the given string. For example.,
@@ -384,6 +390,7 @@ class Material implements Comparable<Material> {
      * @param str
      * @return
      */
+    /*
     static String escapeHtml(String str) {
         StringBuilder sb = new StringBuilder();
         char[] charArray = str.toCharArray();
@@ -400,4 +407,5 @@ class Material implements Comparable<Material> {
         }
         return sb.toString();
     }
+    */
 }

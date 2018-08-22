@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.w3c.dom.Document
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -159,6 +158,7 @@ class TSuiteResultSpec extends Specification {
         s.endsWith('}}')
     }
 
+    /*
     def testToBootstrapTreeviewData() {
         setup:
         TSuiteResult tsr = mri_.getTSuiteResult(
@@ -170,6 +170,7 @@ class TSuiteResultSpec extends Specification {
         s.contains('text')
         s.contains('nodes')
     }
+    */
 
     def testCreateJunitReportWrapper() {
         setup:

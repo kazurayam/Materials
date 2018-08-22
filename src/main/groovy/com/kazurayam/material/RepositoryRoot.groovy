@@ -210,6 +210,7 @@ class RepositoryRoot {
      * </pre>
      * @return
      */
+    /*
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('[')
@@ -223,12 +224,13 @@ class RepositoryRoot {
         sb.append(']')
         return sb.toString()
     }
+    */
 
 
     /**
      *
      * @return
-     */
+     *
     String htmlFragmensOfMaterialsAsModal() {
         StringBuilder sb = new StringBuilder()
         List<Material> mates = this.getMaterials()
@@ -238,10 +240,6 @@ class RepositoryRoot {
         }
         return sb.toString()
     }
-
-
-    /**
-     *
-     */
+    */
 
 }

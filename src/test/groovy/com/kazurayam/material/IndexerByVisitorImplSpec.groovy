@@ -7,6 +7,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as VistorHTML
+
 import groovy.json.JsonOutput
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -49,7 +51,7 @@ class IndexerByVisitorImplSpec extends Specification {
         then:
         content.contains('<html')
     }
-    
+
     def testBootstrapTreeviewData() {
         setup:
         Path materials = workdir_.resolve('Materials')
@@ -82,7 +84,17 @@ class IndexerByVisitorImplSpec extends Specification {
         content.contains('foo/bar/')
     }
 
-
+    def testEscapeHtml() {
+        expect:
+        VistorHTML.escapeHtml("This is a test") == 'This&nbsp;is&nbsp;a&nbsp;test'
+        VistorHTML.escapeHtml("&") == '&amp;'
+        VistorHTML.escapeHtml("<") == '&lt;'
+        VistorHTML.escapeHtml(">") == '&gt;'
+        VistorHTML.escapeHtml('"') == '&quot;'
+        VistorHTML.escapeHtml(" ") == '&nbsp;'
+        VistorHTML.escapeHtml("©") == '&copy;'
+        VistorHTML.escapeHtml("<xml>") == '&lt;xml&gt;'
+    }
     @Ignore
     def testIgnoring() {}
 

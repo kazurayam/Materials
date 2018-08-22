@@ -87,8 +87,10 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/material/IndexerFactorySpec.class'
+    include '**/material/RepositoryRootSpec.class'
     include '**/material/MaterialSpec.class'
+    include '**/material/TCaseResultSpec.class'
+    include '**/material/TSuiteResultSpec.class'
 }
 
 

@@ -8,7 +8,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
@@ -152,6 +151,7 @@ class RepositoryRootSpec extends Specification {
         true
     }
 
+    /*
     def testToBootstrapTreeviewData() {
         when:
         RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
@@ -163,7 +163,9 @@ class RepositoryRootSpec extends Specification {
         s.contains('text')
         s.contains('nodes')
     }
+    */
 
+    /*
     def testHtmlFragmensOfMaterialsAsModal() {
         when:
         RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
@@ -174,5 +176,6 @@ class RepositoryRootSpec extends Specification {
         then:
         html.contains('<div')
     }
+    */
 
 }

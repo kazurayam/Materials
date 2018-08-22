@@ -247,9 +247,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
 
 
-    /**
-     * @return
-     */
+    /*
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
@@ -282,6 +280,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         sb.append('}')
         return sb.toString()
     }
+    */
 
     String treeviewTitle() {
         return tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format()

@@ -9,7 +9,6 @@ import java.time.ZoneOffset
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -136,17 +135,7 @@ class MaterialSpec extends Specification {
         mate1 != mate3
     }
 
-    def testEscapeHtml() {
-        expect:
-        Material.escapeHtml("This is a test") == 'This&nbsp;is&nbsp;a&nbsp;test'
-        Material.escapeHtml("&") == '&amp;'
-        Material.escapeHtml("<") == '&lt;'
-        Material.escapeHtml(">") == '&gt;'
-        Material.escapeHtml('"') == '&quot;'
-        Material.escapeHtml(" ") == '&nbsp;'
-        Material.escapeHtml("©") == '&copy;'
-        Material.escapeHtml("<xml>") == '&lt;xml&gt;'
-    }
+
     def testGetDirpath_noSubpath() {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
@@ -218,7 +207,7 @@ class MaterialSpec extends Specification {
         title == 'http://demoaut.katalon.com/ PNG'
     }
 
-    @IgnoreRest
+
     def testGetIdentifier_withSuffix() {
         when:
         Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
@@ -327,6 +316,7 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
+    /*
     def testMarkupInModalWindow_PNG() {
         setup:
         Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
@@ -338,6 +328,7 @@ class MaterialSpec extends Specification {
         markup.contains('class="img-fluid"')
         markup.contains(FileType.PNG.getExtension())
     }
+    */
 
     def testSetGetLastModified_long() {
         setup:
@@ -359,6 +350,7 @@ class MaterialSpec extends Specification {
         modified.getParent() == tcr_
     }
 
+    /*
     def testToBootstrapTreeviewData() {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
@@ -369,7 +361,9 @@ class MaterialSpec extends Specification {
         str.contains('http://demoaut.katalon.com/')
         str.endsWith('"}')
     }
+    */
 
+    /*
     def testToHtmlAsModalWindow_PNG() {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
@@ -382,8 +376,8 @@ class MaterialSpec extends Specification {
         str.contains('<img')
         str.contains(mate.getEncodedHrefRelativeToRepositoryRoot())
     }
-
-
+    */
+    /*
     def testToHtmlAsModalWindow_miscellaneousImages() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
@@ -428,7 +422,8 @@ class MaterialSpec extends Specification {
         str.contains('.jpg')
         //
     }
-
+    */
+    /*
     def testToHtmlAsModalWindow_CSV() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
@@ -442,7 +437,8 @@ class MaterialSpec extends Specification {
         then:
         str.contains('3,28/06/2018&nbsp;17:00,Volgograd&nbsp;Stadium,Japan,Poland,Group&nbsp;H,')
     }
-
+    */
+    /*
     def testToHtmlAsModalWindow_PDF() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
@@ -457,7 +453,8 @@ class MaterialSpec extends Specification {
         str.contains('<object')
         str.contains('type="application/pdf"')
     }
-
+    */
+    /*
     def testToHtmlAsModalWindow_XLSX() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
@@ -472,6 +469,7 @@ class MaterialSpec extends Specification {
         then:
         str != null
     }
+    */
 
     def testToJson() {
         when:

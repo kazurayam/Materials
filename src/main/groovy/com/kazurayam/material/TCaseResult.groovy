@@ -201,6 +201,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         return sb.toString()
     }
 
+    /*
     String toBootstrapTreeviewData() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
@@ -222,12 +223,11 @@ class TCaseResult implements Comparable<TCaseResult> {
             sb.append('"tags": ["')
             sb.append(status)
             sb.append('"]')
-            /*
-             * #1BC98E; green
-             * #E64759; red
-             * #9F86FF; purple
-             * #E4D836; yellow
-             */
+            // #1BC98E; green
+            // #E64759; red
+            // #9F86FF; purple
+            // #E4D836; yellow
+            //
             if (status == 'FAILED') {
                 sb.append(',')
                 sb.append('"backColor": "#E4D836"')
@@ -239,6 +239,7 @@ class TCaseResult implements Comparable<TCaseResult> {
         sb.append('}')
         return sb.toString()
     }
+    */
 }
 
 

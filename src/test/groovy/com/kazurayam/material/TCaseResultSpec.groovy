@@ -45,7 +45,7 @@ class TCaseResultSpec extends Specification {
         modified.getParent() == tsr
     }
 
-    
+
     def testGetMaterial() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
@@ -160,6 +160,7 @@ class TCaseResultSpec extends Specification {
         str.endsWith('}}')
     }
 
+    /*
     def testToBootstrapTreeviewData() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
@@ -172,6 +173,7 @@ class TCaseResultSpec extends Specification {
         str.contains('text')
         str.contains('nodes')
     }
+    */
 
     def testEquals() {
         setup:
