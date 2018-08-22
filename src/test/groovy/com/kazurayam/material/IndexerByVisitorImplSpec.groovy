@@ -11,9 +11,9 @@ import groovy.json.JsonOutput
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class IndexerByVisitorPatternImplSpec extends Specification {
+class IndexerByVisitorImplSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorPatternImplSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorImplSpec.class)
 
     // fields
     private static Path workdir_
@@ -21,7 +21,7 @@ class IndexerByVisitorPatternImplSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerByVisitorPatternImplSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerByVisitorImplSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -35,7 +35,7 @@ class IndexerByVisitorPatternImplSpec extends Specification {
     @Ignore
     def testSmoke() {
         setup:
-        IndexerByVisitorPatternImpl indexer = new IndexerByVisitorPatternImpl()
+        IndexerByVisitorImpl indexer = new IndexerByVisitorImpl()
         Path materials = workdir_.resolve('Materials')
         indexer.setBaseDir(materials)
         Path index = materials.resolve('index.html')
@@ -49,6 +49,22 @@ class IndexerByVisitorPatternImplSpec extends Specification {
         then:
         content.contains('<html')
     }
+    
+    def testBootstrapTreeviewData() {
+        setup:
+        Path materials = workdir_.resolve('Materials')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        StringWriter jsonSnippet = new StringWriter()
+        def jsonVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+        RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
+        when:
+        String content = jsonSnippet.toString()
+        logger_.debug("#testBootstrapTreeviewData content=${JsonOutput.prettyPrint(content)}")
+        then:
+        content.contains("foo/ http://demoaut.katalon.com/ PNG")
+    }
 
     def testHtmlFragmentsOfMaterialsAsModal() {
         setup:
@@ -57,30 +73,15 @@ class IndexerByVisitorPatternImplSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new IndexerByVisitorPatternImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
+        def htmlVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
         RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
         when:
         String content = htmlFragments.toString()
         logger_.debug("#testHtmlFragmentsOfMaterialsAsModal content=${content}")
         then:
-        content.contains('Hello World')
+        content.contains('foo/bar/')
     }
 
-    def testBootstrapTreeviewData() {
-        setup:
-        Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
-        scanner.scan()
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        StringWriter jsonSnippet = new StringWriter()
-        def jsonVisitor = new IndexerByVisitorPatternImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(jsonSnippet)
-        RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
-        when:
-        String content = jsonSnippet.toString()
-        logger_.debug("#testBootstrapTreeviewData content=${JsonOutput.prettyPrint(content)}")
-        then:
-        content.contains('Hello World')
-    }
 
     @Ignore
     def testIgnoring() {}

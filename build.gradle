@@ -83,16 +83,11 @@ test.outputs.upToDateWhen {false}
 test {
     include '**/material/*Spec.class'
     exclude '**/material/visualtesting/*Spec.class'
-
-    exclude '**/material/IndexerByVisitorPatternImplSpec.class'
-    exclude '**/material/RepositoryWalkerSpec.class'
-
     finalizedBy jacocoTestReport
 }
 
 task pinpoint(type: Test) {
-    include '**/material/IndexerByVisitorPatternImplSpec.class'
-    include '**/material/RepositoryWalkerSpec.class'
+    include '**/material/IndexerSpec.class'
 }
 
 

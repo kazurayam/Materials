@@ -280,6 +280,11 @@ class Material implements Comparable<Material> {
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
         if (this.getURL() != null) {
+            if (this.getDirpath() != Paths.get('.')) {
+                sb.append(this.getDirpath().toString())
+                sb.append('/')
+                sb.append(' ')
+            }
             String urlStr = this.getURL().toString()
             sb.append(urlStr)
             if (this.getSuffix() != Suffix.NULL) {
@@ -292,7 +297,7 @@ class Material implements Comparable<Material> {
             }
         } else {
             Path subpath = parent_.getTCaseDirectory().relativize(this.getPath())
-            sb.append(subpath.toString())
+            sb.append(subpath.toString().replace(File.separator, '/'))
         }
         return sb.toString()
     }

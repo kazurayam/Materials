@@ -59,6 +59,6 @@ class RepositoryWalkerSpec extends Specification {
         output.contains('preVisitTCaseResult')
         output.contains('postVisitTCaseResult')
         output.contains('visitMaterial')
-        output.contains('visitMaterialFailed')
+        //output.contains('visitMaterialFailed')    // this will not be the case normally
     }
 }

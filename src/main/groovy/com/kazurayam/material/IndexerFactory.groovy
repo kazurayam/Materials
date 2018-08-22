@@ -3,8 +3,8 @@ package com.kazurayam.material
 class IndexerFactory {
 
     static Indexer newIndexer() {
-        return new IndexerRudimentaryImpl()
-        //return new IndexerByVisitorPatternImpl()
+        //return new IndexerRudimentaryImpl()
+        return new IndexerByVisitorImpl()
     }
 
     static Indexer newIndexer(String indexerClassName)

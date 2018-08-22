@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 
-class IndexerByVisitorPatternImpl implements Indexer {
+class IndexerByVisitorImpl implements Indexer {
 
-    static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorPatternImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorImpl.class)
 
     private Path baseDir_
     private Path output_
 
-    IndexerByVisitorPatternImpl() {
+    IndexerByVisitorImpl() {
         baseDir_ = null
         output_ = null
     }
@@ -192,7 +192,7 @@ modalize();
 
         @Override RepositoryVisitResult visitMaterial(Material material) {
             StringBuilder sb = new StringBuilder()
-            sb.append('<div id="' + this.hashCode() + '" class="modal fade">' + "\n")
+            sb.append('<div id="' + material.hashCode() + '" class="modal fade">' + "\n")
             sb.append('  <div class="modal-dialog modal-lg" role="document">' + "\n")
             sb.append('    <div class="modal-content">' + "\n")
             sb.append('      <div class="modal-header">' + "\n")
@@ -217,6 +217,7 @@ modalize();
             sb.append('</div>' + "\n")
             pw_.print(sb.toString())
             pw_.flush()
+            return RepositoryVisitResult.SUCCESS
         }
 
         @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
@@ -243,10 +244,12 @@ modalize();
              tSuiteResultCount = 0
              pw_.print('[')
              pw_.flush()
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {
              pw_.print(']')
              pw_.flush()
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {
              if (tSuiteResultCount > 0) {
@@ -260,12 +263,13 @@ modalize();
              sb.append('"backColor":"#CCDDFF",')
              sb.append('"selectable":false,')
              sb.append('"state":{')
-             sb.append('    "expanded":' + tSuiteResult.isLatestModified() + ',')
+             sb.append('    "expanded":' + tSuiteResult.isLatestModified() )
              sb.append('},')
              sb.append('"nodes":[')
              pw_.print(sb.toString())
              pw_.flush()
              tCaseResultCount = 0
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {
              StringBuilder sb = new StringBuilder()
@@ -285,6 +289,7 @@ modalize();
              sb.append('}')
              pw_.print(sb.toString())
              pw_.flush()
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
              StringBuilder sb = new StringBuilder()
@@ -300,6 +305,7 @@ modalize();
              pw_.print(sb.toString())
              pw_.flush()
              materialsCount = 0
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
              StringBuilder sb = new StringBuilder()
@@ -327,6 +333,7 @@ modalize();
              sb.append('}')
              pw_.print(sb.toString())
              pw_.flush()
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult visitMaterial(Material material) {
              StringBuilder sb = new StringBuilder()
@@ -341,6 +348,7 @@ modalize();
              sb.append('}')
              pw_.print(sb.toString())
              pw_.flush()
+             return RepositoryVisitResult.SUCCESS
          }
          @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
              throw new UnsupportedOperationException("failed visiting " + material.toString())

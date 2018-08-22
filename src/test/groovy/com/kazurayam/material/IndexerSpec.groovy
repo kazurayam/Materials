@@ -11,9 +11,9 @@ import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
-class IndexerImplSpec extends Specification {
+class IndexerSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(IndexerImplSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerSpec.class)
 
     // fields
     private static Path workdir_
@@ -21,7 +21,7 @@ class IndexerImplSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerImplSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -33,9 +33,30 @@ class IndexerImplSpec extends Specification {
 
     // feature methods
 
-    def testMakeIndex() {
+
+    @Ignore
+    def testMakeIndex_rudimentary() {
         setup:
-        Indexer indexer = IndexerFactory.newIndexer()
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerRudimentaryImpl')
+        Path baseDir = workdir_.resolve('Materials')
+        indexer.setBaseDir(baseDir)
+        Path index = baseDir.resolve('index.html')
+        indexer.setOutput(index)
+        when:
+        indexer.execute()
+        then:
+        index != null
+        Files.exists(index)
+        when:
+        logger_.debug("#test makeIndex ${index.toFile().getText('UTF-8')}")
+        then:
+        true
+    }
+
+    
+    def testMakeIndex_byVisitor() {
+        setup:
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerByVisitorImpl')
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
         Path index = baseDir.resolve('index.html')

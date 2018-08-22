@@ -15,7 +15,7 @@
     <logger name="com.kazurayam.material.RepositoryFileScanner" level="info"/>
     <logger name="com.kazurayam.material.RepositoryFileVisitor" level="info"/>
     <logger name="com.kazurayam.material.RepositoryWalker"  level="debug"/>
-    <logger name="com.kazurayam.material.Material"          level="debug"/>
+    <logger name="com.kazurayam.material.Material"          level="info"/>
     <logger name="com.kazurayam.material.MaterialFileName"  level="info"/>
     <logger name="com.kazurayam.material.TSuiteResult"      level="info"/>
 
