@@ -7,7 +7,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as VistorHTML
+import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData as JSONVisitor
+import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore
@@ -20,6 +21,8 @@ class IndexerByVisitorImplSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
+    private static Path materials_
+    private static RepositoryRoot repoRoot_
 
     // fixture methods
     def setupSpec() {
@@ -28,6 +31,10 @@ class IndexerByVisitorImplSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
+        materials_ = workdir_.resolve('Materials')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materials_)
+        scanner.scan()
+        repoRoot_ = scanner.getRepositoryRoot()
     }
     def setup() {}
     def cleanup() {}
@@ -38,9 +45,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testSmoke() {
         setup:
         IndexerByVisitorImpl indexer = new IndexerByVisitorImpl()
-        Path materials = workdir_.resolve('Materials')
-        indexer.setBaseDir(materials)
-        Path index = materials.resolve('index.html')
+        indexer.setBaseDir(materials_)
+        Path index = materials_.resolve('index.html')
         indexer.setOutput(index)
         when:
         indexer.execute()
@@ -52,15 +58,12 @@ class IndexerByVisitorImplSpec extends Specification {
         content.contains('<html')
     }
 
+    /* --------- testing IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData as JSONVisitor ----- */
     def testBootstrapTreeviewData() {
         setup:
-        Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
-        scanner.scan()
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         StringWriter jsonSnippet = new StringWriter()
-        def jsonVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
-        RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
+        def jsonVisitor = new JSONVisitor(jsonSnippet)
+        RepositoryWalker.walkRepository(repoRoot_, jsonVisitor)
         when:
         String content = jsonSnippet.toString()
         logger_.debug("#testBootstrapTreeviewData content=${JsonOutput.prettyPrint(content)}")
@@ -68,15 +71,12 @@ class IndexerByVisitorImplSpec extends Specification {
         content.contains("foo/ http://demoaut.katalon.com/ PNG")
     }
 
+    /* -------- testing IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal --------- */
     def testHtmlFragmentsOfMaterialsAsModal() {
         setup:
-        Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
-        scanner.scan()
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
-        RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
+        def htmlVisitor = new HTMLVisitor(htmlFragments)
+        RepositoryWalker.walkRepository(repoRoot_, htmlVisitor)
         when:
         String content = htmlFragments.toString()
         logger_.debug("#testHtmlFragmentsOfMaterialsAsModal content=${content}")
@@ -86,15 +86,17 @@ class IndexerByVisitorImplSpec extends Specification {
 
     def testEscapeHtml() {
         expect:
-        VistorHTML.escapeHtml("This is a test") == 'This&nbsp;is&nbsp;a&nbsp;test'
-        VistorHTML.escapeHtml("&") == '&amp;'
-        VistorHTML.escapeHtml("<") == '&lt;'
-        VistorHTML.escapeHtml(">") == '&gt;'
-        VistorHTML.escapeHtml('"') == '&quot;'
-        VistorHTML.escapeHtml(" ") == '&nbsp;'
-        VistorHTML.escapeHtml("©") == '&copy;'
-        VistorHTML.escapeHtml("<xml>") == '&lt;xml&gt;'
+        HTMLVisitor.escapeHtml("This is a test") == 'This&nbsp;is&nbsp;a&nbsp;test'
+        HTMLVisitor.escapeHtml("&") == '&amp;'
+        HTMLVisitor.escapeHtml("<") == '&lt;'
+        HTMLVisitor.escapeHtml(">") == '&gt;'
+        HTMLVisitor.escapeHtml('"') == '&quot;'
+        HTMLVisitor.escapeHtml(" ") == '&nbsp;'
+        HTMLVisitor.escapeHtml("©") == '&copy;'
+        HTMLVisitor.escapeHtml("<xml>") == '&lt;xml&gt;'
     }
+
+
     @Ignore
     def testIgnoring() {}
 
