@@ -67,6 +67,10 @@ class MaterialFileName {
         }
     }
 
+    String getFileName() {
+        return parts[0]
+    }
+
     URL getURL() {
         return url_
     }

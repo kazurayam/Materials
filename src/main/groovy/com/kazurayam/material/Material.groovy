@@ -18,39 +18,27 @@ class Material implements Comparable<Material> {
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
 
     private TCaseResult parent_
-    private URL url_
-    private Suffix suffix_
-    private FileType fileType_
-    private Path subpath_
-    private Path path_
+    private Path dirpath_
+    private MaterialFileName materialFileName_
     private LocalDateTime lastModified_
 
-    Material(Path subpath, URL url, Suffix suffix, FileType fileType) {
-        url_ = url
-        suffix_ = (suffix == null) ? Suffix.NULL : suffix
-        fileType_ = fileType
-        subpath_ = subpath
-        path_ = subpath.resolve(MaterialFileName.format(url_, suffix_, fileType_)).normalize() // this value will be overriden by setParent()
-    }
-
-    /**
-     *
-     * @param path
-     */
-    Material(Path fullPath) {
-        path_ = fullPath.normalize()
-        MaterialFileName mfn = new MaterialFileName(path_.getFileName().toString())
-        fileType_ = mfn.getFileType()  // FileType.UNSUPPORTED or other
-        suffix_   = mfn.getSuffix()    // Suffix.NULL or other
-        url_      = mfn.getURL()       // null or other
+    Material(Path dirpath, URL url, Suffix suffix, FileType fileType) {
+        dirpath_ = dirpath.normalize()
+        materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
 
     Material setParent(TCaseResult parent) {
         parent_ = parent
-        if (subpath_ != null && url_ != null && suffix_ != null && fileType_ != null) {
-            path_ = parent_.getTCaseDirectory().resolve(subpath_).resolve(MaterialFileName.format(url_, suffix_, fileType_)).normalize()
-        }
         return this
+    }
+
+    Material(TCaseResult parent, Path filePath) {
+        parent_ = parent
+        dirpath_ = parent.getTCaseDirectory().relativize(filePath.normalize().getParent()).normalize()
+        if (dirpath_.toString() == '') {
+            dirpath_ = Paths.get('.')
+        }
+        materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
     }
 
     TCaseResult getParent() {
@@ -62,30 +50,29 @@ class Material implements Comparable<Material> {
     }
 
     URL getURL() {
-        return url_
+        return materialFileName_.getURL()
     }
 
     Suffix getSuffix() {
-        return suffix_
+        return materialFileName_.getSuffix()
     }
 
     FileType getFileType() {
-        return fileType_
+        return materialFileName_.getFileType()
     }
 
     Path getPath() {
-        return path_
-    }
-
-    Path getSubpath() {
-        if (parent_.getTCaseDirectory() == path_.getParent()) {
-            return Paths.get('.')
+        if (parent_ != null) {
+            return parent_.getTCaseDirectory().resolve(dirpath_).resolve(materialFileName_.getFileName()).normalize()
         } else {
-            return parent_.getTCaseDirectory().relativize(path_.getParent()).normalize()
+            throw new IllegalStateException("parent_ is not set")
         }
     }
 
-    //
+    Path getDirpath() {
+        return dirpath_
+    }
+
     Material setLastModified(long lastModified) {
         Instant instant = Instant.ofEpochMilli(lastModified)
         this.setLastModified(instant)
@@ -179,9 +166,9 @@ class Material implements Comparable<Material> {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Material":{')
-        sb.append('"url":"' + Helpers.escapeAsJsonText(url_.toString())+ '",')
-        sb.append('"suffix":"' + Helpers.escapeAsJsonText(suffix_.toString())+ '",')
-        sb.append('"fileType":"' + Helpers.escapeAsJsonText(fileType_.toString()) + '",')
+        sb.append('"url":"' + Helpers.escapeAsJsonText(this.getURL().toString())+ '",')
+        sb.append('"suffix":"' + Helpers.escapeAsJsonText(this.getSuffix().toString())+ '",')
+        sb.append('"fileType":"' + Helpers.escapeAsJsonText(this.getFileType().toString()) + '",')
         sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
         sb.append('"lastModified":"' + lastModified_.toString() + '"')
         sb.append('}}')
@@ -292,16 +279,16 @@ class Material implements Comparable<Material> {
      */
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
-        if (url_ != null) {
-            String urlStr = url_.toString()
+        if (this.getURL() != null) {
+            String urlStr = this.getURL().toString()
             sb.append(urlStr)
-            if (suffix_ != Suffix.NULL) {
+            if (this.getSuffix() != Suffix.NULL) {
                 sb.append(' ')
-                sb.append(suffix_.toString())
+                sb.append(this.getSuffix().toString())
             }
-            if (!urlStr.endsWith(fileType_.getExtension())) {
+            if (!urlStr.endsWith(this.getFileType().getExtension())) {
                 sb.append(' ')
-                sb.append(fileType_.name())
+                sb.append(this.getFileType().name())
             }
         } else {
             Path subpath = parent_.getTCaseDirectory().relativize(this.getPath())
@@ -312,7 +299,7 @@ class Material implements Comparable<Material> {
 
     String markupInModalWindow() {
         StringBuilder sb = new StringBuilder()
-        switch (fileType_) {
+        switch (this.getFileType()) {
             case FileType.BMP:
             case FileType.GIF:
             case FileType.JPG:
@@ -372,7 +359,7 @@ class Material implements Comparable<Material> {
                 sb.append('</a>')
                 break
             default:
-                def msg = "fileType_  '${fileType_}' is unexpected"
+                def msg = "this.getFileType()='${this.getFileType()}' is unexpected"
                 logger_.warn('#markupInModalWindow ' + msg)
                 sb.append("        <p>${msg}</p>")
         }

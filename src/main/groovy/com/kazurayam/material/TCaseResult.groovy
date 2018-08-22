@@ -68,13 +68,13 @@ class TCaseResult implements Comparable<TCaseResult> {
         return materials_
     }
 
-    List<Material> getMaterials(Path subpath, URL url, FileType fileType) {
-        logger_.debug("#getMaterials subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
+    List<Material> getMaterials(Path dirpath, URL url, FileType fileType) {
+        logger_.debug("#getMaterials subpath=${dirpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Material> list = new ArrayList<Material>()
         logger_.debug("#getMaterials materials_.size()=${materials_.size()}")
         for (Material mate : materials_) {
-            logger_.debug("#getMaterials mate.getSubpath()=${mate.getSubpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
-            if (mate.getSubpath() == subpath &&
+            logger_.debug("#getMaterials mate.getDirpath()=${mate.getDirpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
+            if (mate.getDirpath() == dirpath &&
                 mate.getURL().toString() == url.toString() &&
                 mate.getFileType() == fileType) {
                 list.add(mate)
@@ -84,7 +84,7 @@ class TCaseResult implements Comparable<TCaseResult> {
     }
 
 
-    Material getMaterial(Path subpath, URL url, Suffix suffix, FileType fileType) {
+    Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType) {
         for (Material mate : materials_) {
             if (mate.getURL().toString() == url.toString() &&
                 mate.getSuffix() == suffix &&

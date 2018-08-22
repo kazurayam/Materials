@@ -3,10 +3,6 @@ package com.kazurayam.material
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.FileType
-import com.kazurayam.material.MaterialFileName
-import com.kazurayam.material.Suffix
-
 import spock.lang.Specification
 
 class MaterialFileNameSpec extends Specification {
@@ -21,6 +17,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'http%3A%2F%2Fdemoaut.katalon.com%2F '
         mfn.parts[2]      == '(1)'
         mfn.parts[3]      == '.png'
+        mfn.getFileName() == 'http%3A%2F%2Fdemoaut.katalon.com%2F (1).png'
         mfn.getURL().toString()      == new URL('http://demoaut.katalon.com/').toString()
         mfn.getSuffix()   == new Suffix(1)
         mfn.getFileType() == FileType.PNG
@@ -34,6 +31,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc'
         mfn.parts[2]      == null
         mfn.parts[3]      == '.defghij'
+        mfn.getFileName() == 'abc.defghij'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.UNSUPPORTED
@@ -47,6 +45,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abcdef'
         mfn.parts[2]      == null
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abcdef'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.NULL
@@ -60,6 +59,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc (1)'
         mfn.parts[2]      == '(2)'
         mfn.parts[3]      == '.txt'
+        mfn.getFileName() == 'abc (1)(2).txt'
         mfn.getURL()      == null
         mfn.getSuffix()   == new Suffix(2)
         mfn.getFileType() == FileType.TXT
@@ -73,6 +73,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'a'
         mfn.parts[2]      == null
         mfn.parts[3]      == '.png'
+        mfn.getFileName() == 'a.png'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.PNG
@@ -86,6 +87,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'a'
         mfn.parts[2]      == null
         mfn.parts[3]      == null
+        mfn.getFileName() == 'a'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.NULL
@@ -99,6 +101,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'a'
         mfn.parts[2]      == null
         mfn.parts[3]      == '.foo'
+        mfn.getFileName() == 'a.foo'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.UNSUPPORTED
@@ -112,6 +115,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc'
         mfn.parts[2]      == '(2)'
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abc(2)'
         mfn.getURL()      == null
         mfn.getSuffix()   == new Suffix(2)
         mfn.getFileType() == FileType.NULL
@@ -126,6 +130,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc '
         mfn.parts[2]      == '(2)'
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abc (2)'
         mfn.getURL()      == null
         mfn.getSuffix()   == new Suffix(2)
         mfn.getFileType() == FileType.NULL
@@ -142,6 +147,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc '
         mfn.parts[2]      == '(2147483647)'
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abc (2147483647)'
         mfn.getURL()      == null
         mfn.getSuffix()   == new Suffix(2147483647)
         mfn.getFileType() == FileType.NULL
@@ -155,6 +161,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc(-2)'
         mfn.parts[2]      == null
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abc(-2)'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.NULL
@@ -168,6 +175,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc(d)'
         mfn.parts[2]      == null
         mfn.parts[3]      == null
+        mfn.getFileName() == 'abc(d)'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.NULL
@@ -181,6 +189,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc def '
         mfn.parts[2]      == null
         mfn.parts[3]      == '.png'
+        mfn.getFileName() == 'abc def .png'
         mfn.getURL()      == null
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.PNG
@@ -194,6 +203,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'abc def '
         mfn.parts[2]      == '(2)'
         mfn.parts[3]      == '.png'
+        mfn.getFileName() == 'abc def (2).png'
         mfn.getURL()      == null
         mfn.getSuffix()   == new Suffix(2)
         mfn.getFileType() == FileType.PNG
@@ -207,6 +217,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.parts[1]      == 'https%3A%2F%2Fdemoaut.katalon.com%2F'
         mfn.parts[2]      == null
         mfn.parts[3]      == '.png'
+        mfn.getFileName() == 'https%3A%2F%2Fdemoaut.katalon.com%2F.png'
         mfn.getURL().toString()      == new URL('https://demoaut.katalon.com/').toString()
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.PNG

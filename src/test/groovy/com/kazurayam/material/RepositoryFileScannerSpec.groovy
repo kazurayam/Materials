@@ -8,7 +8,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryFileScannerSpec extends Specification {
@@ -188,7 +187,6 @@ class RepositoryFileScannerSpec extends Specification {
      * by the RepositoryFileScanner
      *
      */
-    @IgnoreRest
     def testScan_MaterialsUnderSubpath() {
         setup:
         Path casedir = workdir_.resolve("testScan_MaterialsUnderSubpath")
@@ -226,24 +224,6 @@ class RepositoryFileScannerSpec extends Specification {
     }
 
 
-    def testScanForPDF() {
-        setup:
-        Path casedir = workdir_.resolve("testScanForPDF")
-        Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
-        scanner.scan()
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
-        when:
-        Material mate = tcr.getMaterial(
-            new URL("http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf"),
-            Suffix.NULL,
-            FileType.PDF)
-        then:
-        assert mate != null
-    }
 
 
     def testScanForExcel() {
@@ -259,6 +239,7 @@ class RepositoryFileScannerSpec extends Specification {
         // .xlsx
         when:
         Material mate = tcr.getMaterial(
+            Paths.get('.'),
             new URL("http://www.kazurayam.com/carmina/example/Book1.xlsx"),
             Suffix.NULL,
             FileType.XLSX)
@@ -267,6 +248,7 @@ class RepositoryFileScannerSpec extends Specification {
         // .xlsm
         when:
         mate = tcr.getMaterial(
+            Paths.get('.'),
             new URL("http://www.kazurayam.com/carmina/example/Book1.xlsm"),
             Suffix.NULL,
             FileType.XLSM)
@@ -275,6 +257,25 @@ class RepositoryFileScannerSpec extends Specification {
         //
     }
 
+    def testScanForPDF() {
+        setup:
+        Path casedir = workdir_.resolve("testScanForPDF")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
+        when:
+        Material mate = tcr.getMaterial(
+            Paths.get('.'),
+            new URL("http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf"),
+            Suffix.NULL,
+            FileType.PDF)
+        then:
+        assert mate != null
+    }
 
     def testPrettyPrint() {
         setup:

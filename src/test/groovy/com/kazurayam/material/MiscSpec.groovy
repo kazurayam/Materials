@@ -78,7 +78,20 @@ class MiscSpec extends Specification {
         URLEncoder.encode('.', 'UTF-8') == '.'
     }
 
-
+    def testPathRelative() {
+        when:
+        Path p = Paths.get('.')
+        then:
+        p.toString() == '.'
+        p.getParent() == null
+        p.getRoot() == null
+        when:
+        p = Paths.get('foo/bar')
+        then:
+        p.toString() == 'foo/bar'.replace('/', File.separator)
+        p.getParent() == Paths.get('foo')
+        p.getRoot() == null
+    }
 
 
 
