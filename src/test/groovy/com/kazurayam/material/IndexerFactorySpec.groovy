@@ -17,15 +17,7 @@ class IndexerFactorySpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture")
 
     // fixture methods
-    def setupSpec() {
-        /*
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(IndexerFactorySpec.class)}")
-        if (!workdir_.toFile().exists()) {
-            workdir_.toFile().mkdirs()
-        }
-        Helpers.copyDirectory(fixture_, workdir_)
-        */
-    }
+    def setupSpec() {}
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
@@ -37,7 +29,7 @@ class IndexerFactorySpec extends Specification {
         Indexer indexer = IndexerFactory.newIndexer()
         then:
         indexer != null
-        indexer.getClass().getName() == 'com.kazurayam.material.IndexerRudimentaryImpl'
+        indexer.getClass().getName() == 'com.kazurayam.material.IndexerByVisitorImpl'
     }
 
     def testNewIndexerWithArg() {
@@ -47,7 +39,7 @@ class IndexerFactorySpec extends Specification {
         indexer != null
         indexer.getClass().getName() == 'com.kazurayam.material.IndexerRudimentaryImpl'
     }
-    
+
     def testNewIndexerWithArg_throwsClassNotFoundException() {
         when:
         Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.Foo')
@@ -55,5 +47,5 @@ class IndexerFactorySpec extends Specification {
         def ex = thrown(ClassNotFoundException)
         ex.getMessage().contains('Foo')
     }
-    
+
 }

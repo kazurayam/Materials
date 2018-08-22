@@ -9,6 +9,7 @@ import java.time.ZoneOffset
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -217,6 +218,7 @@ class MaterialSpec extends Specification {
         title == 'http://demoaut.katalon.com/ PNG'
     }
 
+    @IgnoreRest
     def testGetIdentifier_withSuffix() {
         when:
         Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)

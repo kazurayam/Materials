@@ -11,15 +11,15 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.material.RepositoryRoot"    level="info"/>
+    <logger name="com.kazurayam.material.Material"              level="info"/>
+    <logger name="com.kazurayam.material.MaterialFileName"      level="info"/>
+    <logger name="com.kazurayam.material.RepositoryRoot"        level="info"/>
     <logger name="com.kazurayam.material.RepositoryFileScanner" level="info"/>
     <logger name="com.kazurayam.material.RepositoryFileVisitor" level="info"/>
-    <logger name="com.kazurayam.material.RepositoryWalker"  level="debug"/>
-    <logger name="com.kazurayam.material.Material"          level="info"/>
-    <logger name="com.kazurayam.material.MaterialFileName"  level="info"/>
-    <logger name="com.kazurayam.material.TSuiteResult"      level="info"/>
+    <logger name="com.kazurayam.material.RepositoryWalker"      level="info"/>
+    <logger name="com.kazurayam.material.TSuiteResult"          level="info"/>
 
-    <logger name="root" level="debug" />
+    <logger name="root"                                         level="info" />
 
     <root>
         <appender-ref ref="STDOUT" />

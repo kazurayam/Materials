@@ -280,7 +280,7 @@ class Material implements Comparable<Material> {
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
         if (this.getURL() != null) {
-            if (this.getDirpath() != Paths.get('.')) {
+            if (this.getDirpath().toString() != '') {
                 sb.append(this.getDirpath().toString())
                 sb.append('/')
                 sb.append(' ')
