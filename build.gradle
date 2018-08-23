@@ -2,16 +2,14 @@ plugins {
     id "com.energizedwork.webdriver-binaries" version "1.4"
 }
 
-project.group 'kazurayam.com'
+project.group 'com.kazurayam.matrials'
 project.version '0.13'
 
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
-
-apply plugin: 'application'
-mainClassName='com.kazurayam.carmina.RepositoryScanner'
+apply plugin: 'maven-publish'
 
 ext {
     // The drivers we want to use
@@ -57,6 +55,23 @@ dependencies {
     // Drivers
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
+}
+
+publishing {
+    publications {
+        sample(MavenPublication) {
+            from components.java
+            artifact ('document.html') {
+                classifier = 'doc'
+                extension  = 'html'
+            }
+        }
+    }
+    repositories {
+        maven {
+            url 'file://Users/qcq0264/maven-sample-repo'
+        }
+    }
 }
 
 webdriverBinaries {
