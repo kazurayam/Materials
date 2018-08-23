@@ -1,33 +1,25 @@
-plugins {
-    id "com.energizedwork.webdriver-binaries" version "1.4"
-}
-
-project.group 'com.kazurayam.matrials'
-project.version '0.13'
-
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
+
+group    = 'com.kazurayam'
+//artifact = 'Materials'
+version  = '0.13'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 ext {
-    // The drivers we want to use
-    drivers = ["firefox", "chrome", "chromeHeadless"]
-    ext {
-
-        groovyVersion = '2.4.9'
-        logbackVersion = '1.2.3'
-        slf4jVersion = '1.7.2'
-        gebVersion = '2.1'
-        seleniumVersion = '3.13.0'
-        chromeDriverVersion = '2.40'   // 2.35.528161 in Katalon Studio 5.4.2
-        geckoDriverVersion = '0.21.0'  // 0.19.0 in Katalon Studio 5.4.2
-    }
+    groovyVersion  = '2.4.9'
+    logbackVersion = '1.2.3'
+    slf4jVersion   = '1.7.2'
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -44,61 +36,17 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
-
-
-    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: "${seleniumVersion}"
-
-    testCompile "org.gebish:geb-spock:${gebVersion}"
-    testCompile "org.gebish:geb-junit4:${gebVersion}"
-
-    // Drivers
-    testCompile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
-    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
 }
-
-publishing {
-    publications {
-        sample(MavenPublication) {
-            from components.java
-            artifact ('document.html') {
-                classifier = 'doc'
-                extension  = 'html'
-            }
-        }
-    }
-    repositories {
-        maven {
-            url 'file://Users/qcq0264/maven-sample-repo'
-        }
-    }
-}
-
-webdriverBinaries {
-    geckodriver geckoDriverVersion
-    chromedriver chromeDriverVersion
-}
-
-drivers.each { driver ->
-    task "${driver}Test"(type: Test) {
-        group JavaBasePlugin.VERIFICATION_GROUP
-        outputs.upToDateWhen { false }  // Always run tests
-        systemProperty "geb.build.reportsDir", reporting.file("geb/$name")
-        systemProperty "geb.env", driver
-    }
-}
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
 
 def defaultEncoding = 'UTF-8'
-
-test.outputs.upToDateWhen {false}
+tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
+tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncoding }
 
 test {
     include '**/material/*Spec.class'
     exclude '**/material/visualtesting/*Spec.class'
     finalizedBy jacocoTestReport
+    outputs.upToDateWhen {false}
 }
 
 task pinpoint(type: Test) {
@@ -107,27 +55,5 @@ task pinpoint(type: Test) {
     //include '**/material/RepositoryRootSpec.class'
     //include '**/material/TCaseResultSpec.class'
     //include '**/material/TSuiteResultSpec.class'
-}
-
-
-
-// run firefoxTest or run chromeTest
-firefoxTest {
-    include '**/material/demo/GebishOrgSpec.class'
-}
-
-chromeTest {
-    include '**/material/demo/GebishOrgSpec.class'
-}
-
-tasks.withType(Test) {
-    maxHeapSize = "1g"
-    jvmArgs '-XX:MaxMetaspaceSize=128m'
-    testLogging {
-        exceptionFormat = 'full'
-    }
-}
-
-tasks.withType(GroovyCompile) {
-    groovyOptions.forkOptions.memoryMaximumSize = '256m'
+    outputs.upToDateWhen {false}
 }
