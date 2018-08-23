@@ -201,45 +201,6 @@ class TCaseResult implements Comparable<TCaseResult> {
         return sb.toString()
     }
 
-    /*
-    String toBootstrapTreeviewData() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(tCaseName_.getValue())+ '",')
-        sb.append('"selectable":false,')
-        sb.append('"nodes":[')
-        def mate_count = 0
-        for (Material material : materials_) {
-            if (mate_count > 0) {
-                sb.append(',')
-            }
-            sb.append(material.toBootstrapTreeviewData())
-            mate_count += 1
-        }
-        sb.append(']')
-        if (this.getParent() != null && this.getParent().getJUnitReportWrapper() != null) {
-            def status = this.getParent().getJUnitReportWrapper().getTestCaseStatus(this.getTCaseName().getId())
-            sb.append(',')
-            sb.append('"tags": ["')
-            sb.append(status)
-            sb.append('"]')
-            // #1BC98E; green
-            // #E64759; red
-            // #9F86FF; purple
-            // #E4D836; yellow
-            //
-            if (status == 'FAILED') {
-                sb.append(',')
-                sb.append('"backColor": "#E4D836"')
-            } else if (status == 'ERROR') {
-                sb.append(',')
-                sb.append('"backColor": "#E64759"')
-            }
-        }
-        sb.append('}')
-        return sb.toString()
-    }
-    */
 }
 
 

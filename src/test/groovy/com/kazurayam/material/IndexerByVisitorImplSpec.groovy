@@ -7,7 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData as JSONVisitor
 import com.kazurayam.material.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
 
 import groovy.json.JsonOutput
@@ -59,25 +58,50 @@ class IndexerByVisitorImplSpec extends Specification {
     }
 
     /* --------- testing IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData as JSONVisitor ----- */
-    def testBootstrapTreeviewData() {
+    def testWalkWithJSONVisitor() {
         setup:
         StringWriter jsonSnippet = new StringWriter()
-        def jsonVisitor = new JSONVisitor(jsonSnippet)
-        RepositoryWalker.walkRepository(repoRoot_, jsonVisitor)
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
         when:
+        // now walk the repository to generate a json text
+        RepositoryWalker.walkRepository(repoRoot_, jsonVisitor)
         String content = jsonSnippet.toString()
         logger_.debug("#testBootstrapTreeviewData content=${JsonOutput.prettyPrint(content)}")
         then:
         content.contains("foo/ http://demoaut.katalon.com/ PNG")
     }
 
+
+     def testJSONVisitorVisitMaterial() {
+         setup:
+         StringWriter jsonSnippet = new StringWriter()
+         IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
+             new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+         //
+         TSuiteResult tsr = repoRoot_.getTSuiteResult(
+             new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+         when:
+         // now test visitMaterial() method
+         def result = jsonVisitor.visitMaterial(mate)
+         def str = jsonSnippet.toString()
+         logger_.debug("#testJsonVisitorVisitMaterial \n${JsonOutput.prettyPrint(str)}")
+         then:
+         str.startsWith('{"text":"')
+         str.contains('http://demoaut.katalon.com/')
+         str.endsWith('"}')
+     }
+
+
     /* -------- testing IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal --------- */
-    def testHtmlFragmentsOfMaterialsAsModal() {
+    def testWalkWithHTMLVisitor() {
         setup:
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new HTMLVisitor(htmlFragments)
-        RepositoryWalker.walkRepository(repoRoot_, htmlVisitor)
+        def htmlVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
         when:
+        RepositoryWalker.walkRepository(repoRoot_, htmlVisitor)
         String content = htmlFragments.toString()
         logger_.debug("#testHtmlFragmentsOfMaterialsAsModal content=${content}")
         then:
@@ -96,10 +120,168 @@ class IndexerByVisitorImplSpec extends Specification {
         HTMLVisitor.escapeHtml("<xml>") == '&lt;xml&gt;'
     }
 
+    def testHTMLVisitorMarkupInModalWindow() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        when:
+        String markup = htmlVisitor.markupInModalWindow(mate)
+        logger_.debug("#testHTMLVisitorMarkupInModalWindow markup=\n${markup}")
+        then:
+        markup.contains('<img')
+        markup.contains('class="img-fluid"')
+        markup.contains(FileType.PNG.getExtension())
+    }
 
-    @Ignore
-    def testIgnoring() {}
 
-    // helper methods
-    def void anything() {}
+    def testToHtmlAsModalWindow_PNG() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        when:
+        def result = htmlVisitor.visitMaterial(mate)
+        def str = htmlSnippet.toString()
+        logger_.debug("#testToHtmlAsModalWindow_PNG str=${str}")
+        then:
+        str.startsWith('<div')
+        str.contains('<img')
+        str.contains(mate.getEncodedHrefRelativeToRepositoryRoot())
+    }
+
+
+    def testToHtmlAsModalWindow_miscellaneousImages() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        expect:
+        tcr != null
+        tcr.getMaterials().size() == 5
+        when:
+        htmlSnippet.getBuffer().setLength(0)
+        def mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        def result = htmlVisitor.visitMaterial(mate)
+        def str = htmlSnippet.toString()
+        then:
+        str.contains('<img')
+        str.contains('.png')
+        //
+        when:
+        htmlSnippet.getBuffer().setLength(0)
+        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.BMP)
+        result = htmlVisitor.visitMaterial(mate)
+        str = htmlSnippet.toString()
+        then:
+        str.contains('<img')
+        str.contains('.bmp')
+        //
+        when:
+        htmlSnippet.getBuffer().setLength(0)
+        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.GIF)
+        result = htmlVisitor.visitMaterial(mate)
+        str = htmlSnippet.toString()
+        then:
+        str.contains('<img')
+        str.contains('.gif')
+        //
+        when:
+        htmlSnippet.getBuffer().setLength(0)
+        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPEG)
+        result = htmlVisitor.visitMaterial(mate)
+        str = htmlSnippet.toString()
+        then:
+        str.contains('<img')
+        str.contains('.jpeg')
+        //
+        when:
+        htmlSnippet.getBuffer().setLength(0)
+        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPG)
+        result = htmlVisitor.visitMaterial(mate)
+        str = htmlSnippet.toString()
+        then:
+        str.contains('<img')
+        str.contains('.jpg')
+        //
+    }
+
+
+    def testToHtmlAsModalWindow_CSV() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
+        expect:
+        tcr != null
+        //
+        when:
+        String url = 'https://fixturedownload.com/download/csv/fifa-world-cup-2018/japan'
+        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.CSV)
+        def result = htmlVisitor.visitMaterial(mate)
+        def str = htmlSnippet.toString()
+        then:
+        str.contains('3,28/06/2018&nbsp;17:00,Volgograd&nbsp;Stadium,Japan,Poland,Group&nbsp;H,')
+    }
+
+
+    def testToHtmlAsModalWindow_PDF() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
+        expect:
+        tcr != null
+        when:
+        String url = 'http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'
+        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.PDF)
+        def result = htmlVisitor.visitMaterial(mate)
+        def str = htmlSnippet.toString()
+        then:
+        str.contains('<object')
+        str.contains('type="application/pdf"')
+    }
+
+
+    def testToHtmlAsModalWindow_XLSX() {
+        setup:
+        StringWriter htmlSnippet = new StringWriter()
+        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        //
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
+        expect:
+        tcr != null
+        when:
+        String url = 'https://fixturedownload.com/download/xlsx/fifa-world-cup-2018/japan'
+        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.XLSX)
+        def result = htmlVisitor.visitMaterial(mate)
+        def str = htmlSnippet.toString()
+        //logger_.debug("#testToHtmlAsModalWindow_XLSX str=${str}")
+        then:
+        str.contains('<a ')
+        str.contains('Download')
+    }
+
+
 }

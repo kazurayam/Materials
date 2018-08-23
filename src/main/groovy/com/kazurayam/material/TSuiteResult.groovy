@@ -175,6 +175,10 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
 
+    String treeviewTitle() {
+        return tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format()
+    }
+
     // ------------------- helpers -----------------------------------------------
     List<Material> getMaterials() {
         List<Material> materials = new ArrayList<Material>()
@@ -246,44 +250,5 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
 
-
-    /*
-    String toBootstrapTreeviewData() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('{')
-        sb.append('"text":"' + Helpers.escapeAsJsonText(this.treeviewTitle()) + '",')
-        sb.append('"backColor":"#CCDDFF",')
-        sb.append('"selectable":false,')
-        sb.append('"state":{')
-        sb.append('    "expanded":' + latestModified_ + ',')
-        sb.append('},')
-        sb.append('"nodes":[')
-        def count = 0
-        for (TCaseResult tcr : tCaseResults_) {
-            if (count > 0) { sb.append(',') }
-            count += 1
-            sb.append(tcr.toBootstrapTreeviewData())
-        }
-        sb.append(']')
-        if (this.getJUnitReportWrapper() != null) {
-            sb.append(',')
-            sb.append('"tags": ["')
-            logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${this.getTSuiteName()}'")
-            sb.append(this.getJUnitReportWrapper().getTestSuiteSummary(this.getTSuiteName().getId()))
-            sb.append('"')
-            sb.append(',')
-            sb.append('"')
-            sb.append("${this.getExecutionPropertiesWrapper().getExecutionProfile()}")
-            sb.append('"')
-            sb.append(']')
-        }
-        sb.append('}')
-        return sb.toString()
-    }
-    */
-
-    String treeviewTitle() {
-        return tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format()
-    }
 }
 
