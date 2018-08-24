@@ -482,6 +482,9 @@ modalize();
              sb.append('{')
              sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
              sb.append('"selectable":true,')
+             if (material.getPath().getFileName().toString().endsWith('FAILED.png')) {
+                 sb.append('"backColor": "#9F86FF",')
+             }
              sb.append('"href":"#' + material.hashCode() + '"')
              sb.append('}')
              pw_.print(sb.toString())
