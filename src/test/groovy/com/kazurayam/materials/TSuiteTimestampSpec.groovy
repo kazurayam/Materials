@@ -5,8 +5,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 

@@ -3,10 +3,6 @@ package com.kazurayam.materials
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.FileType
-import com.kazurayam.materials.MaterialFileName
-import com.kazurayam.materials.Suffix
-
 import spock.lang.Specification
 
 class MaterialFileNameSpec extends Specification {
@@ -184,7 +180,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.NULL
     }
-    
+
     def 'abc def .png'() {
         when:
         MaterialFileName mfn = new MaterialFileName('abc def .png')
@@ -198,7 +194,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.getSuffix()   == Suffix.NULL
         mfn.getFileType() == FileType.PNG
     }
-    
+
     def 'abc def (2).png'() {
         when:
         MaterialFileName mfn = new MaterialFileName('abc def (2).png')
@@ -212,7 +208,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.getSuffix()   == new Suffix(2)
         mfn.getFileType() == FileType.PNG
     }
-    
+
     def testHttps() {
         when:
         MaterialFileName mfn = new MaterialFileName('https%3A%2F%2Fdemoaut.katalon.com%2F.png')
@@ -227,7 +223,7 @@ class MaterialFileNameSpec extends Specification {
         mfn.getFileType() == FileType.PNG
     }
 
-    
+
     def testFormat() {
         when:
         String fileName = MaterialFileName.format(

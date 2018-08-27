@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import java.nio.file.Path
+
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPath
@@ -10,7 +12,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import java.nio.file.Path
+
 /**
  *
  * @author kazurayam

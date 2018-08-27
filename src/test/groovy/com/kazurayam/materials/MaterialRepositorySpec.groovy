@@ -10,15 +10,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.DownloadsDirectoryHelper
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialPair
-import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.MaterialRepositoryFactory
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteTimestamp
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 

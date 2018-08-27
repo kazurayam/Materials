@@ -5,11 +5,6 @@ import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.w3c.dom.Document
-
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.JUnitReportWrapper
-import com.kazurayam.materials.MaterialRepositoryImpl
 
 import spock.lang.Specification
 

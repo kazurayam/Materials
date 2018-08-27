@@ -7,10 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Indexer
-import com.kazurayam.materials.IndexerFactory
-
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -57,7 +53,7 @@ class IndexerSpec extends Specification {
         true
     }
 
-    
+
     def testMakeIndex_byVisitor() {
         setup:
         Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerByVisitorImpl')

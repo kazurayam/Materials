@@ -6,10 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.MaterialRepositoryFactory
-
 import spock.lang.Specification
 //@Ignore
 class MaterialRepositoryFactorySpec extends Specification {

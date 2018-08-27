@@ -6,9 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.ExecutionPropertiesWrapper
-import com.kazurayam.materials.Helpers
-
 import spock.lang.Specification
 
 class ExecutionPropertiesWrapperSpec extends Specification {

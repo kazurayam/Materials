@@ -3,8 +3,6 @@ package com.kazurayam.materials
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Suffix
-
 import spock.lang.Specification
 
 

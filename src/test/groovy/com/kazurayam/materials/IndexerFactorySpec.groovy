@@ -6,9 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Indexer
-import com.kazurayam.materials.IndexerFactory
-
 import spock.lang.Specification
 
 class IndexerFactorySpec extends Specification {

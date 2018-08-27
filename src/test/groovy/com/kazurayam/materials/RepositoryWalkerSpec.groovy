@@ -6,12 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.RepositoryFileScanner
-import com.kazurayam.materials.RepositoryRoot
-import com.kazurayam.materials.RepositoryVisitorSimpleImpl
-import com.kazurayam.materials.RepositoryWalker
-
 import groovy.json.JsonOutput
 import spock.lang.Ignore
 import spock.lang.Specification

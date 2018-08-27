@@ -7,16 +7,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.FileType
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialFileName
-import com.kazurayam.materials.MaterialPair
-import com.kazurayam.materials.MaterialRepositoryImpl
-import com.kazurayam.materials.Suffix
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteTimestamp
-
 import spock.lang.Specification
 
 //@Ignore
