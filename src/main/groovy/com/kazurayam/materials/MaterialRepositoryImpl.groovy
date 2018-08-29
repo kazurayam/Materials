@@ -314,19 +314,45 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
         List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
         List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
+
+        StringBuilder sb = new StringBuilder()
+        sb.append("${this.getClass().getName()}#getRecentMaterialPairs() diagnostics:\n")
+        sb.append("Arguments:\n")
+        sb.append("    expectedProfile: ${expectedProfile}\n")
+        sb.append("    actualProfile  : ${actualProfile}\n")
+        sb.append("    tSuiteName     : ${tSuiteName.getValue()}\n")
+        sb.append("\n")
+        sb.append("TSuiteResults found:\n")
+        sb.append("    TSuiteName\tTimestamp\t\t\tProfile\t\tMatch?\n")
+        for (TSuiteResult tsr : tSuiteResults) {
+            ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
+            sb.append("    ${tsr.getTSuiteName().getValue()}\t${tsr.getTSuiteTimestamp().format()}\t\t${epw.getExecutionProfile()}\t\t")
+            if (epw.getExecutionProfile() == expectedProfile) {
+                sb.append("match to Expected")
+            } else if (epw.getExecutionProfile() == actualProfile) {
+                sb.append("match to Actual")
+            } else {
+                sb.append("does not match")
+            }
+            sb.append("\n")
+        }
+        System.out.println(sb.toString())
+        //logger_.info(sb.toString())
+
         for (TSuiteResult tsr : tSuiteResults) {
             ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
             if (epw != null) {
-                ExecutionProfile ep = epw.getExecutionProfile() ?: 'default'
+                ExecutionProfile ep = epw.getExecutionProfile() ?: 'unknown'
                 if (ep == expectedProfile) {
                     expectedTSRList.add(tsr)
                 } else if (ep == actualProfile) {
                     actualTSRList.add(tsr)
                 }
             } else {
-                logger_.warn("could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
+                logger_.warn("#getRecentMaterialPairs could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
             }
         }
+
         if (expectedTSRList.size() == 0) {
             logger_.debug("#getRecentMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
             return result
@@ -339,8 +365,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         } else {
             Collections.sort(actualTSRList, Comparator.reverseOrder())
         }
-        def expMaterials = expectedTSRList[0].getMaterials()
-        def actMaterials = actualTSRList[0].getMaterials()
+        TSuiteResult expectedTSR = expectedTSRList[0]
+        TSuiteResult actualTSR = actualTSRList[0]
+        List<Material> expMaterials = expectedTSR.getMaterials()
+        List<Material> actMaterials = actualTSR.getMaterials()
         for (Material expMate : expMaterials) {
             Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
             for (Material actMate : actMaterials) {

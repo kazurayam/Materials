@@ -37,7 +37,7 @@ class IndexerSpec extends Specification {
     @Ignore
     def testMakeIndex_rudimentary() {
         setup:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerRudimentaryImpl')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
         Path index = baseDir.resolve('index.html')
@@ -56,7 +56,7 @@ class IndexerSpec extends Specification {
 
     def testMakeIndex_byVisitor() {
         setup:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerByVisitorImpl')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerByVisitorImpl')
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
         Path index = baseDir.resolve('index.html')

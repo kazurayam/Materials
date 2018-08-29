@@ -52,7 +52,7 @@ class RepositoryRoot {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {
-            logger_.debug("#getTSuiteResults tSuiteName=${tSuiteName}, tsr.getTSuiteName()=${tsr.getTSuiteName()}")
+            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getTSuiteName()}")
             if (tSuiteName == tsr.getTSuiteName()) {
                 result.add(tsr)
             }
