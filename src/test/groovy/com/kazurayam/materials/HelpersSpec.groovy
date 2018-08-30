@@ -78,12 +78,18 @@ class HelpersSpec extends Specification {
         setup:
         Path subdir = workdir_.resolve('testDeleteDirectoryContents')
         Helpers.ensureDirs(subdir)
-        Path file = subdir.resolve('dummy')
-        Helpers.touch(file)
+	Path dummy = subdir.resolve('dummy')
+        Helpers.touch(dummy)
+	Path subsubdir = subdir.resolve('subsubdir')
+	Helpers.ensureDirs(subsubdir)
+	Path dummy1 = subsubdir.resolve('dummy1')
+        Helpers.touch(dummy1)
         when:
         Helpers.deleteDirectoryContents(subdir)
         then:
-        !file.toFile().exists()
+        !dummy1.toFile().exists()
+	!dummy.toFile().exists()
+	!subsubdir.toFile().exists()
         subdir.toFile().exists()
     }
 

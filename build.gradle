@@ -50,7 +50,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/materials/MaterialRepositoryImplSpec.class'
+    include '**/materials/HelpersSpec.class'
     //include '**/materials/MaterialSpec.class'
     //include '**/materials/RepositoryRootSpec.class'
     //include '**/materials/TCaseResultSpec.class'

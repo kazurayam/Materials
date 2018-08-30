@@ -315,6 +315,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
         List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
 
+        // Diagnostics
         StringBuilder sb = new StringBuilder()
         sb.append("${this.getClass().getName()}#getRecentMaterialPairs() diagnostics:\n")
         sb.append("Arguments:\n")
@@ -325,19 +326,27 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         sb.append("TSuiteResults found:\n")
         sb.append("    TSuiteName\tTimestamp\t\t\tProfile\t\tMatch?\n")
         for (TSuiteResult tsr : tSuiteResults) {
+            sb.append("    ${tsr.getTSuiteName().getValue()}\t${tsr.getTSuiteTimestamp().format()}\t\t")
             ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
-            sb.append("    ${tsr.getTSuiteName().getValue()}\t${tsr.getTSuiteTimestamp().format()}\t\t${epw.getExecutionProfile()}\t\t")
-            if (epw.getExecutionProfile() == expectedProfile) {
-                sb.append("match to Expected")
-            } else if (epw.getExecutionProfile() == actualProfile) {
-                sb.append("match to Actual")
+            if (epw != null) {
+                ExecutionProfile ep = epw.getExecutionProfile() ?: 'unknown'
+                sb.append("${ep}\t\t")
+                if (ep == expectedProfile) {
+                    sb.append("match to Expected")
+                } else if (ep == actualProfile) {
+                    sb.append("match to Actual")
+                } else {
+                    sb.append("does not match")
+                }
+                sb.append("\n")
             } else {
-                sb.append("does not match")
+                sb.append("tsr.getExecutionPropertiesWrapper() returned null")
             }
-            sb.append("\n")
         }
         System.out.println(sb.toString())
         //logger_.info(sb.toString())
+
+
 
         for (TSuiteResult tsr : tSuiteResults) {
             ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
