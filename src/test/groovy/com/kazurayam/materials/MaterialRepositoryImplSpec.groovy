@@ -7,6 +7,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 //@Ignore
@@ -172,7 +173,30 @@ class MaterialRepositoryImplSpec extends Specification {
     }
 
 
+    /**
+     * 2018/08/29 Tried to reproduce a problem in another project.
+     *
+     * @return
+     */
+    @Ignore
+    def test_getRecentMaterialsPairs_reproducingProblem() {
+        setup:
+        def methodName = "test_getRecentMaterialsPairs_reproducingProblem"
+        Path problematicFixture = Paths.get("C:\\Users\\qcq0264\\katalon-workspace\\Q-FNHP-ImageDiff")
+        Path casedir = workdir_.resolve(methodName)
+        Path materials = casedir.resolve("Materials")
+        Path reports = casedir.resolve("Reports")
+        Files.createDirectories(materials)
+        Files.createDirectories(reports)
+        Helpers.copyDirectory(problematicFixture.resolve('Materials'), materials)
+        Helpers.copyDirectory(problematicFixture.resolve('Reports'), reports)
+        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(materials)
+        when:
+        List<MaterialPair> list = mri.getRecentMaterialPairs(
+            'product', 'develop', 'AllCorps')
+        then:
+        list.size() > 0
+    }
 
-    // helper methods
 
 }

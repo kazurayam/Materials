@@ -114,7 +114,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             if (Files.exists(reportFilePath)) {
                 return new JUnitReportWrapper(reportFilePath)
             } else {
-                logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
+                logger_.info("#createJUnitReportWrapper ${reportFilePath} does not exist")
                 return null
             }
         } else {
@@ -133,7 +133,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
             if (Files.exists(expropFilePath)) {
                 return new ExecutionPropertiesWrapper(expropFilePath)
             } else {
-                logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
+                logger_.info("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
                 return null
             }
         } else {

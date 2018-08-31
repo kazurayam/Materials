@@ -29,20 +29,20 @@ class IndexerFactorySpec extends Specification {
         Indexer indexer = IndexerFactory.newIndexer()
         then:
         indexer != null
-        indexer.getClass().getName() == 'com.kazurayam.material.IndexerByVisitorImpl'
+        indexer.getClass().getName() == IndexerByVisitorImpl.class.getName()
     }
 
     def testNewIndexerWithArg() {
         when:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.IndexerRudimentaryImpl')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
         then:
         indexer != null
-        indexer.getClass().getName() == 'com.kazurayam.material.IndexerRudimentaryImpl'
+        indexer.getClass().getName() == IndexerRudimentaryImpl.class.getName()
     }
 
     def testNewIndexerWithArg_throwsClassNotFoundException() {
         when:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.material.Foo')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.Foo')
         then:
         def ex = thrown(ClassNotFoundException)
         ex.getMessage().contains('Foo')

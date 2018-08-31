@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.14'
+version  = '0.16'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -43,17 +43,17 @@ tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
 tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncoding }
 
 test {
-    include '**/material/*Spec.class'
-    exclude '**/material/visualtesting/*Spec.class'
+    include '**/materials/*Spec.class'
+    exclude '**/materials/visualtesting/*Spec.class'
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
 
 task pinpoint(type: Test) {
-    include '**/material/IndexerByVisitorImplSpec.class'
-    include '**/material/MaterialSpec.class'
-    //include '**/material/RepositoryRootSpec.class'
-    //include '**/material/TCaseResultSpec.class'
-    //include '**/material/TSuiteResultSpec.class'
+    include '**/materials/HelpersSpec.class'
+    //include '**/materials/MaterialSpec.class'
+    //include '**/materials/RepositoryRootSpec.class'
+    //include '**/materials/TCaseResultSpec.class'
+    //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
 }

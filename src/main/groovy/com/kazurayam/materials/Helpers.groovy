@@ -11,6 +11,7 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.stream.Collectors
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -63,25 +64,66 @@ final class Helpers {
      * @param directoryToBeDeleted
      * @return
      */
-    static boolean deleteDirectory(Path directoryToBeDeleted) {
-        Helpers.deleteDirectoryContents(directoryToBeDeleted)
-        return directoryToBeDeleted.toFile().delete()
+    static void deleteDirectory(Path directory) {
+        if (directory == null) {
+            throw new IllegalArgumentException('directory is null')
+        }
+        if (!Files.exists(directory)) {
+            throw new IllegalArgumentException("${directory.normalize().toAbsolutePath()} does not exist")
+        }
+        if (!Files.isDirectory(directory)) {
+            throw new IllegalArgumentException("${directory.normalize().toAbsolutePath()} is not a directory")
+        }
+        Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+            Integer.MAX_VALUE,
+            new SimpleFileVisitor<Path>() {
+                @Override
+                FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
+                    if (exception == null) {
+                        logger_.debug("#deleteDirectory deleting directory ${dir.toString()}")
+                        Files.delete(dir)
+                        return checkNotExist(dir)
+                    }
+                    return CONTINUE
+                }
+                @Override
+                FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
+                    logger_.debug("#deleteDirectory deleting file      ${file.toString()}")
+                    Files.delete(file)
+                    return CONTINUE
+                }
+                private FileVisitResult checkNotExist(final Path path) throws IOException {
+                    if (!Files.exists(path)) {
+                        return CONTINUE
+                    } else {
+                        throw new IOException()
+                    }
+                }
+            }
+        )
     }
 
+
     /**
-     * force-delete the contents of the directory while preserving the directory undeleted
+     * delete files and child directories of the specified directory
+     * while preserving the directory undeleted
      *
      * @return
      */
-    static boolean deleteDirectoryContents(Path directory) {
-        File[] allContents = directory.toFile().listFiles()
-        if (allContents != null) {
-            for (File child : allContents) {
-                deleteDirectory(child.toPath())
+    static void deleteDirectoryContents(Path directory) throws IOException {
+        List<Path> children = Files.list(directory).collect(Collectors.toList());
+    	for (Path child : children) {
+	    if (Files.isRegularFile(child)) {
+	        Files.delete(child)
+	    } else if (Files.isDirectory(child)) {
+	        deleteDirectory(child)
+	    } else {
+	        logger_.warn("#deleteDirectoryContents ${child.toString()} " +
+						       "is not a File nor a Directory")
             }
         }
-        return true
     }
+
 
     /**
      * Check if a file is present or not. If not present,
@@ -126,7 +168,7 @@ final class Helpers {
             Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
                 @Override
-                FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attr) throws IOException {
+                FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attributes) throws IOException {
                     Path targetdir = target.resolve(source.relativize(dir))
                     try {
                         Files.copy(dir, targetdir)

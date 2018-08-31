@@ -19,7 +19,7 @@
     <logger name="com.kazurayam.material.RepositoryWalker"      level="info"/>
     <logger name="com.kazurayam.material.TSuiteResult"          level="info"/>
 
-    <logger name="root"                                         level="info" />
+    <logger name="root" level="debug" />
 
     <root>
         <appender-ref ref="STDOUT" />
