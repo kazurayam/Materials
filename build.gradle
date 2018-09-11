@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.15'
+version  = '0.17'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -18,7 +18,7 @@ ext {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
     mavenLocal()
 }
 
@@ -56,4 +56,12 @@ task pinpoint(type: Test) {
     //include '**/materials/TCaseResultSpec.class'
     //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
+}
+
+task myGroovydoc(type: Groovydoc) {
+    group = 'Materials'
+    description = 'Generates API documents'
+    include '**/materials/Helpers.class'
+    source = sourceSets.main.groovy
+    
 }
