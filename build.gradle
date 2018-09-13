@@ -58,10 +58,17 @@ task pinpoint(type: Test) {
     outputs.upToDateWhen {false}
 }
 
-task myGroovydoc(type: Groovydoc) {
-    group = 'Materials'
-    description = 'Generates API documents'
-    include '**/materials/Helpers.class'
-    source = sourceSets.main.groovy
+task groovydoc(type: Groovydoc, overwrite: true) {
+    group = 'com.kazurayam'
+    description = 'Generates Public API documents.'
+    source = sourceSets.main.allGroovy
+    classpath = sourceSets.main.runtimeClasspath
+    //options.memberLevel = JavadocMemberLevel.PUBLIC
+    include '**/Helpers.groovy'
+    include '**/Material.groovy'
+    include '**/MaterialPair.groovy'
+    include '**/MaterialRepository.groovy'
+    include '**/MaterialRepositoryFactory.groovy'
+    exclude '**/*Test.groovy'
     
 }
