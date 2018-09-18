@@ -61,18 +61,20 @@ final class Helpers {
     /**
      * force-delete the directory and its contents(files and directories)
      *
+     * If the specified directory does not exit or is not a directory, then Exception will be thrown
+     *
      * @param directoryToBeDeleted
      * @return
      */
-    static void deleteDirectory(Path directory) {
+    static void deleteDirectory(Path directory) throws IOException {
         if (directory == null) {
             throw new IllegalArgumentException('directory is null')
         }
         if (!Files.exists(directory)) {
-            throw new IllegalArgumentException("${directory.normalize().toAbsolutePath()} does not exist")
+            throw new IOException("${directory.normalize().toAbsolutePath()} does not exist")
         }
         if (!Files.isDirectory(directory)) {
-            throw new IllegalArgumentException("${directory.normalize().toAbsolutePath()} is not a directory")
+            throw new IOException("${directory.normalize().toAbsolutePath()} is not a directory")
         }
         Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
             Integer.MAX_VALUE,
@@ -105,29 +107,33 @@ final class Helpers {
 
 
     /**
-     * delete files and child directories of the specified directory
-     * while preserving the directory undeleted
+     * If the specified directory exists, then delete contained files and child directories
+     * while preserving the directory undeleted.
+     *
+     * If the specified directory does not exit, silently returns while doing nothing.
      *
      * @return
      */
     static void deleteDirectoryContents(Path directory) throws IOException {
-        List<Path> children = Files.list(directory).collect(Collectors.toList());
-    	for (Path child : children) {
-	    if (Files.isRegularFile(child)) {
-	        Files.delete(child)
-	    } else if (Files.isDirectory(child)) {
-	        deleteDirectory(child)
-	    } else {
-	        logger_.warn("#deleteDirectoryContents ${child.toString()} " +
-						       "is not a File nor a Directory")
+        if (Files.exists(directory)) {
+           List<Path> children = Files.list(directory).collect(Collectors.toList());
+    	   for (Path child : children) {
+	           if (Files.isRegularFile(child)) {
+	               Files.delete(child)
+	           } else if (Files.isDirectory(child)) {
+	               deleteDirectory(child)
+	           } else {
+	               logger_.warn("#deleteDirectoryContents ${child.toString()} " +
+	                   "is not a File nor a Directory")
+	           }
             }
         }
     }
 
 
     /**
-     * Check if a file is present or not. If not present,
-     * create a file of 0 bytes at the specified Path with the current timestamp.
+     * Check if a file is present or not. 
+     * If not present, create the file of 0 bytes at the specified Path with the current timestamp.
      * This simulate UNIX touch command for a Path
      *
      * @param filePath
