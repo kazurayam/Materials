@@ -9,7 +9,7 @@ The workd 'Material' here means a file created by your WebDriver/Appium-based te
 
 ## API document
 
-Groovydoc is [here](https://kazurayam.github.com/Materials/index.html)
+Groovydoc is [here](https://kazurayam.github.io/Materials/)
 
 ## Copyright and Licensing
 
