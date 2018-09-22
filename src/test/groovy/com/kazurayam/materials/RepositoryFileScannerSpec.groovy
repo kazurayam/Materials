@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
+import spock.lang.IgnoreRest
 
 class RepositoryFileScannerSpec extends Specification {
 
@@ -187,6 +188,7 @@ class RepositoryFileScannerSpec extends Specification {
      * by the RepositoryFileScanner
      *
      */
+    @IgnoreRest
     def testScan_MaterialsUnderSubpath() {
         setup:
         Path casedir = workdir_.resolve("testScan_MaterialsUnderSubpath")
@@ -203,8 +205,8 @@ class RepositoryFileScannerSpec extends Specification {
         logger_.debug("testScan_MaterialsUnderSubpath tcr.toJson()=${JsonOutput.prettyPrint(tcr.toJson())}")
         then:
         tcr.getMaterials().size() == 2
-        tcr.getMaterial(Paths.get('foo\\bar\\smilechart.xls')) != null
-        tcr.getMaterial(Paths.get('foo\\http%3A%2F%2Fdemoaut.katalon.com%2F.png')) != null
+        tcr.getMaterial(Paths.get('foo/bar/smilechart.xls')) != null
+        tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) != null
     }
 
     def testScanForMiscellaneousImages() {

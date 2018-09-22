@@ -18,6 +18,7 @@
     <logger name="com.kazurayam.material.RepositoryFileVisitor" level="info"/>
     <logger name="com.kazurayam.material.RepositoryWalker"      level="info"/>
     <logger name="com.kazurayam.material.TSuiteResult"          level="info"/>
+    <logger name="com.kazurayam.material.TCaseResult"           level="debug"/>
 
     <logger name="root" level="debug" />
 

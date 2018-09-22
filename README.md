@@ -1,49 +1,16 @@
 Materials
 ====
 
-# What is this?
+Document needs to be written yet.
 
-'Materials' is a small JVM library coded in Groovy, that implements Test Results Repository.
+## Abstract
 
+The workd 'Material' here means a file created by your WebDriver/Appium-based tests such as Screenshot image file, downloaded PDF file, or Excel file created on the fly. This project provides a 'MaterialRepository' where you can store materials with well-defined path. The 'MaterialRepositon#resolvePath(String fileName)' method call returns java.nio.file.Path object to you can write bytes: the method resolve the Path for you, you need not worry about where to locate the file. The 'MaterialRepository' provides methods to get access to the files stored. The project can generate HTML view (index.html) of the repository.
 
-A material help you to resolve a file path for a screenshot in the following format:
+## API document
 
-```
-${base directory}/${test suite name}/${test suite timestamp}/${test case name}/${prefix}/${material file name}
-```
+Groovydoc is [here](https://kazurayam.github.io/Materials/)
 
-For example:
-```
-.Results/TS1/20180809_091047/1/https%3A%2F%2Fwww.google.com%2F.png
-```
+## Copyright and Licensing
 
-You can use carmina to save any material files (PNG, JPEG, JSON, XML, PDF, HTML, CSV etc.) which
-you obtained during testing with WebDriver in JUnit, Spock and Katalon Studio.
-
-Materials project requires Java8+
-
-Bootstrap Treeview, Bootstrap Modal
-
-https://stackoverflow.com/questions/25023199/bootstrap-open-image-in-modal
-
-
-
-https://stackoverflow.com/questions/13307499/http-download-file-name
-HTTP Header Content-Disposition allows you to suggest a file name
-
-
-
-# Copyright and Licensing
-
-Copyright 2018 kazurayam
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied.
-See the License for the specific language governing permissions and limitations
-under the License.
+Please see [LICENSE](./LICENSE)
