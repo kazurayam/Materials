@@ -185,5 +185,28 @@ class MaterialRepositorySpec extends Specification {
         actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
 
+    /**
+     * This will test deleteBaseDirContents() method.
+     * This will create a fixture for its own.
+     *
+     * @throws IOException
+     */
+    def testDeleteBaseDirContents() throws IOException {
+        setup:
+        Path workdir = Paths.get("./build/tmp/MaterialRepository_DeleteBaseDirContents")
+        if (!Files.exists(workdir)) {
+            Files.createDirectories(workdir)
+        }
+        Helpers.copyDirectory(fixture_, workdir)
+        //
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir.resolve('Materials'))
+        //
+        when:
+        mr.deleteBaseDirContents()
+        List<String> contents = mr.getBaseDir().toFile().list()
+        then:
+        contents.size() == 0
+    }
+
 }
 

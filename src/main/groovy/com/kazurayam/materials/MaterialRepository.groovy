@@ -98,5 +98,9 @@ interface MaterialRepository {
     List<MaterialPair> getRecentMaterialPairs(
         String expectedProfile, String actualProfile, String testSuiteId)
 
-
+    /**
+     *
+     * @param directory delete descendant directories and files of the specified directory. The directory is retained.
+     */
+    void deleteBaseDirContents() throws IOException
 }

@@ -391,6 +391,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return result
     }
 
+    /**
+     *
+     * @throws IOException
+     */
+    @Override
+    void deleteBaseDirContents() throws IOException {
+        Path baseDir = this.getBaseDir()
+        Helpers.deleteDirectoryContents(baseDir)
+    }
+
     // ----------------------------- helpers ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {
