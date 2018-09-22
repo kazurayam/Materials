@@ -18,7 +18,7 @@ ext {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
     mavenLocal()
 }
 
@@ -57,3 +57,24 @@ task pinpoint(type: Test) {
     //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
 }
+
+task groovydoc(type: Groovydoc, overwrite: true) {
+    group = 'com.kazurayam'
+    description = 'Generates Public API documents.'
+    source = sourceSets.main.allGroovy
+    classpath = sourceSets.main.runtimeClasspath
+    //options.memberLevel = JavadocMemberLevel.PUBLIC
+    //include '**/Helpers.groovy'
+    //include '**/Material.groovy'
+    //include '**/MaterialPair.groovy'
+    //include '**/MaterialRepository.groovy'
+    //include '**/MaterialRepositoryFactory.groovy'
+    //exclude '**/*Test.groovy'
+}
+
+task publishGroovydoc(type: Copy) {
+    from 'build/docs/groovydoc'
+    into 'docs'    
+}
+
+groovydoc.finalizedBy publishGroovydoc

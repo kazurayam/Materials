@@ -205,6 +205,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     /**
+     * returns a Path which represents a file created by the TestCase.
+     * The file will be located under the subpath under the TCaseResult directory.
+     * The parent directories will be created if not present.
+     * 
      * @param testCaseId
      * @param subpath sub-path under TCaseResult directory
      * @param fileName
@@ -224,6 +228,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         //
         Path targetFile = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName).normalize()
+        Files.createDirectories(targetFile.getParent())
         Helpers.touch(targetFile)
         return targetFile
     }
