@@ -150,11 +150,28 @@ class MaterialSpec extends Specification {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
-        logger_.debug("#testGetSubpath_withSubpath mate.getSubpath()=${mate.getDirpath()}")
+        logger_.debug("#testGetSDirpath_withSubpath mate.getDirpath()=${mate.getDirpath()}")
         then:
         mate != null
         mate.getDirpath() == Paths.get('foo')
     }
+    
+    /**
+     * test getDirpathRelativeToTSuiteResult() method
+     *
+     * @return
+     */
+    def testGetDirpathRelativeToTSuiteResult() {
+        when:
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
+        Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        logger_.debug("#testGetDirpathRelativeToTSuiteResult mate.getSubpath()=${mate.getDirpathRelativeToTSuiteResult()}")
+        then:
+        mate != null
+        mate.getDirpathRelativeToTSuiteResult().equals(Paths.get('main.TC4/foo'))
+    }
+
 
     def testGetEncodedHrefRelativeToRepositoryRoot() {
         when:
@@ -336,6 +353,7 @@ class MaterialSpec extends Specification {
         then:
         modified.getParent() == tcr_
     }
+    
 
     def testToJson() {
         when:
