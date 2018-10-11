@@ -30,4 +30,8 @@ class ExecutionPropertiesWrapper {
     ExecutionProfile getExecutionProfile() {
         return new ExecutionProfile(jsonObject.execution.general.executionProfile)
     }
+    
+    String getDriverName() {
+        return jsonObject.Name
+    }
 }
