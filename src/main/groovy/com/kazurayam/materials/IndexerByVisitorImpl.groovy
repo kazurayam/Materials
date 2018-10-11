@@ -422,6 +422,10 @@ modalize();
                  sb.append('"')
                  sb.append("${tSuiteResult.getExecutionPropertiesWrapper().getExecutionProfile()}")
                  sb.append('"')
+                 sb.append(',')
+                 sb.append('"')
+                 sb.append("${tSuiteResult.getExecutionPropertiesWrapper().getDriverName()}")
+                 sb.append('"')
                  sb.append(']')
              }
              sb.append('}')

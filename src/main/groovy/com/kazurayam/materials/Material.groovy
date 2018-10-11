@@ -68,7 +68,23 @@ class Material implements Comparable<Material> {
     Path getDirpath() {
         return dirpath_
     }
+    
+    
+    
+    /**
+     * if this.getPath() returns Paths.get("C:\tmp\VisualTesting\Materials\TS0\20181003_105321\TC1\foo\bar.png")
+     * then the method returns Path('TC1\foo').
+     * In other words, reutrns the Path of the parent directory of this Material, relative to the TSuiteResult. 
+     *
+     * @return
+     */
+    Path getDirpathRelativeToTSuiteResult() {
+        Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
+        return tSuiteTimestampDir.relativize(parent_.getTCaseDirectory().resolve(dirpath_))
+    }
 
+    
+    
     Material setLastModified(long lastModified) {
         Instant instant = Instant.ofEpochMilli(lastModified)
         this.setLastModified(instant)
