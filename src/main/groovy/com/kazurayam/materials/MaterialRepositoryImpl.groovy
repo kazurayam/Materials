@@ -62,13 +62,22 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 new TSuiteTimestamp(testSuiteTimestampString))
     }
 
+    @Override
+    void putCurrentTestSuite(TSuiteName tSuiteName) {
+        this.putCurrentTestSuite(
+                tSuteName,
+                new TSuiteTimestamp(Helpers.now())
+        )
+    }
+
+    @Override
     void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         this.putCurrentTSuiteResult(
                 tSuiteName,
                 tSuiteTimestamp)
     }
 
-    void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         // memorize the specified TestSuite
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
@@ -108,6 +117,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     String getCurrentTestSuiteTimestamp() {
         return currentTSuiteTimestamp_.format()
+    }
+
+    @Override
+    Path getTestCaseDirectory(String testCaseId) {
+        return this.getTCaseResult(testCaseId).getTCaseDirectory()
     }
 
     // --------------------- create/add/get child nodes -----------------------
@@ -158,6 +172,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     Path resolveScreenshotPath(String testCaseId, URL url) {
         return this.resolveScreenshotPath(testCaseId, Paths.get('.'), url)
     }
+    @Override
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url) {
+        return this.resolveScreenshotPath(tCaseName, Paths.get('.'), url)
+    }
 
 
     /**
@@ -170,6 +188,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveScreenshotPath(String testCaseId, Path subpath, URL url) {
         TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.resolveScreenshotPath(tCaseName, subpath, url)
+    }
+    @Override
+    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -204,6 +226,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return resolveMaterialPath(testCaseId, Paths.get('.'), fileName)
     }
 
+    @Override
+    Path resolveMaterialPath(TCaseName tCaseName, String fileName) {
+        return resolveMaterialPath(tCaseName, Paths.get('.'), fileName)
+    }
+
     /**
      * returns a Path which represents a file created by the TestCase.
      * The file will be located under the subpath under the TCaseResult directory.
@@ -216,6 +243,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.resolveMaterialPath(tCaseName, subpath, fileName)
+    }
+    @Override
+    Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -247,9 +278,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path importFileFromDownloadsDir(String testCaseId, String fileName) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.importFileFromDownloadsDir(tCaseName, fileName)
+    }
+    @Override
+    Path importFileFromDownloadsDir(TCaseName tCaseName, String fileName) {
         Path downloadsDir = Paths.get(System.getProperty("user.home"), "Downloads")
         Path sourceFile = downloadsDir.resolve(fileName)
-        TCaseName tCaseName = new TCaseName(testCaseId)
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -303,7 +338,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param actualProfile
      * @param testSuiteId
      * @return
-     */
+     *
     @Override
     List<MaterialPair> getRecentMaterialPairs(
         String expectedProfile, String actualProfile, String testSuiteId) {
@@ -312,7 +347,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 new ExecutionProfile(actualProfile),
                 new TSuiteName(testSuiteId))
     }
+     */
 
+    @Override
     List<MaterialPair> getRecentMaterialPairs(
             ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName) {
         List<MaterialPair> result = new ArrayList<MaterialPair>()
@@ -435,10 +472,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
-    @Override
-    Path getTestCaseDirectory(String testCaseId) {
-        return this.getTCaseResult(testCaseId).getTCaseDirectory()
-    }
 
     // ---------------------- overriding Object properties --------------------
     @Override
