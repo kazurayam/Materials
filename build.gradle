@@ -52,11 +52,8 @@ test {
 task pinpoint(type: Test) {
     include '**/materials/MaterialRepository*Spec.class'
     //include '**/materials/RepositoryFileScannerSpec.class'
-<<<<<<< HEAD
     include '**/materials/IndexerSpec.class'
-=======
     //include '**/materials/MaterialSpec.class'
->>>>>>> introducingImageDifference
     //include '**/materials/TCaseResultSpec.class'
     //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
