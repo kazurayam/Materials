@@ -173,7 +173,7 @@ class MaterialRepositorySpec extends Specification {
     def testGetRecentMaterialPairs() {
         when:
         List<MaterialPair> list = mr_.getRecentMaterialPairs(
-                'product', 'demo', 'TS1')
+                new ExecutionProfile('product'), new ExecutionProfile('demo'), new TSuiteName('TS1'))
         then:
         list.size() == 1
         when:

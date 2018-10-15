@@ -28,12 +28,16 @@ import java.nio.file.Path
 interface MaterialRepository {
 
     void putCurrentTestSuite(String testSuiteId)
+    void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
+    void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+
     String getCurrentTestSuiteId()
     String getCurrentTestSuiteTimestamp()
 
     Path getBaseDir()
     Path getCurrentTestSuiteDirectory()
+
     Path getTestCaseDirectory(String testCaseId)
 
     /**
@@ -43,8 +47,10 @@ interface MaterialRepository {
      * @return
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url)
 
     Path resolveScreenshotPath(String testCaseId, Path subpath, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url)
 
     /**
      *
@@ -53,6 +59,7 @@ interface MaterialRepository {
      * @return
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, String fileName)
 
     /**
      *
@@ -62,6 +69,7 @@ interface MaterialRepository {
      * @return
      */
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
 
     /**
      *
@@ -78,6 +86,7 @@ interface MaterialRepository {
      * @return
      */
     Path importFileFromDownloadsDir(String testCaseId, String fileName)
+    Path importFileFromDownloadsDir(TCaseName tCaseName, String fileName)
 
 
     /**
@@ -96,7 +105,7 @@ interface MaterialRepository {
      * @return
      */
     List<MaterialPair> getRecentMaterialPairs(
-        String expectedProfile, String actualProfile, String testSuiteId)
+        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName)
 
     /**
      *

@@ -160,7 +160,7 @@ class MaterialRepositoryImplSpec extends Specification {
         MaterialRepositoryImpl mri = new MaterialRepositoryImpl(materials)
         when:
         List<MaterialPair> list = mri.getRecentMaterialPairs(
-            'product', 'demo', 'TS1')
+            new ExecutionProfile('product'), new ExecutionProfile('demo'), new TSuiteName('TS1'))
         then:
         list.size() == 1
         when:
