@@ -318,15 +318,18 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     /**
+     * MaterialPairオブジェクトのListを組み立てて返す。
+     * 
      * MaterialRepositoryの中にはスクリーショットが下記の形式のPathに収録されている。
      *
-     * ./Materials/TSuiteName/TSuiteTimestamp/TCaseName/xxx/xxx/sssss.png
+     * ./Materials/<TSuiteName>/<TSuiteTimestamp>/<TCaseName>/xxx/xxx/sssss.png
      *
-     * 指定されたtestSuiteIdの中をスキャンする。TSuiteTimestampに該当する
-     * ./Reports/TSuiteName/TSuiteTimestamp の中から
-     * expectedProfileに一致するTSuiteResultと
-     * actualProfileに一致するTSuiteResultを探し
-     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを特定する。
+     * 指定されたtestSuiteIdと一致するサブディレクトリをスキャンする。
+     * TSuiteTimestampに該当する./Reports/TSuiteName/TSuiteTimestamp の中から
+     * expectedProfileに一致するTSuiteResultの集合と
+     * actualProfileに一致するTSuiteResultの集合を特定する。
+     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを選別する。
+     * これで２つのTSuiteResultが選定される。
      * expectedTSuiteResultと
      * actualTSuiteResultとを見比べてMaterialオブジェクトの組を生成する。
      * Materialのパス文字列
@@ -334,24 +337,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * が一致するもの同士をMatrialPairオブジェクトに格納し、
      * MaterialPairのListを組み立てる。それをreturnする。
      *
+     * @param tSuiteName
      * @param expectedProfile
      * @param actualProfile
-     * @param testSuiteId
      * @return
-     *
-    @Override
-    List<MaterialPair> getRecentMaterialPairs(
-        String expectedProfile, String actualProfile, String testSuiteId) {
-        return this.getRecentMaterialPairs(
-                new ExecutionProfile(expectedProfile),
-                new ExecutionProfile(actualProfile),
-                new TSuiteName(testSuiteId))
-    }
      */
 
     @Override
-    List<MaterialPair> getRecentMaterialPairs(
-            ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName) {
+    List<MaterialPair> createMaterialPairs(
+            TSuiteName tSuiteName, ExecutionProfile expectedProfile, ExecutionProfile actualProfile) {
         List<MaterialPair> result = new ArrayList<MaterialPair>()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
         List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
