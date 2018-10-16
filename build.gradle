@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.21.2'
+version  = '0.23.0'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -72,7 +72,7 @@ task groovydoc(type: Groovydoc, overwrite: true) {
 
 task publishGroovydoc(type: Copy) {
     from 'build/docs/groovydoc'
-    into 'docs'    
+    into 'docs'
 }
 
 groovydoc.finalizedBy publishGroovydoc
