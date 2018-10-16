@@ -97,15 +97,15 @@ interface MaterialRepository {
 
 
     /**
-     * for ImageDiff
+     * ImageDiff calls this
      *
+     * @param tSuiteName
      * @param expectedProfile
      * @param actualProfile
-     * @param testSuiteId
      * @return
      */
-    List<MaterialPair> getRecentMaterialPairs(
-        ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName)
+    List<MaterialPair> createMaterialPairs(
+        TSuiteName tSuiteName, ExecutionProfile expectedProfile, ExecutionProfile actualProfile)
 
     /**
      *

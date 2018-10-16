@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.21.1'
+version  = '0.21.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -50,14 +50,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/materials/MaterialRepository*Spec.class'
-    //include '**/materials/RepositoryFileScannerSpec.class'
-<<<<<<< HEAD
-    include '**/materials/IndexerSpec.class'
-=======
-    //include '**/materials/MaterialSpec.class'
->>>>>>> introducingImageDifference
-    //include '**/materials/TCaseResultSpec.class'
+    include '**/materials/MaterialRepositorySpec.class'
+    include '**/materials/MaterialRepositoryImplSpec.class'
     //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
 }
