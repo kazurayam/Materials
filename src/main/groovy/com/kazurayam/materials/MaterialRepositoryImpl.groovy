@@ -62,13 +62,22 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 new TSuiteTimestamp(testSuiteTimestampString))
     }
 
+    @Override
+    void putCurrentTestSuite(TSuiteName tSuiteName) {
+        this.putCurrentTestSuite(
+                tSuteName,
+                new TSuiteTimestamp(Helpers.now())
+        )
+    }
+
+    @Override
     void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         this.putCurrentTSuiteResult(
                 tSuiteName,
                 tSuiteTimestamp)
     }
 
-    void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         // memorize the specified TestSuite
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
@@ -108,6 +117,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     String getCurrentTestSuiteTimestamp() {
         return currentTSuiteTimestamp_.format()
+    }
+
+    @Override
+    Path getTestCaseDirectory(String testCaseId) {
+        return this.getTCaseResult(testCaseId).getTCaseDirectory()
     }
 
     // --------------------- create/add/get child nodes -----------------------
@@ -158,6 +172,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     Path resolveScreenshotPath(String testCaseId, URL url) {
         return this.resolveScreenshotPath(testCaseId, Paths.get('.'), url)
     }
+    @Override
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url) {
+        return this.resolveScreenshotPath(tCaseName, Paths.get('.'), url)
+    }
 
 
     /**
@@ -170,6 +188,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveScreenshotPath(String testCaseId, Path subpath, URL url) {
         TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.resolveScreenshotPath(tCaseName, subpath, url)
+    }
+    @Override
+    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -204,6 +226,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return resolveMaterialPath(testCaseId, Paths.get('.'), fileName)
     }
 
+    @Override
+    Path resolveMaterialPath(TCaseName tCaseName, String fileName) {
+        return resolveMaterialPath(tCaseName, Paths.get('.'), fileName)
+    }
+
     /**
      * returns a Path which represents a file created by the TestCase.
      * The file will be located under the subpath under the TCaseResult directory.
@@ -216,6 +243,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.resolveMaterialPath(tCaseName, subpath, fileName)
+    }
+    @Override
+    Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -247,9 +278,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path importFileFromDownloadsDir(String testCaseId, String fileName) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.importFileFromDownloadsDir(tCaseName, fileName)
+    }
+    @Override
+    Path importFileFromDownloadsDir(TCaseName tCaseName, String fileName) {
         Path downloadsDir = Paths.get(System.getProperty("user.home"), "Downloads")
         Path sourceFile = downloadsDir.resolve(fileName)
-        TCaseName tCaseName = new TCaseName(testCaseId)
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -267,7 +302,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-
     /**
      * create index.html file in the current <test suite name>/<test suite timestamp>/ directory.
      * returns the Path of the index.html
@@ -283,44 +317,40 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     /**
+     * create a List<MaterialPair>オブジェクトのListを組み立てて返す。
+     * 
      * MaterialRepositoryの中にはスクリーショットが下記の形式のPathに収録されている。
      *
-     * ./Materials/TSuiteName/TSuiteTimestamp/TCaseName/xxx/xxx/sssss.png
+     * ./Materials/<TSuiteName>/<TSuiteTimestamp>/<TCaseName>/xxx/xxx/sssss.png
      *
-     * 指定されたtestSuiteIdの中をスキャンする。TSuiteTimestampに該当する
-     * ./Reports/TSuiteName/TSuiteTimestamp の中から
-     * expectedProfileに一致するTSuiteResultと
-     * actualProfileに一致するTSuiteResultを探し
-     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを特定する。
+     * 指定されたtestSuiteIdと一致するサブディレクトリをスキャンする。
+     * TSuiteTimestampに該当する./Reports/TSuiteName/TSuiteTimestamp の中から
+     * expectedProfileに一致するTSuiteResultの集合と
+     * actualProfileに一致するTSuiteResultの集合を特定する。
+     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを選別する。
+     * これで２つのTSuiteResultが選定される。
      * expectedTSuiteResultと
      * actualTSuiteResultとを見比べてMaterialオブジェクトの組を生成する。
      * Materialのパス文字列
      * TCaseName/xxx/xxx/sssss.ext
-     * が一致するもの同士をMatrialPairオブジェクトに格納し、
+     * 一致するもの同士をMatrialPairオブジェクトに格納し、
      * MaterialPairのListを組み立てる。それをreturnする。
      *
+     * @param tSuiteName
      * @param expectedProfile
      * @param actualProfile
-     * @param testSuiteId
      * @return
      */
     @Override
-    List<MaterialPair> getRecentMaterialPairs(
-        String expectedProfile, String actualProfile, String testSuiteId) {
-        return this.getRecentMaterialPairs(
-                new ExecutionProfile(expectedProfile),
-                new ExecutionProfile(actualProfile),
-                new TSuiteName(testSuiteId))
-    }
+    List<MaterialPair> createMaterialPairs(
+            TSuiteName tSuiteName,
+            ExecutionProfile expectedProfile, ExecutionProfile actualProfile) {
 
-    List<MaterialPair> getRecentMaterialPairs(
-            ExecutionProfile expectedProfile, ExecutionProfile actualProfile, TSuiteName tSuiteName) {
         List<MaterialPair> result = new ArrayList<MaterialPair>()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
         List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
         List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
 
-        // Diagnostics
         StringBuilder sb = new StringBuilder()
         sb.append("${this.getClass().getName()}#getRecentMaterialPairs() diagnostics:\n")
         sb.append("Arguments:\n")
@@ -348,11 +378,23 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 sb.append("tsr.getExecutionPropertiesWrapper() returned null")
             }
         }
+        // The following code will print message like this:
+        
+        // |com.kazurayam.materials.MaterialRepositoryImpl#getRecentMaterialPairs() diagnostics:
+        // |Arguments:
+        // |    expectedProfile: product
+        // |    actualProfile  : develop
+        // |    tSuiteName     : AllCorps
+        // |
+        // |TSuiteResults found:
+        // |    TSuiteName  Timestamp           Profile     Match?
+        // |    AllCorps    20181015_160850     product     match to Expected
+        // |    AllCorps    20181015_160851     develop     match to Actual
+        
         System.out.println(sb.toString())
         //logger_.info(sb.toString())
 
-
-
+        // select TSuiteResult with the specified ExecutionProfile
         for (TSuiteResult tsr : tSuiteResults) {
             ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
             if (epw != null) {
@@ -366,7 +408,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 logger_.warn("#getRecentMaterialPairs could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
             }
         }
-
+        
+        // sort the List<TSuiteResult> by Timestamp in reverse order
         if (expectedTSRList.size() == 0) {
             logger_.debug("#getRecentMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
             return result
@@ -379,15 +422,19 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         } else {
             Collections.sort(actualTSRList, Comparator.reverseOrder())
         }
+        
+        // pickup the LATEST TSuiteResult
         TSuiteResult expectedTSR = expectedTSRList[0]
         TSuiteResult actualTSR = actualTSRList[0]
+        
+        // create the instance of List<Material>
         List<Material> expMaterials = expectedTSR.getMaterials()
         List<Material> actMaterials = actualTSR.getMaterials()
         for (Material expMate : expMaterials) {
             Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
             for (Material actMate : actMaterials) {
                 Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
-                // サブパスが同じだったらMaterialPairにする
+                // create a MateialPair object and add it to the result
                 if (expPath == actPath) {
                     result.add(new MaterialPair().setExpected(expMate).setActual(actMate))
                 }
@@ -435,10 +482,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
-    @Override
-    Path getTestCaseDirectory(String testCaseId) {
-        return this.getTCaseResult(testCaseId).getTCaseDirectory()
-    }
 
     // ---------------------- overriding Object properties --------------------
     @Override
