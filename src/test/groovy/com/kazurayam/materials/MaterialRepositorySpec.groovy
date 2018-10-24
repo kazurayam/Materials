@@ -184,6 +184,21 @@ class MaterialRepositorySpec extends Specification {
         expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
         actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
+    
+    def testCreateMaterialPairs_TSuiteNameOnly() {
+        when:
+        List<MaterialPair> list = mr_.createMaterialPairs(new TSuiteName('TS1'))
+        then:
+        list.size() == 1
+        when:
+        MaterialPair mp = list.get(0)
+        Material expected = mp.getExpected()
+        Material actual = mp.getActual()
+        then:
+        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
+        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
+    }
+    
 
     /**
      * This will test deleteBaseDirContents() method.

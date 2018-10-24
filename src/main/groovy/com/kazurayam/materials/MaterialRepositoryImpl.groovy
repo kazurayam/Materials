@@ -316,6 +316,59 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return index
     }
 
+    
+    
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare.
+     *
+     * This method perform the following search under the Materials directory
+     * in order to identify which Material object to be included.
+     *
+     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
+     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path
+     *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
+     *
+     * @return
+     */
+    @Override
+    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
+
+        List<MaterialPair> result = new ArrayList<MaterialPair>()
+        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
+        
+        // we expect 2 or more TSuiteResult objects with the tSuiteName
+        if (tSuiteResults.size() < 2) {
+            logger_.debug("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} < 2")
+            return result
+        }
+        
+        // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
+        Collections.sort(tSuiteResults, Comparator.reverseOrder())
+
+        // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one" 
+        TSuiteResult actualTSR   = tSuiteResults[0]
+        TSuiteResult expectedTSR = tSuiteResults[1]
+
+        // create the instance of List<MaterialPairs>
+        List<Material> expMaterials = expectedTSR.getMaterials()
+        List<Material> actMaterials = actualTSR.getMaterials()
+        for (Material expMate : expMaterials) {
+            Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
+            for (Material actMate : actMaterials) {
+                Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
+                // create a MateialPair object and add it to the result
+                if (expPath == actPath) {
+                    result.add(new MaterialPair().setExpected(expMate).setActual(actMate))
+                }
+            }
+        }
+        return result
+    }
+
+    
+    
     /**
      * create a List<MaterialPair>オブジェクトのListを組み立てて返す。
      * 
@@ -352,11 +405,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
 
         StringBuilder sb = new StringBuilder()
-        sb.append("${this.getClass().getName()}#getRecentMaterialPairs() diagnostics:\n")
+        sb.append("${this.getClass().getName()}#createMaterialPairs() diagnostics:\n")
         sb.append("Arguments:\n")
+        sb.append("    tSuiteName     : ${tSuiteName.getValue()}\n")
         sb.append("    expectedProfile: ${expectedProfile}\n")
         sb.append("    actualProfile  : ${actualProfile}\n")
-        sb.append("    tSuiteName     : ${tSuiteName.getValue()}\n")
         sb.append("\n")
         sb.append("TSuiteResults found:\n")
         sb.append("    TSuiteName\tTimestamp\t\t\tProfile\t\tMatch?\n")
@@ -405,19 +458,19 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     actualTSRList.add(tsr)
                 }
             } else {
-                logger_.warn("#getRecentMaterialPairs could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
+                logger_.warn("#createMaterialPairs could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
             }
         }
         
         // sort the List<TSuiteResult> by Timestamp in reverse order
         if (expectedTSRList.size() == 0) {
-            logger_.debug("#getRecentMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
+            logger_.debug("#createMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
             return result
         } else {
             Collections.sort(expectedTSRList, Comparator.reverseOrder())
         }
         if (actualTSRList.size() == 0) {
-            logger_.debug("#getRecentMaterialPairs actualTSRList.size() was 0 for ${tSuiteName.getValue()}:${actualProfile}")
+            logger_.debug("#createMaterialPairs actualTSRList.size() was 0 for ${tSuiteName.getValue()}:${actualProfile}")
             return result
         } else {
             Collections.sort(actualTSRList, Comparator.reverseOrder())
@@ -427,7 +480,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteResult expectedTSR = expectedTSRList[0]
         TSuiteResult actualTSR = actualTSRList[0]
         
-        // create the instance of List<Material>
+        // create the instance of List<MaterialPairs>
         List<Material> expMaterials = expectedTSR.getMaterials()
         List<Material> actMaterials = actualTSR.getMaterials()
         for (Material expMate : expMaterials) {
