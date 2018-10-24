@@ -212,6 +212,18 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         return result
     }
 
+    /**
+     * TSuitResult is comparable.
+     * Primarily sorted by the ascending order of TSuiteName, and
+     * secondarily sorted by the ascending order of TSuiteTimestamp.
+     * 
+     * This means:
+     * 1. TS0/20181023_140000
+     * 2. TS1/20181023_132618
+     * 3. TS1/20181023_132619
+     * 4. TS2/20180923_000000 
+     *
+     */
     @Override
     int compareTo(TSuiteResult other) {
         int v = this.getTSuiteName().compareTo(other.getTSuiteName())
