@@ -1,7 +1,6 @@
 Materials
 ====
 
-Document needs to be written yet.
 
 ## Abstract
 
