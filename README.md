@@ -11,6 +11,10 @@ The workd 'Material' here means a file created by your WebDriver/Appium-based te
 
 Groovydoc is [here](https://kazurayam.github.io/Materials/)
 
+## How to use
+
+see another repository https://github.com/kazurayam/UsingMaterialsInKatalonStudio
+
 ## Copyright and Licensing
 
 Please see [LICENSE](./LICENSE)
