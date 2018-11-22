@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.25.1'
+version  = '0.26.0'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
