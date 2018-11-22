@@ -150,26 +150,4 @@ class MaterialRepositoryImplSpec extends Specification {
     }
 
 
-    def testCreateMaterialPairs_tSuiteName_ExecutionProfile() {
-        setup:
-        def methodName = "testGetRecentMaterialPairs"
-        Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materials = casedir.resolve('Materials')
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(materials)
-        when:
-        List<MaterialPair> list = mri.createMaterialPairs(
-            new TSuiteName('TS1'), new ExecutionProfile('product'), new ExecutionProfile('demo'))
-        then:
-        list.size() == 1
-        when:
-        MaterialPair mp = list.get(0)
-        Material expected = mp.getExpected()
-        Material actual = mp.getActual()
-        then:
-        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
-        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
-    }
-
-
 }

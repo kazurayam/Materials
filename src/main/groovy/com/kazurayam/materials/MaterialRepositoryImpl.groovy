@@ -321,16 +321,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     /**
      * Scans the Materials directory to look up pairs of Material objects to compare.
      *
-     * This method perform the following search under the Materials directory
+     * This method perform the following search under the &lt;projectDir&gt;/Materials directory
      * in order to identify which Material object to be included.
      *
-     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
+     * 1. selects all &lt;projectDir&gt;/Materials/&lt;Test Suite Name&gt;/&lt;yyyyMMdd_hhmmss&gt; directories 
+     *    with the name equals to the Test Suite Name specified as argument tSuiteName
      * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
      * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path
-     *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
+     * 4. please note that we do not check the profile name which was applied to each Test Suite run. also we do
+     *    not check the browser type used to each Test Suite run. 
+     * 5. Scan the 2 directories selected and create a List of Material objects. 2 files which have the same path
+     *    under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
+     * 6. A List&lt;MaterialPair&gt; is created, fulfilled and returned as the result
      *
-     * @return
+     * @return List<MaterialPair>
      */
     @Override
     List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
@@ -369,132 +373,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     
     
-    /**
-     * create a List<MaterialPair>オブジェクトのListを組み立てて返す。
-     * 
-     * MaterialRepositoryの中にはスクリーショットが下記の形式のPathに収録されている。
-     *
-     * ./Materials/<TSuiteName>/<TSuiteTimestamp>/<TCaseName>/xxx/xxx/sssss.png
-     *
-     * 指定されたtestSuiteIdと一致するサブディレクトリをスキャンする。
-     * TSuiteTimestampに該当する./Reports/TSuiteName/TSuiteTimestamp の中から
-     * expectedProfileに一致するTSuiteResultの集合と
-     * actualProfileに一致するTSuiteResultの集合を特定する。
-     * かつ各々の集まりのなかで時刻がもっとも新しいTSuiteResultを選別する。
-     * これで２つのTSuiteResultが選定される。
-     * expectedTSuiteResultと
-     * actualTSuiteResultとを見比べてMaterialオブジェクトの組を生成する。
-     * Materialのパス文字列
-     * TCaseName/xxx/xxx/sssss.ext
-     * 一致するもの同士をMatrialPairオブジェクトに格納し、
-     * MaterialPairのListを組み立てる。それをreturnする。
-     *
-     * @param tSuiteName
-     * @param expectedProfile
-     * @param actualProfile
-     * @return
-     */
-    @Override
-    List<MaterialPair> createMaterialPairs(
-            TSuiteName tSuiteName,
-            ExecutionProfile expectedProfile, ExecutionProfile actualProfile) {
-
-        List<MaterialPair> result = new ArrayList<MaterialPair>()
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
-        List<TSuiteResult> expectedTSRList = new ArrayList<TSuiteResult>()
-        List<TSuiteResult> actualTSRList = new ArrayList<TSuiteResult>()
-
-        StringBuilder sb = new StringBuilder()
-        sb.append("${this.getClass().getName()}#createMaterialPairs() diagnostics:\n")
-        sb.append("Arguments:\n")
-        sb.append("    tSuiteName     : ${tSuiteName.getValue()}\n")
-        sb.append("    expectedProfile: ${expectedProfile}\n")
-        sb.append("    actualProfile  : ${actualProfile}\n")
-        sb.append("\n")
-        sb.append("TSuiteResults found:\n")
-        sb.append("    TSuiteName\tTimestamp\t\t\tProfile\t\tMatch?\n")
-        for (TSuiteResult tsr : tSuiteResults) {
-            sb.append("    ${tsr.getTSuiteName().getValue()}\t${tsr.getTSuiteTimestamp().format()}\t\t")
-            ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
-            if (epw != null) {
-                ExecutionProfile ep = epw.getExecutionProfile() ?: 'unknown'
-                sb.append("${ep}\t\t")
-                if (ep == expectedProfile) {
-                    sb.append("match to Expected")
-                } else if (ep == actualProfile) {
-                    sb.append("match to Actual")
-                } else {
-                    sb.append("does not match")
-                }
-                sb.append("\n")
-            } else {
-                sb.append("tsr.getExecutionPropertiesWrapper() returned null")
-            }
-        }
-        // The following code will print message like this:
-        
-        // |com.kazurayam.materials.MaterialRepositoryImpl#getRecentMaterialPairs() diagnostics:
-        // |Arguments:
-        // |    expectedProfile: product
-        // |    actualProfile  : develop
-        // |    tSuiteName     : AllCorps
-        // |
-        // |TSuiteResults found:
-        // |    TSuiteName  Timestamp           Profile     Match?
-        // |    AllCorps    20181015_160850     product     match to Expected
-        // |    AllCorps    20181015_160851     develop     match to Actual
-        
-        System.out.println(sb.toString())
-        //logger_.info(sb.toString())
-
-        // select TSuiteResult with the specified ExecutionProfile
-        for (TSuiteResult tsr : tSuiteResults) {
-            ExecutionPropertiesWrapper epw = tsr.getExecutionPropertiesWrapper()
-            if (epw != null) {
-                ExecutionProfile ep = epw.getExecutionProfile() ?: 'unknown'
-                if (ep == expectedProfile) {
-                    expectedTSRList.add(tsr)
-                } else if (ep == actualProfile) {
-                    actualTSRList.add(tsr)
-                }
-            } else {
-                logger_.warn("#createMaterialPairs could not get ExecutionPropertiesWrapper out of TestSuite '${tsr.getTSuiteName().getId()}'")
-            }
-        }
-        
-        // sort the List<TSuiteResult> by Timestamp in reverse order
-        if (expectedTSRList.size() == 0) {
-            logger_.debug("#createMaterialPairs expectedTSRList.size() was 0 for ${tSuiteName.getValue()}:${expectedProfile}")
-            return result
-        } else {
-            Collections.sort(expectedTSRList, Comparator.reverseOrder())
-        }
-        if (actualTSRList.size() == 0) {
-            logger_.debug("#createMaterialPairs actualTSRList.size() was 0 for ${tSuiteName.getValue()}:${actualProfile}")
-            return result
-        } else {
-            Collections.sort(actualTSRList, Comparator.reverseOrder())
-        }
-        
-        // pickup the LATEST TSuiteResult
-        TSuiteResult expectedTSR = expectedTSRList[0]
-        TSuiteResult actualTSR = actualTSRList[0]
-        
-        // create the instance of List<MaterialPairs>
-        List<Material> expMaterials = expectedTSR.getMaterials()
-        List<Material> actMaterials = actualTSR.getMaterials()
-        for (Material expMate : expMaterials) {
-            Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
-            for (Material actMate : actMaterials) {
-                Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
-                // create a MateialPair object and add it to the result
-                if (expPath == actPath) {
-                    result.add(new MaterialPair().setExpected(expMate).setActual(actMate))
-                }
-            }
-        }
-        return result
-    }
 
     /**
      *

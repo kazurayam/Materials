@@ -108,40 +108,10 @@ interface MaterialRepository {
      * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path 
      *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
      * 
-     * @return
+     * @return List<MaterialPair>
      */
     List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName)
     
-    /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
-     * 
-     * This method perform the following search under the Materials directory
-     * in order to identify which Material object to be included.
-     * 
-     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
-     * 2. among them, selects directories which has corresponding ./Reports/<tSuiteName>/yyyyMMdd_hhmmss directory
-     *    where you can find 'execution.properties' file with "executionProfile":"${expectedProfile}". If multiple
-     *    directories are found, then choose the lastest one.
-     * 3. among them, selects directories which has corresponding ./Reports/<tSuiteName>/yyyyMMdd_hhmmss directory
-     *    where you can find 'execution.properties' file with "executionProfile":"${actualProfile}". If multiple
-     *    directories are found, the choose the lastest one.
-     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path 
-     *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
-     * 
-     * Example:
-     * 
-     * 
-     * The com.kazurayam.ksbackyard.ImageCollectionDiffer class, a Katalon Studio Custom Keyword, is known
-     * using this method.
-     *
-     * @param tSuiteName
-     * @param expectedProfile
-     * @param actualProfile
-     * @return
-     */
-    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName,
-                            ExecutionProfile expectedProfile, ExecutionProfile actualProfile)
-
     /**
      *
      * @param directory delete descendant directories and files of the specified directory. The directory is retained.

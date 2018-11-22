@@ -169,21 +169,6 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
-
-    def testCreateMaterialPairs_TSuiteName_ExecutionProfile() {
-        when:
-        List<MaterialPair> list = mr_.createMaterialPairs(
-                new TSuiteName('TS1'), new ExecutionProfile('product'), new ExecutionProfile('demo'))
-        then:
-        list.size() == 1
-        when:
-        MaterialPair mp = list.get(0)
-        Material expected = mp.getExpected()
-        Material actual = mp.getActual()
-        then:
-        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
-        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
-    }
     
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
