@@ -102,7 +102,7 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
         if (!(obj instanceof TSuiteTimestamp))
             return false
         TSuiteTimestamp other = (TSuiteTimestamp)obj
-        return this.getValue() == other.getValue()
+        return this.getValue().equals(other.getValue())
     }
 
     @Override

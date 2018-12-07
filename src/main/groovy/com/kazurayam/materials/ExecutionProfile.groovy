@@ -25,7 +25,7 @@ class ExecutionProfile implements Comparable<ExecutionProfile> {
         if (!(obj instanceof ExecutionProfile))
             return false
         ExecutionProfile other = (ExecutionProfile)obj
-        return this.getName() == other.getName()
+        return this.getName().equals(other.getName())
     }
 
     @Override

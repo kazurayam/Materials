@@ -165,7 +165,7 @@ class TCaseResult implements Comparable<TCaseResult> {
             return false
         }
         TCaseResult other = (TCaseResult) obj
-        return tCaseName_ == other.getTCaseName()
+        return tCaseName_.equals(other.getTCaseName())
     }
 
     @Override

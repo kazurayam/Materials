@@ -67,7 +67,7 @@ class TCaseName implements Comparable<TCaseName> {
         if (!(obj instanceof TCaseName))
             return false
         TCaseName other = (TCaseName)obj
-        return this.getValue() == other.getValue()
+        return this.getValue().equals(other.getValue())
     }
 
     @Override

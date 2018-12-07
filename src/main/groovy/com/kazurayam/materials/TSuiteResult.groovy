@@ -196,7 +196,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (tSuiteName_ == other.getTSuiteName() && tSuiteTimestamp_ == other.getTSuiteTimestamp()) {
+        if (tSuiteName_.equals(other.getTSuiteName()) && tSuiteTimestamp_.equals(other.getTSuiteTimestamp())) {
             return true
         } else {
             return false

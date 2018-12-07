@@ -67,8 +67,8 @@ class MaterialPair implements Comparable<MaterialPair> {
         if (!(obj instanceof MaterialPair))
             return false
         MaterialPair other = (MaterialPair)obj
-        return this.getLeft() == other.getLeft() &&
-                this.getRight() == other.getRight()
+        return this.getLeft().equals(other.getLeft()) &&
+                this.getRight().equals(other.getRight())
     }
 
     @Override

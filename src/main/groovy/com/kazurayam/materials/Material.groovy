@@ -187,7 +187,7 @@ class Material implements Comparable<Material> {
         //if (this == obj) { return true }
         if (!(obj instanceof Material)) { return false }
         Material other = (Material)obj
-        return this.getPath() == other.getPath()
+        return this.getPath().equals(other.getPath())
     }
 
     @Override

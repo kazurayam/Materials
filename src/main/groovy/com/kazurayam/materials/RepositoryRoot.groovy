@@ -129,7 +129,9 @@ class RepositoryRoot {
         logger_.debug("otherList=${otherList.toString()}")
         if (ownList.size() == otherList.size()) {
             for (int i; i < ownList.size(); i++) {
-                if (ownList.get(i) != otherList.get(i)) { return false }
+                if ( ! ownList.get(i).equals(otherList.get(i)) ) {
+                    return false
+                }
             }
             return true
         } else {

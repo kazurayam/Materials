@@ -67,7 +67,7 @@ class TSuiteName implements Comparable<TSuiteName> {
         if (!(obj instanceof TSuiteName))
             return false
         TSuiteName other = (TSuiteName)obj
-        return this.getValue() == other.getValue()
+        return this.getValue().equals(other.getValue())
     }
 
     @Override

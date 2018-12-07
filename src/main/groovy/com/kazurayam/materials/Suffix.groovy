@@ -48,7 +48,7 @@ class Suffix implements Comparable<Suffix> {
         //if (this == obj) { return true }
         if (!(obj instanceof Suffix)) { return false }
         Suffix other = (Suffix)obj
-        return this.value_ == other.getValue()
+        return this.value_.equals(other.getValue())
     }
 
     @Override
