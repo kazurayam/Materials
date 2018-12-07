@@ -18,7 +18,7 @@ import com.kazurayam.materials.model.TSuiteTimestamp
 /**
  *
  */
-class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
+final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryFileVisitor.class)
 

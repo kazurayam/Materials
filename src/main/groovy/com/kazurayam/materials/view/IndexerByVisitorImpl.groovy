@@ -22,6 +22,7 @@ import com.kazurayam.materials.model.TSuiteResult
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
 
+
 class IndexerByVisitorImpl implements Indexer {
 
     static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorImpl.class)

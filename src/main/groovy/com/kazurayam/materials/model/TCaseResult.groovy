@@ -14,7 +14,7 @@ import com.kazurayam.materials.TCaseName
 /**
  *
  */
-class TCaseResult implements Comparable<TCaseResult> {
+final class TCaseResult implements Comparable<TCaseResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TCaseResult.class)
 

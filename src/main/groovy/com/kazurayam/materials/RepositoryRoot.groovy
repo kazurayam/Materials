@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
 
-class RepositoryRoot {
+final class RepositoryRoot {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryRoot.class)
 

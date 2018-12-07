@@ -13,7 +13,7 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
 
-class Material implements Comparable<Material> {
+final class Material implements Comparable<Material> {
 
     static Logger logger_ = LoggerFactory.getLogger(Material.class)
 

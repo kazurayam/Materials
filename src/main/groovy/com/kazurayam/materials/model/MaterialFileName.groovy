@@ -21,7 +21,7 @@ import com.kazurayam.materials.FileType
  * assert mfn.getFileType() == FileType.CSV
  * </pre>
  */
-class MaterialFileName {
+final class MaterialFileName {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialFileName.class)
 

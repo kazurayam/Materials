@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory
  * @author kazurayam
  *
  */
-class TSuiteName implements Comparable<TSuiteName> {
+final class TSuiteName implements Comparable<TSuiteName> {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteName.class)
 

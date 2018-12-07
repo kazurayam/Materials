@@ -3,7 +3,7 @@ package com.kazurayam.materials.model
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 
-class MaterialPairImpl implements MaterialPair {
+final class MaterialPairImpl implements MaterialPair {
     
     private Material left_
     private Material right_

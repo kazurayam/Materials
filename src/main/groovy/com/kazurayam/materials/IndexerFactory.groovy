@@ -2,7 +2,7 @@ package com.kazurayam.materials
 
 import com.kazurayam.materials.view.IndexerByVisitorImpl
 
-class IndexerFactory {
+final class IndexerFactory {
 
     static Indexer newIndexer() {
         //return new IndexerRudimentaryImpl()

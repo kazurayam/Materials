@@ -2,7 +2,7 @@ package com.kazurayam.materials.view
 
 import com.kazurayam.materials.ExecutionProfile
 
-class ExecutionProfileImpl implements ExecutionProfile {
+final class ExecutionProfileImpl implements ExecutionProfile {
     
     private String profileName_
     

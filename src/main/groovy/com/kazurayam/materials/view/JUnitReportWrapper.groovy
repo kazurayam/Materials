@@ -18,7 +18,7 @@ import org.w3c.dom.Node
  * @author kazurayam
  *
  */
-class JUnitReportWrapper {
+final class JUnitReportWrapper {
 
     static Logger logger_ = LoggerFactory.getLogger(JUnitReportWrapper.class)
 

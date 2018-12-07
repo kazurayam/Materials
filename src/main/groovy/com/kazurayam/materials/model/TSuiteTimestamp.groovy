@@ -17,7 +17,7 @@ import com.kazurayam.materials.RepositoryFileScanner
  * @author kazurayam
  *
  */
-class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
+final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScanner.class);
 

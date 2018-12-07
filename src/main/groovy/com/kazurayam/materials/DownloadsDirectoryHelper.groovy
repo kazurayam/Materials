@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.model.MaterialFileName
 
-class DownloadsDirectoryHelper {
+final class DownloadsDirectoryHelper {
 
     static Logger logger_ = LoggerFactory.getLogger(DownloadsDirectoryHelper.class)
 

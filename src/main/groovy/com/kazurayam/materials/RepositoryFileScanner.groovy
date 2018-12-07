@@ -82,7 +82,7 @@ import groovy.json.JsonOutput
  *
  * @author kazurayam
  */
-class RepositoryFileScanner {
+final class RepositoryFileScanner {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScanner.class)
 

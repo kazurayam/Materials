@@ -14,7 +14,7 @@ import groovy.json.JsonSlurper
  * to each Test Suite exection; default, demo, product. I want to display the value in
  * the ./Materials/index.html
  */
-class ExecutionPropertiesWrapper {
+final class ExecutionPropertiesWrapper {
 
     private def jsonObject
     private static slurper = new JsonSlurper()

@@ -17,7 +17,7 @@ import com.kazurayam.materials.RepositoryRoot
  * @author kazurayam
  *
  */
-class IndexerRudimentaryImpl implements Indexer {
+final class IndexerRudimentaryImpl implements Indexer {
 
     static Logger logger_ = LoggerFactory.getLogger(IndexerRudimentaryImpl.class)
 

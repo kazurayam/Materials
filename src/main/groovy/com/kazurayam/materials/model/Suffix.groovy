@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
  * so that the a sibling file can be saved in the directory.
  *
  */
-class Suffix implements Comparable<Suffix> {
+final class Suffix implements Comparable<Suffix> {
 
     static Logger logger_ = LoggerFactory.getLogger(Suffix.class)
 

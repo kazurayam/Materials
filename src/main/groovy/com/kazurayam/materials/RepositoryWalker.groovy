@@ -3,7 +3,7 @@ package com.kazurayam.materials
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
 
-class RepositoryWalker {
+final class RepositoryWalker {
 
     static RepositoryRoot walkRepository(RepositoryRoot repoRoot, RepositoryVisitor visitor) {
         if (repoRoot == null) {
