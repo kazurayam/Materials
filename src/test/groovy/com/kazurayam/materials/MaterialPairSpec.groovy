@@ -6,9 +6,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.TCaseName
+import com.kazurayam.materials.model.MaterialPairImpl
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteName
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
 
@@ -55,7 +54,7 @@ class MaterialPairSpec extends Specification {
     // feature methods
     def testGetLeft() {
         setup:
-        MaterialPair mp = new MaterialPair().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
         when:
         Material left = mp.getLeft()
         then:
@@ -64,7 +63,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetRight() {
         setup:
-        MaterialPair mp = new MaterialPair().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
         when:
         Material right = mp.getRight()
         then:
@@ -73,7 +72,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetExpected() {
         setup:
-        MaterialPair mp = new MaterialPair().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
         when:
         Material expected = mp.getExpected()
         then:
@@ -82,7 +81,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetActual() {
         setup:
-        MaterialPair mp = new MaterialPair().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
         when:
         Material actual = mp.getActual()
         then:

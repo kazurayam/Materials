@@ -2,6 +2,8 @@ package com.kazurayam.materials.view
 
 import java.nio.file.Path
 
+import com.kazurayam.materials.ExecutionProfile
+
 import groovy.json.JsonSlurper
 
 /**
@@ -28,7 +30,7 @@ class ExecutionPropertiesWrapper {
     }
 
     ExecutionProfile getExecutionProfile() {
-        return new ExecutionProfile(jsonObject.execution.general.executionProfile)
+        return ExecutionProfileImpl.newInstance(jsonObject.execution.general.executionProfile)
     }
     
     String getDriverName() {

@@ -1,9 +1,9 @@
-package com.kazurayam.materials.view
+package com.kazurayam.materials
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.view.ExecutionProfile
+import com.kazurayam.materials.view.ExecutionProfileImpl
 
 import spock.lang.Specification
 
@@ -30,7 +30,7 @@ class ExecutionProfileSpec extends Specification {
     // feature methods
     def testGetName() {
         setup:
-        ExecutionProfile ep = new ExecutionProfile('develop')
+        ExecutionProfile ep = ExecutionProfileImpl.newInstance('develop')
         when:
         String name = ep.getName()
         then:

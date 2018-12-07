@@ -6,6 +6,8 @@ import java.util.regex.Pattern
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.FileType
+
 /**
  * This class wrapps the file name applying the file name format rule for Material.
  *

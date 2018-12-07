@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials
 
 enum FileType {
 

@@ -8,11 +8,9 @@ import java.nio.file.StandardCopyOption
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.model.MaterialPairImpl
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseName
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteName
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
 
@@ -73,7 +71,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     void putCurrentTestSuite(TSuiteName tSuiteName) {
         this.putCurrentTestSuite(
-                tSuteName,
+                tSuiteName,
                 new TSuiteTimestamp(Helpers.now())
         )
     }
@@ -372,7 +370,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
                 // create a MateialPair object and add it to the result
                 if (expPath == actPath) {
-                    result.add(new MaterialPair().setExpected(expMate).setActual(actMate))
+                    result.add(MaterialPairImpl.newInstance().setExpected(expMate).setActual(actMate))
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.kazurayam.materials.model
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.FileType
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 

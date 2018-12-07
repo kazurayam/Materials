@@ -1,9 +1,9 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.FileType
 
 import spock.lang.Specification
 

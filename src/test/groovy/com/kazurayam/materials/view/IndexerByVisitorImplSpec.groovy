@@ -7,16 +7,16 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.RepositoryFileScanner
 import com.kazurayam.materials.RepositoryRoot
 import com.kazurayam.materials.RepositoryWalker
-import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseName
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteName
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
 import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal

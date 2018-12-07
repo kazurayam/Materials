@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.TSuiteName
+import com.kazurayam.materials.TSuiteName
 
 import spock.lang.Specification
 
