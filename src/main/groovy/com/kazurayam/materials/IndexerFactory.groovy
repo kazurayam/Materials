@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.view.IndexerByVisitorImpl
+
 class IndexerFactory {
 
     static Indexer newIndexer() {

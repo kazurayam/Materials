@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.view
 
 class ExecutionProfile implements Comparable<ExecutionProfile> {
 

@@ -1,4 +1,6 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
+
+import com.kazurayam.materials.model.TCaseName
 
 import spock.lang.Specification
 

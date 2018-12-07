@@ -1,5 +1,8 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.model.TSuiteResult
+
 /**
  *
  * RepositoryRoot > TSuiteResult > TCaseResult > Material

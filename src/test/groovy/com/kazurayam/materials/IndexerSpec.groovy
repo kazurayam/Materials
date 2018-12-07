@@ -7,6 +7,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.view.IndexerRudimentaryImpl
+
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -37,7 +39,9 @@ class IndexerSpec extends Specification {
     @Ignore
     def testMakeIndex_rudimentary() {
         setup:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
+        //Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
+        Indexer indexer = IndexerFactory.newIndexer(IndexerRudimentaryImpl.class.getName())
+        
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
         Path index = baseDir.resolve('index.html')
@@ -56,7 +60,9 @@ class IndexerSpec extends Specification {
 
     def testMakeIndex_byVisitor() {
         setup:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerByVisitorImpl')
+        //Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerByVisitorImpl')
+        Indexer indexer = IndexerFactory.newIndexer(IndexerRudimentaryImpl.class.getName())
+        
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
         Path index = baseDir.resolve('index.html')

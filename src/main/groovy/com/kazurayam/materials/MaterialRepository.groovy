@@ -2,6 +2,10 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
+import com.kazurayam.materials.model.TCaseName
+import com.kazurayam.materials.model.TSuiteName
+import com.kazurayam.materials.model.TSuiteTimestamp
+
 /**
  * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.

@@ -7,6 +7,14 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.model.TCaseName
+import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.model.TSuiteName
+import com.kazurayam.materials.model.TSuiteResult
+import com.kazurayam.materials.model.TSuiteTimestamp
+
 import groovy.json.JsonOutput
 import spock.lang.Specification
 import spock.lang.IgnoreRest

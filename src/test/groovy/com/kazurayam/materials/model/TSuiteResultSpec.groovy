@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -6,6 +6,12 @@ import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.MaterialRepositoryImpl
+import com.kazurayam.materials.RepositoryRoot
+import com.kazurayam.materials.view.ExecutionPropertiesWrapper
+import com.kazurayam.materials.view.JUnitReportWrapper
 
 import groovy.json.JsonOutput
 import spock.lang.Specification

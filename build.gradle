@@ -44,14 +44,14 @@ tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncodi
 
 test {
     include '**/materials/*Spec.class'
-    exclude '**/materials/visualtesting/*Spec.class'
+    include '**/materials/model/*Spec.class'
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
 
 task pinpoint(type: Test) {
+    include '**/materials/IndexerSpec.class'
     include '**/materials/MaterialRepositorySpec.class'
-    //include '**/materials/MaterialRepositoryImplSpec.class'
     //include '**/materials/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
 }

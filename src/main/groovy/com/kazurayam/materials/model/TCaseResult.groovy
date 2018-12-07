@@ -1,10 +1,13 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.nio.file.Path
 import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
 
 /**
  *

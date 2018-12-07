@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.nio.file.Path
 

@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.view
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -6,8 +6,17 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import groovy.json.JsonOutput
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.RepositoryFileScanner
+import com.kazurayam.materials.RepositoryRoot
 
+/**
+ * This class is NOT used at all. Should be removed.
+ * 
+ * @author kazurayam
+ *
+ */
 class IndexerRudimentaryImpl implements Indexer {
 
     static Logger logger_ = LoggerFactory.getLogger(IndexerRudimentaryImpl.class)
@@ -110,7 +119,7 @@ class IndexerRudimentaryImpl implements Indexer {
         sb.append('      <div id="footer"></div>'                                             + "\n")
         sb.append('      <div id="modal-windows">'                                            + "\n")
         sb.append('<!-- here reporoot.htmlFragmentsOfMaterialsAsModal() is inserted -->'  + "\n\n\n")
-        sb.append(         repoRoot.htmlFragmensOfMaterialsAsModal()                      + "\n\n\n")
+        //sb.append(         htmlFragments.toString()                                           + "\n\n\n")
         sb.append('<!-- end of reporoot.htmlFragmentsOfMaterialsAsModal() -->'                + "\n")
         sb.append('      </div>'                                                              + "\n")
         sb.append('    </div>'                                                                + "\n")
@@ -129,7 +138,7 @@ class IndexerRudimentaryImpl implements Indexer {
         sb.append('    <script type="text/javascript"><!--'                                       + "\n")
         sb.append('''
 function getTree() {
-    var data = ''' + JsonOutput.prettyPrint(repoRoot.toBootstrapTreeviewData()) + ''';
+    var data = ''' /* + JsonOutput.prettyPrint(repoRoot.toBootstrapTreeviewData()) */ + ''';
     return data;
 }
 //

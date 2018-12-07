@@ -1,10 +1,13 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.view
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.MaterialRepositoryImpl
+import com.kazurayam.materials.view.JUnitReportWrapper
 
 import spock.lang.Specification
 

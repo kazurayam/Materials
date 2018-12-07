@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern

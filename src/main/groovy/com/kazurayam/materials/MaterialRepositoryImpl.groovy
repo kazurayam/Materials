@@ -8,6 +8,14 @@ import java.nio.file.StandardCopyOption
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.model.TCaseName
+import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.model.TSuiteName
+import com.kazurayam.materials.model.TSuiteResult
+import com.kazurayam.materials.model.TSuiteTimestamp
+
 final class MaterialRepositoryImpl implements MaterialRepository {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryImpl.class)

@@ -12,7 +12,7 @@ import org.openqa.selenium.firefox.FirefoxProfile
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
 
-import com.kazurayam.materials.FileType
+import com.kazurayam.materials.model.FileType
 
 waiting {
     presets {

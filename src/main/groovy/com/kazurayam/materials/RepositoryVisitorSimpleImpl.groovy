@@ -3,6 +3,9 @@ package com.kazurayam.materials
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.model.TSuiteResult
+
 class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorSimpleImpl.class)

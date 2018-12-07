@@ -7,6 +7,12 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.model.MaterialFileName
+import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.model.TSuiteName
+import com.kazurayam.materials.model.TSuiteTimestamp
+
 import spock.lang.Specification
 
 //@Ignore

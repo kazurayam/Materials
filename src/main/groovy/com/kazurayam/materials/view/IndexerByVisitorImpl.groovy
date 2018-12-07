@@ -1,10 +1,23 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.view
 
 import java.nio.file.Files
 import java.nio.file.Path
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.RepositoryFileScanner
+import com.kazurayam.materials.RepositoryRoot
+import com.kazurayam.materials.RepositoryVisitResult
+import com.kazurayam.materials.RepositoryVisitor
+import com.kazurayam.materials.RepositoryVisitorSimpleImpl
+import com.kazurayam.materials.RepositoryWalker
+import com.kazurayam.materials.model.FileType
+import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.model.TSuiteResult
 
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
