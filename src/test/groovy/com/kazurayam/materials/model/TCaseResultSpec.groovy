@@ -100,7 +100,7 @@ class TCaseResultSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         URL url = new URL('http://demoaut.katalon.com/')
         Suffix suffix = new Suffix(1)
-        Material mate = new Material(Paths.get('.'), url, suffix, FileType.PNG).setParent(tcr)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), url, suffix, FileType.PNG).setParent(tcr)
         tcr.addMaterial(mate)
         mate = tcr.getMaterial(Paths.get('.'), url, suffix, FileType.PNG)
         then:
@@ -119,7 +119,7 @@ class TCaseResultSpec extends Specification {
         URL url = new URL('http://demoaut.katalon.com/')
         Suffix suffix = new Suffix(2)
         //Material mate = new Material(url, suffix, FileType.PNG).setParent(tcr)
-        Material mate = new Material(Paths.get('.'), url, suffix, FileType.PNG)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), url, suffix, FileType.PNG)
         tcr.addMaterial(mate)
         then:
         thrown(IllegalStateException)

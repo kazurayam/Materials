@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.MaterialPairImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
@@ -211,11 +212,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Material material = tCaseResult.getMaterial(subpath, url, Suffix.NULL, FileType.PNG)
         logger_.debug("#resolveScreenshotPath material is ${material.toString()}")
         if (material == null) {
-            material = new Material(subpath, url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
+            material = MaterialImpl.newInstance(subpath, url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
         } else {
             Suffix newSuffix = tCaseResult.allocateNewSuffix(subpath, url, FileType.PNG)
             logger_.debug("#resolveScreenshotPath newSuffix is ${newSuffix.toString()}")
-            material = new Material(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
+            material = MaterialImpl.newInstance(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
 
         Helpers.ensureDirs(material.getPath().getParent())

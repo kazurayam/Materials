@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
@@ -156,7 +157,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TESTCASE :
             case Layer.SUBDIR :
-                Material material = new Material(tCaseResult_, file)
+                Material material = MaterialImpl.newInstance(tCaseResult_, file)
                 material.setLastModified(file.toFile().lastModified())
                 tCaseResult_.addMaterial(material)
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
