@@ -26,11 +26,8 @@ class MaterialImpl implements Material {
         dirpath_ = dirpath.normalize()
         materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
-    static Material newInstance(Path dirpath, URL url, Suffix suffix, FileType fileType) {
-        return new MaterialImpl(dirpath, url, suffix, fileType)
-    }
     
-    private Material(TCaseResult parent, Path filePath) {
+    private MaterialImpl(TCaseResult parent, Path filePath) {
         parent_ = parent
         dirpath_ = parent.getTCaseDirectory().relativize(filePath.normalize().getParent()).normalize()
         if (dirpath_.toString() == '') {
@@ -38,6 +35,11 @@ class MaterialImpl implements Material {
         }
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
     }
+    
+    static Material newInstance(Path dirpath, URL url, Suffix suffix, FileType fileType) {
+        return new MaterialImpl(dirpath, url, suffix, fileType)
+    }
+    
     static Material newInstance(TCaseResult parent, Path filePath) {
         return new MaterialImpl(parent, filePath)
     }
