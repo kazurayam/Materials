@@ -10,6 +10,8 @@ import com.kazurayam.materials.model.MaterialPairImpl
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
+import com.kazurayam.materials.model.repository.RepositoryFileScanner
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 import spock.lang.Specification
 

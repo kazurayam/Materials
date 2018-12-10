@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.model.MaterialFileName
 
+/**
+ * This class is unused.
+ * 
+ * @author kazurayam
+ */
 final class DownloadsDirectoryHelper {
 
     static Logger logger_ = LoggerFactory.getLogger(DownloadsDirectoryHelper.class)

@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model.repository
 
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -6,6 +6,9 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestamp
 
@@ -144,7 +147,7 @@ final class RepositoryRoot {
 
     @Override
     int hashCode() {
-        return com.kazurayam.materials.RepositoryRoot.class.hashCode()
+        return com.kazurayam.materials.model.repository.RepositoryRoot.class.hashCode()
     }
 
     @Override

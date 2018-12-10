@@ -1,10 +1,16 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model.repository
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.model.repository.RepositoryFileScanner
+import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.model.repository.RepositoryVisitorSimpleImpl
+import com.kazurayam.materials.model.repository.RepositoryWalker
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore

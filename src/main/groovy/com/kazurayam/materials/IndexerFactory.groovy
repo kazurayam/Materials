@@ -4,6 +4,8 @@ import com.kazurayam.materials.view.IndexerByVisitorImpl
 
 final class IndexerFactory {
 
+    private IndexerFactory() {}
+    
     static Indexer newIndexer() {
         //return new IndexerRudimentaryImpl()
         return new IndexerByVisitorImpl()

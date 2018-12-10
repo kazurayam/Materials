@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
-import com.kazurayam.materials.RepositoryFileScanner
-import com.kazurayam.materials.RepositoryRoot
+import com.kazurayam.materials.model.repository.RepositoryFileScanner
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 /**
  * This class is NOT used at all. Should be removed.

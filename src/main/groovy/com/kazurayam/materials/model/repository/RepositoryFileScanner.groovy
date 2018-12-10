@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model.repository
 
 import java.nio.file.FileVisitOption
 import java.nio.file.Files

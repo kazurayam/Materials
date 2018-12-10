@@ -8,7 +8,7 @@ import java.time.temporal.TemporalAccessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.RepositoryFileScanner
+import com.kazurayam.materials.model.repository.RepositoryFileScanner
 
 /**
  * Wraps a time stamp when a Test Suite was executed.
