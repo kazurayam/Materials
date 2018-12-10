@@ -8,7 +8,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.MaterialRepositoryImpl
 import com.kazurayam.materials.RepositoryRoot
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
@@ -35,7 +34,7 @@ class TSuiteResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        mri_ = new MaterialRepositoryImpl(workdir_.resolve('Materials'))
+        mri_ = MaterialRepositoryImpl.newInstance(workdir_.resolve('Materials'))
     }
     def setup() {}
     def cleanup() {}

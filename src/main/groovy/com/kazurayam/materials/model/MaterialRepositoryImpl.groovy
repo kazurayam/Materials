@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -8,12 +8,18 @@ import java.nio.file.StandardCopyOption
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialImpl
-import com.kazurayam.materials.model.MaterialPairImpl
-import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestamp
+import com.kazurayam.materials.DownloadsDirectoryHelper
+import com.kazurayam.materials.FileType
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.IndexerFactory
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialRepository
+import com.kazurayam.materials.RepositoryFileScanner
+import com.kazurayam.materials.RepositoryRoot
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteName
 
 final class MaterialRepositoryImpl implements MaterialRepository {
 
@@ -32,7 +38,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    MaterialRepositoryImpl(Path baseDir) {
+    private MaterialRepositoryImpl(Path baseDir) {
         //
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
@@ -50,6 +56,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
+    static MaterialRepositoryImpl newInstance(Path baseDir) {
+        return new MaterialRepositoryImpl(baseDir)    
+    }
+    
     /**
      * The current time now is assumed
      *

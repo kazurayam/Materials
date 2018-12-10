@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.model
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -7,9 +7,9 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialFileName
-import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TSuiteTimestamp
+import com.kazurayam.materials.FileType
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TSuiteName
 
 import spock.lang.Specification
 
@@ -41,7 +41,7 @@ class MaterialRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve('testGetBaseDir')
         Helpers.copyDirectory(materials_, casedir)
         when:
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         then:
         mri.getBaseDir() == casedir
     }
@@ -52,7 +52,7 @@ class MaterialRepositoryImplSpec extends Specification {
         def methodName ='testResolveMaterialPath'
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         String materialFileName = MaterialFileName.format(
@@ -71,7 +71,7 @@ class MaterialRepositoryImplSpec extends Specification {
         def methodName = 'testResolveMaterialPath_withSuffix'
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         String materialFileName = MaterialFileName.format(
@@ -90,7 +90,7 @@ class MaterialRepositoryImplSpec extends Specification {
         def methodName = 'testResolveMaterialPath_new'
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
@@ -109,7 +109,7 @@ class MaterialRepositoryImplSpec extends Specification {
         def methodName = 'testResolveMaterialPath_withSuffix_new'
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
@@ -128,7 +128,7 @@ class MaterialRepositoryImplSpec extends Specification {
         def methodName = 'testResolveMaterial_png_SuitelessTimeless'
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
@@ -142,7 +142,7 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testToJson')
         Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = new MaterialRepositoryImpl(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS1')
         when:
         def str = mri.toJson()
