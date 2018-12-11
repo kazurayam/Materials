@@ -58,5 +58,50 @@ class TSuiteExecutionRecordSpec extends Specification {
         s.contains('tSuiteTimestamp')
         s.contains('20181211_152348')
     }
+    
+    def testCompareTo_equal() {
+        setup:
+        TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
+            new TSuiteName('TS1'), tSuiteTimestamp_)
+        TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
+        expect:
+        subject.compareTo(basis) == 0
+    }
+    
+    def testCompareTo_differentTSuiteName_lessthan() {
+        setup:
+        TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
+            new TSuiteName('TS0'), tSuiteTimestamp_)
+        TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
+        expect:
+        subject.compareTo(basis) < 0
+    }
+    
+    def testCompareTo_differentTSuiteName_greaterthan() {
+        setup:
+        TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
+            new TSuiteName('TS2'), tSuiteTimestamp_)
+        TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
+        expect:
+        subject.compareTo(basis) > 0
+    }
+    
+    def testCompareTo_differentTSuiteTimestamp_lessthan() {
+        setup:
+        TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
+            tSuiteName_, TSuiteTimestampImpl.newInstance('20180901_000000'))
+        TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
+        expect:
+        subject.compareTo(basis) < 0
+    }
+
+    def testCompareTo_differentTSuiteTimestamp_greaterthan() {
+        setup:
+        TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
+            tSuiteName_, TSuiteTimestampImpl.newInstance('20190101_000000'))
+        TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
+        expect:
+        subject.compareTo(basis) > 0
+    }
 
 }
