@@ -18,6 +18,7 @@ import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
@@ -53,7 +54,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         repoRoot_ = scanner.getRepositoryRoot()
 
         // set default Material path to the "./${baseDir name}/_/_" directory
-        this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestampImpl.TIMELESS)
     }
 
     static MaterialRepositoryImpl newInstance(Path baseDir) {
@@ -76,14 +77,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
         this.putCurrentTSuiteResult(
                 new TSuiteName(testSuiteId),
-                new TSuiteTimestamp(testSuiteTimestampString))
+                TSuiteTimestampImpl.newInstance(testSuiteTimestampString))
     }
 
     @Override
     void putCurrentTestSuite(TSuiteName tSuiteName) {
         this.putCurrentTestSuite(
                 tSuiteName,
-                new TSuiteTimestamp(Helpers.now())
+                TSuiteTimestampImpl.newInstance(Helpers.now())
         )
     }
 

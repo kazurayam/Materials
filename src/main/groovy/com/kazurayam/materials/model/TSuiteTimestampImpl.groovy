@@ -8,35 +8,31 @@ import java.time.temporal.TemporalAccessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
+import com.kazurayam.materials.TSuiteTimestamp
 
-/**
- * Wraps a time stamp when a Test Suite was executed.
- * The time stamp value is formatted in 'yyyyMMdd_HHmmss'
- *
- * @author kazurayam
- *
- */
-final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
+class TSuiteTimestampImpl implements TSuiteTimestamp {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileScanner.class);
+    static Logger logger_ = LoggerFactory.getLogger(TSuiteTimestampImpl.class);
 
     static final String TIMELESS_DIRNAME = '_'
 
-    static final TSuiteTimestamp TIMELESS = new TSuiteTimestamp(LocalDateTime.MIN)
-
-    static final String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
+    static final TSuiteTimestamp TIMELESS = TSuiteTimestampImpl.newInstance(LocalDateTime.MIN)
 
     private LocalDateTime timestamp_
 
     /**
-     * create a Timestamp object based on the LocalDateTime of now
+     * private constructor by LocalDateTime of now
      */
-    TSuiteTimestamp() {
+    private TSuiteTimestampImpl() {
         this(LocalDateTime.now())
     }
 
-    TSuiteTimestamp(String timestamp) {
+    /**
+     * private constructor by String in 'yyyyMMdd_HHmmss' format
+     * 
+     * @param timestamp
+     */
+    private TSuiteTimestampImpl(String timestamp) {
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
             timestamp_ = ignoreMilliseconds(ldt)
@@ -46,19 +42,51 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     }
 
     /**
-     * instanciate a Timestamp object while ignoring milliseconds
+     * private constructor instanciating a Timestamp object while ignoring milliseconds
      *
      * @param ts
      */
-    TSuiteTimestamp(LocalDateTime ts) {
+    private TSuiteTimestampImpl(LocalDateTime ts) {
         timestamp_ = ignoreMilliseconds(ts)
     }
 
-    private LocalDateTime ignoreMilliseconds(LocalDateTime ts) {
-        return LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
-                ts.getHour(), ts.getMinute(), ts.getSecond())
+
+    /**
+     * public static factory method with now
+     * 
+     * @return
+     */
+    static TSuiteTimestamp newInstance() {
+        TSuiteTimestamp tst = new TSuiteTimestampImpl()
+        return tst
     }
 
+    /**
+     * public static factory method with given string in 'yyyyMMdd_HHmmss' format
+     * 
+     * @param timestamp
+     * @return
+     */
+    static TSuiteTimestamp newInstance(String timestamp) {
+        TSuiteTimestamp tst = new TSuiteTimestampImpl(timestamp)
+        return tst
+    }
+
+    /**
+     * public static factory method with given LocalDateTim.
+     * The millisecond value is ingnored.
+     * 
+     * @param ts
+     * @return
+     */
+    static TSuiteTimestamp newInstance(LocalDateTime ts) {
+        TSuiteTimestamp tst = new TSuiteTimestampImpl(ts)
+        return tst
+    }
+
+
+
+    @Override
     LocalDateTime getValue() {
         return timestamp_
     }
@@ -67,12 +95,27 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
      *
      * @return
      */
+    @Override
     String format() {
         if (timestamp_ == LocalDateTime.MIN) {
             return TIMELESS_DIRNAME
         } else {
             return DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).format(timestamp_)
         }
+    }
+
+    @Override
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"TSuiteTimestamp":')
+        sb.append('{"timestamp":"' + this.format()+ '"}' )
+        sb.append('}')
+        return sb.toString()
+    }
+
+    private LocalDateTime ignoreMilliseconds(LocalDateTime ts) {
+        return LocalDateTime.of(ts.getYear(), ts.getMonth(), ts.getDayOfMonth(),
+                ts.getHour(), ts.getMinute(), ts.getSecond())
     }
 
     /**
@@ -122,12 +165,5 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
         return this.toJson()
     }
 
-    String toJson() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('{"TSuiteTimestamp":')
-        sb.append('{"timestamp":"' + this.format()+ '"}' )
-        sb.append('}')
-        return sb.toString()
-    }
 
 }

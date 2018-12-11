@@ -129,7 +129,7 @@ class MaterialRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
-        mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestampImpl.TIMELESS)
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         Path p = mri.resolveMaterialPath('TC1', materialFileName)

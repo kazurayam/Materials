@@ -46,7 +46,7 @@ class TCaseResultSpec extends Specification {
     def testSetParent_GetParent() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = new TCaseResult(new TCaseName('Test Cases/main/TC2'))
         TCaseResult modified = tcr.setParent(tsr)
         then:
@@ -57,7 +57,7 @@ class TCaseResultSpec extends Specification {
     def testGetMaterial() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         logger_.debug("#testGetMaterial tcr=${tcr.toString()}")
         URL url = new URL('http://demoaut.katalon.com/')
@@ -72,7 +72,8 @@ class TCaseResultSpec extends Specification {
 
     def testGetMaterialsOfDifferentSuffixes() {
         setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> mateList = tcr.getMaterials(Paths.get('.'), new URL('http://demoaut.katalon.com/'), FileType.PNG)
@@ -82,8 +83,8 @@ class TCaseResultSpec extends Specification {
 
     def testGetMaterialByPath() {
         setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'),
-            new TSuiteTimestamp('20180712_142755'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS4'), TSuiteTimestampImpl.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         logger_.debug("#testGetMaterialByPath tcr=${JsonOutput.prettyPrint(tcr.toJson())}")
         when:
@@ -95,8 +96,8 @@ class TCaseResultSpec extends Specification {
 
     def testAddMaterial() {
         when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'),
-            new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         URL url = new URL('http://demoaut.katalon.com/')
         Suffix suffix = new Suffix(1)
@@ -113,8 +114,8 @@ class TCaseResultSpec extends Specification {
 
     def testAddMaterial_parentIsNotSet() {
         when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'),
-            new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         URL url = new URL('http://demoaut.katalon.com/')
         Suffix suffix = new Suffix(2)
@@ -127,8 +128,8 @@ class TCaseResultSpec extends Specification {
 
     def testGetMaterials() {
         when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'),
-            new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         List<Material> materials = tcr.getMaterials()
         then:
@@ -140,8 +141,8 @@ class TCaseResultSpec extends Specification {
         when:
         RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
         logger_.debug("#testGetMaterials_reproducingProblem repoRoot is ${JsonOutput.prettyPrint(repoRoot.toJson())}")
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/AllCorps'),
-            new TSuiteTimestamp('20180810_095325'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/AllCorps'), TSuiteTimestampImpl.newInstance('20180810_095325'))
         assert tsr != null
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/fnhp/ecza/visitAllFunds_ecza_pc'))
         List<Material> materials = tcr.getMaterials()
@@ -152,8 +153,8 @@ class TCaseResultSpec extends Specification {
 
     def testToJson() {
         setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'),
-                new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
@@ -172,7 +173,7 @@ class TCaseResultSpec extends Specification {
     def testToBootstrapTreeviewData() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         def str = tcr.toBootstrapTreeviewData()
@@ -186,7 +187,7 @@ class TCaseResultSpec extends Specification {
     def testEquals() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         expect:
         tcr != "string"
@@ -199,7 +200,7 @@ class TCaseResultSpec extends Specification {
     def testHashCode() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         TCaseResult other = new TCaseResult(new TCaseName('Test Cases/main/TC1')).setParent(tsr)

@@ -15,9 +15,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestamp
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest
@@ -81,7 +79,7 @@ class RepositoryFileScannerSpec extends Specification {
         //
         when:
         TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS1"), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName("Test Suites/main/TS1"), TSuiteTimestampImpl.newInstance('20180530_130419'))
         then:
         tSuiteResult != null
         tSuiteResult.getRepositoryRoot() == repoRoot
@@ -146,7 +144,8 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
         when:
-        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130604'))
         TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         LocalDateTime lastModifiedOfTCaseResult = tcr.getLastModified()
         LocalDateTime lastModifiedOfMaterials = LocalDateTime.MIN
@@ -176,7 +175,7 @@ class RepositoryFileScannerSpec extends Specification {
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130604'))
         LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
         LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
         List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResults()
@@ -209,7 +208,8 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         when:
-        TSuiteResult tsr = repoRoot.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TSuiteResult tsr = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         then:
         tcr != null
@@ -229,7 +229,7 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS1"), new TSuiteTimestamp('20180530_130604'))
+            new TSuiteName("Test Suites/main/TS1"), TSuiteTimestampImpl.newInstance('20180530_130604'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterials()
@@ -248,7 +248,7 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
+            new TSuiteName("Test Suites/main/TS3"), TSuiteTimestampImpl.newInstance("20180627_140853"))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         // .xlsx
         when:
@@ -279,7 +279,7 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS3"), new TSuiteTimestamp("20180627_140853"))
+            new TSuiteName("Test Suites/main/TS3"), TSuiteTimestampImpl.newInstance("20180627_140853"))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         when:
         Material mate = tcr.getMaterial(

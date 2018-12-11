@@ -9,10 +9,9 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestamp
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -45,7 +44,7 @@ class RepositoryRootSpec extends Specification {
     def testAddGetTSuiteResults() {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance('20180530_130419')
         TSuiteResult tsr = new TSuiteResult(tsn, tst)
         repoRoot_.addTSuiteResult(tsr)
         TSuiteResult returned = repoRoot_.getTSuiteResult(tsn, tst)
@@ -56,7 +55,7 @@ class RepositoryRootSpec extends Specification {
     def testGetTSuiteResults() {
         when:
         TSuiteResult tsr = new TSuiteResult(
-                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         then:
@@ -71,9 +70,9 @@ class RepositoryRootSpec extends Specification {
         then:
         tsrList.size() == 2
         tsrList[0].getTSuiteName() == new TSuiteName('TS1')
-        tsrList[0].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140105')
+        tsrList[0].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140105')
         tsrList[1].getTSuiteName() == new TSuiteName('TS1')
-        tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140106')
+        tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
     }
 
     def testGetSortedTSuiteResults() {
@@ -114,12 +113,12 @@ class RepositoryRootSpec extends Specification {
         when:
         RepositoryRoot thisRoot = new RepositoryRoot(workdir_)
         TSuiteResult tsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         thisRoot.addTSuiteResult(tsr)
         //
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
         TSuiteResult otherTsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         thisRoot == otherRoot
@@ -128,11 +127,11 @@ class RepositoryRootSpec extends Specification {
     def testHashCode() {
         when:
         TSuiteResult tsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
         TSuiteResult otherTsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         repoRoot_.hashCode() == otherRoot.hashCode()
@@ -141,7 +140,7 @@ class RepositoryRootSpec extends Specification {
     def testToJson() {
         when:
         TSuiteResult tsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toJson())}")
         then:
@@ -151,7 +150,7 @@ class RepositoryRootSpec extends Specification {
     def testToString() {
         when:
         TSuiteResult tsr = new TSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToString ${JsonOutput.prettyPrint(repoRoot_.toString())}")
         then:
