@@ -37,6 +37,7 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     }
 
     TSuiteTimestamp(String timestamp) {
+        Objects.requireNonNull(timestamp)
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
             timestamp_ = ignoreMilliseconds(ldt)
@@ -51,6 +52,7 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
      * @param ts
      */
     TSuiteTimestamp(LocalDateTime ts) {
+        Objects.requireNonNull(ts)
         timestamp_ = ignoreMilliseconds(ts)
     }
 
@@ -81,6 +83,7 @@ final class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
      * @return
      */
     static LocalDateTime parse(String str) {
+        Objects.requireNonNull(str)
         try {
             if (str == TIMELESS_DIRNAME) {
                 return LocalDateTime.MIN

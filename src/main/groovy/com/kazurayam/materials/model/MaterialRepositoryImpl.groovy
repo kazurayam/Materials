@@ -39,6 +39,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tsTimestamp required
      */
     private MaterialRepositoryImpl(Path baseDir) {
+        Objects.requireNonNull(baseDir)
         //
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
@@ -95,6 +96,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName)
+        Objects.requireNonNull(tSuiteTimestamp)
+        
         // memorize the specified TestSuite
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
@@ -138,6 +142,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path getTestCaseDirectory(String testCaseId) {
+        Objects.requireNonNull(testCaseId)
         return this.getTCaseResult(testCaseId).getTCaseDirectory()
     }
 
@@ -150,6 +155,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @return
      */
     void addTSuiteResult(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         boolean found = false
         for (TSuiteResult tsr : tSuiteResults) {
@@ -169,6 +175,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @return
      */
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName)
+        Objects.requireNonNull(tSuiteTimestamp)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         for (TSuiteResult tsr : tSuiteResults) {
             if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
@@ -209,6 +217,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     @Override
     Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -264,6 +273,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     @Override
     Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -356,6 +366,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
 
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        
         List<MaterialPair> result = new ArrayList<MaterialPair>()
         
         // before sorting, create copy of the list which is unmodifiable
@@ -428,7 +440,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             return tsr.getTCaseResult(tCaseName)
         }
         else {
-            throw new IllegalStateException("currentTcName is null")
+            throw new IllegalStateException("tCaseName is null")
         }
     }
 

@@ -30,6 +30,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
      * @param tCaseName
      */
     TCaseResult(TCaseName tCaseName) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         tCaseName_ = tCaseName
         materials_ = new ArrayList<Material>()
         lastModified_ = LocalDateTime.MIN
@@ -37,6 +38,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
     // --------------------- properties getter & setters ----------------------
     TCaseResult setParent(TSuiteResult parent) {
+        Objects.requireNonNull(parent, "parent must not be null")
         parent_ = parent
         tCaseDirectory_ = parent.getTSuiteTimestampDirectory().resolve(tCaseName_.getValue())
         return this
@@ -59,6 +61,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     TCaseResult setLastModified(LocalDateTime lastModified) {
+        Objects.requireNonNull(lastModified, "lastModified must not be null")
         lastModified_ = lastModified
         return this
     }
@@ -74,6 +77,9 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     List<Material> getMaterials(Path dirpath, URL url, FileType fileType) {
+        Objects.requireNonNull(dirpath)
+        Objects.requireNonNull(url)
+        Objects.requireNonNull(fileType)
         logger_.debug("#getMaterials subpath=${dirpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Material> list = new ArrayList<Material>()
         logger_.debug("#getMaterials materials_.size()=${materials_.size()}")
@@ -90,6 +96,10 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
 
     Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType) {
+        Objects.requireNonNull(dirpath)
+        Objects.requireNonNull(url)
+        Objects.requireNonNull(suffix)
+        Objects.requireNonNull(fileType)
         for (Material mate : materials_) {
             if (mate.getURL().toString() == url.toString() &&
                 mate.getSuffix() == suffix &&
@@ -102,6 +112,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
 
     Material getMaterial(Path subpathUnderTCaseResult) {
+        Objects.requireNonNull(subpathUnderTCaseResult)
         if (parent_ == null) {
             throw new IllegalStateException("parent_ is null")
         }
@@ -119,6 +130,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     boolean addMaterial(Material material) {
+        Objects.requireNonNull(material, "material must not be null")
         if (material.getParent() != this) {
             def msg = "material ${material.toJson()} does not have appropriate parent"
             logger_.error("#addMaterial ${msg}")
@@ -140,6 +152,9 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
     // -------------------------- helpers -------------------------------------
     Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType) {
+        Objects.requireNonNull(subpath)
+        Objects.requireNonNull(url)
+        Objects.requireNonNull(fileType)
         logger_.debug("#allocateNewSuffix subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Suffix> suffixList = new ArrayList<>()
         List<Material> mateList = this.getMaterials(subpath, url, fileType)

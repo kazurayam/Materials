@@ -15,6 +15,7 @@ final class MaterialPairImpl implements MaterialPair {
     }
     
     MaterialPair setLeft(Material left) {
+        Objects.requireNonNull(left)
         left_ = left
         return this
     }
@@ -24,6 +25,7 @@ final class MaterialPairImpl implements MaterialPair {
     }
 
     MaterialPair setRight(Material right) {
+        Objects.requireNonNull(right)
         right_ = right
         return this
     }

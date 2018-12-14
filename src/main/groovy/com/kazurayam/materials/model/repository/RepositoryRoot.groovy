@@ -20,7 +20,7 @@ final class RepositoryRoot {
     private List<TSuiteResult> tSuiteResults_
 
     RepositoryRoot(Path baseDir) {
-        assert baseDir != null
+        Objects.requireNonNull(baseDir)
         Helpers.ensureDirs(baseDir)
         baseDir_ = baseDir
         tSuiteResults_ = new ArrayList<TSuiteResult>()
@@ -33,6 +33,7 @@ final class RepositoryRoot {
 
     // ------------------- child nodes operation ----------------------------
     void addTSuiteResult(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult)
         boolean found = false
         for (TSuiteResult tsr : tSuiteResults_) {
             if (tsr == tSuiteResult) {
@@ -46,6 +47,8 @@ final class RepositoryRoot {
     }
 
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName)
+        Objects.requireNonNull(tSuiteTimestamp)
         for (TSuiteResult tsr : tSuiteResults_) {
             if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
@@ -60,6 +63,7 @@ final class RepositoryRoot {
      * @return unmodifiable List<TSuiteResult> 
      */
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+        Objects.requireNonNull(tSuiteName)
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {

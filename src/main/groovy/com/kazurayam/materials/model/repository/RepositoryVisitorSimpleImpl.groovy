@@ -17,6 +17,7 @@ class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
     protected PrintWriter pw_
 
     RepositoryVisitorSimpleImpl(Writer wr) {
+        Objects.requireNonNull(wr)
         pw_ = new PrintWriter(new BufferedWriter(wr))
     }
 

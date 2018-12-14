@@ -42,8 +42,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     // ------------------ constructors & initializer -------------------------------
     TSuiteResult(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
-        assert testSuiteName != null
-        assert testSuiteTimestamp != null
+        Objects.requireNonNull(testSuiteName)
+        Objects.requireNonNull(testSuiteTimestamp)
         tSuiteName_ = testSuiteName
         tSuiteTimestamp_ = testSuiteTimestamp
         tCaseResults_ = new ArrayList<TCaseResult>()
@@ -53,6 +53,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     // ------------------ attribute setter & getter -------------------------------
     TSuiteResult setParent(RepositoryRoot repoRoot) {
+        Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
                 repoRoot_.getBaseDir().resolve(tSuiteName_.getValue()).resolve(tSuiteTimestamp_.format())
@@ -152,6 +153,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     // ------------------ add/get child nodes ------------------------------
     TCaseResult getTCaseResult(TCaseName tCaseName) {
+        Objects.requireNonNull(tCaseName)
         for (TCaseResult tcr : tCaseResults_) {
             if (tcr.getTCaseName() == tCaseName) {
                 return tcr
@@ -165,6 +167,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
     void addTCaseResult(TCaseResult tCaseResult) {
+        Objects.requireNonNull(tCaseResult)
         if (tCaseResult.getParent() != this) {
             def msg = "tCaseResult ${tCaseResult.toString()} does not have appropriate parent"
             logger_.error("#addTCaseResult ${msg}")

@@ -23,11 +23,14 @@ class MaterialImpl implements Material {
     private LocalDateTime lastModified_
     
     private MaterialImpl(Path dirpath, URL url, Suffix suffix, FileType fileType) {
+        Objects.requireNonNull(dirpath)
         dirpath_ = dirpath.normalize()
         materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
     
     private MaterialImpl(TCaseResult parent, Path filePath) {
+        Objects.requireNonNull(parent)
+        Objects.requireNonNull(filePath)
         parent_ = parent
         dirpath_ = parent.getTCaseDirectory().relativize(filePath.normalize().getParent()).normalize()
         if (dirpath_.toString() == '') {
@@ -46,6 +49,7 @@ class MaterialImpl implements Material {
     
     @Override
     Material setParent(TCaseResult parent) {
+        Objects.requireNonNull(parent)
         parent_ = parent
         return this
     }
@@ -104,6 +108,7 @@ class MaterialImpl implements Material {
         
     @Override    
     Material setLastModified(long lastModified) {
+        Objects.requireNonNull(lastModified)
         Instant instant = Instant.ofEpochMilli(lastModified)
         this.setLastModified(instant)
         return this
@@ -111,6 +116,7 @@ class MaterialImpl implements Material {
     
     @Override
     Material setLastModified(Instant lastModified) {
+        Objects.requireNonNull(lastModified)
         lastModified_ = LocalDateTime.ofInstant(lastModified, ZoneOffset.UTC);
         return this
     }
@@ -138,6 +144,7 @@ class MaterialImpl implements Material {
     
     // unused?
     Path getPathRelativeTo(Path base) {
+        Objects.requireNonNull(base)
         Path path =  base.relativize(this.getPath())
         logger_.debug("#getPathRelativeTo base=${base} this.getPath()=${this.getPath()} path=${path}")
         return path
@@ -151,6 +158,7 @@ class MaterialImpl implements Material {
 
     // unused?
     String getHrefRelativeTo(Path base) {
+        Objects.requireNonNull(base)
         Path href = base.relativize(this.getPath())
         return href.normalize().toString().replace('\\', '/')
     }
@@ -165,6 +173,7 @@ class MaterialImpl implements Material {
 
     // unused?
     String getEncodedHrefRelativeTo(Path base) {
+        Objects.requireNonNull(base)
         String baseUri = base.toUri()
         String mateUri = this.getPath().toUri()
         String result = mateUri.substring(baseUri.length())

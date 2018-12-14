@@ -39,6 +39,7 @@ final class TCaseName implements Comparable<TCaseName> {
      * @param testCaseId
      */
     TCaseName(String testCaseId) {
+        Objects.requireNonNull(testCaseId)
         id_ = testCaseId
         def s = testCaseId
         if (s.startsWith(prefix_)) {
@@ -53,6 +54,7 @@ final class TCaseName implements Comparable<TCaseName> {
      * @param path ./Material/main.TC1/yyyyMMdd_hhmmss/<TestCaseName> where TestCaseName is 'main.TC1' for example
      */
     TCaseName(Path path) {
+        Objects.requireNonNull(path)
         value_ = path.getFileName().toString()
         id_ = prefix_ + value_.replace('.', '/')
     }
