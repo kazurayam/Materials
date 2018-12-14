@@ -50,12 +50,12 @@ final class DownloadsDirectoryHelper {
                 suffixedFiles.add(file)
             }
         }
-        return suffixedFiles
+        return Collections.unmodifiableList(suffixedFiles)
     }
 
     static List<Path> listSuffixedFiles(String baseFileName) {
         Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-        return listSuffixedFiles(downloadsDir, baseFileName)
+        return Collections.unmodifiableList(listSuffixedFiles(downloadsDir, baseFileName))
     }
 
     /**
