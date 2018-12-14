@@ -54,6 +54,11 @@ final class RepositoryRoot {
         return null
     }
 
+    /**
+     * 
+     * @param tSuiteName
+     * @return unmodifiable List<TSuiteResult> 
+     */
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
@@ -63,11 +68,15 @@ final class RepositoryRoot {
                 result.add(tsr)
             }
         }
-        return result
+        return Collections.unmodifiableList(result)
     }
 
+    /**
+     * 
+     * @return List of all TSuiteResult in the Repository, the List is unmodifiable
+     */
     List<TSuiteResult> getTSuiteResults() {
-        return tSuiteResults_
+        return Collections.unmodifiableList(tSuiteResults_)
     }
 
     /**
@@ -95,7 +104,7 @@ final class RepositoryRoot {
         }
         List<TSuiteResult> sorted = tSuiteResults_
         Collections.sort(sorted, comparator)
-        return sorted
+        return Collections.unmodifiableList(sorted)
     }
 
     TSuiteResult getLatestModifiedTSuiteResult() {
@@ -119,7 +128,7 @@ final class RepositoryRoot {
                 list.add(mate)
             }
         }
-        return list
+        return Collections.unmodifiableList(list)
     }
 
 

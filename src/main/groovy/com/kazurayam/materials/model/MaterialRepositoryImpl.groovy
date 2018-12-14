@@ -357,7 +357,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
 
         List<MaterialPair> result = new ArrayList<MaterialPair>()
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults(tSuiteName)
+        
+        // before sorting, create copy of the list which is unmodifiable
+        List<TSuiteResult> tSuiteResults = new ArrayList<>(repoRoot_.getTSuiteResults(tSuiteName))
         
         // we expect 2 or more TSuiteResult objects with the tSuiteName
         if (tSuiteResults.size() < 2) {
@@ -385,7 +387,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 }
             }
         }
-        return result
+        return Collections.unmodifiableList(result)
     }
 
     

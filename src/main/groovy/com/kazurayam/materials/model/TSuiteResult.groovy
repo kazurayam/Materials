@@ -161,7 +161,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
     List<TCaseResult> getTCaseResults() {
-        return tCaseResults_
+        return Collections.unmodifiableList(tCaseResults_)
     }
 
     void addTCaseResult(TCaseResult tCaseResult) {
@@ -195,7 +195,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
                 materials.add(mate)
             }
         }
-        return materials
+        return Collections.unmodifiableList(materials)
     }
 
     // -------------------- overriding Object properties ----------------------

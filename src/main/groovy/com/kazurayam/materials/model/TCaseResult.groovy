@@ -85,7 +85,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
                 list.add(mate)
             }
         }
-        return list
+        return Collections.unmodifiableList(list)
     }
 
 
