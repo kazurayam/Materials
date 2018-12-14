@@ -23,9 +23,11 @@ final class ExecutionPropertiesWrapper {
         this(path.toFile())
     }
     ExecutionPropertiesWrapper(File file) {
+        Objects.requireNonNull(file)
         jsonObject = slurper.parse(file)
     }
     ExecutionPropertiesWrapper(String text) {
+        Objects.requireNonNull(text)
         jsonObject = slurper.parseText(text)
     }
 

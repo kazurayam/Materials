@@ -37,6 +37,7 @@ final class MaterialFileName {
     protected static final Pattern PTN_SUFFIX = Pattern.compile(/(.+\s*)(\((\d+)\))$/)
 
     MaterialFileName(String fileName) {
+        Objects.requireNonNull(fileName)
         parts[0] = fileName
         // for Extension
         String[] arr = fileName.split('\\.')

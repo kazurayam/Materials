@@ -35,12 +35,14 @@ final class JUnitReportWrapper {
     }
 
     JUnitReportWrapper(File file) {
+        Objects.requireNonNull(file)
         DocumentBuilder db = dbFactory_.newDocumentBuilder()
         Document document = db.parse(file)
         init(document)
     }
 
     JUnitReportWrapper(Document document) {
+        Objects.requireNonNull(document)
         init(document)
     }
 
@@ -54,6 +56,7 @@ final class JUnitReportWrapper {
      * @return String e.g., 'PASSED: 1, FAILED: 1, ERROR: 0', returns null if the Test Suite not found
      */
     String getTestSuiteSummary(String testSuiteId) {
+        Objects.requireNonNull(testSuiteId)
         String location = "/testsuites/testsuite[@id='${testSuiteId}']"
         Node testSuiteNode = (Node)xpath_.evaluate(location, document_, XPathConstants.NODE)
         if (testSuiteNode != null) {
@@ -75,6 +78,7 @@ final class JUnitReportWrapper {
      * @return 'PASSED' or 'FAILED', returns '' if the Test Case not found
      */
     String getTestCaseStatus(String testCaseId) {
+        Objects.requireNonNull(testCaseId)
         String location = "/testsuites/testsuite/testcase[@name='${testCaseId}']"
         Node testCaseNode = (Node)xpath_.evaluate(location, document_, XPathConstants.NODE)
         if (testCaseNode != null) {

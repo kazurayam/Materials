@@ -43,6 +43,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     private Stack<Layer> directoryTransition_
 
     RepositoryFileVisitor(RepositoryRoot repoRoot) {
+        Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         directoryTransition_ = new Stack<Layer>()
         directoryTransition_.push(Layer.INIT)
@@ -186,7 +187,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      * @param a instance of TCaseResult
      * @return LocalDateTime for TCaseResult's lastModified property
      */
-    LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tcr) {
+    private LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tcr) {
         LocalDateTime lastModified = LocalDateTime.MIN
         List<Material> materials = tcr.getMaterials()
         for (Material mate : materials) {
@@ -202,7 +203,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      * @param an instance of TSuiteResult
      * @return LocalDateTime for TSuiteResutl's lastModified property
      */
-    LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
+    private LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
         LocalDateTime lastModified = LocalDateTime.MIN
         List<TCaseResult> tCaseResults = tsr.getTCaseResults()
         for (TCaseResult tcr : tCaseResults) {

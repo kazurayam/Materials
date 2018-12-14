@@ -33,6 +33,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      * @param timestamp
      */
     private TSuiteTimestampImpl(String timestamp) {
+        Objects.requireNonNull(timestamp)
         LocalDateTime ldt = parse(timestamp)
         if (ldt != null) {
             timestamp_ = ignoreMilliseconds(ldt)
@@ -47,6 +48,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      * @param ts
      */
     private TSuiteTimestampImpl(LocalDateTime ts) {
+        Objects.requireNonNull(ts)
         timestamp_ = ignoreMilliseconds(ts)
     }
 
@@ -68,6 +70,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      * @return
      */
     static TSuiteTimestamp newInstance(String timestamp) {
+        Objects.requireNonNull(timestamp)
         TSuiteTimestamp tst = new TSuiteTimestampImpl(timestamp)
         return tst
     }
@@ -80,6 +83,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      * @return
      */
     static TSuiteTimestamp newInstance(LocalDateTime ts) {
+        Objects.requireNonNull(ts)
         TSuiteTimestamp tst = new TSuiteTimestampImpl(ts)
         return tst
     }
@@ -124,6 +128,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      * @return
      */
     static LocalDateTime parse(String str) {
+        Objects.requireNonNull(str)
         try {
             if (str == TIMELESS_DIRNAME) {
                 return LocalDateTime.MIN

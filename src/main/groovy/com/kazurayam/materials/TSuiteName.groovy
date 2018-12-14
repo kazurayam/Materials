@@ -39,6 +39,7 @@ final class TSuiteName implements Comparable<TSuiteName> {
     private String value_
 
     TSuiteName(String testSuiteId) {
+        Objects.requireNonNull(testSuiteId)
         id_ = testSuiteId
         def s = testSuiteId
         if (s.startsWith(prefix_)) {
@@ -53,6 +54,7 @@ final class TSuiteName implements Comparable<TSuiteName> {
      * @param path ./Materials/<TSuiteName>/ where <TSuiteName> is 'main.TC1' for example
      */
     TSuiteName(Path path) {
+        Objects.requireNonNull(path)
         value_ = path.getFileName().toString()
         id_ = prefix_ + value_.replace('.', '/')
     }

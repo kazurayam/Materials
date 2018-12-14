@@ -89,7 +89,7 @@ final class RepositoryFileScanner {
     private RepositoryRoot repoRoot_
 
     RepositoryFileScanner(Path baseDir) {
-        assert baseDir != null
+        Objects.requireNonNull(baseDir)
         if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }

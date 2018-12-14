@@ -7,12 +7,9 @@ import com.kazurayam.materials.model.TSuiteResult
 final class RepositoryWalker {
 
     static RepositoryRoot walkRepository(RepositoryRoot repoRoot, RepositoryVisitor visitor) {
-        if (repoRoot == null) {
-            throw new IllegalArgumentException("repoRoot is required")
-        }
-        if (visitor == null) {
-            throw new IllegalArgumentException("visitor is required")
-        }
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
+        Objects.requireNonNull(visitor, "visitor must not be null")
+
         // traverse the Material Repository tree
         visitor.preVisitRepositoryRoot(repoRoot)
 

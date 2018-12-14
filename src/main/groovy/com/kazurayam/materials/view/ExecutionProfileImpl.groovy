@@ -11,6 +11,7 @@ final class ExecutionProfileImpl implements ExecutionProfile {
     }
     
     static ExecutionProfile newInstance(String profileName) {
+        Objects.requireNonNull(profileName)
         return new ExecutionProfileImpl(profileName)
     }
     

@@ -14,6 +14,7 @@ final class MaterialRepositoryFactory {
     private MaterialRepositoryFactory() {}
 
     static MaterialRepository createInstance(Path baseDir) {
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
         return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir)
     }

@@ -52,6 +52,7 @@ class IndexerByVisitorImpl implements Indexer {
 
     @Override
     void setOutput(Path outputFile) {
+        Objects.requireNonNull(outputFile)
         output_ = outputFile
         Helpers.ensureDirs(outputFile.getParent())
     }
@@ -82,6 +83,8 @@ class IndexerByVisitorImpl implements Indexer {
     }
 
     void generate(RepositoryRoot repoRoot, OutputStream os) throws IOException {
+        Objects.requireNonNull(repoRoot)
+        Objects.requireNonNull(os)
         def dir = repoRoot.getBaseDir().resolve('../..').normalize().toAbsolutePath()
         def title = dir.relativize(repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
         def writer = new OutputStreamWriter(os, 'UTF-8')
