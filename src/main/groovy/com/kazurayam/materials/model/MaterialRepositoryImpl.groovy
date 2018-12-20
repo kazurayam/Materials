@@ -3,12 +3,10 @@ package com.kazurayam.materials.model
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.DownloadsDirectoryHelper
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
@@ -294,40 +292,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
 
 
-
-
-    /**
-     *
-     */
-    @Override
-    int deleteFilesInDownloadsDir(String fileName) {
-        DownloadsDirectoryHelper.deleteSuffixedFiles(fileName)
-    }
-
-    @Override
-    Path importFileFromDownloadsDir(String testCaseId, String fileName) {
-        TCaseName tCaseName = new TCaseName(testCaseId)
-        return this.importFileFromDownloadsDir(tCaseName, fileName)
-    }
-    @Override
-    Path importFileFromDownloadsDir(TCaseName tCaseName, String fileName) {
-        Path downloadsDir = Paths.get(System.getProperty("user.home"), "Downloads")
-        Path sourceFile = downloadsDir.resolve(fileName)
-        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
-        if (tSuiteResult == null) {
-            throw new IllegalStateException("tSuiteResult is null")
-        }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
-        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
-        //
-        Path targetFile = tCaseResult.getTCaseDirectory().resolve(fileName)
-        Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING)
-        return targetFile
-    }
 
 
     /**
