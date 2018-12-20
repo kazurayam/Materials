@@ -50,10 +50,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/materials/IndexerSpec.class'
-    include '**/materials/model/repository/MaterialRepositorySpec.class'
-    include '**/materials/view/ExecutionProfileSpec.class'
-    //include '**/materials/TSuiteResultSpec.class'
+    include '**/materials/TSuiteExecutionRecordSpec.class'
     outputs.upToDateWhen {false}
 }
 

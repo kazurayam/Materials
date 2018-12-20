@@ -16,9 +16,9 @@ import java.util.stream.Collectors
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.TSuiteTimestamp
-
 import groovy.json.StringEscapeUtils
+
+import com.kazurayam.materials.TSuiteTimestamp
 
 final class Helpers {
 

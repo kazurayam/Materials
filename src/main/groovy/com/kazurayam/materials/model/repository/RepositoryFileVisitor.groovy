@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestamp
+import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 /**
  *
@@ -66,9 +67,9 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TESTSUITE:
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
-                LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
+                LocalDateTime ldt = TSuiteTimestampImpl.parse(dir.getFileName().toString())
                 if (ldt != null) {
-                    tSuiteTimestamp_ = new TSuiteTimestamp(ldt)
+                    tSuiteTimestamp_ = TSuiteTimestampImpl.newInstance(ldt)
                     tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
                     repoRoot_.addTSuiteResult(tSuiteResult_)
                 } else {
