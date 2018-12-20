@@ -126,42 +126,6 @@ class MaterialRepositorySpec extends Specification {
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
 
-    def testDeleteFilesInDownloadsDir() {
-        when:
-        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-        Path sourceFile   = downloadsDir.resolve('myFunnyDays.txt')
-        Helpers.touch(sourceFile)
-        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
-        then:
-        list.size() >= 1
-        when:
-        int count = mr_.deleteFilesInDownloadsDir('myFunnyDays.txt')
-        then:
-        count > 0
-        when:
-        list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
-        then:
-        list.size() == 0
-    }
-
-    def testImportFileFromDownloadsDir() {
-        when:
-        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
-        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-        Path sourceFile   = downloadsDir.resolve('downloaded.pdf')
-        Helpers.touch(sourceFile)
-        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('downloaded.pdf')
-        then:
-        list.size() >= 1
-        when:
-        Path path = mr_.importFileFromDownloadsDir('Test Cases/main/TC1', 'downloaded.pdf')
-        then:
-        path != null
-        path.toString().contains('main.TS1')
-        path.toString().contains('20180530_130419')
-        path.toString().contains('main.TC1')
-        path.toString().contains('downloaded.pdf')
-    }
 
     def testMakeIndex() {
         when:

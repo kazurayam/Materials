@@ -74,24 +74,6 @@ interface MaterialRepository {
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
 
     /**
-     *
-     * @param first
-     * @param more
-     * @return
-     */
-    int deleteFilesInDownloadsDir(String fileName)
-
-    /**
-     *
-     * @param testCaseId e.g., 'Test Cases/TC1'
-     * @param fileName e.g., 'smilechart.xls'
-     * @return
-     */
-    Path importFileFromDownloadsDir(String testCaseId, String fileName)
-    Path importFileFromDownloadsDir(TCaseName tCaseName, String fileName)
-
-
-    /**
      * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
      * @return
      */
