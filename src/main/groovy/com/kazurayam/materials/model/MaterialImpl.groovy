@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TCaseName
 
 class MaterialImpl implements Material {
     
@@ -55,8 +56,19 @@ class MaterialImpl implements Material {
     }
     
     @Override
+    String getFileName() {
+        Objects.requireNonNull(materialFileName_, "materialFileName_ must not be null")
+        materialFileName_.getFileName()
+    }
+    
+    @Override
     TCaseResult getParent() {
         return this.getTCaseResult()
+    }
+    
+    @Override
+    TCaseName getTCaseName() {
+        return this.getTCaseResult().getTCaseName()
     }
     
     @Override
@@ -67,6 +79,11 @@ class MaterialImpl implements Material {
     @Override    
     URL getURL() {
         return materialFileName_.getURL()
+    }
+    
+    @Override
+    Path getSubpath() {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     
     @Override

@@ -144,6 +144,41 @@ class MaterialSpec extends Specification {
         mate1 != mate3
     }
 
+    def testGetFileName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getFileName().equals("smilechart.xls")      // "main.TC4/foo/bar/smilechart.xls"
+    }
+    
+    def testGetSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath().equals(Paths.get("foo/bar"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
+    
+    def testGetTCaseName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestampImpl.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getTCaseName().equals(new TCaseName("main/TC4"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
 
     def testGetDirpath_noSubpath() {
         when:

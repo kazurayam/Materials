@@ -13,6 +13,12 @@ interface Material extends Comparable<Material> {
 
     TCaseResult getParent()
 
+    /**
+     * 
+     * @return
+     */
+    TCaseName getTCaseName()
+    
     TCaseResult getTCaseResult()
 
     URL getURL()
@@ -22,6 +28,18 @@ interface Material extends Comparable<Material> {
     FileType getFileType()
 
     Path getPath()
+    
+    /**
+     * 
+     * @return
+     */
+    String getFileName()
+    
+    /**
+     * 
+     * @return
+     */
+    Path getSubpath()
 
     Path getDirpath()
     

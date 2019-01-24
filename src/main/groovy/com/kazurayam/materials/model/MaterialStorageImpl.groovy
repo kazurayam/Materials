@@ -6,6 +6,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
@@ -49,11 +50,19 @@ class MaterialStorageImpl implements MaterialStorage {
         return new MaterialStorageImpl(baseDir)
     }
     
-    
+    /**
+     * copy Material files belonging to the tSuiteName + tSuiteTimestamp 
+     * from the Materials dir of the project into the external Storage directory
+     */
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        //throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-        
+        //
+        externalRepos_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        //
+        List<Material> sourceList = fromMR.getMaterials(tSuiteName, tSuiteTimestamp)
+        for (Material mate : sourceList) {
+            Path target = externalRepos_.resolveMaterialPath() 
+        }
     }
     
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
