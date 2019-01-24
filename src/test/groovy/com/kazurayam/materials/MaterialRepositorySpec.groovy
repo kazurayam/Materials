@@ -108,6 +108,26 @@ class MaterialRepositorySpec extends Specification {
         then:
         testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
     }
+    
+    def testGetMaterials_withArgs() {
+        when:
+        List<Material> list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestampImpl.newInstance("20180530_130419"))
+        then:
+        list.size() == 3
+        //
+        when:
+        list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestampImpl.newInstance("20180530_130604"))
+        then:
+        list.size() == 6
+        //
+        when:
+        list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS2"),
+            TSuiteTimestampImpl.newInstance("20180612_111256"))
+        then:
+        list.size() == 2
+    }
 
     def testGetTestCaseDirectory() {
         when:

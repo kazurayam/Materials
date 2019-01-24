@@ -395,6 +395,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
+
+    /**
+     * 
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+       Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+       Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+       return this.getRepositoryRoot().getMaterials(tSuiteName, tSuiteTimestamp)
+    }
+
     TCaseResult getTCaseResult(String testCaseId) {
         return this.getTCaseResult(new TCaseName(testCaseId))
     }

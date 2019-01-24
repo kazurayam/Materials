@@ -71,6 +71,15 @@ interface MaterialRepository {
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
 
+
+    /**
+     *     
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return List of Material objects belonging to the tSuiteName + tSuiteTimestamp
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    
     /**
      * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
      * @return
