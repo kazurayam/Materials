@@ -124,6 +124,10 @@ final class RepositoryRoot {
         return result
     }
 
+    /**
+     * 
+     * @return
+     */
     List<Material> getMaterials() {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
@@ -135,6 +139,25 @@ final class RepositoryRoot {
         return Collections.unmodifiableList(list)
     }
 
+    /**
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        List<Material> list = new ArrayList<Material>()
+        for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
+            if (tsr.getTSuiteName().equals(tSuiteName) &&
+                tsr.getTSuiteTimestamp().equals(tSuiteTimestamp)) {
+                    List<Material> mates =  tsr.getMaterials()
+                    for (Material mate : mates) {
+                        list.add(mate)
+                    }
+            }
+        }
+        return Collections.unmodifiableList(list)
+    }
 
 
     // -------------- overriding java.lang.Object methods ---------------------

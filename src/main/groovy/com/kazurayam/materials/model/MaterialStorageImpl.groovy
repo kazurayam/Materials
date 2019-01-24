@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model.storage
+package com.kazurayam.materials.model
 
 import java.nio.file.Path
 
@@ -11,6 +11,8 @@ import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.model.storage.GroupBy
+import com.kazurayam.materials.model.storage.SelectBy
 
 class MaterialStorageImpl implements MaterialStorage {
     
@@ -34,7 +36,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // create the directory if not present
         Helpers.ensureDirs(baseDir_)
         
-        externalRepos_ = MaterialRepositoryFactory.newInstance(baseDir_)
+        externalRepos_ = MaterialRepositoryFactory.createInstance(baseDir_)
     }
     
     /**
@@ -48,10 +50,10 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     
-    
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+        //throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+        
     }
     
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,

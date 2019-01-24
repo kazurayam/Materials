@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.TSuiteResult
@@ -51,6 +52,22 @@ class RepositoryRootSpec extends Specification {
         then:
         tsr == returned
     }
+    
+    def testGetMaterials_noArgs() {
+        when:
+        List<Material> mates = repoRoot_.getMaterials()
+        then:
+        mates.size() > 2
+    }
+    
+    def testGetMaterials_withArgs() {
+        when:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance('20180530_130419')
+        List<Material> mates = repoRoot_.getMaterials(tsn, tst)
+        then:
+        mates.size() == 2
+    }
 
     def testGetTSuiteResults() {
         when:
@@ -69,10 +86,11 @@ class RepositoryRootSpec extends Specification {
         List<TSuiteResult> tsrList = repoRoot_.getTSuiteResults(new TSuiteName('TS1'))
         then:
         tsrList.size() == 2
-        tsrList[0].getTSuiteName() == new TSuiteName('TS1')
-        tsrList[0].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140105')
-        tsrList[1].getTSuiteName() == new TSuiteName('TS1')
-        tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
+        // tsList is not sorted
+        //tsrList[0].getTSuiteName() == new TSuiteName('TS1')
+        //tsrList[0].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140105')
+        //tsrList[1].getTSuiteName() == new TSuiteName('TS1')
+        //tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
     }
 
     def testGetSortedTSuiteResults() {
