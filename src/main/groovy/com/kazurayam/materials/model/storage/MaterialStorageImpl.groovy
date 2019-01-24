@@ -6,15 +6,18 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.MaterialRepository
+import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 class MaterialStorageImpl implements MaterialStorage {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialStorageImpl.class)
     
     private Path baseDir_
-    private RepositoryRoot rr_
+    private MaterialRepository externalRepos_
     
     /**
      * constructor is hidden
@@ -30,6 +33,8 @@ class MaterialStorageImpl implements MaterialStorage {
         baseDir_ = baseDir
         // create the directory if not present
         Helpers.ensureDirs(baseDir_)
+        
+        externalRepos_ = MaterialRepositoryFactory.newInstance(baseDir_)
     }
     
     /**
@@ -43,5 +48,39 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     
+    
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
+        SelectBy selectBy) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+        SelectBy selectBy) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int empty() throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int expire(TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    int expire(TSuiteName tSuiteName,
+        GroupBy groupBy) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
     
 }

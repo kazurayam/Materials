@@ -1,5 +1,6 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.model.storage.GroupBy
 import com.kazurayam.materials.model.storage.SelectBy
 
 /**
@@ -18,7 +19,7 @@ interface MaterialStorage {
      * @param fromMR
      * @param tSuiteName
      * @param tSuiteTimestamp
-     * @return
+     * @return number of Material files transfered
      * @throws IOException
      */
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
@@ -31,7 +32,7 @@ interface MaterialStorage {
      * @param fromMR
      * @param tSuiteName
      * @param selectBy
-     * @return
+     * @return number of Material files transfered
      * @throws IOException
      */
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
@@ -44,7 +45,7 @@ interface MaterialStorage {
      * @param intoMR
      * @param tSuiteName
      * @param tSuiteTimestamp
-     * @return
+     * @return number of Material files transfered
      * @throws IOException
      */
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
@@ -57,10 +58,42 @@ interface MaterialStorage {
      * @param intoMR
      * @param tSuiteName
      * @param selectBy
-     * @return
+     * @return number of Material files transfered
      * @throws IOException
      */
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
         SelectBy selectBy) throws IOException
+    
+    /**
+     * delete all Material files in this Material Storage, kee the baseDir undeleted.
+     * 
+     * @return number of Matrial files deleted
+     * @throws IOException
+     */
+    int empty() throws IOException
+    
+    /**
+     * delete Material files in this Material Storage, which belongs to the tSuiteName and
+     * with the TSuiteTimestamp specified by the argument
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return
+     * @throws IOException
+     */
+    int expire(TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException
+    
+    /**
+     * delete Material files in this Material Storage, which belongs to the tSuiteName and
+     * with the TSuiteTimestamp grouped by the groupBy argument
+     *  
+     * @param tSuiteName
+     * @param groupBy
+     * @return
+     * @throws IOException
+     */
+    int expire(TSuiteName tSuiteName,
+        GroupBy groupBy) throws IOException
 
 }
