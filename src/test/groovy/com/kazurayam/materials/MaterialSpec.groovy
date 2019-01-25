@@ -147,7 +147,7 @@ class MaterialSpec extends Specification {
     def testGetFileName() {
         when:
         List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180718_142832"))
+            TSuiteTimestampImpl.newInstance("20180718_142832"))
         then:
         materials.size() > 0
         when:
@@ -156,10 +156,10 @@ class MaterialSpec extends Specification {
         mate.getFileName().equals("smilechart.xls")      // "main.TC4/foo/bar/smilechart.xls"
     }
     
-    def testGetSubpath() {
+    def testGetSubpath_withSubpath() {
         when:
         List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180718_142832"))
+            TSuiteTimestampImpl.newInstance("20180718_142832"))
         then:
         materials.size() > 0
         when:
@@ -167,7 +167,19 @@ class MaterialSpec extends Specification {
         then:
         mate.getSubpath().equals(Paths.get("foo/bar"))    // "main.TC4/foo/bar/smilechart.xls"
     }
-    
+
+    def testGetSubpath_withoutSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestampImpl.newInstance("20180530_130419"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath() == null    // "main.TC4/smilechart.xls" has no subpath in between TCaseName and fileName
+    }
+
     def testGetTCaseName() {
         when:
         List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),

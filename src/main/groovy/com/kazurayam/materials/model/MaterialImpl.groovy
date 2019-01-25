@@ -81,9 +81,17 @@ class MaterialImpl implements Material {
         return materialFileName_.getURL()
     }
     
+    /**
+     * 
+     */
     @Override
     Path getSubpath() {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+        Path p = this.getPathRelativeToTSuiteTimestamp()   // main.TC4\foo\bar\smilechart.xls
+        try {
+            return p.subpath(1, p.getNameCount() - 1)      // -> foo\bar
+        } catch (IllegalArgumentException ex) {
+            return null                                    // main.TC1\somefile.txt --> no subpath here, return null
+        }
     }
     
     @Override
