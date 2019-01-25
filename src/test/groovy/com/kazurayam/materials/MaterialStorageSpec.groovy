@@ -23,7 +23,6 @@ class MaterialStorageSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepository mr_
-    private static MaterialStorage ms_
     
     // fixture methods
     def setupSpec() {
@@ -31,21 +30,36 @@ class MaterialStorageSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         //
         mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve("Materials"))
-        //
-        Path msdir = workdir_.resolve("Storage")
-        if (!Files.exists(msdir)) {
-            Files.createDirectory(msdir)
-        }
-        ms_ = MaterialStorageFactory.createInstance(msdir)
     }
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
     
     // feature methods
-    def testBackupSpecifyingTSuiteTimestamp() {
+    def testBackup_specifyingTSuiteTimestamp() {
+        setup:
+        Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteTimestamp")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
-        int num = ms_.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        then:
+        num == 1
+    }
+    
+    def testRestore_specifyingTSuiteTimestamp() {
+        setup:
+        Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
+        Path msdir = stepWork.resolve("Storage")
+        Path restoredDir = stepWork.resolve("Materials_restored")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        then:
+        num == 1
+        when:
+        MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
+        num = ms.restore(restored, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
         then:
         num == 1
     }

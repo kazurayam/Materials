@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
@@ -24,7 +25,7 @@ class MaterialStorageImpl implements MaterialStorage {
     static Logger logger_ = LoggerFactory.getLogger(MaterialStorageImpl.class)
     
     private Path baseDir_
-    private MaterialRepository externalRepos_
+    private MaterialRepository componentMR_
     
     /**
      * constructor is hidden
@@ -41,7 +42,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // create the directory if not present
         Helpers.ensureDirs(baseDir_)
         
-        externalRepos_ = MaterialRepositoryFactory.createInstance(baseDir_)
+        componentMR_ = MaterialRepositoryFactory.createInstance(baseDir_)
     }
     
     /**
@@ -61,7 +62,7 @@ class MaterialStorageImpl implements MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
         //
-        externalRepos_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        componentMR_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
         //
         List<Material> sourceList = fromMR.getMaterials(tSuiteName, tSuiteTimestamp)
         int count = 0
@@ -71,9 +72,9 @@ class MaterialStorageImpl implements MaterialStorage {
             String fileName = sourceMate.getFileName()
             Path copyTo
             if (subpath != null) {
-                copyTo = externalRepos_.resolveMaterialPath(tcn, subpath, fileName)
+                copyTo = componentMR_.resolveMaterialPath(tcn, subpath, fileName)
             } else {
-                copyTo = externalRepos_.resolveMaterialPath(tcn, fileName)
+                copyTo = componentMR_.resolveMaterialPath(tcn, fileName)
             }
             CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
             Files.copy(sourceMate.getPath(), copyTo, options)
@@ -89,7 +90,27 @@ class MaterialStorageImpl implements MaterialStorage {
     
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+        //
+        intoMR.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        //
+        List<Material> sourceList = componentMR_.getMaterials(tSuiteName, tSuiteTimestamp)
+        logger_.info("sourceList.size()=${sourceList.size()}")
+        int count = 0
+        for (Material sourceMate : sourceList) {
+            TCaseName tcn = sourceMate.getTCaseName()
+            Path subpath = sourceMate.getSubpath()
+            String fileName = sourceMate.getFileName()
+            Path copyTo
+            if (subpath != null) {
+                copyTo = intoMR.resolveMaterialPath(tcn, subpath, fileName)
+            } else {
+                copyTo = intoMR.resolveMaterialPath(tcn, fileName)
+            }
+            CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
+            Files.copy(sourceMate.getPath(), copyTo, options)
+            count += 1
+        }
+        return count
     }
     
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
@@ -110,5 +131,20 @@ class MaterialStorageImpl implements MaterialStorage {
         GroupBy groupBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
-    
+
+
+    // ---------------------- overriding Object properties --------------------
+    @Override
+    String toString() {
+        return this.toJson()
+    }
+
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"MaterialStorageImpl":{')
+        sb.append('"baseDir":"' +
+            Helpers.escapeAsJsonText(baseDir_.toString()) + '"')
+        sb.append('}}')
+        return sb.toString()
+    }    
 }
