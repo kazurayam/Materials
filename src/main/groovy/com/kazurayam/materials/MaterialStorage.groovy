@@ -41,13 +41,26 @@ interface MaterialStorage {
     
     
     /**
-     * delete material files which belogns to the tSuiteName + tSuiteTimestamp in this Material Storage
+     * delete all of subdirectories and material files which belogns to 
+     * the tSuiteName + tSuiteTimestamp in this Material Storage.
+     * Will remove the tSuiteTimestamp directory, but retain the tSuiteName directory
      *  
      * @param tSuiteName
      * @param tSuiteTimestamp
-     * @return
+     * @return number of Material files deleted. number of deleted directories are not included.
      */
     int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
+    
+    /**
+     * delete all of subdirectories and material files which belong to
+     * the tSuiteName in this Material Storage.
+     * Will remove the tSuiteName directory.
+     * 
+     * @param tSuiteName
+     * @return number of Material files deleted. number of deleted directories are not included.
+     * @throws IOException
+     */
+    int clear(TSuiteName tSuiteName) throws IOException
     
     /**
      * delete all Material files in this Material Storage, keep the baseDir undeleted.

@@ -116,7 +116,27 @@ interface MaterialRepository {
     
     /**
      *
-     * @param directory delete descendant directories and files of the specified directory. The directory is retained.
+     * delete all descendant directories and files of the base directory. The base directory is retained.
      */
     void deleteBaseDirContents() throws IOException
+    
+    /**
+     * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
+     * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return number of material files deleted. number of directories are not included.
+     */
+    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    
+    /**
+     * delete all descendant directories and files beloging to the tSuiteName directory.
+     * will remove the tSuiteTimestamp directory.
+     * 
+     * @param tSuiteName
+     * @return number of material files deleted. number of directories are not included.
+     */
+    int clear(TSuiteName tSuiteName)
+    
 }
