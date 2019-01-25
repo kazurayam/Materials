@@ -41,7 +41,7 @@ class MaterialStorageImpl implements MaterialStorage {
         baseDir_ = baseDir
         // create the directory if not present
         Helpers.ensureDirs(baseDir_)
-        
+        //
         componentMR_ = MaterialRepositoryFactory.createInstance(baseDir_)
     }
     
@@ -59,6 +59,7 @@ class MaterialStorageImpl implements MaterialStorage {
      * copy Material files belonging to the tSuiteName + tSuiteTimestamp 
      * from the Materials dir of the project into the external Storage directory
      */
+    @Override
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
         //
@@ -80,14 +81,70 @@ class MaterialStorageImpl implements MaterialStorage {
             Files.copy(sourceMate.getPath(), copyTo, options)
             count += 1
         }
+        // scan the directories/files to update the internal status of componentMR
+        componentMR_.scan()
+        // done
         return count
     }
     
+    @Override
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         SelectBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     
+    @Override
+    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        // delete files
+        List<Material> materials = this.getMaterials(tSuiteName, tSuiteTimestamp)
+        int count = 0
+        for (Material mate: materials) {
+            Files.delete(mate.getPath())
+            count += 1
+        }
+        // delete directories
+        
+        componentMR_.scan()
+        return count
+    }
+    
+    @Override
+    void empty() throws IOException {
+        componentMR_.deleteBaseDirContents()
+    }
+    
+    @Override
+    int expire(TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    @Override
+    int expire(TSuiteName tSuiteName,
+        GroupBy groupBy) throws IOException {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    @Override
+    List<Material> getMaterials() {
+        return componentMR_.getMaterials()
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+       return componentMR_.getMaterials(tSuiteName, tSuiteTimestamp) 
+    }
+    
+    /**
+     *
+     */
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
         //
@@ -110,6 +167,9 @@ class MaterialStorageImpl implements MaterialStorage {
             Files.copy(sourceMate.getPath(), copyTo, options)
             count += 1
         }
+        // Is it ok to do this? not sure.
+        intoMR.scan()
+        // done
         return count
     }
     
@@ -117,21 +177,6 @@ class MaterialStorageImpl implements MaterialStorage {
         SelectBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
-    
-    int empty() throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    
-    int expire(TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    
-    int expire(TSuiteName tSuiteName,
-        GroupBy groupBy) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-
 
     // ---------------------- overriding Object properties --------------------
     @Override

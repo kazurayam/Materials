@@ -11,6 +11,7 @@ import com.kazurayam.materials.model.storage.SelectBy
  * @author kazurayam
  */
 interface MaterialStorage {
+    
 
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp 
@@ -38,39 +39,23 @@ interface MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         SelectBy selectBy) throws IOException
     
+    
     /**
-     * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp 
-     * from this Material Storage into the project's Materials folder (intoMR).
-     * 
-     * @param intoMR
+     * delete material files which belogns to the tSuiteName + tSuiteTimestamp in this Material Storage
+     *  
      * @param tSuiteName
      * @param tSuiteTimestamp
-     * @return number of Material files transfered
-     * @throws IOException
+     * @return
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
     
     /**
-     * copy a set of Material files identified by a pair of a tSuiteName and a SelectBy object
-     * from this Material Storage into the project's Materials folder (intoMR).
-     * 
-     * @param intoMR
-     * @param tSuiteName
-     * @param selectBy
-     * @return number of Material files transfered
-     * @throws IOException
-     */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException
-    
-    /**
-     * delete all Material files in this Material Storage, kee the baseDir undeleted.
+     * delete all Material files in this Material Storage, keep the baseDir undeleted.
      * 
      * @return number of Matrial files deleted
      * @throws IOException
      */
-    int empty() throws IOException
+    void empty() throws IOException
     
     /**
      * delete Material files in this Material Storage, which belongs to the tSuiteName and
@@ -95,5 +80,45 @@ interface MaterialStorage {
      */
     int expire(TSuiteName tSuiteName,
         GroupBy groupBy) throws IOException
+    
+    /**
+     * @return List of Material objects contained in the current MaterialStorage
+     */
+    List<Material> getMaterials()
+
+    /**
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return List of Material objects belonging to the tSuiteName + tSuiteTimestamp 
+     * contained in the current MaterialStorage
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+
+    /**
+     * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp
+     * from this Material Storage into the project's Materials folder (intoMR).
+     *
+     * @param intoMR
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return number of Material files transfered
+     * @throws IOException
+     */
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp) throws IOException
+    
+    /**
+     * copy a set of Material files identified by a pair of a tSuiteName and a SelectBy object
+     * from this Material Storage into the project's Materials folder (intoMR).
+     *
+     * @param intoMR
+     * @param tSuiteName
+     * @param selectBy
+     * @return number of Material files transfered
+     * @throws IOException
+     */
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+        SelectBy selectBy) throws IOException
+    
 
 }

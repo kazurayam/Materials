@@ -48,9 +48,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(baseDir_)
 
         // load data from the local disk
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
-        scanner.scan()
-        repoRoot_ = scanner.getRepositoryRoot()
+        this.scan()
 
         // set default Material path to the "./${baseDir name}/_/_" directory
         this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestampImpl.TIMELESS)
@@ -58,6 +56,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     static MaterialRepositoryImpl newInstance(Path baseDir) {
         return new MaterialRepositoryImpl(baseDir)    
+    }
+    
+    @Override
+    void scan() {
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
+        scanner.scan()
+        repoRoot_ = scanner.getRepositoryRoot()
     }
     
     /**
@@ -366,8 +371,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         return Collections.unmodifiableList(result)
     }
-
-    
     
 
     /**
@@ -378,6 +381,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     void deleteBaseDirContents() throws IOException {
         Path baseDir = this.getBaseDir()
         Helpers.deleteDirectoryContents(baseDir)
+        this.scan()
     }
 
     // ----------------------------- helpers ----------------------------------
@@ -395,14 +399,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
+    /**
+     * 
+     */
+    List<Material> getMaterials() {
+        return this.getRepositoryRoot().getMaterials()
+    }
 
     /**
      * 
      */
     List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-       Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-       Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
-       return this.getRepositoryRoot().getMaterials(tSuiteName, tSuiteTimestamp)
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+        return this.getRepositoryRoot().getMaterials(tSuiteName, tSuiteTimestamp)
     }
 
     TCaseResult getTCaseResult(String testCaseId) {

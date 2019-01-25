@@ -27,6 +27,11 @@ import java.nio.file.Path
  */
 interface MaterialRepository {
 
+    /**
+     * scan the baseDir to recognize the current directories/files configuration
+     */
+    void scan()
+    
     void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
@@ -72,6 +77,12 @@ interface MaterialRepository {
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
 
 
+    /**
+     * 
+     * @return List of all Material objects contained
+     */
+    List<Material> getMaterials()
+    
     /**
      *     
      * @param tSuiteName

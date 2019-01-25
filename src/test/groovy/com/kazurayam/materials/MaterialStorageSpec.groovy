@@ -47,6 +47,76 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
+    def testClear() {
+        setup:
+        Path stepWork = workdir_.resolve("testClear")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 1
+        when:
+        ms.clear(tsn, tst)
+        List<Material> materials = ms.getMaterials()
+        then:
+        materials.size() == 0
+    }
+    
+    def testEmpty() {
+        setup:
+        Path stepWork = workdir_.resolve("testEmpty")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 1
+        when:
+        ms.empty()
+        List<Material> materials = ms.getMaterials()
+        then:
+        materials.size() == 0
+    }
+    
+    def testGetMaterials_noArgs() {
+        setup:
+        Path stepWork = workdir_.resolve("testGetMaterials_noArgs")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 1
+        when:
+        List<Material> materials = ms.getMaterials()
+        then:
+        materials.size() == 1
+    }
+    
+    def testGetMaterials_withArgs() {
+        setup:
+        Path stepWork = workdir_.resolve("testGetMaterials_noArgs")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 1
+        when:
+        List<Material> materials = ms.getMaterials(tsn, tst)
+        then:
+        materials.size() == 1
+    }
+    
     def testRestore_specifyingTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
@@ -63,5 +133,5 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 1
     }
-    
+
 }
