@@ -1,6 +1,9 @@
 package com.kazurayam.materials.model
 
+import java.nio.file.CopyOption
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,6 +13,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.storage.GroupBy
@@ -60,9 +64,22 @@ class MaterialStorageImpl implements MaterialStorage {
         externalRepos_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
         //
         List<Material> sourceList = fromMR.getMaterials(tSuiteName, tSuiteTimestamp)
-        for (Material mate : sourceList) {
-            Path target = externalRepos_.resolveMaterialPath() 
+        int count = 0
+        for (Material sourceMate : sourceList) {
+            TCaseName tcn = sourceMate.getTCaseName()
+            Path subpath = sourceMate.getSubpath()
+            String fileName = sourceMate.getFileName()
+            Path copyTo
+            if (subpath != null) {
+                copyTo = externalRepos_.resolveMaterialPath(tcn, subpath, fileName)
+            } else {
+                copyTo = externalRepos_.resolveMaterialPath(tcn, fileName)
+            }
+            CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
+            Files.copy(sourceMate.getPath(), copyTo, options)
+            count += 1
         }
+        return count
     }
     
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,

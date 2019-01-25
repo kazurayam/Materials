@@ -342,7 +342,7 @@ class MaterialSpec extends Specification {
         true
     }
 
-    def testGetPathBySubpath() {
+    def testGetPath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
                 new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180718_142832'))
