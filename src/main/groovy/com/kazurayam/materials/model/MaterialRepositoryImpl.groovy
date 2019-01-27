@@ -387,12 +387,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     /**
      * delete Material files and sub directories located in the tSuiteName+tSuiteTimestamp dir.
-     * The tSuiteName directory is retained.
-     * The tSuiteTimestamp directory under the tSuiteName is removed.
+     * The tSuiteName directory is removed.
+     * All tSuiteTimestamp directories under the tSuiteName are removed of cource.
      *
      * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return number of deleted files, excluding deleted sub directories
+     * @return number of Material files removed, excluding deleted sub directories
      * @throws IOException
      */
     @Override
@@ -414,8 +413,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     int clear(TSuiteName tSuiteName) throws IOException {
-        Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue())
-        int count = Helpers.deleteDirectory(tstDir)
+        Path tsnDir = this.getBaseDir().resolve(tSuiteName.getValue())
+        int count = Helpers.deleteDirectory(tsnDir)
         this.scan()
         return count
     }
@@ -440,17 +439,28 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     /**
      * 
      */
-    List<Material> getMaterials() {
-        return this.getRepositoryRoot().getMaterials()
-    }
-
-    /**
-     * 
-     */
+    @Override
     List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         return this.getRepositoryRoot().getMaterials(tSuiteName, tSuiteTimestamp)
+    }
+
+    /**
+     *
+     */
+    @Override
+    List<Material> getMaterials(TSuiteName tSuiteName) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        return this.getRepositoryRoot().getMaterials(tSuiteName)
+    }
+
+    /**
+     *
+     */
+    @Override
+    List<Material> getMaterials() {
+        return this.getRepositoryRoot().getMaterials()
     }
 
     TCaseResult getTCaseResult(String testCaseId) {

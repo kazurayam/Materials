@@ -114,7 +114,7 @@ class MaterialRepositorySpec extends Specification {
         List<Material> list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
             TSuiteTimestampImpl.newInstance("20180530_130419"))
         then:
-        list.size() == 3
+        list.size() == 2
         //
         when:
         list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
@@ -178,8 +178,7 @@ class MaterialRepositorySpec extends Specification {
      */
     def testDeleteBaseDirContents() throws IOException {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository")
-        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        Path casedir = workdir_.resolve("testDeleteBaseDirContents")
         if (!Files.exists(casedir)) {
             Files.createDirectories(casedir)
         }
@@ -194,10 +193,9 @@ class MaterialRepositorySpec extends Specification {
         contents.size() == 0
     }
 
-    def testClear_withTSuiteTimestamp() {
+    def testClear_withArgTSuiteTimestamp() {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository")
-        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        Path casedir = workdir_.resolve("testClear_withArgTSuiteTimestamp")
         if (!Files.exists(casedir)) {
             Files.createDirectories(casedir)
         }
@@ -215,16 +213,15 @@ class MaterialRepositorySpec extends Specification {
         list.size() == 0
         when:
         mr.putCurrentTestSuite(tsn)
-        Path tsndir = mr.getCurrentTestSuiteDirectory()
-        Path tstdir = tsndir.resolve(tst.format())
+        Path tsnDir = mr.getCurrentTestSuiteDirectory()
+        Path tstDir = tsnDir.resolve(tst.format())
         then:
-        ! Files.exists(tstdir)
+        ! Files.exists(tstDir)
     }
 
-    def testClear_withONlyTSuiteName() {
+    def testClear_withArgOnlyTSuiteName() {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository")
-        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        Path casedir = workdir_.resolve("testClear_withArgOnlyTSuiteName")
         if (!Files.exists(casedir)) {
             Files.createDirectories(casedir)
         }
@@ -239,12 +236,11 @@ class MaterialRepositorySpec extends Specification {
         when:
         List<Material> list = mr.getMaterials(tsn)
         then:
-        list.size() != 0
+        list.size() == 0
         when:
-        mr.putCurrentTestSuite(tsn)
-        Path tsndir = mr.getCurrentTestSuiteDirectory()
+        Path tsnDir = mr.getBaseDir().resolve(tsn.getValue())
         then:
-        ! Files.exists(tsndir)
+        ! Files.exists(tsnDir)
     }
 }
 

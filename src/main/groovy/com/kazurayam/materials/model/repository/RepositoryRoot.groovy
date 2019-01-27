@@ -140,6 +140,26 @@ final class RepositoryRoot {
     }
 
     /**
+     *
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName) {
+        List<Material> list = new ArrayList<Material>()
+        for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
+            if (tsr.getTSuiteName().equals(tSuiteName)) {
+                List<Material> mates =  tsr.getMaterials()
+                for (Material mate : mates) {
+                    list.add(mate)
+                }
+            }
+        }
+        return Collections.unmodifiableList(list)
+    }
+
+
+    /**
      * 
      * @param tSuiteName
      * @param tSuiteTimestamp
