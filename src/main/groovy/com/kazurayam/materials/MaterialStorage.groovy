@@ -1,7 +1,4 @@
 package com.kazurayam.materials
-
-import com.kazurayam.materials.model.storage.SelectBy
-
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.

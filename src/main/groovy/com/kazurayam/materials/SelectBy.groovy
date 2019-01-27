@@ -1,6 +1,4 @@
-package com.kazurayam.materials.model.storage
-
-import com.kazurayam.materials.TSuiteTimestamp
+package com.kazurayam.materials
 
 class SelectBy {
     
