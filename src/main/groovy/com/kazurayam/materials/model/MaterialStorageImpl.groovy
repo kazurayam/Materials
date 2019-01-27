@@ -17,7 +17,6 @@ import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.model.storage.GroupBy
 import com.kazurayam.materials.model.storage.SelectBy
 
 class MaterialStorageImpl implements MaterialStorage {
@@ -119,7 +118,7 @@ class MaterialStorageImpl implements MaterialStorage {
     
     @Override
     int expire(TSuiteName tSuiteName,
-        GroupBy groupBy) throws IOException {
+        SelectBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     

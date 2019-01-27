@@ -1,6 +1,5 @@
 package com.kazurayam.materials
 
-import com.kazurayam.materials.model.storage.GroupBy
 import com.kazurayam.materials.model.storage.SelectBy
 
 /**
@@ -92,7 +91,7 @@ interface MaterialStorage {
      * @throws IOException
      */
     int expire(TSuiteName tSuiteName,
-        GroupBy groupBy) throws IOException
+        SelectBy selectBy) throws IOException
     
     /**
      * @return List of Material objects contained in the current MaterialStorage
