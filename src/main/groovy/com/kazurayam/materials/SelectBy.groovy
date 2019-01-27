@@ -1,27 +1,76 @@
 package com.kazurayam.materials
 
-class SelectBy {
+import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.model.TSuiteResult
+
+abstract class SelectBy {
     
     static SelectBy tSuiteTimestamp(TSuiteTimestamp tSuiteTimestamp) {
-        
+        return new SelectByTSuiteTimestamp(tSuiteTimestamp)
     }
-    
+
     static SelectBy latest() {
-        
+        return new SelectByLatest()
+    }
+
+    static SelectBy beforeHours(int beforeHours) {
+        return new SelectByBeforeHours(beforeHours)
+    }
+
+    static SelectBy beforeMinutes(int beforeMinutes) {
+        return new SelectByBeforeMinutes(beforeMinutes)
     }
 
     /**
-     * 
-     * @param beforeHours
-     * @return a SelectBy which selects a TSuiteExcecutionRecord which is 1st latest amongst
-     * those are X hours before now. 
+     *
+     * @param mr
+     * @return
      */
-    static SelectBy beforeHours(int beforeHours) {
-        
+    abstract List<TSuiteResult> findTSuiteResults(SearchContext context)
+
+    /**
+     *
+     * @param mr
+     * @return
+     */
+    abstract TSuiteResult findTSuiteResult(SearchContext context)
+
+
+    @Override
+    boolean equals(Object other) {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
-    
-    static SelectBy beforeMinutes(int beforeMinutes) {
-        
+
+    @Override
+    int hashCode() {
+        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
-    
+
+    // ------------------------------------------------------------
+    static class SearchContext {
+        private SerachContext() {}
+        SearchContext build(RepositoryRoot rr, TSuiteResult currentTSuiteResult) {
+            
+        }
+    }
+
+    /**
+     *
+     */
+    static class SelectByTSuiteTimestamp extends SelectBy {}
+
+    /**
+     *
+     */
+    static class SelectByLatest extends SelectBy {}
+
+    /**
+     *
+     */
+    static class SelectByBeforeHours extends SelectBy {}
+
+    /**
+     *
+     */
+    static class SelectByBeforeMinutes extends SelectBy {}
 }
