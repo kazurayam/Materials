@@ -76,13 +76,6 @@ interface MaterialRepository {
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
 
-
-    /**
-     * 
-     * @return List of all Material objects contained
-     */
-    List<Material> getMaterials()
-    
     /**
      *     
      * @param tSuiteName
@@ -90,7 +83,20 @@ interface MaterialRepository {
      * @return List of Material objects belonging to the tSuiteName + tSuiteTimestamp
      */
     List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-    
+
+    /**
+     *
+     * @param tSuiteName
+     * @return List of Material objects belonging to the tSuiteName
+     */
+    List<Material> getMaterials(TSuiteName tSuiteName)
+
+    /**
+     *
+     * @return List of all Material objects contained
+     */
+    List<Material> getMaterials()
+
     /**
      * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
      * @return
@@ -127,8 +133,9 @@ interface MaterialRepository {
      * @param tSuiteName
      * @param tSuiteTimestamp
      * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
      */
-    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
     
     /**
      * delete all descendant directories and files beloging to the tSuiteName directory.
@@ -136,7 +143,8 @@ interface MaterialRepository {
      * 
      * @param tSuiteName
      * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
      */
-    int clear(TSuiteName tSuiteName)
+    int clear(TSuiteName tSuiteName) throws IOException
     
 }

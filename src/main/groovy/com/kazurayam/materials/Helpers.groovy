@@ -61,23 +61,23 @@ final class Helpers {
     }
 
     /**
-     * force-delete the directory and its contents(files and directories)
-     *
+     * force-delete the directory and its contents(files and directories).
+     * Will say again, the specified directory will be removed!
+     * If you like to retain the directory, you should use deleteDirectoryContents(Path) method instead.
      * If the specified directory does not exit or is not a directory, then Exception will be thrown
      *
      * @param directoryToBeDeleted
-     * @return
+     * @return number of files deleted, excluding directories deleted
      */
-    static void deleteDirectory(Path directory) throws IOException {
-        if (directory == null) {
-            throw new IllegalArgumentException('directory is null')
-        }
+    static int deleteDirectory(Path directory) throws IOException {
+        Objects.requireNonNull(directory, 'directory must not be null')
         if (!Files.exists(directory)) {
             throw new IOException("${directory.normalize().toAbsolutePath()} does not exist")
         }
         if (!Files.isDirectory(directory)) {
             throw new IOException("${directory.normalize().toAbsolutePath()} is not a directory")
         }
+        int count = 0
         Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
             Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
@@ -94,6 +94,7 @@ final class Helpers {
                 FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
                     logger_.debug("#deleteDirectory deleting file      ${file.toString()}")
                     Files.delete(file)
+                    count += 1
                     return CONTINUE
                 }
                 private FileVisitResult checkNotExist(final Path path) throws IOException {
@@ -105,6 +106,7 @@ final class Helpers {
                 }
             }
         )
+        return count
     }
 
 

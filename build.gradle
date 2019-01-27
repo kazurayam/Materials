@@ -51,8 +51,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    // include '**/materials/MaterialSpec.class'
-    include '**/materials/MaterialStorageSpec.class'
+    include '**/materials/MaterialRepositorySpec.class'
+    //include '**/materials/MaterialStorageSpec.class'
     outputs.upToDateWhen {false}
 }
 

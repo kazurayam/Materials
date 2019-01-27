@@ -95,19 +95,17 @@ class MaterialStorageImpl implements MaterialStorage {
     
     @Override
     int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        // delete files
-        List<Material> materials = this.getMaterials(tSuiteName, tSuiteTimestamp)
-        int count = 0
-        for (Material mate: materials) {
-            Files.delete(mate.getPath())
-            count += 1
-        }
-        // delete directories
-        
-        componentMR_.scan()
+        int count = componentMR_.clear(tSuiteName, tSuiteTimestamp)
         return count
     }
-    
+
+    @Override
+    int clear(TSuiteName tSuiteName) throws IOException {
+        int count = componentMR_.clear(tSuiteName)
+        return count
+    }
+
+
     @Override
     void empty() throws IOException {
         componentMR_.deleteBaseDirContents()

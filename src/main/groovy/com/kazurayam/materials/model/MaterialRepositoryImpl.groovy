@@ -371,7 +371,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         return Collections.unmodifiableList(result)
     }
-    
+
+    // -------------------- House cleaning -----------------------------------
 
     /**
      *
@@ -384,7 +385,44 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.scan()
     }
 
-    // ----------------------------- helpers ----------------------------------
+    /**
+     * delete Material files and sub directories located in the tSuiteName+tSuiteTimestamp dir.
+     * The tSuiteName directory is retained.
+     * The tSuiteTimestamp directory under the tSuiteName is removed.
+     *
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return number of deleted files, excluding deleted sub directories
+     * @throws IOException
+     */
+    @Override
+    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue()).resolve(tSuiteTimestamp.format())
+        int count = Helpers.deleteDirectory(tstDir)
+        this.scan()
+        return count
+    }
+
+    /**
+     * delete Material files and sub directories located in the tSuiteName+tSuiteTimestamp dir.
+     * The tSuiteName directory is removed.
+     * All tSuiteTimestamp directories under the tSuiteName are removed of cource.
+     *
+     * @param tSuiteName
+     * @return number of Material files removed, excluding deleted sub directories
+     * @throws IOException
+     */
+    @Override
+    int clear(TSuiteName tSuiteName) throws IOException {
+        Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue())
+        int count = Helpers.deleteDirectory(tstDir)
+        this.scan()
+        return count
+    }
+
+
+
+    // ----------------------------- getters ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {
         if (currentTSuiteName_ != null) {

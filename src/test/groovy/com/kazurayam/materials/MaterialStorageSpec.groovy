@@ -47,7 +47,7 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
-    def testClear() {
+    def testClear_withTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testClear")
         Path msdir = stepWork.resolve("Storage")
@@ -64,7 +64,25 @@ class MaterialStorageSpec extends Specification {
         then:
         materials.size() == 0
     }
-    
+
+    def testClear_withOnlyTSuiteName() {
+        setup:
+        Path stepWork = workdir_.resolve("testClear")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 1
+        when:
+        ms.clear(tsn)    // HERE is difference
+        List<Material> materials = ms.getMaterials()
+        then:
+        materials.size() == 0
+    }
+
     def testEmpty() {
         setup:
         Path stepWork = workdir_.resolve("testEmpty")

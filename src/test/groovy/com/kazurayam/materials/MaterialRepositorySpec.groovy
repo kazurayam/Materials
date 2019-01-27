@@ -178,13 +178,14 @@ class MaterialRepositorySpec extends Specification {
      */
     def testDeleteBaseDirContents() throws IOException {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository_DeleteBaseDirContents")
-        if (!Files.exists(workdir)) {
-            Files.createDirectories(workdir)
+        Path workdir = Paths.get("./build/tmp/MaterialRepository")
+        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
         }
-        Helpers.copyDirectory(fixture_, workdir)
+        Helpers.copyDirectory(fixture_, casedir)
         //
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir.resolve('Materials'))
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
         //
         when:
         mr.deleteBaseDirContents()
@@ -193,5 +194,57 @@ class MaterialRepositorySpec extends Specification {
         contents.size() == 0
     }
 
+    def testClear_withTSuiteTimestamp() {
+        setup:
+        Path workdir = Paths.get("./build/tmp/MaterialRepository")
+        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180530_130419")
+        int count = mr.clear(tsn, tst)
+        then:
+        count == 2
+        when:
+        List<Material> list = mr.getMaterials(tsn, tst)
+        then:
+        list.size() == 0
+        when:
+        mr.putCurrentTestSuite(tsn)
+        Path tsndir = mr.getCurrentTestSuiteDirectory()
+        Path tstdir = tsndir.resolve(tst.format())
+        then:
+        ! Files.exists(tstdir)
+    }
+
+    def testClear_withONlyTSuiteName() {
+        setup:
+        Path workdir = Paths.get("./build/tmp/MaterialRepository")
+        Path casedir = workdir.resolve("testDeleteBaseDirContents")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180530_130419")
+        int count = mr.clear(tsn)        // HERE is difference
+        then:
+        count == 12
+        when:
+        List<Material> list = mr.getMaterials(tsn)
+        then:
+        list.size() != 0
+        when:
+        mr.putCurrentTestSuite(tsn)
+        Path tsndir = mr.getCurrentTestSuiteDirectory()
+        then:
+        ! Files.exists(tsndir)
+    }
 }
 
