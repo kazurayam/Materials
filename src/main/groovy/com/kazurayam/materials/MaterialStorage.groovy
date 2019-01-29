@@ -1,4 +1,7 @@
 package com.kazurayam.materials
+
+import com.kazurayam.materials.model.repository.RepositoryRoot
+
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.
@@ -89,6 +92,11 @@ interface MaterialStorage {
      */
     int expire(TSuiteName tSuiteName,
         SelectBy selectBy) throws IOException
+
+    /**
+     * @return reference to the RepositoryRoot object contained in this MaterialStorage    
+     */
+    RepositoryRoot getRepositoryRoot()
     
     /**
      * @return List of Material objects contained in the current MaterialStorage

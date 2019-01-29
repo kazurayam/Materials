@@ -68,13 +68,14 @@ final class RepositoryRoot {
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {
             logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getTSuiteName()}")
-            if (tSuiteName == tsr.getTSuiteName()) {
+            if (tSuiteName.equals(tsr.getTSuiteName())) {
                 result.add(tsr)
             }
         }
         return Collections.unmodifiableList(result)
     }
-
+    
+    
     /**
      * 
      * @return List of all TSuiteResult in the Repository, the List is unmodifiable
@@ -82,7 +83,34 @@ final class RepositoryRoot {
     List<TSuiteResult> getTSuiteResults() {
         return Collections.unmodifiableList(tSuiteResults_)
     }
-
+    
+    
+    /**
+     * List of TSuiteResult which has the given TSuiteName, the Timestamp before the given 2nd arg.
+     * Excluding the timestamp of {before`
+     * The entries returned are sorted in descending order or the timestamp. Therefore the latest
+     * entry before the given timestamp will come at [0].
+     * 
+     * @param tSuiteName
+     * @param before
+     * @return
+     */
+    List<TSuiteResult> getTSuiteResultsBeforeExclusive(TSuiteName tSuiteName, TSuiteTimestamp before) {
+        Objects.requireNonNull(tSuiteName, "argument \'tSuiteName\' must not be null")
+        Objects.requireNonNull(before, "argument \'before\' must not be null")
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : tSuiteResults_) {
+            if (tSuiteName.equals(tsr.getTSuiteName())) {
+                if (TSuiteResultComparator_.compare(tsr, new TSuiteResult(tSuiteName, before)) > 0) {
+                    // use < to select entries exclusively
+                    result.add(tsr)
+                }
+            }
+        }
+        Collections.sort(result, TSuiteResultComparator_)
+        return Collections.unmodifiableList(result)
+    }
+    
     /**
      * returns the sorted list of TSuiteResults ordered by
      * (1) TSuiteName in natural order
@@ -91,7 +119,16 @@ final class RepositoryRoot {
      * @return
      */
     List<TSuiteResult> getSortedTSuiteResults() {
-        Comparator<TSuiteResult> comparator = new Comparator<TSuiteResult>() {
+        List<TSuiteResult> sorted = tSuiteResults_
+        Collections.sort(sorted, TSuiteResultComparator_)
+        return Collections.unmodifiableList(sorted)
+    }
+    
+    /**
+     * Comparator for TSuiteResult in the natural order : ascending order of TSuiteName + TSuiteTimestamp
+     */
+    private static Comparator<TSuiteResult> TSuiteResultComparator_ = 
+        new Comparator<TSuiteResult>() {
             @Override
             public int compare(TSuiteResult o1, TSuiteResult o2) {
                 int v = o1.getTSuiteName().compareTo(o2.getTSuiteName())
@@ -106,11 +143,11 @@ final class RepositoryRoot {
                 }
             }
         }
-        List<TSuiteResult> sorted = tSuiteResults_
-        Collections.sort(sorted, comparator)
-        return Collections.unmodifiableList(sorted)
-    }
 
+    /**
+     * 
+     * @return
+     */
     TSuiteResult getLatestModifiedTSuiteResult() {
         LocalDateTime lastModified = LocalDateTime.MIN
         TSuiteResult result = null

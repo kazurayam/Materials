@@ -17,6 +17,7 @@ import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.SelectBy
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
     
@@ -119,6 +120,11 @@ class MaterialStorageImpl implements MaterialStorage {
     int expire(TSuiteName tSuiteName,
         SelectBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    @Override
+    RepositoryRoot getRepositoryRoot() {
+        return this.componentMR_.getRepositoryRoot()    
     }
     
     /**

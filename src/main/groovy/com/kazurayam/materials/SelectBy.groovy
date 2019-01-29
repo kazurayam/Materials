@@ -10,8 +10,8 @@ abstract class SelectBy {
      * @param tSuiteTimestamp
      * @return
      */
-    static SelectBy tSuiteTimestamp(TSuiteTimestamp tSuiteTimestamp) {
-        return new SelectByTSuiteTimestamp(tSuiteTimestamp)
+    static SelectBy tSuiteTimestampBefore(TSuiteTimestamp tSuiteTimestamp) {
+        return new SelectByTSuiteTimestampBefore(tSuiteTimestamp)
     }
 
     /*
@@ -54,16 +54,31 @@ abstract class SelectBy {
     /**
      *
      */
-    static class SelectByTSuiteTimestamp extends SelectBy {
+    static class SelectByTSuiteTimestampBefore extends SelectBy {
+        
+        private TSuiteTimestamp tSuiteTimestamp_
+        
+        SelectByTSuiteTimestampBefore(TSuiteTimestamp tst) {
+            this.tSuiteTimestamp_ = tst
+        }
         
         @Override
         List<TSuiteResult> findTSuiteResults(SearchContext context) {
-            throw new UnsupportedOperationException()
+            RepositoryRoot rr = context.getRepositoryRoot()
+            TSuiteName tsn = context.getTSuiteName()
+            return rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
         }
         
         @Override
         TSuiteResult findTSuiteResult(SearchContext context) {
-            throw new UnsupportedOperationException()
+            RepositoryRoot rr = context.getRepositoryRoot()
+            TSuiteName tsn = context.getTSuiteName()
+            List<TSuiteResult> tSuiteResults = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            if (tSuiteResults.size() > 0) {
+                return tSuiteResults[0]
+            } else {
+                return TSuiteResult.NULL
+            }
         }
     }
 
@@ -80,9 +95,16 @@ abstract class SelectBy {
     // ------------------------------------------------------------
     static class SearchContext {
         private RepositoryRoot rr_
-        private SerachContext() {}
-        SearchContext build(RepositoryRoot rr) {
+        private TSuiteName tsn_
+        private SearchContext(RepositoryRoot rr, TSuiteName tsn) {
             rr_ = rr   
+            tsn_ = tsn
+        }
+        RepositoryRoot getRepositoryRoot() {
+            return rr_
+        }
+        TSuiteName getTSuiteName() {
+            return tsn_
         }
     }
 

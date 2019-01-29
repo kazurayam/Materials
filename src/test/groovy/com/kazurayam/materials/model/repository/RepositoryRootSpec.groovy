@@ -92,6 +92,19 @@ class RepositoryRootSpec extends Specification {
         //tsrList[1].getTSuiteName() == new TSuiteName('TS1')
         //tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
     }
+    
+    def testGetTSuiteResultsBeforeExclusive() {
+        when:
+        TSuiteName tsn = new TSuiteName('main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance('20180805_081908')
+        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
+        then:
+        tsrList.size() == 3
+        when:
+        TSuiteTimestamp expectedTst = TSuiteTimestampImpl.newInstance('20180718_142832')
+        then:
+        tsrList[0].getTSuiteTimestamp().equals(expectedTst)
+    }
 
     def testGetSortedTSuiteResults() {
         when:

@@ -10,7 +10,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.model.MaterialRepositoryImpl
+import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestampImpl
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 import spock.lang.Specification
 
@@ -21,14 +24,14 @@ class SelectBySpec extends Specification {
     
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static MaterialRepository mr_
+    private static MaterialRepositoryImpl mri_
     
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialStorageSpec.class)}")
         Helpers.copyDirectory(fixture_, workdir_)
         //
-        mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve("Materials"))
+        mri_ = new MaterialRepositoryImpl(workdir_.resolve("Materials"))
     }
     def setup() {}
     def cleanup() {}
@@ -37,8 +40,22 @@ class SelectBySpec extends Specification {
     // feature methods
     def test_tSuiteTimestamp() {
         setup:
-        TSuiteName tsn = TSuiteName("Monitor47News")
-        SelectBy
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        RepositoryRoot rr = mri_.getRepositoryRoot()
+        SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
+        SelectBy by = SelectBy.tSuiteTimestampBefore(tst)
+        //
+        when:
+        List<TSuiteResult> list = by.findTSuiteResults(context)
+        then:
+        list.size() == 1
+        //
+        when:
+        TSuiteResult tSuiteResult = by.findTSuiteResult(context)
+        List<Material> materials = tSuiteResult.getMaterials()
+        then:
+        materials.size() == 1
     }
     
 }

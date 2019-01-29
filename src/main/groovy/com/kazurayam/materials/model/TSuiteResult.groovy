@@ -21,6 +21,8 @@ import com.kazurayam.materials.view.JUnitReportWrapper
  */
 final class TSuiteResult implements Comparable<TSuiteResult> {
 
+    static final TSuiteResult NULL = new TSuiteResult(TSuiteName.NULL, TSuiteTimestamp.NULL)
+    
     static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
     private TSuiteName tSuiteName_

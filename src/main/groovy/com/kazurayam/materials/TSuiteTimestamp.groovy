@@ -1,6 +1,7 @@
 package com.kazurayam.materials
 
 import java.time.LocalDateTime
+import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 /**
  * Wraps a time stamp when a Test Suite was executed.
@@ -10,6 +11,8 @@ import java.time.LocalDateTime
  *
  */
 interface TSuiteTimestamp extends Comparable<TSuiteTimestamp> {
+    
+    static final TSuiteTimestamp NULL = new TSuiteTimestampImpl()
     
     static final String DATE_TIME_PATTERN = 'yyyyMMdd_HHmmss'
     
