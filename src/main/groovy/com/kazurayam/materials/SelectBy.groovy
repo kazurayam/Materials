@@ -10,14 +10,11 @@ abstract class SelectBy {
      * @param tSuiteTimestamp
      * @return
      */
-    static SelectBy tSuiteTimestampBefore(TSuiteTimestamp tSuiteTimestamp) {
-        return new SelectByTSuiteTimestampBefore(tSuiteTimestamp)
+    static SelectBy before(TSuiteTimestamp tSuiteTimestamp) {
+        return new SelectByBefore(tSuiteTimestamp)
     }
 
     /*
-    static SelectBy latest() {
-        return new SelectByLatest()
-    }
     static SelectBy beforeHours(int beforeHours) {
         return new SelectByBeforeHours(beforeHours)
     }
@@ -54,11 +51,11 @@ abstract class SelectBy {
     /**
      *
      */
-    static class SelectByTSuiteTimestampBefore extends SelectBy {
+    static class SelectByBefore extends SelectBy {
         
         private TSuiteTimestamp tSuiteTimestamp_
         
-        SelectByTSuiteTimestampBefore(TSuiteTimestamp tst) {
+        SelectByBefore(TSuiteTimestamp tst) {
             this.tSuiteTimestamp_ = tst
         }
         
@@ -84,9 +81,6 @@ abstract class SelectBy {
         }
     }
 
-    /*
-    static class SelectByLatest extends SelectBy {}
-     */
     /*
     static class SelectByBeforeHours extends SelectBy {}
      */

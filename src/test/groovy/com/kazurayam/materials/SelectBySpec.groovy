@@ -39,13 +39,13 @@ class SelectBySpec extends Specification {
     
     // feature methods
     
-    def test_tSuiteTimestampBefore_oneOrMoreBefore() {
+    def test_tSuiteTimestampBefore_oneOrMoreFound() {
         setup:
         TSuiteName tsn = new TSuiteName("TS1")
         TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180810_140106")
         RepositoryRoot rr = mri_.getRepositoryRoot()
         SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
-        SelectBy by = SelectBy.tSuiteTimestampBefore(tst)
+        SelectBy by = SelectBy.before(tst)
         //
         when:
         List<TSuiteResult> list = by.findTSuiteResults(context)
@@ -53,13 +53,13 @@ class SelectBySpec extends Specification {
         list.size() == 1
     }
 
-    def test_tSuiteTimestampBefore_noneBefore() {
+    def test_tSuiteTimestampBefore_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
         TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
         RepositoryRoot rr = mri_.getRepositoryRoot()
         SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
-        SelectBy by = SelectBy.tSuiteTimestampBefore(tst)
+        SelectBy by = SelectBy.before(tst)
         //
         when:
         List<TSuiteResult> list = by.findTSuiteResults(context)
