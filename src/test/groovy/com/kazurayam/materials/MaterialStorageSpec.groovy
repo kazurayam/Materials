@@ -1,17 +1,15 @@
 package com.kazurayam.materials
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
-import com.kazurayam.materials.model.MaterialStorageImpl
-import com.kazurayam.materials.model.TSuiteTimestampImpl
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 import spock.lang.Specification
 
@@ -42,7 +40,7 @@ class MaterialStorageSpec extends Specification {
         Path msdir = stepWork.resolve("Storage")
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
-        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestamp.newInstance("20190123_153854"))
         then:
         num == 1
     }
@@ -54,7 +52,7 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         int num = ms.backup(mr_, tsn, tst)
         then:
         num == 1
@@ -72,7 +70,7 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         int num = ms.backup(mr_, tsn, tst)
         then:
         num == 1
@@ -90,7 +88,7 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         int num = ms.backup(mr_, tsn, tst)
         then:
         num == 1
@@ -108,7 +106,7 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         int num = ms.backup(mr_, tsn, tst)
         then:
         num == 1
@@ -125,7 +123,7 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         int num = ms.backup(mr_, tsn, tst)
         then:
         num == 1
@@ -142,12 +140,12 @@ class MaterialStorageSpec extends Specification {
         Path restoredDir = stepWork.resolve("Materials_restored")
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
-        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        int num = ms.backup(mr_, new TSuiteName("Monitor47News"), TSuiteTimestamp.newInstance("20190123_153854"))
         then:
         num == 1
         when:
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
-        num = ms.restore(restored, new TSuiteName("Monitor47News"), TSuiteTimestampImpl.newInstance("20190123_153854"))
+        num = ms.restore(restored, new TSuiteName("Monitor47News"), TSuiteTimestamp.newInstance("20190123_153854"))
         then:
         num == 1
     }

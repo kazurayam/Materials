@@ -42,7 +42,7 @@ class SelectBySpec extends Specification {
     def test_tSuiteTimestampBefore_oneOrMoreFound() {
         setup:
         TSuiteName tsn = new TSuiteName("TS1")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180810_140106")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180810_140106")
         RepositoryRoot rr = mri_.getRepositoryRoot()
         SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
         SelectBy by = SelectBy.before(tst)
@@ -56,7 +56,7 @@ class SelectBySpec extends Specification {
     def test_tSuiteTimestampBefore_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         RepositoryRoot rr = mri_.getRepositoryRoot()
         SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
         SelectBy by = SelectBy.before(tst)

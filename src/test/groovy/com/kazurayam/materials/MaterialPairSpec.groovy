@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.model.MaterialPairImpl
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestampImpl
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
@@ -39,13 +38,13 @@ class MaterialPairSpec extends Specification {
     }
     def setup() {
         TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult expectedTcr = expectedTsr.getTCaseResult(
             new TCaseName('main.TC1'))
         expectedMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         //
         TSuiteResult actualTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130604'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult actualTcr = expectedTsr.getTCaseResult(
             new TCaseName('main.TC1'))
         actualMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))

@@ -81,14 +81,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
         this.putCurrentTSuiteResult(
                 new TSuiteName(testSuiteId),
-                TSuiteTimestampImpl.newInstance(testSuiteTimestampString))
+                TSuiteTimestamp.newInstance(testSuiteTimestampString))
     }
 
     @Override
     void putCurrentTestSuite(TSuiteName tSuiteName) {
         this.putCurrentTestSuite(
                 tSuiteName,
-                TSuiteTimestampImpl.newInstance(Helpers.now())
+                TSuiteTimestamp.newInstance(Helpers.now())
         )
     }
 

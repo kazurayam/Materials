@@ -17,7 +17,7 @@ class TSuiteExecutionRecordSpec extends Specification {
     
     def setup() {
         tSuiteName_ = new TSuiteName('Test Suites/TS1')
-        tSuiteTimestamp_ = TSuiteTimestampImpl.newInstance('20181211_152348')
+        tSuiteTimestamp_ = TSuiteTimestamp.newInstance('20181211_152348')
     }
     
     def testGetTSuiteName() {
@@ -89,7 +89,7 @@ class TSuiteExecutionRecordSpec extends Specification {
     def testCompareTo_differentTSuiteTimestamp_lessthan() {
         setup:
         TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
-            tSuiteName_, TSuiteTimestampImpl.newInstance('20180901_000000'))
+            tSuiteName_, TSuiteTimestamp.newInstance('20180901_000000'))
         TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
         expect:
         subject.compareTo(basis) < 0
@@ -98,7 +98,7 @@ class TSuiteExecutionRecordSpec extends Specification {
     def testCompareTo_differentTSuiteTimestamp_greaterthan() {
         setup:
         TSuiteExecutionRecord subject = TSuiteExecutionRecordImpl.newInstance(
-            tSuiteName_, TSuiteTimestampImpl.newInstance('20190101_000000'))
+            tSuiteName_, TSuiteTimestamp.newInstance('20190101_000000'))
         TSuiteExecutionRecord basis   = TSuiteExecutionRecordImpl.newInstance(tSuiteName_, tSuiteTimestamp_)
         expect:
         subject.compareTo(basis) > 0

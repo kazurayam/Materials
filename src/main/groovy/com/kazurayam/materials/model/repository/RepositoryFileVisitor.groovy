@@ -69,7 +69,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 LocalDateTime ldt = TSuiteTimestampImpl.parse(dir.getFileName().toString())
                 if (ldt != null) {
-                    tSuiteTimestamp_ = TSuiteTimestampImpl.newInstance(ldt)
+                    tSuiteTimestamp_ = TSuiteTimestamp.newInstance(ldt)
                     tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
                     repoRoot_.addTSuiteResult(tSuiteResult_)
                 } else {

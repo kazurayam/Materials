@@ -63,7 +63,7 @@ class MaterialRepositorySpec extends Specification {
     def testPutCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
         when:
         mr_.putCurrentTestSuite(
-                new TSuiteName('oneStringArg'), TSuiteTimestampImpl.newInstance('20180616_160000'))
+                new TSuiteName('oneStringArg'), TSuiteTimestamp.newInstance('20180616_160000'))
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -112,19 +112,19 @@ class MaterialRepositorySpec extends Specification {
     def testGetMaterials_withArgs() {
         when:
         List<Material> list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestampImpl.newInstance("20180530_130419"))
+            TSuiteTimestamp.newInstance("20180530_130419"))
         then:
         list.size() == 2
         //
         when:
         list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestampImpl.newInstance("20180530_130604"))
+            TSuiteTimestamp.newInstance("20180530_130604"))
         then:
         list.size() == 6
         //
         when:
         list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS2"),
-            TSuiteTimestampImpl.newInstance("20180612_111256"))
+            TSuiteTimestamp.newInstance("20180612_111256"))
         then:
         list.size() == 2
     }
@@ -203,7 +203,7 @@ class MaterialRepositorySpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
         when:
         TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180530_130419")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
         int count = mr.clear(tsn, tst)
         then:
         count == 2
@@ -229,7 +229,7 @@ class MaterialRepositorySpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
         when:
         TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
-        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180530_130419")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
         int count = mr.clear(tsn)        // HERE is difference
         then:
         count == 12

@@ -108,6 +108,14 @@ final class Helpers {
         )
         return count
     }
+    
+    private static FileVisitResult checkNotExist(final Path path) throws IOException {
+        if (! Files.exists(path)) {
+            return FileVisitResult.CONTINUE
+        } else {
+            throw new IOException("${path} remains")
+        }
+    }
 
 
     /**

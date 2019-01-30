@@ -12,10 +12,10 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestampImpl
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.model.repository.RepositoryWalker
@@ -93,7 +93,7 @@ class IndexerByVisitorImplSpec extends Specification {
              new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
          //
          TSuiteResult tsr = repoRoot_.getTSuiteResult(
-             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
+             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
          TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
          Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
          when:
@@ -140,7 +140,7 @@ class IndexerByVisitorImplSpec extends Specification {
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
@@ -160,7 +160,7 @@ class IndexerByVisitorImplSpec extends Specification {
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
@@ -181,7 +181,7 @@ class IndexerByVisitorImplSpec extends Specification {
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130604'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         expect:
         tcr != null
@@ -241,7 +241,7 @@ class IndexerByVisitorImplSpec extends Specification {
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestampImpl.newInstance('20180627_140853'))
+            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         expect:
         tcr != null
@@ -263,7 +263,7 @@ class IndexerByVisitorImplSpec extends Specification {
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestampImpl.newInstance('20180627_140853'))
+            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         expect:
         tcr != null
@@ -284,7 +284,8 @@ class IndexerByVisitorImplSpec extends Specification {
         IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
             new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), TSuiteTimestampImpl.newInstance('20180627_140853'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'),
+                                                    TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         expect:
         tcr != null

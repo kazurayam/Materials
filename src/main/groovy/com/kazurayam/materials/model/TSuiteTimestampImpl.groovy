@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.TSuiteTimestamp
 
-class TSuiteTimestampImpl implements TSuiteTimestamp {
+class TSuiteTimestampImpl extends TSuiteTimestamp {
 
     static Logger logger_ = LoggerFactory.getLogger(TSuiteTimestampImpl.class);
 
@@ -84,7 +84,7 @@ class TSuiteTimestampImpl implements TSuiteTimestamp {
      */
     static TSuiteTimestamp newInstance(LocalDateTime ts) {
         Objects.requireNonNull(ts)
-        TSuiteTimestamp tst = new TSuiteTimestampImpl(ts)
+        TSuiteTimestamp tst = new TSuiteTimestampImpl(ts.withNano(0))
         return tst
     }
 
