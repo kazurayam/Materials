@@ -16,7 +16,7 @@ import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.SelectBy
+import com.kazurayam.materials.RetrievalBy
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
@@ -88,7 +88,7 @@ class MaterialStorageImpl implements MaterialStorage {
     
     @Override
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException {
+        RetrievalBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     
@@ -118,7 +118,7 @@ class MaterialStorageImpl implements MaterialStorage {
     
     @Override
     int expire(TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException {
+        RetrievalBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     
@@ -176,7 +176,7 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException {
+        RetrievalBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
 

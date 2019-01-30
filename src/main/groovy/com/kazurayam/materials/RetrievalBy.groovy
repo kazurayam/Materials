@@ -1,27 +1,30 @@
 package com.kazurayam.materials
 
+import java.time.LocalDateTime
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.model.TSuiteResult
 
-abstract class SelectBy {
+abstract class RetrievalBy {
     
     /**
+     * identify TSuiteResult object(s) before the given tSuiteTimestamp.
      * 
      * @param tSuiteTimestamp
      * @return
      */
-    static SelectBy before(TSuiteTimestamp tSuiteTimestamp) {
-        return new SelectByBefore(tSuiteTimestamp)
+    static RetrievalBy before(TSuiteTimestamp tSuiteTimestamp) {
+        return new RetrievalByBefore(tSuiteTimestamp)
     }
 
-    /*
-    static SelectBy beforeHours(int beforeHours) {
-        return new SelectByBeforeHours(beforeHours)
+    /**
+     * 
+     * @param base
+     * @param days
+     * @return
+     */
+    static RetrievalBy before(LocalDateTime base, int hour, int minute, int second) {
+        return new RetrievalByBefore(base, hour, minute, second)    
     }
-    static SelectBy beforeMinutes(int beforeMinutes) {
-        return new SelectByBeforeMinutes(beforeMinutes)
-    }
-    */
 
     /**
      *
@@ -38,25 +41,45 @@ abstract class SelectBy {
     abstract TSuiteResult findTSuiteResult(SearchContext context)
 
 
+    /*
     @Override
     boolean equals(Object other) {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
+    */
 
+    /*
     @Override
     int hashCode() {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
+    */
 
     /**
      *
      */
-    static class SelectByBefore extends SelectBy {
+    static class RetrievalByBefore extends RetrievalBy {
         
         private TSuiteTimestamp tSuiteTimestamp_
         
-        SelectByBefore(TSuiteTimestamp tst) {
-            this.tSuiteTimestamp_ = tst
+        RetrievalByBefore(TSuiteTimestamp tSuiteTimestamp) {
+            Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+            this.tSuiteTimestamp_ = tSuiteTimestamp
+        }
+        
+        RetrievalByBefore(LocalDateTime base, int hour, int minute, int second) {
+            Objects.requireNonNull(base, "base must not be null")
+            if (hour < 0 || 23 < hour) {
+                throw new IllegalArgumentException("hour(${hour}) must be in the range of 0..23")
+            }
+            if (minute < 0 || 59 < minute) {
+                throw new IllegalArgumentException("minute(${minute}) must be in the range of 0..59")
+            }
+            if (second < 0 || 59 < second) {
+                throw new IllegalArgumentException("second(${second}) must be in the range of 0..59")
+            }
+            LocalDateTime d = base.withHour(hour).withMinute(minute).withSecond(second)
+            this.tSuiteTimestamp_ = TSuiteTimestamp.newInstance(d)
         }
         
         @Override
@@ -79,17 +102,7 @@ abstract class SelectBy {
                 return TSuiteResult.NULL
             }
         }
-    }
-
-    /*
-    static class SelectByBeforeHours extends SelectBy {}
-     */
-    /*
-    static class SelectByBeforeMinutes extends SelectBy {}
-     */
-    
-    
-    
+    }    
     
     
     /**

@@ -36,7 +36,7 @@ interface MaterialStorage {
      * @throws IOException
      */
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException
+        RetrievalBy selectBy) throws IOException
     
     
     /**
@@ -91,7 +91,7 @@ interface MaterialStorage {
      * @throws IOException
      */
     int expire(TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException
+        RetrievalBy selectBy) throws IOException
 
     /**
      * @return reference to the RepositoryRoot object contained in this MaterialStorage    
@@ -135,7 +135,7 @@ interface MaterialStorage {
      * @throws IOException
      */
     int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        SelectBy selectBy) throws IOException
+        RetrievalBy selectBy) throws IOException
     
 
 }
