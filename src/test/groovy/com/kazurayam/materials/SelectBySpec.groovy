@@ -28,7 +28,7 @@ class SelectBySpec extends Specification {
     
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialStorageSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(SelectBySpec.class)}")
         Helpers.copyDirectory(fixture_, workdir_)
         //
         mri_ = new MaterialRepositoryImpl(workdir_.resolve("Materials"))
@@ -38,7 +38,22 @@ class SelectBySpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
-    def test_tSuiteTimestamp() {
+    
+    def test_tSuiteTimestampBefore_oneOrMoreBefore() {
+        setup:
+        TSuiteName tsn = new TSuiteName("TS1")
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20180810_140106")
+        RepositoryRoot rr = mri_.getRepositoryRoot()
+        SelectBy.SearchContext context = new SelectBy.SearchContext(rr, tsn)
+        SelectBy by = SelectBy.tSuiteTimestampBefore(tst)
+        //
+        when:
+        List<TSuiteResult> list = by.findTSuiteResults(context)
+        then:
+        list.size() == 1
+    }
+
+    def test_tSuiteTimestampBefore_noneBefore() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
         TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance("20190123_153854")
@@ -49,13 +64,7 @@ class SelectBySpec extends Specification {
         when:
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
-        list.size() == 1
-        //
-        when:
-        TSuiteResult tSuiteResult = by.findTSuiteResult(context)
-        List<Material> materials = tSuiteResult.getMaterials()
-        then:
-        materials.size() == 1
+        list.size() == 0
     }
     
 }

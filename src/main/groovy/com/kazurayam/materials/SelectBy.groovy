@@ -64,6 +64,7 @@ abstract class SelectBy {
         
         @Override
         List<TSuiteResult> findTSuiteResults(SearchContext context) {
+            Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
             return rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
@@ -71,11 +72,12 @@ abstract class SelectBy {
         
         @Override
         TSuiteResult findTSuiteResult(SearchContext context) {
+            Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
-            List<TSuiteResult> tSuiteResults = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
-            if (tSuiteResults.size() > 0) {
-                return tSuiteResults[0]
+            List<TSuiteResult> results = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            if (results.size() > 0) {
+                return results[0]
             } else {
                 return TSuiteResult.NULL
             }
@@ -92,19 +94,30 @@ abstract class SelectBy {
     static class SelectByBeforeMinutes extends SelectBy {}
      */
     
-    // ------------------------------------------------------------
+    
+    
+    
+    
+    /**
+     * 
+     */
     static class SearchContext {
-        private RepositoryRoot rr_
-        private TSuiteName tsn_
-        private SearchContext(RepositoryRoot rr, TSuiteName tsn) {
-            rr_ = rr   
-            tsn_ = tsn
+        
+        private RepositoryRoot repositoryRoot_
+        private TSuiteName tSuiteName_
+        
+        private SearchContext(RepositoryRoot repositoryRoot, TSuiteName tSuiteName) {
+            Objects.requireNonNull(repositoryRoot, "repositoryRoot must not be null")
+            repositoryRoot_ = repositoryRoot   
+            tSuiteName_ = tSuiteName
         }
+        
         RepositoryRoot getRepositoryRoot() {
-            return rr_
+            return repositoryRoot_
         }
+        
         TSuiteName getTSuiteName() {
-            return tsn_
+            return tSuiteName_
         }
     }
 

@@ -105,7 +105,16 @@ class RepositoryRootSpec extends Specification {
         then:
         tsrList[0].getTSuiteTimestamp().equals(expectedTst)
     }
-
+    
+    def testGetTSuiteResultsBeforeExclusive_47News() {
+        when:
+        TSuiteName tsn = new TSuiteName('Montor47News')
+        TSuiteTimestamp tst = TSuiteTimestampImpl.newInstance('20190123_153854')
+        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
+        then:
+        tsrList.size() == 0
+    }
+    
     def testGetSortedTSuiteResults() {
         when:
         RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
