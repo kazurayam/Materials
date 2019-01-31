@@ -99,19 +99,23 @@ class MaterialStorageImpl implements MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSUiteName must not be null")
-        List<TSuiteResult> list = componentMR_.getTSuiteResults(tSuiteName)
+        List<TSuiteResult> list = fromMR.getTSuiteResults(tSuiteName)
+        int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            this.backup(fromMR, tSuiteName, tSuiteResult.getTSuiteTimestamp())
+            count += this.backup(fromMR, tSuiteName, tSuiteResult.getTSuiteTimestamp())
         }
+        return count
     }
     
     @Override
     int backup(MaterialRepository fromMR) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         List<TSuiteResult> list = componentMR_.getTSuiteResults()
+        int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            this.backup(fromMR, tSuiteResult.getTSuiteName())
+            count += this.backup(fromMR, tSuiteResult.getTSuiteName())
         }
+        return count
     }
     
     @Override
@@ -172,14 +176,13 @@ class MaterialStorageImpl implements MaterialStorage {
     /**
      *
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
         //
         intoMR.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
         //
-        List<Material> sourceList = componentMR_.getMaterials(tSuiteName, tSuiteTimestamp)
-        logger_.info("sourceList.size()=${sourceList.size()}")
         int count = 0
+        TSuiteResult tsr = componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+        List<Material> sourceList = tsr.getMaterials()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()

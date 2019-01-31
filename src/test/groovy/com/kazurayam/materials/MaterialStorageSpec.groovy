@@ -46,6 +46,18 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
+    def testBackup_specifyingTSuiteName() {
+        setup:
+        Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteName")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        int num = ms.backup(mr_, new TSuiteName("Monitor47News"))
+        then:
+        num == 2
+    }
+    
+    
     def testBackup_all() {
         setup:
         Path stepWork = workdir_.resolve("testBackup_all")
@@ -112,18 +124,57 @@ class MaterialStorageSpec extends Specification {
     }
         
     def testGetTSuiteResult() {
-        expect:
-        false
+        setup:
+        Path stepWork = workdir_.resolve("testGetTSuiteResult")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 2
+        when:
+        TSuiteResult tsr = ms.getTSuiteResult(tsn, tst)
+        then:
+        tsr != null
+        tsr.getTSuiteName().equals(tsn)
+        tsr.getTSuiteTimestamp().equals(tst)
     }
     
     def testGetTSuiteResults_withTSuiteName() {
-        expect:
-        false
+        setup:
+        Path stepWork = workdir_.resolve("testGetTSuiteResult_withTSuiteName")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
+        int num = ms.backup(mr_, tsn, tst)
+        then:
+        num == 2
+        when:
+        List<TSuiteResult> list = ms.getTSuiteResults(tsn)
+        then:
+        list != null
+        list.size() == 1
     }
     
     def testGetTSuiteResults_noArgs() {
-        expect:
-        false
+        setup:
+        Path stepWork = workdir_.resolve("testGetTSuiteResult_noArgs")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        int num = ms.backup(mr_, tsn)
+        then:
+        num == 12
+        when:
+        List<TSuiteResult> list = ms.getTSuiteResults()
+        then:
+        list != null
+        list.size() == 4
     }
     
     def testRestore_specifyingTSuiteTimestamp() {
