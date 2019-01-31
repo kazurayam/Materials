@@ -4,6 +4,24 @@ import java.time.LocalDateTime
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.model.TSuiteResult
 
+/**
+ * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
+ * Two strategies are implemented.
+ * 1. before(TSuiteTimestamp)
+ * 2. before(LocalDateTime base, int hour, int minute, in second)
+ * 
+ * The caller have chance to set the base with various values.
+ * 1. base = LocalDateTime.now() means 'now'
+ * 2. base = LocalDateTime.of(2018, 1, 31, 10, 50, 0) means 31,January 2018 10hours 50minutes 0seconds
+ * 3. base = LocalDateTime.now().minusDays(1) means 'yesterday'
+ * 4. base = LocalDateTime.now().minusWeeks(1).with(DayOfWeek.FRIDAY) means 'the last friday prior to today'
+ * 5. base = LocalDateTime.now().minusMonths(1).withDayOfMonth(25) means '25 of the last months prior to today'
+ * 
+ * See the source of src/test/groovy/com/kazurayam/materials/RetrievalBySpec.groovy where
+ * you can find a few sample codes how to use RetrievalBy.
+ * 
+ * @author kazurayam
+ */
 abstract class RetrievalBy {
     
     /**
@@ -40,28 +58,18 @@ abstract class RetrievalBy {
      */
     abstract TSuiteResult findTSuiteResult(SearchContext context)
 
-
-    /*
-    @Override
-    boolean equals(Object other) {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    */
-
-    /*
-    @Override
-    int hashCode() {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    */
-
+    
+    
+    
     /**
-     *
+     * Implementation of the RetrivalBy interface
      */
-    static class RetrievalByBefore extends RetrievalBy {
-        
+    static class RetrievalByBefore extends RetrievalBy {    
         private TSuiteTimestamp tSuiteTimestamp_
-        
+        /**
+         * 
+         * @param tSuiteTimestamp
+         */
         RetrievalByBefore(TSuiteTimestamp tSuiteTimestamp) {
             Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
             this.tSuiteTimestamp_ = tSuiteTimestamp
