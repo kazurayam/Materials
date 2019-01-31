@@ -10,6 +10,7 @@ import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.model.TSuiteResult
 
 import spock.lang.Specification
 
@@ -45,6 +46,17 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
+    def testBackup_all() {
+        setup:
+        Path stepWork = workdir_.resolve("testBackup_all")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        int num = ms.backup(mr_)
+        then:
+        num == 1
+    }
+    
     def testClear_withTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testClear")
@@ -58,9 +70,9 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.clear(tsn, tst)
-        List<Material> materials = ms.getMaterials()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
         then:
-        materials.size() == 0
+        tSuiteResults.size() == 0
     }
 
     def testClear_withOnlyTSuiteName() {
@@ -76,9 +88,9 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.clear(tsn)    // HERE is difference
-        List<Material> materials = ms.getMaterials()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
         then:
-        materials.size() == 0
+        tSuiteResults.size() == 0
     }
 
     def testEmpty() {
@@ -94,43 +106,24 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.empty()
-        List<Material> materials = ms.getMaterials()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
         then:
-        materials.size() == 0
+        tSuiteResults.size() == 0
+    }
+        
+    def testGetTSuiteResult() {
+        expect:
+        false
     }
     
-    def testGetMaterials_noArgs() {
-        setup:
-        Path stepWork = workdir_.resolve("testGetMaterials_noArgs")
-        Path msdir = stepWork.resolve("Storage")
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        when:
-        TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-        int num = ms.backup(mr_, tsn, tst)
-        then:
-        num == 1
-        when:
-        List<Material> materials = ms.getMaterials()
-        then:
-        materials.size() == 1
+    def testGetTSuiteResults_withTSuiteName() {
+        expect:
+        false
     }
     
-    def testGetMaterials_withArgs() {
-        setup:
-        Path stepWork = workdir_.resolve("testGetMaterials_noArgs")
-        Path msdir = stepWork.resolve("Storage")
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        when:
-        TSuiteName tsn = new TSuiteName("Monitor47News")
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-        int num = ms.backup(mr_, tsn, tst)
-        then:
-        num == 1
-        when:
-        List<Material> materials = ms.getMaterials(tsn, tst)
-        then:
-        materials.size() == 1
+    def testGetTSuiteResults_noArgs() {
+        expect:
+        false
     }
     
     def testRestore_specifyingTSuiteTimestamp() {

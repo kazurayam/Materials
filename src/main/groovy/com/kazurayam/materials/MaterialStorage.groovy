@@ -1,5 +1,8 @@
 package com.kazurayam.materials
 
+import java.nio.file.Path
+
+import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
 /**
@@ -11,7 +14,6 @@ import com.kazurayam.materials.model.repository.RepositoryRoot
  */
 interface MaterialStorage {
     
-
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp 
      * from the project's Materials folder (fromMR) into this Material Storage.
@@ -38,6 +40,25 @@ interface MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         RetrievalBy selectBy) throws IOException
     
+    /**
+     * copy a set of Material files in the project's Materials folder (fromMR) beloging to the tSuiteName  
+     * at the timing of invokation into this Material Storage
+     * 
+     * @param fromMR
+     * @return
+     * @throws IOException
+     */
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException
+    
+    /**
+     * copy all Material files in the project's Materials folder (fromMR)
+     * at the timing of invokation into this Material Storage
+     *
+     * @param fromMR
+     * @return
+     * @throws IOException
+     */
+    int backup(MaterialRepository fromMR) throws IOException
     
     /**
      * delete all of subdirectories and material files which belogns to 
@@ -99,18 +120,32 @@ interface MaterialStorage {
     RepositoryRoot getRepositoryRoot()
     
     /**
-     * @return List of Material objects contained in the current MaterialStorage
+     * 
+     * @return the baseDir Path
      */
-    List<Material> getMaterials()
-
+    Path getBaseDir()
+    
     /**
+     * 
      * @param tSuiteName
      * @param tSuiteTimestamp
-     * @return List of Material objects belonging to the tSuiteName + tSuiteTimestamp 
-     * contained in the current MaterialStorage
+     * @return
      */
-    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    
+    /**
+     * 
+     * @param tSuiteName
+     * @return
+     */
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName)
+    
+    
+    /**
+     * 
+     */
+    List<TSuiteResult> getTSuiteResults()
+    
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp
      * from this Material Storage into the project's Materials folder (intoMR).

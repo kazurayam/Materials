@@ -2,6 +2,8 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
+import com.kazurayam.materials.model.TSuiteResult
+
 /**
  * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.
@@ -44,7 +46,11 @@ interface MaterialRepository {
     Path getCurrentTestSuiteDirectory()
 
     Path getTestCaseDirectory(String testCaseId)
-
+    
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName)
+    List<TSuiteResult> getTSuiteResults()
+    
     /**
      *
      * @param testCaseId e.g., 'Test Cases/TC1'
@@ -75,27 +81,6 @@ interface MaterialRepository {
      */
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
-
-    /**
-     *     
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return List of Material objects belonging to the tSuiteName + tSuiteTimestamp
-     */
-    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-
-    /**
-     *
-     * @param tSuiteName
-     * @return List of Material objects belonging to the tSuiteName
-     */
-    List<Material> getMaterials(TSuiteName tSuiteName)
-
-    /**
-     *
-     * @return List of all Material objects contained
-     */
-    List<Material> getMaterials()
 
     /**
      * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.

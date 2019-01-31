@@ -11,6 +11,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.model.TSuiteTimestampImpl
+import com.kazurayam.materials.model.TSuiteResult
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -108,26 +109,6 @@ class MaterialRepositorySpec extends Specification {
         then:
         testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
     }
-    
-    def testGetMaterials_withArgs() {
-        when:
-        List<Material> list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180530_130419"))
-        then:
-        list.size() == 2
-        //
-        when:
-        list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180530_130604"))
-        then:
-        list.size() == 6
-        //
-        when:
-        list = mr_.getMaterials(new TSuiteName("Test Suites/main/TS2"),
-            TSuiteTimestamp.newInstance("20180612_111256"))
-        then:
-        list.size() == 2
-    }
 
     def testGetTestCaseDirectory() {
         when:
@@ -135,6 +116,35 @@ class MaterialRepositorySpec extends Specification {
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
         then:
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
+    }
+    
+    def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
+        when:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
+        mr_.putCurrentTestSuite(tsn, tst)
+        TSuiteResult tsr = mr_.getTSuiteResult(tsn, tst)
+        then:
+        tsr != null
+        tsr.getTSuiteName().equals(tsn)
+        tsr.getTSuiteTimestamp().equals(tst)
+        
+    }
+    
+    def testGetTSuiteResults_withTSuiteName() {
+        when:
+        List<TSuiteResult> list = mr_.getTSuiteResults(new TSuiteName('Test Suites/main/TS1'))
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResults_noArgs() {
+        when:
+        List<TSuiteResult> list = mr_.getTSuiteResults()
+        then:
+        list != null
+        list.size() == 13
     }
 
     def testResolveScreenshotPath() {
@@ -208,9 +218,9 @@ class MaterialRepositorySpec extends Specification {
         then:
         count == 2
         when:
-        List<Material> list = mr.getMaterials(tsn, tst)
+        TSuiteResult result= mr.getTSuiteResult(tsn, tst)
         then:
-        list.size() == 0
+        result == null
         when:
         mr.putCurrentTestSuite(tsn)
         Path tsnDir = mr.getCurrentTestSuiteDirectory()
@@ -234,7 +244,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         count == 12
         when:
-        List<Material> list = mr.getMaterials(tsn)
+        List<TSuiteResult> list = mr.getTSuiteResults(tsn)
         then:
         list.size() == 0
         when:

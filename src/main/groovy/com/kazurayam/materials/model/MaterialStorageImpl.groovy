@@ -61,11 +61,15 @@ class MaterialStorageImpl implements MaterialStorage {
     @Override
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
         TSuiteTimestamp tSuiteTimestamp) throws IOException {
+        Objects.requireNonNull(fromMR, "fromMR must not be null")
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         //
         componentMR_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
         //
-        List<Material> sourceList = fromMR.getMaterials(tSuiteName, tSuiteTimestamp)
         int count = 0
+        TSuiteResult tsr = fromMR.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+        List<Material> sourceList = tsr.getMaterials()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()
@@ -87,9 +91,27 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException {
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, RetrievalBy selectBy) throws IOException {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
+    }
+    
+    @Override
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException {
+        Objects.requireNonNull(fromMR, "fromMR must not be null")
+        Objects.requireNonNull(tSuiteName, "tSUiteName must not be null")
+        List<TSuiteResult> list = componentMR_.getTSuiteResults(tSuiteName)
+        for (TSuiteResult tSuiteResult : list) {
+            this.backup(fromMR, tSuiteName, tSuiteResult.getTSuiteTimestamp())
+        }
+    }
+    
+    @Override
+    int backup(MaterialRepository fromMR) throws IOException {
+        Objects.requireNonNull(fromMR, "fromMR must not be null")
+        List<TSuiteResult> list = componentMR_.getTSuiteResults()
+        for (TSuiteResult tSuiteResult : list) {
+            this.backup(fromMR, tSuiteResult.getTSuiteName())
+        }
     }
     
     @Override
@@ -127,23 +149,26 @@ class MaterialStorageImpl implements MaterialStorage {
         return this.componentMR_.getRepositoryRoot()    
     }
     
-    /**
-     * 
-     * @return
-     */
     @Override
-    List<Material> getMaterials() {
-        return componentMR_.getMaterials()
+    Path getBaseDir() {
+        return componentMR_.getBaseDir()    
     }
     
-    /**
-     * 
-     */
     @Override
-    List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-       return componentMR_.getMaterials(tSuiteName, tSuiteTimestamp) 
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        return componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
     }
     
+    @Override
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+        return componentMR_.getTSuiteResults(tSuiteName)
+    }
+    
+    @Override
+    List<TSuiteResult> getTSuiteResults() {
+        return componentMR_.getTSuiteResults()
+    }
+        
     /**
      *
      */
