@@ -99,7 +99,7 @@ class MaterialStorageImpl implements MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSUiteName must not be null")
-        List<TSuiteResult> list = fromMR.getTSuiteResults(tSuiteName)
+        List<TSuiteResult> list = fromMR.getTSuiteResultList(tSuiteName)
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
             count += this.backup(fromMR, tSuiteName, tSuiteResult.getTSuiteTimestamp())
@@ -110,7 +110,7 @@ class MaterialStorageImpl implements MaterialStorage {
     @Override
     int backup(MaterialRepository fromMR) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
-        List<TSuiteResult> list = componentMR_.getTSuiteResults()
+        List<TSuiteResult> list = componentMR_.getTSuiteResultList()
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
             count += this.backup(fromMR, tSuiteResult.getTSuiteName())
@@ -164,13 +164,13 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
-        return componentMR_.getTSuiteResults(tSuiteName)
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        return componentMR_.getTSuiteResultList(tSuiteName)
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResults() {
-        return componentMR_.getTSuiteResults()
+    List<TSuiteResult> getTSuiteResultList() {
+        return componentMR_.getTSuiteResultList()
     }
         
     /**

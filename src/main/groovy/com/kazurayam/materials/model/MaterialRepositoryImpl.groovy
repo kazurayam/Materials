@@ -193,7 +193,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         List<TSuiteResult> list = new ArrayList<TSuiteResult>()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
@@ -206,7 +206,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResults() {
+    List<TSuiteResult> getTSuiteResultList() {
         return repoRoot_.getTSuiteResults()
     }
 

@@ -131,17 +131,17 @@ class MaterialRepositorySpec extends Specification {
         
     }
     
-    def testGetTSuiteResults_withTSuiteName() {
+    def testGetTSuiteResultList_withTSuiteName() {
         when:
-        List<TSuiteResult> list = mr_.getTSuiteResults(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> list = mr_.getTSuiteResultList(new TSuiteName('Test Suites/main/TS1'))
         then:
         list != null
         list.size() == 4
     }
     
-    def testGetTSuiteResults_noArgs() {
+    def testGetTSuiteResultList_noArgs() {
         when:
-        List<TSuiteResult> list = mr_.getTSuiteResults()
+        List<TSuiteResult> list = mr_.getTSuiteResultList()
         then:
         list != null
         list.size() == 13
@@ -244,7 +244,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         count == 12
         when:
-        List<TSuiteResult> list = mr.getTSuiteResults(tsn)
+        List<TSuiteResult> list = mr.getTSuiteResultList(tsn)
         then:
         list.size() == 0
         when:

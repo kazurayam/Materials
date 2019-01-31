@@ -138,13 +138,13 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName)
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName)
     
     
     /**
      * 
      */
-    List<TSuiteResult> getTSuiteResults()
+    List<TSuiteResult> getTSuiteResultList()
     
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp

@@ -82,7 +82,7 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.clear(tsn, tst)
-        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
         then:
         tSuiteResults.size() == 0
     }
@@ -100,7 +100,7 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.clear(tsn)    // HERE is difference
-        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
         then:
         tSuiteResults.size() == 0
     }
@@ -118,7 +118,7 @@ class MaterialStorageSpec extends Specification {
         num == 1
         when:
         ms.empty()
-        List<TSuiteResult> tSuiteResults = ms.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
         then:
         tSuiteResults.size() == 0
     }
@@ -142,7 +142,7 @@ class MaterialStorageSpec extends Specification {
         tsr.getTSuiteTimestamp().equals(tst)
     }
     
-    def testGetTSuiteResults_withTSuiteName() {
+    def testGetTSuiteResultList_withTSuiteName() {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResult_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
@@ -154,13 +154,13 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 2
         when:
-        List<TSuiteResult> list = ms.getTSuiteResults(tsn)
+        List<TSuiteResult> list = ms.getTSuiteResultList(tsn)
         then:
         list != null
         list.size() == 1
     }
     
-    def testGetTSuiteResults_noArgs() {
+    def testGetTSuiteResultList_noArgs() {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResult_noArgs")
         Path msdir = stepWork.resolve("Storage")
@@ -171,7 +171,7 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 12
         when:
-        List<TSuiteResult> list = ms.getTSuiteResults()
+        List<TSuiteResult> list = ms.getTSuiteResultList()
         then:
         list != null
         list.size() == 4

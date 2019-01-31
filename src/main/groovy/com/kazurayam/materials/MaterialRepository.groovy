@@ -48,8 +48,8 @@ interface MaterialRepository {
     Path getTestCaseDirectory(String testCaseId)
     
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName)
-    List<TSuiteResult> getTSuiteResults()
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName)
+    List<TSuiteResult> getTSuiteResultList()
     
     /**
      *
