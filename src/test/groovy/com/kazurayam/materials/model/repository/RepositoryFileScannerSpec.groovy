@@ -89,7 +89,7 @@ class RepositoryFileScannerSpec extends Specification {
 
         //
         when:
-        List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResults()
+        List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResultList()
         then:
         tCaseResults.size() == 1
         //
@@ -102,7 +102,7 @@ class RepositoryFileScannerSpec extends Specification {
 
         //
         when:
-        List<Material> materials = tCaseResult.getMaterials()
+        List<Material> materials = tCaseResult.getMaterialList()
         then:
         materials.size() == 2
         //
@@ -149,7 +149,7 @@ class RepositoryFileScannerSpec extends Specification {
         TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         LocalDateTime lastModifiedOfTCaseResult = tcr.getLastModified()
         LocalDateTime lastModifiedOfMaterials = LocalDateTime.MIN
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         for (Material mate : materials) {
             if (mate.getLastModified() > lastModifiedOfMaterials) {
                 lastModifiedOfMaterials = mate.getLastModified()
@@ -178,7 +178,7 @@ class RepositoryFileScannerSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
         LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
-        List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResults()
+        List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResultList()
         for (TCaseResult tcr : tCaseResults) {
             if (tcr.getLastModified() > lastModifiedOfTCaseResults) {
                 lastModifiedOfTCaseResults = tcr.getLastModified()
@@ -216,7 +216,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         logger_.debug("testScan_MaterialsUnderSubpath tcr.toJson()=${JsonOutput.prettyPrint(tcr.toJson())}")
         then:
-        tcr.getMaterials().size() == 2
+        tcr.getMaterialList().size() == 2
         tcr.getMaterial(Paths.get('foo/bar/smilechart.xls')) != null
         tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) != null
     }
@@ -232,7 +232,7 @@ class RepositoryFileScannerSpec extends Specification {
             new TSuiteName("Test Suites/main/TS1"), TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         then:
         materials.size() == 5
     }

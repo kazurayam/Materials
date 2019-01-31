@@ -16,10 +16,10 @@ final class RepositoryWalker {
         for (TSuiteResult tSuiteResult : repoRoot.getSortedTSuiteResults()) {
             visitor.preVisitTSuiteResult(tSuiteResult)
 
-            for (TCaseResult tCaseResult : tSuiteResult.getTCaseResults()) {
+            for (TCaseResult tCaseResult : tSuiteResult.getTCaseResultList()) {
                 visitor.preVisitTCaseResult(tCaseResult)
 
-                for (Material material : tCaseResult.getMaterials()) {
+                for (Material material : tCaseResult.getMaterialList()) {
 
                     try {
                         if (material.getPath().toFile().exists()) {

@@ -189,7 +189,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      */
     private LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tcr) {
         LocalDateTime lastModified = LocalDateTime.MIN
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         for (Material mate : materials) {
             if (mate.getLastModified() > lastModified) {
                 lastModified = mate.getLastModified()
@@ -205,7 +205,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      */
     private LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
         LocalDateTime lastModified = LocalDateTime.MIN
-        List<TCaseResult> tCaseResults = tsr.getTCaseResults()
+        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
         for (TCaseResult tcr : tCaseResults) {
             if (tcr.getLastModified() > lastModified) {
                 lastModified = tcr.getLastModified()

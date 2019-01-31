@@ -165,7 +165,7 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         return null
     }
 
-    List<TCaseResult> getTCaseResults() {
+    List<TCaseResult> getTCaseResultList() {
         return Collections.unmodifiableList(tCaseResults_)
     }
 
@@ -194,10 +194,10 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
     // ------------------- helpers -----------------------------------------------
-    List<Material> getMaterials() {
+    List<Material> getMaterialList() {
         List<Material> materials = new ArrayList<Material>()
-        for (TCaseResult tcr : this.getTCaseResults()) {
-            for (Material mate : tcr.getMaterials()) {
+        for (TCaseResult tcr : this.getTCaseResultList()) {
+            for (Material mate : tcr.getMaterialList()) {
                 materials.add(mate)
             }
         }

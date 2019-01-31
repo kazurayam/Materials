@@ -377,8 +377,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteResult expectedTSR = tSuiteResults[1]
 
         // create the instance of List<MaterialPairs>
-        List<Material> expMaterials = expectedTSR.getMaterials()
-        List<Material> actMaterials = actualTSR.getMaterials()
+        List<Material> expMaterials = expectedTSR.getMaterialList()
+        List<Material> actMaterials = actualTSR.getMaterialList()
         for (Material expMate : expMaterials) {
             Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
             for (Material actMate : actMaterials) {

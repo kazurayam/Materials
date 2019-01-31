@@ -78,11 +78,11 @@ class TSuiteResultSpec extends Specification {
         tcr.getParent() == tsr
     }
 
-    def testGetTCaseResults() {
+    def testGetTCaseResultList() {
         when:
         TSuiteResult tsr = mri_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
-        List<TCaseResult> tCaseResults = tsr.getTCaseResults()
+        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
         then:
         tCaseResults != null
         tCaseResults.size() == 2

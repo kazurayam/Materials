@@ -69,7 +69,7 @@ class MaterialStorageImpl implements MaterialStorage {
         //
         int count = 0
         TSuiteResult tsr = fromMR.getTSuiteResult(tSuiteName, tSuiteTimestamp)
-        List<Material> sourceList = tsr.getMaterials()
+        List<Material> sourceList = tsr.getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()
@@ -182,7 +182,7 @@ class MaterialStorageImpl implements MaterialStorage {
         //
         int count = 0
         TSuiteResult tsr = componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
-        List<Material> sourceList = tsr.getMaterials()
+        List<Material> sourceList = tsr.getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()

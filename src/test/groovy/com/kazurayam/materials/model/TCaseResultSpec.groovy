@@ -71,13 +71,13 @@ class TCaseResultSpec extends Specification {
     }
 
 
-    def testGetMaterialsOfDifferentSuffixes() {
+    def testGetMaterialListOfDifferentSuffixes() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> mateList = tcr.getMaterials(Paths.get('.'), new URL('http://demoaut.katalon.com/'), FileType.PNG)
+        List<Material> mateList = tcr.getMaterialList(Paths.get('.'), new URL('http://demoaut.katalon.com/'), FileType.PNG)
         then:
         mateList.size() == 2
     }
@@ -127,30 +127,16 @@ class TCaseResultSpec extends Specification {
         thrown(IllegalStateException)
     }
 
-    def testGetMaterials() {
+    def testGetMaterialList() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         then:
         materials.size() == 2
     }
 
-    /*
-    def testGetMaterials_reproducingProblem() {
-        when:
-        RepositoryRoot repoRoot = scanner_.getRepositoryRoot()
-        logger_.debug("#testGetMaterials_reproducingProblem repoRoot is ${JsonOutput.prettyPrint(repoRoot.toJson())}")
-        TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/AllCorps'), TSuiteTimestamp.newInstance('20180810_095325'))
-        assert tsr != null
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/fnhp/ecza/visitAllFunds_ecza_pc'))
-        List<Material> materials = tcr.getMaterials()
-        then:
-        materials.size() == 4
-    }
-     */
 
     def testToJson() {
         setup:
@@ -170,20 +156,6 @@ class TCaseResultSpec extends Specification {
         str.endsWith('}}')
     }
 
-    /*
-    def testToBootstrapTreeviewData() {
-        setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp('20180530_130419'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        when:
-        def str = tcr.toBootstrapTreeviewData()
-        logger_.debug("#testToBootstrapTreeviewData: \n${JsonOutput.prettyPrint(str)}")
-        then:
-        str.contains('text')
-        str.contains('nodes')
-    }
-    */
 
     def testEquals() {
         setup:

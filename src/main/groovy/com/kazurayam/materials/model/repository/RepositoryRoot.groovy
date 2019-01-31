@@ -168,7 +168,7 @@ final class RepositoryRoot {
     List<Material> getMaterials() {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
-            List<Material> mates = tsr.getMaterials()
+            List<Material> mates = tsr.getMaterialList()
             for (Material mate : mates) {
                 list.add(mate)
             }
@@ -186,7 +186,7 @@ final class RepositoryRoot {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
             if (tsr.getTSuiteName().equals(tSuiteName)) {
-                List<Material> mates =  tsr.getMaterials()
+                List<Material> mates =  tsr.getMaterialList()
                 for (Material mate : mates) {
                     list.add(mate)
                 }
@@ -207,7 +207,7 @@ final class RepositoryRoot {
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
             if (tsr.getTSuiteName().equals(tSuiteName) &&
                 tsr.getTSuiteTimestamp().equals(tSuiteTimestamp)) {
-                    List<Material> mates =  tsr.getMaterials()
+                    List<Material> mates =  tsr.getMaterialList()
                     for (Material mate : mates) {
                         list.add(mate)
                     }

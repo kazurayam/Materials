@@ -185,7 +185,7 @@ class IndexerByVisitorImplSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         expect:
         tcr != null
-        tcr.getMaterials().size() == 5
+        tcr.getMaterialList().size() == 5
         when:
         htmlSnippet.getBuffer().setLength(0)
         def mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)

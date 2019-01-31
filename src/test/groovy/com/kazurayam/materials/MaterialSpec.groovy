@@ -333,7 +333,7 @@ class MaterialSpec extends Specification {
                 new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         for (Material mate : materials) {
             logger_.debug("#testGetPath_Excel mate.getPath()=${mate.getPath()}")
             assert !mate.getPath().contains('..')

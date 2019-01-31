@@ -72,11 +72,11 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
     // --------------------- create/add/get child nodes ----------------------
 
-    List<Material> getMaterials() {
+    List<Material> getMaterialList() {
         return materials_
     }
 
-    List<Material> getMaterials(Path dirpath, URL url, FileType fileType) {
+    List<Material> getMaterialList(Path dirpath, URL url, FileType fileType) {
         Objects.requireNonNull(dirpath)
         Objects.requireNonNull(url)
         Objects.requireNonNull(fileType)
@@ -116,7 +116,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         if (parent_ == null) {
             throw new IllegalStateException("parent_ is null")
         }
-        List<Material> materials = this.getMaterials()
+        List<Material> materials = this.getMaterialList()
         //logger_.debug("#getMaterial materials.size()=${materials.size()}")
         for (Material mate : materials) {
             Path matePath = mate.getPath()
@@ -137,7 +137,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
             throw new IllegalArgumentException(msg)
         }
         boolean found = false
-        for (Material mate : materials) {
+        for (Material mate : materialList) {
             if (mate == material) {
                 found = true
             }
@@ -157,7 +157,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         Objects.requireNonNull(fileType)
         logger_.debug("#allocateNewSuffix subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Suffix> suffixList = new ArrayList<>()
-        List<Material> mateList = this.getMaterials(subpath, url, fileType)
+        List<Material> mateList = this.getMaterialList(subpath, url, fileType)
         logger_.debug("#allocateNewSuffix mateList.size()=${mateList.size()}")
         for (Material mate : mateList) {
             suffixList.add(mate.getSuffix())
