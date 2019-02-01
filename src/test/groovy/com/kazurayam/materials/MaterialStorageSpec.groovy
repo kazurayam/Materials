@@ -35,7 +35,7 @@ class MaterialStorageSpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
-    def testBackup_specifyingTSuiteTimestamp() {
+    def testBackup_specifyingTSuiteNameAndTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
@@ -66,10 +66,10 @@ class MaterialStorageSpec extends Specification {
         when:
         int num = ms.backup(mr_)
         then:
-        num == 1
+        num > 1
     }
     
-    def testClear_withTSuiteTimestamp() {
+    def testClear_withTSuiteNameAndTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testClear")
         Path msdir = stepWork.resolve("Storage")

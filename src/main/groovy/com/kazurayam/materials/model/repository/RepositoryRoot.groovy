@@ -81,7 +81,11 @@ final class RepositoryRoot {
      * @return List of all TSuiteResult in the Repository, the List is unmodifiable
      */
     List<TSuiteResult> getTSuiteResults() {
-        return Collections.unmodifiableList(tSuiteResults_)
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : tSuiteResults_) {
+            result.add(tsr)
+        }
+        return Collections.unmodifiableList(result)
     }
     
     

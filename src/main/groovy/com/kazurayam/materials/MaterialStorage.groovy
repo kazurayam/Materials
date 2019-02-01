@@ -24,21 +24,19 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
 
     /**
-     * copy a set of Material files identified by a pair of a tSuiteName and a SelectBy object
+     * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
      * from the project's Materials folder (fromMR) into this Material Storage.
      * 
      * @param fromMR
      * @param tSuiteName
-     * @param selectBy
+     * @param retrievalBy
      * @return number of Material files transfered
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
     
     /**
      * copy a set of Material files in the project's Materials folder (fromMR) beloging to the tSuiteName  
@@ -151,21 +149,19 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
     
     /**
-     * copy a set of Material files identified by a pair of a tSuiteName and a SelectBy object
+     * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
      * from this Material Storage into the project's Materials folder (intoMR).
      *
      * @param intoMR
      * @param tSuiteName
-     * @param selectBy
+     * @param retrievalBy
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
     
 
 }

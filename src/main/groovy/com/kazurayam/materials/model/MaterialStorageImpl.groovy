@@ -59,8 +59,7 @@ class MaterialStorageImpl implements MaterialStorage {
      * from the Materials dir of the project into the external Storage directory
      */
     @Override
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException {
+    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
@@ -82,6 +81,7 @@ class MaterialStorageImpl implements MaterialStorage {
             }
             CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
             Files.copy(sourceMate.getPath(), copyTo, options)
+            logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
             count += 1
         }
         // scan the directories/files to update the internal status of componentMR
@@ -110,10 +110,11 @@ class MaterialStorageImpl implements MaterialStorage {
     @Override
     int backup(MaterialRepository fromMR) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
-        List<TSuiteResult> list = componentMR_.getTSuiteResultList()
+        List<TSuiteResult> list = fromMR.getTSuiteResultList()
+        logger_.debug("#backup(MaterialRepository) list.size()=${list.size()}")
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getTSuiteName())
+            count += this.backup(fromMR, tSuiteResult.getTSuiteName(), tSuiteResult.getTSuiteTimestamp())
         }
         return count
     }
@@ -191,6 +192,7 @@ class MaterialStorageImpl implements MaterialStorage {
             }
             CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
             Files.copy(sourceMate.getPath(), copyTo, options)
+            logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
             count += 1
         }
         // Is it ok to do this? not sure.
