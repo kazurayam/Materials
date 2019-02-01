@@ -136,6 +136,38 @@ class RetrievalBySpec extends Specification {
     }
     
     /**
+     * test getting the last business day prior to the day given.
+     * @return
+     */
+    def testLastBusinessDay() {
+        expect:
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,29,0,0,0)).equals(LocalDateTime.of(2018,1,28,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,28,0,0,0)).equals(LocalDateTime.of(2018,1,25,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,27,0,0,0)).equals(LocalDateTime.of(2018,1,25,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,26,0,0,0)).equals(LocalDateTime.of(2018,1,25,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,25,0,0,0)).equals(LocalDateTime.of(2018,1,24,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,24,0,0,0)).equals(LocalDateTime.of(2018,1,23,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,23,0,0,0)).equals(LocalDateTime.of(2018,1,22,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,22,0,0,0)).equals(LocalDateTime.of(2018,1,21,0,0,0))
+        RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,21,0,0,0)).equals(LocalDateTime.of(2018,1,18,0,0,0))
+    }
+    
+    def testBefore_LocalDateTime_lastBusinessDay() {
+        setup:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        when:
+        LocalDateTime base = LocalDateTime.of(2018, 5, 31, 0, 0, 0)
+        RetrievalBy by = RetrievalBy.before(base, 0, 0, 0)
+        List<TSuiteResult> list = by.findTSuiteResults(context)
+        then:
+        list.size() == 2
+        list[0].getTSuiteName().equals(tsn)
+        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+    }
+    
+    /**
      * retrieving TSuiteResult befor 25th of the last month (prior to the specified day) + 18:00:00
      */
     def testBefore_LocalDateTime_25lastMonth() {

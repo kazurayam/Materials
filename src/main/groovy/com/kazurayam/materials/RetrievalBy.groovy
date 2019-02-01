@@ -1,6 +1,8 @@
 package com.kazurayam.materials
 
+import java.time.DayOfWeek
 import java.time.LocalDateTime
+
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.model.TSuiteResult
 
@@ -35,7 +37,7 @@ abstract class RetrievalBy {
     }
 
     /**
-     * 
+     * Criteria to retrieve a set of TSuiteResults before the given day + 
      * @param base
      * @param days
      * @return
@@ -44,6 +46,36 @@ abstract class RetrievalBy {
         return new RetrievalByBefore(base, hour, minute, second)    
     }
 
+    /**
+     * Criteria to retrieve a set of TSuiteResults before the last business day + hour + minute + second. 
+     * select exclusively.
+     * The last business day means MONDAY, TUESDAY, WEDNSDAY, THURSDAY and FRIDAY before today.
+     * Today means now.
+     * 
+     * @param hour
+     * @param minute
+     * @param second
+     * @return
+     */
+    static RetrievalBy beforeLastBusinessDay(int hour, int minute, int second) {
+        return beforeLastBusinessDay(LocalDateTime.now(), hour, minute, second)
+    }
+    
+    static RetrievalBy beforeLastBusinessDay(LocalDateTime d, int hour, int minute, int second) {
+        LocalDateTime shifted = lastBusinessDay(d)
+        return new RetrievalByBefore(shifted, hour, minute, second)
+    }
+    
+    static LocalDateTime lastBusinessDay(LocalDateTime d) {
+        LocalDateTime prev = d.minusDays(1)
+        if (d.getDayOfWeek() == DayOfWeek.SUNDAY ||
+            d.getDayOfWeek() == DayOfWeek.SATURDAY) {
+            return lastBusinessDay(prev)
+        } else {
+            return prev
+        }
+    }
+    
     /**
      *
      * @param mr
