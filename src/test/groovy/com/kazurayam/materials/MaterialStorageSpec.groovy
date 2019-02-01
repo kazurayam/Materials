@@ -193,5 +193,18 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 1
     }
+    
+    def testRestore_RetrieveBy_before_TSuiteTimestamp() {
+        expect:
+        false
+    }
+    
+
+    def testRestore_RetrieveBy_before_LocalDateTime() {
+        expect:
+        false
+    }
+    
+    
 
 }
