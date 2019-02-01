@@ -148,10 +148,6 @@ class MaterialStorageImpl implements MaterialStorage {
         throw new UnsupportedOperationException("TO BE IMPLEMENTED")
     }
     
-    @Override
-    RepositoryRoot getRepositoryRoot() {
-        return this.componentMR_.getRepositoryRoot()    
-    }
     
     @Override
     Path getBaseDir() {

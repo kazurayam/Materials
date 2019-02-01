@@ -115,11 +115,6 @@ interface MaterialStorage {
         RetrievalBy selectBy) throws IOException
 
     /**
-     * @return reference to the RepositoryRoot object contained in this MaterialStorage    
-     */
-    RepositoryRoot getRepositoryRoot()
-    
-    /**
      * 
      * @return the baseDir Path
      */

@@ -131,10 +131,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return baseDir_
     }
 
-    RepositoryRoot getRepositoryRoot() {
-        return repoRoot_
-    }
-
     @Override
     String getCurrentTestSuiteId() {
         return currentTSuiteName_.getId()
@@ -440,6 +436,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
+    RepositoryRoot getRepositoryRoot() {
+        return repoRoot_
+    }
 
     // ----------------------------- getters ----------------------------------
 
