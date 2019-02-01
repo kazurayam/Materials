@@ -16,8 +16,8 @@ import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
@@ -169,16 +169,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
-    /**
-     *
-     * @param testSuiteId
-     * @param timestamp
-     * @return
-     */
     @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        Objects.requireNonNull(tSuiteName)
-        Objects.requireNonNull(tSuiteTimestamp)
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        Objects.requireNonNull(tSuiteResultId)
+        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
+        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         for (TSuiteResult tsr : tSuiteResults) {
             if (tsr.getTSuiteName().equals(tSuiteName) && tsr.getTSuiteTimestamp().equals(tSuiteTimestamp)) {
@@ -189,13 +184,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
         List<TSuiteResult> list = new ArrayList<TSuiteResult>()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
-        for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr.getTSuiteName().equals(tSuiteName)) {
-                list.add(tsr)
+        for (TSuiteResultId subject : tSuiteResultIdList) {
+            for (TSuiteResult tsr : tSuiteResults) {
+                if (tsr.getTSuiteName().equals(subject.getTSuiteName()) &&
+                    tsr.getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
+                    list.add(tsr)
+                }
             }
         }
         return list

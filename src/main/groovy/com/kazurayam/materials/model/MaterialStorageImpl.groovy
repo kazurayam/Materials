@@ -15,9 +15,8 @@ import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.RetrievalBy
-import com.kazurayam.materials.model.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
     
@@ -91,18 +90,14 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, RetrievalBy selectBy) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    
-    @Override
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException {
+    int backup(MaterialRepository fromMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
-        Objects.requireNonNull(tSuiteName, "tSUiteName must not be null")
-        List<TSuiteResult> list = fromMR.getTSuiteResultList(tSuiteName)
+        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
+        List<TSuiteResult> list = fromMR.getTSuiteResultList(tSuiteResultIdList)
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteName, tSuiteResult.getTSuiteTimestamp())
+            count += this.backup(fromMR, tSuiteResult.getTSuiteResultId())
+            throw new RuntimeException("FIXME")
         }
         return count
     }
@@ -120,8 +115,8 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        int count = componentMR_.clear(tSuiteName, tSuiteTimestamp)
+    int clear(TSuiteResultId tSuiteResultId) throws IOException {
+        int count = componentMR_.clear(tSuiteResultId)
         return count
     }
 
@@ -138,31 +133,18 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    int expire(TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    
-    @Override
-    int expire(TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
-    
-    
-    @Override
     Path getBaseDir() {
         return componentMR_.getBaseDir()    
     }
     
     @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        return componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        return componentMR_.getTSuiteResult(tSuiteResultId)
     }
     
     @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
-        return componentMR_.getTSuiteResultList(tSuiteName)
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        return componentMR_.getTSuiteResultList(tSuiteResultIdList)
     }
     
     @Override
@@ -201,10 +183,6 @@ class MaterialStorageImpl implements MaterialStorage {
         return count
     }
     
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException {
-        throw new UnsupportedOperationException("TO BE IMPLEMENTED")
-    }
 
     // ---------------------- overriding Object properties --------------------
     @Override

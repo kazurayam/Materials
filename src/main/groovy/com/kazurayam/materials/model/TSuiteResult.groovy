@@ -11,7 +11,9 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
@@ -19,7 +21,7 @@ import com.kazurayam.materials.view.JUnitReportWrapper
 /**
  *
  */
-final class TSuiteResult implements Comparable<TSuiteResult> {
+final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
 
     static final TSuiteResult NULL = new TSuiteResult(TSuiteName.NULL, TSuiteTimestamp.NULL)
     
@@ -55,6 +57,20 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
     // ------------------ attribute setter & getter -------------------------------
+    TSuiteResultId getTSuiteResultId() {
+        return TSuiteResultIdImpl.new(this.getTSuiteName(), this.getTSuiteTimestamp())
+    }
+    
+    @Override
+    TSuiteName getTSuiteName() {
+        return tSuiteName_
+    }
+
+    @Override
+    TSuiteTimestamp getTSuiteTimestamp() {
+        return tSuiteTimestamp_
+    }
+
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
@@ -64,7 +80,6 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
         return this
     }
-
 
     RepositoryRoot getParent() {
         return this.getRepositoryRoot()
@@ -76,14 +91,6 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     Path getTSuiteTimestampDirectory() {
         return tSuiteTimestampDirectory_.normalize()
-    }
-
-    TSuiteName getTSuiteName() {
-        return tSuiteName_
-    }
-
-    TSuiteTimestamp getTSuiteTimestamp() {
-        return tSuiteTimestamp_
     }
 
     TSuiteResult setLastModified(LocalDateTime lastModified) {

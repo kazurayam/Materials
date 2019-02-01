@@ -3,7 +3,6 @@ package com.kazurayam.materials
 import java.nio.file.Path
 
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.repository.RepositoryRoot
 
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
@@ -24,7 +23,7 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId) throws IOException
 
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
@@ -36,18 +35,8 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
-    
-    /**
-     * copy a set of Material files in the project's Materials folder (fromMR) beloging to the tSuiteName  
-     * at the timing of invokation into this Material Storage
-     * 
-     * @param fromMR
-     * @return
-     * @throws IOException
-     */
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName) throws IOException
-    
+    int backup(MaterialRepository fromMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
+
     /**
      * copy all Material files in the project's Materials folder (fromMR)
      * at the timing of invokation into this Material Storage
@@ -67,8 +56,10 @@ interface MaterialStorage {
      * @param tSuiteTimestamp
      * @return number of Material files deleted. number of deleted directories are not included.
      */
-    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
-    
+    int clear(TSuiteResultId tSuiteResultId) throws IOException
+
+    int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException
+
     /**
      * delete all of subdirectories and material files which belong to
      * the tSuiteName in this Material Storage.
@@ -87,30 +78,6 @@ interface MaterialStorage {
      * @throws IOException
      */
     void empty() throws IOException
-    
-    /**
-     * delete Material files in this Material Storage, which belongs to the tSuiteName and
-     * with the TSuiteTimestamp specified by the argument
-     * 
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return
-     * @throws IOException
-     */
-    int expire(TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp) throws IOException
-    
-    /**
-     * delete Material files in this Material Storage, which belongs to the tSuiteName and
-     * with the TSuiteTimestamp grouped by the groupBy argument
-     *  
-     * @param tSuiteName
-     * @param groupBy
-     * @return
-     * @throws IOException
-     */
-    int expire(TSuiteName tSuiteName,
-        RetrievalBy selectBy) throws IOException
 
     /**
      * 
@@ -124,14 +91,14 @@ interface MaterialStorage {
      * @param tSuiteTimestamp
      * @return
      */
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
     
     /**
      * 
      * @param tSuiteName
      * @return
      */
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName)
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     
     
     /**
@@ -149,7 +116,7 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException
     
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
@@ -161,7 +128,7 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
     
 
 }
