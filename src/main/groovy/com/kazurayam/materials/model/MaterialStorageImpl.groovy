@@ -244,8 +244,8 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(componentMR_, tSuiteName)
-        
-        throw new UnsupportedOperationException("FIXME")
+        TSuiteResult tSuiteResult = by.findTSuiteResult(context)
+        return this.restore(intoMR, tSuiteResult)
     }
     
     @Override
@@ -253,7 +253,9 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        throw new UnsupportedOperationException("FIXME")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(componentMR_, tSuiteName)
+        List<TSuiteResult> list = by.findTSuiteResults(context)
+        return this.restore(intoMR, list)
     }
     
 
