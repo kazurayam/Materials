@@ -152,5 +152,21 @@ interface MaterialStorage {
      */
     int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
     
+    /**
+     * Retrieve a single TSuiteResult out of the MaterialStorage by the retrievalBy, then
+     * copy the Material files of the TSuiteResult from MaterialStorage into MaterialRespository.
+     * 
+     * synonym to unitaryRestore() mehtod
+     * 
+     * @param intoMR
+     * @param retrievalBy
+     * @return
+     * @throws IOException
+     */
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    
+    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    
+    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
 
 }

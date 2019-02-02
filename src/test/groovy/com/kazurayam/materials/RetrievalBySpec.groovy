@@ -8,9 +8,7 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialRepositoryImpl
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.repository.RepositoryRoot
 
 import spock.lang.Specification
 
@@ -21,16 +19,19 @@ class RetrievalBySpec extends Specification {
     
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static MaterialRepositoryImpl mri_
-    private static RepositoryRoot rr_
+    private static MaterialRepository mr_
+    private static MaterialStorage ms_
     
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RetrievalBySpec.class)}")
-        Helpers.copyDirectory(fixture_, workdir_)
+        Path materials = workdir_.resolve("Materials")
+        Path storage   = workdir_.resolve("Storage")
+        Helpers.copyDirectory(fixture_, materials)
+        Helpers.copyDirectory(materials, storage)
         //
-        mri_ = new MaterialRepositoryImpl(workdir_.resolve("Materials"))
-        rr_ = mri_.getRepositoryRoot()
+        mr_ = MaterialRepositoryFactory.createInstance(materials)
+        ms_ = MaterialStorageFactory.createInstance(storage)
     }
     def setup() {}
     def cleanup() {}
@@ -41,7 +42,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_TSuiteTimestamp_oneOrMoreFound() {
         setup:
         TSuiteName tsn = new TSuiteName("TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180810_140106")
         when:
         RetrievalBy by = RetrievalBy.before(tst)
@@ -53,7 +54,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_TSuiteTimestamp_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         when:
         RetrievalBy by = RetrievalBy.before(tst)
@@ -61,14 +62,32 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 0
     }
-    
+
+    /**
+     * Retrieving a single TSuiteResult object.
+     * 
+     * @return
+     */
+    def testBefore_findUnaryTSuiteResult() {
+        setup:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        when:
+        LocalDateTime base = LocalDateTime.of(2018, 7, 18, 23, 59, 59)
+        RetrievalBy by = RetrievalBy.before(base, 0, 0, 0)
+        TSuiteResult tsr = by.findTSuiteResult(context)
+        then:
+        tsr.getTSuiteResultId().getTSuiteName().equals(tsn)
+        tsr.getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+    }
+
     /**
      * retrieving TSuiteResults before the specified day + time
      */
     def testBefore_LocalDateTime_theDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 18, 23, 59, 59)
         RetrievalBy by = RetrievalBy.before(base, 0, 0, 0)
@@ -86,7 +105,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_LocalDateTime_previousDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusDays(1)
@@ -111,7 +130,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_LocalDateTime_lastFriday() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusWeeks(1).with(DayOfWeek.FRIDAY)
@@ -150,7 +169,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_LocalDateTime_lastBusinessDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 5, 31, 0, 0, 0)
         RetrievalBy by = RetrievalBy.before(base, 0, 0, 0)
@@ -168,7 +187,7 @@ class RetrievalBySpec extends Specification {
     def testBefore_LocalDateTime_25lastMonth() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(rr_, tsn)
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusMonths(1).withDayOfMonth(25)
@@ -186,5 +205,7 @@ class RetrievalBySpec extends Specification {
         list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
         list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
+    
+   
 
 }

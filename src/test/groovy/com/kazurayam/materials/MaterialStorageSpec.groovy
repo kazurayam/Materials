@@ -2,6 +2,7 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -233,15 +234,56 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
-    def testRestore_RetrieveBy_before_TSuiteTimestamp() {
-        expect:
-        false
+    def testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective() {
+        setup:
+        Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+        int num = ms.backup(mr_, tsriList)
+        then:
+        num == 12
+        when:
+        Path restoredDir = stepWork.resolve("Materials_restored")
+        MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
+        // remark the following line
+        num = ms.restoreCollective(restored, RetrievalBy.before(TSuiteTimestamp.newInstance("20180805_081908")))
+        then:
+        num == 1
+        when:
+        List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
+        then:
+        tsriListRestored.size()== 2
+        tsriListRestored[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance("20180718_142832"))
     }
-    
 
-    def testRestore_RetrieveBy_before_LocalDateTime() {
-        expect:
-        false
+
+    def testRestore_RetrieveBy_before_LocalDateTime_restoreUnary() {
+        setup:
+        Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+        int num = ms.backup(mr_, tsriList)
+        then:
+        num == 12
+        when:
+        Path restoredDir = stepWork.resolve("Materials_restored")
+        MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
+        // remark the following 2 lines
+        LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
+        num = ms.restoreUnary(restored, RetrievalBy.before(baseD))
+        then:
+        num == 1
+        when:
+        List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
+        then:
+        tsriListRestored.size()== 2
+        tsriListRestored[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance("20180718_142832"))
     }
 
 }

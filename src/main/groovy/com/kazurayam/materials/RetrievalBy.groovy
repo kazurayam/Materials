@@ -3,8 +3,10 @@ package com.kazurayam.materials
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.model.MaterialRepositoryImpl
+import com.kazurayam.materials.model.MaterialStorageImpl
 import com.kazurayam.materials.model.TSuiteResult
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 /**
  * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
@@ -44,6 +46,15 @@ abstract class RetrievalBy {
      */
     static RetrievalBy before(LocalDateTime base, int hour, int minute, int second) {
         return new RetrievalByBefore(base, hour, minute, second)    
+    }
+    
+    /**
+     * 
+     * @param base
+     * @return
+     */
+    static RetrievalBy before(LocalDateTime base) {
+        return new RetrievalByBefore(base, base.getHour(), base.getMinute(), base.getSecond())
     }
 
     /**
@@ -153,9 +164,19 @@ abstract class RetrievalBy {
         private RepositoryRoot repositoryRoot_
         private TSuiteName tSuiteName_
         
-        private SearchContext(RepositoryRoot repositoryRoot, TSuiteName tSuiteName) {
-            Objects.requireNonNull(repositoryRoot, "repositoryRoot must not be null")
-            repositoryRoot_ = repositoryRoot   
+        SearchContext(MaterialRepository materialRepository, TSuiteName tSuiteName) {
+            Objects.requireNonNull(materialRepository, "materialRepository must not be null")
+            Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+            MaterialRepositoryImpl mri = (MaterialRepositoryImpl)materialRepository
+            repositoryRoot_ = mri.getRepositoryRoot()
+            tSuiteName_ = tSuiteName
+        }
+        
+        SearchContext(MaterialStorage materialStorage, TSuiteName tSuiteName) {
+            Objects.requireNonNull(materialStorage, "materialStorage must not be null")
+            Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+            MaterialStorageImpl msi = (MaterialStorageImpl)materialStorage
+            repositoryRoot_ = msi.getRepositoryRoot()
             tSuiteName_ = tSuiteName
         }
         

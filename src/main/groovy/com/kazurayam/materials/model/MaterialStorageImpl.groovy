@@ -13,10 +13,13 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.RetrievalBy
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.RetrievalBy.SearchContext
+import com.kazurayam.materials.model.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
     
@@ -143,6 +146,10 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getBaseDir()    
     }
     
+    RepositoryRoot getRepositoryRoot() {
+        MaterialRepositoryImpl mri = (MaterialRepositoryImpl)componentMR_
+        return mri.getRepositoryRoot()
+    }
     /*
     @Override
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
@@ -178,6 +185,7 @@ class MaterialStorageImpl implements MaterialStorage {
     /**
      *
      */
+    @Override
     int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException {
         TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
@@ -207,7 +215,10 @@ class MaterialStorageImpl implements MaterialStorage {
         // done
         return count
     }
+    
+    @Override
     int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
+        Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
         int count = 0
         for (TSuiteResultId tsri : tSuiteResultIdList) {
@@ -215,6 +226,36 @@ class MaterialStorageImpl implements MaterialStorage {
         }
         return count
     }
+    
+    @Override
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+        Objects.requireNonNull(intoMR, "intoMR must not be null")
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(by, "by must not be null")
+        return this.restoreUnary(intoMR, by)
+    }
+    
+    /**
+     *
+     */
+    @Override
+    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+        Objects.requireNonNull(intoMR, "intoMR must not be null")
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(by, "by must not be null")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(componentMR_, tSuiteName)
+        
+        throw new UnsupportedOperationException("FIXME")
+    }
+    
+    @Override
+    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+        Objects.requireNonNull(intoMR, "intoMR must not be null")
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(by, "by must not be null")
+        throw new UnsupportedOperationException("FIXME")
+    }
+    
 
     // ---------------------- overriding Object properties --------------------
     @Override
