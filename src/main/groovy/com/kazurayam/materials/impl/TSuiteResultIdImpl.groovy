@@ -9,13 +9,13 @@ public class TSuiteResultIdImpl implements TSuiteResultId {
     private TSuiteName tSuiteName_
     private TSuiteTimestamp tSuiteTimestamp_
     
-    private TSuiteResultIdImpl() {}
+    private TSuiteResultIdImpl(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        this.tSuiteName_ = tSuiteName
+        this.tSuiteTimestamp_ = tSuiteTimestamp
+    }
     
-    TSuiteResultId newInstance(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        TSuiteResultId instance = new TSuiteResultIdImpl(tSuiteName, tSuiteTimestamp)
-        instance.setTSuiteName(tSuiteName)
-        instance.setTSuiteTimestamp(tSuiteTimestamp)
-        return instance
+    TSuiteResultIdImpl newInstance(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        return new TSuiteResultIdImpl(tSuiteName, tSuiteTimestamp)
     }
     
     void setTSuiteName(TSuiteName tSuiteName) {

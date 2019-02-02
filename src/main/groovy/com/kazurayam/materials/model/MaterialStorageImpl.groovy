@@ -58,16 +58,16 @@ class MaterialStorageImpl implements MaterialStorage {
      * from the Materials dir of the project into the external Storage directory
      */
     @Override
-    int backup(MaterialRepository fromMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
+    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
-        //
-        componentMR_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
         //
         int count = 0
-        TSuiteResult tsr = fromMR.getTSuiteResult(tSuiteName, tSuiteTimestamp)
-        List<Material> sourceList = tsr.getMaterialList()
+        //
+        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
+        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
+        componentMR_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        List<Material> sourceList = fromMR.getTSuiteResult(tSuiteName, tSuiteTimestamp).getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()
@@ -119,6 +119,15 @@ class MaterialStorageImpl implements MaterialStorage {
         int count = componentMR_.clear(tSuiteResultId)
         return count
     }
+    
+    @Override
+    int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException {
+        int count = 0
+        for (TSuiteResultId tsri : tSuiteResultIdList) {
+            count += this.clear(tsri)
+        }
+        return count
+    }
 
     @Override
     int clear(TSuiteName tSuiteName) throws IOException {
@@ -155,8 +164,9 @@ class MaterialStorageImpl implements MaterialStorage {
     /**
      *
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
-        //
+    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException {
+        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
+        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         intoMR.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
         //
         int count = 0
@@ -182,7 +192,14 @@ class MaterialStorageImpl implements MaterialStorage {
         // done
         return count
     }
-    
+    int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
+        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
+        int count = 0
+        for (TSuiteResultId tsri : tSuiteResultIdList) {
+            count += this.restore(intoMR, tsri)
+        }
+        return count
+    }
 
     // ---------------------- overriding Object properties --------------------
     @Override

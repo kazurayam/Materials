@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
@@ -65,6 +67,17 @@ class TSuiteResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         then:
         tsr.getTSuiteTimestamp() == TSuiteTimestamp.newInstance('20180530_130419')
+    }
+    
+    def testGetTSuiteResultId() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        when:
+        TSuiteResult tsr = mri_.getTSuiteResult(tsn, tst)
+        then:
+        tsr.getTSuiteResultId().equals(tsri)
     }
 
     def testGetTCaseResult() {

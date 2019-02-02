@@ -27,8 +27,10 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
     
     static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
-    private TSuiteName tSuiteName_
-    private TSuiteTimestamp tSuiteTimestamp_
+    //private TSuiteName tSuiteName_
+    //private TSuiteTimestamp tSuiteTimestamp_
+    private TSuiteResultId tSuiteResultId_
+    
     private RepositoryRoot repoRoot_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
@@ -49,33 +51,34 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
     TSuiteResult(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
         Objects.requireNonNull(testSuiteName)
         Objects.requireNonNull(testSuiteTimestamp)
-        tSuiteName_ = testSuiteName
-        tSuiteTimestamp_ = testSuiteTimestamp
-        tCaseResults_ = new ArrayList<TCaseResult>()
-        lastModified_ = LocalDateTime.MIN
+        tSuiteResultId_ = TSuiteResultIdImpl.newInstance(testSuiteName, testSuiteTimestamp)
+        tCaseResults_   = new ArrayList<TCaseResult>()
+        lastModified_   = LocalDateTime.MIN
         latestModified_ = false
     }
 
     // ------------------ attribute setter & getter -------------------------------
     TSuiteResultId getTSuiteResultId() {
-        return TSuiteResultIdImpl.new(this.getTSuiteName(), this.getTSuiteTimestamp())
+        return tSuiteResultId_    
     }
-    
+
     @Override
     TSuiteName getTSuiteName() {
-        return tSuiteName_
+        return tSuiteResultId_.getTSuiteName()
     }
 
     @Override
     TSuiteTimestamp getTSuiteTimestamp() {
-        return tSuiteTimestamp_
+        return tSuiteResultId_.getTSuiteTimestamp()
     }
 
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
-                repoRoot_.getBaseDir().resolve(tSuiteName_.getValue()).resolve(tSuiteTimestamp_.format())
+                repoRoot_.getBaseDir()
+                    .resolve(this.getTSuiteName().getValue())
+                    .resolve(this.getTSuiteTimestamp().format())
         junitReportWrapper_ = createJUnitReportWrapper()
         executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
         return this
@@ -197,7 +200,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
 
 
     String treeviewTitle() {
-        return tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format()
+        return this.getTSuiteName().getValue()
+                    + '/' + this.getTSuiteTimestamp().format()
     }
 
     // ------------------- helpers -----------------------------------------------
@@ -217,7 +221,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (tSuiteName_.equals(other.getTSuiteName()) && tSuiteTimestamp_.equals(other.getTSuiteTimestamp())) {
+        if (this.getTSuiteName().equals(other.getTSuiteName()) && 
+            this.getTSuiteTimestamp().equals(other.getTSuiteTimestamp())) {
             return true
         } else {
             return false
@@ -266,8 +271,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(tSuiteName_.toString()) + '",')
-        sb.append('"tSuiteTimestamp": "' + tSuiteTimestamp_.format() + '",')
+        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getTSuiteName().toString()) + '",')
+        sb.append('"tSuiteTimestamp": "' + this.getTSuiteTimestamp().format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0
