@@ -91,7 +91,29 @@ interface MaterialStorage {
      * @param tSuiteTimestamp
      * @return
      */
+    //TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    
+    /**
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @return
+     */
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+    
+    
+    /**
+     * 
+     * @param tSuiteName
+     * @return
+     */
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+    
+    /**
+     * 
+     * @return
+     */
+    List<TSuiteResultId> getTSuiteResultIdList()
     
     /**
      * 

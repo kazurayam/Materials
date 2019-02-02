@@ -51,10 +51,15 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/MaterialPairSpec.class'
     include '**/MaterialRepositorySpec.class'
+    include '**/MaterialSpec.class'
     include '**/MaterialStorageSpec.class'
-    include '**/TSuiteResultIdImplSpec.class'
-    include '**/TSuiteResultSpec.class'
+    include '**/RetrievalBySpec.class'
+    include '**/TCaseResultSpec.class'
+    include '**/RepositoryRootSpec.class'
+    include '**/RepositoryWalkerSpec.class'
+    include '**/IndexerByVisitorImplSpec.class'
     outputs.upToDateWhen {false}
 }
 

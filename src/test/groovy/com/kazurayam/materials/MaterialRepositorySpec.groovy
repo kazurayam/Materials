@@ -10,8 +10,8 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.TSuiteTimestampImpl
 import com.kazurayam.materials.model.TSuiteResult
+import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -133,10 +133,27 @@ class MaterialRepositorySpec extends Specification {
     
     def testGetTSuiteResultList_withTSuiteName() {
         when:
-        List<TSuiteResult> list = mr_.getTSuiteResultList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> list = mr_.getTSuiteResultList(tsriList)
         then:
         list != null
         list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList_withTSuiteName() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList()
+        then:
+        list != null
+        list.size()== 13
     }
     
     def testGetTSuiteResultList_noArgs() {
@@ -244,7 +261,8 @@ class MaterialRepositorySpec extends Specification {
         then:
         count == 12
         when:
-        List<TSuiteResult> list = mr.getTSuiteResultList(tsn)
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(tsn)
+        List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
         then:
         list.size() == 0
         when:

@@ -64,10 +64,8 @@ class MaterialStorageImpl implements MaterialStorage {
         //
         int count = 0
         //
-        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
-        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
-        componentMR_.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
-        List<Material> sourceList = fromMR.getTSuiteResult(tSuiteName, tSuiteTimestamp).getMaterialList()
+        componentMR_.putCurrentTestSuite(tSuiteResultId)
+        List<Material> sourceList = fromMR.getTSuiteResult(tSuiteResultId).getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
             Path subpath = sourceMate.getSubpath()
@@ -97,7 +95,6 @@ class MaterialStorageImpl implements MaterialStorage {
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
             count += this.backup(fromMR, tSuiteResult.getTSuiteResultId())
-            throw new RuntimeException("FIXME")
         }
         return count
     }
@@ -109,7 +106,7 @@ class MaterialStorageImpl implements MaterialStorage {
         logger_.debug("#backup(MaterialRepository) list.size()=${list.size()}")
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getTSuiteName(), tSuiteResult.getTSuiteTimestamp())
+            count += this.backup(fromMR, tSuiteResult.getTSuiteResultId())
         }
         return count
     }
@@ -146,9 +143,26 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getBaseDir()    
     }
     
+    /*
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        return componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+    }
+    */
+    
     @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
         return componentMR_.getTSuiteResult(tSuiteResultId)
+    }
+    
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName) {
+        return componentMR_.getTSuiteResultIdList(tSuiteName)
+    }
+    
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        return componentMR_.getTSuiteResultIdList()
     }
     
     @Override
@@ -167,10 +181,11 @@ class MaterialStorageImpl implements MaterialStorage {
     int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException {
         TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
-        intoMR.putCurrentTestSuite(tSuiteName, tSuiteTimestamp)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+        intoMR.putCurrentTestSuite(tsri)
         //
         int count = 0
-        TSuiteResult tsr = componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+        TSuiteResult tsr = componentMR_.getTSuiteResult(tsri)
         List<Material> sourceList = tsr.getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
@@ -214,5 +229,5 @@ class MaterialStorageImpl implements MaterialStorage {
             Helpers.escapeAsJsonText(baseDir_.toString()) + '"')
         sb.append('}}')
         return sb.toString()
-    }    
+    }
 }

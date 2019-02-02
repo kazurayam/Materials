@@ -1,9 +1,15 @@
 package com.kazurayam.materials
 
-interface TSuiteResultId {
+import com.kazurayam.materials.impl.TSuiteResultIdImpl
 
-    TSuiteName getTSuiteName()
+abstract class TSuiteResultId {
 
-    TSuiteTimestamp getTSuiteTimestamp()
+    static TSuiteResultId newInstance(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        return new TSuiteResultIdImpl(tSuiteName, tSuiteTimestamp)
+    }
+    
+    abstract TSuiteName getTSuiteName()
+
+    abstract TSuiteTimestamp getTSuiteTimestamp()
 
 }

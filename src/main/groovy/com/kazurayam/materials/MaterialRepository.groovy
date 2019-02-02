@@ -38,7 +38,8 @@ interface MaterialRepository {
     void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
     void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-
+    void putCurrentTestSuite(TSuiteResultId tSuiteResultId)
+    
     String getCurrentTestSuiteId()
     String getCurrentTestSuiteTimestamp()
 
@@ -47,7 +48,10 @@ interface MaterialRepository {
 
     Path getTestCaseDirectory(String testCaseId)
     
+    //TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+    List<TSuiteResultId> getTSuiteResultIdList()
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     
@@ -115,13 +119,22 @@ interface MaterialRepository {
      * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
      * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
      * 
-     * @param tSuiteName
-     * @param tSuiteTimestamp
+     * @param tSuiteResultId
      * @return number of material files deleted. number of directories are not included.
      * @throws IOException
      */
-    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException
+    int clear(TSuiteResultId tSuiteResultId) throws IOException
     
+    /**
+     * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
+     * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
+     *
+     * @param tSuiteResultId
+     * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
+     */
+    int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException
+
     /**
      * delete all descendant directories and files beloging to the tSuiteName directory.
      * will remove the tSuiteTimestamp directory.

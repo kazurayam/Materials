@@ -21,15 +21,13 @@ import com.kazurayam.materials.view.JUnitReportWrapper
 /**
  *
  */
-final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
+final class TSuiteResult implements Comparable<TSuiteResult> {
 
     static final TSuiteResult NULL = new TSuiteResult(TSuiteName.NULL, TSuiteTimestamp.NULL)
     
-    static Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
+    static final Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
 
-    //private TSuiteName tSuiteName_
-    //private TSuiteTimestamp tSuiteTimestamp_
-    private TSuiteResultId tSuiteResultId_
+    private final TSuiteResultId tSuiteResultId_
     
     private RepositoryRoot repoRoot_
     private Path tSuiteTimestampDirectory_
@@ -59,26 +57,28 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
 
     // ------------------ attribute setter & getter -------------------------------
     TSuiteResultId getTSuiteResultId() {
-        return tSuiteResultId_    
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(
+                                    tSuiteResultId_.getTSuiteName(),
+                                    tSuiteResultId_.getTSuiteTimestamp())
+        return tsri
     }
 
-    @Override
+    /*
     TSuiteName getTSuiteName() {
-        return tSuiteResultId_.getTSuiteName()
+        return this.getTSuiteResultId().getTSuiteName()
     }
-
-    @Override
     TSuiteTimestamp getTSuiteTimestamp() {
-        return tSuiteResultId_.getTSuiteTimestamp()
+        return this.getTSuiteResultId().getTSuiteTimestamp()
     }
+     */
 
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
                 repoRoot_.getBaseDir()
-                    .resolve(this.getTSuiteName().getValue())
-                    .resolve(this.getTSuiteTimestamp().format())
+                    .resolve(this.getTSuiteResultId().getTSuiteName().getValue())
+                    .resolve(this.getTSuiteResultId().getTSuiteTimestamp().format())
         junitReportWrapper_ = createJUnitReportWrapper()
         executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
         return this
@@ -130,8 +130,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
         if (this.getRepositoryRoot() != null) {
             Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
             Path reportFilePath = reportsDirPath.
-                    resolve(this.getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getTSuiteTimestamp().format()).
+                    resolve(this.getTSuiteResultId().getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getTSuiteResultId().getTSuiteTimestamp().format()).
                     resolve('JUnit_Report.xml')
             if (Files.exists(reportFilePath)) {
                 return new JUnitReportWrapper(reportFilePath)
@@ -149,8 +149,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
         if (this.getRepositoryRoot() != null) {
             Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
             Path expropFilePath = reportsDirPath.
-                    resolve(this.getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getTSuiteTimestamp().format()).
+                    resolve(this.getTSuiteResultId().getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getTSuiteResultId().getTSuiteTimestamp().format()).
                     resolve('execution.properties')
             if (Files.exists(expropFilePath)) {
                 return new ExecutionPropertiesWrapper(expropFilePath)
@@ -200,8 +200,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
 
 
     String treeviewTitle() {
-        return this.getTSuiteName().getValue()
-                    + '/' + this.getTSuiteTimestamp().format()
+        return this.getTSuiteResultId().getTSuiteName().getValue()
+                    + '/' + this.getTSuiteResultId().getTSuiteTimestamp().format()
     }
 
     // ------------------- helpers -----------------------------------------------
@@ -221,8 +221,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (this.getTSuiteName().equals(other.getTSuiteName()) && 
-            this.getTSuiteTimestamp().equals(other.getTSuiteTimestamp())) {
+        if (this.getTSuiteResultId().getTSuiteName().equals(other.getTSuiteResultId().getTSuiteName()) && 
+            this.getTSuiteResultId().getTSuiteTimestamp().equals(other.getTSuiteResultId().getTSuiteTimestamp())) {
             return true
         } else {
             return false
@@ -233,8 +233,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTSuiteName().hashCode()
-        result = prime * result + this.getTSuiteTimestamp().hashCode()
+        result = prime * result + this.getTSuiteResultId().getTSuiteName().hashCode()
+        result = prime * result + this.getTSuiteResultId().getTSuiteTimestamp().hashCode()
         return result
     }
 
@@ -252,11 +252,11 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
      */
     @Override
     int compareTo(TSuiteResult other) {
-        int v = this.getTSuiteName().compareTo(other.getTSuiteName())
+        int v = this.getTSuiteResultId().getTSuiteName().compareTo(other.getTSuiteResultId().getTSuiteName())
         if (v < 0) {
             return v
         } else if (v == 0) {
-            v = this.getTSuiteTimestamp().compareTo(other.getTSuiteTimestamp())
+            v = this.getTSuiteResultId().getTSuiteTimestamp().compareTo(other.getTSuiteResultId().getTSuiteTimestamp())
             return v
         } else {
             return v
@@ -271,8 +271,8 @@ final class TSuiteResult implements TSuiteResultId, Comparable<TSuiteResult> {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getTSuiteName().toString()) + '",')
-        sb.append('"tSuiteTimestamp": "' + this.getTSuiteTimestamp().format() + '",')
+        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getTSuiteResultId().getTSuiteName().toString()) + '",')
+        sb.append('"tSuiteTimestamp": "' + this.getTSuiteResultId().getTSuiteTimestamp().format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0

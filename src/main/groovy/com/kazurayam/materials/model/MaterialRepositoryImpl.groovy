@@ -18,6 +18,7 @@ import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
@@ -99,7 +100,19 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 tSuiteName,
                 tSuiteTimestamp)
     }
+    
+    @Override
+    void putCurrentTestSuite(TSuiteResultId tSuiteResultId) {
+        this.putCurrentTSuiteResult(
+            tSuiteResultId.getTSuiteName(),
+            tSuiteResultId.getTSuiteTimestamp())
+    }
 
+    /**
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     */
     private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName)
         Objects.requireNonNull(tSuiteTimestamp)
@@ -109,7 +122,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         currentTSuiteTimestamp_ = tSuiteTimestamp
 
         // add the specified TestSuite
-        TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResult tsr = this.getTSuiteResult(tsri)
+        
+        // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found,
+        // then create new one
         if (tsr == null) {
             tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
@@ -169,6 +186,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
+    /*
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tSuiteTimestamp)
+        return this.getTSuiteResult(tsri)
+    }
+    */
+    
     @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
         Objects.requireNonNull(tSuiteResultId)
@@ -176,7 +201,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr.getTSuiteName().equals(tSuiteName) && tsr.getTSuiteTimestamp().equals(tSuiteTimestamp)) {
+            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName) && 
+                tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
                 return tsr
             }
         }
@@ -184,14 +210,34 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+            if (subject.getTSuiteResultId().getTSuiteName().equals(tSuiteName)) {
+                list.add(subject.getTSuiteResultId())
+            }
+        }
+        return list
+    }
+    
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+            list.add(subject.getTSuiteResultId())
+        }
+        return list
+    }
+    
+    @Override
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
         List<TSuiteResult> list = new ArrayList<TSuiteResult>()
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         for (TSuiteResultId subject : tSuiteResultIdList) {
-            for (TSuiteResult tsr : tSuiteResults) {
-                if (tsr.getTSuiteName().equals(subject.getTSuiteName()) &&
-                    tsr.getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
+            for (TSuiteResult tsr : repoRoot_.getTSuiteResults()) {
+                if (tsr.getTSuiteResultId().getTSuiteName().equals(subject.getTSuiteName()) &&
+                    tsr.getTSuiteResultId().getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
                     list.add(tsr)
                 }
             }
@@ -409,13 +455,25 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @throws IOException
      */
     @Override
-    int clear(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) throws IOException {
+    int clear(TSuiteResultId tSuiteResultId) throws IOException {
+        Objects.requireNonNull(tSuiteResultId,"tSuiteResultId must not be null")
+        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
+        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue()).resolve(tSuiteTimestamp.format())
         int count = Helpers.deleteDirectory(tstDir)
         this.scan()
         return count
     }
 
+    @Override
+    int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException {
+        int count = 0
+        for (TSuiteResultId tsri : tSuiteResultIdList) {
+            count += this.clear(tsri)
+        }
+        return count
+    }
+    
     /**
      * delete Material files and sub directories located in the tSuiteName+tSuiteTimestamp dir.
      * The tSuiteName directory is removed.
@@ -443,7 +501,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     TSuiteResult getCurrentTSuiteResult() {
         if (currentTSuiteName_ != null) {
             if (currentTSuiteTimestamp_ != null) {
-                TSuiteResult tsr = getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
+                TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+                TSuiteResult tsr = this.getTSuiteResult(tsri)
                 return tsr
             } else {
                 throw new IllegalStateException('currentTSuiteTimestamp is not set')

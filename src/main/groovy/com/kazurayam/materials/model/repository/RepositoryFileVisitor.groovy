@@ -132,7 +132,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 LocalDateTime lastModified = resolveLastModifiedOfTSuiteResult(tSuiteResult_)
                 tSuiteResult_.setLastModified(lastModified)
                 logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
-                    " ${tSuiteResult_.getTSuiteName()}/${tSuiteResult_.getTSuiteTimestamp().format()}")
+                    " ${tSuiteResult_.getTSuiteResultId().getTSuiteName()}/${tSuiteResult_.getTSuiteResultId().getTSuiteTimestamp().format()}")
                 directoryTransition_.pop()
                 break
             case Layer.TESTSUITE :
