@@ -122,12 +122,13 @@ class MaterialRepositorySpec extends Specification {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
-        mr_.putCurrentTestSuite(tsn, tst)
-        TSuiteResult tsr = mr_.getTSuiteResult(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        mr_.putCurrentTestSuite(tsri)
+        TSuiteResult tsr = mr_.getTSuiteResult(tsri)
         then:
         tsr != null
-        tsr.getTSuiteName().equals(tsn)
-        tsr.getTSuiteTimestamp().equals(tst)
+        tsr.getTSuiteResultId().getTSuiteName().equals(tsn)
+        tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tst)
         
     }
     
@@ -231,15 +232,16 @@ class MaterialRepositorySpec extends Specification {
         when:
         TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
-        int count = mr.clear(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        int count = mr.clear(tsri)
         then:
         count == 2
         when:
-        TSuiteResult result= mr.getTSuiteResult(tsn, tst)
+        TSuiteResult result= mr.getTSuiteResult(tsri)
         then:
         result == null
         when:
-        mr.putCurrentTestSuite(tsn)
+        mr.putCurrentTestSuite(tsri)
         Path tsnDir = mr.getCurrentTestSuiteDirectory()
         Path tstDir = tsnDir.resolve(tst.format())
         then:

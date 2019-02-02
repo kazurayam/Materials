@@ -1,8 +1,5 @@
 package com.kazurayam.materials
 
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.DayOfWeek
@@ -10,11 +7,9 @@ import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteTimestamp
+
 import com.kazurayam.materials.model.MaterialRepositoryImpl
 import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestampImpl
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
 import spock.lang.Specification
@@ -80,9 +75,9 @@ class RetrievalBySpec extends Specification {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 2
-        list[0].getTSuiteName().equals(tsn)
-        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getTSuiteResultId().getTSuiteName().equals(tsn)
+        list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
    
     /**
@@ -105,9 +100,9 @@ class RetrievalBySpec extends Specification {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 2
-        list[0].getTSuiteName().equals(tsn)
-        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getTSuiteResultId().getTSuiteName().equals(tsn)
+        list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
     
     /**
@@ -130,9 +125,9 @@ class RetrievalBySpec extends Specification {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 2
-        list[0].getTSuiteName().equals(tsn)
-        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getTSuiteResultId().getTSuiteName().equals(tsn)
+        list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
     
     /**
@@ -162,9 +157,9 @@ class RetrievalBySpec extends Specification {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 2
-        list[0].getTSuiteName().equals(tsn)
-        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getTSuiteResultId().getTSuiteName().equals(tsn)
+        list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
     
     /**
@@ -187,9 +182,9 @@ class RetrievalBySpec extends Specification {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 2
-        list[0].getTSuiteName().equals(tsn)
-        list[0].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getTSuiteResultId().getTSuiteName().equals(tsn)
+        list[0].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        list[1].getTSuiteResultId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
     }
 
 }

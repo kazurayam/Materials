@@ -135,7 +135,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path getCurrentTestSuiteDirectory() {
-        TSuiteResult tsr = this.getTSuiteResult(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResult tsr = this.getTSuiteResult(tsri)
         if (tsr != null) {
             return tsr.getTSuiteTimestampDirectory()
         }

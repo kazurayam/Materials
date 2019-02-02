@@ -50,7 +50,8 @@ final class RepositoryRoot {
         Objects.requireNonNull(tSuiteName)
         Objects.requireNonNull(tSuiteTimestamp)
         for (TSuiteResult tsr : tSuiteResults_) {
-            if (tsr.getTSuiteName() == tSuiteName && tsr.getTSuiteTimestamp() == tSuiteTimestamp) {
+            if (tsr.getTSuiteResultId().getTSuiteName() == tSuiteName &&
+                tsr.getTSuiteResultId().getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
             }
         }
@@ -67,8 +68,8 @@ final class RepositoryRoot {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {
-            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getTSuiteName()}")
-            if (tSuiteName.equals(tsr.getTSuiteName())) {
+            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getTSuiteResultId().getTSuiteName()}")
+            if (tSuiteName.equals(tsr.getTSuiteResultId().getTSuiteName())) {
                 result.add(tsr)
             }
         }
@@ -104,7 +105,7 @@ final class RepositoryRoot {
         Objects.requireNonNull(before, "argument \'before\' must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
-            if (tSuiteName.equals(tsr.getTSuiteName())) {
+            if (tSuiteName.equals(tsr.getTSuiteResultId().getTSuiteName())) {
                 if (TSuiteResultComparator_.compare(tsr, new TSuiteResult(tSuiteName, before)) > 0) {
                     // use < to select entries exclusively
                     result.add(tsr)
@@ -135,12 +136,12 @@ final class RepositoryRoot {
         new Comparator<TSuiteResult>() {
             @Override
             public int compare(TSuiteResult o1, TSuiteResult o2) {
-                int v = o1.getTSuiteName().compareTo(o2.getTSuiteName())
+                int v = o1.getTSuiteResultId().getTSuiteName().compareTo(o2.getTSuiteResultId().getTSuiteName())
                 if (v < 0) {
                     return v // natural order of TSuiteName
                 } else if (v == 0) {
-                    LocalDateTime ldt1 = o1.getTSuiteTimestamp().getValue()
-                    LocalDateTime ldt2 = o2.getTSuiteTimestamp().getValue()
+                    LocalDateTime ldt1 = o1.getTSuiteResultId().getTSuiteTimestamp().getValue()
+                    LocalDateTime ldt2 = o2.getTSuiteResultId().getTSuiteTimestamp().getValue()
                     return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
                 } else {
                     return v  // natural order of TSuiteName
@@ -189,7 +190,7 @@ final class RepositoryRoot {
     List<Material> getMaterials(TSuiteName tSuiteName) {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
-            if (tsr.getTSuiteName().equals(tSuiteName)) {
+            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName)) {
                 List<Material> mates =  tsr.getMaterialList()
                 for (Material mate : mates) {
                     list.add(mate)
@@ -209,8 +210,8 @@ final class RepositoryRoot {
     List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
-            if (tsr.getTSuiteName().equals(tSuiteName) &&
-                tsr.getTSuiteTimestamp().equals(tSuiteTimestamp)) {
+            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName) &&
+                tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
                     List<Material> mates =  tsr.getMaterialList()
                     for (Material mate : mates) {
                         list.add(mate)
