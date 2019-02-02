@@ -228,34 +228,50 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                    RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        return this.restoreUnary(intoMR, by)
+        return this.restoreUnary(intoMR, tSuiteName, by)
     }
     
     /**
      *
      */
     @Override
-    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                    RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(componentMR_, tSuiteName)
+        int count = 0
+        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
+        // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
-        return this.restore(intoMR, tSuiteResult)
+        // copy the files
+        count += this.restore(intoMR, tSuiteResult.getTSuiteResultId())
+        return count
     }
     
+    /**
+     * 
+     */
     @Override
-    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy by) throws IOException {
+    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                    RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(componentMR_, tSuiteName)
+        int count = 0
+        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
+        // find some TSuiteResult objects
         List<TSuiteResult> list = by.findTSuiteResults(context)
-        return this.restore(intoMR, list)
+        for (TSuiteResult tSuiteResult : list) {
+            // copy the files
+            count += this.restore(intoMR, tSuiteResult.getTSuiteResultId())
+        }
+        return count
     }
     
 

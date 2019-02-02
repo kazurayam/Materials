@@ -33,4 +33,23 @@ public class TSuiteResultIdImpl extends TSuiteResultId {
     TSuiteTimestamp getTSuiteTimestamp() {
         return tSuiteTimestamp_
     }
+    
+    @Override
+    String toString() {
+        return "\'" + tSuiteName_.getValue() + '/' + tSuiteTimestamp_.format() + "\'"
+    }
+    
+    @Override
+    boolean equals(Object obj) {
+        if (!(obj instanceof TSuiteResultIdImpl))
+            return false
+        TSuiteResultIdImpl other = (TSuiteResultIdImpl)obj
+        return this.getTSuiteName().equals(other.getTSuiteName()) &&
+                this.getTSuiteTimestamp().equals(other.getTSuiteTimestamp())
+    }
+    
+    @Override
+    int hashCode() {
+        return Objects.hash(tSuiteName_, tSuiteTimestamp_)
+    }
 }

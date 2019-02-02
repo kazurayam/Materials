@@ -163,10 +163,13 @@ interface MaterialStorage {
      * @return
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                RetrievalBy retrievalBy) throws IOException
     
-    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                RetrievalBy retrievalBy) throws IOException
     
-    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
+    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
+                                RetrievalBy retrievalBy) throws IOException
 
 }
