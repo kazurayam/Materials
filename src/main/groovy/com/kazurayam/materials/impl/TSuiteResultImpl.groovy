@@ -82,6 +82,16 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_
     }
+    
+    @Override
+    TSuiteName getTSuiteName() {
+        return tSuiteResultId_.getTSuiteName()
+    }
+    
+    @Override
+    TSuiteTimestamp getTSuiteTimestamp() {
+        return tSuiteResultId_.getTSuiteTimestamp()
+    }
 
     @Override
     Path getTSuiteTimestampDirectory() {

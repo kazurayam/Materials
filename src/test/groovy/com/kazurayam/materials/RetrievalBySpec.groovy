@@ -23,9 +23,9 @@ class RetrievalBySpec extends Specification {
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RetrievalBySpec.class)}")
+        Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve("Materials")
         Path storage   = workdir_.resolve("Storage")
-        Helpers.copyDirectory(fixture_, materials)
         Helpers.copyDirectory(materials, storage)
         //
         mr_ = MaterialRepositoryFactory.createInstance(materials)

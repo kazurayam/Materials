@@ -58,7 +58,7 @@ class TSuiteResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
-        tsr.getId().getTSuiteName() == new TSuiteName('Test Suites/main/TS1')
+        tsr.getTSuiteName() == new TSuiteName('Test Suites/main/TS1')
     }
 
     def testGetTSuiteTimestamp() {
@@ -67,7 +67,7 @@ class TSuiteResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
-        tsr.getId().getTSuiteTimestamp() == TSuiteTimestamp.newInstance('20180530_130419')
+        tsr.getTSuiteTimestamp() == TSuiteTimestamp.newInstance('20180530_130419')
     }
     
     def testGetId() {

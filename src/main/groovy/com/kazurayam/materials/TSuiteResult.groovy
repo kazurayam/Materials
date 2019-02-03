@@ -28,6 +28,10 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
 
     abstract RepositoryRoot getRepositoryRoot()
 
+    abstract TSuiteName getTSuiteName()
+    
+    abstract TSuiteTimestamp getTSuiteTimestamp()
+    
     abstract Path getTSuiteTimestampDirectory()
 
     abstract TSuiteResult setLastModified(LocalDateTime lastModified)
