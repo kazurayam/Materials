@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials.impl
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.impl.TSuiteTimestampImpl
+import com.kazurayam.materials.model.MaterialFileName
+import com.kazurayam.materials.model.Suffix
 
 import spock.lang.Specification
 

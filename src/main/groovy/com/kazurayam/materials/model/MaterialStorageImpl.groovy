@@ -20,6 +20,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.RetrievalBy.SearchContext
+import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
