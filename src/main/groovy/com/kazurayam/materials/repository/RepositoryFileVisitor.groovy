@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model.repository
+package com.kazurayam.materials.repository
 
 import static java.nio.file.FileVisitResult.*
 

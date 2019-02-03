@@ -16,9 +16,9 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
-import com.kazurayam.materials.model.repository.RepositoryWalker
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryWalker
 import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
 import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
 

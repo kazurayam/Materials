@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
 

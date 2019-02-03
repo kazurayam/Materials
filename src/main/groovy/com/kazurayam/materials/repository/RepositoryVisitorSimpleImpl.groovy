@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model.repository
+package com.kazurayam.materials.repository
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

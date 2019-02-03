@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model.repository
+package com.kazurayam.materials.repository
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -16,6 +16,8 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest

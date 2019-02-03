@@ -21,8 +21,8 @@ import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
 
 final class MaterialRepositoryImpl implements MaterialRepository {
 

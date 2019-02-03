@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model.repository
+package com.kazurayam.materials.repository
 
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -245,7 +245,7 @@ final class RepositoryRoot {
 
     @Override
     int hashCode() {
-        return com.kazurayam.materials.model.repository.RepositoryRoot.class.hashCode()
+        return com.kazurayam.materials.repository.RepositoryRoot.class.hashCode()
     }
 
     @Override

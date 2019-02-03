@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.MaterialStorageImpl
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryRoot
 
 /**
  * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
