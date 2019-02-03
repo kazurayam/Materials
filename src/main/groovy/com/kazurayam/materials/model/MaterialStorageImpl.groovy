@@ -16,6 +16,7 @@ import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.RetrievalBy
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.RetrievalBy.SearchContext

@@ -12,10 +12,10 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
 
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest

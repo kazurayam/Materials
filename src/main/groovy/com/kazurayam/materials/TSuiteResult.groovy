@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -7,13 +7,8 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
+import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper

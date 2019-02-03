@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.model.TSuiteResult
 
 import groovy.json.JsonOutput
 import spock.lang.Specification

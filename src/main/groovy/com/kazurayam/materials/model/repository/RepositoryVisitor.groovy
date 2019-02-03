@@ -1,8 +1,8 @@
 package com.kazurayam.materials.model.repository
 
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
 
 /**
  *

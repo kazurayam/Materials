@@ -10,6 +10,7 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteResult
 
 /**
  *

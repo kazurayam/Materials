@@ -2,8 +2,6 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
-import com.kazurayam.materials.model.TSuiteResult
-
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.

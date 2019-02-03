@@ -2,8 +2,6 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
-import com.kazurayam.materials.model.TSuiteResult
-
 /**
  * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.

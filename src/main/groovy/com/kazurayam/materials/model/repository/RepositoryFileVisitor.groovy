@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestampImpl
 
 /**

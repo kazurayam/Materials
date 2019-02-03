@@ -10,8 +10,8 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.model.repository.RepositoryVisitResult

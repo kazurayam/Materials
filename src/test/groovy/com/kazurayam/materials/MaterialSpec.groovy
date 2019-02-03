@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
 import com.kazurayam.materials.model.TSuiteTimestampImpl
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
