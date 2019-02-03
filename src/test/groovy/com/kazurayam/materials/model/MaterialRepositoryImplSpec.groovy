@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
 
 import spock.lang.Specification
 

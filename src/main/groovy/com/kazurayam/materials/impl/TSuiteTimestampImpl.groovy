@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials.impl
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

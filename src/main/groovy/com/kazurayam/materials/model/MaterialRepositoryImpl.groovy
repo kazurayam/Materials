@@ -20,6 +20,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
 import com.kazurayam.materials.model.repository.RepositoryFileScanner
 import com.kazurayam.materials.model.repository.RepositoryRoot
 

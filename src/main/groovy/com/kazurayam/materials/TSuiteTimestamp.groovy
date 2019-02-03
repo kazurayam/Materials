@@ -1,7 +1,8 @@
 package com.kazurayam.materials
 
 import java.time.LocalDateTime
-import com.kazurayam.materials.model.TSuiteTimestampImpl
+
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
 
 /**
  * Wraps a time stamp when a Test Suite was executed.
