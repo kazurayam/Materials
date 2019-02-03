@@ -4,7 +4,7 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
-import com.kazurayam.materials.model.MaterialStorageImpl
+import com.kazurayam.materials.impl.MaterialStorageImpl
 import com.kazurayam.materials.model.repository.RepositoryRoot
 
 /**

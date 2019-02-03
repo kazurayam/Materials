@@ -5,7 +5,7 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialStorageImpl
+import com.kazurayam.materials.impl.MaterialStorageImpl
 
 final class MaterialStorageFactory {
 
