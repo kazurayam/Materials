@@ -16,8 +16,8 @@ import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.impl.TSuiteTimestampImpl
-import com.kazurayam.materials.model.MaterialImpl
 import com.kazurayam.materials.model.TCaseResult
 
 /**
