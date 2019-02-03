@@ -72,7 +72,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     tSuiteTimestamp_ = TSuiteTimestamp.newInstance(ldt)
                     Objects.requireNonNull(tSuiteName_, "tSuiteName_ must not be null")
                     Objects.requireNonNull(tSuiteTimestamp_, "tSuiteTimestamp_ must not be null")
-                    tSuiteResult_ = new TSuiteResult(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
+                    tSuiteResult_ = TSuiteResult.newInstance(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
                     repoRoot_.addTSuiteResult(tSuiteResult_)
                 } else {
                     logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +

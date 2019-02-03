@@ -1,13 +1,9 @@
 package com.kazurayam.materials
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.impl.TSuiteResultIdImpl
+import com.kazurayam.materials.impl.TSuiteResultImpl
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.model.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
@@ -16,190 +12,56 @@ import com.kazurayam.materials.view.JUnitReportWrapper
 /**
  *
  */
-final class TSuiteResult implements Comparable<TSuiteResult> {
+abstract class TSuiteResult implements Comparable<TSuiteResult> {
 
-    static final TSuiteResult NULL = new TSuiteResult(TSuiteName.NULL, TSuiteTimestamp.NULL)
+    static final TSuiteResult NULL = new TSuiteResultImpl(TSuiteName.NULL, TSuiteTimestamp.NULL)
     
-    static final Logger logger_ = LoggerFactory.getLogger(TSuiteResult.class)
-
-    private final TSuiteResultId tSuiteResultId_
-    
-    private RepositoryRoot repoRoot_
-    private Path tSuiteTimestampDirectory_
-    private List<TCaseResult> tCaseResults_
-    private LocalDateTime lastModified_
-    private Boolean latestModified_
-
-    /*
-     * wraps ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
-     */
-    private JUnitReportWrapper junitReportWrapper_
-
-    /*
-     *  wraps ./Reports/xxx/xxx/yyyMMdd_hhmmss/execution.properties
-     */
-    private ExecutionPropertiesWrapper executionPropertiesWrapper_
-
-    // ------------------ constructors & initializer -------------------------------
-    TSuiteResult(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
-        Objects.requireNonNull(testSuiteName)
-        Objects.requireNonNull(testSuiteTimestamp)
-        tSuiteResultId_ = TSuiteResultIdImpl.newInstance(testSuiteName, testSuiteTimestamp)
-        tCaseResults_   = new ArrayList<TCaseResult>()
-        lastModified_   = LocalDateTime.MIN
-        latestModified_ = false
+    static TSuiteResult newInstance(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        return new TSuiteResultImpl(tSuiteName, tSuiteTimestamp)
     }
-
     // ------------------ attribute setter & getter -------------------------------
-    TSuiteResultId getId() {
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(
-                                    tSuiteResultId_.getTSuiteName(),
-                                    tSuiteResultId_.getTSuiteTimestamp())
-        return tsri
-    }
+    abstract TSuiteResultId getId()
 
-    TSuiteResult setParent(RepositoryRoot repoRoot) {
-        Objects.requireNonNull(repoRoot)
-        repoRoot_ = repoRoot
-        tSuiteTimestampDirectory_ =
-                repoRoot_.getBaseDir()
-                    .resolve(this.getId().getTSuiteName().getValue())
-                    .resolve(this.getId().getTSuiteTimestamp().format())
-        junitReportWrapper_ = createJUnitReportWrapper()
-        executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
-        return this
-    }
+    abstract TSuiteResult setParent(RepositoryRoot repoRoot)
 
-    RepositoryRoot getParent() {
-        return this.getRepositoryRoot()
-    }
+    abstract RepositoryRoot getParent()
 
-    RepositoryRoot getRepositoryRoot() {
-        return repoRoot_
-    }
+    abstract RepositoryRoot getRepositoryRoot()
 
-    Path getTSuiteTimestampDirectory() {
-        return tSuiteTimestampDirectory_.normalize()
-    }
+    abstract Path getTSuiteTimestampDirectory()
 
-    TSuiteResult setLastModified(LocalDateTime lastModified) {
-        lastModified_ = lastModified
-        return this
-    }
+    abstract TSuiteResult setLastModified(LocalDateTime lastModified)
 
-    LocalDateTime getLastModified() {
-        return lastModified_
-    }
+    abstract LocalDateTime getLastModified()
 
-    Boolean isLatestModified() {
-        return latestModified_
-    }
+    abstract boolean isLatestModified()
 
-    TSuiteResult setLatestModified(Boolean isLatest) {
-        latestModified_ = isLatest
-        return this
-    }
+    abstract TSuiteResult setLatestModified(Boolean isLatest)
 
-    JUnitReportWrapper getJUnitReportWrapper() {
-        return this.junitReportWrapper_
-    }
+    abstract JUnitReportWrapper getJUnitReportWrapper()
 
-    ExecutionPropertiesWrapper getExecutionPropertiesWrapper() {
-        return this.executionPropertiesWrapper_
-    }
+    abstract ExecutionPropertiesWrapper getExecutionPropertiesWrapper()
 
     /**
      *
      * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
      */
-    JUnitReportWrapper createJUnitReportWrapper() {
-        if (this.getRepositoryRoot() != null) {
-            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
-            Path reportFilePath = reportsDirPath.
-                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getId().getTSuiteTimestamp().format()).
-                    resolve('JUnit_Report.xml')
-            if (Files.exists(reportFilePath)) {
-                return new JUnitReportWrapper(reportFilePath)
-            } else {
-                logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
-                return null
-            }
-        } else {
-            logger_.debug("#createJUnitReportWrapper this.getRepositoryRoot() returned null")
-            return null
-        }
-    }
+    abstract JUnitReportWrapper createJUnitReportWrapper()
 
-    ExecutionPropertiesWrapper createExecutionPropertiesWrapper() {
-        if (this.getRepositoryRoot() != null) {
-            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
-            Path expropFilePath = reportsDirPath.
-                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getId().getTSuiteTimestamp().format()).
-                    resolve('execution.properties')
-            if (Files.exists(expropFilePath)) {
-                return new ExecutionPropertiesWrapper(expropFilePath)
-            } else {
-                logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
-                return null
-            }
-        } else {
-            logger_.debug("#createExecutionPropertiesWrapper this.getRepositoryRoot() returned null")
-            return null
-        }
-    }
+    abstract ExecutionPropertiesWrapper createExecutionPropertiesWrapper()
 
     // ------------------ add/get child nodes ------------------------------
-    TCaseResult getTCaseResult(TCaseName tCaseName) {
-        Objects.requireNonNull(tCaseName)
-        for (TCaseResult tcr : tCaseResults_) {
-            if (tcr.getTCaseName() == tCaseName) {
-                return tcr
-            }
-        }
-        return null
-    }
+    
+    abstract TCaseResult getTCaseResult(TCaseName tCaseName)
 
-    List<TCaseResult> getTCaseResultList() {
-        return Collections.unmodifiableList(tCaseResults_)
-    }
+    abstract List<TCaseResult> getTCaseResultList()
 
-    void addTCaseResult(TCaseResult tCaseResult) {
-        Objects.requireNonNull(tCaseResult)
-        if (tCaseResult.getParent() != this) {
-            def msg = "tCaseResult ${tCaseResult.toString()} does not have appropriate parent"
-            logger_.error("#addTCaseResult ${msg}")
-            throw new IllegalArgumentException(msg)
-        }
-        boolean found = false
-        for (TCaseResult tcr : tCaseResults_) {
-            if (tcr == tCaseResult) {
-                found = true
-            }
-        }
-        if (!found) {
-            tCaseResults_.add(tCaseResult)
-            Collections.sort(tCaseResults_)
-        }
-    }
+    abstract void addTCaseResult(TCaseResult tCaseResult)
 
-
-    String treeviewTitle() {
-        return this.getId().getTSuiteName().getValue()
-                    + '/' + this.getId().getTSuiteTimestamp().format()
-    }
+    abstract String treeviewTitle()
 
     // ------------------- helpers -----------------------------------------------
-    List<Material> getMaterialList() {
-        List<Material> materials = new ArrayList<Material>()
-        for (TCaseResult tcr : this.getTCaseResultList()) {
-            for (Material mate : tcr.getMaterialList()) {
-                materials.add(mate)
-            }
-        }
-        return Collections.unmodifiableList(materials)
-    }
+    abstract List<Material> getMaterialList()
 
     // -------------------- overriding Object properties ----------------------
     @Override
@@ -251,28 +113,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.getId().getTSuiteName().getValue() + '/' + this.getId().getTSuiteTimestamp().format()
     }
-
-    String toJson() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getId().getTSuiteName().toString()) + '",')
-        sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
-        sb.append('"tCaseResults": [')
-        def count = 0
-        for (TCaseResult tcr : tCaseResults_) {
-            if (count > 0) { sb.append(',') }
-            count += 1
-            sb.append(tcr.toJson())
-        }
-        sb.append('],')
-        sb.append('"lastModified":"' + lastModified_.toString() + '"')
-        sb.append('}}')
-        return sb.toString()
-    }
-
 
 }
 

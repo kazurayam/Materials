@@ -106,7 +106,7 @@ final class RepositoryRoot {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
             if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
-                if (TSuiteResultComparator_.compare(tsr, new TSuiteResult(tSuiteName, before)) > 0) {
+                if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, before)) > 0) {
                     // use < to select entries exclusively
                     result.add(tsr)
                 }

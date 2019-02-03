@@ -129,7 +129,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found,
         // then create new one
         if (tsr == null) {
-            tsr = new TSuiteResult(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
+            tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
         }
     }

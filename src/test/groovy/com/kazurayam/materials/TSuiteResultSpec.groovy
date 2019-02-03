@@ -7,12 +7,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.model.MaterialRepositoryImpl
 import com.kazurayam.materials.model.TCaseResult
@@ -52,7 +46,7 @@ class TSuiteResultSpec extends Specification {
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
         TSuiteName tsn = new TSuiteName('TS3')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance(LocalDateTime.now())
-        TSuiteResult tsr = new TSuiteResult(tsn, tst)
+        TSuiteResult tsr = TSuiteResult.newInstance(tsn, tst)
         TSuiteResult modified = tsr.setParent(repoRoot)
         then:
         modified.getParent() == repoRoot
@@ -151,11 +145,11 @@ class TSuiteResultSpec extends Specification {
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
         TSuiteResult tsr = repoRoot.getTSuiteResult(tsn, tst)
-        TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
+        TSuiteResult other = TSuiteResult.newInstance(tsn, tst).setParent(repoRoot)
         then:
         tsr == other
         when:
-        TSuiteResult more = new TSuiteResult(new TSuiteName('Test Suites/main/TS2') , tst).setParent(repoRoot)
+        TSuiteResult more = TSuiteResult.newInstance(new TSuiteName('Test Suites/main/TS2') , tst).setParent(repoRoot)
         then:
         tsr != more
     }
@@ -167,7 +161,7 @@ class TSuiteResultSpec extends Specification {
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        TSuiteResult other = new TSuiteResult(tsn, tst).setParent(repoRoot)
+        TSuiteResult other = TSuiteResult.newInstance(tsn, tst).setParent(repoRoot)
         then:
         tsr.hashCode() == other.hashCode()
     }
