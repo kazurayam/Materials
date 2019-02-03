@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials.impl
 
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
