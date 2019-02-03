@@ -127,8 +127,8 @@ class MaterialRepositorySpec extends Specification {
         TSuiteResult tsr = mr_.getTSuiteResult(tsri)
         then:
         tsr != null
-        tsr.getTSuiteResultId().getTSuiteName().equals(tsn)
-        tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tst)
+        tsr.getId().getTSuiteName().equals(tsn)
+        tsr.getId().getTSuiteTimestamp().equals(tst)
         
     }
     

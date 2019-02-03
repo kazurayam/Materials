@@ -202,8 +202,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName) && 
-                tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
+            if (tsr.getId().getTSuiteName().equals(tSuiteName) && 
+                tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
                 return tsr
             }
         }
@@ -215,8 +215,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
         for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
-            if (subject.getTSuiteResultId().getTSuiteName().equals(tSuiteName)) {
-                list.add(subject.getTSuiteResultId())
+            if (subject.getId().getTSuiteName().equals(tSuiteName)) {
+                list.add(subject.getId())
             }
         }
         return list
@@ -226,7 +226,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     List<TSuiteResultId> getTSuiteResultIdList() {
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
         for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
-            list.add(subject.getTSuiteResultId())
+            list.add(subject.getId())
         }
         return list
     }
@@ -237,8 +237,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> list = new ArrayList<TSuiteResult>()
         for (TSuiteResultId subject : tSuiteResultIdList) {
             for (TSuiteResult tsr : repoRoot_.getTSuiteResults()) {
-                if (tsr.getTSuiteResultId().getTSuiteName().equals(subject.getTSuiteName()) &&
-                    tsr.getTSuiteResultId().getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
+                if (tsr.getId().getTSuiteName().equals(subject.getTSuiteName()) &&
+                    tsr.getId().getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
                     list.add(tsr)
                 }
             }

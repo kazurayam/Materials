@@ -50,8 +50,8 @@ final class RepositoryRoot {
         Objects.requireNonNull(tSuiteName)
         Objects.requireNonNull(tSuiteTimestamp)
         for (TSuiteResult tsr : tSuiteResults_) {
-            if (tsr.getTSuiteResultId().getTSuiteName() == tSuiteName &&
-                tsr.getTSuiteResultId().getTSuiteTimestamp() == tSuiteTimestamp) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                tsr.getId().getTSuiteTimestamp() == tSuiteTimestamp) {
                 return tsr
             }
         }
@@ -68,8 +68,8 @@ final class RepositoryRoot {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {
-            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getTSuiteResultId().getTSuiteName()}")
-            if (tSuiteName.equals(tsr.getTSuiteResultId().getTSuiteName())) {
+            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getId().getTSuiteName()}")
+            if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
                 result.add(tsr)
             }
         }
@@ -105,7 +105,7 @@ final class RepositoryRoot {
         Objects.requireNonNull(before, "argument \'before\' must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
-            if (tSuiteName.equals(tsr.getTSuiteResultId().getTSuiteName())) {
+            if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
                 if (TSuiteResultComparator_.compare(tsr, new TSuiteResult(tSuiteName, before)) > 0) {
                     // use < to select entries exclusively
                     result.add(tsr)
@@ -136,12 +136,12 @@ final class RepositoryRoot {
         new Comparator<TSuiteResult>() {
             @Override
             public int compare(TSuiteResult o1, TSuiteResult o2) {
-                int v = o1.getTSuiteResultId().getTSuiteName().compareTo(o2.getTSuiteResultId().getTSuiteName())
+                int v = o1.getId().getTSuiteName().compareTo(o2.getId().getTSuiteName())
                 if (v < 0) {
                     return v // natural order of TSuiteName
                 } else if (v == 0) {
-                    LocalDateTime ldt1 = o1.getTSuiteResultId().getTSuiteTimestamp().getValue()
-                    LocalDateTime ldt2 = o2.getTSuiteResultId().getTSuiteTimestamp().getValue()
+                    LocalDateTime ldt1 = o1.getId().getTSuiteTimestamp().getValue()
+                    LocalDateTime ldt2 = o2.getId().getTSuiteTimestamp().getValue()
                     return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
                 } else {
                     return v  // natural order of TSuiteName
@@ -190,7 +190,7 @@ final class RepositoryRoot {
     List<Material> getMaterials(TSuiteName tSuiteName) {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
-            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName)) {
+            if (tsr.getId().getTSuiteName().equals(tSuiteName)) {
                 List<Material> mates =  tsr.getMaterialList()
                 for (Material mate : mates) {
                     list.add(mate)
@@ -210,8 +210,8 @@ final class RepositoryRoot {
     List<Material> getMaterials(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         List<Material> list = new ArrayList<Material>()
         for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
-            if (tsr.getTSuiteResultId().getTSuiteName().equals(tSuiteName) &&
-                tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
+            if (tsr.getId().getTSuiteName().equals(tSuiteName) &&
+                tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
                     List<Material> mates =  tsr.getMaterialList()
                     for (Material mate : mates) {
                         list.add(mate)

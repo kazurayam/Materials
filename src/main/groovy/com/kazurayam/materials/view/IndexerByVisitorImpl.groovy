@@ -369,9 +369,9 @@ modalize();
             if (tsr != null) {
                 StringBuilder sb = new StringBuilder()
                 sb.append('../Reports/')
-                sb.append(tsr.getTSuiteResultId().getTSuiteName().getValue().replace('.', '/'))
+                sb.append(tsr.getId().getTSuiteName().getValue().replace('.', '/'))
                 sb.append('/')
-                sb.append(tsr.getTSuiteResultId().getTSuiteTimestamp().format())
+                sb.append(tsr.getId().getTSuiteTimestamp().format())
                 sb.append('/Report.html')
                 return sb.toString()
             } else {
@@ -432,8 +432,8 @@ modalize();
              if (tSuiteResult.getJUnitReportWrapper() != null) {
                  sb.append(',')
                  sb.append('"tags": ["')
-                 logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getTSuiteResultId().getTSuiteName()}'")
-                 sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getTSuiteResultId().getTSuiteName().getId()))
+                 logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
+                 sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
                  sb.append('"')
                  sb.append(',')
                  sb.append('"')

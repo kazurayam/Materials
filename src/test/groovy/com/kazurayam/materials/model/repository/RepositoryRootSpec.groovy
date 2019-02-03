@@ -102,7 +102,7 @@ class RepositoryRootSpec extends Specification {
         when:
         TSuiteTimestamp expectedTst = TSuiteTimestamp.newInstance('20180718_142832')
         then:
-        tsrList[0].getTSuiteResultId().getTSuiteTimestamp().equals(expectedTst)
+        tsrList[0].getId().getTSuiteTimestamp().equals(expectedTst)
     }
     
     def testGetTSuiteResultsBeforeExclusive_47News() {
@@ -126,7 +126,7 @@ class RepositoryRootSpec extends Specification {
         when:
         def count = 0
         for (TSuiteResult tsr : tSuiteResults) {
-            TSuiteTimestamp tst = tsr.getTSuiteResultId().getTSuiteTimestamp()
+            TSuiteTimestamp tst = tsr.getId().getTSuiteTimestamp()
             logger_.debug("#testGetTSuiteResultsSortedByTSuiteTimestampReverseOrder tst${count}=${tst}")
             count += 1
         }
@@ -136,12 +136,12 @@ class RepositoryRootSpec extends Specification {
         logger_.debug("#testGetSortedTSuiteResults tSuiteResults[0] : ${tSuiteResults[0]}") // _/_
         logger_.debug("#testGetSortedTSuiteResults tSuiteResults[1] : ${tSuiteResults[1]}") // main.TS1 20180805_081908
         logger_.debug("#testGetSortedTSuiteResults tSuiteResults[2] : ${tSuiteResults[2]}") // main.TS1 20180718_142832
-        TSuiteName tsn0 = tSuiteResults[0].getTSuiteResultId().getTSuiteName()
-        TSuiteName tsn1 = tSuiteResults[1].getTSuiteResultId().getTSuiteName()
-        TSuiteName tsn2 = tSuiteResults[2].getTSuiteResultId().getTSuiteName()
-        LocalDateTime ldt0 = tSuiteResults[0].getTSuiteResultId().getTSuiteTimestamp().getValue()
-        LocalDateTime ldt1 = tSuiteResults[1].getTSuiteResultId().getTSuiteTimestamp().getValue()
-        LocalDateTime ldt2 = tSuiteResults[2].getTSuiteResultId().getTSuiteTimestamp().getValue()
+        TSuiteName tsn0 = tSuiteResults[0].getId().getTSuiteName()
+        TSuiteName tsn1 = tSuiteResults[1].getId().getTSuiteName()
+        TSuiteName tsn2 = tSuiteResults[2].getId().getTSuiteName()
+        LocalDateTime ldt0 = tSuiteResults[0].getId().getTSuiteTimestamp().getValue()
+        LocalDateTime ldt1 = tSuiteResults[1].getId().getTSuiteTimestamp().getValue()
+        LocalDateTime ldt2 = tSuiteResults[2].getId().getTSuiteTimestamp().getValue()
         then:
         tsn0 <= tsn1  // _ == main.TS1
         tsn1 <= tsn2  // main.TS1 <= main.TS2

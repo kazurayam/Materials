@@ -97,7 +97,7 @@ class MaterialStorageImpl implements MaterialStorage {
         List<TSuiteResult> list = fromMR.getTSuiteResultList(tSuiteResultIdList)
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getTSuiteResultId())
+            count += this.backup(fromMR, tSuiteResult.getId())
         }
         return count
     }
@@ -109,7 +109,7 @@ class MaterialStorageImpl implements MaterialStorage {
         logger_.debug("#backup(MaterialRepository) list.size()=${list.size()}")
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getTSuiteResultId())
+            count += this.backup(fromMR, tSuiteResult.getId())
         }
         return count
     }
@@ -250,7 +250,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
         // copy the files
-        count += this.restore(intoMR, tSuiteResult.getTSuiteResultId())
+        count += this.restore(intoMR, tSuiteResult.getId())
         return count
     }
     
@@ -269,7 +269,7 @@ class MaterialStorageImpl implements MaterialStorage {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         for (TSuiteResult tSuiteResult : list) {
             // copy the files
-            count += this.restore(intoMR, tSuiteResult.getTSuiteResultId())
+            count += this.restore(intoMR, tSuiteResult.getId())
         }
         return count
     }

@@ -56,29 +56,20 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     }
 
     // ------------------ attribute setter & getter -------------------------------
-    TSuiteResultId getTSuiteResultId() {
+    TSuiteResultId getId() {
         TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(
                                     tSuiteResultId_.getTSuiteName(),
                                     tSuiteResultId_.getTSuiteTimestamp())
         return tsri
     }
 
-    /*
-    TSuiteName getTSuiteName() {
-        return this.getTSuiteResultId().getTSuiteName()
-    }
-    TSuiteTimestamp getTSuiteTimestamp() {
-        return this.getTSuiteResultId().getTSuiteTimestamp()
-    }
-     */
-
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         tSuiteTimestampDirectory_ =
                 repoRoot_.getBaseDir()
-                    .resolve(this.getTSuiteResultId().getTSuiteName().getValue())
-                    .resolve(this.getTSuiteResultId().getTSuiteTimestamp().format())
+                    .resolve(this.getId().getTSuiteName().getValue())
+                    .resolve(this.getId().getTSuiteTimestamp().format())
         junitReportWrapper_ = createJUnitReportWrapper()
         executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
         return this
@@ -130,8 +121,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         if (this.getRepositoryRoot() != null) {
             Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
             Path reportFilePath = reportsDirPath.
-                    resolve(this.getTSuiteResultId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getTSuiteResultId().getTSuiteTimestamp().format()).
+                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getId().getTSuiteTimestamp().format()).
                     resolve('JUnit_Report.xml')
             if (Files.exists(reportFilePath)) {
                 return new JUnitReportWrapper(reportFilePath)
@@ -149,8 +140,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         if (this.getRepositoryRoot() != null) {
             Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
             Path expropFilePath = reportsDirPath.
-                    resolve(this.getTSuiteResultId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getTSuiteResultId().getTSuiteTimestamp().format()).
+                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
+                    resolve(this.getId().getTSuiteTimestamp().format()).
                     resolve('execution.properties')
             if (Files.exists(expropFilePath)) {
                 return new ExecutionPropertiesWrapper(expropFilePath)
@@ -200,8 +191,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
 
 
     String treeviewTitle() {
-        return this.getTSuiteResultId().getTSuiteName().getValue()
-                    + '/' + this.getTSuiteResultId().getTSuiteTimestamp().format()
+        return this.getId().getTSuiteName().getValue()
+                    + '/' + this.getId().getTSuiteTimestamp().format()
     }
 
     // ------------------- helpers -----------------------------------------------
@@ -221,8 +212,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (this.getTSuiteResultId().getTSuiteName().equals(other.getTSuiteResultId().getTSuiteName()) && 
-            this.getTSuiteResultId().getTSuiteTimestamp().equals(other.getTSuiteResultId().getTSuiteTimestamp())) {
+        if (this.getId().getTSuiteName().equals(other.getId().getTSuiteName()) && 
+            this.getId().getTSuiteTimestamp().equals(other.getId().getTSuiteTimestamp())) {
             return true
         } else {
             return false
@@ -233,8 +224,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     int hashCode() {
         final int prime = 31
         int result = 1
-        result = prime * result + this.getTSuiteResultId().getTSuiteName().hashCode()
-        result = prime * result + this.getTSuiteResultId().getTSuiteTimestamp().hashCode()
+        result = prime * result + this.getId().getTSuiteName().hashCode()
+        result = prime * result + this.getId().getTSuiteTimestamp().hashCode()
         return result
     }
 
@@ -252,11 +243,11 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
      */
     @Override
     int compareTo(TSuiteResult other) {
-        int v = this.getTSuiteResultId().getTSuiteName().compareTo(other.getTSuiteResultId().getTSuiteName())
+        int v = this.getId().getTSuiteName().compareTo(other.getId().getTSuiteName())
         if (v < 0) {
             return v
         } else if (v == 0) {
-            v = this.getTSuiteResultId().getTSuiteTimestamp().compareTo(other.getTSuiteResultId().getTSuiteTimestamp())
+            v = this.getId().getTSuiteTimestamp().compareTo(other.getId().getTSuiteTimestamp())
             return v
         } else {
             return v
@@ -271,8 +262,8 @@ final class TSuiteResult implements Comparable<TSuiteResult> {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getTSuiteResultId().getTSuiteName().toString()) + '",')
-        sb.append('"tSuiteTimestamp": "' + this.getTSuiteResultId().getTSuiteTimestamp().format() + '",')
+        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getId().getTSuiteName().toString()) + '",')
+        sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
         sb.append('"tCaseResults": [')
         def count = 0

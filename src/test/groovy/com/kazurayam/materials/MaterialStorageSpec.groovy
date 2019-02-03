@@ -136,8 +136,8 @@ class MaterialStorageSpec extends Specification {
         TSuiteResult tsr = ms.getTSuiteResult(tsri)
         then:
         tsr != null
-        tsr.getTSuiteResultId().getTSuiteName().equals(tsn)
-        tsr.getTSuiteResultId().getTSuiteTimestamp().equals(tst)
+        tsr.getId().getTSuiteName().equals(tsn)
+        tsr.getId().getTSuiteTimestamp().equals(tst)
     }
     
     def testGetTSuiteResultList_withTSuiteName() {
