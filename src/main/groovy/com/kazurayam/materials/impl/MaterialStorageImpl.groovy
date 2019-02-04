@@ -195,21 +195,25 @@ class MaterialStorageImpl implements MaterialStorage {
         //
         int count = 0
         TSuiteResult tsr = componentMR_.getTSuiteResult(tsri)
-        List<Material> sourceList = tsr.getMaterialList()
-        for (Material sourceMate : sourceList) {
-            TCaseName tcn = sourceMate.getTCaseName()
-            Path subpath = sourceMate.getSubpath()
-            String fileName = sourceMate.getFileName()
-            Path copyTo
-            if (subpath != null) {
-                copyTo = intoMR.resolveMaterialPath(tcn, subpath, fileName)
-            } else {
-                copyTo = intoMR.resolveMaterialPath(tcn, fileName)
+        if (tsr != null) {
+            List<Material> sourceList = tsr.getMaterialList()
+            for (Material sourceMate : sourceList) {
+                TCaseName tcn = sourceMate.getTCaseName()
+                Path subpath = sourceMate.getSubpath()
+                String fileName = sourceMate.getFileName()
+                Path copyTo
+                if (subpath != null) {
+                    copyTo = intoMR.resolveMaterialPath(tcn, subpath, fileName)
+                } else {
+                    copyTo = intoMR.resolveMaterialPath(tcn, fileName)
+                }
+                CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
+                Files.copy(sourceMate.getPath(), copyTo, options)
+                logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
+                count += 1
             }
-            CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
-            Files.copy(sourceMate.getPath(), copyTo, options)
-            logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
-            count += 1
+        } else {
+            logger_.warn("No TSuiteResult of ${tsri.toString()} is not found in ${componentMR_.toString()}")
         }
         // Is it ok to do this? not sure.
         intoMR.scan()
