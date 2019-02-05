@@ -186,6 +186,18 @@ class TSuiteResultSpec extends Specification {
         s.endsWith('}}')
     }
 
+    def testTreeviewTitle() {
+        setup:
+        String tsnStr = 'Test Suites/main/TS1'
+        String tstStr = '20180530_130419'
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+            new TSuiteName(tsnStr), TSuiteTimestamp.newInstance(tstStr))
+        when:
+        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
+        then:
+        tsr.treeviewTitle().equals('main.TS1/20180530_130419')
+    }
+    
     /*
     def testToBootstrapTreeviewData() {
         setup:

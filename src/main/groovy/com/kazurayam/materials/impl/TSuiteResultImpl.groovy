@@ -213,8 +213,11 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
 
     @Override
     String treeviewTitle() {
-        return this.getId().getTSuiteName().getValue()
-                    + '/' + this.getId().getTSuiteTimestamp().format()
+        StringBuilder sb = new StringBuilder()
+        sb.append(this.getId().getTSuiteName().getValue())
+        sb.append('/')
+        sb.append(this.getId().getTSuiteTimestamp().format())
+        return sb.toString()
     }
 
     // ------------------- helpers -----------------------------------------------

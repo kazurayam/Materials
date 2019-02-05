@@ -51,7 +51,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/RetrievalBySpec.class'
+    include '**/Indexer*Spec.class'
     include '**/TSuiteResultSpec.class'
     outputs.upToDateWhen {false}
 }
