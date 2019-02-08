@@ -25,6 +25,7 @@ class MaterialImpl implements Material {
     private Path dirpath_
     private MaterialFileName materialFileName_
     private LocalDateTime lastModified_
+    private long length_
     
     private MaterialImpl(Path dirpath, URL url, Suffix suffix, FileType fileType) {
         Objects.requireNonNull(dirpath)
@@ -154,6 +155,16 @@ class MaterialImpl implements Material {
         return lastModified_
     }
     
+    @Override
+    long getLength() {
+        return length_
+    }
+    
+    @Override
+    Material setLength(long length) {
+        length_ = length
+        return this
+    }
     // ---------------- business ----------------------------------------------
     
     @Override

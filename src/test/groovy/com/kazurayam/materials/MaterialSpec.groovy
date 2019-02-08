@@ -10,7 +10,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.impl.MaterialImpl
-import com.kazurayam.materials.impl.TSuiteTimestampImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.repository.RepositoryFileScanner
@@ -403,6 +402,17 @@ class MaterialSpec extends Specification {
         mate.setLastModified(longNow)
         then:
         mate.getLastModified() == ldtNow
+    }
+    
+    def testSetGetLength() {
+        setup:
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
+        long length = 2_000_000
+        when:
+        Material result = mate.setLength(length)
+        then:
+        mate.getLength() == length
+        result.getLength() == length 
     }
 
     def testSetParent_GetParent() {

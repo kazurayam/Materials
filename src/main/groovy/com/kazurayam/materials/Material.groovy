@@ -9,66 +9,12 @@ import com.kazurayam.materials.model.TCaseResult
 
 interface Material extends Comparable<Material> {
 
-    Material setParent(TCaseResult parent)
-
-    TCaseResult getParent()
-
-    /**
-     * 
-     * @return
-     */
-    TCaseName getTCaseName()
-    
-    TCaseResult getTCaseResult()
-
-    URL getURL()
-
-    Suffix getSuffix()
-
-    FileType getFileType()
-
-    Path getPath()
-    
-    /**
-     * 
-     * @return
-     */
-    String getFileName()
-    
-    /**
-     * 
-     * @return
-     */
-    Path getSubpath()
-
     Path getDirpath()
-    
     Path getDirpathRelativeToTSuiteResult()
-    
-    Material setLastModified(long lastModified)
-
-    Material setLastModified(Instant lastModified)
-
-    LocalDateTime getLastModified()
-
-    // ---------------- business ----------------------------------------------
-    Path getPathRelativeToTSuiteTimestamp()
-
-    Path getPathRelativeToRepositoryRoot()
-
-    //Path getPathRelativeTo(Path base)
-
-    // --------------------------------------
-
-    String getHrefRelativeToRepositoryRoot()
-
-    //String getHrefRelativeTo(Path base)
-
-    // ---------------------------------------------
-
     String getEncodedHrefRelativeToRepositoryRoot()
-
-    //String getEncodedHrefRelativeTo(Path base)
+    String getFileName()
+    FileType getFileType()
+    String getHrefRelativeToRepositoryRoot()
 
     /**
      * returns the identifier of the Material which is used as
@@ -78,7 +24,21 @@ interface Material extends Comparable<Material> {
      * @return
      */
     String getIdentifier()
-    
+    LocalDateTime getLastModified()
+    long getLength()
+    TCaseResult getParent()
+    Path getPath()
+    Path getPathRelativeToRepositoryRoot()
+    Path getPathRelativeToTSuiteTimestamp()
+    Path getSubpath()
+    Suffix getSuffix()
+    TCaseName getTCaseName()
+    TCaseResult getTCaseResult()
+    URL getURL()
+    Material setLastModified(Instant lastModified)
+    Material setLastModified(long lastModified)
+    Material setLength(long length)
+    Material setParent(TCaseResult parent)
     String toJson()
 
 }
