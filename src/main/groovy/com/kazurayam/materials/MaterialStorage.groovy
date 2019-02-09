@@ -89,14 +89,6 @@ interface MaterialStorage {
      * @param tSuiteTimestamp
      * @return
      */
-    //TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-    
-    /**
-     * 
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return
-     */
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
     
     
@@ -127,12 +119,12 @@ interface MaterialStorage {
     List<TSuiteResult> getTSuiteResultList()
     
     /**
-     * list TSuiteResults in the current Storage
+     * list the current status of the Storage
      * 
      * @param options
      * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
      */
-    //String list(String options)
+    void list(Writer output, Map options)
     
     /**
      * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
@@ -140,8 +132,10 @@ interface MaterialStorage {
      * 
      * e.g., MaterialStorage.reduceSizeTo(20 * 1000 * 1000 * 1000); // 20 giga-bytes
      * 
+     * @param targetBytes want to make the Storage size less than this
+     * @return the size of the Storage after reduction = sum of remaining Material files
      */
-    //int reduceSizeTo(long targetBytes)
+    long reduceTo(long targetBytes) throws IOException
     
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp

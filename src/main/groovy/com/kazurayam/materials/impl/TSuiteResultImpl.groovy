@@ -96,7 +96,11 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
 
     @Override
     Path getTSuiteTimestampDirectory() {
-        return tSuiteTimestampDirectory_.normalize()
+        if (tSuiteTimestampDirectory_ != null) {
+            return tSuiteTimestampDirectory_.normalize()
+        } else {
+            return null
+        }
     }
 
     @Override
@@ -300,18 +304,19 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName": "' + Helpers.escapeAsJsonText(this.getId().getTSuiteName().toString()) + '",')
+        sb.append('"tSuiteName":' + this.getId().getTSuiteName().toString() + ',')
         sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(tSuiteTimestampDirectory_.toString()) + '",')
+        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
+        sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
+        sb.append('"length":' + this.getLength()+ ',')
         sb.append('"tCaseResults": [')
         def count = 0
-        for (TCaseResult tcr : tCaseResults_) {
+        for (TCaseResult tcr : this.getTCaseResultList()) {
             if (count > 0) { sb.append(',') }
             count += 1
             sb.append(tcr.toJson())
         }
-        sb.append('],')
-        sb.append('"lastModified":"' + lastModified_.toString() + '"')
+        sb.append(']')
         sb.append('}}')
         return sb.toString()
     }

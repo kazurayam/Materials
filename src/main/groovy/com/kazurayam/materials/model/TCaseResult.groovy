@@ -60,7 +60,11 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     Path getTCaseDirectory() {
-        return tCaseDirectory_.normalize()
+        if (tCaseDirectory_ != null) {
+            return tCaseDirectory_.normalize()
+        } else {
+            return null
+        }
     }
 
     TCaseResult setLastModified(LocalDateTime lastModified) {
@@ -218,8 +222,10 @@ final class TCaseResult implements Comparable<TCaseResult> {
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')
-        sb.append('"tCaseName":"'   + Helpers.escapeAsJsonText(tCaseName_.toString())   + '",')
-        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(tCaseDirectory_.toString())    + '",')
+        sb.append('"tCaseName":'   + this.getTCaseName().toString()   + ',')
+        sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(this.getTCaseDirectory().toString())    + '",')
+        sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
+        sb.append('"length":' + this.getLength()+ ',')
         sb.append('"materials":[')
         def count = 0
         for (Material mate : materials_) {
@@ -227,8 +233,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
             sb.append(mate.toJson())
             count += 1
         }
-        sb.append('],')
-        sb.append('"lastModified":"' + lastModified_.toString() + '"')
+        sb.append(']')
         sb.append('}}')
         return sb.toString()
     }

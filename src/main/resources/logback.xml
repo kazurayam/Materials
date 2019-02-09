@@ -11,18 +11,16 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.materials.Helpers"                                level="info"/>
-    <logger name="com.kazurayam.materials.model.MaterialImpl"                     level="info"/>
-    <logger name="com.kazurayam.materials.model.MaterialFileName"                 level="info"/>
-    <logger name="com.kazurayam.materials.model.repository.RepositoryRoot"        level="info"/>
-    <logger name="com.kazurayam.materials.model.repository.RepositoryFileScanner" level="info"/>
-    <logger name="com.kazurayam.materials.model.repository.RepositoryFileVisitor" level="info"/>
-    <logger name="com.kazurayam.materials.model.repository.RepositoryWalker"      level="info"/>
-    <logger name="com.kazurayam.materials.model.TCaseResult"                      level="info"/>
-    <logger name="com.kazurayam.materials.model.TSuiteResult"                     level="info"/>
-    <logger name="com.kazurayam.materials.view.IndexerByVisitorImpl"              level="info"/>
-
-
+    <logger name="com.kazurayam.materials.Helpers"                               level="info"/>
+    <logger name="com.kazurayam.materials.impl.MaterialImpl"                     level="info"/>
+    <logger name="com.kazurayam.materials.impl.TSuiteResultImpl"                 level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryRoot"             level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryFileScanner"      level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryFileVisitor"      level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryWalker"           level="info"/>
+    <logger name="com.kazurayam.materials.model.MaterialFileName"                level="info"/>
+    <logger name="com.kazurayam.materials.model.TCaseResult"                     level="info"/>
+    <logger name="com.kazurayam.materials.view.IndexerByVisitorImpl"             level="info"/>
 
     <logger name="root" level="debug" />
 

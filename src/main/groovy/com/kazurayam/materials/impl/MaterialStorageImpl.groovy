@@ -222,6 +222,47 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
+    void list(Writer output, Map<String, Object> options) {
+        TSuiteName pTSuiteName = null
+        String key = 'TSuiteName'
+        if (options.containsKey(key) &&
+            options.get(key) instanceof TSuiteName) {
+            pTSuiteName = options.get(key)
+        }
+        //
+        String fmtS = '%-26s\t%-15s\t%20s'
+        String fmtD = '%-26s\t%-15s\t%,20d'
+        BufferedWriter bw = new BufferedWriter(output)
+        bw.println(String.format(
+            fmtS,
+            '--------TSuiteName-------',
+            '---Timestamp---',
+            '---sum length---'))
+        long sum = 0
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            //bw.println(tsr.toString())
+            if (pTSuiteName == null || 
+                tsr.getTSuiteName().equals(pTSuiteName)) {
+                bw.println(String.format(
+                    fmtD,
+                    tsr.getTSuiteName().getValue(),
+                    tsr.getTSuiteTimestamp().format(),
+                    tsr.getLength()))
+                sum += tsr.getLength()
+            }
+        }
+        bw.println(String.format(fmtS, '', '', '================'))
+        bw.println(String.format(fmtD, '', '', sum))
+        bw.flush()
+    }
+    
+    @Override
+    long reduceTo(long targetBytes) throws IOException {
+        
+    }
+    
+    
+    @Override
     int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
