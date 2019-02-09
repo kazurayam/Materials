@@ -55,10 +55,10 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         return parent_
     }
 
-    @Override
-    TSuiteResult getTSuiteResult() {
-        return this.getParent()
-    }
+    //@Override
+    //TSuiteResult getTSuiteResult() {
+    //    return this.getParent()
+    //}
 
     @Override
     TCaseName getTCaseName() {
@@ -104,7 +104,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         return materials_
     }
 
-    @Override
+    //@Override
     List<Material> getMaterialList(Path dirpath, URL url, FileType fileType) {
         Objects.requireNonNull(dirpath)
         Objects.requireNonNull(url)
@@ -139,7 +139,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         return null
     }
 
-    @Override
+    //@Override
     Material getMaterial(Path subpathUnderTCaseResult) {
         Objects.requireNonNull(subpathUnderTCaseResult)
         if (parent_ == null) {
