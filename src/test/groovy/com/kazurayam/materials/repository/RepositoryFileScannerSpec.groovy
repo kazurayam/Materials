@@ -11,11 +11,11 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -199,7 +199,7 @@ class RepositoryFileScannerSpec extends Specification {
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        long length = tcr.getLength()
+        long length = tcr.getSize()
         then:
         length == 7_054_300
     }
@@ -215,7 +215,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
-        long length = ts1_20180530_130604.getLength()
+        long length = ts1_20180530_130604.getSize()
         then:
         length == 9_313_714
     }

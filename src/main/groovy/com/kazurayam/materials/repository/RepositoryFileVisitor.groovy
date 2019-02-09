@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.impl.TSuiteTimestampImpl
-import com.kazurayam.materials.model.TCaseResult
 
 /**
  *
@@ -85,7 +85,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 tCaseName_ = new TCaseName(dir)
                 tCaseResult_ = tSuiteResult_.getTCaseResult(tCaseName_)
                 if (tCaseResult_ == null) {
-                    tCaseResult_ = new TCaseResult(tCaseName_).setParent(tSuiteResult_)
+                    tCaseResult_ = TCaseResult.newInstance(tCaseName_).setParent(tSuiteResult_)
                     tSuiteResult_.addTCaseResult(tCaseResult_)
                 }
                 directoryTransition_.push(Layer.TESTCASE)

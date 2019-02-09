@@ -4,8 +4,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.model.TCaseResult
 
 class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
 

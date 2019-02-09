@@ -5,7 +5,6 @@ import java.time.Instant
 import java.time.LocalDateTime
 
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
 
 interface Material extends Comparable<Material> {
 

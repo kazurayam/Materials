@@ -15,12 +15,12 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -291,7 +291,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
         //
@@ -347,7 +347,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
-            tCaseResult = new TCaseResult(tCaseName).setParent(tSuiteResult)
+            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())

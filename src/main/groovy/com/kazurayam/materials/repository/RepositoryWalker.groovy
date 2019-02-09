@@ -1,8 +1,8 @@
 package com.kazurayam.materials.repository
 
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.model.TCaseResult
 
 final class RepositoryWalker {
 

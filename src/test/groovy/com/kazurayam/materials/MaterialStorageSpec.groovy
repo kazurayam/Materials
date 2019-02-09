@@ -234,7 +234,60 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
+    def testList_all() {
+        setup:
+        Path stepWork = workdir_.resolve("testList_all")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        int numberOfMaterialsCopied = ms.backup(mr_)
+        when:
+        StringWriter sw = new StringWriter()
+        Map options = new HashMap()
+        ms.list(sw, options)
+        String output = sw.toString()
+        println output
+        then:
+        output.contains('TS1')
+        output.contains('20180810_140105')
+        output.contains('1,924,038')
+    }
     
+    def testList_one() {
+        setup:
+        Path stepWork = workdir_.resolve("testList_one")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        int numberOfMaterialsCopied = ms.backup(mr_)
+        when:
+        StringWriter sw = new StringWriter()
+        Map<String, Object> options = new HashMap()
+        options.put('TSuiteName', new TSuiteName('Monitor47News'))
+        ms.list(sw, options)
+        String output = sw.toString()
+        println output
+        then:
+        output.contains('Monitor47News')
+        output.contains('20190123_153854')
+        output.contains('2,631,409')
+    }
+    
+    def testReduce() {
+        setup:
+        Path stepWork = workdir_.resolve("testList_one")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        int numberOfMaterialsCopied = ms.backup(mr_)
+        when:
+        long remainingBytes =ms.reduce(20_000_000)   // make the Storage usage less than 20MB
+        then:
+        remainingBytes <= 20_000_000
+        when:
+        long currentSize = ms.getSize()
+        println ">>>currentSize is ${currentSize}"
+        then:
+        currentSize <= 20_000_000
+        remainingBytes == currentSize
+    }
 
     def testRestore_RetrieveBy_before_LocalDateTime_restoreUnary() {
         setup:

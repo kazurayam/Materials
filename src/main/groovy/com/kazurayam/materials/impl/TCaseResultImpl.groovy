@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials.impl
 
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -10,12 +10,14 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.model.Suffix
 
 /**
  *
  */
-final class TCaseResult implements Comparable<TCaseResult> {
+final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResult> {
 
     static Logger logger_ = LoggerFactory.getLogger(TCaseResult.class)
 
@@ -31,7 +33,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
      *
      * @param tCaseName
      */
-    TCaseResult(TCaseName tCaseName) {
+    TCaseResultImpl(TCaseName tCaseName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         tCaseName_ = tCaseName
         materials_ = new ArrayList<Material>()
@@ -40,6 +42,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     // --------------------- properties getter & setters ----------------------
+    @Override
     TCaseResult setParent(TSuiteResult parent) {
         Objects.requireNonNull(parent, "parent must not be null")
         parent_ = parent
@@ -47,18 +50,22 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return this
     }
 
+    @Override
     TSuiteResult getParent() {
         return parent_
     }
 
+    @Override
     TSuiteResult getTSuiteResult() {
         return this.getParent()
     }
 
+    @Override
     TCaseName getTCaseName() {
         return tCaseName_
     }
 
+    @Override
     Path getTCaseDirectory() {
         if (tCaseDirectory_ != null) {
             return tCaseDirectory_.normalize()
@@ -67,31 +74,37 @@ final class TCaseResult implements Comparable<TCaseResult> {
         }
     }
 
+    @Override
     TCaseResult setLastModified(LocalDateTime lastModified) {
         Objects.requireNonNull(lastModified, "lastModified must not be null")
         lastModified_ = lastModified
         return this
     }
 
+    @Override
     LocalDateTime getLastModified() {
         return lastModified_
     }
     
+    @Override
     TCaseResult setSize(long size) {
         size_ = size
         return this
     }
     
+    @Override
     long getSize() {
         return size_
     }
 
     // --------------------- create/add/get child nodes ----------------------
 
+    @Override
     List<Material> getMaterialList() {
         return materials_
     }
 
+    @Override
     List<Material> getMaterialList(Path dirpath, URL url, FileType fileType) {
         Objects.requireNonNull(dirpath)
         Objects.requireNonNull(url)
@@ -110,7 +123,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return Collections.unmodifiableList(list)
     }
 
-
+    @Override
     Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType) {
         Objects.requireNonNull(dirpath)
         Objects.requireNonNull(url)
@@ -126,7 +139,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return null
     }
 
-
+    @Override
     Material getMaterial(Path subpathUnderTCaseResult) {
         Objects.requireNonNull(subpathUnderTCaseResult)
         if (parent_ == null) {
@@ -145,6 +158,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return null
     }
 
+    @Override
     boolean addMaterial(Material material) {
         Objects.requireNonNull(material, "material must not be null")
         if (material.getParent() != this) {
@@ -167,6 +181,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     }
 
     // -------------------------- helpers -------------------------------------
+    @Override
     Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType) {
         Objects.requireNonNull(subpath)
         Objects.requireNonNull(url)
@@ -219,6 +234,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return this.toJson()
     }
 
+    @Override
     String toJson() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')

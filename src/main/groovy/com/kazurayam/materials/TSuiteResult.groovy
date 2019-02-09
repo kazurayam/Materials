@@ -4,7 +4,6 @@ import java.nio.file.Path
 import java.time.LocalDateTime
 
 import com.kazurayam.materials.impl.TSuiteResultImpl
-import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper

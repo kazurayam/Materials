@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
-import com.kazurayam.materials.model.TCaseResult
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
@@ -109,7 +108,7 @@ class TSuiteResultSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
+        TCaseResult tcr = TCaseResult.newInstance(new TCaseName('TSX')).setParent(tsr)
         tsr.addTCaseResult(tcr)
         TCaseResult tcr2 = tsr.getTCaseResult(new TCaseName('TSX'))
         then:
@@ -123,7 +122,7 @@ class TSuiteResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         //TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
-        TCaseResult tcr = new TCaseResult(new TCaseName('TSX'))
+        TCaseResult tcr = TCaseResult.newInstance(new TCaseName('TSX'))
         tsr.addTCaseResult(tcr)
         then:
         thrown(IllegalArgumentException)

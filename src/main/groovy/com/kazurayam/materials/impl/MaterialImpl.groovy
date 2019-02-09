@@ -13,9 +13,9 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
 
 class MaterialImpl implements Material {
     

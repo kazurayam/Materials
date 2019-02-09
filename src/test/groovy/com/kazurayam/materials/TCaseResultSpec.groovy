@@ -1,4 +1,4 @@
-package com.kazurayam.materials.model
+package com.kazurayam.materials
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -6,14 +6,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.FileType
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialImpl
+import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -50,7 +44,7 @@ class TCaseResultSpec extends Specification {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
-        TCaseResult tcr = new TCaseResult(new TCaseName('Test Cases/main/TC2'))
+        TCaseResult tcr = TCaseResult.newInstance(new TCaseName('Test Cases/main/TC2'))
         TCaseResult modified = tcr.setParent(tsr)
         then:
         modified.getParent() == tsr
@@ -148,6 +142,7 @@ class TCaseResultSpec extends Specification {
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
         def str = tcr.toString()
+        println ">>>>>>>>>>>>>>" + str
         logger_.debug("#testToString: \n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"TCaseResult":{')
@@ -167,7 +162,7 @@ class TCaseResultSpec extends Specification {
         expect:
         tcr != "string"
         when:
-        TCaseResult other = new TCaseResult(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
+        TCaseResult other = TCaseResult.newInstance(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
         then:
         tcr == other
     }
@@ -178,7 +173,7 @@ class TCaseResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        TCaseResult other = new TCaseResult(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
+        TCaseResult other = TCaseResult.newInstance(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
         then:
         tcr.hashCode() == other.hashCode()
     }
