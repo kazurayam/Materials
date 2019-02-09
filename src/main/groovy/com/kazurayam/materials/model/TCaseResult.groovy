@@ -24,6 +24,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     private Path tCaseDirectory_
     private List<Material> materials_
     private LocalDateTime lastModified_
+    private long length_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -35,6 +36,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         tCaseName_ = tCaseName
         materials_ = new ArrayList<Material>()
         lastModified_ = LocalDateTime.MIN
+        length_ = 0
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -69,6 +71,15 @@ final class TCaseResult implements Comparable<TCaseResult> {
 
     LocalDateTime getLastModified() {
         return lastModified_
+    }
+    
+    TCaseResult setLength(long length) {
+        length_ = length
+        return this
+    }
+    
+    long getLength() {
+        return length_
     }
 
     // --------------------- create/add/get child nodes ----------------------

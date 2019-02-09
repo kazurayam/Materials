@@ -37,6 +37,10 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract TSuiteResult setLastModified(LocalDateTime lastModified)
 
     abstract LocalDateTime getLastModified()
+    
+    abstract TSuiteResult setLength(long length)
+    
+    abstract long getLength()
 
     abstract boolean isLatestModified()
 

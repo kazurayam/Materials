@@ -30,6 +30,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
     private boolean latestModified_
+    private long length_
 
     /*
      * wraps ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
@@ -109,6 +110,17 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         return lastModified_
     }
 
+    @Override
+    TSuiteResult setLength(long length) {
+        length_ = length
+        return this
+    }
+    
+    @Override
+    long getLength() {
+        return length_
+    }
+    
     @Override
     boolean isLatestModified() {
         return latestModified_

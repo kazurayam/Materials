@@ -16,11 +16,8 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.repository.RepositoryFileScanner
-import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryFileScannerSpec extends Specification {
@@ -188,9 +185,41 @@ class RepositoryFileScannerSpec extends Specification {
         }
         then:
         lastModifiedOfTSuiteResult == lastModifiedOfTCaseResults
-
     }
 
+    def testScan_lengthOfTCaseResult() {
+        setup:
+        Path casedir = workdir_.resolve("testScan_lengthOfTCaseResult")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        when:
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+        TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        long length = tcr.getLength()
+        then:
+        length == 7_054_300
+    }
+    
+    def testScan_lengthOfTSuiteResult() {
+        setup:
+        Path casedir = workdir_.resolve("testScan_lengthOfTCaseResult")
+        Helpers.copyDirectory(fixture_, casedir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        scanner.scan()
+        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        when:
+        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+        long length = ts1_20180530_130604.getLength()
+        then:
+        length == 9_313_714
+    }
+    
     /**
      * Test if the following files are recognized as Materials:
      * "main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
@@ -201,7 +230,6 @@ class RepositoryFileScannerSpec extends Specification {
      * by the RepositoryFileScanner
      *
      */
-    @IgnoreRest
     def testScan_MaterialsUnderSubpath() {
         setup:
         Path casedir = workdir_.resolve("testScan_MaterialsUnderSubpath")

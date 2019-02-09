@@ -124,6 +124,10 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 LocalDateTime lastModified = resolveLastModifiedOfTCaseResult(tCaseResult_)
                 tCaseResult_.setLastModified(lastModified)
                 logger_.debug("#postVisitDirectory set lastModified=${lastModified} to ${tCaseResult_.getTCaseName()}")
+                // resolve the length property of the TCaseResult
+                long length = resolveLengthOfTCaseResult(tCaseResult_)
+                tCaseResult_.setLength(length)
+                //
                 directoryTransition_.pop()
                 break
             case Layer.TIMESTAMP :
@@ -133,6 +137,10 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 tSuiteResult_.setLastModified(lastModified)
                 logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
                     " ${tSuiteResult_.getId().getTSuiteName()}/${tSuiteResult_.getId().getTSuiteTimestamp().format()}")
+                // resolve the length property of the TSuiteResult
+                long length = resolveLengthOfTSuiteResult(tSuiteResult_)
+                tSuiteResult_.setLength(length)
+                //
                 directoryTransition_.pop()
                 break
             case Layer.TESTSUITE :
@@ -166,6 +174,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
             case Layer.SUBDIR :
                 Material material = MaterialImpl.newInstance(tCaseResult_, file)
                 material.setLastModified(file.toFile().lastModified())
+                material.setLength(file.toFile().length())
                 tCaseResult_.addMaterial(material)
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
                 break
@@ -214,6 +223,33 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
             }
         }
         return lastModified
+    }
+    
+    
+    /**
+     * @param tcr an instance of TCaseResult
+     * @return sum of length of Materials contained in the TCaseResult
+     */
+    private long resolveLengthOfTCaseResult(TCaseResult tcr) {
+        long length = 0
+        List<Material> materials = tcr.getMaterialList()
+        for (Material mate : materials) {
+            length += mate.getLength()
+        }
+        return length
+    }
+    
+    /**
+     * @param tsr an instance of TSuiteResult
+     * @return sum of length of Materials contained in the TSuiteResult
+     */
+    private long resolveLengthOfTSuiteResult(TSuiteResult tsr) {
+        long length = 0
+        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
+        for (TCaseResult tcr :  tCaseResults) {
+            length += tcr.getLength()
+        }
+        return length
     }
 
 }

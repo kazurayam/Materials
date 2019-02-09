@@ -127,6 +127,23 @@ interface MaterialStorage {
     List<TSuiteResult> getTSuiteResultList()
     
     /**
+     * list TSuiteResults in the current Storage
+     * 
+     * @param options
+     * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
+     */
+    //String list(String options)
+    
+    /**
+     * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
+     * If exceeding, clear older TSuiteResults to reduce the total less than the target.
+     * 
+     * e.g., MaterialStorage.reduceSizeTo(20 * 1000 * 1000 * 1000); // 20 giga-bytes
+     * 
+     */
+    //int reduceSizeTo(long targetBytes)
+    
+    /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp
      * from this Material Storage into the project's Materials folder (intoMR).
      *
