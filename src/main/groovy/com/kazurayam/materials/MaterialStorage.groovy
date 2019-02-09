@@ -16,12 +16,12 @@ interface MaterialStorage {
      * from the project's Materials folder (fromMR) into this Material Storage.
      * 
      * @param fromMR
-     * @param tSuiteName
-     * @param tSuiteTimestamp
+     * @param tSuiteResultId
+     * @param scan whether to call this.scan after backing up this TSuiteResultId
      * @return number of Material files transfered
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId) throws IOException
+    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
 
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
@@ -85,6 +85,12 @@ interface MaterialStorage {
     
     /**
      * 
+     * @return sum of the size of Material files contained in the Storage 
+     */
+    long getSize()
+    
+    /**
+     * 
      * @param tSuiteName
      * @param tSuiteTimestamp
      * @return
@@ -128,6 +134,7 @@ interface MaterialStorage {
     
     /**
      * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
+     * All of TSuiteNames are inspected as possible deletion target.
      * If exceeding, clear older TSuiteResults to reduce the total less than the target.
      * 
      * e.g., MaterialStorage.reduceSizeTo(20 * 1000 * 1000 * 1000); // 20 giga-bytes
@@ -135,19 +142,19 @@ interface MaterialStorage {
      * @param targetBytes want to make the Storage size less than this
      * @return the size of the Storage after reduction = sum of remaining Material files
      */
-    long reduceTo(long targetBytes) throws IOException
+    long reduce(long targetBytes) throws IOException
     
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp
      * from this Material Storage into the project's Materials folder (intoMR).
      *
      * @param intoMR
-     * @param tSuiteName
-     * @param tSuiteTimestamp
+     * @param tSuiteResultId
+     * @param scan wither to call scan() after restoring this TSuiteResultId
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException
+    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
     
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object

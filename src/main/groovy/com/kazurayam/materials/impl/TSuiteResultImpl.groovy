@@ -30,7 +30,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
     private boolean latestModified_
-    private long length_
+    private long size_
 
     /*
      * wraps ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
@@ -115,14 +115,14 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     }
 
     @Override
-    TSuiteResult setLength(long length) {
-        length_ = length
+    TSuiteResult setSize(long length) {
+        size_ = length
         return this
     }
     
     @Override
-    long getLength() {
-        return length_
+    long getSize() {
+        return size_
     }
     
     @Override
@@ -308,7 +308,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
         sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
-        sb.append('"length":' + this.getLength()+ ',')
+        sb.append('"length":' + this.getSize()+ ',')
         sb.append('"tCaseResults": [')
         def count = 0
         for (TCaseResult tcr : this.getTCaseResultList()) {

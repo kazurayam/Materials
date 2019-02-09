@@ -458,13 +458,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @throws IOException
      */
     @Override
-    int clear(TSuiteResultId tSuiteResultId) throws IOException {
+    int clear(TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(tSuiteResultId,"tSuiteResultId must not be null")
         TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue()).resolve(tSuiteTimestamp.format())
         int count = Helpers.deleteDirectory(tstDir)
-        this.scan()
+        if (scan) {
+            this.scan()
+        }
         return count
     }
 
@@ -472,8 +474,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException {
         int count = 0
         for (TSuiteResultId tsri : tSuiteResultIdList) {
-            count += this.clear(tsri)
+            count += this.clear(tsri, false)
         }
+        this.scan()
         return count
     }
     
@@ -513,6 +516,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         } else {
             throw new IllegalStateException('currentTSuiteName is not set')
         }
+    }
+    
+    @Override
+    long getSize() {
+        long size = 0
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            size += tsr.getSize()
+        }
+        return size
     }
 
     TCaseResult getTCaseResult(String testCaseId) {

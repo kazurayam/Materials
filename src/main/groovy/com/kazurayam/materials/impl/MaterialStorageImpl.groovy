@@ -62,7 +62,7 @@ class MaterialStorageImpl implements MaterialStorage {
      * from the Materials dir of the project into the external Storage directory
      */
     @Override
-    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId) throws IOException {
+    int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
         //
@@ -86,7 +86,9 @@ class MaterialStorageImpl implements MaterialStorage {
             count += 1
         }
         // scan the directories/files to update the internal status of componentMR
-        componentMR_.scan()
+        if (scan) {
+            componentMR_.scan()
+        }
         // done
         return count
     }
@@ -98,8 +100,9 @@ class MaterialStorageImpl implements MaterialStorage {
         List<TSuiteResult> list = fromMR.getTSuiteResultList(tSuiteResultIdList)
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getId())
+            count += this.backup(fromMR, tSuiteResult.getId(), false)
         }
+        componentMR_.scan()
         return count
     }
     
@@ -110,30 +113,26 @@ class MaterialStorageImpl implements MaterialStorage {
         logger_.debug("#backup(MaterialRepository) list.size()=${list.size()}")
         int count = 0
         for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getId())
+            count += this.backup(fromMR, tSuiteResult.getId(), false)
         }
+        componentMR_.scan()
         return count
     }
     
     @Override
     int clear(TSuiteResultId tSuiteResultId) throws IOException {
-        int count = componentMR_.clear(tSuiteResultId)
+        int count = componentMR_.clear(tSuiteResultId, true)
         return count
     }
     
     @Override
     int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException {
-        int count = 0
-        for (TSuiteResultId tsri : tSuiteResultIdList) {
-            count += this.clear(tsri)
-        }
-        return count
+        return componentMR_.clear(tSuiteResultIdList)
     }
 
     @Override
     int clear(TSuiteName tSuiteName) throws IOException {
-        int count = componentMR_.clear(tSuiteName)
-        return count
+        return componentMR_.clear(tSuiteName)
     }
 
 
@@ -157,6 +156,11 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
     }
     */
+    
+    @Override
+    long getSize() {
+        return componentMR_.getSize()
+    }
     
     @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
@@ -187,7 +191,7 @@ class MaterialStorageImpl implements MaterialStorage {
      *
      */
     @Override
-    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId) throws IOException {
+    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         TSuiteResultId tsri = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
@@ -215,8 +219,9 @@ class MaterialStorageImpl implements MaterialStorage {
         } else {
             logger_.warn("No TSuiteResult of ${tsri.toString()} is not found in ${componentMR_.toString()}")
         }
-        // Is it ok to do this? not sure.
-        intoMR.scan()
+        if (scan) {
+            intoMR.scan()
+        }
         // done
         return count
     }
@@ -247,8 +252,8 @@ class MaterialStorageImpl implements MaterialStorage {
                     fmtD,
                     tsr.getTSuiteName().getValue(),
                     tsr.getTSuiteTimestamp().format(),
-                    tsr.getLength()))
-                sum += tsr.getLength()
+                    tsr.getSize()))
+                sum += tsr.getSize()
             }
         }
         bw.println(String.format(fmtS, '', '', '================'))
@@ -256,11 +261,49 @@ class MaterialStorageImpl implements MaterialStorage {
         bw.flush()
     }
     
-    @Override
-    long reduceTo(long targetBytes) throws IOException {
-        
-    }
     
+    @Override
+    long reduce(long targetBytes) throws IOException {
+        // need to clone the list as componentMR_.getTSuiteResultList() returns unmodifiable list
+        List<TSuiteResult> source = new ArrayList<TSuiteResult>(componentMR_.getTSuiteResultList())
+        // sort the list as required
+        Collections.sort(source, new TimestampFirstTSuiteResultComparator())
+        // now calculate
+        List<TSuiteResultId> toBeDeleted = new ArrayList<TSuiteResultId>()
+        long size = 0
+        for (TSuiteResult tsr : source) {
+            if (size + tsr.getSize() <= targetBytes) {
+                size += tsr.getSize()
+            } else {
+                toBeDeleted.add(tsr.getId())
+            }
+        }
+        // now delete it
+        int numDeletedFiles = componentMR_.clear(toBeDeleted)
+        // report the current size of the Storage
+        return componentMR_.getSize()
+    }
+
+    /**
+     * sort a list of TSuiteResult by
+     * 1. Descending order of TSuiteTimestamp
+     * 2. Ascending order of TSuiteName
+     */
+    class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
+        @Override
+        int compare(TSuiteResult a, TSuiteResult b) {
+            int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
+            if (v < 0) {
+                return v
+            } else if (v == 0) {
+                v = a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName())
+                return v
+            } else {
+                return v
+            }
+        }
+    }
+
     
     @Override
     int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
@@ -268,8 +311,9 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
         int count = 0
         for (TSuiteResultId tsri : tSuiteResultIdList) {
-            count += this.restore(intoMR, tsri)
+            count += this.restore(intoMR, tsri, false)
         }
+        componentMR_.scan()
         return count
     }
     
@@ -315,8 +359,9 @@ class MaterialStorageImpl implements MaterialStorage {
         List<TSuiteResult> list = by.findTSuiteResults(context)
         for (TSuiteResult tSuiteResult : list) {
             // copy the files
-            count += this.restore(intoMR, tSuiteResult.getId())
+            count += this.restore(intoMR, tSuiteResult.getId(), false)
         }
+        componentMR_.scan()
         return count
     }
     

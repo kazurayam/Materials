@@ -24,7 +24,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
     private Path tCaseDirectory_
     private List<Material> materials_
     private LocalDateTime lastModified_
-    private long length_
+    private long size_
 
     // --------------------- constructors and initializer ---------------------
     /**
@@ -36,7 +36,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         tCaseName_ = tCaseName
         materials_ = new ArrayList<Material>()
         lastModified_ = LocalDateTime.MIN
-        length_ = 0
+        size_ = 0
     }
 
     // --------------------- properties getter & setters ----------------------
@@ -77,13 +77,13 @@ final class TCaseResult implements Comparable<TCaseResult> {
         return lastModified_
     }
     
-    TCaseResult setLength(long length) {
-        length_ = length
+    TCaseResult setSize(long size) {
+        size_ = size
         return this
     }
     
-    long getLength() {
-        return length_
+    long getSize() {
+        return size_
     }
 
     // --------------------- create/add/get child nodes ----------------------
@@ -225,7 +225,7 @@ final class TCaseResult implements Comparable<TCaseResult> {
         sb.append('"tCaseName":'   + this.getTCaseName().toString()   + ',')
         sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(this.getTCaseDirectory().toString())    + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
-        sb.append('"length":' + this.getLength()+ ',')
+        sb.append('"length":' + this.getSize()+ ',')
         sb.append('"materials":[')
         def count = 0
         for (Material mate : materials_) {

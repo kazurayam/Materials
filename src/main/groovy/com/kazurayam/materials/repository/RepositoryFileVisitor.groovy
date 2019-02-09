@@ -126,7 +126,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 logger_.debug("#postVisitDirectory set lastModified=${lastModified} to ${tCaseResult_.getTCaseName()}")
                 // resolve the length property of the TCaseResult
                 long length = resolveLengthOfTCaseResult(tCaseResult_)
-                tCaseResult_.setLength(length)
+                tCaseResult_.setSize(length)
                 //
                 directoryTransition_.pop()
                 break
@@ -139,7 +139,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     " ${tSuiteResult_.getId().getTSuiteName()}/${tSuiteResult_.getId().getTSuiteTimestamp().format()}")
                 // resolve the length property of the TSuiteResult
                 long length = resolveLengthOfTSuiteResult(tSuiteResult_)
-                tSuiteResult_.setLength(length)
+                tSuiteResult_.setSize(length)
                 //
                 directoryTransition_.pop()
                 break
@@ -247,7 +247,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
         long length = 0
         List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
         for (TCaseResult tcr :  tCaseResults) {
-            length += tcr.getLength()
+            length += tcr.getSize()
         }
         return length
     }
