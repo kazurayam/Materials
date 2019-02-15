@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.TSuiteTimestampImpl
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -63,7 +63,7 @@ class MaterialRepositorySpec extends Specification {
     def testPutCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
         when:
         mr_.putCurrentTestSuite(
-                new TSuiteName('oneStringArg'), TSuiteTimestampImpl.newInstance('20180616_160000'))
+                new TSuiteName('oneStringArg'), TSuiteTimestamp.newInstance('20180616_160000'))
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -116,6 +116,53 @@ class MaterialRepositorySpec extends Specification {
         then:
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
+    
+    def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
+        when:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        mr_.putCurrentTestSuite(tsri)
+        TSuiteResult tsr = mr_.getTSuiteResult(tsri)
+        then:
+        tsr != null
+        tsr.getId().getTSuiteName().equals(tsn)
+        tsr.getId().getTSuiteTimestamp().equals(tst)
+        
+    }
+    
+    def testGetTSuiteResultList_withTSuiteName() {
+        when:
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> list = mr_.getTSuiteResultList(tsriList)
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList_withTSuiteName() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList()
+        then:
+        list != null
+        list.size()== 13
+    }
+    
+    def testGetTSuiteResultList_noArgs() {
+        when:
+        List<TSuiteResult> list = mr_.getTSuiteResultList()
+        then:
+        list != null
+        list.size() == 13
+    }
 
     def testResolveScreenshotPath() {
         when:
@@ -158,13 +205,13 @@ class MaterialRepositorySpec extends Specification {
      */
     def testDeleteBaseDirContents() throws IOException {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository_DeleteBaseDirContents")
-        if (!Files.exists(workdir)) {
-            Files.createDirectories(workdir)
+        Path casedir = workdir_.resolve("testDeleteBaseDirContents")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
         }
-        Helpers.copyDirectory(fixture_, workdir)
+        Helpers.copyDirectory(fixture_, casedir)
         //
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir.resolve('Materials'))
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
         //
         when:
         mr.deleteBaseDirContents()
@@ -173,5 +220,56 @@ class MaterialRepositorySpec extends Specification {
         contents.size() == 0
     }
 
+    def testClear_withArgTSuiteTimestamp() {
+        setup:
+        Path casedir = workdir_.resolve("testClear_withArgTSuiteTimestamp")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        int count = mr.clear(tsri)
+        then:
+        count == 2
+        when:
+        TSuiteResult result= mr.getTSuiteResult(tsri)
+        then:
+        result == null
+        when:
+        mr.putCurrentTestSuite(tsri)
+        Path tsnDir = mr.getCurrentTestSuiteDirectory()
+        Path tstDir = tsnDir.resolve(tst.format())
+        then:
+        ! Files.exists(tstDir)
+    }
+
+    def testClear_withArgOnlyTSuiteName() {
+        setup:
+        Path casedir = workdir_.resolve("testClear_withArgOnlyTSuiteName")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
+        int count = mr.clear(tsn)        // HERE is difference
+        then:
+        count == 12
+        when:
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(tsn)
+        List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
+        then:
+        list.size() == 0
+        when:
+        Path tsnDir = mr.getBaseDir().resolve(tsn.getValue())
+        then:
+        ! Files.exists(tsnDir)
+    }
 }
 

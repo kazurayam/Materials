@@ -27,19 +27,89 @@ import java.nio.file.Path
  */
 interface MaterialRepository {
 
+    /**
+     * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
+     * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
+     *
+     * @param tSuiteResultId
+     * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
+     */
+    int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException
+
+    /**
+     * delete all descendant directories and files beloging to the tSuiteName directory.
+     * will remove the tSuiteTimestamp directory.
+     *
+     * @param tSuiteName
+     * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
+     */
+    int clear(TSuiteName tSuiteName) throws IOException
+
+    /**
+     * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
+     * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
+     *
+     * @param tSuiteResultId
+     * @param to perform scan() or not
+     * @return number of material files deleted. number of directories are not included.
+     * @throws IOException
+     */
+    int clear(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
+    
+
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare.
+     *
+     * This method perform the following search under the Materials directory
+     * in order to identify which Material object to be included.
+     *
+     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
+     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path
+     *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
+     *
+     * @return List<MaterialPair>
+     */
+    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName)
+
+    /**
+     *
+     * delete all descendant directories and files of the base directory. The base directory is retained.
+     */
+    void deleteBaseDirContents() throws IOException
+
+    
+    Path getBaseDir()
+    
+    Path getCurrentTestSuiteDirectory()
+    String getCurrentTestSuiteId()
+    String getCurrentTestSuiteTimestamp()
+    
+    long getSize()
+    
+    Path getTestCaseDirectory(String testCaseId)
+    
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+    List<TSuiteResultId> getTSuiteResultIdList()
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
+    List<TSuiteResult> getTSuiteResultList()
+    
+    /**
+     * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
+     * @return
+     */
+    Path makeIndex()
+    
     void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
     void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-
-    String getCurrentTestSuiteId()
-    String getCurrentTestSuiteTimestamp()
-
-    Path getBaseDir()
-    Path getCurrentTestSuiteDirectory()
-
-    Path getTestCaseDirectory(String testCaseId)
-
+    void putCurrentTestSuite(TSuiteResultId tSuiteResultId)
+    
     /**
      *
      * @param testCaseId e.g., 'Test Cases/TC1'
@@ -47,11 +117,10 @@ interface MaterialRepository {
      * @return
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, URL url)
-
     Path resolveScreenshotPath(String testCaseId, Path subpath, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url)
     Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url)
-
+    
     /**
      *
      * @param testCaseId
@@ -59,44 +128,12 @@ interface MaterialRepository {
      * @return
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, String fileName)
-
-    /**
-     *
-     * @param testCaseId e.g., 'Test Cases/TC1'
-     * @param subpath '.', 'foo' or 'foo/bar'
-     * @param fileName 'myfile.xls'
-     * @return
-     */
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
-
-    /**
-     * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
-     * @return
-     */
-    Path makeIndex()
-
-
-    /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
-     * 
-     * This method perform the following search under the Materials directory
-     * in order to identify which Material object to be included.
-     * 
-     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName 
-     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
-     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path 
-     *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
-     * 
-     * @return List<MaterialPair>
-     */
-    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName)
     
     /**
-     *
-     * @param directory delete descendant directories and files of the specified directory. The directory is retained.
+     * scan the baseDir to recognize the current directories/files configuration
      */
-    void deleteBaseDirContents() throws IOException
+    void scan()
 }

@@ -9,13 +9,10 @@ import java.time.ZoneOffset
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialImpl
+import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestampImpl
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
 
 import spock.lang.Specification
 
@@ -45,7 +42,7 @@ class MaterialSpec extends Specification {
     }
     def setup() {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
     }
 
@@ -144,6 +141,53 @@ class MaterialSpec extends Specification {
         mate1 != mate3
     }
 
+    def testGetFileName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getFileName().equals("smilechart.xls")      // "main.TC4/foo/bar/smilechart.xls"
+    }
+    
+    def testGetSubpath_withSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath().equals(Paths.get("foo/bar"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
+
+    def testGetSubpath_withoutSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180530_130419"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath() == null    // "main.TC4/smilechart.xls" has no subpath in between TCaseName and fileName
+    }
+
+    def testGetTCaseName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getTCaseName().equals(new TCaseName("main/TC4"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
 
     def testGetDirpath_noSubpath() {
         when:
@@ -157,7 +201,7 @@ class MaterialSpec extends Specification {
     def testGetDirpath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180718_142832'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         logger_.debug("#testGetSDirpath_withSubpath mate.getDirpath()=${mate.getDirpath()}")
@@ -174,7 +218,7 @@ class MaterialSpec extends Specification {
     def testGetDirpathRelativeToTSuiteResult() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180718_142832'))
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         logger_.debug("#testGetDirpathRelativeToTSuiteResult mate.getSubpath()=${mate.getDirpathRelativeToTSuiteResult()}")
@@ -215,7 +259,7 @@ class MaterialSpec extends Specification {
     def testGetIdentifierOfExcelFile() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS4'), TSuiteTimestampImpl.newInstance('20180712_142755'))
+            new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
@@ -251,7 +295,7 @@ class MaterialSpec extends Specification {
     def testGetIdentifier_FileTypeOmmited() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestampImpl.newInstance('20180627_140853'))
+            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         when:
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),
@@ -283,10 +327,10 @@ class MaterialSpec extends Specification {
     def testGetPath_Excel() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS4'), TSuiteTimestampImpl.newInstance('20180712_142755'))
+                new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         for (Material mate : materials) {
             logger_.debug("#testGetPath_Excel mate.getPath()=${mate.getPath()}")
             assert !mate.getPath().contains('..')
@@ -295,10 +339,10 @@ class MaterialSpec extends Specification {
         true
     }
 
-    def testGetPathBySubpath() {
+    def testGetPath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material png = tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         then:
@@ -332,8 +376,8 @@ class MaterialSpec extends Specification {
 
     def testHashCodeWithAncestors() {
         setup:
-        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
-        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), TSuiteTimestampImpl.newInstance('20180612_111256'))
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), TSuiteTimestamp.newInstance('20180612_111256'))
         TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
@@ -357,6 +401,17 @@ class MaterialSpec extends Specification {
         mate.setLastModified(longNow)
         then:
         mate.getLastModified() == ldtNow
+    }
+    
+    def testSetGetLength() {
+        setup:
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
+        long length = 2_000_000
+        when:
+        Material result = mate.setLength(length)
+        then:
+        mate.getLength() == length
+        result.getLength() == length 
     }
 
     def testSetParent_GetParent() {

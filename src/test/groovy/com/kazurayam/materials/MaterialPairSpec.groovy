@@ -6,12 +6,9 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.model.MaterialPairImpl
-import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.TSuiteTimestampImpl
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
+import com.kazurayam.materials.impl.MaterialPairImpl
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
 
 import spock.lang.Specification
 
@@ -38,17 +35,14 @@ class MaterialPairSpec extends Specification {
         repoRoot_ = scanner.getRepositoryRoot()
     }
     def setup() {
-        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130419'))
-        TCaseResult expectedTcr = expectedTsr.getTCaseResult(
-            new TCaseName('main.TC1'))
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130419'))
+        TCaseResult expectedTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
         expectedMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         //
-        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestampImpl.newInstance('20180530_130604'))
-        TCaseResult actualTcr = expectedTsr.getTCaseResult(
-            new TCaseName('main.TC1'))
-        actualMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130604'))
+        TCaseResult actualTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
+        actualMaterial_   = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
     def cleanup() {}
     def cleanupSpec() {}

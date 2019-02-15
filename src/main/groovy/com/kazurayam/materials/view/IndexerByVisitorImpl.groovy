@@ -10,14 +10,14 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.model.TCaseResult
-import com.kazurayam.materials.model.TSuiteResult
-import com.kazurayam.materials.model.repository.RepositoryFileScanner
-import com.kazurayam.materials.model.repository.RepositoryRoot
-import com.kazurayam.materials.model.repository.RepositoryVisitResult
-import com.kazurayam.materials.model.repository.RepositoryVisitor
-import com.kazurayam.materials.model.repository.RepositoryVisitorSimpleImpl
-import com.kazurayam.materials.model.repository.RepositoryWalker
+import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryVisitResult
+import com.kazurayam.materials.repository.RepositoryVisitor
+import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
+import com.kazurayam.materials.repository.RepositoryWalker
 
 import groovy.json.JsonOutput
 import groovy.xml.XmlUtil
@@ -369,9 +369,9 @@ modalize();
             if (tsr != null) {
                 StringBuilder sb = new StringBuilder()
                 sb.append('../Reports/')
-                sb.append(tsr.getTSuiteName().getValue().replace('.', '/'))
+                sb.append(tsr.getId().getTSuiteName().getValue().replace('.', '/'))
                 sb.append('/')
-                sb.append(tsr.getTSuiteTimestamp().format())
+                sb.append(tsr.getId().getTSuiteTimestamp().format())
                 sb.append('/Report.html')
                 return sb.toString()
             } else {
@@ -432,8 +432,8 @@ modalize();
              if (tSuiteResult.getJUnitReportWrapper() != null) {
                  sb.append(',')
                  sb.append('"tags": ["')
-                 logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getTSuiteName()}'")
-                 sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getTSuiteName().getId()))
+                 logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
+                 sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
                  sb.append('"')
                  sb.append(',')
                  sb.append('"')
