@@ -6,6 +6,9 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.view.IndexerByVisitorImpl
+import com.kazurayam.materials.view.IndexerRudimentaryImpl
+
 import spock.lang.Specification
 
 class IndexerFactorySpec extends Specification {
@@ -34,7 +37,7 @@ class IndexerFactorySpec extends Specification {
 
     def testNewIndexerWithArg() {
         when:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
+        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.view.IndexerRudimentaryImpl')
         then:
         indexer != null
         indexer.getClass().getName() == IndexerRudimentaryImpl.class.getName()

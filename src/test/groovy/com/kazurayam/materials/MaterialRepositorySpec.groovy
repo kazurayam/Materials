@@ -10,6 +10,8 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
+
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -43,7 +45,7 @@ class MaterialRepositorySpec extends Specification {
         timestampdir.toString().contains('oneStringArg')
         when:
         String dirName = timestampdir.getFileName()
-        LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
+        LocalDateTime ldt = TSuiteTimestampImpl.parse(dirName)
         then:
         true
     }
@@ -61,8 +63,7 @@ class MaterialRepositorySpec extends Specification {
     def testPutCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
         when:
         mr_.putCurrentTestSuite(
-                new TSuiteName('oneStringArg'),
-                new TSuiteTimestamp('20180616_160000'))
+                new TSuiteName('oneStringArg'), TSuiteTimestamp.newInstance('20180616_160000'))
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -115,6 +116,53 @@ class MaterialRepositorySpec extends Specification {
         then:
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
+    
+    def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
+        when:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        mr_.putCurrentTestSuite(tsri)
+        TSuiteResult tsr = mr_.getTSuiteResult(tsri)
+        then:
+        tsr != null
+        tsr.getId().getTSuiteName().equals(tsn)
+        tsr.getId().getTSuiteTimestamp().equals(tst)
+        
+    }
+    
+    def testGetTSuiteResultList_withTSuiteName() {
+        when:
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> list = mr_.getTSuiteResultList(tsriList)
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList_withTSuiteName() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        then:
+        list != null
+        list.size() == 4
+    }
+    
+    def testGetTSuiteResultIdList() {
+        when:
+        List<TSuiteResultId> list = mr_.getTSuiteResultIdList()
+        then:
+        list != null
+        list.size()== 13
+    }
+    
+    def testGetTSuiteResultList_noArgs() {
+        when:
+        List<TSuiteResult> list = mr_.getTSuiteResultList()
+        then:
+        list != null
+        list.size() == 13
+    }
 
     def testResolveScreenshotPath() {
         when:
@@ -124,42 +172,6 @@ class MaterialRepositorySpec extends Specification {
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
 
-    def testDeleteFilesInDownloadsDir() {
-        when:
-        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-        Path sourceFile   = downloadsDir.resolve('myFunnyDays.txt')
-        Helpers.touch(sourceFile)
-        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
-        then:
-        list.size() >= 1
-        when:
-        int count = mr_.deleteFilesInDownloadsDir('myFunnyDays.txt')
-        then:
-        count > 0
-        when:
-        list = DownloadsDirectoryHelper.listSuffixedFiles('myFunnyDays.txt')
-        then:
-        list.size() == 0
-    }
-
-    def testImportFileFromDownloadsDir() {
-        when:
-        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
-        Path downloadsDir = Paths.get(System.getProperty('user.home'), 'Downloads')
-        Path sourceFile   = downloadsDir.resolve('downloaded.pdf')
-        Helpers.touch(sourceFile)
-        List<Path> list = DownloadsDirectoryHelper.listSuffixedFiles('downloaded.pdf')
-        then:
-        list.size() >= 1
-        when:
-        Path path = mr_.importFileFromDownloadsDir('Test Cases/main/TC1', 'downloaded.pdf')
-        then:
-        path != null
-        path.toString().contains('main.TS1')
-        path.toString().contains('20180530_130419')
-        path.toString().contains('main.TC1')
-        path.toString().contains('downloaded.pdf')
-    }
 
     def testMakeIndex() {
         when:
@@ -193,13 +205,13 @@ class MaterialRepositorySpec extends Specification {
      */
     def testDeleteBaseDirContents() throws IOException {
         setup:
-        Path workdir = Paths.get("./build/tmp/MaterialRepository_DeleteBaseDirContents")
-        if (!Files.exists(workdir)) {
-            Files.createDirectories(workdir)
+        Path casedir = workdir_.resolve("testDeleteBaseDirContents")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
         }
-        Helpers.copyDirectory(fixture_, workdir)
+        Helpers.copyDirectory(fixture_, casedir)
         //
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir.resolve('Materials'))
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
         //
         when:
         mr.deleteBaseDirContents()
@@ -208,5 +220,56 @@ class MaterialRepositorySpec extends Specification {
         contents.size() == 0
     }
 
+    def testClear_withArgTSuiteTimestamp() {
+        setup:
+        Path casedir = workdir_.resolve("testClear_withArgTSuiteTimestamp")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        int count = mr.clear(tsri)
+        then:
+        count == 2
+        when:
+        TSuiteResult result= mr.getTSuiteResult(tsri)
+        then:
+        result == null
+        when:
+        mr.putCurrentTestSuite(tsri)
+        Path tsnDir = mr.getCurrentTestSuiteDirectory()
+        Path tstDir = tsnDir.resolve(tst.format())
+        then:
+        ! Files.exists(tstDir)
+    }
+
+    def testClear_withArgOnlyTSuiteName() {
+        setup:
+        Path casedir = workdir_.resolve("testClear_withArgOnlyTSuiteName")
+        if (!Files.exists(casedir)) {
+            Files.createDirectories(casedir)
+        }
+        Helpers.copyDirectory(fixture_, casedir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        when:
+        TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
+        int count = mr.clear(tsn)        // HERE is difference
+        then:
+        count == 12
+        when:
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(tsn)
+        List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
+        then:
+        list.size() == 0
+        when:
+        Path tsnDir = mr.getBaseDir().resolve(tsn.getValue())
+        then:
+        ! Files.exists(tsnDir)
+    }
 }
 

@@ -9,6 +9,11 @@ import java.time.ZoneOffset
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.impl.MaterialImpl
+import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
+
 import spock.lang.Specification
 
 //@Ignore
@@ -36,7 +41,8 @@ class MaterialSpec extends Specification {
         repoRoot_ = scanner.getRepositoryRoot()
     }
     def setup() {
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
     }
 
@@ -44,8 +50,8 @@ class MaterialSpec extends Specification {
     // feature methods
     def testCompareTo_byFileType() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.JPG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.JPG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1.compareTo(mate2) < 0
         mate2.compareTo(mate1) > 0
@@ -53,8 +59,8 @@ class MaterialSpec extends Specification {
 
     def testCompareTo_bySuffix() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
         then:
         mate1.compareTo(mate2) > 0
         mate2.compareTo(mate1) < 0
@@ -62,20 +68,20 @@ class MaterialSpec extends Specification {
 
     def testCompareTo_byURL() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/abc'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/abc'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1.compareTo(mate2) < 0
         when:
-        Material mate3 = new Material(Paths.get('.'), new URL('https://aaa.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate3 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://aaa.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1.compareTo(mate3) > 0
     }
 
     def testCompareTo_equal() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1.compareTo(mate2) == 0
     }
@@ -86,7 +92,7 @@ class MaterialSpec extends Specification {
         setup:
         Path filePath = repoRoot_.getBaseDir().resolve('main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls')
         when:
-        Material mate = new Material(tcr_, filePath)
+        Material mate = MaterialImpl.newInstance(tcr_, filePath)
         then:
         mate.getParent() == tcr_
         mate.getTCaseResult() == tcr_
@@ -100,8 +106,8 @@ class MaterialSpec extends Specification {
 
     def testEquals() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1 != null
         mate2 != null
@@ -109,32 +115,79 @@ class MaterialSpec extends Specification {
     }
 
     def testEquals_differentURL() {
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         when:
-        Material mate3 = new Material(Paths.get('.'), new URL('https://www.yahoo.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate3 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.yahoo.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate3 != null
         mate1 != mate3
     }
 
     def testEquals_differentSuffix() {
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         when:
-        Material mate3 = new Material(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
+        Material mate3 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
         then:
         mate3 != null
         mate1 != mate3
     }
 
     def testEquals_differentFileType() {
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         when:
-        Material mate3 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.JPEG).setParent(tcr_)
+        Material mate3 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.JPEG).setParent(tcr_)
         then:
         mate3 != null
         mate1 != mate3
     }
 
+    def testGetFileName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getFileName().equals("smilechart.xls")      // "main.TC4/foo/bar/smilechart.xls"
+    }
+    
+    def testGetSubpath_withSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath().equals(Paths.get("foo/bar"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
+
+    def testGetSubpath_withoutSubpath() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180530_130419"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getSubpath() == null    // "main.TC4/smilechart.xls" has no subpath in between TCaseName and fileName
+    }
+
+    def testGetTCaseName() {
+        when:
+        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
+            TSuiteTimestamp.newInstance("20180718_142832"))
+        then:
+        materials.size() > 0
+        when:
+        Material mate = materials[0]
+        then:
+        mate.getTCaseName().equals(new TCaseName("main/TC4"))    // "main.TC4/foo/bar/smilechart.xls"
+    }
 
     def testGetDirpath_noSubpath() {
         when:
@@ -147,7 +200,8 @@ class MaterialSpec extends Specification {
 
     def testGetDirpath_withSubpath() {
         when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         logger_.debug("#testGetSDirpath_withSubpath mate.getDirpath()=${mate.getDirpath()}")
@@ -163,7 +217,8 @@ class MaterialSpec extends Specification {
      */
     def testGetDirpathRelativeToTSuiteResult() {
         when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial(Paths.get('foo'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         logger_.debug("#testGetDirpathRelativeToTSuiteResult mate.getSubpath()=${mate.getDirpathRelativeToTSuiteResult()}")
@@ -203,7 +258,8 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifierOfExcelFile() {
         setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
@@ -217,7 +273,7 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifier_withoutSuffix() {
         setup:
-        Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         when:
         String title = mate.getIdentifier()
         then:
@@ -227,7 +283,7 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifier_withSuffix() {
         when:
-        Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
         then:
         mate != null
         when:
@@ -238,7 +294,8 @@ class MaterialSpec extends Specification {
 
     def testGetIdentifier_FileTypeOmmited() {
         setup:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'), new TSuiteTimestamp('20180627_140853'))
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         when:
         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),
@@ -270,10 +327,10 @@ class MaterialSpec extends Specification {
     def testGetPath_Excel() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS4'), new TSuiteTimestamp('20180712_142755'))
+                new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> materials = tcr.getMaterials()
+        List<Material> materials = tcr.getMaterialList()
         for (Material mate : materials) {
             logger_.debug("#testGetPath_Excel mate.getPath()=${mate.getPath()}")
             assert !mate.getPath().contains('..')
@@ -282,10 +339,10 @@ class MaterialSpec extends Specification {
         true
     }
 
-    def testGetPathBySubpath() {
+    def testGetPath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material png = tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         then:
@@ -306,12 +363,12 @@ class MaterialSpec extends Specification {
 
     def testHashCode() {
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr_)
         then:
         mate1.hashCode() == mate2.hashCode()
         when:
-        Material mate3 = new Material(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
+        Material mate3 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), new Suffix(1), FileType.PNG).setParent(tcr_)
         then:
         mate1.hashCode() != mate3.hashCode()
     }
@@ -319,13 +376,13 @@ class MaterialSpec extends Specification {
 
     def testHashCodeWithAncestors() {
         setup:
-        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
-        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), new TSuiteTimestamp('20180612_111256'))
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), TSuiteTimestamp.newInstance('20180612_111256'))
         TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        Material mate1 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr1)
-        Material mate2 = new Material(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr2)
+        Material mate1 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr1)
+        Material mate2 = MaterialImpl.newInstance(Paths.get('.'), new URL('https://www.google.com/'), Suffix.NULL, FileType.PNG).setParent(tcr2)
         logger_.debug("#testHashCodeWithAncestors mate1.hashCode()=${mate1.hashCode()}")
         logger_.debug("#testHashCodeWithAncestors mate2.hashCode()=${mate2.hashCode()}")
         then:
@@ -336,7 +393,7 @@ class MaterialSpec extends Specification {
 
     def testSetGetLastModified_long() {
         setup:
-        Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
         LocalDateTime ldtNow = LocalDateTime.now()
         Instant instantNow = ldtNow.toInstant(ZoneOffset.UTC)
         long longNow = instantNow.toEpochMilli()
@@ -345,10 +402,21 @@ class MaterialSpec extends Specification {
         then:
         mate.getLastModified() == ldtNow
     }
+    
+    def testSetGetLength() {
+        setup:
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
+        long length = 2_000_000
+        when:
+        Material result = mate.setLength(length)
+        then:
+        mate.getLength() == length
+        result.getLength() == length 
+    }
 
     def testSetParent_GetParent() {
         when:
-        Material mate = new Material(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
+        Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(2), FileType.PNG)
         Material modified = mate.setParent(tcr_)
         then:
         modified.getParent() == tcr_

@@ -9,6 +9,8 @@ import java.util.regex.Pattern
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.impl.TSuiteTimestampImpl
+
 import spock.lang.Specification
 
 /**
@@ -153,7 +155,7 @@ class HelpersSpec extends Specification {
     def testNow() {
         when:
         String now = Helpers.now()
-        LocalDateTime ldt = TSuiteTimestamp.parse(now)
+        LocalDateTime ldt = TSuiteTimestampImpl.parse(now)
         logger_.debug("#testNow now=${now},ldt=${ldt}")
         then:
         true

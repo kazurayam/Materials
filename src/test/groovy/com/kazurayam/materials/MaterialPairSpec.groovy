@@ -6,6 +6,10 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.impl.MaterialPairImpl
+import com.kazurayam.materials.repository.RepositoryFileScanner
+import com.kazurayam.materials.repository.RepositoryRoot
+
 import spock.lang.Specification
 
 class MaterialPairSpec extends Specification {
@@ -31,17 +35,14 @@ class MaterialPairSpec extends Specification {
         repoRoot_ = scanner.getRepositoryRoot()
     }
     def setup() {
-        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
-        TCaseResult expectedTcr = expectedTsr.getTCaseResult(
-            new TCaseName('main.TC1'))
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130419'))
+        TCaseResult expectedTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
         expectedMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         //
-        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130604'))
-        TCaseResult actualTcr = expectedTsr.getTCaseResult(
-            new TCaseName('main.TC1'))
-        actualMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130604'))
+        TCaseResult actualTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
+        actualMaterial_   = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -49,7 +50,7 @@ class MaterialPairSpec extends Specification {
     // feature methods
     def testGetLeft() {
         setup:
-        MaterialPair mp = new MaterialPair().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
         when:
         Material left = mp.getLeft()
         then:
@@ -58,7 +59,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetRight() {
         setup:
-        MaterialPair mp = new MaterialPair().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
         when:
         Material right = mp.getRight()
         then:
@@ -67,7 +68,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetExpected() {
         setup:
-        MaterialPair mp = new MaterialPair().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
         when:
         Material expected = mp.getExpected()
         then:
@@ -76,7 +77,7 @@ class MaterialPairSpec extends Specification {
 
     def testGetActual() {
         setup:
-        MaterialPair mp = new MaterialPair().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
         when:
         Material actual = mp.getActual()
         then:

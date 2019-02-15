@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.28.0'
+version  = '0.29.17'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -34,6 +34,7 @@ dependencies {
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
     compile group: 'ch.qos.logback', name: 'logback-core', version: "${logbackVersion}"
 
+    
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 }
@@ -44,15 +45,14 @@ tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncodi
 
 test {
     include '**/materials/*Spec.class'
-    exclude '**/materials/visualtesting/*Spec.class'
+    include '**/materials/**/*Spec.class'
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
 
 task pinpoint(type: Test) {
-    include '**/materials/MaterialRepositorySpec.class'
-    //include '**/materials/MaterialRepositoryImplSpec.class'
-    //include '**/materials/TSuiteResultSpec.class'
+    include '**/MaterialRepositorySpec.class'
+    include '**/MaterialStorageSpec.class'
     outputs.upToDateWhen {false}
 }
 

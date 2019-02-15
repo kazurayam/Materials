@@ -11,14 +11,16 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.material.Material"              level="info"/>
-    <logger name="com.kazurayam.material.MaterialFileName"      level="info"/>
-    <logger name="com.kazurayam.material.RepositoryRoot"        level="info"/>
-    <logger name="com.kazurayam.material.RepositoryFileScanner" level="info"/>
-    <logger name="com.kazurayam.material.RepositoryFileVisitor" level="info"/>
-    <logger name="com.kazurayam.material.RepositoryWalker"      level="info"/>
-    <logger name="com.kazurayam.material.TSuiteResult"          level="info"/>
-    <logger name="com.kazurayam.material.TCaseResult"           level="debug"/>
+    <logger name="com.kazurayam.materials.Helpers"                               level="info"/>
+    <logger name="com.kazurayam.materials.impl.MaterialImpl"                     level="info"/>
+    <logger name="com.kazurayam.materials.impl.TSuiteResultImpl"                 level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryRoot"             level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryFileScanner"      level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryFileVisitor"      level="info"/>
+    <logger name="com.kazurayam.materials.repository.RepositoryWalker"           level="info"/>
+    <logger name="com.kazurayam.materials.model.MaterialFileName"                level="info"/>
+    <logger name="com.kazurayam.materials.model.TCaseResult"                     level="info"/>
+    <logger name="com.kazurayam.materials.view.IndexerByVisitorImpl"             level="info"/>
 
     <logger name="root" level="debug" />
 

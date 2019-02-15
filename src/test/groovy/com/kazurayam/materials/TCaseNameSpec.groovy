@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.TCaseName
+
 import spock.lang.Specification
 
 class TCaseNameSpec extends Specification {

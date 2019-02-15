@@ -5,15 +5,18 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class MaterialRepositoryFactory {
+import com.kazurayam.materials.impl.MaterialRepositoryImpl
+
+final class MaterialRepositoryFactory {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryFactory.class)
 
     private MaterialRepositoryFactory() {}
 
     static MaterialRepository createInstance(Path baseDir) {
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
-        return new MaterialRepositoryImpl(baseDir)
+        return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir)
     }
 
 }
