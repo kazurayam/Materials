@@ -6,13 +6,15 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-class ImageDiffStatsSpec extends Specification {
-    static Logger logger_ = LoggerFactory.getLogger(ImageDiffStatsSpec.class)
+class ImageDeltaStatsSpec extends Specification {
+    
+    static Logger logger_ = LoggerFactory.getLogger(ImageDeltaStatsSpec.class)
+    
     def testToString() {
         when:
-        String s = ImageDiffStats.ZERO.toString()
+        String s = ImageDeltaStats.ZERO.toString()
         String pp = JsonOutput.prettyPrint(s)
-        logger_.debug("ImageDiffStats.ZERO.toString():\n${pp}")
+        logger_.debug(ImageDeltaStats.getClass().getName() + ".ZERO:\n${pp}")
         then:
         s.contains("0.0")
     }

@@ -1,12 +1,12 @@
-package com.kazurayam.matrials.stats
+package com.kazurayam.materials.stats
 
-class ImageDelta {
+class Delta {
     
     private String a
     private String b
     private double d
     
-    ImageDelta(String a, String b, double d) {
+    Delta(String a, String b, double d) {
         this.a = a
         this.b = b
         this.d = d

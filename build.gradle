@@ -51,7 +51,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/ImageDiffStatsSpec.class'
+    include '**/ImageDeltaStatsSpec.class'
+    include '**/StorageScannerSpec.class'
     outputs.upToDateWhen {false}
 }
 

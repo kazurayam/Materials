@@ -1,24 +1,23 @@
-package com.kazurayam.materials.impl
+package com.kazurayam.materials.stats
 
-import com.kazurayam.materials.ImageDiffStats
+import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.TSuiteName
-import com.kazurayam.matrials.stats.StatsEntry
 
 /**
  * 
  * @author kazurayam
  */
-class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffStatsImpl> {
+class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDeltaStatsImpl> {
     
     public static final double SUGGESTED_CRITERIA_PERCENTAGE = 5.0
     
     private double defaultCriteriaPercentage
     
-    private List<StatsEntry> statsEntries
+    private List<ImageDeltaStatsEntry> statsEntries
     
-    ImageDiffStatsImpl() {
+    ImageDeltaStatsImpl() {
         defaultCriteriaPercentage = 0.0
-        statsEntries = new ArrayList<StatsEntry>()
+        statsEntries = new ArrayList<ImageDeltaStatsEntry>()
     }
     
     
@@ -38,12 +37,12 @@ class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffS
             defaultCriteriaPercentage = value
             return this
         }
-        ImageDiffStats build() {
-            return new ImageDiffStatsImpl(this)
+        ImageDeltaStats build() {
+            return new ImageDeltaStatsImpl(this)
         }
     }
     
-    private ImageDiffStatsImpl(Builder builder) {
+    private ImageDeltaStatsImpl(Builder builder) {
         this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
     }
 
@@ -53,20 +52,20 @@ class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffS
     }
     
     @Override
-    List<StatsEntry> getStatsEntries() {
+    List<ImageDeltaStatsEntry> getStatsEntries() {
         return statsEntries
     }
     
     @Override
-    StatsEntry getStatsEntry(TSuiteName tSuiteName) {
-        for (StatsEntry entry: statsEntries) {
+    ImageDeltaStatsEntry getStatsEntry(TSuiteName tSuiteName) {
+        for (ImageDeltaStatsEntry entry: statsEntries) {
             if (entry.getTSuiteName().equals(tSuiteName)) {
                 return statsEntries.get(tSuiteName)
             }
         }
     }
     
-    void addStatsEntry(StatsEntry entry ) {
+    void addStatsEntry(ImageDeltaStatsEntry entry ) {
         statsEntries.add(entry)
     }
 
@@ -85,7 +84,7 @@ class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffS
     }
     
     @Override
-    int compareTo(ImageDiffStatsImpl other) {
+    int compareTo(ImageDeltaStatsImpl other) {
         double d = this.getDefaultCriteriaPercentage()
         return this.getDefaultCriteriaPercentage() - d
     }
