@@ -2,9 +2,11 @@ package com.kazurayam.materials.stats
 
 import java.nio.file.Path
 
-import org.slf4j.Logger
+import javax.imageio.ImageIO
+
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
@@ -46,23 +48,22 @@ class StorageScanner {
      * @return
      */
     static ImageDeltaStatsEntry makeImageDeltaStatsEntry(MaterialStorage ms, TSuiteName tSuiteName) {
-        ImageDeltaStatsEntry idse = new ImageDeltaStatsEntry(tSuiteName)
-        List<TSuiteResultId> idList = ms.getTSuiteResultIdList(tSuiteName)
-        for (TSuiteResultId tSuiteResultId : idList) {
+        // at first, look up materials of PNG within the TSuiteName across multiple TSuiteTimestamps
+        List<Material> materials = new ArrayList<Material>()
+        for (TSuiteResultId tSuiteResultId : ms.getTSuiteResultIdList(tSuiteName)) {
             TSuiteResult tSuiteResult = ms.getTSuiteResult(tSuiteResultId)
-            List<Material> materials = tSuiteResult.getMaterialList()
-            for (Material mate: materials) {
+            for (Material mate: tSuiteResult.getMaterialList()) {
                 if (mate.fileType.equals(FileType.PNG)) {
-                    Path path = mate.getDirpathRelativeToTSuiteResult()
-                    List<Delta> deltaList = makeDeltaList(tSuiteResult, path)
-                    if (deltaList.size()> 0) {
-                        MaterialStats materialStats = new MaterialStats(path, deltaList)
-                        idse.addMaterialStats(materialStats)
-                    }
+                    materials.add(mate)
                 }
             }
         }
-        return idse
+        // sort the list by the descending order of TSuiteTimestamp
+        
+        // build ImageDeltaStatsEntry object while ...
+        throw new UnsupportedOperationException("TODO")
+        //ImageDeltaStatsEntry idse = new ImageDeltaStatsEntry(tSuiteName)
+        //return idse
     }
     
     /**
@@ -74,11 +75,10 @@ class StorageScanner {
      */
     static List<Delta> makeDeltaList(TSuiteResult tSuiteResult, Path path) {
         List<Delta> deltaList = new ArrayList<Delta>()
-        for (Material mate : tSuiteResult.getMaterialList()) {
-            if (mate.getDirpathRelativeToTSuiteResult() == path) {
-                
-            }
-        }
+        // look up Materials of which path is equal to the given param
+        List<Material> materials = tSuiteResult.getMaterialList(path)
+        // sort the list of materials by 
+        
         //
         return deltaList
     }
@@ -90,6 +90,22 @@ class StorageScanner {
      * @return
      */
     static Delta makeDelta(Material a, Material b) {
-        throw new UnsupportedOperationException("FIXME: makeDelta() depends on the aShot library.")
+        Objects.requireNonNull(a, "Material a must not be null")
+        Objects.requireNonNull(b, "Material b must not be null")
+        if (a.getFileType() != FileType.PNG) {
+            throw new IllegalArgumentException("${a.path()} is not a PNG file")
+        }
+        if (b.getFileType() != FileType.PNG) {
+            throw new IllegalArgumentException("${b.path()} is not a PNG file")
+        }
+        // create ImageDifference of the 2 given images to calculate the diff ratio
+        ImageDifference diff = new ImageDifference(
+                ImageIO.read(a.getPath().toFile()),
+                ImageIO.read(b.getPath().toFile()))
+        // make the delta
+        Delta delta = new Delta(a.getParent().getParent().getTSuiteTimestamp(),
+                        b.getParent().getParent().getTSuiteTimestamp(),
+                        diff.getRatio())
+        return delta
     }
 }
