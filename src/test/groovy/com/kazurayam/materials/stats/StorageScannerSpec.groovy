@@ -43,7 +43,7 @@ class StorageScannerSpec extends Specification {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = StorageScanner.scan(ms_)
-        ImageDeltaStatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         then:
         statsEntry != null
         statsEntry.getTSuiteName().equals(tSuiteName)
@@ -58,7 +58,7 @@ class StorageScannerSpec extends Specification {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = StorageScanner.scan(ms_, tSuiteName)
-        ImageDeltaStatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         then:
         statsEntry != null
         statsEntry.getTSuiteName().equals(tSuiteName)

@@ -2,15 +2,15 @@ package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TSuiteName
 
-class ImageDeltaStatsEntry {
+class StatsEntry {
     
-    static final ImageDeltaStatsEntry NULL = new ImageDeltaStatsEntry(null)
+    static final StatsEntry NULL = new StatsEntry(null)
 
     private TSuiteName tSuiteName
     
     private List<MaterialStats> materialStatsList
     
-    ImageDeltaStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry(TSuiteName tSuiteName) {
         this.tSuiteName = tSuiteName
         this.materialStatsList = new ArrayList<MaterialStats>() 
     }

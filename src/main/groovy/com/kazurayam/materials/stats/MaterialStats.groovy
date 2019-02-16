@@ -5,9 +5,9 @@ import java.nio.file.Path
 class MaterialStats {
 
     private Path path
-    private List<Delta> deltaList
+    private List<ImageDelta> deltaList
     
-    MaterialStats(Path path, List<Delta> deltaList) {
+    MaterialStats(Path path, List<ImageDelta> deltaList) {
         this.path = path
         this.deltaList = deltaList
     }
@@ -20,7 +20,7 @@ class MaterialStats {
         throw new UnsupportedOperationException("FIXME")
     }
     
-    List<Delta> getDeltaList() {
+    List<ImageDelta> getDeltaList() {
         return deltaList
     }
 

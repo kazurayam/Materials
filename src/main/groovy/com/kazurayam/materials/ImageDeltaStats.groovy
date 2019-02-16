@@ -1,13 +1,13 @@
 package com.kazurayam.materials
 
-import com.kazurayam.materials.stats.ImageDeltaStatsEntry
 import com.kazurayam.materials.stats.ImageDeltaStatsImpl
+import com.kazurayam.materials.stats.StatsEntry
 
 /**
  * <PRE>
  * {
  *  "defaultCriteriaPercentage":5.0,
- *  "imageDeltaStatsEntries":[
+ *  "statsEntries":[
  *      {
  *          "TSuiteName": "47News_chronos_capture",
  *          "materialStatsList": [
@@ -56,9 +56,9 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
     // --------------- attribute setter & getter ----------------------
     abstract double getDefaultCriteriaPercentage()
     
-    abstract List<ImageDeltaStatsEntry> getImageDeltaStatsEntries()
+    abstract List<StatsEntry> getImageDeltaStatsEntries()
     
-    abstract ImageDeltaStatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
+    abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
     
     @Override
     int compareTo(ImageDeltaStats other) {

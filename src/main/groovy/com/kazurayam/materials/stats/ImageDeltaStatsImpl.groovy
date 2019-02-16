@@ -13,17 +13,17 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
     
     private double defaultCriteriaPercentage
     
-    private List<ImageDeltaStatsEntry> imageDeltaStatsEntries
+    private List<StatsEntry> imageDeltaStatsEntries
     
     /**
      *
      */
     static class Builder {
         private double defaultCriteriaPercentage
-        private List<ImageDeltaStatsEntry> imageDeltaStatsEntries
+        private List<StatsEntry> imageDeltaStatsEntries
         Builder() {
             defaultCriteriaPercentage = SUGGESTED_CRITERIA_PERCENTAGE
-            imageDeltaStatsEntries = new ArrayList<ImageDeltaStatsEntry>()
+            imageDeltaStatsEntries = new ArrayList<StatsEntry>()
         }
         Builder defaultCriteriaPercentage(double value) {
             if (value < 0.0 || value > 100.0) {
@@ -33,7 +33,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
             defaultCriteriaPercentage = value
             return this
         }
-        Builder addImageDeltaStatsEntry(ImageDeltaStatsEntry entry) {
+        Builder addImageDeltaStatsEntry(StatsEntry entry) {
             imageDeltaStatsEntries.add(entry)
             return this
         }
@@ -53,21 +53,21 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
     }
     
     @Override
-    List<ImageDeltaStatsEntry> getImageDeltaStatsEntries() {
+    List<StatsEntry> getImageDeltaStatsEntries() {
         return imageDeltaStatsEntries
     }
     
     @Override
-    ImageDeltaStatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName) {
-        for (ImageDeltaStatsEntry entry: imageDeltaStatsEntries) {
+    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName) {
+        for (StatsEntry entry: imageDeltaStatsEntries) {
             if (entry.getTSuiteName().equals(tSuiteName)) {
                 return imageDeltaStatsEntries.get(tSuiteName)
             }
         }
-        return ImageDeltaStatsEntry.NULL
+        return StatsEntry.NULL
     }
     
-    void addStatsEntry(ImageDeltaStatsEntry entry ) {
+    void addStatsEntry(StatsEntry entry ) {
         statsEntries.add(entry)
     }
 
