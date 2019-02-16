@@ -1,6 +1,8 @@
 package com.kazurayam.materials.impl
 
 import com.kazurayam.materials.ImageDiffStats
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.matrials.stats.StatsEntry
 
 /**
  * 
@@ -11,6 +13,14 @@ class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffS
     public static final double SUGGESTED_CRITERIA_PERCENTAGE = 5.0
     
     private double defaultCriteriaPercentage
+    
+    private List<StatsEntry> statsEntries
+    
+    ImageDiffStatsImpl() {
+        defaultCriteriaPercentage = 0.0
+        statsEntries = new ArrayList<StatsEntry>()
+    }
+    
     
     /**
      *
@@ -37,8 +47,27 @@ class ImageDiffStatsImpl extends ImageDiffStats implements Comparable<ImageDiffS
         this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
     }
 
+    @Override
     double getDefaultCriteriaPercentage() {
         return this.defaultCriteriaPercentage
+    }
+    
+    @Override
+    List<StatsEntry> getStatsEntries() {
+        return statsEntries
+    }
+    
+    @Override
+    StatsEntry getStatsEntry(TSuiteName tSuiteName) {
+        for (StatsEntry entry: statsEntries) {
+            if (entry.getTSuiteName().equals(tSuiteName)) {
+                return statsEntries.get(tSuiteName)
+            }
+        }
+    }
+    
+    void addStatsEntry(StatsEntry entry ) {
+        statsEntries.add(entry)
     }
 
     @Override
