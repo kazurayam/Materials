@@ -7,20 +7,20 @@ import com.kazurayam.materials.stats.ImageDeltaStatsImpl
  * <PRE>
  * {
  *  "defaultCriteriaPercentage":5.0,
- *  "statsEntries":[
+ *  "imageDeltaStatsEntries":[
  *      {
  *          "TSuiteName": "47News_chronos_capture",
  *          "materialStatsList": [
  *              {
  *                  "path: "main.TC_47News.visitSite/47NEWS_TOP.png",
- *                  "calculatedCriteriaPercentage": 2.51,
  *                  "deltaList": [
  *                      { "a": "20190216_064354", "b": "20190216_064149", "delta": 0.10 },
  *                      { "a": "20190216_064149", "b": "20190216_064007", "delta": 0.0  },
  *                      { "a": "20190216_064007", "b": "20190216_063205", "delta": 1.96 },
  *                      { "a": "20190216_063205", "b": "20190215_222316", "delta": 2.67 },
  *                      { "a": "20190215_222316", "b": "20190215_222146", "delta": 0.0  }
- *                  ]
+ *                  ],
+ *                  "calculatedCriteriaPercentage": 2.51
  *              }
  *          ]
  *      },
@@ -29,10 +29,11 @@ import com.kazurayam.materials.stats.ImageDeltaStatsImpl
  *          "materialStatsList": [
  *              {
  *                  "path": "Execute/20190216_175116/captureLondonStockExchange/https%3A%2F%2Fwww.londonstockexchange.com%2Fhome%2Fhomepage.htm.png",
- *                  "calculatedCriteriaPercentage": 0.0,
  *                  "imageDeltas": [
  *                      { "a": "20190217_175210", "b": "20190216_092451", "delta": 0.0}
- *                  ]
+ *                  ],
+ *                  "calculatedCriteriaPercentage": 0.0
+ *              }
  *          ]
  *      }
  *  }
@@ -55,9 +56,9 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
     // --------------- attribute setter & getter ----------------------
     abstract double getDefaultCriteriaPercentage()
     
-    abstract List<ImageDeltaStatsEntry> getStatsEntries()
+    abstract List<ImageDeltaStatsEntry> getImageDeltaStatsEntries()
     
-    abstract ImageDeltaStatsEntry getStatsEntry(TSuiteName tSuiteName)
+    abstract ImageDeltaStatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
     
     @Override
     int compareTo(ImageDeltaStats other) {

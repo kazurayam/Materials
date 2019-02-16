@@ -19,6 +19,10 @@ class ImageDeltaStatsEntry {
         return tSuiteName
     }
     
+    void addMaterialStats(MaterialStats materialStats) {
+        this.materialStatsList.add(materialStats)
+    }
+    
     List<MaterialStats> getMaterialStatsList() {
         return materialStatsList
     }

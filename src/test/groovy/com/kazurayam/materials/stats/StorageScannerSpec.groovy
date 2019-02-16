@@ -39,20 +39,36 @@ class StorageScannerSpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
-    def testScan() {
+    def testScan_all() {
         when:
+        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = StorageScanner.scan(ms_)
-        ImageDeltaStatsEntry statsEntry = stats.getStatsEntry(new TSuiteName('47News_chronos_capture'))
+        ImageDeltaStatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         then:
         statsEntry != null
-        statsEntry.getTSuiteName().equals(new TSuiteName('47News_chronos_capture'))
+        statsEntry.getTSuiteName().equals(tSuiteName)
         when:
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
         mstats != null
         mstats.getPath().toString()== 'main.TC_47News.visitSite/47NEWS_TOP.png'
-    
     }
+    
+    def testScan_47News() {
+        when:
+        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
+        ImageDeltaStats stats = StorageScanner.scan(ms_, tSuiteName)
+        ImageDeltaStatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        then:
+        statsEntry != null
+        statsEntry.getTSuiteName().equals(tSuiteName)
+        when:
+        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+        then:
+        mstats != null
+        mstats.getPath().toString()== 'main.TC_47News.visitSite/47NEWS_TOP.png'
+    }
+    
     def testFeature() {
         setup:
         anything()

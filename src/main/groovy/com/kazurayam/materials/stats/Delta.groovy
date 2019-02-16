@@ -1,22 +1,24 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TSuiteTimestamp
+
 class Delta {
     
-    private String a
-    private String b
+    private TSuiteTimestamp a
+    private TSuiteTimestamp b
     private double d
     
-    Delta(String a, String b, double d) {
+    Delta(TSuiteTimestamp a, TSuiteTimestamp b, double d) {
         this.a = a
         this.b = b
         this.d = d
     }
     
-    String getA() {
+    TSuiteTimestamp getA() {
         return a
     }
     
-    String getB() {
+    TSuiteTimestamp getB() {
         return b
     }
     

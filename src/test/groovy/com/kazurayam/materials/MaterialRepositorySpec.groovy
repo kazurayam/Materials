@@ -117,6 +117,13 @@ class MaterialRepositorySpec extends Specification {
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
     
+    def testGetTSuiteNameList() {
+        when:
+        List<TSuiteName> tsnList = mr_.getTSuiteNameList()
+        then:
+        tsnList.size() == 8
+    }
+    
     def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')

@@ -2,18 +2,14 @@ package com.kazurayam.materials.stats
 
 import java.nio.file.Path
 
-import com.kazurayam.materials.Material
-
 class MaterialStats {
 
     private Path path
-    private double calculatedCriteriaPercentage
     private List<Delta> deltaList
     
-    MaterialStats(Material material) {
-        path = material.getDirpathRelativeToTSuiteResult()
-        calculatedCriteriaPercentage = 0.0
-        deltaList = new ArrayList<Delta>()
+    MaterialStats(Path path, List<Delta> deltaList) {
+        this.path = path
+        this.deltaList = deltaList
     }
 
     Path getPath() {
@@ -21,18 +17,11 @@ class MaterialStats {
     }
     
     double getCalculatedCriteriaPercentage() {
-        return calculatedCriteriaPercentage
+        throw new UnsupportedOperationException("FIXME")
     }
     
-    void setCalculatedCriteriaPercentage(double value) {
-        calculatedCriteriaPercentage = value
-    }
-    
-    List<Delta> getDeletaList() {
+    List<Delta> getDeltaList() {
         return deltaList
     }
-    
-    void addDeleta(Delta delta) {
-        
-    }
+
 }

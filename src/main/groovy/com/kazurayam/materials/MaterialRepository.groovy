@@ -92,6 +92,8 @@ interface MaterialRepository {
     
     Path getTestCaseDirectory(String testCaseId)
     
+    List<TSuiteName> getTSuiteNameList()
+    
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
     List<TSuiteResultId> getTSuiteResultIdList()

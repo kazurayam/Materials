@@ -89,6 +89,13 @@ interface MaterialStorage {
      */
     long getSize()
     
+    
+    /**
+     * 
+     * @return
+     */
+    List<TSuiteName> getTSuiteNameList()
+    
     /**
      * 
      * @param tSuiteName
