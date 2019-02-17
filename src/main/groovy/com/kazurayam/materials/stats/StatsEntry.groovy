@@ -27,4 +27,28 @@ class StatsEntry {
         return materialStatsList
     }
     
+    @Override
+    String toString() {
+        return this.toJson()
+    }
+    
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("{")
+        sb.append("\"TSuiteName\":")
+        sb.append("\"${tSuiteName.getValue()}\",")
+        sb.append("\"materialStatsList\":")
+        int count = 0
+        sb.append("[")
+        for (MaterialStats ms : materialStatsList) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            sb.append(ms.toJson())
+            count += 1
+        }
+        sb.append("]")
+        sb.append("}")
+        return sb.toString()
+    }
 }

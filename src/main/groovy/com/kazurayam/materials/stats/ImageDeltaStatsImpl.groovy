@@ -2,12 +2,11 @@ package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.TSuiteName
-
 /**
  * 
  * @author kazurayam
  */
-class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDeltaStatsImpl> {
+class ImageDeltaStatsImpl extends ImageDeltaStats {
     
     public static final double SUGGESTED_CRITERIA_PERCENTAGE = 5.0
     
@@ -37,7 +36,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
             imageDeltaStatsEntries.add(entry)
             return this
         }
-        ImageDeltaStats build() {
+        ImageDeltaStatsImpl build() {
             return new ImageDeltaStatsImpl(this)
         }
     }
@@ -53,22 +52,22 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
     }
     
     @Override
-    List<StatsEntry> getImageDeltaStatsEntries() {
+    List<StatsEntry> getStatsEntryList() {
         return imageDeltaStatsEntries
     }
     
     @Override
-    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry getStatsEntry(TSuiteName tSuiteName) {
         for (StatsEntry entry: imageDeltaStatsEntries) {
             if (entry.getTSuiteName().equals(tSuiteName)) {
-                return imageDeltaStatsEntries.get(tSuiteName)
+                return entry
             }
         }
         return StatsEntry.NULL
     }
     
     void addStatsEntry(StatsEntry entry ) {
-        statsEntries.add(entry)
+        imageDeltaStatsEntries.add(entry)
     }
 
     @Override
@@ -80,14 +79,19 @@ class ImageDeltaStatsImpl extends ImageDeltaStats implements Comparable<ImageDel
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"defaultCriteriaPercentage\":")
-        sb.append("${this.getDefaultCriteriaPercentage()}")
+        sb.append("${this.getDefaultCriteriaPercentage()},")
+        sb.append("\"imageDeltaStatsEntries\":[")
+        int count = 0
+        for (StatsEntry statsEntry : imageDeltaStatsEntries) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            sb.append(statsEntry.toJson())
+            count += 1
+        }
+        sb.append("]")
         sb.append("}")
         return sb.toString()
     }
-    
-    @Override
-    int compareTo(ImageDeltaStatsImpl other) {
-        double d = this.getDefaultCriteriaPercentage()
-        return this.getDefaultCriteriaPercentage() - d
-    }
+
 }

@@ -4,16 +4,18 @@ import com.kazurayam.materials.stats.ImageDeltaStatsImpl
 import com.kazurayam.materials.stats.StatsEntry
 
 /**
+ * ImageDeletaStats object:
+ * 
  * <PRE>
  * {
  *  "defaultCriteriaPercentage":5.0,
- *  "statsEntries":[
+ *  "statsEntryList":[
  *      {
  *          "TSuiteName": "47News_chronos_capture",
  *          "materialStatsList": [
  *              {
  *                  "path: "main.TC_47News.visitSite/47NEWS_TOP.png",
- *                  "deltaList": [
+ *                  "imageDeltaList": [
  *                      { "a": "20190216_064354", "b": "20190216_064149", "delta": 0.10 },
  *                      { "a": "20190216_064149", "b": "20190216_064007", "delta": 0.0  },
  *                      { "a": "20190216_064007", "b": "20190216_063205", "delta": 1.96 },
@@ -29,7 +31,7 @@ import com.kazurayam.materials.stats.StatsEntry
  *          "materialStatsList": [
  *              {
  *                  "path": "Execute/20190216_175116/captureLondonStockExchange/https%3A%2F%2Fwww.londonstockexchange.com%2Fhome%2Fhomepage.htm.png",
- *                  "imageDeltas": [
+ *                  "imageDeltaList": [
  *                      { "a": "20190217_175210", "b": "20190216_092451", "delta": 0.0}
  *                  ],
  *                  "calculatedCriteriaPercentage": 0.0
@@ -56,9 +58,9 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
     // --------------- attribute setter & getter ----------------------
     abstract double getDefaultCriteriaPercentage()
     
-    abstract List<StatsEntry> getImageDeltaStatsEntries()
+    abstract List<StatsEntry> getStatsEntryList()
     
-    abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
+    abstract StatsEntry getStatsEntry(TSuiteName tSuiteName)
     
     @Override
     int compareTo(ImageDeltaStats other) {

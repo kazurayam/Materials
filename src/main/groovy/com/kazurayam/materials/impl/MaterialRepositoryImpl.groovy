@@ -536,6 +536,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         return size
     }
+    
+    @Override
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+        Set<Path> set = new TreeSet<Path>()
+        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName)
+        for (TSuiteResultId id: idList) {
+            TSuiteResult tSuiteResult = this.getTSuiteResult(id)
+            List<Material> materialList = tSuiteResult.getMaterialList()
+            for (Material material: materialList) {
+                set.add(material.getPathRelativeToTSuiteTimestamp().normalize())
+            }
+        } 
+        return set
+    }
 
     TCaseResult getTCaseResult(String testCaseId) {
         return this.getTCaseResult(new TCaseName(testCaseId))

@@ -20,22 +20,50 @@ class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
     
+    /**
+     * This will return ... 
+     * <PRE>
+     * {
+     *  "defaultCriteriaPercentage":5.0,
+     *  "statsEntryList":[
+     *      // list of StatsEntry objects
+     *  ]
+     * }
+     * </PRE>
+     * 
+     * @param materialStorage
+     * @return a ImageDeltaStats object
+     */
     static ImageDeltaStats scan(MaterialStorage materialStorage) {
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
         for (TSuiteName tSuiteName : materialStorage.getTSuiteNameList()) {
-            StatsEntry idse = makeStatsEntry(materialStorage, tSuiteName)
-            builder.addImageDeltaStatsEntry(idse)
+            StatsEntry se = makeStatsEntry(materialStorage, tSuiteName)
+            builder.addImageDeltaStatsEntry(se)
         }
         return builder.build()
     }
     
+    /**
+     * This will return
+     * <PRE>
+     * {
+     *  "defaultCriteriaPercentage":5.0,
+     *  "statsEntryList":[
+     *      // a StatsEntry object of the TSuiteName specified
+     *  ]
+     * }
+     * </PRE>
+     *
+     * @param materialStorage
+     * @return a ImageDeltaStats object
+     */
     static ImageDeltaStats scan(MaterialStorage materialStorage, TSuiteName tSuiteName) {
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
         if (materialStorage.getTSuiteNameList().contains(tSuiteName)) {
-            StatsEntry idse = makeStatsEntry(materialStorage, tSuiteName)
-            builder.addImageDeltaStatsEntry(idse)
+            StatsEntry se = makeStatsEntry(materialStorage, tSuiteName)
+            builder.addImageDeltaStatsEntry(se)
         } else {
             logger_.warn("No ${tSuiteName} is found in ${materialStorage}")
         }
@@ -43,27 +71,59 @@ class StorageScanner {
     }
     
     /**
+     * This will return
+     * <PRE>
+     *     {
+     *          "TSuiteName": "47News_chronos_capture",
+     *          "materialStatsList": [
+     *              // list of MaterialStats objects
+     *          ]
+     *     }
+     * </PRE>
      * 
-     * @param mr
+     * @param ms
+     * @param tSuiteName
+     * @return a StatsEntry object
+     */
+    static StatsEntry makeStatsEntry(MaterialStorage ms, TSuiteName tSuiteName) {
+        StatsEntry statsEntry = new StatsEntry(tSuiteName)
+        Set<Path> set = 
+            ms.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
+        for (Path path : set) {
+            MaterialStats materialStats = makeMaterialStats(ms, tSuiteName, path)
+            statsEntry.addMaterialStats(materialStats)
+        }
+        return statsEntry
+    }
+
+    
+    /**
+     * This will return
+     * <PRE>
+     *              {
+     *                  "path: "main.TC_47News.visitSite/47NEWS_TOP.png",
+     *                  "imageDeltaList": [
+     *                      // list of ImageDelta objects
+     *                  ],
+     *                  "calculatedCriteriaPercentage": 2.51
+     *              }
+     * </PRE>
+     * 
+     * @param ms
      * @param tSuiteName
      * @return
      */
-    static StatsEntry makeStatsEntry(MaterialStorage ms, TSuiteName tSuiteName) {
+    static MaterialStats makeMaterialStats(
+                                MaterialStorage ms,
+                                TSuiteName tSuiteName,
+                                Path pathRelativeToTSuiteTimestamp) {
+                                
         // at first, look up materials of FileType.PNG 
         //   within the TSuiteName across multiple TSuiteTimestamps
-        List<Material> materials = new ArrayList<Material>()
-        for (TSuiteResultId tSuiteResultId : ms.getTSuiteResultIdList(tSuiteName)) {
-            TSuiteResult tSuiteResult = ms.getTSuiteResult(tSuiteResultId)
-            for (Material mate: tSuiteResult.getMaterialList()) {
-                if (mate.fileType.equals(FileType.PNG)) {
-                    materials.add(mate)
-                }
-            }
-        }
-        
-        if (materials.size() == 0) {
-            throw new IllegalArgumentException("No PNG file find in the TSuiteName ${tSuiteName}")
-        }
+        List<Material> materials = getMaterialsOfARelativePathInATSuiteName(
+                                        ms,
+                                        tSuiteName,
+                                        pathRelativeToTSuiteTimestamp)
         
         // sort the Material list by the descending order of TSuiteTimestamp
         Collections.sort(materials, new Comparator<Material>() {
@@ -81,24 +141,58 @@ class StorageScanner {
                 }
             }
         })
-        // build the MaterialStats object while calculating the diff ratio of two PNG files
+
+        // build the MaterialStats object while calculating the diff ratio 
+        // of two PNG files
         List<ImageDelta> imageDeltaList = new ArrayList<ImageDelta>()
         if (materials.size() > 1) {
             for (int i = 0; i < materials.size() - 1; i++) {
-                ImageDelta imageDelta = makeImageDelta(materials.get(i), materials.get(i + 1))
+                ImageDelta imageDelta = makeImageDelta(
+                                    materials.get(i), materials.get(i + 1))
                 imageDeltaList.add(imageDelta)
             }
         }
-        Path relativePath = materials.get(0).getPathRelativeToTSuiteTimestamp()
-        MaterialStats materialStats  = new MaterialStats(relativePath, imageDeltaList)
+        MaterialStats materialStats  = new MaterialStats(
+                    pathRelativeToTSuiteTimestamp, imageDeltaList)
         return materialStats
     }
 
     /**
+     *
+     * @param ms
+     * @param tSuiteName
+     * @param pathRelativeToTSuiteTimestamp
+     * @return
+     */
+    static List<Material> getMaterialsOfARelativePathInATSuiteName(
+                                MaterialStorage ms,
+                                TSuiteName tSuiteName,
+                                Path pathRelativeToTSuiteTimestamp) {
+        List<Material> materialList = new ArrayList<Material>()
+        //
+        List<TSuiteResultId> idsOfTSuiteName = ms.getTSuiteResultIdList(tSuiteName)
+        for (TSuiteResultId tSuiteResultId : idsOfTSuiteName) {
+            TSuiteResult tSuiteResult = ms.getTSuiteResult(tSuiteResultId)
+            for (Material mate: tSuiteResult.getMaterialList()) {
+                if (mate.fileType.equals(FileType.PNG) &&
+                    mate.getPathRelativeToTSuiteTimestamp() ==
+                            pathRelativeToTSuiteTimestamp) {
+                    materialList.add(mate)
+                }
+            }
+        }
+        return materialList
+    }
+
+    /**
+     * This will return
+     * <PRE>
+     *      { "a": "20190216_064354", "b": "20190216_064149", "delta": 0.10 }
+     * </PRE>
      * 
      * @param a
      * @param b
-     * @return
+     * @return a ImageDelta object
      */
     static ImageDelta makeImageDelta(Material a, Material b) {
         Objects.requireNonNull(a, "Material a must not be null")
@@ -114,9 +208,10 @@ class StorageScanner {
                 ImageIO.read(a.getPath().toFile()),
                 ImageIO.read(b.getPath().toFile()))
         // make the delta
-        ImageDelta imageDelta = new ImageDelta(a.getParent().getParent().getTSuiteTimestamp(),
-                        b.getParent().getParent().getTSuiteTimestamp(),
-                        diff.getRatio())
+        ImageDelta imageDelta = new ImageDelta(
+                                a.getParent().getParent().getTSuiteTimestamp(),
+                                b.getParent().getParent().getTSuiteTimestamp(),
+                                diff.getRatio())
         return imageDelta
     }
 }

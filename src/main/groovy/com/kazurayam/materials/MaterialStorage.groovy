@@ -89,6 +89,12 @@ interface MaterialStorage {
      */
     long getSize()
     
+    /**
+     * 
+     * @param tSuiteName
+     * @return
+     */
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     
     /**
      * 

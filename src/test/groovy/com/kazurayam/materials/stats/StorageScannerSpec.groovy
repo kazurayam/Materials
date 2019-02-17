@@ -43,7 +43,12 @@ class StorageScannerSpec extends Specification {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = StorageScanner.scan(ms_)
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        logger_.debug("#testScan_all:\n" + stats.toString())
+        //logger_.debug("#testScan_all:\n" + JsonOutput.prettyPrint(stats.toString()))
+        then:
+        !stats.toString().contains("NaN")
+        when:
+        StatsEntry statsEntry = stats.getStatsEntry(tSuiteName)
         then:
         statsEntry != null
         statsEntry.getTSuiteName().equals(tSuiteName)
@@ -58,7 +63,7 @@ class StorageScannerSpec extends Specification {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = StorageScanner.scan(ms_, tSuiteName)
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getStatsEntry(tSuiteName)
         then:
         statsEntry != null
         statsEntry.getTSuiteName().equals(tSuiteName)

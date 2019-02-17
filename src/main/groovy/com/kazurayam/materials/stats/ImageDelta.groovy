@@ -25,4 +25,22 @@ class ImageDelta {
     double getD() {
         return d
     }
+    
+    @Override
+    String toString() {
+        return this.toJson()
+    }
+    
+    String toJson() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("{")
+        sb.append("\"a\":")
+        sb.append("\"${a.format()}\",")
+        sb.append("\"b\":")
+        sb.append("\"${b.format()}\",")
+        sb.append("\"d\":")
+        sb.append(String.format('%1$.2f', this.getD()))
+        sb.append("}")
+        return sb.toString()
+    }
 }
