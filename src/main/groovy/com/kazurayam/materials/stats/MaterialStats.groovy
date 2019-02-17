@@ -16,19 +16,36 @@ class MaterialStats {
         return path
     }
     
-    double getCalculatedCriteriaPercentage() {
+    double[] data() {
         List<Double> list = new ArrayList<Double>()
         for (ImageDelta delta : this.getImageDeltaList()) {
             list.add(delta.getD())
         }
         double[] data = list.toArray(new double[list.size()])
+        return data
+    }
+    
+    int dataLength() {
+        return this.data().length
+    }
+    
+    double sum() {
+        double[] data = this.data()
         // sum
-        double sum = 0.0 
+        double sum = 0.0
         for (int i = 0; i < data.length; i++) {
             sum += data[i]
         }
-        // mean
-        double mean = sum / data.length
+        return sum
+    }
+    
+    double mean() {
+        double mean = this.sum()/ this.data().length
+        return mean
+    }
+    
+    double variance() {
+        double[] data = this.data()
         // ssum
         double ssum = 0.0
         for (int i = 0; i < data.length; i++) {
@@ -36,8 +53,18 @@ class MaterialStats {
         }
         // variance
         double variance = ssum / data.length
+        return variance
+    }
+    
+    double standardDeviation() {
+        return Math.sqrt(this.variance())
+    }
+    
+    double getCalculatedCriteriaPercentage() {
+        // mean
+        double mean = this.mean()
         // standard deviation
-        double sd = Math.sqrt(variance)
+        double sd = this.standardDeviation()
         //
         return mean + sd * 2
     }
@@ -66,6 +93,11 @@ class MaterialStats {
             count += 1
         }
         sb.append("],")
+        sb.append("\"data\":${this.data().toString()},")
+        sb.append("\"sum\":${this.sum()},")
+        sb.append("\"mean\":${this.mean()},")
+        sb.append("\"variance\":${this.variance()},")
+        sb.append("\"standardDeviation\":${this.standardDeviation()},")
         sb.append("\"calculatedCriteriaPercentage\":")
         //sb.append(String.format('%1$.2f', this.getCalculatedCriteriaPercentage()))
         sb.append(this.getCalculatedCriteriaPercentage())
