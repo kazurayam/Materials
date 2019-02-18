@@ -41,7 +41,8 @@ class StorageScannerSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
     
-    // feature methods
+    
+    @Ignore   // method scan() was deprecated
     def testScan_all() {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")

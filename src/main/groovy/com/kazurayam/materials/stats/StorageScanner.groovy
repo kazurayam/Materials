@@ -29,36 +29,8 @@ class StorageScanner {
         this.materialStorage_ = materialStorage
     }
     
-    /**
-     * This will return ... 
-     * <PRE>
-     * {
-     *  "defaultCriteriaPercentage":5.0,
-     *  "statsEntryList":[
-     *      // list of StatsEntry objects
-     *  ]
-     * }
-     * </PRE>
-     * 
-     * @param materialStorage
-     * @return a ImageDeltaStats object
-     */
-    ImageDeltaStats scan() {
-        StopWatch stopWatch = new StopWatch()
-        stopWatch.start()
-        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
-                                defaultCriteriaPercentage(5.0)
-        for (TSuiteName tSuiteName : materialStorage_.getTSuiteNameList()) {
-            StatsEntry se = this.makeStatsEntry(tSuiteName)
-            builder.addImageDeltaStatsEntry(se)
-            logger_.info("#scan created StatsEntry of ${se.getTSuiteName()}")
-        }
-        stopWatch.stop()
-        logger_.debug("#scan() took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
-        return builder.build()
-    }
     
-    private String stopWatch
+    
     /**
      * This will return
      * <PRE>
@@ -88,6 +60,37 @@ class StorageScanner {
         logger_.debug("#scan(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return builder.build()
     }
+    
+    /**
+     * This will return ...
+     * <PRE>
+     * {
+     *  "defaultCriteriaPercentage":5.0,
+     *  "statsEntryList":[
+     *      // list of StatsEntry objects
+     *  ]
+     * }
+     * </PRE>
+     * @deprecated It takes long if you scan multiple TSuiteName. Do not use this. Be specific to process a single TSuiteName.
+     * @param materialStorage
+     * @return a ImageDeltaStats object
+     */
+    /*
+    ImageDeltaStats scan() {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
+        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
+                                defaultCriteriaPercentage(5.0)
+        for (TSuiteName tSuiteName : materialStorage_.getTSuiteNameList()) {
+            StatsEntry se = this.makeStatsEntry(tSuiteName)
+            builder.addImageDeltaStatsEntry(se)
+            logger_.info("#scan created StatsEntry of ${se.getTSuiteName()}")
+        }
+        stopWatch.stop()
+        logger_.debug("#scan() took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        return builder.build()
+    }
+    */
     
     /**
      * This will return
