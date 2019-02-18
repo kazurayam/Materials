@@ -56,8 +56,8 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/StorageScannerSpec.class'
     include '**/MaterialStatsSpec.class'
-    //include '**/StorageScannerSpec.class'
     outputs.upToDateWhen {false}
 }
 

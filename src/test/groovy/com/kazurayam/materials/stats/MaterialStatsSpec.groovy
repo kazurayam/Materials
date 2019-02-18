@@ -53,38 +53,38 @@ class MaterialStatsSpec extends Specification {
         when:
         double[] data = materialStats_.data()
         then:
-        data == [16.86, 4.53, 2.83, 27.85, 16.1, 0.01]    
+        data == [16.86, 4.53, 27.85, 16.1]    
     }
 
     def testSum() {
         when:
-        double sum = materialStats_.sum()  // "sum": 68.18,
+        double sum = materialStats_.sum()  // "sum": 65.34,
         then:
-        sum == 68.18
+        sum == 65.34
     }
     
     def testMean() {
         when:
-        double mean = materialStats_.mean()  // "mean": 11.363333333333335,
+        double mean = materialStats_.mean()  // "mean": 16.335,
         then:
-        11.36 < mean
-        mean < 11.37
+        16.0 < mean
+        mean < 17.0
     }
     
     def testVaiance() {
         when:
-        double variance = materialStats_.variance()  // "variance": 2.914330912658107,
+        double variance = materialStats_.variance()  // "variance": 2.009,
         then:
-        2.91 < variance
-        variance < 2.92
+        2.000 < variance
+        variance < 2.010
     }
     
     def testStandardDeviation() {
         when:
-        double standardDeviation = materialStats_.standardDeviation()   // "standardDeviation": 1.7071411519432442,
+        double standardDeviation = materialStats_.standardDeviation()   // "standardDeviation": 1.417,
         then:
-        1.70 < standardDeviation
-        standardDeviation < 1.71
+        1.41 < standardDeviation
+        standardDeviation < 1.42
     }
     
     def testPROBABILITY() {
@@ -94,18 +94,18 @@ class MaterialStatsSpec extends Specification {
     
     def testTDistribution() {
         when:
-        double tdistribution = materialStats_.tDistribution()   // "tDistribution": 2.0150483736252975,
+        double tdistribution = materialStats_.tDistribution()   // "tDistribution": 2.353,
         then:
-        2.0150 < tdistribution
-        tdistribution < 2.0151
+        2.350 < tdistribution
+        tdistribution < 2.360
     }
     
     def testGetCalculatedCriteriaPercentage() {
         when:
-        double upperBound = materialStats_.getCalculatedCriteriaPercentage() // "calculatedCriteriaPercentage": 12.77
+        double upperBound = materialStats_.getCalculatedCriteriaPercentage() // "calculatedCriteriaPercentage": 18.003
         then:
-        12.00 < upperBound
-        upperBound < 13.00
+        18.00 < upperBound
+        upperBound < 19.00
     }
     
     

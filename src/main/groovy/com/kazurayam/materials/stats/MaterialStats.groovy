@@ -19,7 +19,7 @@ class MaterialStats {
     private List<ImageDelta> imageDeltaList
     
     static final String CRITERIA_PERCENTAGE_FORMAT = '%1$.2f'
-    static final double FILTERING_CRITERIA = 3.00
+    static final double FILTER_DATA_LESS_THAN = 3.00
     static final double PROBABILITY = 0.95
     
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
@@ -31,7 +31,7 @@ class MaterialStats {
         return path
     }
     
-    double[] data(double filteringCriteria = FILTERING_CRITERIA) {
+    double[] data(double filteringCriteria = FILTER_DATA_LESS_THAN) {
         List<Double> list = new ArrayList<Double>()
         for (ImageDelta delta : this.getImageDeltaList()) {
             if (delta.getD() >= filteringCriteria) {
