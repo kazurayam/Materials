@@ -20,6 +20,12 @@ class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
     
+    private MaterialStorage materialStorage_
+    
+    public StorageScanner(MaterialStorage materialStorage) {
+        this.materialStorage_ = materialStorage
+    }
+    
     /**
      * This will return ... 
      * <PRE>
@@ -34,11 +40,11 @@ class StorageScanner {
      * @param materialStorage
      * @return a ImageDeltaStats object
      */
-    static ImageDeltaStats scan(MaterialStorage materialStorage) {
+    ImageDeltaStats scan() {
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
-        for (TSuiteName tSuiteName : materialStorage.getTSuiteNameList()) {
-            StatsEntry se = makeStatsEntry(materialStorage, tSuiteName)
+        for (TSuiteName tSuiteName : materialStorage_.getTSuiteNameList()) {
+            StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
         }
         return builder.build()
@@ -58,14 +64,14 @@ class StorageScanner {
      * @param materialStorage
      * @return a ImageDeltaStats object
      */
-    static ImageDeltaStats scan(MaterialStorage materialStorage, TSuiteName tSuiteName) {
+    ImageDeltaStats scan(TSuiteName tSuiteName) {
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
-        if (materialStorage.getTSuiteNameList().contains(tSuiteName)) {
-            StatsEntry se = makeStatsEntry(materialStorage, tSuiteName)
+        if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
+            StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
         } else {
-            logger_.warn("No ${tSuiteName} is found in ${materialStorage}")
+            logger_.warn("No ${tSuiteName} is found in ${materialStorage_}")
         }
         return builder.build()
     }
@@ -85,12 +91,12 @@ class StorageScanner {
      * @param tSuiteName
      * @return a StatsEntry object
      */
-    static StatsEntry makeStatsEntry(MaterialStorage ms, TSuiteName tSuiteName) {
+    StatsEntry makeStatsEntry(TSuiteName tSuiteName) {
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
         Set<Path> set = 
-            ms.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
+            materialStorage_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
         for (Path path : set) {
-            MaterialStats materialStats = makeMaterialStats(ms, tSuiteName, path)
+            MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)
         }
         return statsEntry
@@ -113,15 +119,12 @@ class StorageScanner {
      * @param tSuiteName
      * @return
      */
-    static MaterialStats makeMaterialStats(
-                                MaterialStorage ms,
-                                TSuiteName tSuiteName,
+    MaterialStats makeMaterialStats(TSuiteName tSuiteName,
                                 Path pathRelativeToTSuiteTimestamp) {
                                 
         // at first, look up materials of FileType.PNG 
         //   within the TSuiteName across multiple TSuiteTimestamps
         List<Material> materials = getMaterialsOfARelativePathInATSuiteName(
-                                        ms,
                                         tSuiteName,
                                         pathRelativeToTSuiteTimestamp)
         
@@ -147,7 +150,7 @@ class StorageScanner {
         List<ImageDelta> imageDeltaList = new ArrayList<ImageDelta>()
         if (materials.size() > 1) {
             for (int i = 0; i < materials.size() - 1; i++) {
-                ImageDelta imageDelta = makeImageDelta(
+                ImageDelta imageDelta = StorageScanner.makeImageDelta(
                                     materials.get(i), materials.get(i + 1))
                 imageDeltaList.add(imageDelta)
             }
@@ -164,15 +167,14 @@ class StorageScanner {
      * @param pathRelativeToTSuiteTimestamp
      * @return
      */
-    static List<Material> getMaterialsOfARelativePathInATSuiteName(
-                                MaterialStorage ms,
+    List<Material> getMaterialsOfARelativePathInATSuiteName(
                                 TSuiteName tSuiteName,
                                 Path pathRelativeToTSuiteTimestamp) {
         List<Material> materialList = new ArrayList<Material>()
         //
-        List<TSuiteResultId> idsOfTSuiteName = ms.getTSuiteResultIdList(tSuiteName)
+        List<TSuiteResultId> idsOfTSuiteName = materialStorage_.getTSuiteResultIdList(tSuiteName)
         for (TSuiteResultId tSuiteResultId : idsOfTSuiteName) {
-            TSuiteResult tSuiteResult = ms.getTSuiteResult(tSuiteResultId)
+            TSuiteResult tSuiteResult = materialStorage_.getTSuiteResult(tSuiteResultId)
             for (Material mate: tSuiteResult.getMaterialList()) {
                 if (mate.fileType.equals(FileType.PNG) &&
                     mate.getPathRelativeToTSuiteTimestamp() ==

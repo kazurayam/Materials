@@ -23,6 +23,7 @@ class StorageScannerSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialStorage ms_
+    private static StorageScanner storageScanner_
     
     // fixture methods
     def setupSpec() {
@@ -34,7 +35,9 @@ class StorageScannerSpec extends Specification {
         Path msPath = workdir_.resolve("Storage")
         ms_ = MaterialStorageFactory.createInstance(msPath)
     }
-    def setup() {}
+    def setup() {
+        storageScanner_ = new StorageScanner(ms_)
+    }
     def cleanup() {}
     def cleanupSpec() {}
     
@@ -42,7 +45,7 @@ class StorageScannerSpec extends Specification {
     def testScan_all() {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats stats = StorageScanner.scan(ms_)
+        ImageDeltaStats stats = storageScanner_.scan()
         logger_.debug("#testScan_all:\n" + stats.toString())
         //logger_.debug("#testScan_all:\n" + JsonOutput.prettyPrint(stats.toString()))
         then:
@@ -62,7 +65,7 @@ class StorageScannerSpec extends Specification {
     def testScan_47News() {
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats stats = StorageScanner.scan(ms_, tSuiteName)
+        ImageDeltaStats stats = storageScanner_.scan(tSuiteName)
         StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         then:
         statsEntry != null
@@ -72,17 +75,6 @@ class StorageScannerSpec extends Specification {
         then:
         mstats != null
         mstats.getPath().toString()== "main.TC_47News.visitSite\\47NEWS_TOP.png"
-    }
-    
-    def testFeature() {
-        setup:
-        anything()
-        when:
-        anything()
-        then:
-        anything()
-        cleanup:
-        anything()
     }
     
     @Ignore
