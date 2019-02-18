@@ -58,9 +58,9 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
     // --------------- attribute setter & getter ----------------------
     abstract double getDefaultCriteriaPercentage()
     
-    abstract List<StatsEntry> getStatsEntryList()
+    abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
-    abstract StatsEntry getStatsEntry(TSuiteName tSuiteName)
+    abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
 
     @Override
     int compareTo(ImageDeltaStats other) {

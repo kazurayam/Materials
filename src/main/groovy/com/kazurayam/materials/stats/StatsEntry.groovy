@@ -1,6 +1,8 @@
 package com.kazurayam.materials.stats
 
+import java.nio.file.Path
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.Helpers
 
 class StatsEntry {
     
@@ -27,6 +29,15 @@ class StatsEntry {
         return materialStatsList
     }
     
+    MaterialStats getMaterialStats(Path path) {
+        for (MaterialStats ms: materialStatsList) {
+            if (ms.getPath() == path) {
+                return ms
+            }
+        }
+        return MaterialStats.NULL
+    }
+    
     @Override
     String toString() {
         return this.toJson()
@@ -36,7 +47,7 @@ class StatsEntry {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"TSuiteName\":")
-        sb.append("\"${tSuiteName.getValue()}\",")
+        sb.append("\"${Helpers.escapeAsJsonText(tSuiteName.getValue())}\",")
         sb.append("\"materialStatsList\":")
         int count = 0
         sb.append("[")

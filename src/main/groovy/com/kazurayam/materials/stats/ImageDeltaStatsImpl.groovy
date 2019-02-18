@@ -52,12 +52,12 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    List<StatsEntry> getStatsEntryList() {
+    List<StatsEntry> getImageDeltaStatsEntryList() {
         return imageDeltaStatsEntries
     }
     
     @Override
-    StatsEntry getStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName) {
         for (StatsEntry entry: imageDeltaStatsEntries) {
             if (entry.getTSuiteName().equals(tSuiteName)) {
                 return entry
