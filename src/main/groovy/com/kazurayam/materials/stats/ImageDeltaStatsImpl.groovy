@@ -1,7 +1,10 @@
 package com.kazurayam.materials.stats
 
+import java.nio.file.Path
+
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.TSuiteName
+
 /**
  * 
  * @author kazurayam
@@ -45,7 +48,36 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
         this.imageDeltaStatsEntries = builder.imageDeltaStatsEntries
     }
-
+    
+    @Override
+    double criteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
+        double value
+        try {
+            value = this.getCalculatedCriteriaPercentage(tSuiteName, pathRelativeToTSuiteTimestamp)
+        } catch (IllegalArgumentException e) {
+            value = this.getDefaultCriteriaPercentage()
+        }
+        return value
+    }
+    
+    @Override
+    double getCalculatedCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
+        StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteName)
+        if (statsEntry != StatsEntry.NULL) {
+            MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
+            if (materialStats != null) {
+                return materialStats.getCalculatedCriteriaPercentage()
+            } else {
+                throw new IllegalArgumentException("path \"${pathRelativeToTSuiteTimestamp}\" is not " + 
+                    "found in MaterialStats ${materialStats.toString()}")
+            }
+            
+        } else {
+            throw new IllegalArgumentException("TSuiteName \"${tSuiteName}\" is not " + 
+                "found in this ImageDeltaStats")
+        }
+    }
+    
     @Override
     double getDefaultCriteriaPercentage() {
         return this.defaultCriteriaPercentage

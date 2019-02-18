@@ -19,7 +19,6 @@ class ImageDeltaStatsSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialStorage ms_
-    private static ImageDeltaStats ids_
     
     // fixture methods
     def setupSpec() {
@@ -30,14 +29,72 @@ class ImageDeltaStatsSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         Path storage = workdir_.resolve("Storage")
         ms_ = MaterialStorageFactory.createInstance(storage)
-        StorageScanner scanner = new StorageScanner(ms_)
-        ids_ = scanner.scan(new TSuiteName("47News_chronos_capture"))
     }
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
+    /**
+     * 
+     */
+    def testGetDefaultCriteriaPercentage_customizing() {
+        setup:
+        double value = 0.10
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
+                                            defaultCriteriaPercentage(value).
+                                            build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        when:
+        ImageDeltaStats ids = scanner.scan(new TSuiteName("47News_chronos_capture"))
+        then:
+        ids.getDefaultCriteriaPercentage() == value
+    }
+    
+    /**
+     * 
+     */
+    def testCriteriaPercentage_customizingFilterDataLessThan() {
+        setup:
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
+                                            filterDataLessThan(0.0).  // LOOK HERE
+                                            build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        when:
+        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+        ImageDeltaStats ids = scanner.scan(tsn)
+        double criteriaPercentage = ids.criteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        then:
+        // criteriaPercentage == 12.767696022300328 
+        12.0 < criteriaPercentage
+        criteriaPercentage < 13.0
+    }
+    
+    /**
+     * 
+     */
+    def testCriteriaPercentage_customizingProbability() {
+        setup:
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
+                                            probability(0.75).  // LOOK HERE
+                                            build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        when:
+        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+        ImageDeltaStats ids = scanner.scan(tsn)
+        double criteriaPercentage = ids.criteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        then:
+        // criteriaPercentage == 18.003084151123726 
+        18.00 < criteriaPercentage
+        criteriaPercentage < 18.01
+    }
+    
+    /**
+     * 
+     */
     def testToString() {
+        setup:
+        StorageScanner scanner = new StorageScanner(ms_)
+        ImageDeltaStats ids = scanner.scan(new TSuiteName("47News_chronos_capture"))
         when:
         String s = ImageDeltaStats.ZERO.toString()
         String pp = JsonOutput.prettyPrint(s)
@@ -45,5 +102,4 @@ class ImageDeltaStatsSpec extends Specification {
         then:
         s.contains("0.0")
     }
-    
 }

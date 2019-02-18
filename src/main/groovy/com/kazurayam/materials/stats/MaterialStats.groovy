@@ -15,26 +15,42 @@ class MaterialStats {
 
     static final MaterialStats NULL = new MaterialStats(null, new ArrayList<ImageDelta>())
     
-    private Path path
-    private List<ImageDelta> imageDeltaList
-    
     static final String CRITERIA_PERCENTAGE_FORMAT = '%1$.2f'
     static final double FILTER_DATA_LESS_THAN = 3.00
     static final double PROBABILITY = 0.95
     
+    private Path path
+    private List<ImageDelta> imageDeltaList
+    private double filterDataLessThan
+    private double probability
+    
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
         this.path = path
         this.imageDeltaList = imageDeltaList
+        this.filterDataLessThan = FILTER_DATA_LESS_THAN
+        this.probability = PROBABILITY
     }
 
     Path getPath() {
         return path
     }
     
-    double[] data(double filteringCriteria = FILTER_DATA_LESS_THAN) {
+    String getPathAsStringInUNIX() {
+        return path.toString().replace('\\', '/')
+    }
+    
+    void setFilterDataLessThan(double value) {
+        this.filterDataLessThan = value
+    }
+    
+    void setProbability(double value) {
+        this.probability = value
+    }
+    
+    double[] data() {
         List<Double> list = new ArrayList<Double>()
         for (ImageDelta delta : this.getImageDeltaList()) {
-            if (delta.getD() >= filteringCriteria) {
+            if (delta.getD() >= this.filterDataLessThan) {
                 list.add(delta.getD())
             }
         }
@@ -85,13 +101,13 @@ class MaterialStats {
      */
     double tDistribution() {
         TDistribution tdist = new org.apache.commons.math3.distribution.TDistribution(this.degree() - 1)
-        return tdist.inverseCumulativeProbability(PROBABILITY)
+        return tdist.inverseCumulativeProbability(this.probability)
     }
     
     ConfidenceInterval getConfidenceInterval() {
         double lowerBound = this.mean() - this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
         double upperBound = this.mean() + this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
-        double confidenceLevel = PROBABILITY
+        double confidenceLevel = this.probability
         return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
     }
     
@@ -132,7 +148,7 @@ class MaterialStats {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"path\":")
-        sb.append("\"${Helpers.escapeAsJsonText(this.getPath().toString())}\",")
+        sb.append("\"${Helpers.escapeAsJsonText(this.getPathAsStringInUNIX())}\",")
         sb.append("\"imageDeltaList\":[")
         int count = 0
         for (ImageDelta id : this.getImageDeltaList()) {

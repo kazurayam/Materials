@@ -5,6 +5,8 @@ import java.nio.file.Path
 import javax.imageio.ImageIO
 import java.util.concurrent.TimeUnit
 
+import groovy.json.JsonOutput
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -24,12 +26,16 @@ class StorageScanner {
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
     
     private MaterialStorage materialStorage_
+    private Options options_
     
     public StorageScanner(MaterialStorage materialStorage) {
-        this.materialStorage_ = materialStorage
+        this(materialStorage, new Options.Builder().build())
     }
     
-    
+    public StorageScanner(MaterialStorage materialStorage, Options options) {
+        this.materialStorage_ = materialStorage
+        this.options_ = options
+    }
     
     /**
      * This will return
@@ -48,17 +54,21 @@ class StorageScanner {
     ImageDeltaStats scan(TSuiteName tSuiteName) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
-                                defaultCriteriaPercentage(5.0)
+        
+        ImageDeltaStatsImpl.Builder builder = 
+            new ImageDeltaStatsImpl.Builder().
+                defaultCriteriaPercentage(options_.getDefaultCriteriaPercentage())
         if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
             StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
         } else {
             logger_.warn("No ${tSuiteName} is found in ${materialStorage_}")
         }
+        ImageDeltaStats ids = builder.build()
+        
         stopWatch.stop()
         logger_.debug("#scan(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
-        return builder.build()
+        return ids
     }
     
     /**
@@ -145,7 +155,7 @@ class StorageScanner {
         stopWatch.start()
         // at first, look up materials of FileType.PNG 
         //   within the TSuiteName across multiple TSuiteTimestamps
-        List<Material> materials = getMaterialsOfARelativePathInATSuiteName(
+        List<Material> materials = this.getMaterialsOfARelativePathInATSuiteName(
                                         tSuiteName,
                                         pathRelativeToTSuiteTimestamp)
         
@@ -178,6 +188,10 @@ class StorageScanner {
         }
         MaterialStats materialStats  = new MaterialStats(
                     pathRelativeToTSuiteTimestamp, imageDeltaList)
+        // configure parameters
+        materialStats.setFilterDataLessThan(options_.getFilterDataLessThan())
+        
+        //
         stopWatch.stop()
         logger_.debug("#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestamp} " + 
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
@@ -254,5 +268,83 @@ class StorageScanner {
         logger_.debug("#makeImageDelta(${a}, ${b}) " +
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return imageDelta
+    }
+    
+    
+    /**
+     * 
+     */
+    static class Options {
+        
+        private double defaultCriteriaPercentage
+        private double filterDataLessThan
+        private double probability
+        
+        static class Builder {
+            private double defaultCriteriaPercentage
+            private double filterDataLessThan
+            private double probability
+            Builder() {
+                this.defaultCriteriaPercentage = ImageDeltaStatsImpl.SUGGESTED_CRITERIA_PERCENTAGE
+                this.filterDataLessThan = MaterialStats.FILTER_DATA_LESS_THAN
+                this.probability = MaterialStats.PROBABILITY
+            }
+            Builder defaultCriteriaPercentage(double value) {
+                if (value < 0.0) {
+                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be negative")
+                }
+                if (value > 100.0) {
+                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be  > 100.0")
+                }
+                this.defaultCriteriaPercentage = value
+                return this
+            }
+            Builder filterDataLessThan(double value) {
+                if (value < 0.0) {
+                    throw new IllegalArgumentException("filterDataLessThan must not be negative")
+                }
+                if (value > 100.0) {
+                    throw new IllegalArgumentException("filterDataLessThan must not be  > 100.0")
+                }
+                this.filterDataLessThan = value
+                return this
+            }
+            Builder probability(double value) {
+                if (value < 0.0) {
+                    throw new IllegalArgumentException("probability must not be negative")
+                }
+                if (value > 1.0) {
+                    throw new IllegalArgumentException("probability must not be > 1.0")
+                }
+                this.probability = value
+                return this
+            }
+            Options build() {
+                return new Options(this)
+            }
+        }
+        
+        private Options(Builder builder) {
+            this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
+            this.filterDataLessThan = builder.filterDataLessThan
+            this.probability = builder.probability
+        }
+        
+        double getDefaultCriteriaPercentage() {
+            return this.defaultCriteriaPercentage
+        }
+        
+        double getFilterDataLessThan() {
+            return this.filterDataLessThan
+        }
+        
+        double getProbability() {
+            return this.probability
+        }
+        
+        @Override
+        String toString() {
+            return JsonOutput.toJson(this)
+        }
     }
 }

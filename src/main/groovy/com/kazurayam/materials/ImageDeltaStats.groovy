@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import java.nio.file.Path
+
 import com.kazurayam.materials.stats.ImageDeltaStatsImpl
 import com.kazurayam.materials.stats.StatsEntry
 
@@ -56,12 +58,24 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
     }
     
     // --------------- attribute setter & getter ----------------------
+    /**
+     * if getCalculatedCriteriaPercentage() returns a valid value, then returns it.
+     * otherwise return the value returned by getDefaultCriteriaPercentage()
+     * 
+     * @param tSuiteName
+     * @param pathRelativeToTSuiteTimestamp
+     * @return
+     */
+    abstract double criteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
+    
     abstract double getDefaultCriteriaPercentage()
+    
+    abstract double getCalculatedCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
     
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
     abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
-
+    
     @Override
     int compareTo(ImageDeltaStats other) {
         double d = this.getDefaultCriteriaPercentage()
