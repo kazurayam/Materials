@@ -30,7 +30,8 @@ class ImageDeltaStatsSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         Path storage = workdir_.resolve("Storage")
         ms_ = MaterialStorageFactory.createInstance(storage)
-        ids_ = StorageScanner.scan(ms_, new TSuiteName("47News_chronos_capture"))
+        StorageScanner scanner = new StorageScanner(ms_)
+        ids_ = scanner.scan(new TSuiteName("47News_chronos_capture"))
     }
     def setup() {}
     def cleanup() {}

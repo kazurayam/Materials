@@ -39,7 +39,8 @@ class MaterialStatsSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         storagedir_ = workdir_.resolve("Storage")
         ms_ = MaterialStorageFactory.createInstance(storagedir_)
-        ids_ = StorageScanner.scan(ms_)
+        StorageScanner scanner = new StorageScanner(ms_)
+        ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'))
     }
     def setup() {
         StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))

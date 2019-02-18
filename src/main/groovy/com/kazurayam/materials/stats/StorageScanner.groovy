@@ -3,9 +3,12 @@ package com.kazurayam.materials.stats
 import java.nio.file.Path
 
 import javax.imageio.ImageIO
+import java.util.concurrent.TimeUnit
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import org.apache.commons.lang3.time.StopWatch
 
 import com.kazurayam.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
@@ -41,15 +44,21 @@ class StorageScanner {
      * @return a ImageDeltaStats object
      */
     ImageDeltaStats scan() {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
         for (TSuiteName tSuiteName : materialStorage_.getTSuiteNameList()) {
             StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
+            logger_.info("#scan created StatsEntry of ${se.getTSuiteName()}")
         }
+        stopWatch.stop()
+        logger_.debug("#scan() took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return builder.build()
     }
     
+    private String stopWatch
     /**
      * This will return
      * <PRE>
@@ -65,6 +74,8 @@ class StorageScanner {
      * @return a ImageDeltaStats object
      */
     ImageDeltaStats scan(TSuiteName tSuiteName) {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
                                 defaultCriteriaPercentage(5.0)
         if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
@@ -73,6 +84,8 @@ class StorageScanner {
         } else {
             logger_.warn("No ${tSuiteName} is found in ${materialStorage_}")
         }
+        stopWatch.stop()
+        logger_.debug("#scan(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return builder.build()
     }
     
@@ -92,6 +105,8 @@ class StorageScanner {
      * @return a StatsEntry object
      */
     StatsEntry makeStatsEntry(TSuiteName tSuiteName) {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
         Set<Path> set = 
             materialStorage_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
@@ -99,6 +114,8 @@ class StorageScanner {
             MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)
         }
+        stopWatch.stop()
+        logger_.debug("#makeStatsEntry(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return statsEntry
     }
 
@@ -121,7 +138,8 @@ class StorageScanner {
      */
     MaterialStats makeMaterialStats(TSuiteName tSuiteName,
                                 Path pathRelativeToTSuiteTimestamp) {
-                                
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         // at first, look up materials of FileType.PNG 
         //   within the TSuiteName across multiple TSuiteTimestamps
         List<Material> materials = getMaterialsOfARelativePathInATSuiteName(
@@ -157,6 +175,9 @@ class StorageScanner {
         }
         MaterialStats materialStats  = new MaterialStats(
                     pathRelativeToTSuiteTimestamp, imageDeltaList)
+        stopWatch.stop()
+        logger_.debug("#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestamp} " + 
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return materialStats
     }
 
@@ -170,6 +191,8 @@ class StorageScanner {
     List<Material> getMaterialsOfARelativePathInATSuiteName(
                                 TSuiteName tSuiteName,
                                 Path pathRelativeToTSuiteTimestamp) {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         List<Material> materialList = new ArrayList<Material>()
         //
         List<TSuiteResultId> idsOfTSuiteName = materialStorage_.getTSuiteResultIdList(tSuiteName)
@@ -183,11 +206,18 @@ class StorageScanner {
                 }
             }
         }
+        stopWatch.stop()
+        logger_.debug("#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return materialList
     }
 
     /**
-     * This will return
+     * Read 2 PNG files to get image difference, calculate the diff ratio,
+     * and will return a ImageDelta object.
+     * 
+     * Please note that this method call takes fairly long processing time (2 to 4 seconds).
+     * 
      * <PRE>
      *      { "a": "20190216_064354", "b": "20190216_064149", "delta": 0.10 }
      * </PRE>
@@ -197,6 +227,8 @@ class StorageScanner {
      * @return a ImageDelta object
      */
     static ImageDelta makeImageDelta(Material a, Material b) {
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
         Objects.requireNonNull(a, "Material a must not be null")
         Objects.requireNonNull(b, "Material b must not be null")
         if (a.getFileType() != FileType.PNG) {
@@ -205,6 +237,7 @@ class StorageScanner {
         if (b.getFileType() != FileType.PNG) {
             throw new IllegalArgumentException("${b.path()} is not a PNG file")
         }
+        // read PNG files and
         // create ImageDifference of the 2 given images to calculate the diff ratio
         ImageDifference diff = new ImageDifference(
                 ImageIO.read(a.getPath().toFile()),
@@ -214,6 +247,9 @@ class StorageScanner {
                                 a.getParent().getParent().getTSuiteTimestamp(),
                                 b.getParent().getParent().getTSuiteTimestamp(),
                                 diff.getRatio())
+        stopWatch.stop()
+        logger_.debug("#makeImageDelta(${a}, ${b}) " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return imageDelta
     }
 }

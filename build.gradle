@@ -40,6 +40,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+    
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 }
@@ -57,6 +60,8 @@ test {
 
 task pinpoint(type: Test) {
     include '**/StorageScannerSpec.class'
+    include '**/MaterialStatsSpec.class'
+    include '**/ImageDeltaStatsSpec.class'
     outputs.upToDateWhen {false}
 }
 
