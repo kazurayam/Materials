@@ -83,9 +83,9 @@ class ImageDeltaStatsSpec extends Specification {
         ImageDeltaStats ids = scanner.scan(tsn)
         double criteriaPercentage = ids.criteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
         then:
-        // criteriaPercentage == 18.003084151123726 
-        18.00 < criteriaPercentage
-        criteriaPercentage < 18.01
+        // criteriaPercentage == 15.197159598135954
+        15.00 < criteriaPercentage
+        criteriaPercentage < 15.20
     }
     
     /**

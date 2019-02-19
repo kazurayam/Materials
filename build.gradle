@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.31.0'
+version  = '0.31.1'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -35,7 +35,7 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-core', version: "${logbackVersion}"
 
     // from mavenLocal
-    compile group: 'com.kazurayam', name: 'ImageDifference', version: '0.2.0'
+    compile group: 'com.kazurayam', name: 'ImageDifference', version: '0.4.0'
     
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
@@ -59,8 +59,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/MaterialSpec.class'
     include '**/ImageDeltaStatsSpec.class'
+    include '**/MaterialStatsSpec.class'
     outputs.upToDateWhen {false}
 }
 

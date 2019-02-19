@@ -16,7 +16,7 @@ class MaterialStats {
     static final MaterialStats NULL = new MaterialStats(null, new ArrayList<ImageDelta>())
     
     static final String CRITERIA_PERCENTAGE_FORMAT = '%1$.2f'
-    static final double FILTER_DATA_LESS_THAN = 3.00
+    static final double FILTER_DATA_LESS_THAN = 1.00
     static final double PROBABILITY = 0.95
     
     private Path path

@@ -1,16 +1,14 @@
 package com.kazurayam.materials.stats
 
+import java.awt.image.BufferedImage
 import java.nio.file.Path
-
-import javax.imageio.ImageIO
 import java.util.concurrent.TimeUnit
 
-import groovy.json.JsonOutput
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import javax.imageio.ImageIO
 
 import org.apache.commons.lang3.time.StopWatch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import com.kazurayam.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
@@ -21,12 +19,15 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 
+import groovy.json.JsonOutput
+
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
     
     private MaterialStorage materialStorage_
     private Options options_
+    private BufferedImageBuffer biBuffer_
     
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
@@ -35,6 +36,7 @@ class StorageScanner {
     public StorageScanner(MaterialStorage materialStorage, Options options) {
         this.materialStorage_ = materialStorage
         this.options_ = options
+        this.biBuffer_ = new BufferedImageBuffer()
     }
     
     /**
@@ -70,38 +72,7 @@ class StorageScanner {
         logger_.debug("#scan(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return ids
     }
-    
-    /**
-     * This will return ...
-     * <PRE>
-     * {
-     *  "defaultCriteriaPercentage":5.0,
-     *  "statsEntryList":[
-     *      // list of StatsEntry objects
-     *  ]
-     * }
-     * </PRE>
-     * @deprecated It takes long if you scan multiple TSuiteName. Do not use this. Be specific to process a single TSuiteName.
-     * @param materialStorage
-     * @return a ImageDeltaStats object
-     */
-    /*
-    ImageDeltaStats scan() {
-        StopWatch stopWatch = new StopWatch()
-        stopWatch.start()
-        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder().
-                                defaultCriteriaPercentage(5.0)
-        for (TSuiteName tSuiteName : materialStorage_.getTSuiteNameList()) {
-            StatsEntry se = this.makeStatsEntry(tSuiteName)
-            builder.addImageDeltaStatsEntry(se)
-            logger_.info("#scan created StatsEntry of ${se.getTSuiteName()}")
-        }
-        stopWatch.stop()
-        logger_.debug("#scan() took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
-        return builder.build()
-    }
-    */
-    
+        
     /**
      * This will return
      * <PRE>
@@ -153,36 +124,24 @@ class StorageScanner {
                                 Path pathRelativeToTSuiteTimestamp) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        // at first, look up materials of FileType.PNG 
-        //   within the TSuiteName across multiple TSuiteTimestamps
+        
+        // At first, look up materials of FileType.PNG 
+        //     within the TSuiteName across multiple TSuiteTimestamps
+        // This list is sorted by descending order of TSuiteTimestamp
         List<Material> materials = this.getMaterialsOfARelativePathInATSuiteName(
                                         tSuiteName,
                                         pathRelativeToTSuiteTimestamp)
         
-        // sort the Material list by the descending order of TSuiteTimestamp
-        Collections.sort(materials, new Comparator<Material>() {
-            public int compare(Material materialA, Material materialB) {
-                TSuiteResult tsrA = materialA.getTCaseResult().getParent()
-                TSuiteResult tsrB = materialB.getTCaseResult().getParent()
-                if (tsrA > tsrB) {
-                    return -1
-                } else if (tsrA == tsrB) {
-                    Path pathA = materialA.getPath()
-                    Path pathB = materialB.getPath()
-                    return pathA.compareTo(pathB)
-                } else {
-                    return 1
-                }
-            }
-        })
-
         // build the MaterialStats object while calculating the diff ratio 
         // of two PNG files
         List<ImageDelta> imageDeltaList = new ArrayList<ImageDelta>()
         if (materials.size() > 1) {
             for (int i = 0; i < materials.size() - 1; i++) {
-                ImageDelta imageDelta = StorageScanner.makeImageDelta(
-                                    materials.get(i), materials.get(i + 1))
+                ImageDelta imageDelta = 
+                                this.makeImageDelta(
+                                    materials.get(i),
+                                    materials.get(i + 1)
+                                    )
                 imageDeltaList.add(imageDelta)
             }
         }
@@ -223,6 +182,22 @@ class StorageScanner {
                 }
             }
         }
+        // sort the Material list by the descending order of TSuiteTimestamp
+        Collections.sort(materialList, new Comparator<Material>() {
+            public int compare(Material materialA, Material materialB) {
+                TSuiteResult tsrA = materialA.getTCaseResult().getParent()
+                TSuiteResult tsrB = materialB.getTCaseResult().getParent()
+                if (tsrA > tsrB) {
+                    return -1
+                } else if (tsrA == tsrB) {
+                    Path pathA = materialA.getPath()
+                    Path pathB = materialB.getPath()
+                    return pathA.compareTo(pathB)
+                } else {
+                    return 1
+                }
+            }
+        })
         stopWatch.stop()
         logger_.debug("#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
@@ -243,7 +218,7 @@ class StorageScanner {
      * @param b
      * @return a ImageDelta object
      */
-    static ImageDelta makeImageDelta(Material a, Material b) {
+    ImageDelta makeImageDelta(Material a, Material b) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         Objects.requireNonNull(a, "Material a must not be null")
@@ -256,20 +231,43 @@ class StorageScanner {
         }
         // read PNG files and
         // create ImageDifference of the 2 given images to calculate the diff ratio
-        ImageDifference diff = new ImageDifference(
-                ImageIO.read(a.getPath().toFile()),
-                ImageIO.read(b.getPath().toFile()))
+        BufferedImage biA = biBuffer_.read(a)
+        BufferedImage biB = biBuffer_.read(b)
+        ImageDifference diff = new ImageDifference(biA, biB)
         // make the delta
         ImageDelta imageDelta = new ImageDelta(
                                 a.getParent().getParent().getTSuiteTimestamp(),
                                 b.getParent().getParent().getTSuiteTimestamp(),
                                 diff.getRatio())
+        biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         stopWatch.stop()
         logger_.debug("#makeImageDelta(${a}, ${b}) " +
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
         return imageDelta
     }
     
+    /**
+     * This class mainteins a buffer of BufferedImage to make I/O to PNG files efficient.
+     */
+    static class BufferedImageBuffer {
+        private Map<Material, BufferedImage> buffer
+        BufferedImageBuffer() {
+            buffer = new HashMap<Material, BufferedImage>()
+        }
+        BufferedImage read(Material material) {
+            if (!buffer.containsKey(material)) {
+                BufferedImage bi = ImageIO.read(material.getPath().toFile())
+                buffer.put(material, bi)
+            }
+            return buffer.get(material)
+        }
+        BufferedImage remove(Material material) {
+            return buffer.remove(material)
+        }
+        int size() {
+            return buffer.size()
+        }
+    }
     
     /**
      * 
