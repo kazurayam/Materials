@@ -1,9 +1,11 @@
 package com.kazurayam.materials.stats
 
 import java.nio.file.Path
-import com.kazurayam.materials.Helpers
+
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.interval.ConfidenceInterval
+
+import com.kazurayam.materials.Helpers
 
 /**
  * referrences:
@@ -16,8 +18,11 @@ class MaterialStats {
     static final MaterialStats NULL = new MaterialStats(null, new ArrayList<ImageDelta>())
     
     static final String CRITERIA_PERCENTAGE_FORMAT = '%1$.2f'
-    static final double FILTER_DATA_LESS_THAN = 1.00
-    static final double PROBABILITY = 0.95
+    
+    // following default values may be overridden by StorageScanner.Options object
+    static final double DEFAULT_FILTER_DATA_LESS_THAN = 1.00
+    static final double DEFAULT_PROBABILITY = 0.95
+    static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 10
     
     private Path path
     private List<ImageDelta> imageDeltaList
@@ -27,8 +32,8 @@ class MaterialStats {
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
         this.path = path
         this.imageDeltaList = imageDeltaList
-        this.filterDataLessThan = FILTER_DATA_LESS_THAN
-        this.probability = PROBABILITY
+        this.filterDataLessThan = DEFAULT_FILTER_DATA_LESS_THAN
+        this.probability = DEFAULT_PROBABILITY
     }
 
     Path getPath() {
@@ -75,11 +80,13 @@ class MaterialStats {
     }
     
     double mean() {
+        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
         double mean = this.sum()/ this.degree()
         return mean
     }
     
     double variance() {
+        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
         // ssum
         double ssum = 0.0
         for (int i = 0; i < this.degree(); i++) {
@@ -100,11 +107,13 @@ class MaterialStats {
      * @return calculate t-inverse with this.degree() degrees of FREEDOM %
      */
     double tDistribution() {
+        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
         TDistribution tdist = new org.apache.commons.math3.distribution.TDistribution(this.degree() - 1)
         return tdist.inverseCumulativeProbability(this.probability)
     }
     
     ConfidenceInterval getConfidenceInterval() {
+        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
         double lowerBound = this.mean() - this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
         double upperBound = this.mean() + this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
         double confidenceLevel = this.probability

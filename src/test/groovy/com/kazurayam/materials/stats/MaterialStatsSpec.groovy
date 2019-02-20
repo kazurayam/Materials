@@ -11,12 +11,9 @@ import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
 import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.stats.StatsEntry
-import com.kazurayam.materials.stats.StorageScanner
-
-import spock.lang.Specification
 
 import groovy.json.JsonOutput
+import spock.lang.Specification
 
 class MaterialStatsSpec extends Specification {
     
@@ -44,7 +41,7 @@ class MaterialStatsSpec extends Specification {
     }
     def setup() {
         StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
-        materialStats_ = se.getMaterialStats(Paths.get("main.TC_47News.visitSite\\47NEWS_TOP.png"))
+        materialStats_ = se.getMaterialStats(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -90,7 +87,7 @@ class MaterialStatsSpec extends Specification {
     
     def testPROBABILITY() {
         expect:
-        0.95 == MaterialStats.PROBABILITY
+        0.95 == MaterialStats.DEFAULT_PROBABILITY
     }
     
     def testTDistribution() {

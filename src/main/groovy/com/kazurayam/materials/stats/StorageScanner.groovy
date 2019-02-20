@@ -40,6 +40,14 @@ class StorageScanner {
     }
     
     /**
+     * 
+     * @return Options object which is in use
+     */
+    Options getOptions() {
+        return this.options_
+    }
+    
+    /**
      * This will return
      * <PRE>
      * {
@@ -136,7 +144,10 @@ class StorageScanner {
         // of two PNG files
         List<ImageDelta> imageDeltaList = new ArrayList<ImageDelta>()
         if (materials.size() > 1) {
-            for (int i = 0; i < materials.size() - 1; i++) {
+            for (int i = 0;
+                    i < materials.size() - 1 &&
+                    i < options_.getMaximumNumberOfImageDeltas();
+                    i++) {
                 ImageDelta imageDelta = 
                                 this.makeImageDelta(
                                     materials.get(i),
@@ -277,15 +288,18 @@ class StorageScanner {
         private double defaultCriteriaPercentage
         private double filterDataLessThan
         private double probability
+        private int maximumNumberOfImageDeltas
         
         static class Builder {
             private double defaultCriteriaPercentage
             private double filterDataLessThan
             private double probability
+            private int maximumNumberOfImageDeltas
             Builder() {
                 this.defaultCriteriaPercentage = ImageDeltaStatsImpl.SUGGESTED_CRITERIA_PERCENTAGE
-                this.filterDataLessThan = MaterialStats.FILTER_DATA_LESS_THAN
-                this.probability = MaterialStats.PROBABILITY
+                this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
+                this.probability = MaterialStats.DEFAULT_PROBABILITY
+                this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
             }
             Builder defaultCriteriaPercentage(double value) {
                 if (value < 0.0) {
@@ -317,6 +331,13 @@ class StorageScanner {
                 this.probability = value
                 return this
             }
+            Builder maximumNumberOfImageDeltas(int value) {
+                if (value < 1) {
+                    throw new IllegalArgumentException("maximumNumberOfImageDeltas must not be less than 1")
+                }
+                this.maximumNumberOfImageDeltas = value
+                return this
+            }
             Options build() {
                 return new Options(this)
             }
@@ -326,6 +347,7 @@ class StorageScanner {
             this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
             this.filterDataLessThan = builder.filterDataLessThan
             this.probability = builder.probability
+            this.maximumNumberOfImageDeltas = builder.maximumNumberOfImageDeltas
         }
         
         double getDefaultCriteriaPercentage() {
@@ -338,6 +360,10 @@ class StorageScanner {
         
         double getProbability() {
             return this.probability
+        }
+        
+        int getMaximumNumberOfImageDeltas() {
+            return this.maximumNumberOfImageDeltas
         }
         
         @Override

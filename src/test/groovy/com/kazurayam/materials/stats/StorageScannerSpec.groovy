@@ -14,6 +14,7 @@ import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.stats.StorageScanner.BufferedImageBuffer
+import com.kazurayam.materials.stats.StorageScanner.Options
 
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -56,7 +57,7 @@ class StorageScannerSpec extends Specification {
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
         mstats != null
-        mstats.getPath().toString()== "main.TC_47News.visitSite\\47NEWS_TOP.png"
+        mstats.getPath().toString()== "main.TC_47News.visitSite/47NEWS_TOP.png"
     }
     
     def testBufferedImageBuffer() {
@@ -90,6 +91,36 @@ class StorageScannerSpec extends Specification {
         bi1 = biBuffer.remove(materials.get(1))
         then:
         biBuffer.size() == 1
+    }
+    
+    /**
+     * Specifying maximumNumberOfDelta=3 makes StorageScanner to generate
+     * 3 ImageDelta objects in a MatrialStats object.
+     * @return
+     */
+    def testSpecifyingMaximumNumberOfDelta() {
+        setup:
+        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
+        StorageScanner.Options options = new Options.Builder().
+                                            maximumNumberOfImageDeltas(3).
+                                            build()
+        when:
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        ImageDeltaStats stats = scanner.scan(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+        then:
+        scanner.getOptions().getMaximumNumberOfImageDeltas() == 3
+        mstats != null
+        mstats.getImageDeltaList().size() == 3
+        
+    }
+    
+    def test_Options_maximumNumberOfDelta() {
+        when:
+        StorageScanner.Options options = new Options.Builder().maximumNumberOfImageDeltas(3).build()
+        then:
+        options.getMaximumNumberOfImageDeltas() == 3
     }
     
     @Ignore

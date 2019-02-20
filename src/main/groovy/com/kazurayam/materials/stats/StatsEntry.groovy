@@ -1,8 +1,9 @@
 package com.kazurayam.materials.stats
 
 import java.nio.file.Path
-import com.kazurayam.materials.TSuiteName
+
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TSuiteName
 
 class StatsEntry {
     
@@ -31,7 +32,8 @@ class StatsEntry {
     
     MaterialStats getMaterialStats(Path path) {
         for (MaterialStats ms: materialStatsList) {
-            if (ms.getPath() == path) {
+            //
+            if (ms.getPath().equals(path)) {
                 return ms
             }
         }
