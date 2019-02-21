@@ -32,7 +32,9 @@ class StatsEntry {
     
     MaterialStats getMaterialStats(Path path) {
         for (MaterialStats ms: materialStatsList) {
-            //
+            // It is important to use Path#equals(Path) method rather than == operator
+            // because they are not identical in the way of dealing with File.separator ('\\' and '/').
+            // We need to be tolerant for the difference of '\\' and '/' used in the path parameter.
             if (ms.getPath().equals(path)) {
                 return ms
             }

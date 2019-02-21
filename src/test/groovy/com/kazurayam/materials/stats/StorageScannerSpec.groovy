@@ -57,7 +57,7 @@ class StorageScannerSpec extends Specification {
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
         mstats != null
-        mstats.getPath().toString()== "main.TC_47News.visitSite/47NEWS_TOP.png"
+        mstats.getPath().equals(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
     }
     
     def testBufferedImageBuffer() {
