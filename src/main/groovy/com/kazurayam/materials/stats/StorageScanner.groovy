@@ -15,9 +15,11 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
 
 import groovy.json.JsonOutput
 
@@ -187,9 +189,10 @@ class StorageScanner {
             TSuiteResult tSuiteResult = materialStorage_.getTSuiteResult(tSuiteResultId)
             for (Material mate: tSuiteResult.getMaterialList()) {
                 if (mate.fileType.equals(FileType.PNG) &&
-                    mate.getPathRelativeToTSuiteTimestamp() ==
-                            pathRelativeToTSuiteTimestamp) {
-                    materialList.add(mate)
+                    mate.getPathRelativeToTSuiteTimestamp() == pathRelativeToTSuiteTimestamp) {
+                    if (this.isInRangeOfTSuiteTimestamp(mate)) {
+                        materialList.add(mate)
+                    }
                 }
             }
         }
@@ -258,6 +261,33 @@ class StorageScanner {
     }
     
     /**
+     * Check if the Material is newer than the TSuiteTimestamp specified by the onlySince property 
+     * in the Options object passed to the StorageScanner constructor.
+     * The boolean property onlySinceInclusive is respected.
+     *  
+     * @param material
+     * @return
+     */
+    boolean isInRangeOfTSuiteTimestamp(Material material) {
+        TSuiteTimestamp onlySince = options_.getOnlySince()
+        boolean onlySinceInclusive = options_.getOnlySinceInclusive()
+        if (onlySince != TSuiteTimestamp.NULL) {
+            TCaseResult tcr = material.getParent()
+            TSuiteResult tsr = tcr.getParent()
+            TSuiteTimestamp tst = tsr.getTSuiteTimestamp()
+            logger_.debug("#isInRangeOfTSuiteTimestamp onlySinceInclusive=${onlySinceInclusive}, tst=${tst.toString()}, onlySince=${onlySince.toString()}")
+            if (onlySinceInclusive) {
+                return tst >= onlySince    
+            } else {
+                return tst > onlySince
+            }
+        } else {
+            // if onlySince is not specified, return true
+            return true
+        }
+    }
+    
+    /**
      * This class mainteins a buffer of BufferedImage to make I/O to PNG files efficient.
      */
     static class BufferedImageBuffer {
@@ -281,7 +311,7 @@ class StorageScanner {
     }
     
     /**
-     * 
+     * Options to control the behavior of StroageScanner
      */
     static class Options {
         
@@ -289,17 +319,26 @@ class StorageScanner {
         private double filterDataLessThan
         private double probability
         private int maximumNumberOfImageDeltas
+        private TSuiteTimestamp onlySince
+        private boolean onlySinceInclusive
         
         static class Builder {
             private double defaultCriteriaPercentage
             private double filterDataLessThan
             private double probability
             private int maximumNumberOfImageDeltas
+            private TSuiteTimestamp onlySince
+            private boolean onlySinceInclusive
+            /*
+             * set default values
+             */
             Builder() {
                 this.defaultCriteriaPercentage = ImageDeltaStatsImpl.SUGGESTED_CRITERIA_PERCENTAGE
                 this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
                 this.probability = MaterialStats.DEFAULT_PROBABILITY
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
+                this.onlySince = TSuiteTimestamp.NULL
+                this.onlySinceInclusive = true
             }
             Builder defaultCriteriaPercentage(double value) {
                 if (value < 0.0) {
@@ -338,6 +377,11 @@ class StorageScanner {
                 this.maximumNumberOfImageDeltas = value
                 return this
             }
+            Builder onlySince(TSuiteTimestamp tSuiteTimestamp, boolean inclusive = true) {
+                this.onlySince = tSuiteTimestamp
+                this.onlySinceInclusive = inclusive
+                return this
+            }
             Options build() {
                 return new Options(this)
             }
@@ -348,6 +392,8 @@ class StorageScanner {
             this.filterDataLessThan = builder.filterDataLessThan
             this.probability = builder.probability
             this.maximumNumberOfImageDeltas = builder.maximumNumberOfImageDeltas
+            this.onlySince = builder.onlySince
+            this.onlySinceInclusive = builder.onlySinceInclusive
         }
         
         double getDefaultCriteriaPercentage() {
@@ -364,6 +410,14 @@ class StorageScanner {
         
         int getMaximumNumberOfImageDeltas() {
             return this.maximumNumberOfImageDeltas
+        }
+        
+        TSuiteTimestamp getOnlySince() {
+            return this.onlySince
+        }
+        
+        boolean getOnlySinceInclusive() {
+            return this.onlySinceInclusive    
         }
         
         @Override

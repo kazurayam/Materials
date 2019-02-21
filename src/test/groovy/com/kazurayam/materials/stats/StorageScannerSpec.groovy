@@ -13,6 +13,9 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.stats.StorageScanner.BufferedImageBuffer
 import com.kazurayam.materials.stats.StorageScanner.Options
 
@@ -98,7 +101,7 @@ class StorageScannerSpec extends Specification {
      * 3 ImageDelta objects in a MatrialStats object.
      * @return
      */
-    def testSpecifyingMaximumNumberOfDelta() {
+    def testSpecifyingOption_maximumNumberOfDelta() {
         setup:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         StorageScanner.Options options = new Options.Builder().
@@ -115,12 +118,102 @@ class StorageScannerSpec extends Specification {
         mstats.getImageDeltaList().size() == 3
         
     }
+
+    def testSpecifyingOption_onlySince() {
+        setup:
+        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
+        StorageScanner.Options options = new Options.Builder().
+                                            onlySince(TSuiteTimestamp.newInstance("20190216_064149"), true).
+                                            build()
+        when:
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        ImageDeltaStats stats = scanner.scan(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+        //println "#testSpecifyingOptions_onlySince mstats:${mstats.toJson()}"
+        then:
+        mstats != null
+        mstats.getImageDeltaList().size() == 2
+    }
+
+    def testIsInRangeOfTSuiteTimestamp_inclusive_default() {
+        setup:
+        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        when:
+        StorageScanner.Options options = 
+            new Options.Builder().
+                onlySince(tst).  // onlySinceInclude default: true
+                build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        TSuiteResult tsr = ms_.getTSuiteResult(tsri)
+        List<Material> materials = tsr.getMaterialList()
+        then:
+        materials.size() == 1
+        when:
+        Material mate = materials.get(0)
+        then:
+        scanner.isInRangeOfTSuiteTimestamp(mate)
+    }
     
+    def testIsInRangeOfTSuiteTimestamp_inclusive_false() {
+        setup:
+        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        when:
+        StorageScanner.Options options =
+            new Options.Builder().
+                onlySince(tst, false).   // onlySinceInclusive: false
+                build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        TSuiteResult tsr = ms_.getTSuiteResult(tsri)
+        List<Material> materials = tsr.getMaterialList()
+        then:
+        materials.size() == 1
+        when:
+        Material mate = materials.get(0)
+        then:
+        ! scanner.isInRangeOfTSuiteTimestamp(mate)
+    }
+    
+    def testIsInRangeOfTSuiteTimestamp_inclusive_true() {
+        setup:
+        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        when:
+        StorageScanner.Options options =
+            new Options.Builder().
+                onlySince(tst, true).  // onlySinceInclusive: true
+                build()
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        TSuiteResult tsr = ms_.getTSuiteResult(tsri)
+        List<Material> materials = tsr.getMaterialList()
+        then:
+        materials.size() == 1
+        when:
+        Material mate = materials.get(0)
+        then:
+        scanner.isInRangeOfTSuiteTimestamp(mate)  
+    }
+
+        
     def test_Options_maximumNumberOfDelta() {
         when:
         StorageScanner.Options options = new Options.Builder().maximumNumberOfImageDeltas(3).build()
         then:
         options.getMaximumNumberOfImageDeltas() == 3
+    }
+    
+    def test_Options_onlySince() {
+        when:
+        TSuiteTimestamp tsn = TSuiteTimestamp.newInstance("20190101_000000")
+        StorageScanner.Options options = new Options.Builder().onlySince(tsn, false).build()
+        then:
+        options.getOnlySince().equals(tsn)
+        options.getOnlySinceInclusive() == false
     }
     
     @Ignore
