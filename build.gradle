@@ -59,7 +59,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/StorageScannerSpec.class'
+    include '**/StatsEntrySpec.class'
     outputs.upToDateWhen {false}
 }
 

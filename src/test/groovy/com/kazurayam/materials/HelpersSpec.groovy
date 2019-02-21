@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
+import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -80,18 +81,18 @@ class HelpersSpec extends Specification {
         setup:
         Path subdir = workdir_.resolve('testDeleteDirectoryContents')
         Helpers.ensureDirs(subdir)
-	Path dummy = subdir.resolve('dummy')
+        Path dummy = subdir.resolve('dummy')
         Helpers.touch(dummy)
-	Path subsubdir = subdir.resolve('subsubdir')
-	Helpers.ensureDirs(subsubdir)
-	Path dummy1 = subsubdir.resolve('dummy1')
+        Path subsubdir = subdir.resolve('subsubdir')
+        Helpers.ensureDirs(subsubdir)
+        Path dummy1 = subsubdir.resolve('dummy1')
         Helpers.touch(dummy1)
         when:
         Helpers.deleteDirectoryContents(subdir)
         then:
         !dummy1.toFile().exists()
-	!dummy.toFile().exists()
-	!subsubdir.toFile().exists()
+        !dummy.toFile().exists()
+        !subsubdir.toFile().exists()
         subdir.toFile().exists()
     }
 
@@ -119,6 +120,40 @@ class HelpersSpec extends Specification {
         Files.exists(targetDir.resolve('main.TS1/20180530_130604'))
         Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1'))
         Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+    }
+    
+    /**
+     * make sure Helpers#copyDirectory() copies the source file to the target only 
+     * when the target file is not there or different from the source.
+     * it is expected that Helpers#copyDirectories() runs far quicker when executed 2nd times.
+     * 
+     * @return
+     */
+    def testCopyDirectory_ensuringModified() {
+        setup:
+        Path sourceDir = Paths.get('./src/test/fixture/Materials')
+        Path targetDir = workdir_.resolve('testCopyDirectory_ensuringModified')
+        when:
+        if (Files.exists(targetDir)) {
+            Helpers.deleteDirectory(targetDir)
+        }
+        Files.createDirectory(targetDir)
+        StopWatch stopWatch1 = new StopWatch()
+        stopWatch1.start()
+        Helpers.copyDirectory(sourceDir, targetDir)
+        stopWatch1.stop()
+        long time1 = stopWatch1.getTime()
+        then:
+        time1 < 2000
+        //
+        when:
+        StopWatch stopWatch2 = new StopWatch()
+        stopWatch2.start()
+        Helpers.copyDirectory(sourceDir, targetDir, true)   // 3rd arg is unnecessary whichi defaults to true
+        stopWatch2.stop()
+        long time2 = stopWatch2.getTime()
+        then:
+        time2 < time1 * 0.1   // time2 is expected to be much smaller than time1
     }
 
     def testGetClassShortName() {

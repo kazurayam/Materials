@@ -39,6 +39,8 @@ class StorageScanner {
         this.materialStorage_ = materialStorage
         this.options_ = options
         this.biBuffer_ = new BufferedImageBuffer()
+        // speed up ImageIO!
+        ImageIO.setUseCache(false)
     }
     
     /**
