@@ -25,6 +25,7 @@ class TSuiteResultSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepositoryImpl mri_
+    private static MaterialStorage ms_
 
     // fixture methods
     def setupSpec() {
@@ -34,6 +35,7 @@ class TSuiteResultSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         mri_ = MaterialRepositoryImpl.newInstance(workdir_.resolve('Materials'))
+        ms_  = MaterialStorageFactory.createInstance(workdir_.resolve('Storage'))
     }
     def setup() {}
     def cleanup() {}
@@ -78,6 +80,35 @@ class TSuiteResultSpec extends Specification {
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
         tsr.getId().equals(tsri)
+    }
+    
+    def testGetMaterialList_all() {
+        setup:
+        TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20190215_222146')
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        when:
+        TSuiteResult tsr = ms_.getTSuiteResult(tsri)
+        List<Material> materialList = tsr.getMaterialList()
+        then:
+        materialList.size() == 1
+    }
+    
+    def testGetMaterialList_withParam() {
+        setup:
+        TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20190215_222146')
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        when:
+        TSuiteResult tsr = ms_.getTSuiteResult(tsri)
+        List<Material> materialListAll = tsr.getMaterialList()
+        then:
+        materialListAll.size() == 1
+        when:
+        Material material = materialListAll.get(0)
+        List<Material> materialListSelected = tsr.getMaterialList(material.getPathRelativeToTSuiteTimestamp())
+        then:
+        materialListSelected.size()== 1
     }
 
     def testGetTCaseResult() {

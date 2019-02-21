@@ -247,6 +247,19 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         }
         return Collections.unmodifiableList(materials)
     }
+    
+    @Override
+    List<Material> getMaterialList(Path pathRelativeToTSuiteTimestamp) {
+        List<Material> materials = new ArrayList<Material>()
+        for (TCaseResult tcr : this.getTCaseResultList()) {
+            for (Material mate : tcr.getMaterialList()) {
+                if (mate.getPathRelativeToTSuiteTimestamp().equals(pathRelativeToTSuiteTimestamp)) {
+                    materials.add(mate)
+                }
+            }
+        }
+        return Collections.unmodifiableList(materials)
+    }
 
     // -------------------- overriding Object properties ----------------------
     @Override

@@ -3,6 +3,7 @@ package com.kazurayam.materials.impl
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -196,6 +197,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return this.getTSuiteResult(tsri)
     }
     */
+    
+    @Override
+    List<TSuiteName> getTSuiteNameList() {
+        Set<TSuiteName> set = new HashSet<TSuiteName>()
+        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+            set.add(subject.getTSuiteName())
+        }
+        return set.stream().collect(Collectors.toList())
+    }
     
     @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
@@ -525,6 +535,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             size += tsr.getSize()
         }
         return size
+    }
+    
+    @Override
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+        Set<Path> set = new TreeSet<Path>()
+        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName)
+        for (TSuiteResultId id: idList) {
+            TSuiteResult tSuiteResult = this.getTSuiteResult(id)
+            List<Material> materialList = tSuiteResult.getMaterialList()
+            for (Material material: materialList) {
+                set.add(material.getPathRelativeToTSuiteTimestamp().normalize())
+            }
+        } 
+        return set
     }
 
     TCaseResult getTCaseResult(String testCaseId) {

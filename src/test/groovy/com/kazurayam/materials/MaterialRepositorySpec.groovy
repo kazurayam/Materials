@@ -108,6 +108,31 @@ class MaterialRepositorySpec extends Specification {
         then:
         testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
     }
+    
+    def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
+        when:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        Set<Path> paths = mr_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
+        logger_.debug( "#testGetSetOfMaterialPathRelativeToTSuiteTimestmp: " + paths)
+        /*
+        [
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.bmp,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.gif,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.jpeg,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.jpg,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC2/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180718_142832/main.TC4/foo/bar/smilechart.xls,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png,
+            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC2/smilechart.xls
+        ]
+         */
+        then:
+        paths.size() == 11
+    }
 
     def testGetTestCaseDirectory() {
         when:
@@ -115,6 +140,13 @@ class MaterialRepositorySpec extends Specification {
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
         then:
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
+    }
+    
+    def testGetTSuiteNameList() {
+        when:
+        List<TSuiteName> tsnList = mr_.getTSuiteNameList()
+        then:
+        tsnList.size() == 8
     }
     
     def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {

@@ -163,6 +163,19 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+        return componentMR_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
+    }
+    
+    /**
+     * list of TSuiteName, unique
+     */
+    @Override
+    List<TSuiteName> getTSuiteNameList() {
+        return componentMR_.getTSuiteNameList()
+    }
+    
+    @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
         return componentMR_.getTSuiteResult(tSuiteResultId)
     }

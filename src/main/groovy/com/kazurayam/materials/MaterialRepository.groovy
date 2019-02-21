@@ -90,8 +90,9 @@ interface MaterialRepository {
     
     long getSize()
     
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)
-    
+    List<TSuiteName> getTSuiteNameList()
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
     List<TSuiteResultId> getTSuiteResultIdList()
