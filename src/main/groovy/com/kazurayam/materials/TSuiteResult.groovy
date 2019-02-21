@@ -69,6 +69,8 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
 
     // ------------------- helpers -----------------------------------------------
     abstract List<Material> getMaterialList()
+    
+    abstract List<Material> getMaterialList(Path pathRelativeToTSuiteTimestamp)
 
     // -------------------- overriding Object properties ----------------------
     @Override

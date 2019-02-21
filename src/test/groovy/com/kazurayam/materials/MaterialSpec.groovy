@@ -357,7 +357,7 @@ class MaterialSpec extends Specification {
         Path relative = mate.getPathRelativeToTSuiteTimestamp()
         then:
         relative != null
-        relative.toString().replace('\\', '/') == 'main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+        relative.toString().replace('\\','/') == 'main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
     }
 
 

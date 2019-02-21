@@ -181,7 +181,7 @@ class MaterialImpl implements Material {
         return getPathRelativeTo(rootDir)
     }
     
-    // unused?
+    //
     Path getPathRelativeTo(Path base) {
         Objects.requireNonNull(base)
         Path path =  base.relativize(this.getPath())

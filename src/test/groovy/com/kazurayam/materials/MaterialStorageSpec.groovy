@@ -118,6 +118,22 @@ class MaterialStorageSpec extends Specification {
         then:
         tSuiteResults.size() == 0
     }
+    
+    def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
+        setup:
+        Path stepWork = workdir_.resolve("imageDeltaStatsEntries.get(tSuiteName)")
+        Path msdir = stepWork.resolve("Storage")
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        int num = ms.backup(mr_, tsri)
+        Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
+        logger_.debug("#testGetSetOfMaterialPathRelativeToTSuiteTimestamp " + set)
+        then:
+        set.size() == 2
+    }
         
     def testGetTSuiteResult() {
         setup:
