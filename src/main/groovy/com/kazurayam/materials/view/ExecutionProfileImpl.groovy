@@ -4,6 +4,8 @@ import com.kazurayam.materials.ExecutionProfile
 
 final class ExecutionProfileImpl implements ExecutionProfile {
     
+    public static final ExecutionProfile BLANK = ExecutionProfileImpl.newInstance('')
+    
     private String profileName_
     
     private ExecutionProfileImpl(String profileName) {

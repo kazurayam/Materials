@@ -19,6 +19,10 @@ final class ExecutionPropertiesWrapper {
     private def jsonObject
     private static slurper = new JsonSlurper()
 
+    /**
+     * 
+     * @param path Path to the 'executin.properties' file of the TSuiteResult
+     */
     ExecutionPropertiesWrapper(Path path) {
         this(path.toFile())
     }
