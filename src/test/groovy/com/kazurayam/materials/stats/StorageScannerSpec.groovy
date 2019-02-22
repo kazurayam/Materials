@@ -207,6 +207,7 @@ class StorageScannerSpec extends Specification {
         options.getMaximumNumberOfImageDeltas() == 3
     }
     
+    
     def test_Options_onlySince() {
         when:
         TSuiteTimestamp tsn = TSuiteTimestamp.newInstance("20190101_000000")

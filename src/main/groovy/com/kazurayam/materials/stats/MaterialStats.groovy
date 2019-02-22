@@ -134,7 +134,7 @@ class MaterialStats {
             return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
         } else {
             logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
-            return new ConfidenceInterval(0.0, 0.0, 0.0)
+            return new ConfidenceInterval(0.0, 100.0, 99.00)
         }
     }
     
