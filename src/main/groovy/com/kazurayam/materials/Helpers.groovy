@@ -1,6 +1,7 @@
 package com.kazurayam.materials
 
 import static java.nio.file.FileVisitResult.*
+import static java.nio.file.StandardCopyOption.*
 
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
@@ -17,8 +18,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.StringEscapeUtils
-
-import com.kazurayam.materials.TSuiteTimestamp
 
 final class Helpers {
 
@@ -164,9 +163,10 @@ final class Helpers {
      *
      * @param source a directory from which files and directories are copied
      * @param target a directory into which files and directories are copied
+     * @param skipExisting default to true
      * @return
      */
-    static boolean copyDirectory(Path source, Path target) {
+    static boolean copyDirectory(Path source, Path target, boolean skipIfIdentical = true) {
         if (source == null) {
             throw new IllegalArgumentException('source is null')
         }
@@ -199,10 +199,16 @@ final class Helpers {
                 @Override
                 FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
                     Path targetFile = target.resolve(source.relativize(file))
-                    if (Files.exists(targetFile)) {
-                        Files.delete(targetFile)
+                    File sourceF = file.toFile()
+                    File targetF = targetFile.toFile()
+                    if (skipIfIdentical &&
+                        Files.exists(targetFile) && 
+                        sourceF.length() == targetF.length() &&
+                        sourceF.lastModified() == targetF.lastModified()) {
+                        ; // skip copying if sourceF and targetF are identical
+                    } else {
+                        Files.copy(file, targetFile, REPLACE_EXISTING, COPY_ATTRIBUTES)
                     }
-                    Files.copy(file, targetFile)
                     return CONTINUE
                 }
             }

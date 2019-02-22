@@ -4,6 +4,8 @@ import java.nio.file.Path
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.interval.ConfidenceInterval
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 
@@ -14,7 +16,9 @@ import com.kazurayam.materials.Helpers
  *
  */
 class MaterialStats {
-
+    
+    static Logger logger_ = LoggerFactory.getLogger(MaterialStats.class)
+    
     static final MaterialStats NULL = new MaterialStats(null, new ArrayList<ImageDelta>())
     
     static final String CRITERIA_PERCENTAGE_FORMAT = '%1$.2f'
@@ -80,44 +84,58 @@ class MaterialStats {
     }
     
     double mean() {
-        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
-        double mean = this.sum()/ this.degree()
-        return mean
+        if (this.degree() > 0) {
+            double mean = this.sum()/ this.degree()
+            return mean
+        } else {
+            logger_.warn("mean() returned 0 because this.degree() returned 0")
+            return 0
+        }
     }
     
     double variance() {
-        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
-        // ssum
-        double ssum = 0.0
-        for (int i = 0; i < this.degree(); i++) {
-            ssum += Math.sqrt(Math.abs(this.data()[i] - this.mean()))
+        if (this.degree() > 0) {
+            // ssum
+            double ssum = 0.0
+            for (int i = 0; i < this.degree(); i++) {
+                ssum += Math.sqrt(Math.abs(this.data()[i] - this.mean()))
+            }
+            // variance
+            double variance = ssum / this.degree()
+            return variance
+        } else {
+            logger_.warn("variance() returned 0 because this.degree() returned 0")
+            return 0
         }
-        // variance
-        double variance = ssum / this.degree()
-        return variance
     }
     
     double standardDeviation() {
         return Math.sqrt(this.variance())
     }
     
-    
-        
     /**
      * @return calculate t-inverse with this.degree() degrees of FREEDOM %
      */
     double tDistribution() {
-        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
-        TDistribution tdist = new org.apache.commons.math3.distribution.TDistribution(this.degree() - 1)
-        return tdist.inverseCumulativeProbability(this.probability)
+        if (this.degree() > 1) {
+            TDistribution tdist = new org.apache.commons.math3.distribution.TDistribution(this.degree() - 1)
+            return tdist.inverseCumulativeProbability(this.probability)
+        } else {
+            logger_.warn("tDistribution() returned 0 because this.degree() was ${this.degree()}")
+            return 0
+        }
     }
     
     ConfidenceInterval getConfidenceInterval() {
-        //if (this.degree() == 0) throw new IllegalStateException("this.degree() returned 0")
-        double lowerBound = this.mean() - this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
-        double upperBound = this.mean() + this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
-        double confidenceLevel = this.probability
-        return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
+        if (this.degree() > 0) {
+            double lowerBound = this.mean() - this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
+            double upperBound = this.mean() + this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
+            double confidenceLevel = this.probability
+            return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
+        } else {
+            logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
+            return new ConfidenceInterval(0.0, 100.0, 99.00)
+        }
     }
     
     double getCalculatedCriteriaPercentage() {

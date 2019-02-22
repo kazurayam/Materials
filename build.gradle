@@ -6,7 +6,8 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.32.0'
+version  = '0.34.0'
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -59,7 +60,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/StorageScannerSpec.class'
+    include '**/StatsEntrySpec.class'
+    //include '**/StorageScannerSpec.class'
     outputs.upToDateWhen {false}
 }
 

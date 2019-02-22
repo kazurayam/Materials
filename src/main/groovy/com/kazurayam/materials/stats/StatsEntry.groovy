@@ -2,10 +2,15 @@ package com.kazurayam.materials.stats
 
 import java.nio.file.Path
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
 
 class StatsEntry {
+    
+    static Logger logger_ = LoggerFactory.getLogger(StatsEntry.class)
     
     static final StatsEntry NULL = new StatsEntry(null)
 
@@ -32,11 +37,11 @@ class StatsEntry {
     
     MaterialStats getMaterialStats(Path path) {
         for (MaterialStats ms: materialStatsList) {
-            // It is important to use Path#equals(Path) method rather than == operator
-            // because they are not identical in the way of dealing with File.separator ('\\' and '/').
-            // We need to be tolerant for the difference of '\\' and '/' used in the path parameter.
             if (ms.getPath().equals(path)) {
                 return ms
+            } else {
+                logger_.warn("#getMaterialStats path:${path.toString()}, ms.getPath():${ms.getPath()}," +
+                    " equals?:${ms.getPath().equals(path)}")
             }
         }
         return MaterialStats.NULL
