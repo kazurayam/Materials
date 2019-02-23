@@ -20,7 +20,7 @@ class SpecTemplate extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(SpecTemplate.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(SpecTemplate.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }

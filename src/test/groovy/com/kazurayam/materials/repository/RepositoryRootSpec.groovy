@@ -12,8 +12,6 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.repository.RepositoryFileScanner
-import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -29,7 +27,7 @@ class RepositoryRootSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -89,9 +87,9 @@ class RepositoryRootSpec extends Specification {
         tsrList.size() == 2
         // tsList is not sorted
         //tsrList[0].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[0].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140105')
+        //tsrList[0].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140105')
         //tsrList[1].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
+        //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
     }
     
     def testGetTSuiteResultsBeforeExclusive() {

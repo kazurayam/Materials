@@ -18,7 +18,7 @@ class MaterialRepositoryFactorySpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialRepositoryFactorySpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialRepositoryFactorySpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }

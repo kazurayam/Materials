@@ -26,7 +26,7 @@ class TSuiteResultIdImplSpec extends Specification {
     
     // fixture methods
     def setupSpec() {
-        //workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TsNameSpec.class)}")
+        //workdir = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(TsNameSpec.class)}")
         //if (!workdir.toFile().exists()) {
         //    workdir.toFile().mkdirs()
         //}

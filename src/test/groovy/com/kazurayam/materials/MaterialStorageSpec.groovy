@@ -22,7 +22,7 @@ class MaterialStorageSpec extends Specification {
     
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(MaterialStorageSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialStorageSpec.class)}")
         Helpers.copyDirectory(fixture_, workdir_)
         //
         mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve("Materials"))
