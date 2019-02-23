@@ -6,8 +6,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.TSuiteName
-
 import spock.lang.Specification
 
 class TSuiteNameSpec extends Specification {
@@ -20,7 +18,7 @@ class TSuiteNameSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        //workdir = Paths.get("./build/tmp/${Helpers.getClassShortName(TsNameSpec.class)}")
+        //workdir = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(TsNameSpec.class)}")
         //if (!workdir.toFile().exists()) {
         //    workdir.toFile().mkdirs()
         //}

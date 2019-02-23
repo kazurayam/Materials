@@ -30,7 +30,7 @@ class RepositoryFileScannerSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryFileScannerSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryFileScannerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -107,7 +107,7 @@ class RepositoryFileScannerSpec extends Specification {
         //
         when:
         Material mate0 = materials[0]
-        String p0 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
+        String p0 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
             '/testScan/main.TS1/20180530_130419' +
             '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
@@ -118,7 +118,7 @@ class RepositoryFileScannerSpec extends Specification {
         //
         when:
         Material mate1 = materials[1]
-        String p1 = 'build/tmp/' + Helpers.getClassShortName(this.class) +
+        String p1 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
                 '/testScan/main.TS1/20180530_130419' +
                 '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:

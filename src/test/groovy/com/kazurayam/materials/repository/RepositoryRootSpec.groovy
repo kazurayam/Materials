@@ -12,8 +12,6 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.repository.RepositoryFileScanner
-import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -29,7 +27,7 @@ class RepositoryRootSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }

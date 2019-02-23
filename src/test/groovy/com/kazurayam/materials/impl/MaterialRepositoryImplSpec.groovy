@@ -28,7 +28,7 @@ class MaterialRepositoryImplSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${classShortName_}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${classShortName_}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -65,7 +65,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolveMaterialPath_withSuffix() {
@@ -84,7 +84,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testResolveMaterialPath_new() {
@@ -102,7 +102,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         Files.exists(p.getParent())
     }
 
@@ -121,7 +121,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
         Files.exists(p.getParent())
     }
 
@@ -137,7 +137,7 @@ class MaterialRepositoryImplSpec extends Specification {
         Path p = mri.resolveMaterialPath('TC1', materialFileName)
         then:
         p != null
-        p.toString().replace('\\', '/') == "build/tmp/${classShortName_}/${methodName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+        p.toString().replace('\\', '/') == "build/tmp/testOutput/${classShortName_}/${methodName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testToJson() {

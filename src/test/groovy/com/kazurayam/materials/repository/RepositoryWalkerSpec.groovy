@@ -7,10 +7,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.repository.RepositoryFileScanner
-import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
-import com.kazurayam.materials.repository.RepositoryWalker
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore
@@ -27,7 +23,7 @@ class RepositoryWalkerSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/${Helpers.getClassShortName(RepositoryWalkerSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryWalkerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
