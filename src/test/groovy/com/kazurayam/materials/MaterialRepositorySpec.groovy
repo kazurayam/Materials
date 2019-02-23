@@ -10,8 +10,6 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.impl.TSuiteTimestampImpl
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -45,7 +43,7 @@ class MaterialRepositorySpec extends Specification {
         timestampdir.toString().contains('oneStringArg')
         when:
         String dirName = timestampdir.getFileName()
-        LocalDateTime ldt = TSuiteTimestampImpl.parse(dirName)
+        LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
         then:
         true
     }

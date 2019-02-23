@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 
@@ -131,7 +132,7 @@ class MaterialRepositoryImplSpec extends Specification {
         Path casedir = workdir_.resolve(methodName)
         Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
-        mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestampImpl.TIMELESS)
+        mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         Path p = mri.resolveMaterialPath('TC1', materialFileName)

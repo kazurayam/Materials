@@ -18,7 +18,6 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialImpl
-import com.kazurayam.materials.impl.TSuiteTimestampImpl
 
 /**
  *
@@ -67,9 +66,9 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TESTSUITE:
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
-                LocalDateTime ldt = TSuiteTimestampImpl.parse(dir.getFileName().toString())
+                LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
-                    tSuiteTimestamp_ = TSuiteTimestamp.newInstance(ldt)
+                    tSuiteTimestamp_ = new TSuiteTimestamp(ldt)
                     Objects.requireNonNull(tSuiteName_, "tSuiteName_ must not be null")
                     Objects.requireNonNull(tSuiteTimestamp_, "tSuiteTimestamp_ must not be null")
                     tSuiteResult_ = TSuiteResult.newInstance(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)

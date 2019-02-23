@@ -87,9 +87,9 @@ class RepositoryRootSpec extends Specification {
         tsrList.size() == 2
         // tsList is not sorted
         //tsrList[0].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[0].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140105')
+        //tsrList[0].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140105')
         //tsrList[1].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[1].getTSuiteTimestamp() == TSuiteTimestampImpl.newInstance('20180810_140106')
+        //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
     }
     
     def testGetTSuiteResultsBeforeExclusive() {
