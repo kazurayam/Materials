@@ -211,7 +211,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     /**
      *
      * @param an instance of TSuiteResult
-     * @return LocalDateTime for TSuiteResutl's lastModified property
+     * @return LocalDateTime for TSuiteResult's lastModified property
      */
     private LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
         LocalDateTime lastModified = LocalDateTime.MIN
