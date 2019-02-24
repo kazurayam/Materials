@@ -222,12 +222,12 @@ class MaterialStorageSpec extends Specification {
         List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
         int num = ms.backup(mr_, tsriList)
         then:
-        num == 12
+        num == 22
         when:
         List<TSuiteResult> list = ms.getTSuiteResultList()
         then:
         list != null
-        list.size() == 4
+        list.size() == 6
     }
     
     def testRestore_specifyingTSuiteTimestamp() {
@@ -315,7 +315,7 @@ class MaterialStorageSpec extends Specification {
         List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
         int num = ms.backup(mr_, tsriList)
         then:
-        num == 12
+        num == 22
         when:
         Path restoredDir = stepWork.resolve("Materials_restored")
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
@@ -343,7 +343,7 @@ class MaterialStorageSpec extends Specification {
         List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
         int num = ms.backup(mr_, tsriList)
         then:
-        num == 12
+        num == 22
         when:
         Path restoredDir = stepWork.resolve("Materials_restored")
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)

@@ -126,10 +126,11 @@ class MaterialRepositorySpec extends Specification {
             ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
             ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png,
             ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC2/smilechart.xls
+            and more
         ]
          */
         then:
-        paths.size() == 11
+        paths.size() == 16
     }
 
     def testGetTestCaseDirectory() {
@@ -167,7 +168,7 @@ class MaterialRepositorySpec extends Specification {
         List<TSuiteResult> list = mr_.getTSuiteResultList(tsriList)
         then:
         list != null
-        list.size() == 4
+        list.size() == 6
     }
     
     def testGetTSuiteResultIdList_withTSuiteName() {
@@ -175,7 +176,7 @@ class MaterialRepositorySpec extends Specification {
         List<TSuiteResultId> list = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
         then:
         list != null
-        list.size() == 4
+        list.size() == 6
     }
     
     def testGetTSuiteResultIdList() {
@@ -183,7 +184,7 @@ class MaterialRepositorySpec extends Specification {
         List<TSuiteResultId> list = mr_.getTSuiteResultIdList()
         then:
         list != null
-        list.size()== 13
+        list.size()== 15
     }
     
     def testGetTSuiteResultList_noArgs() {
@@ -191,7 +192,7 @@ class MaterialRepositorySpec extends Specification {
         List<TSuiteResult> list = mr_.getTSuiteResultList()
         then:
         list != null
-        list.size() == 13
+        list.size() == 15
     }
 
     def testResolveScreenshotPath() {
@@ -290,7 +291,7 @@ class MaterialRepositorySpec extends Specification {
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
         int count = mr.clear(tsn)        // HERE is difference
         then:
-        count == 12
+        count == 22
         when:
         List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(tsn)
         List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
