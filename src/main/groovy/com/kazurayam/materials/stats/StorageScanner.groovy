@@ -10,7 +10,6 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
@@ -20,6 +19,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.imagedifference.ImageDifference
 
 import groovy.json.JsonOutput
 
@@ -249,7 +249,10 @@ class StorageScanner {
         // create ImageDifference of the 2 given images to calculate the diff ratio
         BufferedImage biA = biBuffer_.read(a)
         BufferedImage biB = biBuffer_.read(b)
+        
+        // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
+        
         // make the delta
         ImageDelta imageDelta = new ImageDelta(
                                 a.getParent().getParent().getTSuiteTimestamp(),
