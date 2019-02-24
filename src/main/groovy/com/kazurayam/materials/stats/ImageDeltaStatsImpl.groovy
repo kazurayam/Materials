@@ -1,9 +1,12 @@
 package com.kazurayam.materials.stats
 
+import java.nio.file.Files
 import java.nio.file.Path
 
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.TSuiteName
+
+import groovy.json.JsonOutput
 
 /**
  * 
@@ -96,6 +99,12 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
             }
         }
         return StatsEntry.NULL
+    }
+    
+    @Override
+    void write(Path output) {
+        Files.createDirectories(output.getParent())
+        output.toFile().text = JsonOutput.prettyPrint(this.toJson())
     }
     
     void addStatsEntry(StatsEntry entry ) {
