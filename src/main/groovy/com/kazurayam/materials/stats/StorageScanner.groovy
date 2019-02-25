@@ -427,7 +427,38 @@ class StorageScanner {
         
         @Override
         String toString() {
-            return JsonOutput.toJson(this)
+            return this.toJson()
+        }
+        
+        String toJson() {
+            StringBuilder sb = new StringBuilder()
+            sb.append("{")
+            //
+            sb.append("\"defaultCriteriaPercentage\":")
+            sb.append(this.getDefaultCriteriaPercentage())
+            sb.append(",")
+            //
+            sb.append("\"filterDataLessThan\":")
+            sb.append(this.getFilterDataLessThan())
+            sb.append(",")
+            //
+            sb.append("\"maximumNumberOfImageDeltas\":")
+            sb.append(this.getMaximumNumberOfImageDeltas())
+            sb.append(",")
+            //
+            sb.append("\"onlySince\":")
+            sb.append("\"" + this.getOnlySince().format() + "\"")
+            sb.append(",")
+            //
+            sb.append("\"onlySinceInclusive\":")
+            sb.append(this.getOnlySinceInclusive())
+            sb.append(",")
+            //
+            sb.append("\"probability\":")
+            sb.append(this.getProbability())
+            sb.append("")
+            sb.append("}")
+            sb.toString()
         }
     }
 }

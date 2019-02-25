@@ -3,6 +3,7 @@ package com.kazurayam.materials.stats
 import java.awt.image.BufferedImage
 import java.nio.file.Path
 import java.nio.file.Paths
+import groovy.json.JsonOutput
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -215,6 +216,16 @@ class StorageScannerSpec extends Specification {
         then:
         options.getOnlySince().equals(tsn)
         options.getOnlySinceInclusive() == false
+    }
+    
+    def test_Options_toString() {
+        when:
+        StorageScanner.Options options = new Options.Builder().build()
+        logger_.debug("#test_Options_toString() optons.toString()=${options.toString()}")
+        String json = JsonOutput.prettyPrint(options.toString())
+        logger_.debug("#test_Options_toString() json=${json}")
+        then:
+        json.length() > 0
     }
     
     @Ignore

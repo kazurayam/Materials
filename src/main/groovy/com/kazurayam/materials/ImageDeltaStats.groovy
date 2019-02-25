@@ -10,7 +10,14 @@ import com.kazurayam.materials.stats.StatsEntry
  * 
  * <PRE>
  * {
- *  "defaultCriteriaPercentage":5.0,
+ *  "storageScannerOptions": {
+ *      "defaultCriteriaPercentage": 5.0,
+ *      "filterDataLessThan": 1.0,
+ *      "maximumNumberOfImageDeltas": 10,
+ *      "onlySince": "20190219_021648",
+ *      "onlySinceInclusive": true,
+ *      "probability": 0.95
+ *  },
  *  "statsEntryList":[
  *      {
  *          "TSuiteName": "47News_chronos_capture",
@@ -41,6 +48,7 @@ import com.kazurayam.materials.stats.StatsEntry
  *          ]
  *      }
  *  }
+ *  
  * }
  * </PRE>
  * @author kazurayam
