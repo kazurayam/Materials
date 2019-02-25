@@ -27,18 +27,20 @@ class MaterialStats {
     static final double DEFAULT_FILTER_DATA_LESS_THAN = 1.00
     static final double DEFAULT_PROBABILITY = 0.95
     static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 10
-    static final double SUGGESTED_CRITERIA_PERCENTAGE = 0.0
+    static final double SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY = 0.0
     
     private Path path
     private List<ImageDelta> imageDeltaList
     private double filterDataLessThan
     private double probability
+    private double shiftCriteriaPercentageBy
     
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
         this.path = path
         this.imageDeltaList = imageDeltaList
         this.filterDataLessThan = DEFAULT_FILTER_DATA_LESS_THAN
         this.probability = DEFAULT_PROBABILITY
+        this.shiftCriteriaPercentageBy = this.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
     }
 
     Path getPath() {
@@ -55,6 +57,10 @@ class MaterialStats {
     
     void setProbability(double value) {
         this.probability = value
+    }
+    
+    void setShiftCriteriaPercentageBy(double value) {
+        this.shiftCriteriaPercentageBy = value
     }
     
     double[] data() {
@@ -139,8 +145,12 @@ class MaterialStats {
         }
     }
     
+    /**
+     * 
+     * @return upperBound of the ConfidenceInterval + shiftCriteriaPercentage
+     */
     double getCalculatedCriteriaPercentage() {
-        return this.getConfidenceInterval().getUpperBound()
+        return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
     }
    
     String getCalculatedCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
@@ -194,6 +204,12 @@ class MaterialStats {
         sb.append("\"variance\":${this.variance()},")
         sb.append("\"standardDeviation\":${this.standardDeviation()},")
         sb.append("\"tDistribution\":${this.tDistribution()},")
+        sb.append("\"confidenceInterval\":{")
+        sb.append("\"lowerBound\":")
+        sb.append(this.getConfidenceInterval().getLowerBound())
+        sb.append(",\"upperBound\":")
+        sb.append(this.getConfidenceInterval().getUpperBound())
+        sb.append("},")
         sb.append("\"calculatedCriteriaPercentage\":")
         sb.append(this.getCalculatedCriteriaPercentageAsString())
         sb.append("}")

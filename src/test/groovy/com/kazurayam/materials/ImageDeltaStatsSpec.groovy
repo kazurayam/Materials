@@ -112,6 +112,7 @@ class ImageDeltaStatsSpec extends Specification {
     def testWrite() {
         setup:
         StorageScanner.Options options = new StorageScanner.Options.Builder().
+            defaultCriteriaPercentage(25.0).
             probability(0.75).  // LOOK HERE
             build()
         StorageScanner scanner = new StorageScanner(ms_, options)
@@ -128,7 +129,7 @@ class ImageDeltaStatsSpec extends Specification {
         JsonSlurper slurper = new JsonSlurper()
         def json = slurper.parse(file.toFile())
         then:
-        json.storageScannerOptions.defaultCriteriaPercentage == 0.0
+        json.storageScannerOptions.defaultCriteriaPercentage == 25.0
         json.storageScannerOptions.filterDataLessThan == 1.0
         json.storageScannerOptions.maximumNumberOfImageDeltas == 10
         json.storageScannerOptions.onlySince == '19990101_000000'
@@ -139,7 +140,7 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList.size()== 1
         json.imageDeltaStatsEntries[0].materialStatsList[0].path == "main.TC_47News.visitSite/47NEWS_TOP.png"
         json.imageDeltaStatsEntries[0].materialStatsList[0].imageDeltaList.size()> 0
-        json.imageDeltaStatsEntries[0].materialStatsList[0].calculatedCriteriaPercentage == 15.20
+        json.imageDeltaStatsEntries[0].materialStatsList[0].calculatedCriteriaPercentage == 40.20
         
     }
 }

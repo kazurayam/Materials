@@ -162,8 +162,10 @@ class StorageScanner {
         }
         MaterialStats materialStats  = new MaterialStats(
                     pathRelativeToTSuiteTimestamp, imageDeltaList)
+        
         // configure parameters
         materialStats.setFilterDataLessThan(options_.getFilterDataLessThan())
+        materialStats.setShiftCriteriaPercentageBy(options_.getDefaultCriteriaPercentage())
         
         //
         stopWatch.stop()
@@ -339,7 +341,7 @@ class StorageScanner {
              * constructor, where we set the default values
              */
             Builder() {
-                this.defaultCriteriaPercentage = MaterialStats.SUGGESTED_CRITERIA_PERCENTAGE
+                this.defaultCriteriaPercentage = MaterialStats.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
                 this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
                 this.probability = MaterialStats.DEFAULT_PROBABILITY
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
