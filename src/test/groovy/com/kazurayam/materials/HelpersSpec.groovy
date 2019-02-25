@@ -151,7 +151,7 @@ class HelpersSpec extends Specification {
         stopWatch2.stop()
         long time2 = stopWatch2.getTime()
         then:
-        time2 < time1 * 0.1   // time2 is expected to be much smaller than time1
+        time2 < time1 * 0.5   // time2 is expected to be much smaller than time1
     }
 
     def testGetClassShortName() {

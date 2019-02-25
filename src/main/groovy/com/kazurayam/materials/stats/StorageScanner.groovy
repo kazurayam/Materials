@@ -10,7 +10,7 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.imagedifference.ImageDifference
+import com.kazurayam.materials.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material

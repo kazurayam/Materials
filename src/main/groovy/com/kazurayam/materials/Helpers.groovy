@@ -23,8 +23,6 @@ final class Helpers {
 
     static Logger logger_ = LoggerFactory.getLogger(Helpers.class)
 
-
-
     /**
      * Constructor is hidden as this class is not supposed to be instanciated
      */
