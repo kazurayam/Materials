@@ -4,6 +4,7 @@ import java.nio.file.Path
 
 import com.kazurayam.materials.stats.ImageDeltaStatsImpl
 import com.kazurayam.materials.stats.StatsEntry
+import com.kazurayam.materials.stats.StorageScanner.Options
 
 /**
  * ImageDeletaStats object:
@@ -54,16 +55,10 @@ import com.kazurayam.materials.stats.StatsEntry
  * @author kazurayam
  *
  */
-abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
+abstract class ImageDeltaStats {
     
     static final ImageDeltaStats ZERO = 
-        new ImageDeltaStatsImpl.Builder().defaultCriteriaPercentage(0.0).build()
-    
-    static ImageDeltaStats newInstance(
-            double defaultCriteriaPercentage, MaterialStorage storage) {
-        // FIXME
-        return ZERO
-    }
+        new ImageDeltaStatsImpl.Builder().build()
     
     // --------------- attribute setter & getter ----------------------
     /**
@@ -74,21 +69,14 @@ abstract class ImageDeltaStats implements Comparable<ImageDeltaStats> {
      * @param pathRelativeToTSuiteTimestamp
      * @return
      */
-    abstract double criteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
-    
-    abstract double getDefaultCriteriaPercentage()
-    
-    abstract double getCalculatedCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
+    abstract Options getStorageScannerOptions()
     
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
+    
+    abstract double getCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
     
     abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
     
     abstract void write(Path output)
     
-    @Override
-    int compareTo(ImageDeltaStats other) {
-        double d = this.getDefaultCriteriaPercentage()
-        return this.getDefaultCriteriaPercentage() - d
-    }
 }

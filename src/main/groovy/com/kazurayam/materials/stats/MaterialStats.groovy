@@ -27,6 +27,7 @@ class MaterialStats {
     static final double DEFAULT_FILTER_DATA_LESS_THAN = 1.00
     static final double DEFAULT_PROBABILITY = 0.95
     static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 10
+    static final double SUGGESTED_CRITERIA_PERCENTAGE = 0.0
     
     private Path path
     private List<ImageDelta> imageDeltaList

@@ -144,7 +144,7 @@ class ImageCollectionDifferSpec extends Specification {
             }.collect(Collectors.toList())
         StorageScanner storageScanner = new StorageScanner(ms, new StorageScanner.Options.Builder().build())
         ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
-        double ccp = imageDeltaStats.getCalculatedCriteriaPercentage(
+        double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:

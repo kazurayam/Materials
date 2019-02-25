@@ -70,8 +70,8 @@ class StorageScanner {
         stopWatch.start()
         
         ImageDeltaStatsImpl.Builder builder = 
-            new ImageDeltaStatsImpl.Builder().
-                defaultCriteriaPercentage(options_.getDefaultCriteriaPercentage())
+            new ImageDeltaStatsImpl.Builder().storageScannerOptions(options_)
+        //
         if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
             StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
@@ -334,15 +334,16 @@ class StorageScanner {
             private int maximumNumberOfImageDeltas
             private TSuiteTimestamp onlySince
             private boolean onlySinceInclusive
+            
             /*
-             * set default values
+             * constructor, where we set the default values
              */
             Builder() {
-                this.defaultCriteriaPercentage = ImageDeltaStatsImpl.SUGGESTED_CRITERIA_PERCENTAGE
+                this.defaultCriteriaPercentage = MaterialStats.SUGGESTED_CRITERIA_PERCENTAGE
                 this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
                 this.probability = MaterialStats.DEFAULT_PROBABILITY
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
-                this.onlySince = TSuiteTimestamp.NULL
+                this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
             }
             Builder defaultCriteriaPercentage(double value) {

@@ -59,7 +59,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/StorageScannerSpec.class'
+    include '**/ImageCollectionDifferSpec.class'
     //include '**/MaterialRepositorySpec.class'
     //include '**/HelpersSpec.class'
     //include '**/StorageScannerSpec.class'

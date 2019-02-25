@@ -25,8 +25,9 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     
     /**
      * NULL Object
+     * '19990101_000000'
      */
-    static final TSuiteTimestamp NULL = new TSuiteTimestamp()
+    static final TSuiteTimestamp NULL = new TSuiteTimestamp('19990101_000000')
     
     /**
      * The format of standard String representation of TSuiteTimestamp object

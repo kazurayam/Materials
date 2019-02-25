@@ -39,7 +39,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    def testGetDefaultCriteriaPercentage_customizing() {
+    def testGetStorageScannerOptions() {
         setup:
         double value = 0.10
         StorageScanner.Options options = new StorageScanner.Options.Builder().
@@ -49,13 +49,13 @@ class ImageDeltaStatsSpec extends Specification {
         when:
         ImageDeltaStats ids = scanner.scan(new TSuiteName("47News_chronos_capture"))
         then:
-        ids.getDefaultCriteriaPercentage() == value
+        ids.getStorageScannerOptions().getDefaultCriteriaPercentage() == value
     }
     
     /**
      * 
      */
-    def testCriteriaPercentage_customizingFilterDataLessThan() {
+    def testGetCriteriaPercentage_customizingFilterDataLessThan() {
         setup:
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                                             filterDataLessThan(0.0).  // LOOK HERE
@@ -64,7 +64,7 @@ class ImageDeltaStatsSpec extends Specification {
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats ids = scanner.scan(tsn)
-        double criteriaPercentage = ids.criteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        double criteriaPercentage = ids.getCriteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
         then:
         // criteriaPercentage == 12.767696022300328 
         12.0 < criteriaPercentage
@@ -74,7 +74,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    def testCriteriaPercentage_customizingProbability() {
+    def testGetCriteriaPercentage_customizingProbability() {
         setup:
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                                             probability(0.75).  // LOOK HERE
@@ -83,7 +83,7 @@ class ImageDeltaStatsSpec extends Specification {
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats ids = scanner.scan(tsn)
-        double criteriaPercentage = ids.criteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        double criteriaPercentage = ids.getCriteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
         then:
         // criteriaPercentage == 15.197159598135954
         15.00 < criteriaPercentage
@@ -128,7 +128,12 @@ class ImageDeltaStatsSpec extends Specification {
         JsonSlurper slurper = new JsonSlurper()
         def json = slurper.parse(file.toFile())
         then:
-        json.defaultCriteriaPercentage == 5.0 
+        json.storageScannerOptions.defaultCriteriaPercentage == 0.0
+        json.storageScannerOptions.filterDataLessThan == 1.0
+        json.storageScannerOptions.maximumNumberOfImageDeltas == 10
+        json.storageScannerOptions.onlySince == '19990101_000000'
+        json.storageScannerOptions.onlySinceInclusive == true
+        json.storageScannerOptions.probability == 0.75
         json.imageDeltaStatsEntries.size() == 1
         json.imageDeltaStatsEntries[0].TSuiteName == '47News_chronos_capture'
         json.imageDeltaStatsEntries[0].materialStatsList.size()== 1
