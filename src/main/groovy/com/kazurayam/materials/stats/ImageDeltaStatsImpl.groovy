@@ -4,7 +4,14 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 import com.kazurayam.materials.ImageDeltaStats
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialRepository
+import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
@@ -28,7 +35,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         private Options options
         private List<StatsEntry> imageDeltaStatsEntries
         Builder() {
-            options = new StorageScanner.Options.Builder().build()
+            options = new StorageScanner.Options.Builder() .build()
             imageDeltaStatsEntries = new ArrayList<StatsEntry>()
         }
         Builder storageScannerOptions(Options value) {
@@ -92,6 +99,27 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     void write(Path output) {
         Files.createDirectories(output.getParent())
         output.toFile().text = JsonOutput.prettyPrint(this.toJson())
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr,
+        TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName, String fileName) {
+        mr.putCurrentTestSuite(imageDiffTSuiteName, tSuiteTimestamp)
+        Path inMaterials = mr.resolveMaterialPath(tCaseName, fileName)
+        this.write(inMaterials)
+        mr.scan()
+        //
+        TSuiteResultId tsri = TSuiteResultId.newInstance(imageDiffTSuiteName, tSuiteTimestamp)
+        ms.backup(mr, tsri, true)
+        List<Material> mateList = ms.getTSuiteResult(tsri).getMaterialList()
+        assert mateList.size() == 1
+        Material mate = mateList.get(0)
+        Path inStorage = mate.getPath()
+        //
+        return new PersistedImageDeltaStats(inStorage, inMaterials)
     }
     
     void addStatsEntry(StatsEntry entry ) {

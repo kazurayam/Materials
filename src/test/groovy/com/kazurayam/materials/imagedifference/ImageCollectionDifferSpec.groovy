@@ -46,7 +46,7 @@ class ImageCollectionDifferSpec extends Specification {
     /**
      * PNG file should end with "FAILED.png"
      */
-    @Ignore
+    
     def test_makeImageCollectionDifferences_twins_shouldCreatePngWithFAILED() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithFAILED")
@@ -84,7 +84,7 @@ class ImageCollectionDifferSpec extends Specification {
     /**
      * PNG file should not end with "FAILED.png"
      */
-    @Ignore
+    
     def test_makeImageCollectionDifferences_twins_shouldCreatePngWithoutFAILED() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithoutFAILED")
@@ -126,7 +126,7 @@ class ImageCollectionDifferSpec extends Specification {
      * the actual diffRation of a Material is 16.86, and is regarded as FAILED.
      * @return
      */
-    @Ignore
+    
     def test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage")

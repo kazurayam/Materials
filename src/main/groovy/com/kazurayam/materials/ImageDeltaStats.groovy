@@ -108,4 +108,30 @@ abstract class ImageDeltaStats {
     
     abstract void write(Path output)
     
+    abstract PersistedImageDeltaStats persist(
+        MaterialStorage ms,
+        MaterialRepository mr,
+        TSuiteName tSuiteName,
+        TSuiteTimestamp tSuiteTimestamp,
+        TCaseName tCaseName,
+        String fileName)
+    
+    /**
+     *
+     */
+    static class PersistedImageDeltaStats {
+        private Path inStorage
+        private Path inMaterials
+        PersistedImageDeltaStats(Path inStorage, Path inMaterials) {
+            this.inStorage = inStorage
+            this.inMaterials = inMaterials
+        }
+        Path getPathInMaterials() {
+            return this.inMaterials
+        }
+        Path getPathInStorage() {
+            return this.inStorage
+        }
+    } 
+    
 }

@@ -141,7 +141,7 @@ class MaterialStats {
             return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
         } else {
             logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
-            return new ConfidenceInterval(0.0, 100.0, 99.00)
+            return new ConfidenceInterval(0.0, 100.0, 0.999)
         }
     }
     
@@ -150,7 +150,11 @@ class MaterialStats {
      * @return ConfidenceInterval.upperBound + shiftCriteriaPercentage
      */
     double getCriteriaPercentage() {
-        return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
+        if (this.degree() > 0) {
+            return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
+        } else {
+            return this.shiftCriteriaPercentageBy
+        }
     }
    
     String getCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
@@ -187,17 +191,6 @@ class MaterialStats {
         sb.append("{")
         sb.append("\"path\":")
         sb.append("\"${Helpers.escapeAsJsonText(this.getPathAsStringInUNIX())}\",")
-        sb.append("\"imageDeltaList\":[")
-        int count = 0
-        for (ImageDelta id : this.getImageDeltaList()) {
-            if (count > 0) {
-                sb.append(",")
-            }
-            sb.append(id.toJson())
-            count += 1
-        }
-        sb.append("],")
-        sb.append("\"data\":${this.data().toString()},")
         sb.append("\"degree\":${this.degree().toString()},")
         sb.append("\"sum\":${this.sum()},")
         sb.append("\"mean\":${this.mean()},")
@@ -212,6 +205,18 @@ class MaterialStats {
         sb.append("},")
         sb.append("\"criteriaPercentage\":")
         sb.append(this.getCriteriaPercentageAsString())
+        sb.append(",")
+        sb.append("\"data\":${this.data().toString()},")
+        sb.append("\"imageDeltaList\":[")
+        int count = 0
+        for (ImageDelta id : this.getImageDeltaList()) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            sb.append(id.toJson())
+            count += 1
+        }
+        sb.append("]")
         sb.append("}")
         return sb.toString()
     }

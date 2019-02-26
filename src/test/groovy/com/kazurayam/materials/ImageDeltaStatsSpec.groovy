@@ -7,10 +7,13 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class ImageDeltaStatsSpec extends Specification {
@@ -18,19 +21,15 @@ class ImageDeltaStatsSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(ImageDeltaStatsSpec.class)
     
     // fields
-    private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static MaterialStorage ms_
+    private static Path fixtureDir
+    private static Path specOutputDir
     
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(ImageDeltaStats.class)}")
-        if (!workdir_.toFile().exists()) {
-            workdir_.toFile().mkdirs()
-        }
-        Helpers.copyDirectory(fixture_, workdir_)
-        Path storage = workdir_.resolve("Storage")
-        ms_ = MaterialStorageFactory.createInstance(storage)
+        Path projectDir = Paths.get(".")
+        fixtureDir = projectDir.resolve("./src/test/fixture")
+        Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDeltaStats.class))
     }
     def setup() {}
     def cleanup() {}
@@ -39,13 +38,20 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
+    
     def testGetStorageScannerOptions() {
         setup:
+        Path caseOutputDir = specOutputDir.resolve("testGetStorageScannerOptions")
+        Path fixtureStorage = fixtureDir.resolve('Storage')
+        Path outputStorage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(outputStorage)
+        Helpers.copyDirectory(fixtureStorage, outputStorage)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         double value = 0.10
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                                             shiftCriteriaPercentageBy(value).
                                             build()
-        StorageScanner scanner = new StorageScanner(ms_, options)
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         ImageDeltaStats ids = scanner.scan(new TSuiteName("47News_chronos_capture"))
         then:
@@ -55,12 +61,19 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
+    
     def testGetCriteriaPercentage_customizingFilterDataLessThan() {
         setup:
+        Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingFilterDataLessThan")
+        Path fixtureStorage = fixtureDir.resolve('Storage')
+        Path outputStorage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(outputStorage)
+        Helpers.copyDirectory(fixtureStorage, outputStorage)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                                             filterDataLessThan(0.0).  // LOOK HERE
                                             build()
-        StorageScanner scanner = new StorageScanner(ms_, options)
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats ids = scanner.scan(tsn)
@@ -74,12 +87,19 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
+    
     def testGetCriteriaPercentage_customizingProbability() {
         setup:
+        Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
+        Path fixtureStorage = fixtureDir.resolve('Storage')
+        Path outputStorage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(outputStorage)
+        Helpers.copyDirectory(fixtureStorage, outputStorage)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                                             probability(0.75).  // LOOK HERE
                                             build()
-        StorageScanner scanner = new StorageScanner(ms_, options)
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats ids = scanner.scan(tsn)
@@ -93,9 +113,16 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
+    
     def testToString() {
         setup:
-        StorageScanner scanner = new StorageScanner(ms_)
+        Path caseOutputDir = specOutputDir.resolve("testToString")
+        Path fixtureStorage = fixtureDir.resolve('Storage')
+        Path outputStorage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(outputStorage)
+        Helpers.copyDirectory(fixtureStorage, outputStorage)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+        StorageScanner scanner = new StorageScanner(ms)
         ImageDeltaStats ids = scanner.scan(new TSuiteName("47News_chronos_capture"))
         when:
         String s = ImageDeltaStats.ZERO.toString()
@@ -109,17 +136,24 @@ class ImageDeltaStatsSpec extends Specification {
      * 
      * @return
      */
+    
     def testWrite() {
         setup:
+        Path caseOutputDir = specOutputDir.resolve("testWrite")
+        Path fixtureStorage = fixtureDir.resolve('Storage')
+        Path outputStorage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(outputStorage)
+        Helpers.copyDirectory(fixtureStorage, outputStorage)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         StorageScanner.Options options = new StorageScanner.Options.Builder().
             shiftCriteriaPercentageBy(25.0).
             probability(0.75).  // LOOK HERE
             build()
-        StorageScanner scanner = new StorageScanner(ms_, options)
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats ids = scanner.scan(tsn)
-        Path file = workdir_.resolve('tmp').resolve('image-delta-stats.json')
+        Path file = caseOutputDir.resolve('image-delta-stats.json')
         // now we write this
         ids.write(file)
         then:
@@ -141,6 +175,26 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList[0].path == "main.TC_47News.visitSite/47NEWS_TOP.png"
         json.imageDeltaStatsEntries[0].materialStatsList[0].imageDeltaList.size()> 0
         json.imageDeltaStatsEntries[0].materialStatsList[0].criteriaPercentage == 40.20
-        
+    }
+    
+    def testPersist() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("testPersist")
+        Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
+        StorageScanner.Options options = new StorageScanner.Options.Builder().build()
+        StorageScanner scanner = new StorageScanner(ms, options)
+        TSuiteName tSuiteNameCapture = new TSuiteName("47News_chronos_capture")
+        ImageDeltaStats imageDeltaStats = scanner.scan(tSuiteNameCapture)
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp()
+        TCaseName tCaseName = new TCaseName('Test Cases/main/TC_47News/ImageDiff')
+        when:
+        PersistedImageDeltaStats stats = 
+            imageDeltaStats.persist(ms, mr, tSuiteNameExam, tSuiteTimestamp, tCaseName, 'image-delta-stats.json')
+        then:
+        Files.exists(stats.getPathInStorage())
+        Files.exists(stats.getPathInMaterials())
     }
 }
