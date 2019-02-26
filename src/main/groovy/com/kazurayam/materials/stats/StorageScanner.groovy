@@ -165,7 +165,7 @@ class StorageScanner {
         
         // configure parameters
         materialStats.setFilterDataLessThan(options_.getFilterDataLessThan())
-        materialStats.setShiftCriteriaPercentageBy(options_.getDefaultCriteriaPercentage())
+        materialStats.setShiftCriteriaPercentageBy(options_.getShiftCriteriaPercentageBy())
         
         //
         stopWatch.stop()
@@ -322,7 +322,7 @@ class StorageScanner {
      */
     static class Options {
         
-        private double defaultCriteriaPercentage
+        private double shiftCriteriaPercentageBy
         private double filterDataLessThan
         private double probability
         private int maximumNumberOfImageDeltas
@@ -330,7 +330,7 @@ class StorageScanner {
         private boolean onlySinceInclusive
         
         static class Builder {
-            private double defaultCriteriaPercentage
+            private double shiftCriteriaPercentageBy
             private double filterDataLessThan
             private double probability
             private int maximumNumberOfImageDeltas
@@ -341,21 +341,21 @@ class StorageScanner {
              * constructor, where we set the default values
              */
             Builder() {
-                this.defaultCriteriaPercentage = MaterialStats.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
+                this.shiftCriteriaPercentageBy = MaterialStats.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
                 this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
                 this.probability = MaterialStats.DEFAULT_PROBABILITY
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
                 this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
             }
-            Builder defaultCriteriaPercentage(double value) {
+            Builder shiftCriteriaPercentageBy(double value) {
                 if (value < 0.0) {
-                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be negative")
+                    throw new IllegalArgumentException("shiftCriteriaPercentageBy must not be negative")
                 }
                 if (value > 100.0) {
-                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be  > 100.0")
+                    throw new IllegalArgumentException("shiftCriteriaPercentageBy must not be > 100.0")
                 }
-                this.defaultCriteriaPercentage = value
+                this.shiftCriteriaPercentageBy = value
                 return this
             }
             Builder filterDataLessThan(double value) {
@@ -396,7 +396,7 @@ class StorageScanner {
         }
         
         private Options(Builder builder) {
-            this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
+            this.shiftCriteriaPercentageBy = builder.shiftCriteriaPercentageBy
             this.filterDataLessThan = builder.filterDataLessThan
             this.probability = builder.probability
             this.maximumNumberOfImageDeltas = builder.maximumNumberOfImageDeltas
@@ -404,8 +404,8 @@ class StorageScanner {
             this.onlySinceInclusive = builder.onlySinceInclusive
         }
         
-        double getDefaultCriteriaPercentage() {
-            return this.defaultCriteriaPercentage
+        double getShiftCriteriaPercentageBy() {
+            return this.shiftCriteriaPercentageBy
         }
         
         double getFilterDataLessThan() {
@@ -437,8 +437,8 @@ class StorageScanner {
             StringBuilder sb = new StringBuilder()
             sb.append("{")
             //
-            sb.append("\"defaultCriteriaPercentage\":")
-            sb.append(this.getDefaultCriteriaPercentage())
+            sb.append("\"shiftCriteriaPercentageBy\":")
+            sb.append(this.getShiftCriteriaPercentageBy())
             sb.append(",")
             //
             sb.append("\"filterDataLessThan\":")

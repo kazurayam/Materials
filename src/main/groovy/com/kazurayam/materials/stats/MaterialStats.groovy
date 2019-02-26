@@ -147,14 +147,14 @@ class MaterialStats {
     
     /**
      * 
-     * @return upperBound of the ConfidenceInterval + shiftCriteriaPercentage
+     * @return ConfidenceInterval.upperBound + shiftCriteriaPercentage
      */
-    double getCalculatedCriteriaPercentage() {
+    double getCriteriaPercentage() {
         return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
     }
    
-    String getCalculatedCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
-        return String.format(CRITERIA_PERCENTAGE_FORMAT, this.getCalculatedCriteriaPercentage())
+    String getCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
+        return String.format(CRITERIA_PERCENTAGE_FORMAT, this.getCriteriaPercentage())
     }
     
     List<ImageDelta> getImageDeltaList() {
@@ -210,8 +210,8 @@ class MaterialStats {
         sb.append(",\"upperBound\":")
         sb.append(this.getConfidenceInterval().getUpperBound())
         sb.append("},")
-        sb.append("\"calculatedCriteriaPercentage\":")
-        sb.append(this.getCalculatedCriteriaPercentageAsString())
+        sb.append("\"criteriaPercentage\":")
+        sb.append(this.getCriteriaPercentageAsString())
         sb.append("}")
         return sb.toString()
     }

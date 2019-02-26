@@ -28,7 +28,7 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         Path projectDir = Paths.get(".")
         fixtureDir = projectDir.resolve("src/test/fixture")
         Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
-        specOutputDir = testOutputDir.resolve(ImageDifferenceFilenameResolverDefaultImplSpec.class.getName())
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDifferenceFilenameResolverDefaultImplSpec.class))
     }
     def setup() {}
     def cleanup() {}
@@ -77,14 +77,14 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         actBI != null
         diff != null
         when:
-        // verify the case of criteriaPercent is less than the actual diff magnitude -> file name should be FAILED.png
+        // verify the case of criteriaPercent is less than the actual diff magnitude -> file name should end with 'FAILED.png'
         double criteriaPercentF = 5.0
         ImageDifferenceFilenameResolverDefaultImpl instanceF = new ImageDifferenceFilenameResolverDefaultImpl()
         String fileNameF = instanceF.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentF)
         then:
         fileNameF == "CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72)FAILED.png"
         when:
-        // verify the case of criteriaPercent is less than the actual diff magnitude -> file name should be FAILED.png
+        // verify the case of criteriaPercent is greater than the actual diff magnitude -> file name should end with '.png'
         Double criteriaPercentP = 10.0
         ImageDifferenceFilenameResolverDefaultImpl instanceP = new ImageDifferenceFilenameResolverDefaultImpl()
         String fileNameP = instanceP.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentP)

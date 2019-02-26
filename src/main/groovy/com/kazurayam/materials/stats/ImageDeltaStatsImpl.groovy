@@ -56,7 +56,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         if (statsEntry != StatsEntry.NULL) {
             MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
             if (materialStats != null) {
-                return materialStats.getCalculatedCriteriaPercentage()
+                return materialStats.getCriteriaPercentage()
             } else {
                 throw new IllegalArgumentException("path \"${pathRelativeToTSuiteTimestamp}\" is not " + 
                     "found in MaterialStats ${materialStats.toString()}")

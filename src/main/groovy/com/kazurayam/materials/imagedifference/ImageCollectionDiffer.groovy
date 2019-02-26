@@ -12,6 +12,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteName
 
 /**
  * This class is designed to implement the "Visual Testing in Katalon Studio" feature.
@@ -77,7 +78,12 @@ class ImageCollectionDiffer {
             ImageDeltaStats imageDeltaStats) {
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
-            double criteriaPercentage = 0.0
+            // resolve the criteria percentage for this Material
+            Material expected = pair.getExpected()
+            TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
+            Path path = expected.getPathRelativeToTSuiteTimestamp()
+            double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
+            // make a diff image
             this.writeDiffImage(pair.getExpected(), pair.getActual(), tCaseName, criteriaPercentage)
         }
     }

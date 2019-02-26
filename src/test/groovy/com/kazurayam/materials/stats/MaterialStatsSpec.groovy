@@ -3,6 +3,7 @@ package com.kazurayam.materials.stats
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.apache.commons.math3.stat.interval.ConfidenceInterval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -98,9 +99,19 @@ class MaterialStatsSpec extends Specification {
         tdistribution < 2.140
     }
     
-    def testGetCalculatedCriteriaPercentage() {
+    def testConfidenceInteval() {
         when:
-        double upperBound = materialStats_.getCalculatedCriteriaPercentage() // "calculatedCriteriaPercentage": 18.003
+        ConfidenceInterval confidenceInterval = materialStats_.getConfidenceInterval()
+        then:
+        12.0 < confidenceInterval.getLowerBound()              // "lowerBound": 12.070840401864046
+        confidenceInterval.getLowerBound() < 13.0 
+        15.0 < confidenceInterval.getUpperBound()              // "upperBound": 15.197159598135954
+        confidenceInterval.getUpperBound() < 16.0 
+    }
+    
+    def testGetCriteriaPercentage() {
+        when:
+        double upperBound = materialStats_.getCriteriaPercentage() // "criteriaPercentage": 18.003
         then:
         15.00 < upperBound
         upperBound < 16.00
@@ -116,7 +127,7 @@ class MaterialStatsSpec extends Specification {
         println "#testToString str:\n" + JsonOutput.prettyPrint(str)
         //println "#testToString str:\n" + str
         then:
-        str.contains("calculatedCriteriaPercentage")
+        str.contains("criteriaPercentage")
     }
     
     

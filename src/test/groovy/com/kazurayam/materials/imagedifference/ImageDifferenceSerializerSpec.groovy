@@ -9,6 +9,7 @@ import javax.imageio.ImageIO
 
 import org.apache.commons.io.FileUtils
 
+import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.imagedifference.ImageDifference
 import com.kazurayam.materials.imagedifference.ImageDifferenceSerializer
 
@@ -20,6 +21,7 @@ class ImageDifferenceSerializerSpec extends Specification {
     private static File image1_
     private static File image6_
     private static Path testOutputDir
+    private static Path specOutputDir
     
     
     def setupSpec() {
@@ -28,6 +30,7 @@ class ImageDifferenceSerializerSpec extends Specification {
         image1_ = fixtureImagesDir.resolve("andrej.png").toFile()
         image6_ = fixtureImagesDir.resolve("kazurayam.png").toFile()
         testOutputDir = projectDir.resolve("build/tmp/testOutput")
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDifferenceSerializerSpec.class))
     }
     def setup() {}
     def cleanup() {}
@@ -35,7 +38,7 @@ class ImageDifferenceSerializerSpec extends Specification {
     
     def testSimilarImages() {
         setup:
-        Path output = testOutputDir.resolve(ImageDifferenceSerializerSpec.class.getName() + "/testSimilarImages")
+        Path output = specOutputDir.resolve("testSimilarImages")
         Files.createDirectories(output)
         FileUtils.deleteQuietly(output.toFile())
         when:
@@ -55,7 +58,7 @@ class ImageDifferenceSerializerSpec extends Specification {
     
     def testDifferentImages() {
         setup:
-        Path output = testOutputDir.resolve(ImageDifferenceSerializerSpec.class.getName() + "/testDifferentImages")
+        Path output = specOutputDir.resolve("testDifferentImages")
         Files.createDirectories(output)
         FileUtils.deleteQuietly(output.toFile())
         when:
