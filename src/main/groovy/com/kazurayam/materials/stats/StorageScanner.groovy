@@ -11,6 +11,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
+import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
@@ -328,6 +329,7 @@ class StorageScanner {
         private int maximumNumberOfImageDeltas
         private TSuiteTimestamp onlySince
         private boolean onlySinceInclusive
+        private Path previousImageDeltaStats
         
         static class Builder {
             private double shiftCriteriaPercentageBy
@@ -336,6 +338,7 @@ class StorageScanner {
             private int maximumNumberOfImageDeltas
             private TSuiteTimestamp onlySince
             private boolean onlySinceInclusive
+            private Path previousImageDeltaStats
             
             /*
              * constructor, where we set the default values
@@ -347,6 +350,7 @@ class StorageScanner {
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
                 this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
+                this.previousImageDeltaStats = null
             }
             Builder shiftCriteriaPercentageBy(double value) {
                 if (value < 0.0) {
@@ -390,6 +394,10 @@ class StorageScanner {
                 this.onlySinceInclusive = inclusive
                 return this
             }
+            Builder previousImageDeltaStats(Path path) {
+                this.previousImageDeltaStats = path
+                return this
+            }
             Options build() {
                 return new Options(this)
             }
@@ -402,6 +410,7 @@ class StorageScanner {
             this.maximumNumberOfImageDeltas = builder.maximumNumberOfImageDeltas
             this.onlySince = builder.onlySince
             this.onlySinceInclusive = builder.onlySinceInclusive
+            this.previousImageDeltaStats = builder.previousImageDeltaStats
         }
         
         double getShiftCriteriaPercentageBy() {
@@ -426,6 +435,10 @@ class StorageScanner {
         
         boolean getOnlySinceInclusive() {
             return this.onlySinceInclusive    
+        }
+        
+        Path getPreviousImageDeltaStats() {
+            return this.previousImageDeltaStats
         }
         
         @Override
@@ -459,7 +472,17 @@ class StorageScanner {
             //
             sb.append("\"probability\":")
             sb.append(this.getProbability())
-            sb.append("")
+            sb.append(",")
+            //
+            sb.append("\"previousImageDeltaStats\":")
+            if (this.getPreviousImageDeltaStats() != null) {
+                sb.append("\"")
+                sb.append(Helpers.escapeAsJsonText(this.getPreviousImageDeltaStats().toString()))
+                sb.append("\"")
+            } else {
+                sb.append("\"\"")
+            }
+            //
             sb.append("}")
             sb.toString()
         }

@@ -13,6 +13,7 @@ import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
@@ -117,7 +118,6 @@ class StorageScannerSpec extends Specification {
         scanner.getOptions().getMaximumNumberOfImageDeltas() == 3
         mstats != null
         mstats.getImageDeltaList().size() == 3
-        
     }
 
     def testSpecifyingOption_onlySince() {
@@ -200,14 +200,12 @@ class StorageScannerSpec extends Specification {
         scanner.isInRangeOfTSuiteTimestamp(mate)  
     }
 
-        
     def test_Options_maximumNumberOfDelta() {
         when:
         StorageScanner.Options options = new Options.Builder().maximumNumberOfImageDeltas(3).build()
         then:
         options.getMaximumNumberOfImageDeltas() == 3
     }
-    
     
     def test_Options_onlySince() {
         when:
@@ -217,6 +215,7 @@ class StorageScannerSpec extends Specification {
         options.getOnlySince().equals(tsn)
         options.getOnlySinceInclusive() == false
     }
+    
     
     def test_Options_toString() {
         when:
@@ -228,10 +227,33 @@ class StorageScannerSpec extends Specification {
         json.length() > 0
     }
     
+    def test_Options_previousImageDeltaStats() {
+        setup:
+        TSuiteName tsn      = new TSuiteName("Test Suites/47News_chronos_exam")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20190216_064149")
+        TCaseName tcn       = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        when:
+        Path jsonPath = ImageDeltaStats.resolvePath(tsn, tst, tcn)
+        StorageScanner.Options options = new Options.Builder().previousImageDeltaStats(jsonPath).build()
+        then:
+        jsonPath.equals(options.getPreviousImageDeltaStats())
+        when:
+        StorageScanner scanner = new StorageScanner(ms_, options)
+        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
+        Path jsonFullPath = ms_.getBaseDir().resolve(jsonPath)
+        imageDeltaStats.write(jsonFullPath)
+        String str = jsonFullPath.toFile().text
+        logger_.debug("#test_Options_previousImageDeltaStats str=\n" + str)
+        then:
+        str.contains('previousImageDeltaStats')
+        str.contains(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+    }
+    
     @Ignore
     def testIgnoring() {}
     
     // helper methods
+    @Ignore
     def void anything() {}
     
 }
