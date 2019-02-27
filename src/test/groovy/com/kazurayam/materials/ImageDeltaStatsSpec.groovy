@@ -8,11 +8,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
+import com.kazurayam.materials.stats.MaterialStats
 import com.kazurayam.materials.stats.StorageScanner
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -216,6 +216,7 @@ class ImageDeltaStatsSpec extends Specification {
     def testDeserialize() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testDeserialize")
+        Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
@@ -232,6 +233,17 @@ class ImageDeltaStatsSpec extends Specification {
         when:
         ImageDeltaStats deserialized = ImageDeltaStats.deserialize(jsonFile)
         then:
-        deserialized.equals("")
+        deserialized.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
+        deserialized.storageScannerOptions.previousImageDeltaStats == ""
+        deserialized.imageDeltaStatsEntries[0].TSuiteName.value == '47News_chronos_capture'
+        when:
+        MaterialStats msl0 = deserialized.imageDeltaStatsEntries[0].materialStatsList[0]
+        logger_.debug("#testDeserialize msl0=" + msl0.toString())
+        then:
+        msl0.getPath().equals(Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        msl0.degree() == 5
+        msl0.getCriteriaPercentage() == 15.20
+        msl0.data()[0] == 16.86
+        msl0.getImageDeltaList()[0].d == 16.86
     }
 }
