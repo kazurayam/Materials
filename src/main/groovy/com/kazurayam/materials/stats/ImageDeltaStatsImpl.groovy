@@ -2,6 +2,10 @@ package com.kazurayam.materials.stats
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
@@ -17,12 +21,15 @@ import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 /**
  * 
  * @author kazurayam
  */
 class ImageDeltaStatsImpl extends ImageDeltaStats {
+    
+    static Logger logger_ = LoggerFactory.getLogger(ImageDeltaStatsImpl.class)
     
     private Options options
     

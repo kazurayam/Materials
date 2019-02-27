@@ -2,6 +2,7 @@ package com.kazurayam.materials.stats
 
 import java.awt.image.BufferedImage
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 import javax.imageio.ImageIO
@@ -24,6 +25,10 @@ import com.kazurayam.materials.imagedifference.ImageDifference
 
 import groovy.json.JsonOutput
 
+/**
+ * 
+ * @author kazurayam
+ */
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
@@ -31,6 +36,8 @@ class StorageScanner {
     private MaterialStorage materialStorage_
     private Options options_
     private BufferedImageBuffer biBuffer_
+    
+    private ImageDeltaStats imageDeltaStats_
     
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
@@ -42,6 +49,12 @@ class StorageScanner {
         this.biBuffer_ = new BufferedImageBuffer()
         // speed up ImageIO!
         ImageIO.setUseCache(false)
+        //
+        if ( ! options_.getPreviousImageDeltaStats().equals("") ) {
+           imageDeltaStats_ = ImageDeltaStatsImpl.deserialize(options_.getPreviousImageDeltaStats())
+        } else {
+            imageDeltaStats_ = null
+        }
     }
     
     /**
@@ -125,12 +138,12 @@ class StorageScanner {
      *                  "imageDeltaList": [
      *                      // list of ImageDelta objects
      *                  ],
-     *                  "calculatedCriteriaPercentage": 2.51
+     *                  
      *              }
      * </PRE>
      * 
      * @param ms
-     * @param tSuiteName
+     * @param pathRelativeToTSuiteTimestamp
      * @return
      */
     MaterialStats makeMaterialStats(TSuiteName tSuiteName,
@@ -153,11 +166,9 @@ class StorageScanner {
                     i < materials.size() - 1 &&
                     i < options_.getMaximumNumberOfImageDeltas();
                     i++) {
-                ImageDelta imageDelta = 
-                                this.makeImageDelta(
-                                    materials.get(i),
-                                    materials.get(i + 1)
-                                    )
+                // the following 1 line requires much calcuration resources
+                ImageDelta imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                //
                 imageDeltaList.add(imageDelta)
             }
         }
@@ -177,7 +188,6 @@ class StorageScanner {
 
     /**
      *
-     * @param ms
      * @param tSuiteName
      * @param pathRelativeToTSuiteTimestamp
      * @return
@@ -188,7 +198,7 @@ class StorageScanner {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         List<Material> materialList = new ArrayList<Material>()
-        //
+        // construct a list of Materials
         List<TSuiteResultId> idsOfTSuiteName = materialStorage_.getTSuiteResultIdList(tSuiteName)
         for (TSuiteResultId tSuiteResultId : idsOfTSuiteName) {
             TSuiteResult tSuiteResult = materialStorage_.getTSuiteResult(tSuiteResultId)
@@ -248,20 +258,19 @@ class StorageScanner {
         if (b.getFileType() != FileType.PNG) {
             throw new IllegalArgumentException("${b.path()} is not a PNG file")
         }
+        //
+        TSuiteTimestamp tSuiteTimestampA = a.getParent().getParent().getTSuiteTimestamp()
+        TSuiteTimestamp tSuiteTimestampB = b.getParent().getParent().getTSuiteTimestamp()
         // read PNG files and
         // create ImageDifference of the 2 given images to calculate the diff ratio
         BufferedImage biA = biBuffer_.read(a)
         BufferedImage biB = biBuffer_.read(b)
-        
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
-        
         // make the delta
-        ImageDelta imageDelta = new ImageDelta(
-                                a.getParent().getParent().getTSuiteTimestamp(),
-                                b.getParent().getParent().getTSuiteTimestamp(),
-                                diff.getRatio())
+        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio())
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
+        
         stopWatch.stop()
         logger_.debug("#makeImageDelta(${a}, ${b}) " +
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
@@ -329,7 +338,7 @@ class StorageScanner {
         private int maximumNumberOfImageDeltas
         private TSuiteTimestamp onlySince
         private boolean onlySinceInclusive
-        private Path previousImageDeltaStats
+        private String previousImageDeltaStats
         
         static class Builder {
             private double shiftCriteriaPercentageBy
@@ -338,7 +347,7 @@ class StorageScanner {
             private int maximumNumberOfImageDeltas
             private TSuiteTimestamp onlySince
             private boolean onlySinceInclusive
-            private Path previousImageDeltaStats
+            private String previousImageDeltaStats
             
             /*
              * constructor, where we set the default values
@@ -350,7 +359,7 @@ class StorageScanner {
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
                 this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
-                this.previousImageDeltaStats = null
+                this.previousImageDeltaStats = ""
             }
             Builder shiftCriteriaPercentageBy(double value) {
                 if (value < 0.0) {
@@ -394,7 +403,7 @@ class StorageScanner {
                 this.onlySinceInclusive = inclusive
                 return this
             }
-            Builder previousImageDeltaStats(Path path) {
+            Builder previousImageDeltaStats(String path) {
                 this.previousImageDeltaStats = path
                 return this
             }
@@ -437,7 +446,7 @@ class StorageScanner {
             return this.onlySinceInclusive    
         }
         
-        Path getPreviousImageDeltaStats() {
+        String getPreviousImageDeltaStats() {
             return this.previousImageDeltaStats
         }
         

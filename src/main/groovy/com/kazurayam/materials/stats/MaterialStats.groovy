@@ -35,6 +35,11 @@ class MaterialStats {
     private double probability
     private double shiftCriteriaPercentageBy
     
+    /**
+     * 
+     * @param path
+     * @param imageDeltaList
+     */
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
         this.path = path
         this.imageDeltaList = imageDeltaList

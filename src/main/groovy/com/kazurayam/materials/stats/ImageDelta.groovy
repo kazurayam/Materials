@@ -43,4 +43,23 @@ class ImageDelta {
         sb.append("}")
         return sb.toString()
     }
+    
+    @Override
+    boolean equals(Object obj) {
+        if (!(obj instanceof ImageDelta)) { return false }
+        ImageDelta other = (ImageDelta)obj
+        return this.getA().equals(other.getA()) &&
+                this.getB().equals(other.getB()) &&
+                this.getD() == other.getD()
+    }
+    
+    @Override
+    int hashCode() {
+        int hash = 7
+        hash = 31 * hash + this.getA().hashCode()
+        hash = 31 * hash + this.getB().hashCode()
+        hash = 31 * hash + (int)Math.round(this.getD())
+        return hash
+    }
+    
 }

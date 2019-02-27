@@ -29,7 +29,7 @@ class ImageDeltaStatsSpec extends Specification {
         Path projectDir = Paths.get(".")
         fixtureDir = projectDir.resolve("./src/test/fixture")
         Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
-        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDeltaStats.class))
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDeltaStatsSpec.class))
     }
     def setup() {}
     def cleanup() {}
@@ -38,7 +38,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    
+    @Ignore
     def testGetStorageScannerOptions() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetStorageScannerOptions")
@@ -61,7 +61,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    
+    @Ignore
     def testGetCriteriaPercentage_customizingFilterDataLessThan() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingFilterDataLessThan")
@@ -87,7 +87,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    
+    @Ignore
     def testGetCriteriaPercentage_customizingProbability() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
@@ -113,7 +113,7 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    
+    @Ignore
     def testToString() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testToString")
@@ -136,7 +136,7 @@ class ImageDeltaStatsSpec extends Specification {
      * 
      * @return
      */
-    
+    @Ignore
     def testWrite() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testWrite")
@@ -177,6 +177,7 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList[0].criteriaPercentage == 40.20
     }
     
+    @Ignore
     def testResolvePath() {
         when:
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
@@ -189,6 +190,7 @@ class ImageDeltaStatsSpec extends Specification {
         jsonPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME) 
     }
     
+    @Ignore
     def testPersist() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testPersist")
@@ -209,5 +211,26 @@ class ImageDeltaStatsSpec extends Specification {
         then:
         Files.exists(stats.getPathInStorage())
         Files.exists(stats.getPathInMaterials())
+    }
+    
+    def testDeserialize() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("testDeserialize")
+        Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+        StorageScanner.Options options = new StorageScanner.Options.Builder().build()
+        StorageScanner scanner = new StorageScanner(ms, options)
+        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("47News_chronos_exam"))
+        when:
+        Path tmp = caseOutputDir.resolve("tmp")
+        Files.createDirectories(tmp)
+        Path jsonFile = tmp.resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        imageDeltaStats.write(jsonFile)
+        then:
+        Files.exists(jsonFile)
+        when:
+        ImageDeltaStats deserialized = ImageDeltaStats.deserialize(jsonFile.toString())
+        then:
+        deserialized.equals("")
     }
 }

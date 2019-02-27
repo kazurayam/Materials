@@ -233,7 +233,7 @@ class StorageScannerSpec extends Specification {
         TSuiteTimestamp tst = new TSuiteTimestamp("20190216_064149")
         TCaseName tcn       = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         when:
-        Path jsonPath = ImageDeltaStats.resolvePath(tsn, tst, tcn)
+        String jsonPath = ImageDeltaStats.resolvePath(tsn, tst, tcn).toString()
         StorageScanner.Options options = new Options.Builder().previousImageDeltaStats(jsonPath).build()
         then:
         jsonPath.equals(options.getPreviousImageDeltaStats())
