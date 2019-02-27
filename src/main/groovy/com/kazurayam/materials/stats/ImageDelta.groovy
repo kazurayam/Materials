@@ -44,6 +44,15 @@ class ImageDelta {
         return sb.toString()
     }
     
+    static ImageDelta deserialize(Map json) {
+        if (json.a == null) throw new IllegalArgumentException("json.a must not be null")
+        if (json.b == null) throw new IllegalArgumentException("json.b must not be null")
+        TSuiteTimestamp a = new TSuiteTimestamp(json.a)
+        TSuiteTimestamp b = new TSuiteTimestamp(json.b)
+        double d = json.d
+        return new ImageDelta(a, b, d)            
+    }
+    
     @Override
     boolean equals(Object obj) {
         if (!(obj instanceof ImageDelta)) { return false }

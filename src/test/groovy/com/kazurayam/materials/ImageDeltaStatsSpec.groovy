@@ -217,19 +217,20 @@ class ImageDeltaStatsSpec extends Specification {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testDeserialize")
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         StorageScanner.Options options = new StorageScanner.Options.Builder().build()
         StorageScanner scanner = new StorageScanner(ms, options)
-        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("47News_chronos_exam"))
+        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("47News_chronos_capture"))
+        Path path = ImageDeltaStats.resolvePath(new TSuiteName('47News_chronos_exam'), 
+            new TSuiteTimestamp(), new TCaseName('Test Cases/main/TS1/ImageDiff'))
+        imageDeltaStats.persist(ms, mr, path)
         when:
-        Path tmp = caseOutputDir.resolve("tmp")
-        Files.createDirectories(tmp)
-        Path jsonFile = tmp.resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
-        imageDeltaStats.write(jsonFile)
+        Path jsonFile = ms.getBaseDir().resolve(path)
         then:
         Files.exists(jsonFile)
         when:
-        ImageDeltaStats deserialized = ImageDeltaStats.deserialize(jsonFile.toString())
+        ImageDeltaStats deserialized = ImageDeltaStats.deserialize(jsonFile)
         then:
         deserialized.equals("")
     }

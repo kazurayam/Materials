@@ -71,4 +71,31 @@ class StatsEntry {
         sb.append("}")
         return sb.toString()
     }
+    
+    /**
+     * <PRE>
+     * {
+            "TSuiteName": "47News_chronos_capture",
+            "materialStatsList": [
+                // list of MaterialStats objects
+            ] 
+     * }
+     * </PRE>
+     * @param json
+     * @return
+     */
+    static StatsEntry deserialize(Map json) {
+        if (json.TSuiteName == null) {
+            throw new IllegalArgumentException("json.TSuiteName must not be null")
+        }
+        if (json.materialStatsList == null) {
+            throw new IllegalArgumentException("json.materialStatsList must not be null")
+        }
+        StatsEntry statsEntry = new StatsEntry(new TSuiteName(json.TSuiteName))
+        for (Map entry : (List)json.materialStatsList) {
+            MaterialStats materialStats = MaterialStats.deserialize(entry)
+            statsEntry.addMaterialStats(materialStats)
+        }
+        return statsEntry
+    }
 }

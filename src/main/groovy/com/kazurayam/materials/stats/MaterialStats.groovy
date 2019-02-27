@@ -1,6 +1,7 @@
 package com.kazurayam.materials.stats
 
 import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.interval.ConfidenceInterval
@@ -224,5 +225,59 @@ class MaterialStats {
         sb.append("]")
         sb.append("}")
         return sb.toString()
+    }
+    
+    /**
+     * <PRE>
+     * {
+                    "path": "main.TC_47News.visitSite/47NEWS_TOP.png",
+                    "degree": 5,
+                    "sum": 68.17,
+                    "mean": 13.634,
+                    "variance": 2.6882191428856,
+                    "standardDeviation": 1.6395789529283424,
+                    "tDistribution": 2.1318467859510317,
+                    "confidenceInterval": {
+                        "lowerBound": 12.070840401864046,
+                        "upperBound": 15.197159598135954
+                    },
+                    "criteriaPercentage": 40.20,
+                    "data": [
+                        16.86,
+                        4.53,
+                        2.83,
+                        27.85,
+                        16.1
+                    ],
+                    "imageDeltaList": [
+                        // list of ImageDelta objects
+                    ]
+                }
+     * </PRE>
+     * @param json
+     * @return
+     */
+    static MaterialStats deserialize(Map json) {
+        if (json.path == null) {
+            throw new IllegalArgumentException("json.path must not be null")
+        }
+        if (json.imageDeltaList == null) {
+            throw new IllegalArgumentException("json.imageDeltaList must not be null")
+        }
+        List<ImageDelta> imageDeltas = new ArrayList<ImageDelta>()
+        for (Map obj : (List)json.imageDeltaList) {
+            ImageDelta imageDelta = ImageDelta.deserialize(obj)
+        } 
+        MaterialStats materialStats = new MaterialStats(Paths.get(json.path), imageDeltas)
+        if (json.filterDataLessThan != null) {
+            materialStats.setFilterDataLessThan(json.filterDataLessThan)
+        }
+        if (json.probability != null) {
+            materialStats.setProbability(json.probability)
+        }
+        if (json.shiftCriteriaPercentageBy != null) {
+            materialStats.setShiftCriteriaPercentageBy(json.shiftCriteriaPercentageBy)
+        }
+        return materialStats
     }
 }

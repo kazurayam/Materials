@@ -60,6 +60,7 @@ test {
 
 task pinpoint(type: Test) {
     include '**/ImageDeltaStatsSpec.class'
+    //include '**/StatsEntrySpec.class'
     //include '**/StorageScannerSpec.class'
     outputs.upToDateWhen {false}
 }

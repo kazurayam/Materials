@@ -141,34 +141,40 @@ abstract class ImageDeltaStats {
      * @param jsonPath
 </PRE>
      */
-    static ImageDeltaStatsImpl deserialize(String pathString) {
-        Path jsonFilePath = Paths.get(pathString)
+    static ImageDeltaStats deserialize(Path jsonFilePath) {
         if (Files.exists(jsonFilePath)) {
             JsonSlurper slurper = new JsonSlurper()
             def json = slurper.parse(jsonFilePath.toFile())
             logger_.debug("#deserialize json=\n${json}")
-            StorageScanner.Options ssOptions = 
-                new StorageScanner.Options.Builder().
-                    shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
-                    filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
-                    maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).
-                    onlySince                 (new TSuiteTimestamp(json.storageScannerOptions.onlySince), 
-                                                            json.storageScannerOptions.onlySinceInclusive).
-                    probability               (json.storageScannerOptions.probability                    ).
-                    previousImageDeltaStats   (json.storageScannerOptions.previousImageDeltaStats        ).
-                    build()
-            ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
-            builder.storageScannerOptions(ssOptions)
-            //for (Object imageDeltaStatsEntry : (List)json.getImageDeltaStatsEntries) {
-            //    StatsEntry s    tatsEntry = StatsEntry.createInstance(imageDeltaStatsEntry)
-            //    builder.addImageDeltaStatsEntry(statsEntry)
-            //}
-            ImageDeltaStatsImpl result = builder.build()
-            return result
+            return ImageDeltaStats.deserialize((Map)json)
         } else {
             logger_.warn("${jsonFilePath} does not exist")
             return null
         }
+    }
+    
+    static ImageDeltaStats deserialize(Map json) {
+        StorageScanner.Options ssOptions =
+            new StorageScanner.Options.Builder().
+                shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
+                filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
+                maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).
+                onlySince                 (new TSuiteTimestamp(json.storageScannerOptions.onlySince),
+                    json.storageScannerOptions.onlySinceInclusive).
+                probability               (json.storageScannerOptions.probability                    ).
+                previousImageDeltaStats   (json.storageScannerOptions.previousImageDeltaStats        ).
+                build()
+        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
+        builder.storageScannerOptions(ssOptions)
+        //
+        logger_.debug("#deserialize json.imageDeltaStatsEntries.size()=${json.imageDeltaStatsEntries.size()}")
+        for (Map statsEntry : (List)json.imageDeltaStatsEntries) {
+            StatsEntry se = StatsEntry.deserialize(statsEntry)
+            builder.addImageDeltaStatsEntry(se)
+        }
+        //
+        ImageDeltaStatsImpl result = builder.build()
+        return result
     }
 
     
