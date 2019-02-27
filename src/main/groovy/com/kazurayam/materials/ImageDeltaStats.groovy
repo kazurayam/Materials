@@ -1,6 +1,7 @@
 package com.kazurayam.materials
 
 import java.nio.file.Path
+import java.nio.file.Paths
 
 import com.kazurayam.materials.stats.ImageDeltaStatsImpl
 import com.kazurayam.materials.stats.StatsEntry
@@ -89,6 +90,8 @@ abstract class ImageDeltaStats {
     static final ImageDeltaStats ZERO = 
         new ImageDeltaStatsImpl.Builder().build()
     
+    static final String IMAGE_DELTA_STATS_FILE_NAME = 'image-delta-stats.json'
+    
     // --------------- attribute setter & getter ----------------------
     /**
      * if getCalculatedCriteriaPercentage() returns a valid value, then returns it.
@@ -108,13 +111,15 @@ abstract class ImageDeltaStats {
     
     abstract void write(Path output)
     
-    abstract PersistedImageDeltaStats persist(
-        MaterialStorage ms,
-        MaterialRepository mr,
-        TSuiteName tSuiteName,
-        TSuiteTimestamp tSuiteTimestamp,
-        TCaseName tCaseName,
-        String fileName)
+    static Path resolvePath(TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
+        Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
+                        resolve(tSuiteTimestamp.format()).
+                        resolve(tCaseName.getValue()).
+                        resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        return jsonPath
+    }
+    
+    abstract PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr, Path jsonPath)
     
     /**
      *

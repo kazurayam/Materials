@@ -105,19 +105,15 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
      * 
      */
     @Override
-    PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr,
-        TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName, String fileName) {
-        mr.putCurrentTestSuite(imageDiffTSuiteName, tSuiteTimestamp)
-        Path inMaterials = mr.resolveMaterialPath(tCaseName, fileName)
+    PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr, Path path) {
+        Path inMaterials = mr.getBaseDir().resolve(path)
+        Files.createDirectories(inMaterials.getParent())
         this.write(inMaterials)
         mr.scan()
         //
-        TSuiteResultId tsri = TSuiteResultId.newInstance(imageDiffTSuiteName, tSuiteTimestamp)
-        ms.backup(mr, tsri, true)
-        List<Material> mateList = ms.getTSuiteResult(tsri).getMaterialList()
-        assert mateList.size() == 1
-        Material mate = mateList.get(0)
-        Path inStorage = mate.getPath()
+        Path inStorage = ms.getBaseDir().resolve(path)
+        Files.createDirectories(inStorage.getParent())
+        this.write(inStorage)
         //
         return new PersistedImageDeltaStats(inStorage, inMaterials)
     }

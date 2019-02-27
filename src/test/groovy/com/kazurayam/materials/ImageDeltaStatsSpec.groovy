@@ -177,6 +177,18 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList[0].criteriaPercentage == 40.20
     }
     
+    def testResolvePath() {
+        when:
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp()
+        TCaseName tCaseName = new TCaseName('Test Cases/main/TC_47News/ImageDiff')
+        Path jsonPath = ImageDeltaStats.resolvePath(tSuiteNameExam, tSuiteTimestamp, tCaseName)
+        logger_.debug("#testResolvePath jsonPath=${jsonPath}")
+        then:
+        jsonPath != null
+        jsonPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME) 
+    }
+    
     def testPersist() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testPersist")
@@ -187,12 +199,13 @@ class ImageDeltaStatsSpec extends Specification {
         StorageScanner scanner = new StorageScanner(ms, options)
         TSuiteName tSuiteNameCapture = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats imageDeltaStats = scanner.scan(tSuiteNameCapture)
+        //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp()
         TCaseName tCaseName = new TCaseName('Test Cases/main/TC_47News/ImageDiff')
         when:
-        PersistedImageDeltaStats stats = 
-            imageDeltaStats.persist(ms, mr, tSuiteNameExam, tSuiteTimestamp, tCaseName, 'image-delta-stats.json')
+        Path jsonPath = ImageDeltaStats.resolvePath(tSuiteNameExam, tSuiteTimestamp, tCaseName)
+        PersistedImageDeltaStats stats = imageDeltaStats.persist(ms, mr, jsonPath)
         then:
         Files.exists(stats.getPathInStorage())
         Files.exists(stats.getPathInMaterials())
