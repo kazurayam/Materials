@@ -119,6 +119,7 @@ class StatsEntrySpec extends Specification {
         then:
         id2 == null
     }
+    
 
     @Ignore
     def testIgnoring() {}

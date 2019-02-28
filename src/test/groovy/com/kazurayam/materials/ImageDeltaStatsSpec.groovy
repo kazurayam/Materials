@@ -246,6 +246,7 @@ class ImageDeltaStatsSpec extends Specification {
         ids.imageDeltaStatsEntries[0].materialStatsList[0].getImageDeltaList()[0].d == 16.86
     }
     
+    @Ignore
     def testHasImageDelta() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testHasImageDelta")
@@ -269,6 +270,7 @@ class ImageDeltaStatsSpec extends Specification {
         ! imageDeltaStats.hasImageDelta(tsn, pathRelativeToTSuiteTimestampDir, another, b)
     }
     
+    @Ignore
     def testGetImageDelta() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testHasImageDelta")
@@ -292,6 +294,18 @@ class ImageDeltaStatsSpec extends Specification {
         ImageDelta id2 = imageDeltaStats.getImageDelta(tsn, pathRelativeToTSuiteTimestampDir, another, b)
         then:
         id2 == null
+    }
+    
+    /**
+     * It is expected that StorageScanner.scan runs much faster in the 2nd run
+     * when we use StorageScanner.Options.Builder#previousImageDeltaStats(xxx).
+     * Let's try it to see how much the speed is improved.
+     *
+     * @return
+     */
+    def testPeformanceImprovementByPreviousImageDeltaStats() {
+        expect:
+        false
     }
     
     @Ignore
