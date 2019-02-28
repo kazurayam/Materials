@@ -119,7 +119,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
                 }
             }
         }
-        return false
+        return null
     }
 
     @Override

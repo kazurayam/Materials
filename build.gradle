@@ -59,7 +59,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/StatsEntrySpec.class'
+    include '**/ImageDeltaStatsSpec.class'
     outputs.upToDateWhen {false}
 }
 
