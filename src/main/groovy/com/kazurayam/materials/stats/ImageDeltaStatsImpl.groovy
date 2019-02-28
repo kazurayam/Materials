@@ -100,7 +100,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
                             TSuiteTimestamp a, TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName().equals(tSuiteName) {
+            if (se.getTSuiteName().equals(tSuiteName)) {
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return true
                 }
@@ -113,7 +113,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
                             TSuiteTimestamp a, TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName().equals(tSuiteName) {
+            if (se.getTSuiteName().equals(tSuiteName)) {
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return se.getImageDelta(relativeToTSuiteTimestampDir, a, b)
                 }

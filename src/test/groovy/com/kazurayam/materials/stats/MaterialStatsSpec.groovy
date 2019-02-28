@@ -12,6 +12,7 @@ import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -115,6 +116,32 @@ class MaterialStatsSpec extends Specification {
         then:
         15.00 < upperBound
         upperBound < 16.00
+    }
+    
+    def testHasMaterialStats() {
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp('20190216_204329')
+        TSuiteTimestamp b = new TSuiteTimestamp('20190216_064354')
+        then:
+        materialStats_.hasImageDelta(a, b)
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp('20190301_065500')
+        then:
+        ! materialStats_.hasImageDelta(another, b)
+    }
+    
+    def testGetMaterialStats() {
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp('20190216_204329')
+        TSuiteTimestamp b = new TSuiteTimestamp('20190216_064354')
+        ImageDelta ms1 = materialStats_.getImageDelta(a, b)
+        then:
+        ms1 != null
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp('20190301_065500')
+        ImageDelta ms2 = materialStats_.getImageDelta(another, b)
+        then:
+        ms2 == null
     }
     
     

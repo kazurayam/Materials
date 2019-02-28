@@ -59,10 +59,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/MaterialRepositoryImplSpec.class'
-    //include '**/RepositoryFileScannerSpec.class'
-    //include '**/RepositoryRootSpec.class'
-    include '**/StorageScannerSpec.class'
+    include '**/MaterialStatsSpec.class'
     outputs.upToDateWhen {false}
 }
 
