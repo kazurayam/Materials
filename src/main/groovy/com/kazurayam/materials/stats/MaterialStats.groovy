@@ -257,27 +257,35 @@ class MaterialStats {
      * @param json
      * @return
      */
-    static MaterialStats deserialize(Map json) {
-        if (json.path == null) {
-            throw new IllegalArgumentException("json.path must not be null")
+    static MaterialStats fromJsonObject(Object jsonObject) {
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        if (jsonObject instanceof Map) {
+            Map materialStatsJsonObject = (Map)jsonObject
+            logger_.debug("#deserialize json=${materialStatsJsonObject.toString()}")
+            if (materialStatsJsonObject.path == null) {
+                throw new IllegalArgumentException("json.path must not be null")
+            }
+            if (materialStatsJsonObject.imageDeltaList == null) {
+                throw new IllegalArgumentException("json.imageDeltaList must not be null")
+            }
+            List<ImageDelta> imageDeltas = new ArrayList<ImageDelta>()
+            for (Map imageDeltaJsonObj : (List)materialStatsJsonObject.imageDeltaList) {
+                ImageDelta deserialized = ImageDelta.fromJsonObject(imageDeltaJsonObj)
+                imageDeltas.add(deserialized)
+            }
+            MaterialStats materialStats = new MaterialStats(Paths.get(materialStatsJsonObject.path), imageDeltas)
+            if (materialStatsJsonObject.filterDataLessThan != null) {
+                materialStats.setFilterDataLessThan(materialStatsJsonObject.filterDataLessThan)
+            }
+            if (materialStatsJsonObject.probability != null) {
+                materialStats.setProbability(materialStatsJsonObject.probability)
+            }
+            if (materialStatsJsonObject.shiftCriteriaPercentageBy != null) {
+                materialStats.setShiftCriteriaPercentageBy(materialStatsJsonObject.shiftCriteriaPercentageBy)
+            }
+            return materialStats
+        } else {
+                throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
         }
-        if (json.imageDeltaList == null) {
-            throw new IllegalArgumentException("json.imageDeltaList must not be null")
-        }
-        List<ImageDelta> imageDeltas = new ArrayList<ImageDelta>()
-        for (Map obj : (List)json.imageDeltaList) {
-            ImageDelta imageDelta = ImageDelta.deserialize(obj)
-        } 
-        MaterialStats materialStats = new MaterialStats(Paths.get(json.path), imageDeltas)
-        if (json.filterDataLessThan != null) {
-            materialStats.setFilterDataLessThan(json.filterDataLessThan)
-        }
-        if (json.probability != null) {
-            materialStats.setProbability(json.probability)
-        }
-        if (json.shiftCriteriaPercentageBy != null) {
-            materialStats.setShiftCriteriaPercentageBy(json.shiftCriteriaPercentageBy)
-        }
-        return materialStats
     }
 }

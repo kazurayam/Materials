@@ -4,6 +4,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.apache.commons.lang3.SerializationUtils
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -213,9 +215,9 @@ class ImageDeltaStatsSpec extends Specification {
         Files.exists(stats.getPathInMaterials())
     }
     
-    def testDeserialize() {
+    def testFromJson() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testDeserialize")
+        Path caseOutputDir = specOutputDir.resolve("testFromJson")
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
@@ -227,23 +229,21 @@ class ImageDeltaStatsSpec extends Specification {
             new TSuiteTimestamp(), new TCaseName('Test Cases/main/TS1/ImageDiff'))
         imageDeltaStats.persist(ms, mr, path)
         when:
-        Path jsonFile = ms.getBaseDir().resolve(path)
+        Path jsonFilePath = ms.getBaseDir().resolve(path)
         then:
-        Files.exists(jsonFile)
+        Files.exists(jsonFilePath)
         when:
-        ImageDeltaStats deserialized = ImageDeltaStats.deserialize(jsonFile)
+        ImageDeltaStats ids = ImageDeltaStats.fromJson(jsonFilePath)
         then:
-        deserialized.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
-        deserialized.storageScannerOptions.previousImageDeltaStats == ""
-        deserialized.imageDeltaStatsEntries[0].TSuiteName.value == '47News_chronos_capture'
-        when:
-        MaterialStats msl0 = deserialized.imageDeltaStatsEntries[0].materialStatsList[0]
-        logger_.debug("#testDeserialize msl0=" + msl0.toString())
-        then:
-        msl0.getPath().equals(Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
-        msl0.degree() == 5
-        msl0.getCriteriaPercentage() == 15.20
-        msl0.data()[0] == 16.86
-        msl0.getImageDeltaList()[0].d == 16.86
+        ids.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
+        ids.storageScannerOptions.previousImageDeltaStats == ""
+        ids.imageDeltaStatsEntries[0].TSuiteName.value == '47News_chronos_capture'
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].getPath().equals(
+            Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].degree() == 5
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].getCriteriaPercentage() > 15.19 // 15.197159598135954
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].getCriteriaPercentage() < 15.20 // 15.197159598135954
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].data()[0] == 16.86
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].getImageDeltaList()[0].d == 16.86
     }
 }

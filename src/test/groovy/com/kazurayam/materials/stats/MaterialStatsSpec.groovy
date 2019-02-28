@@ -129,7 +129,5 @@ class MaterialStatsSpec extends Specification {
         then:
         str.contains("criteriaPercentage")
     }
-    
-    
 
 }

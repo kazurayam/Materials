@@ -44,13 +44,23 @@ class ImageDelta {
         return sb.toString()
     }
     
-    static ImageDelta deserialize(Map json) {
-        if (json.a == null) throw new IllegalArgumentException("json.a must not be null")
-        if (json.b == null) throw new IllegalArgumentException("json.b must not be null")
-        TSuiteTimestamp a = new TSuiteTimestamp(json.a)
-        TSuiteTimestamp b = new TSuiteTimestamp(json.b)
-        double d = json.d
-        return new ImageDelta(a, b, d)            
+    static ImageDelta fromJsonObject(Object jsonObject) {
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        if (jsonObject instanceof Map) {
+            Map imageDeltaJsonObject = (Map)jsonObject
+            if (imageDeltaJsonObject.a == null) {
+                throw new IllegalArgumentException("json.a must not be null")
+            }
+            if (imageDeltaJsonObject.b == null) {
+                throw new IllegalArgumentException("json.b must not be null")
+            }
+            TSuiteTimestamp a = new TSuiteTimestamp(imageDeltaJsonObject.a)
+            TSuiteTimestamp b = new TSuiteTimestamp(imageDeltaJsonObject.b)
+            double d = imageDeltaJsonObject.d
+            return new ImageDelta(a, b, d)
+        } else {
+            throw new IllegalArgumentException("#fromJsonObject ")
+        }          
     }
     
     @Override

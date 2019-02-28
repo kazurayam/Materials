@@ -84,18 +84,24 @@ class StatsEntry {
      * @param json
      * @return
      */
-    static StatsEntry deserialize(Map json) {
-        if (json.TSuiteName == null) {
-            throw new IllegalArgumentException("json.TSuiteName must not be null")
+    static StatsEntry fromJsonObject(Object jsonObject) {
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        if (jsonObject instanceof Map) {
+            Map statsEntryJsonObject = (Map)jsonObject
+            if (statsEntryJsonObject.TSuiteName == null) {
+                throw new IllegalArgumentException("map.TSuiteName must not be null")
+            }
+            if (statsEntryJsonObject.materialStatsList == null) {
+                throw new IllegalArgumentException("map.materialStatsList must not be null")
+            }
+            StatsEntry statsEntry = new StatsEntry(new TSuiteName(statsEntryJsonObject.TSuiteName))
+            for (Map entry : (List)statsEntryJsonObject.materialStatsList) {
+                MaterialStats deserialized = MaterialStats.fromJsonObject(entry)
+                statsEntry.addMaterialStats(deserialized)
+            }
+            return statsEntry
+        } else {
+            throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
         }
-        if (json.materialStatsList == null) {
-            throw new IllegalArgumentException("json.materialStatsList must not be null")
-        }
-        StatsEntry statsEntry = new StatsEntry(new TSuiteName(json.TSuiteName))
-        for (Map entry : (List)json.materialStatsList) {
-            MaterialStats materialStats = MaterialStats.deserialize(entry)
-            statsEntry.addMaterialStats(materialStats)
-        }
-        return statsEntry
     }
 }

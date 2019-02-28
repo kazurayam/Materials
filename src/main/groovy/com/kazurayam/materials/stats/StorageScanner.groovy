@@ -51,7 +51,7 @@ class StorageScanner {
         ImageIO.setUseCache(false)
         //
         if ( ! options_.getPreviousImageDeltaStats().equals("") ) {
-           imageDeltaStats_ = ImageDeltaStatsImpl.deserialize(options_.getPreviousImageDeltaStats())
+           imageDeltaStats_ = ImageDeltaStatsImpl.fromJsonObject(options_.getPreviousImageDeltaStats())
         } else {
             imageDeltaStats_ = null
         }

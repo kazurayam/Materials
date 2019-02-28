@@ -1,5 +1,6 @@
 package com.kazurayam.materials
 
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -138,43 +139,60 @@ abstract class ImageDeltaStats {
     /**
      * create an instance of ImageDeltaStats class from a file
      *
-     * @param jsonPath
-</PRE>
+     * @param jsonFilePath
      */
-    static ImageDeltaStats deserialize(Path jsonFilePath) {
+    static ImageDeltaStats fromJson(Path jsonFilePath) {
         if (Files.exists(jsonFilePath)) {
-            JsonSlurper slurper = new JsonSlurper()
-            def json = slurper.parse(jsonFilePath.toFile())
-            logger_.debug("#deserialize json=\n${json}")
-            return ImageDeltaStats.deserialize((Map)json)
+            String jsonText = jsonFilePath.toFile().text
+            return ImageDeltaStats.fromJsonText(jsonText)
         } else {
-            logger_.warn("${jsonFilePath} does not exist")
-            return null
+            throw new FileNotFoundException("${jsonFilePath} is not found")
         }
     }
     
-    static ImageDeltaStats deserialize(Map json) {
-        StorageScanner.Options ssOptions =
-            new StorageScanner.Options.Builder().
-                shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
-                filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
-                maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).
-                onlySince                 (new TSuiteTimestamp(json.storageScannerOptions.onlySince),
-                    json.storageScannerOptions.onlySinceInclusive).
-                probability               (json.storageScannerOptions.probability                    ).
-                previousImageDeltaStats   (json.storageScannerOptions.previousImageDeltaStats        ).
-                build()
-        ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
-        builder.storageScannerOptions(ssOptions)
-        //
-        logger_.debug("#deserialize json.imageDeltaStatsEntries.size()=${json.imageDeltaStatsEntries.size()}")
-        for (Map statsEntry : (List)json.imageDeltaStatsEntries) {
-            StatsEntry se = StatsEntry.deserialize(statsEntry)
-            builder.addImageDeltaStatsEntry(se)
+    static ImageDeltaStats fromJson(File jsonFile) {
+        if (jsonFile.exists()) {
+            String jsonText = jsonFile.text
+            return ImageDeltaStats.fromJsonText(jsonText)
+        } else {
+            throw new FileNotFoundException("${jsonFile} is not found")
         }
-        //
-        ImageDeltaStatsImpl result = builder.build()
-        return result
+    }
+    
+    static ImageDeltaStats fromJsonText(String jsonText) {
+        JsonSlurper slurper = new JsonSlurper()
+        def jsonObject = slurper.parseText(jsonText)
+        return ImageDeltaStats.fromJsonObject(jsonObject)
+    }
+    
+    static ImageDeltaStats fromJsonObject(Object jsonObject) {
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        if (jsonObject instanceof Map) {
+            Map json = (Map)jsonObject
+            StorageScanner.Options ssOptions =
+                new StorageScanner.Options.Builder().
+                    shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
+                    filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
+                    maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).
+                    onlySince                 (new TSuiteTimestamp(json.storageScannerOptions.onlySince),
+                        json.storageScannerOptions.onlySinceInclusive).
+                    probability               (json.storageScannerOptions.probability                    ).
+                    previousImageDeltaStats   (json.storageScannerOptions.previousImageDeltaStats        ).
+                    build()
+            ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
+            builder.storageScannerOptions(ssOptions)
+            //
+            logger_.debug("#fromJsonObject json.imageDeltaStatsEntries.size()=${json.imageDeltaStatsEntries.size()}")
+            for (Map statsEntry : (List)json.imageDeltaStatsEntries) {
+                StatsEntry se = StatsEntry.fromJsonObject(statsEntry)
+                builder.addImageDeltaStatsEntry(se)
+            }
+            //
+            ImageDeltaStatsImpl result = builder.build()
+            return result
+        } else {
+            throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
+        }
     }
 
     
