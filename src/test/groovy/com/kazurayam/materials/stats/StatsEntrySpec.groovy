@@ -1,6 +1,5 @@
 package com.kazurayam.materials.stats
 
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -12,10 +11,10 @@ import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 import spock.lang.Ignore
 import spock.lang.Specification
-
 
 class StatsEntrySpec extends Specification {
 
@@ -87,6 +86,38 @@ class StatsEntrySpec extends Specification {
         mStats2.getImageDeltaList().size() > 0
         
         
+    }
+    
+    def testHasImageDelta() {
+        setup:
+        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        then:
+        se.hasImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp("20190301_065500")
+        then:
+        ! se.hasImageDelta(pathRelativeToTSuiteTimestampDir, another, b)
+    }
+    
+    def testGetImageDelta() {
+        setup:
+        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        ImageDelta id1 = se.getImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
+        then:
+        id1 != null
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp("20190301_065500")
+        ImageDelta id2 = se.getImageDelta(pathRelativeToTSuiteTimestampDir, another, b)
+        then:
+        id2 == null
     }
 
     @Ignore
