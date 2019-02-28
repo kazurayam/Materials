@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 class StatsEntry {
     
@@ -45,6 +46,24 @@ class StatsEntry {
             }
         }
         return MaterialStats.NULL
+    }
+    
+    boolean hasImageDelta(Path pathRelativeToTSuiteTimestamp, TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (MaterialStats ms: materialStatsList) {
+            if (ms.getPath().equals(pathRelativeToTSuiteTimestamp) && ms.hasImageDelta(a, b)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    ImageDelta getImageDelta(Path pathRelativeToTSuiteTimestamp, TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (MaterialStats ms: materialStatsList) {
+            if (ms.getPath().equals(pathRelativeToTSuiteTimestamp) && ms.hasImageDelta(a, b)) {
+                return ms.getImageDelta(a, b)
+            }
+        }
+        return null
     }
     
     @Override

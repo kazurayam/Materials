@@ -2,26 +2,20 @@ package com.kazurayam.materials.stats
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.ImageDeltaStats
-import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage
-import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
-import com.kazurayam.materials.stats.StorageScanner
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 
 /**
  * 
@@ -42,7 +36,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         private Options options
         private List<StatsEntry> imageDeltaStatsEntries
         Builder() {
-            options = new StorageScanner.Options.Builder() .build()
+            options = new StorageScanner.Options.Builder().build()
             imageDeltaStatsEntries = new ArrayList<StatsEntry>()
         }
         Builder storageScannerOptions(Options value) {
@@ -102,6 +96,32 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         return StatsEntry.NULL
     }
     
+    @Override
+    boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                            TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (StatsEntry se: imageDeltaStatsEntries) {
+            if (se.getTSuiteName().equals(tSuiteName) {
+                if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    @Override
+    ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                            TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (StatsEntry se: imageDeltaStatsEntries) {
+            if (se.getTSuiteName().equals(tSuiteName) {
+                if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
+                    return se.getImageDelta(relativeToTSuiteTimestampDir, a, b)
+                }
+            }
+        }
+        return false
+    }
+
     @Override
     void write(Path output) {
         Files.createDirectories(output.getParent())

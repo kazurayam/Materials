@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TSuiteTimestamp
 
 /**
  * referrences:
@@ -180,6 +181,36 @@ class MaterialStats {
             return false
         MaterialStats other = (MaterialStats)obj
         return this.getPath().equals(other.getPath())
+    }
+    
+    /**
+     * If this MaterialStats has an ImageDelta of a anb b, return true
+     * @param a
+     * @param b
+     * @return
+     */
+    boolean hasImageDelta(TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (ImageDelta id: imageDeltaList) {
+            if (id.getA().equals(a) && id.getB().equals(b)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /**
+     * 
+     * @param a
+     * @param b
+     * @return an ImageDelta object with TSuiteTimestamp a and b, else null
+     */
+    ImageDelta getImageDelta(TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (ImageDelta id: imageDeltaList) {
+            if (id.getA().equals(a) && id.getB().equals(b)) {
+                return id
+            }
+        }
+        return null
     }
     
     @Override
