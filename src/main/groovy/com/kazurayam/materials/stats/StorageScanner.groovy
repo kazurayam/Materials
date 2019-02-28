@@ -37,7 +37,7 @@ class StorageScanner {
     private Options options_
     private BufferedImageBuffer biBuffer_
     
-    private ImageDeltaStats imageDeltaStats_
+    private ImageDeltaStats previousImageDeltaStats_
     
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
@@ -57,13 +57,14 @@ class StorageScanner {
              */
             try {
                 Path path = Paths.get(options_.getPreviousImageDeltaStats())
-                imageDeltaStats_ = ImageDeltaStatsImpl.fromJsonFile(path)
+                previousImageDeltaStats_ = ImageDeltaStatsImpl.fromJsonFile(path)
             } catch (Exception ex) {
-                logger_.warn("As previousImageDeltaStats, failed to read ${options_.getPreviousImageDeltaStats()}, will be ignored to continue")
-                imageDeltaStats_ = null
+                logger_.warn("failed to load previousImageDeltaStats(${options_.getPreviousImageDeltaStats()});" + 
+                    " will ignore and continue")
+                previousImageDeltaStats_ = null
             }
         } else {
-            imageDeltaStats_ = null
+            previousImageDeltaStats_ = null
         }
     }
     

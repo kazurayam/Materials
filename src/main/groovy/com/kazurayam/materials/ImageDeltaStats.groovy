@@ -8,6 +8,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.stats.ImageDelta
 import com.kazurayam.materials.stats.ImageDeltaStatsImpl
 import com.kazurayam.materials.stats.StatsEntry
 import com.kazurayam.materials.stats.StorageScanner
@@ -123,6 +124,26 @@ abstract class ImageDeltaStats {
     
     abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
     
+    /**
+     * 
+     * @param tSuiteName
+     * @param relativeToTSuiteTimestampDir
+     * @param a
+     * @param b
+     * @return
+     */
+    abstract boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    
+    /**
+     */
+    abstract ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    
+    /**
+     * 
+     * @param output
+     */
     abstract void write(Path output)
     
     abstract void write(Writer writer)
