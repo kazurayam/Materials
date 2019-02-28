@@ -569,19 +569,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     // ---------------------- overriding Object properties --------------------
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    @Override
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"MaterialRepositoryImpl":{')
+        sb.append('{"MaterialRepository":{')
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
-        sb.append('"currentTsName":"' +
-            Helpers.escapeAsJsonText(currentTSuiteName_.toString()) + '",')
-        sb.append('"currentTsTimestamp":"' +
-            Helpers.escapeAsJsonText(currentTSuiteTimestamp_.toString()) + '",')
-        sb.append('"repoRoot":' + repoRoot_.toJson() + '')
+        sb.append('"currentTsName":' +
+            currentTSuiteName_.toJsonText() + ',')
+        sb.append('"currentTsTimestamp":' +
+            currentTSuiteTimestamp_.toJsonText() + ',')
+        sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
         sb.append('}}')
         return sb.toString()
     }

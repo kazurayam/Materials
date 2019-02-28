@@ -311,10 +311,10 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
         sb.append('"tSuiteName":' + this.getId().getTSuiteName().toString() + ',')
@@ -327,7 +327,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         for (TCaseResult tcr : this.getTCaseResultList()) {
             if (count > 0) { sb.append(',') }
             count += 1
-            sb.append(tcr.toJson())
+            sb.append(tcr.toJsonText())
         }
         sb.append(']')
         sb.append('}}')

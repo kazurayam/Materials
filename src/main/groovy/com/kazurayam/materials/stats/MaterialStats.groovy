@@ -189,10 +189,10 @@ class MaterialStats {
     
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"path\":")
@@ -219,7 +219,7 @@ class MaterialStats {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append(id.toJson())
+            sb.append(id.toJsonText())
             count += 1
         }
         sb.append("]")

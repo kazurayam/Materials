@@ -125,6 +125,8 @@ abstract class ImageDeltaStats {
     
     abstract void write(Path output)
     
+    abstract void write(Writer writer)
+    
     static Path resolvePath(TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
         Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
                         resolve(tSuiteTimestamp.format()).
@@ -135,13 +137,14 @@ abstract class ImageDeltaStats {
     
     abstract PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr, Path jsonPath)
     
+    abstract toJsonText()
     
     /**
      * create an instance of ImageDeltaStats class from a file
      *
      * @param jsonFilePath
      */
-    static ImageDeltaStats fromJson(Path jsonFilePath) {
+    static ImageDeltaStats fromJsonFile(Path jsonFilePath) {
         if (Files.exists(jsonFilePath)) {
             String jsonText = jsonFilePath.toFile().text
             return ImageDeltaStats.fromJsonText(jsonText)
@@ -150,7 +153,7 @@ abstract class ImageDeltaStats {
         }
     }
     
-    static ImageDeltaStats fromJson(File jsonFile) {
+    static ImageDeltaStats fromJsonFile(File jsonFile) {
         if (jsonFile.exists()) {
             String jsonText = jsonFile.text
             return ImageDeltaStats.fromJsonText(jsonText)

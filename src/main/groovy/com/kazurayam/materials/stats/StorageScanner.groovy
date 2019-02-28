@@ -51,7 +51,17 @@ class StorageScanner {
         ImageIO.setUseCache(false)
         //
         if ( ! options_.getPreviousImageDeltaStats().equals("") ) {
-           imageDeltaStats_ = ImageDeltaStatsImpl.fromJsonObject(options_.getPreviousImageDeltaStats())
+            /*
+             * We will try to open the previos image-delta-stats.json file.
+             * Even if failed to open, we will just ignore it and continue.
+             */
+            try {
+                Path path = Paths.get(options_.getPreviousImageDeltaStats())
+                imageDeltaStats_ = ImageDeltaStatsImpl.fromJsonFile(path)
+            } catch (Exception ex) {
+                logger_.warn("As previousImageDeltaStats, failed to read ${options_.getPreviousImageDeltaStats()}, will be ignored to continue")
+                imageDeltaStats_ = null
+            }
         } else {
             imageDeltaStats_ = null
         }
@@ -452,10 +462,10 @@ class StorageScanner {
         
         @Override
         String toString() {
-            return this.toJson()
+            return this.toJsonText()
         }
         
-        String toJson() {
+        String toJsonText() {
             StringBuilder sb = new StringBuilder()
             sb.append("{")
             //

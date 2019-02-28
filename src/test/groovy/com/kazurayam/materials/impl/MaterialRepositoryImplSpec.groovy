@@ -141,17 +141,17 @@ class MaterialRepositoryImplSpec extends Specification {
         p.toString().replace('\\', '/') == "build/tmp/testOutput/${classShortName_}/${methodName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
-    def testToJson() {
+    def testToJsonText() {
         setup:
-        Path casedir = workdir_.resolve('testToJson')
+        Path casedir = workdir_.resolve('testToJsonText')
         Helpers.copyDirectory(materials_, casedir)
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
         mri.putCurrentTestSuite('TS1')
         when:
-        def str = mri.toJson()
+        def str = mri.toJsonText()
         then:
         str != null
-        str.contains('{"MaterialRepositoryImpl":{')
+        str.contains('{"MaterialRepository":{')
         str.contains(Helpers.escapeAsJsonText(casedir.toString()))
         str.contains('}}')
     }

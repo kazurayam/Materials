@@ -122,7 +122,19 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
 
     @Override
     String toString() {
-        return this.getId().getTSuiteName().getValue() + '/' + this.getId().getTSuiteTimestamp().format()
+        return toJsonText()
+    }
+    
+    String toJsonText() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("{")
+        sb.append("\"value\":\"")
+        sb.append(this.getId().getTSuiteName().getValue())
+        sb.append("\",\"format\":\"")
+        sb.append(this.getId().getTSuiteTimestamp().format())
+        sb.append("\"")
+        sb.append("}")
+        return sb.toString()
     }
 
 }

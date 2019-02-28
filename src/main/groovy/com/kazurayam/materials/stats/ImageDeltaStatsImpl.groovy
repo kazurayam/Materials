@@ -105,7 +105,15 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     @Override
     void write(Path output) {
         Files.createDirectories(output.getParent())
-        output.toFile().text = JsonOutput.prettyPrint(this.toJson())
+        output.toFile().text = JsonOutput.prettyPrint(this.toJsonText())
+    }
+    
+    @Override
+    void write(Writer writer) {
+        BufferedWriter bw = new BufferedWriter(writer)
+        String text = JsonOutput.prettyPrint(this.toJsonText())
+        writer.print(text)
+        writer.flush()
     }
     
     /**
@@ -131,21 +139,22 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
     
-    String toJson() {
+    @Override
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"storageScannerOptions\":")
-        sb.append("${this.getStorageScannerOptions().toJson()},")
+        sb.append("${this.getStorageScannerOptions().toJsonText()},")
         sb.append("\"imageDeltaStatsEntries\":[")
         int count = 0
         for (StatsEntry statsEntry : imageDeltaStatsEntries) {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append(statsEntry.toJson())
+            sb.append(statsEntry.toJsonText())
             count += 1
         }
         sb.append("]")

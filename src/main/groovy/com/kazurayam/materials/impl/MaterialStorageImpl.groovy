@@ -382,12 +382,13 @@ class MaterialStorageImpl implements MaterialStorage {
     // ---------------------- overriding Object properties --------------------
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    @Override
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
-        sb.append('{"MaterialStorageImpl":{')
+        sb.append('{"MaterialStorage":{')
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(baseDir_.toString()) + '"')
         sb.append('}}')

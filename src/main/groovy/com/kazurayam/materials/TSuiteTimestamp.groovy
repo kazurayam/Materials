@@ -112,7 +112,7 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
         }
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteTimestamp":')
         sb.append('{"timestamp":"' + this.format()+ '"}' )
@@ -121,7 +121,7 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     }
     
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
     // ---------------- overriding Object properties --------------------------

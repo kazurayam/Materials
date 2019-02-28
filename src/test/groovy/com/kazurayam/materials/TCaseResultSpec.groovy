@@ -83,7 +83,7 @@ class TCaseResultSpec extends Specification {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        logger_.debug("#testGetMaterialByPath tcr=${JsonOutput.prettyPrint(tcr.toJson())}")
+        logger_.debug("#testGetMaterialByPath tcr=${JsonOutput.prettyPrint(tcr.toJsonText())}")
         when:
         Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
         then:
@@ -134,7 +134,7 @@ class TCaseResultSpec extends Specification {
     }
 
 
-    def testToJson() {
+    def testToString() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
                 new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))

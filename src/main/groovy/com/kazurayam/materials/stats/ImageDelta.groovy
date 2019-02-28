@@ -28,10 +28,10 @@ class ImageDelta {
     
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
     
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"a\":")

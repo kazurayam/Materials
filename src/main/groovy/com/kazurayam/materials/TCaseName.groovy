@@ -70,6 +70,10 @@ final class TCaseName implements Comparable<TCaseName> {
     // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
+        return this.toJsonText()
+    }
+    
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"id": "')

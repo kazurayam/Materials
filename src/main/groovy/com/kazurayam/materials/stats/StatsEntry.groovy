@@ -49,10 +49,10 @@ class StatsEntry {
     
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
     
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"TSuiteName\":")
@@ -64,7 +64,7 @@ class StatsEntry {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append(ms.toJson())
+            sb.append(ms.toJsonText())
             count += 1
         }
         sb.append("]")

@@ -60,7 +60,7 @@ class TSuiteTimestampSpec extends Specification {
         //cleanup:
     }
 
-    def testToJson() {
+    def testToString() {
         setup:
         LocalDateTime source = LocalDateTime.of(2018, 6, 5, 9, 2, 13)
         when:

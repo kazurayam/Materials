@@ -40,7 +40,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetStorageScannerOptions() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetStorageScannerOptions")
@@ -63,7 +62,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetCriteriaPercentage_customizingFilterDataLessThan() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingFilterDataLessThan")
@@ -89,7 +87,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetCriteriaPercentage_customizingProbability() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
@@ -115,7 +112,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testToString() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testToString")
@@ -138,7 +134,6 @@ class ImageDeltaStatsSpec extends Specification {
      * 
      * @return
      */
-    @Ignore
     def testWrite() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testWrite")
@@ -179,7 +174,6 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList[0].criteriaPercentage == 40.20
     }
     
-    @Ignore
     def testResolvePath() {
         when:
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
@@ -192,7 +186,6 @@ class ImageDeltaStatsSpec extends Specification {
         jsonPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME) 
     }
     
-    @Ignore
     def testPersist() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testPersist")
@@ -215,7 +208,7 @@ class ImageDeltaStatsSpec extends Specification {
         Files.exists(stats.getPathInMaterials())
     }
     
-    def testFromJson() {
+    def testFromJsonFile() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testFromJson")
         Files.createDirectories(caseOutputDir)
@@ -233,7 +226,7 @@ class ImageDeltaStatsSpec extends Specification {
         then:
         Files.exists(jsonFilePath)
         when:
-        ImageDeltaStats ids = ImageDeltaStats.fromJson(jsonFilePath)
+        ImageDeltaStats ids = ImageDeltaStats.fromJsonFile(jsonFilePath)
         then:
         ids.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
         ids.storageScannerOptions.previousImageDeltaStats == ""

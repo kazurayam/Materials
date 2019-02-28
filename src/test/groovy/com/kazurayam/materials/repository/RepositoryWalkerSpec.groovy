@@ -42,7 +42,7 @@ class RepositoryWalkerSpec extends Specification {
     @Ignore
     def testPrintRepositoryRoot() {
         when:
-        logger_.debug("#testPrintRepositoryRoot repoRoot_.toJson():\n" + JsonOutput.prettyPrint(repoRoot_.toJson()))
+        logger_.debug("#testPrintRepositoryRoot repoRoot_.toJsonText():\n" + JsonOutput.prettyPrint(repoRoot_.toJsonText()))
         then:
         false
     }

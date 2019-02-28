@@ -137,4 +137,6 @@ interface MaterialRepository {
      * scan the baseDir to recognize the current directories/files configuration
      */
     void scan()
+    
+    String toJsonText()
 }

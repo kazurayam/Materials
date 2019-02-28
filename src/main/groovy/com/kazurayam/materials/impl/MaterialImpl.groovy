@@ -277,11 +277,11 @@ class MaterialImpl implements Material {
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
     @Override
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Material":{')

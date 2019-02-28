@@ -119,10 +119,10 @@ final class RepositoryFileScanner {
     }
 
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"RepositoryScanner":{')
-        sb.append('"repoRoot":' + repoRoot_.toJson() + '"')
+        sb.append('"repoRoot":' + repoRoot_.toJsonText() + '"')
         sb.append('}}')
         return sb.toString()
     }
@@ -137,7 +137,7 @@ final class RepositoryFileScanner {
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Materials')
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir)
         scanner.scan()
-        logger_.info("#main " + JsonOutput.prettyPrint(scanner.toJson()))
+        logger_.info("#main " + JsonOutput.prettyPrint(scanner.toJsonText()))
     }
 
 }

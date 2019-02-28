@@ -423,7 +423,7 @@ class MaterialSpec extends Specification {
     }
     
 
-    def testToJson() {
+    def testString() {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def str = mate.toString()

@@ -72,6 +72,10 @@ final class TSuiteName implements Comparable<TSuiteName> {
     // -------------------- overriding Object properties ----------------------
     @Override
     String toString() {
+        return this.toJsonText()
+    }
+    
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"id": "')

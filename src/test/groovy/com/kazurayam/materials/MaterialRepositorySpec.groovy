@@ -76,18 +76,19 @@ class MaterialRepositorySpec extends Specification {
         errors << 'Your feet smell.'
         errors << 'I am having a bad day.'
         when:
-        def jsonString = toJson(errors)
+        def jsonString = JsonOutput.toJson(errors)
         then:
         jsonString == '["Your password was bad.","Your feet smell.","I am having a bad day."]'
     }
 
-    def testToJson() {
+    def testToJsonText() {
         when:
         mr_.putCurrentTestSuite('Test Suites/TS1')
-        def str = JsonOutput.prettyPrint(mr_.toString())
-        //logger_.debug(JsonOutput.prettyPrint(str))
+        def text = mr_.toJsonText()
+        logger_.debug("#testToJsonText text=" + text)
+        logger_.debug("#testToJsonText prettyPrint(text)=" + JsonOutput.prettyPrint(text))
         then:
-        str.contains('TS1')
+        text.contains('TS1')
     }
 
     def testConstructor_Path_tsn() {

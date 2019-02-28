@@ -201,4 +201,5 @@ interface MaterialStorage {
     int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
 
+    String toJsonText()
 }

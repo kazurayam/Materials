@@ -162,7 +162,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
     boolean addMaterial(Material material) {
         Objects.requireNonNull(material, "material must not be null")
         if (material.getParent() != this) {
-            def msg = "material ${material.toJson()} does not have appropriate parent"
+            def msg = "material ${material.toJsonText()} does not have appropriate parent"
             logger_.error("#addMaterial ${msg}")
             throw new IllegalArgumentException(msg)
         }
@@ -231,11 +231,11 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
     @Override
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')
         sb.append('"tCaseName":'   + this.getTCaseName().toString()   + ',')
@@ -246,7 +246,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         def count = 0
         for (Material mate : materials_) {
             if (count > 0) { sb.append(',') }
-            sb.append(mate.toJson())
+            sb.append(mate.toJsonText())
             count += 1
         }
         sb.append(']')
