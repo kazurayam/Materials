@@ -55,12 +55,23 @@ class StorageScanner {
              * We will try to open the previos image-delta-stats.json file.
              * Even if failed to open, we will just ignore it and continue.
              */
+            Path path = materialStorage.getBaseDir().resolve(options_.getPreviousImageDeltaStats())
             try {
-                Path path = Paths.get(options_.getPreviousImageDeltaStats())
                 previousImageDeltaStats_ = ImageDeltaStatsImpl.fromJsonFile(path)
-            } catch (Exception ex) {
-                logger_.warn("failed to load previousImageDeltaStats(${options_.getPreviousImageDeltaStats()});" + 
+                logger_.info("Successfully loaded previousImageDeltaStats(${path.toString()})")
+            } catch (FileNotFoundException ex) {
+                logger_.warn("File not found: previousImageDeltaStats(${path.toString()});" + 
                     " will ignore and continue")
+                previousImageDeltaStats_ = null
+            } catch (IOException ex) {
+                logger_.warn("IOException for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue")
+                ex.printStackTrace()
+                previousImageDeltaStats_ = null
+            } catch (Exception ex) {
+                logger_.warn("${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue")
+                ex.printStackTrace()
                 previousImageDeltaStats_ = null
             }
         } else {
@@ -158,7 +169,7 @@ class StorageScanner {
      * @return
      */
     MaterialStats makeMaterialStats(TSuiteName tSuiteName,
-                                Path pathRelativeToTSuiteTimestamp) {
+                                Path pathRelativeToTSuiteTimestampDir) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         
@@ -167,7 +178,7 @@ class StorageScanner {
         // This list is sorted by descending order of TSuiteTimestamp
         List<Material> materials = this.getMaterialsOfARelativePathInATSuiteName(
                                         tSuiteName,
-                                        pathRelativeToTSuiteTimestamp)
+                                        pathRelativeToTSuiteTimestampDir)
         
         // build the MaterialStats object while calculating the diff ratio 
         // of two PNG files
@@ -177,14 +188,27 @@ class StorageScanner {
                     i < materials.size() - 1 &&
                     i < options_.getMaximumNumberOfImageDeltas();
                     i++) {
-                // the following 1 line requires much calcuration resources
-                ImageDelta imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                ImageDelta imageDelta
+                if (previousImageDeltaStats_ != null &&
+                    previousImageDeltaStats_.hasImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
+                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
+                            )) {
+                    imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
+                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
+                            )
+                } else {
+                    // the following 1 line causes many ImageIO and significant amount of calcuration,
+                    // will require many seconds of processing
+                    imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                }
                 //
                 imageDeltaList.add(imageDelta)
             }
         }
         MaterialStats materialStats  = new MaterialStats(
-                    pathRelativeToTSuiteTimestamp, imageDeltaList)
+                    pathRelativeToTSuiteTimestampDir, imageDeltaList)
         
         // configure parameters
         materialStats.setFilterDataLessThan(options_.getFilterDataLessThan())
@@ -192,8 +216,10 @@ class StorageScanner {
         
         //
         stopWatch.stop()
-        logger_.debug("#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestamp} " + 
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestampDir} " + 
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //
         return materialStats
     }
 
@@ -239,8 +265,10 @@ class StorageScanner {
             }
         })
         stopWatch.stop()
-        logger_.debug("#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //    
         return materialList
     }
 
@@ -283,8 +311,10 @@ class StorageScanner {
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()
-        logger_.debug("#makeImageDelta(${a}, ${b}) " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#makeImageDelta(${a}, ${b}) " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //
         return imageDelta
     }
     

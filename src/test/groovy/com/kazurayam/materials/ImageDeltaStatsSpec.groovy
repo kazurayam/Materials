@@ -38,7 +38,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetStorageScannerOptions() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetStorageScannerOptions")
@@ -61,7 +60,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetCriteriaPercentage_customizingFilterDataLessThan() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingFilterDataLessThan")
@@ -87,7 +85,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testGetCriteriaPercentage_customizingProbability() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
@@ -113,7 +110,6 @@ class ImageDeltaStatsSpec extends Specification {
     /**
      * 
      */
-    @Ignore
     def testToString() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testToString")
@@ -136,7 +132,6 @@ class ImageDeltaStatsSpec extends Specification {
      * 
      * @return
      */
-    @Ignore
     def testWrite() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testWrite")
@@ -177,7 +172,6 @@ class ImageDeltaStatsSpec extends Specification {
         json.imageDeltaStatsEntries[0].materialStatsList[0].criteriaPercentage == 40.20
     }
     
-    @Ignore
     def testResolvePath() {
         when:
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
@@ -190,7 +184,6 @@ class ImageDeltaStatsSpec extends Specification {
         jsonPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME) 
     }
     
-    @Ignore
     def testPersist() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testPersist")
@@ -207,13 +200,12 @@ class ImageDeltaStatsSpec extends Specification {
         TCaseName tCaseName = new TCaseName('Test Cases/main/TC_47News/ImageDiff')
         when:
         Path jsonPath = ImageDeltaStats.resolvePath(tSuiteNameExam, tSuiteTimestamp, tCaseName)
-        PersistedImageDeltaStats stats = imageDeltaStats.persist(ms, mr, jsonPath)
+        PersistedImageDeltaStats pathPair = imageDeltaStats.persist(ms, mr, jsonPath)
         then:
-        Files.exists(stats.getPathInStorage())
-        Files.exists(stats.getPathInMaterials())
+        Files.exists(pathPair.getPathInStorage())
+        Files.exists(PathPair.getPathInMaterials())
     }
     
-    @Ignore
     def testFromJsonFile() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testFromJson")
@@ -246,7 +238,6 @@ class ImageDeltaStatsSpec extends Specification {
         ids.imageDeltaStatsEntries[0].materialStatsList[0].getImageDeltaList()[0].d == 16.86
     }
     
-    @Ignore
     def testHasImageDelta() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testHasImageDelta")
@@ -270,7 +261,6 @@ class ImageDeltaStatsSpec extends Specification {
         ! imageDeltaStats.hasImageDelta(tsn, pathRelativeToTSuiteTimestampDir, another, b)
     }
     
-    @Ignore
     def testGetImageDelta() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testHasImageDelta")
@@ -296,18 +286,8 @@ class ImageDeltaStatsSpec extends Specification {
         id2 == null
     }
     
-    /**
-     * It is expected that StorageScanner.scan runs much faster in the 2nd run
-     * when we use StorageScanner.Options.Builder#previousImageDeltaStats(xxx).
-     * Let's try it to see how much the speed is improved.
-     *
-     * @return
-     */
-    def testPeformanceImprovementByPreviousImageDeltaStats() {
-        expect:
-        false
-    }
+
     
     @Ignore
-    def testFoo() {}
+    def testIgnoreThis() {}
 }

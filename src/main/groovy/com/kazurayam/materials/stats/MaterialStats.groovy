@@ -292,7 +292,6 @@ class MaterialStats {
         Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         if (jsonObject instanceof Map) {
             Map materialStatsJsonObject = (Map)jsonObject
-            logger_.debug("#deserialize json=${materialStatsJsonObject.toString()}")
             if (materialStatsJsonObject.path == null) {
                 throw new IllegalArgumentException("json.path must not be null")
             }
