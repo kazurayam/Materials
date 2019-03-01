@@ -25,9 +25,9 @@ import com.kazurayam.materials.stats.StorageScanner.BufferedImageBuffer
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
-
 import groovy.json.JsonOutput
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class StorageScannerSpec extends Specification {
@@ -286,7 +286,7 @@ class StorageScannerSpec extends Specification {
         when:
         // now scan again to reflect cached image-delta-stats.json under the Strogae dir
         options = new Options.Builder().
-            previousImageDeltaStats(persisted.toString()).
+            previousImageDeltaStats(persisted).
             build()
         scanner = new StorageScanner(ms, options)
         imageDeltaStats = scanner.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
@@ -326,7 +326,7 @@ class StorageScannerSpec extends Specification {
         when:
         // now scan again to reflect cached image-delta-stats.json under the Strogae dir
         options = new Options.Builder().
-            previousImageDeltaStats( './invalid/path' ).
+            previousImageDeltaStats(Paths.get('./invalid/path')).
             build()
         scanner = new StorageScanner(ms, options)
         imageDeltaStats = scanner.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
@@ -334,7 +334,7 @@ class StorageScannerSpec extends Specification {
         imageDeltaStats.write(sw)
         then:
         sw.toString().contains('previousImageDeltaStats')
-        sw.toString().contains('./invalid/path')
+        sw.toString().contains('invalid')
     }
     
     def testPersist() {
@@ -378,10 +378,10 @@ class StorageScannerSpec extends Specification {
         then:
         Files.exists(p)
         when:
-        String latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
+        Path latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
         logger_.debug("#testFindLatestImageDeltaStats latestPath=${latestPath}")
         then:
-        latestPath.endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        latestPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
     }
     
     /**
@@ -391,6 +391,7 @@ class StorageScannerSpec extends Specification {
      *
      * @return
      */
+    //@IgnoreRest
     def testPeformanceImprovementByPreviousImageDeltaStats() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_PerformanceImprovementByPreviousImageDeltaStats")
@@ -412,13 +413,14 @@ class StorageScannerSpec extends Specification {
         TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190301_095547")
         TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path pathOfImageDeltaStats = scanner.persist(imageDeltaStats, tSuiteNameExam, tSuiteTimestampExam, tCaseNameExam)
+        logger_.debug("#testPerformanceImprovementByPreviousImageDeltaStats pathOfImageDeltaStats=${pathOfImageDeltaStats}")
         then:
         Files.exists(pathOfImageDeltaStats)
         
         when:
-        String latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
+        //Path latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
         StorageScanner.Options options2 = new Options.Builder().
-                                            previousImageDeltaStats(latestPath).
+                                            previousImageDeltaStats(pathOfImageDeltaStats).
                                             build()
         StorageScanner scanner2 = new StorageScanner(ms, options2)
         StopWatch sw2 = new StopWatch()

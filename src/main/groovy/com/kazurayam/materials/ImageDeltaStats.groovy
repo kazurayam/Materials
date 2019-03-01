@@ -197,7 +197,7 @@ abstract class ImageDeltaStats {
                     onlySince                 (new TSuiteTimestamp(json.storageScannerOptions.onlySince),
                         json.storageScannerOptions.onlySinceInclusive).
                     probability               (json.storageScannerOptions.probability                    ).
-                    previousImageDeltaStats   (json.storageScannerOptions.previousImageDeltaStats        ).
+                    previousImageDeltaStats   (Paths.get(json.storageScannerOptions.previousImageDeltaStats)).
                     build()
             ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
             builder.storageScannerOptions(ssOptions)

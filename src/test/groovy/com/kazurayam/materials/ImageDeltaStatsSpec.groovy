@@ -209,7 +209,7 @@ class ImageDeltaStatsSpec extends Specification {
         ImageDeltaStats ids = ImageDeltaStats.fromJsonFile(path)
         then:
         ids.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
-        ids.storageScannerOptions.previousImageDeltaStats == ""
+        ids.storageScannerOptions.previousImageDeltaStats == StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
         ids.imageDeltaStatsEntries[0].TSuiteName.value == '47News_chronos_capture'
         ids.imageDeltaStatsEntries[0].materialStatsList[0].getPath().equals(
             Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
