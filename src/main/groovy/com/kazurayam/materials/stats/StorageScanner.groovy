@@ -375,10 +375,21 @@ class StorageScanner {
      * @return
      */
     Path findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+        return StorageScanner.findLatestImageDeltaStats(materialStorage_, tSuiteNameExam, tCaseNameExam)
+    }
+    
+    /**
+     * 
+     * @param materialStorage
+     * @param tSuiteNameExam
+     * @param tCaseNameExam
+     * @return
+     */
+    static Path findLatestImageDeltaStats(MaterialStorage materialStorage, TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
         Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
         Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
-        List<TSuiteResultId> tSuiteResultIdList = materialStorage_.getTSuiteResultIdList(tSuiteNameExam)
-        List<TSuiteResult> tSuiteResultList = materialStorage_.getTSuiteResultList(tSuiteResultIdList)
+        List<TSuiteResultId> tSuiteResultIdList = materialStorage.getTSuiteResultIdList(tSuiteNameExam)
+        List<TSuiteResult> tSuiteResultList = materialStorage.getTSuiteResultList(tSuiteResultIdList)
         Collections.sort(tSuiteResultList, new TimestampFirstTSuiteResultComparator())
         // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
         // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
@@ -399,7 +410,7 @@ class StorageScanner {
             }
             return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
         } else {
-            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage_.toString()}")
+            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage.toString()}")
             return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
         }
     }
