@@ -1,8 +1,8 @@
 package com.kazurayam.materials.stats
 
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 import javax.imageio.ImageIO
@@ -11,12 +11,13 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.impl.MaterialStorageImpl.TimestampFirstTSuiteResultComparator
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage
-import com.kazurayam.materials.impl.MaterialStorageImpl.TimestampFirstTSuiteResultComparator
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
@@ -24,8 +25,6 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.imagedifference.ImageDifference
-
-import groovy.json.JsonOutput
 
 /**
  * 
@@ -93,39 +92,6 @@ class StorageScanner {
         return this.options_
     }
     
-    /**
-     * 
-     * @return
-     */
-    String findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
-        Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
-        Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
-        List<TSuiteResultId> tSuiteResultIdList = materialStorage_.getTSuiteResultIdList(tSuiteNameExam)
-        List<TSuiteResult> tSuiteResultList = materialStorage_.getTSuiteResultList(tSuiteResultIdList)
-        // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
-        // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
-        // logger_.debug("#findLatestImageDeltaStats tSuiteResultIdList=${tSuiteResultIdList}")
-        // logger_.debug("#findLatestImageDeltaStats tSuiteResultList=${tSuiteResultList}")
-        if (tSuiteResultList.size() > 0) {
-            // sort the list as required
-            Collections.sort(tSuiteResultList, new TimestampFirstTSuiteResultComparator())
-            for (TSuiteResult tsr : tSuiteResultList) {
-                TCaseResult tcr = tsr.getTCaseResult(tCaseNameExam)
-                if (tcr != null) {
-                    List<Material> materials = tcr.getMaterialList()
-                    for (Material mate : materials) {
-                        if (mate.getFileName().equals(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)) {
-                            return mate.getPath().toString()
-                        }
-                    }
-                }
-            }
-            return ""
-        } else {
-            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage_.toString()}")
-            return ""
-        }
-    }
     
     /**
      * This will return
@@ -385,6 +351,58 @@ class StorageScanner {
         }
     }
     
+    /**
+     *
+     */
+    Path persist(ImageDeltaStats imageDeltaStats,
+            TSuiteName tSuiteNameExam, TSuiteTimestamp tSuiteTimestampExam, TCaseName tCaseNameExam) {
+        Path inStorage = materialStorage_.getBaseDir().
+                                resolve(tSuiteNameExam.getValue()).
+                                resolve(tSuiteTimestampExam.format()).
+                                resolve(tCaseNameExam.getValue()).
+                                resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        Files.createDirectories(inStorage.getParent())
+        imageDeltaStats.write(inStorage)
+        // important to call scan() of the MaterialStorage to let it be aware of the added file
+        materialStorage_.scan()
+        //
+        return inStorage
+    }
+
+    /**
+     *
+     * @return
+     */
+    String findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+        Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
+        Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
+        List<TSuiteResultId> tSuiteResultIdList = materialStorage_.getTSuiteResultIdList(tSuiteNameExam)
+        List<TSuiteResult> tSuiteResultList = materialStorage_.getTSuiteResultList(tSuiteResultIdList)
+        Collections.sort(tSuiteResultList, new TimestampFirstTSuiteResultComparator())
+        // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultIdList=${tSuiteResultIdList}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultList=${tSuiteResultList}")
+        if (tSuiteResultList.size() > 0) {
+            // sort the list as required
+            for (TSuiteResult tsr : tSuiteResultList) {
+                TCaseResult tcr = tsr.getTCaseResult(tCaseNameExam)
+                if (tcr != null) {
+                    List<Material> materials = tcr.getMaterialList()
+                    for (Material mate : materials) {
+                        if (mate.getFileName().equals(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)) {
+                            return mate.getPath().toString()
+                        }
+                    }
+                }
+            }
+            return ""
+        } else {
+            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${ms.toString()}")
+            return ""
+        }
+    }
+
     /**
      * This class mainteins a buffer of BufferedImage to make I/O to PNG files efficient.
      */

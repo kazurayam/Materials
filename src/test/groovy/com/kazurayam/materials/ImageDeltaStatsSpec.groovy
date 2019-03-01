@@ -7,9 +7,11 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
 import com.kazurayam.materials.stats.ImageDelta
 import com.kazurayam.materials.stats.StorageScanner
+import com.kazurayam.materials.stats.StorageScanner.Options
+import com.kazurayam.materials.stats.StorageScanner.Options.Builder
+
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -184,28 +186,8 @@ class ImageDeltaStatsSpec extends Specification {
         jsonPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME) 
     }
     
-    def testPersist() {
-        setup:
-        Path caseOutputDir = specOutputDir.resolve("testPersist")
-        Helpers.copyDirectory(fixtureDir, caseOutputDir)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
-        StorageScanner.Options options = new StorageScanner.Options.Builder().build()
-        StorageScanner scanner = new StorageScanner(ms, options)
-        TSuiteName tSuiteNameCapture = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats imageDeltaStats = scanner.scan(tSuiteNameCapture)
-        //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp()
-        TCaseName tCaseName = new TCaseName('Test Cases/main/TC_47News/ImageDiff')
-        when:
-        Path jsonPath = ImageDeltaStats.resolvePath(tSuiteNameExam, tSuiteTimestamp, tCaseName)
-        PersistedImageDeltaStats pathPair = imageDeltaStats.persist(ms, mr, jsonPath)
-        then:
-        Files.exists(pathPair.getPathInStorage())
-        Files.exists(PathPair.getPathInMaterials())
-    }
     
+
     def testFromJsonFile() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testFromJson")
@@ -215,16 +197,16 @@ class ImageDeltaStatsSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         StorageScanner.Options options = new StorageScanner.Options.Builder().build()
         StorageScanner scanner = new StorageScanner(ms, options)
+        when:
         ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("47News_chronos_capture"))
-        Path path = ImageDeltaStats.resolvePath(new TSuiteName('47News_chronos_exam'), 
-            new TSuiteTimestamp(), new TCaseName('Test Cases/main/TS1/ImageDiff'))
-        imageDeltaStats.persist(ms, mr, path)
-        when:
-        Path jsonFilePath = ms.getBaseDir().resolve(path)
+        TSuiteName tSuiteNameExam = new TSuiteName('47News_chronos_exam')
+        TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp()
+        TCaseName tCaseNameExam = new TCaseName('Test Cases/main/TS1/ImageDiff')
+        Path path = scanner.persist(imageDeltaStats, tSuiteNameExam, tSuiteTimestampExam, tCaseNameExam)
         then:
-        Files.exists(jsonFilePath)
+        Files.exists(path)
         when:
-        ImageDeltaStats ids = ImageDeltaStats.fromJsonFile(jsonFilePath)
+        ImageDeltaStats ids = ImageDeltaStats.fromJsonFile(path)
         then:
         ids.storageScannerOptions.shiftCriteriaPercentageBy == 0.0
         ids.storageScannerOptions.previousImageDeltaStats == ""

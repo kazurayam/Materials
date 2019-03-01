@@ -1,6 +1,5 @@
 package com.kazurayam.materials
 
-import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -15,7 +14,6 @@ import com.kazurayam.materials.stats.StorageScanner
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 /**
@@ -156,8 +154,6 @@ abstract class ImageDeltaStats {
         return jsonPath
     }
     
-    abstract PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr, Path jsonPath)
-    
     abstract toJsonText()
     
     /**
@@ -218,24 +214,5 @@ abstract class ImageDeltaStats {
             throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
         }
     }
-
-    
-    /**
-     *
-     */
-    static class PersistedImageDeltaStats {
-        private Path inStorage
-        private Path inMaterials
-        PersistedImageDeltaStats(Path inStorage, Path inMaterials) {
-            this.inStorage = inStorage
-            this.inMaterials = inMaterials
-        }
-        Path getPathInMaterials() {
-            return this.inMaterials
-        }
-        Path getPathInStorage() {
-            return this.inStorage
-        }
-    } 
     
 }

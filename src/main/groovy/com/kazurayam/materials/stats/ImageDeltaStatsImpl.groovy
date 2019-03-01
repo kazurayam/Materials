@@ -7,11 +7,16 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.ImageDeltaStats
+import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
+
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.ImageDeltaStats.PersistedImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
@@ -36,7 +41,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         private Options options
         private List<StatsEntry> imageDeltaStatsEntries
         Builder() {
-            options = new StorageScanner.Options.Builder().build()
+            options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().build()
             imageDeltaStatsEntries = new ArrayList<StatsEntry>()
         }
         Builder storageScannerOptions(Options value) {
@@ -134,25 +139,8 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
         String text = JsonOutput.prettyPrint(this.toJsonText())
         writer.print(text)
         writer.flush()
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    PersistedImageDeltaStats persist(MaterialStorage ms, MaterialRepository mr, Path path) {
-        Path inMaterials = mr.getBaseDir().resolve(path)
-        Files.createDirectories(inMaterials.getParent())
-        this.write(inMaterials)
-        mr.scan()
-        //
-        Path inStorage = ms.getBaseDir().resolve(path)
-        Files.createDirectories(inStorage.getParent())
-        this.write(inStorage)
-        //
-        return new PersistedImageDeltaStats(inStorage, inMaterials)
-    }
-    
+    }    
+        
     void addStatsEntry(StatsEntry entry ) {
         imageDeltaStatsEntries.add(entry)
     }
