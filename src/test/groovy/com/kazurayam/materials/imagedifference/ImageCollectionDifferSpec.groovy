@@ -25,7 +25,6 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.StorageScanner
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class ImageCollectionDifferSpec extends Specification {
@@ -148,8 +147,19 @@ class ImageCollectionDifferSpec extends Specification {
             mr.createMaterialPairs(tsn).stream().filter { mp ->
                 mp.getLeft().getFileType() == FileType.PNG
             }.collect(Collectors.toList())
-        StorageScanner storageScanner = new StorageScanner(ms, new StorageScanner.Options.Builder().build())
+        //
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        //
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
+                                                previousImageDeltaStats(previousIDS).
+                                                build()
+        StorageScanner storageScanner = new StorageScanner(ms, options)
         ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+        //
+        storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+        //
         double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
@@ -190,6 +200,11 @@ class ImageCollectionDifferSpec extends Specification {
         assert Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+        //
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        //
         TSuiteName tsn = new TSuiteName('47News_chronos_capture')
         ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
         ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
@@ -201,11 +216,14 @@ class ImageCollectionDifferSpec extends Specification {
             mr.createMaterialPairs(tsn).stream().filter { mp ->
                 mp.getLeft().getFileType() == FileType.PNG
             }.collect(Collectors.toList())
-        StorageScanner storageScanner = new StorageScanner(ms,
-                                                new StorageScanner.Options.Builder().
-                                                shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
-                                                build())
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
+            previousImageDeltaStats(previousIDS).
+            shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
+            build()
+        StorageScanner storageScanner = new StorageScanner(ms, options)
         ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+        //
+        storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
         double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))

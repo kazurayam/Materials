@@ -27,7 +27,6 @@ import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class StorageScannerSpec extends Specification {
@@ -353,6 +352,9 @@ class StorageScannerSpec extends Specification {
     /**
      * Verify the case where we give invalid path to Options.previousImageDeltaStatus(String path).
      * Processing should continue with no problem
+     * 
+     * This test case may take longer secodns than 20
+     * 
      */
     def test_Options_previousImageDeltaStats_invalidPath() {
         setup:
@@ -418,11 +420,14 @@ class StorageScannerSpec extends Specification {
         Files.exists(pathOfImageDeltaStats)
     }
     
-    @IgnoreRest
+    /**
+     * this test case may take longer seconds than 20
+     */
     def testFindLatestImageDeltaStats() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testFindLatestImageDeltaStats")
         if (Files.exists(caseOutputDir)) {
+            // intentionally delete the previous fixture
             Helpers.deleteDirectoryContents(caseOutputDir)
         }
         Files.createDirectories(caseOutputDir)
@@ -445,6 +450,7 @@ class StorageScannerSpec extends Specification {
         then:
         Files.exists(p)
         when:
+        // Now we test the method in question
         Path latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
         logger_.debug("#testFindLatestImageDeltaStats latestPath=${latestPath}")
         then:
@@ -456,13 +462,13 @@ class StorageScannerSpec extends Specification {
      * when we use StorageScanner.Options.Builder#previousImageDeltaStats(xxx).
      * Let's try it to see how much the speed is improved.
      *
-     * @return
+     * this test case may take longer seconds than 20
      */
-    
     def testPeformanceImprovementByPreviousImageDeltaStats() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_PerformanceImprovementByPreviousImageDeltaStats")
         if (Files.exists(caseOutputDir)) {
+            // intentionally delete the previous fixtures
             Helpers.deleteDirectoryContents(caseOutputDir)
         }
         Files.createDirectories(caseOutputDir)

@@ -10,6 +10,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 
@@ -34,8 +35,16 @@ class StatsEntrySpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         Path storagedir = workdir_.resolve('Storage')
         MaterialStorage ms = MaterialStorageFactory.createInstance(storagedir)
-        StorageScanner scanner = new StorageScanner(ms)
+        //
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+                                            previousImageDeltaStats(previousIDS).
+                                            build()
+        StorageScanner scanner = new StorageScanner(ms, options)
         ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'))
+        scanner.persist(ids_, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
     }
     def setup() {}
     def cleanup() {}
