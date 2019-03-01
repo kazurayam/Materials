@@ -16,6 +16,8 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.impl.MaterialStorageImpl.TimestampFirstTSuiteResultComparator
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
@@ -45,6 +47,10 @@ class StorageScanner {
     
     public StorageScanner(MaterialStorage materialStorage, Options options) {
         this.materialStorage_ = materialStorage
+        // reflesh it.
+        // this may heavy. i am not very sure if it is a good idea to call MaterialRepository.scan() here.
+        this.materialStorage_.scan()
+        //
         this.options_ = options
         this.biBuffer_ = new BufferedImageBuffer()
         // speed up ImageIO!
@@ -85,6 +91,40 @@ class StorageScanner {
      */
     Options getOptions() {
         return this.options_
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    String findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+        Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
+        Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
+        List<TSuiteResultId> tSuiteResultIdList = materialStorage_.getTSuiteResultIdList(tSuiteNameExam)
+        List<TSuiteResult> tSuiteResultList = materialStorage_.getTSuiteResultList(tSuiteResultIdList)
+        // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultIdList=${tSuiteResultIdList}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultList=${tSuiteResultList}")
+        if (tSuiteResultList.size() > 0) {
+            // sort the list as required
+            Collections.sort(tSuiteResultList, new TimestampFirstTSuiteResultComparator())
+            for (TSuiteResult tsr : tSuiteResultList) {
+                TCaseResult tcr = tsr.getTCaseResult(tCaseNameExam)
+                if (tcr != null) {
+                    List<Material> materials = tcr.getMaterialList()
+                    for (Material mate : materials) {
+                        if (mate.getFileName().equals(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)) {
+                            return mate.getPath().toString()
+                        }
+                    }
+                }
+            }
+            return ""
+        } else {
+            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage_.toString()}")
+            return ""
+        }
     }
     
     /**

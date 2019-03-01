@@ -302,7 +302,7 @@ class MaterialStorageImpl implements MaterialStorage {
      * 1. Descending order of TSuiteTimestamp
      * 2. Ascending order of TSuiteName
      */
-    class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
+    public class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
         @Override
         int compare(TSuiteResult a, TSuiteResult b) {
             int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
@@ -378,6 +378,10 @@ class MaterialStorageImpl implements MaterialStorage {
         return count
     }
     
+    @Override
+    void scan() {
+        componentMR_.scan()
+    }
 
     // ---------------------- overriding Object properties --------------------
     @Override

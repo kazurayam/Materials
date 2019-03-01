@@ -55,7 +55,8 @@ class StorageScannerSpec extends Specification {
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        StorageScanner scanner = new StorageScanner(ms)
+        StorageScanner.Options options = new Options.Builder().build()
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = scanner.scan(tSuiteName)
@@ -77,7 +78,8 @@ class StorageScannerSpec extends Specification {
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        StorageScanner scanner = new StorageScanner(ms)
+        StorageScanner.Options options = new Options.Builder().build()
+        StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         ImageDeltaStats stats = scanner.scan(tSuiteName)
@@ -348,6 +350,7 @@ class StorageScannerSpec extends Specification {
      *
      * @return
      */
+    @Ignore
     def testPeformanceImprovementByPreviousImageDeltaStats() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_PerformanceImprovementByPreviousImageDeltaStats")
@@ -387,6 +390,38 @@ class StorageScannerSpec extends Specification {
         // I expect the processing with cache is over 100 times or even more faster 
         // than creating ImageDilta objects from DISK 
         sw1.getTime() / 100 > sw2.getTime()
+    }
+    
+    def testFindLatestImageDeltaStats() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("testFindLatestImageDeltaStats")
+        if (Files.exists(caseOutputDir)) {
+            Helpers.deleteDirectoryContents(caseOutputDir)
+        }
+        Files.createDirectories(caseOutputDir)
+        Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+        when:
+        StorageScanner.Options options = new Options.Builder().build()
+        StorageScanner scanner = new StorageScanner(ms, options)
+        StopWatch sw1 = new StopWatch()
+        sw1.start()
+        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
+        sw1.stop()
+        TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47News_chronos_exam")
+        TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190301_095547")
+        TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path jsonPathRelativeToTSuiteTimestampDir = ImageDeltaStats.resolvePath(tSuiteNameExam, tSuiteTimestampExam, tCaseNameExam)
+        PersistedImageDeltaStats pathPair = imageDeltaStats.persist(ms, mr, jsonPathRelativeToTSuiteTimestampDir)
+        then:
+        Files.exists(pathPair.getPathInStorage())
+        when:
+        StorageScanner scanner2 = new StorageScanner(ms)
+        String latestPath = scanner2.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
+        logger_.debug("#testFindLatestImageDeltaStats latestPath=${latestPath}")
+        then:
+        latestPath.endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
     }
     
     @Ignore
