@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils
 
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
@@ -23,6 +22,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
+import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
 import spock.lang.Specification

@@ -6,7 +6,6 @@ import java.nio.file.Path
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage

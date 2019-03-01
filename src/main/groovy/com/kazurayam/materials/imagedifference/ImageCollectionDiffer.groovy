@@ -7,12 +7,12 @@ import javax.imageio.ImageIO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.stats.ImageDeltaStats
 
 /**
  * This class is designed to implement the "Visual Testing in Katalon Studio" feature.

@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.stats
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -7,12 +7,10 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.stats.ImageDelta
-import com.kazurayam.materials.stats.ImageDeltaStatsImpl
-import com.kazurayam.materials.stats.StatsEntry
-import com.kazurayam.materials.stats.StorageScanner
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.stats.StorageScanner.Options
-import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonSlurper
 

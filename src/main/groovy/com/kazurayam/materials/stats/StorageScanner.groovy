@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.impl.MaterialStorageImpl.TimestampFirstTSuiteResultComparator
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage

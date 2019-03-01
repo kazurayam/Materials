@@ -1,4 +1,4 @@
-package com.kazurayam.materials
+package com.kazurayam.materials.stats
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -7,8 +7,14 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.stats.ImageDelta
-import com.kazurayam.materials.stats.StorageScanner
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.MaterialRepository
+import com.kazurayam.materials.MaterialRepositoryFactory
+import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.MaterialStorageFactory
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.stats.StorageScanner.Options
 import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
@@ -54,7 +60,7 @@ class ImageDeltaStatsSpec extends Specification {
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
         //
         double value = 0.10
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             shiftCriteriaPercentageBy(value).
                                             build()
@@ -83,7 +89,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             filterDataLessThan(0.0).  // LOOK HERE
                                             build()
@@ -117,7 +123,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             probability(0.75).  // LOOK HERE
                                             build()
@@ -184,7 +190,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
             shiftCriteriaPercentageBy(25.0).
             probability(0.75).  // LOOK HERE
@@ -245,7 +251,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
             build()
         StorageScanner scanner = new StorageScanner(ms, options)
@@ -281,7 +287,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
             build()
         StorageScanner scanner = new StorageScanner(ms, options)
@@ -313,7 +319,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new StorageScanner.Options.Builder().
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
             build()
         StorageScanner scanner = new StorageScanner(ms, options)
