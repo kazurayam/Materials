@@ -3,8 +3,21 @@ package com.kazurayam.materials.stats
 import java.nio.file.Files
 import java.nio.file.Path
 
-import com.kazurayam.materials.ImageDeltaStats
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialRepository
+import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
+
+import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.stats.StorageScanner.Options
+import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
 
@@ -14,9 +27,9 @@ import groovy.json.JsonOutput
  */
 class ImageDeltaStatsImpl extends ImageDeltaStats {
     
-    public static final double SUGGESTED_CRITERIA_PERCENTAGE = 5.0
+    static Logger logger_ = LoggerFactory.getLogger(ImageDeltaStatsImpl.class)
     
-    private double defaultCriteriaPercentage
+    private Options options
     
     private List<StatsEntry> imageDeltaStatsEntries
     
@@ -24,18 +37,15 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
      *
      */
     static class Builder {
-        private double defaultCriteriaPercentage
+        private Options options
         private List<StatsEntry> imageDeltaStatsEntries
         Builder() {
-            defaultCriteriaPercentage = SUGGESTED_CRITERIA_PERCENTAGE
+            options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().build()
             imageDeltaStatsEntries = new ArrayList<StatsEntry>()
         }
-        Builder defaultCriteriaPercentage(double value) {
-            if (value < 0.0 || value > 100.0) {
-                throw new IllegalArgumentException(
-                    "defaultCrieteriaPercentage(${value}) must be positive; less than or equal to 100.0")
-            }
-            defaultCriteriaPercentage = value
+        Builder storageScannerOptions(Options value) {
+            Objects.requireNonNull(options, "options must not be null")
+            this.options = value
             return this
         }
         Builder addImageDeltaStatsEntry(StatsEntry entry) {
@@ -48,28 +58,17 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     private ImageDeltaStatsImpl(Builder builder) {
-        this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
+        this.options = builder.options
         this.imageDeltaStatsEntries = builder.imageDeltaStatsEntries
     }
     
     @Override
-    double criteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
-        double value
-        try {
-            value = this.getCalculatedCriteriaPercentage(tSuiteName, pathRelativeToTSuiteTimestamp)
-        } catch (IllegalArgumentException e) {
-            value = this.getDefaultCriteriaPercentage()
-        }
-        return value
-    }
-    
-    @Override
-    double getCalculatedCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
+    double getCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
         StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteName)
         if (statsEntry != StatsEntry.NULL) {
             MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
             if (materialStats != null) {
-                return materialStats.getCalculatedCriteriaPercentage()
+                return materialStats.getCriteriaPercentage()
             } else {
                 throw new IllegalArgumentException("path \"${pathRelativeToTSuiteTimestamp}\" is not " + 
                     "found in MaterialStats ${materialStats.toString()}")
@@ -82,8 +81,8 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    double getDefaultCriteriaPercentage() {
-        return this.defaultCriteriaPercentage
+    Options getStorageScannerOptions() {
+        return this.options
     }
     
     @Override
@@ -102,32 +101,67 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    void write(Path output) {
-        Files.createDirectories(output.getParent())
-        output.toFile().text = JsonOutput.prettyPrint(this.toJson())
+    boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                            TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (StatsEntry se: imageDeltaStatsEntries) {
+            if (se.getTSuiteName().equals(tSuiteName)) {
+                if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
+                    return true
+                }
+            }
+        }
+        return false
     }
     
+    @Override
+    ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
+                            TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (StatsEntry se: imageDeltaStatsEntries) {
+            if (se.getTSuiteName().equals(tSuiteName)) {
+                if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
+                    return se.getImageDelta(relativeToTSuiteTimestampDir, a, b)
+                }
+            }
+        }
+        return null
+    }
+
+    @Override
+    void write(Path output) {
+        Files.createDirectories(output.getParent())
+        output.toFile().text = JsonOutput.prettyPrint(this.toJsonText())
+    }
+    
+    @Override
+    void write(Writer writer) {
+        BufferedWriter bw = new BufferedWriter(writer)
+        String text = JsonOutput.prettyPrint(this.toJsonText())
+        writer.print(text)
+        writer.flush()
+    }    
+        
     void addStatsEntry(StatsEntry entry ) {
         imageDeltaStatsEntries.add(entry)
     }
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
     
-    String toJson() {
+    @Override
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
-        sb.append("\"defaultCriteriaPercentage\":")
-        sb.append("${this.getDefaultCriteriaPercentage()},")
+        sb.append("\"storageScannerOptions\":")
+        sb.append("${this.getStorageScannerOptions().toJsonText()},")
         sb.append("\"imageDeltaStatsEntries\":[")
         int count = 0
         for (StatsEntry statsEntry : imageDeltaStatsEntries) {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append(statsEntry.toJson())
+            sb.append(statsEntry.toJsonText())
             count += 1
         }
         sb.append("]")

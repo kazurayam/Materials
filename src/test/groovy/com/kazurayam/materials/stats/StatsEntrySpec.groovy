@@ -1,6 +1,5 @@
 package com.kazurayam.materials.stats
 
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -8,14 +7,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.ImageDeltaStats
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
 
 import spock.lang.Ignore
 import spock.lang.Specification
-
 
 class StatsEntrySpec extends Specification {
 
@@ -35,8 +34,16 @@ class StatsEntrySpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         Path storagedir = workdir_.resolve('Storage')
         MaterialStorage ms = MaterialStorageFactory.createInstance(storagedir)
-        StorageScanner scanner = new StorageScanner(ms)
+        //
+        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+                                            previousImageDeltaStats(previousIDS).
+                                            build()
+        StorageScanner scanner = new StorageScanner(ms, options)
         ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'))
+        scanner.persist(ids_, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
     }
     def setup() {}
     def cleanup() {}
@@ -88,6 +95,39 @@ class StatsEntrySpec extends Specification {
         
         
     }
+    
+    def testHasImageDelta() {
+        setup:
+        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        then:
+        se.hasImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp("20190301_065500")
+        then:
+        ! se.hasImageDelta(pathRelativeToTSuiteTimestampDir, another, b)
+    }
+    
+    def testGetImageDelta() {
+        setup:
+        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        when:
+        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        ImageDelta id1 = se.getImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
+        then:
+        id1 != null
+        when:
+        TSuiteTimestamp another = new TSuiteTimestamp("20190301_065500")
+        ImageDelta id2 = se.getImageDelta(pathRelativeToTSuiteTimestampDir, another, b)
+        then:
+        id2 == null
+    }
+    
 
     @Ignore
     def testIgnoring() {}

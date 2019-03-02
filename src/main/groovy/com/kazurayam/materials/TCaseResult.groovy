@@ -45,7 +45,7 @@ abstract class TCaseResult implements Comparable<TCaseResult> {
     
     abstract Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType)
     
-    abstract String toJson()
+    abstract String toJsonText()
 
 }
 

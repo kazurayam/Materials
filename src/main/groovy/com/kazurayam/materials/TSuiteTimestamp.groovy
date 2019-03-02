@@ -25,8 +25,9 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     
     /**
      * NULL Object
+     * '19990101_000000'
      */
-    static final TSuiteTimestamp NULL = new TSuiteTimestamp()
+    static final TSuiteTimestamp NULL = new TSuiteTimestamp('19990101_000000')
     
     /**
      * The format of standard String representation of TSuiteTimestamp object
@@ -111,7 +112,7 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
         }
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteTimestamp":')
         sb.append('{"timestamp":"' + this.format()+ '"}' )
@@ -120,7 +121,7 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
     }
     
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
     // ---------------- overriding Object properties --------------------------

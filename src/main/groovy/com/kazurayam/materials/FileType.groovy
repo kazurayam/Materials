@@ -66,10 +66,10 @@ enum FileType {
 
     @Override
     String toString() {
-        return toJson() //this.getExtension()
+        return toJsonText() //this.getExtension()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"FileType":{')
         sb.append('"extension":"' + this.getExtension() + '","mimeTypes":[')

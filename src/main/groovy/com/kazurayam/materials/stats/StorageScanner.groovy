@@ -1,7 +1,9 @@
 package com.kazurayam.materials.stats
 
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 import javax.imageio.ImageIO
@@ -11,9 +13,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
-import com.kazurayam.materials.ImageDeltaStats
+import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
@@ -21,8 +24,10 @@ import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.imagedifference.ImageDifference
 
-import groovy.json.JsonOutput
-
+/**
+ * 
+ * @author kazurayam
+ */
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
@@ -31,16 +36,50 @@ class StorageScanner {
     private Options options_
     private BufferedImageBuffer biBuffer_
     
+    private ImageDeltaStats previousImageDeltaStats_
+    
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
     }
     
     public StorageScanner(MaterialStorage materialStorage, Options options) {
         this.materialStorage_ = materialStorage
+        // reflesh it.
+        // this may heavy. i am not very sure if it is a good idea to call MaterialRepository.scan() here.
+        this.materialStorage_.scan()
+        //
         this.options_ = options
         this.biBuffer_ = new BufferedImageBuffer()
         // speed up ImageIO!
         ImageIO.setUseCache(false)
+        //
+        if ( ! options_.getPreviousImageDeltaStats().equals(Options.NULL_PREVIOUS_IMAGE_DELTA_STATS) ) {
+            /*
+             * We will try to open the previos image-delta-stats.json file.
+             * Even if failed to open, we will just ignore it and continue.
+             */
+            Path path = options_.getPreviousImageDeltaStats()
+            try {
+                previousImageDeltaStats_ = ImageDeltaStats.fromJsonFile(path)
+                logger_.info("Successfully loaded previousImageDeltaStats(${path.toString()})")
+            } catch (FileNotFoundException ex) {
+                logger_.warn("File not found: previousImageDeltaStats(${path.toString()});" + 
+                    " will ignore and continue")
+                previousImageDeltaStats_ = null
+            } catch (IOException ex) {
+                logger_.warn("IOException for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue")
+                ex.printStackTrace()
+                previousImageDeltaStats_ = null
+            } catch (Exception ex) {
+                logger_.warn("${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue")
+                ex.printStackTrace()
+                previousImageDeltaStats_ = null
+            }
+        } else {
+            previousImageDeltaStats_ = null
+        }
     }
     
     /**
@@ -50,6 +89,7 @@ class StorageScanner {
     Options getOptions() {
         return this.options_
     }
+    
     
     /**
      * This will return
@@ -70,8 +110,8 @@ class StorageScanner {
         stopWatch.start()
         
         ImageDeltaStatsImpl.Builder builder = 
-            new ImageDeltaStatsImpl.Builder().
-                defaultCriteriaPercentage(options_.getDefaultCriteriaPercentage())
+            new ImageDeltaStatsImpl.Builder().storageScannerOptions(options_)
+        //
         if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
             StatsEntry se = this.makeStatsEntry(tSuiteName)
             builder.addImageDeltaStatsEntry(se)
@@ -124,16 +164,16 @@ class StorageScanner {
      *                  "imageDeltaList": [
      *                      // list of ImageDelta objects
      *                  ],
-     *                  "calculatedCriteriaPercentage": 2.51
+     *                  
      *              }
      * </PRE>
      * 
      * @param ms
-     * @param tSuiteName
+     * @param pathRelativeToTSuiteTimestamp
      * @return
      */
     MaterialStats makeMaterialStats(TSuiteName tSuiteName,
-                                Path pathRelativeToTSuiteTimestamp) {
+                                Path pathRelativeToTSuiteTimestampDir) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         
@@ -142,7 +182,7 @@ class StorageScanner {
         // This list is sorted by descending order of TSuiteTimestamp
         List<Material> materials = this.getMaterialsOfARelativePathInATSuiteName(
                                         tSuiteName,
-                                        pathRelativeToTSuiteTimestamp)
+                                        pathRelativeToTSuiteTimestampDir)
         
         // build the MaterialStats object while calculating the diff ratio 
         // of two PNG files
@@ -152,29 +192,43 @@ class StorageScanner {
                     i < materials.size() - 1 &&
                     i < options_.getMaximumNumberOfImageDeltas();
                     i++) {
-                ImageDelta imageDelta = 
-                                this.makeImageDelta(
-                                    materials.get(i),
-                                    materials.get(i + 1)
-                                    )
+                ImageDelta imageDelta
+                if (previousImageDeltaStats_ != null &&
+                    previousImageDeltaStats_.hasImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
+                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
+                            )) {
+                    imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
+                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
+                            )
+                } else {
+                    // the following 1 line causes many ImageIO and significant amount of calcuration,
+                    // will require many seconds of processing
+                    imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                }
+                //
                 imageDeltaList.add(imageDelta)
             }
         }
         MaterialStats materialStats  = new MaterialStats(
-                    pathRelativeToTSuiteTimestamp, imageDeltaList)
+                    pathRelativeToTSuiteTimestampDir, imageDeltaList)
+        
         // configure parameters
         materialStats.setFilterDataLessThan(options_.getFilterDataLessThan())
+        materialStats.setShiftCriteriaPercentageBy(options_.getShiftCriteriaPercentageBy())
         
         //
         stopWatch.stop()
-        logger_.debug("#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestamp} " + 
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestampDir} " + 
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //
         return materialStats
     }
 
     /**
      *
-     * @param ms
      * @param tSuiteName
      * @param pathRelativeToTSuiteTimestamp
      * @return
@@ -185,7 +239,7 @@ class StorageScanner {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         List<Material> materialList = new ArrayList<Material>()
-        //
+        // construct a list of Materials
         List<TSuiteResultId> idsOfTSuiteName = materialStorage_.getTSuiteResultIdList(tSuiteName)
         for (TSuiteResultId tSuiteResultId : idsOfTSuiteName) {
             TSuiteResult tSuiteResult = materialStorage_.getTSuiteResult(tSuiteResultId)
@@ -215,8 +269,10 @@ class StorageScanner {
             }
         })
         stopWatch.stop()
-        logger_.debug("#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //    
         return materialList
     }
 
@@ -245,23 +301,24 @@ class StorageScanner {
         if (b.getFileType() != FileType.PNG) {
             throw new IllegalArgumentException("${b.path()} is not a PNG file")
         }
+        //
+        TSuiteTimestamp tSuiteTimestampA = a.getParent().getParent().getTSuiteTimestamp()
+        TSuiteTimestamp tSuiteTimestampB = b.getParent().getParent().getTSuiteTimestamp()
         // read PNG files and
         // create ImageDifference of the 2 given images to calculate the diff ratio
         BufferedImage biA = biBuffer_.read(a)
         BufferedImage biB = biBuffer_.read(b)
-        
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
-        
         // make the delta
-        ImageDelta imageDelta = new ImageDelta(
-                                a.getParent().getParent().getTSuiteTimestamp(),
-                                b.getParent().getParent().getTSuiteTimestamp(),
-                                diff.getRatio())
+        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio())
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
+        
         stopWatch.stop()
-        logger_.debug("#makeImageDelta(${a}, ${b}) " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#makeImageDelta(${a}, ${b}) " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        //logger_.debug(msg)
+        //
         return imageDelta
     }
     
@@ -293,6 +350,69 @@ class StorageScanner {
     }
     
     /**
+     *
+     */
+    Path persist(ImageDeltaStats imageDeltaStats,
+            TSuiteName tSuiteNameExam, TSuiteTimestamp tSuiteTimestampExam, TCaseName tCaseNameExam) {
+        Path inStorage = materialStorage_.getBaseDir().
+                                resolve(tSuiteNameExam.getValue()).
+                                resolve(tSuiteTimestampExam.format()).
+                                resolve(tCaseNameExam.getValue()).
+                                resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        Files.createDirectories(inStorage.getParent())
+        imageDeltaStats.write(inStorage)
+        // important to call scan() of the MaterialStorage to let it be aware of the added file
+        materialStorage_.scan()
+        //
+        return inStorage
+    }
+
+    /**
+     *
+     * @return
+     */
+    Path findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+        return StorageScanner.findLatestImageDeltaStats(materialStorage_, tSuiteNameExam, tCaseNameExam)
+    }
+    
+    /**
+     * 
+     * @param materialStorage
+     * @param tSuiteNameExam
+     * @param tCaseNameExam
+     * @return
+     */
+    static Path findLatestImageDeltaStats(MaterialStorage materialStorage, TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+        Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
+        Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
+        List<TSuiteResultId> tSuiteResultIdList = materialStorage.getTSuiteResultIdList(tSuiteNameExam)
+        List<TSuiteResult> tSuiteResultList = materialStorage.getTSuiteResultList(tSuiteResultIdList)
+        Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
+        // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultIdList=${tSuiteResultIdList}")
+        // logger_.debug("#findLatestImageDeltaStats tSuiteResultList=${tSuiteResultList}")
+        if (tSuiteResultList.size() > 0) {
+            // sort the list as required
+            for (TSuiteResult tsr : tSuiteResultList) {
+                TCaseResult tcr = tsr.getTCaseResult(tCaseNameExam)
+                if (tcr != null) {
+                    List<Material> materials = tcr.getMaterialList()
+                    for (Material mate : materials) {
+                        if (mate.getFileName().equals(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)) {
+                            return mate.getPath()
+                        }
+                    }
+                }
+            }
+            return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
+        } else {
+            logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage.toString()}")
+            return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
+        }
+    }
+
+    /**
      * This class mainteins a buffer of BufferedImage to make I/O to PNG files efficient.
      */
     static class BufferedImageBuffer {
@@ -320,39 +440,45 @@ class StorageScanner {
      */
     static class Options {
         
-        private double defaultCriteriaPercentage
+        public static Path NULL_PREVIOUS_IMAGE_DELTA_STATS = Paths.get('.')
+        
+        private double shiftCriteriaPercentageBy
         private double filterDataLessThan
         private double probability
         private int maximumNumberOfImageDeltas
         private TSuiteTimestamp onlySince
         private boolean onlySinceInclusive
+        private Path previousImageDeltaStats
         
         static class Builder {
-            private double defaultCriteriaPercentage
+            private double shiftCriteriaPercentageBy
             private double filterDataLessThan
             private double probability
             private int maximumNumberOfImageDeltas
             private TSuiteTimestamp onlySince
             private boolean onlySinceInclusive
+            private Path previousImageDeltaStats
+            
             /*
-             * set default values
+             * constructor, where we set the default values
              */
             Builder() {
-                this.defaultCriteriaPercentage = ImageDeltaStatsImpl.SUGGESTED_CRITERIA_PERCENTAGE
+                this.shiftCriteriaPercentageBy = MaterialStats.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
                 this.filterDataLessThan = MaterialStats.DEFAULT_FILTER_DATA_LESS_THAN
                 this.probability = MaterialStats.DEFAULT_PROBABILITY
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
-                this.onlySince = TSuiteTimestamp.NULL
+                this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
+                this.previousImageDeltaStats = Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
             }
-            Builder defaultCriteriaPercentage(double value) {
+            Builder shiftCriteriaPercentageBy(double value) {
                 if (value < 0.0) {
-                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be negative")
+                    throw new IllegalArgumentException("shiftCriteriaPercentageBy must not be negative")
                 }
                 if (value > 100.0) {
-                    throw new IllegalArgumentException("defaultCriteriaPercentage must not be  > 100.0")
+                    throw new IllegalArgumentException("shiftCriteriaPercentageBy must not be > 100.0")
                 }
-                this.defaultCriteriaPercentage = value
+                this.shiftCriteriaPercentageBy = value
                 return this
             }
             Builder filterDataLessThan(double value) {
@@ -387,22 +513,32 @@ class StorageScanner {
                 this.onlySinceInclusive = inclusive
                 return this
             }
+            /**
+             * 
+             * @param path to image-delta-stats.json file in the Storage dir. Path must be relative to the project dir or be an absolute path
+             * @return
+             */
+            Builder previousImageDeltaStats(Path path) {
+                this.previousImageDeltaStats = path
+                return this
+            }
             Options build() {
                 return new Options(this)
             }
         }
         
         private Options(Builder builder) {
-            this.defaultCriteriaPercentage = builder.defaultCriteriaPercentage
+            this.shiftCriteriaPercentageBy = builder.shiftCriteriaPercentageBy
             this.filterDataLessThan = builder.filterDataLessThan
             this.probability = builder.probability
             this.maximumNumberOfImageDeltas = builder.maximumNumberOfImageDeltas
             this.onlySince = builder.onlySince
             this.onlySinceInclusive = builder.onlySinceInclusive
+            this.previousImageDeltaStats = builder.previousImageDeltaStats
         }
         
-        double getDefaultCriteriaPercentage() {
-            return this.defaultCriteriaPercentage
+        double getShiftCriteriaPercentageBy() {
+            return this.shiftCriteriaPercentageBy
         }
         
         double getFilterDataLessThan() {
@@ -425,9 +561,54 @@ class StorageScanner {
             return this.onlySinceInclusive    
         }
         
+        Path getPreviousImageDeltaStats() {
+            return this.previousImageDeltaStats
+        }
+        
         @Override
         String toString() {
-            return JsonOutput.toJson(this)
+            return this.toJsonText()
+        }
+        
+        String toJsonText() {
+            StringBuilder sb = new StringBuilder()
+            sb.append("{")
+            //
+            sb.append("\"shiftCriteriaPercentageBy\":")
+            sb.append(this.getShiftCriteriaPercentageBy())
+            sb.append(",")
+            //
+            sb.append("\"filterDataLessThan\":")
+            sb.append(this.getFilterDataLessThan())
+            sb.append(",")
+            //
+            sb.append("\"maximumNumberOfImageDeltas\":")
+            sb.append(this.getMaximumNumberOfImageDeltas())
+            sb.append(",")
+            //
+            sb.append("\"onlySince\":")
+            sb.append("\"" + this.getOnlySince().format() + "\"")
+            sb.append(",")
+            //
+            sb.append("\"onlySinceInclusive\":")
+            sb.append(this.getOnlySinceInclusive())
+            sb.append(",")
+            //
+            sb.append("\"probability\":")
+            sb.append(this.getProbability())
+            sb.append(",")
+            //
+            sb.append("\"previousImageDeltaStats\":")
+            if (this.getPreviousImageDeltaStats() != null) {
+                sb.append("\"")
+                sb.append(Helpers.escapeAsJsonText(this.getPreviousImageDeltaStats().toString()))
+                sb.append("\"")
+            } else {
+                sb.append("\"\"")
+            }
+            //
+            sb.append("}")
+            sb.toString()
         }
     }
 }

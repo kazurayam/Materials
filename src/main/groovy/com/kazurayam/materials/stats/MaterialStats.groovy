@@ -1,6 +1,7 @@
 package com.kazurayam.materials.stats
 
 import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.interval.ConfidenceInterval
@@ -8,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TSuiteTimestamp
 
 /**
  * referrences:
@@ -27,17 +29,25 @@ class MaterialStats {
     static final double DEFAULT_FILTER_DATA_LESS_THAN = 1.00
     static final double DEFAULT_PROBABILITY = 0.95
     static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 10
+    static final double SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY = 0.0
     
     private Path path
     private List<ImageDelta> imageDeltaList
     private double filterDataLessThan
     private double probability
+    private double shiftCriteriaPercentageBy
     
+    /**
+     * 
+     * @param path
+     * @param imageDeltaList
+     */
     MaterialStats(Path path, List<ImageDelta> imageDeltaList) {
         this.path = path
         this.imageDeltaList = imageDeltaList
         this.filterDataLessThan = DEFAULT_FILTER_DATA_LESS_THAN
         this.probability = DEFAULT_PROBABILITY
+        this.shiftCriteriaPercentageBy = this.SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY
     }
 
     Path getPath() {
@@ -54,6 +64,10 @@ class MaterialStats {
     
     void setProbability(double value) {
         this.probability = value
+    }
+    
+    void setShiftCriteriaPercentageBy(double value) {
+        this.shiftCriteriaPercentageBy = value
     }
     
     double[] data() {
@@ -134,16 +148,24 @@ class MaterialStats {
             return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
         } else {
             logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
-            return new ConfidenceInterval(0.0, 100.0, 99.00)
+            return new ConfidenceInterval(0.0, 100.0, 0.999)
         }
     }
     
-    double getCalculatedCriteriaPercentage() {
-        return this.getConfidenceInterval().getUpperBound()
+    /**
+     * 
+     * @return ConfidenceInterval.upperBound + shiftCriteriaPercentage
+     */
+    double getCriteriaPercentage() {
+        if (this.degree() > 0) {
+            return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
+        } else {
+            return this.shiftCriteriaPercentageBy
+        }
     }
    
-    String getCalculatedCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
-        return String.format(CRITERIA_PERCENTAGE_FORMAT, this.getCalculatedCriteriaPercentage())
+    String getCriteriaPercentageAsString(String fmt = CRITERIA_PERCENTAGE_FORMAT) {
+        return String.format(CRITERIA_PERCENTAGE_FORMAT, this.getCriteriaPercentage())
     }
     
     List<ImageDelta> getImageDeltaList() {
@@ -161,6 +183,36 @@ class MaterialStats {
         return this.getPath().equals(other.getPath())
     }
     
+    /**
+     * If this MaterialStats has an ImageDelta of a anb b, return true
+     * @param a
+     * @param b
+     * @return
+     */
+    boolean hasImageDelta(TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (ImageDelta id: imageDeltaList) {
+            if (id.getA().equals(a) && id.getB().equals(b)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /**
+     * 
+     * @param a
+     * @param b
+     * @return an ImageDelta object with TSuiteTimestamp a and b, else null
+     */
+    ImageDelta getImageDelta(TSuiteTimestamp a, TSuiteTimestamp b) {
+        for (ImageDelta id: imageDeltaList) {
+            if (id.getA().equals(a) && id.getB().equals(b)) {
+                return id
+            }
+        }
+        return null
+    }
+    
     @Override
     public int hashCode() {
         return this.getPath().hashCode()
@@ -168,34 +220,102 @@ class MaterialStats {
     
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"path\":")
         sb.append("\"${Helpers.escapeAsJsonText(this.getPathAsStringInUNIX())}\",")
-        sb.append("\"imageDeltaList\":[")
-        int count = 0
-        for (ImageDelta id : this.getImageDeltaList()) {
-            if (count > 0) {
-                sb.append(",")
-            }
-            sb.append(id.toJson())
-            count += 1
-        }
-        sb.append("],")
-        sb.append("\"data\":${this.data().toString()},")
         sb.append("\"degree\":${this.degree().toString()},")
         sb.append("\"sum\":${this.sum()},")
         sb.append("\"mean\":${this.mean()},")
         sb.append("\"variance\":${this.variance()},")
         sb.append("\"standardDeviation\":${this.standardDeviation()},")
         sb.append("\"tDistribution\":${this.tDistribution()},")
-        sb.append("\"calculatedCriteriaPercentage\":")
-        sb.append(this.getCalculatedCriteriaPercentageAsString())
+        sb.append("\"confidenceInterval\":{")
+        sb.append("\"lowerBound\":")
+        sb.append(this.getConfidenceInterval().getLowerBound())
+        sb.append(",\"upperBound\":")
+        sb.append(this.getConfidenceInterval().getUpperBound())
+        sb.append("},")
+        sb.append("\"criteriaPercentage\":")
+        sb.append(this.getCriteriaPercentageAsString())
+        sb.append(",")
+        sb.append("\"data\":${this.data().toString()},")
+        sb.append("\"imageDeltaList\":[")
+        int count = 0
+        for (ImageDelta id : this.getImageDeltaList()) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            sb.append(id.toJsonText())
+            count += 1
+        }
+        sb.append("]")
         sb.append("}")
         return sb.toString()
+    }
+    
+    /**
+     * <PRE>
+     * {
+                    "path": "main.TC_47News.visitSite/47NEWS_TOP.png",
+                    "degree": 5,
+                    "sum": 68.17,
+                    "mean": 13.634,
+                    "variance": 2.6882191428856,
+                    "standardDeviation": 1.6395789529283424,
+                    "tDistribution": 2.1318467859510317,
+                    "confidenceInterval": {
+                        "lowerBound": 12.070840401864046,
+                        "upperBound": 15.197159598135954
+                    },
+                    "criteriaPercentage": 40.20,
+                    "data": [
+                        16.86,
+                        4.53,
+                        2.83,
+                        27.85,
+                        16.1
+                    ],
+                    "imageDeltaList": [
+                        // list of ImageDelta objects
+                    ]
+                }
+     * </PRE>
+     * @param json
+     * @return
+     */
+    static MaterialStats fromJsonObject(Object jsonObject) {
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        if (jsonObject instanceof Map) {
+            Map materialStatsJsonObject = (Map)jsonObject
+            if (materialStatsJsonObject.path == null) {
+                throw new IllegalArgumentException("json.path must not be null")
+            }
+            if (materialStatsJsonObject.imageDeltaList == null) {
+                throw new IllegalArgumentException("json.imageDeltaList must not be null")
+            }
+            List<ImageDelta> imageDeltas = new ArrayList<ImageDelta>()
+            for (Map imageDeltaJsonObj : (List)materialStatsJsonObject.imageDeltaList) {
+                ImageDelta deserialized = ImageDelta.fromJsonObject(imageDeltaJsonObj)
+                imageDeltas.add(deserialized)
+            }
+            MaterialStats materialStats = new MaterialStats(Paths.get(materialStatsJsonObject.path), imageDeltas)
+            if (materialStatsJsonObject.filterDataLessThan != null) {
+                materialStats.setFilterDataLessThan(materialStatsJsonObject.filterDataLessThan)
+            }
+            if (materialStatsJsonObject.probability != null) {
+                materialStats.setProbability(materialStatsJsonObject.probability)
+            }
+            if (materialStatsJsonObject.shiftCriteriaPercentageBy != null) {
+                materialStats.setShiftCriteriaPercentageBy(materialStatsJsonObject.shiftCriteriaPercentageBy)
+            }
+            return materialStats
+        } else {
+                throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
+        }
     }
 }

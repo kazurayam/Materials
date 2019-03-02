@@ -176,12 +176,12 @@ class RepositoryRootSpec extends Specification {
         repoRoot_.hashCode() == otherRoot.hashCode()
     }
 
-    def testToJson() {
+    def testToJsonText() {
         when:
         TSuiteResult tsr = TSuiteResult.newInstance(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
-        logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toJson())}")
+        logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toJsonText())}")
         then:
         true
     }

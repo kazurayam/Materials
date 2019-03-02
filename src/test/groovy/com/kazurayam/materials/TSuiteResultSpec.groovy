@@ -196,7 +196,7 @@ class TSuiteResultSpec extends Specification {
         tsr.hashCode() == other.hashCode()
     }
 
-    def testToJson() {
+    def testToString() {
         setup:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))

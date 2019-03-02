@@ -38,6 +38,6 @@ interface Material extends Comparable<Material> {
     Material setLastModified(long lastModified)
     Material setLength(long length)
     Material setParent(TCaseResult parent)
-    String toJson()
+    String toJsonText()
 
 }

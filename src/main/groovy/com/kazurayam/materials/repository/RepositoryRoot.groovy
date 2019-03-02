@@ -250,10 +250,10 @@ final class RepositoryRoot {
 
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"RepositoryRoot":{')
         sb.append('"tSuiteResults":[')
@@ -261,7 +261,7 @@ final class RepositoryRoot {
         for (TSuiteResult tsr : tSuiteResults_) {
             if (count > 0) { sb.append(',') }
             count += 1
-            sb.append(tsr.toJson())
+            sb.append(tsr.toJsonText())
         }
         sb.append(']')
         sb.append('}}')

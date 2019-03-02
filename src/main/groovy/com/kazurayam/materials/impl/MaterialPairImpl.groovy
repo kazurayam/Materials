@@ -53,17 +53,17 @@ final class MaterialPairImpl implements MaterialPair {
     // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
-        return this.toJson()
+        return this.toJsonText()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"left": ')
-        sb.append(left_.toJson())
+        sb.append(left_.toJsonText())
         sb.append(',')
         sb.append('"right": ')
-        sb.append(right_.toJson())
+        sb.append(right_.toJsonText())
         sb.append('')
         sb.append('}')
         return sb.toString()

@@ -141,7 +141,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
@@ -171,7 +171,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
@@ -194,7 +194,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
@@ -211,7 +211,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJson())}")
+        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
@@ -244,7 +244,7 @@ class RepositoryFileScannerSpec extends Specification {
         then:
         tcr != null
         when:
-        logger_.debug("testScan_MaterialsUnderSubpath tcr.toJson()=${JsonOutput.prettyPrint(tcr.toJson())}")
+        logger_.debug("testScan_MaterialsUnderSubpath tcr.toJsonText()=${JsonOutput.prettyPrint(tcr.toJsonText())}")
         then:
         tcr.getMaterialList().size() == 2
         tcr.getMaterial(Paths.get('foo/bar/smilechart.xls')) != null
@@ -328,7 +328,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         when:
-        logger_.debug(JsonOutput.prettyPrint(scanner.toJson()))
+        logger_.debug(JsonOutput.prettyPrint(scanner.toJsonText()))
         then:
         true
     }
@@ -342,7 +342,7 @@ class RepositoryFileScannerSpec extends Specification {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append(tSuiteResult.toJson())
+            sb.append(tSuiteResult.toJsonText())
             count += 1
         }
         sb.append("]")

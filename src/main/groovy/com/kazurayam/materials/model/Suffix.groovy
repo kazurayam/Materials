@@ -74,7 +74,7 @@ final class Suffix implements Comparable<Suffix> {
         return sb.toString()
     }
 
-    String toJson() {
+    String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Suffix":')

@@ -120,9 +120,42 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         }
     }
 
+    
     @Override
     String toString() {
-        return this.getId().getTSuiteName().getValue() + '/' + this.getId().getTSuiteTimestamp().format()
+        return toJsonText()
+    }
+    
+    String toJsonText() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("{")
+        sb.append("\"value\":\"")
+        sb.append(this.getId().getTSuiteName().getValue())
+        sb.append("\",\"format\":\"")
+        sb.append(this.getId().getTSuiteTimestamp().format())
+        sb.append("\"")
+        sb.append("}")
+        return sb.toString()
+    }
+
+    /**
+     * sort a list of TSuiteResult by
+     * 1. Descending order of TSuiteTimestamp
+     * 2. Ascending order of TSuiteName
+     */
+    public static class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
+        @Override
+        int compare(TSuiteResult a, TSuiteResult b) {
+            int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
+            if (v < 0) {
+                return v
+            } else if (v == 0) {
+                v = a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName())
+                return v
+            } else {
+                return v
+            }
+        }
     }
 
 }
