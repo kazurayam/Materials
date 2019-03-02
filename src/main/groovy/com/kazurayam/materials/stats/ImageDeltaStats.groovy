@@ -188,7 +188,7 @@ abstract class ImageDeltaStats {
         if (jsonObject instanceof Map) {
             Map json = (Map)jsonObject
             StorageScanner.Options ssOptions =
-                new StorageScanner.Options.Builder().
+                new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                     shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
                     filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
                     maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).

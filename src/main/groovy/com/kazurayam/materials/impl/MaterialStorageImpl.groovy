@@ -280,7 +280,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // need to clone the list as componentMR_.getTSuiteResultList() returns unmodifiable list
         List<TSuiteResult> source = new ArrayList<TSuiteResult>(componentMR_.getTSuiteResultList())
         // sort the list as required
-        Collections.sort(source, new TimestampFirstTSuiteResultComparator())
+        Collections.sort(source, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
         // now calculate
         List<TSuiteResultId> toBeDeleted = new ArrayList<TSuiteResultId>()
         long size = 0
@@ -301,7 +301,7 @@ class MaterialStorageImpl implements MaterialStorage {
      * sort a list of TSuiteResult by
      * 1. Descending order of TSuiteTimestamp
      * 2. Ascending order of TSuiteName
-     */
+     *
     public static class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
         @Override
         int compare(TSuiteResult a, TSuiteResult b) {
@@ -316,7 +316,7 @@ class MaterialStorageImpl implements MaterialStorage {
             }
         }
     }
-
+     */
     
     @Override
     int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {

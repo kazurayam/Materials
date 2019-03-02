@@ -12,11 +12,9 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.impl.MaterialStorageImpl.TimestampFirstTSuiteResultComparator
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
@@ -389,7 +387,7 @@ class StorageScanner {
         Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
         List<TSuiteResultId> tSuiteResultIdList = materialStorage.getTSuiteResultIdList(tSuiteNameExam)
         List<TSuiteResult> tSuiteResultList = materialStorage.getTSuiteResultList(tSuiteResultIdList)
-        Collections.sort(tSuiteResultList, new TimestampFirstTSuiteResultComparator())
+        Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
         // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")
         // logger_.debug("#findLatestImageDeltaStats tCaseNameExam=${tCaseNameExam}")
         // logger_.debug("#findLatestImageDeltaStats tSuiteResultIdList=${tSuiteResultIdList}")

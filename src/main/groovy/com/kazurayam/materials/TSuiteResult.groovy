@@ -120,6 +120,7 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         }
     }
 
+    
     @Override
     String toString() {
         return toJsonText()
@@ -135,6 +136,26 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         sb.append("\"")
         sb.append("}")
         return sb.toString()
+    }
+
+    /**
+     * sort a list of TSuiteResult by
+     * 1. Descending order of TSuiteTimestamp
+     * 2. Ascending order of TSuiteName
+     */
+    public static class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
+        @Override
+        int compare(TSuiteResult a, TSuiteResult b) {
+            int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
+            if (v < 0) {
+                return v
+            } else if (v == 0) {
+                v = a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName())
+                return v
+            } else {
+                return v
+            }
+        }
     }
 
 }
