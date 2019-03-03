@@ -515,11 +515,17 @@ class StorageScanner {
             }
             /**
              * 
-             * @param path to image-delta-stats.json file in the Storage dir. Path must be relative to the project dir or be an absolute path
+             * @param path to image-delta-stats.json file in the Storage dir. 
+             *        You can pass a path either absolute or relative to the project dir.
+             *        The give path will be intentionally transformed to a relative path to the project dir.
              * @return
              */
             Builder previousImageDeltaStats(Path path) {
-                this.previousImageDeltaStats = path
+                if (path.isAbsolute()) {
+                    this.previousImageDeltaStats = Paths.get('.').toAbsolutePath().relativize(path)
+                } else {
+                    this.previousImageDeltaStats = Paths.get('.').relativize(path)
+                }
                 return this
             }
             Options build() {
