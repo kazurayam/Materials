@@ -28,10 +28,12 @@ class IndexerByVisitorImpl implements Indexer {
     static Logger logger_ = LoggerFactory.getLogger(IndexerByVisitorImpl.class)
 
     private Path baseDir_
+    private Path reportsDir_
     private Path output_
 
     IndexerByVisitorImpl() {
         baseDir_ = null
+        reportsDir_ = null
         output_ = null
     }
 
@@ -51,6 +53,21 @@ class IndexerByVisitorImpl implements Indexer {
     }
 
     @Override
+    void setReportsDir(Path reportsDir) {
+        if (reportsDir == null) {
+            def msg = "#setReportsDir reportsDir argument is null"
+            logger_.error(msg)
+            throw new IllegalArgumentException(msg)
+        }
+        if (Files.notExists(reportsDir)) {
+            def msg = "#setReportsDir reportsDir ${reportsDir.toString()} does not exist"
+            logger_.error(msg)
+            throw new IllegalArgumentException(msg)
+        }
+        reportsDir_ = reportsDir
+    }
+    
+    @Override
     void setOutput(Path outputFile) {
         Objects.requireNonNull(outputFile)
         output_ = outputFile
@@ -69,12 +86,17 @@ class IndexerByVisitorImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
+        if (reportsDir_ == null) {
+            def msg = "#execute reportsDir_ is null"
+            logger_.error(msg)
+            throw new IllegalStateException(msg)
+        }
         if (output_ == null) {
             def msg = "#execute output_ is null"
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         OutputStream os = output_.toFile().newOutputStream()

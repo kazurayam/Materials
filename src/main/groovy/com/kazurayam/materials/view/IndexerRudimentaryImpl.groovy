@@ -22,10 +22,12 @@ final class IndexerRudimentaryImpl implements Indexer {
     static Logger logger_ = LoggerFactory.getLogger(IndexerRudimentaryImpl.class)
 
     private Path baseDir_
+    private Path reportsDir_
     private Path output_
 
     IndexerRudimentaryImpl() {
         baseDir_ = null
+        reportsDir_ = null
         output_ = null
     }
 
@@ -42,6 +44,21 @@ final class IndexerRudimentaryImpl implements Indexer {
             throw new IllegalArgumentException(msg)
         }
         baseDir_ = baseDir
+    }
+
+    @Override
+    void setReportsDir(Path reportsDir) {
+        if (reportsDir == null) {
+            def msg = "#setReportsDir reportsDir argument is null"
+            logger_.error(msg)
+            throw new IllegalArgumentException(msg)
+        }
+        if (Files.notExists(reportsDir)) {
+            def msg = "#setReportsDir reportsDir ${reportsDir.toString()} does not exist"
+            logger_.error(msg)
+            throw new IllegalArgumentException(msg)
+        }
+        reportsDir_ = reportsDir
     }
 
     @Override
@@ -67,7 +84,7 @@ final class IndexerRudimentaryImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         OutputStream os = output_.toFile().newOutputStream()

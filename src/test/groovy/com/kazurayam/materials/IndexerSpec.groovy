@@ -41,9 +41,9 @@ class IndexerSpec extends Specification {
         setup:
         //Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.IndexerRudimentaryImpl')
         Indexer indexer = IndexerFactory.newIndexer(IndexerRudimentaryImpl.class.getName())
-        
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
+        indexer.setReportsDir(workdir_.resolve('Reports'))
         Path index = baseDir.resolve('index.html')
         indexer.setOutput(index)
         when:
@@ -65,6 +65,7 @@ class IndexerSpec extends Specification {
         
         Path baseDir = workdir_.resolve('Materials')
         indexer.setBaseDir(baseDir)
+        indexer.setReportsDir(workdir_.resolve('Reports'))
         Path index = baseDir.resolve('index.html')
         indexer.setOutput(index)
         when:

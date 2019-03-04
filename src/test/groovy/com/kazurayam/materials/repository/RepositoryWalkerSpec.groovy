@@ -29,7 +29,8 @@ class RepositoryWalkerSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
+        Path reports   = workdir_.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materials, reports)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

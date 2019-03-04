@@ -1,5 +1,6 @@
 package com.kazurayam.materials.repository
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 
@@ -11,12 +12,15 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.view.ExecutionPropertiesWrapper
+import com.kazurayam.materials.view.JUnitReportWrapper
 
 final class RepositoryRoot {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryRoot.class)
 
     private Path baseDir_
+    private Path reportsDir_ = null
     private List<TSuiteResult> tSuiteResults_
 
     RepositoryRoot(Path baseDir) {
@@ -26,6 +30,15 @@ final class RepositoryRoot {
         tSuiteResults_ = new ArrayList<TSuiteResult>()
     }
 
+    // ------------------ method for Reports directory ----------------------
+    void setReportsDir(Path reportsDir) {
+        this.reportsDir_ = reportsDir
+    }
+    
+    Path getReportsDir() {
+        return this.reportsDir_
+    }
+    
     // ------------------- getter -------------------------------------------
     Path getBaseDir() {
         return baseDir_
@@ -115,6 +128,8 @@ final class RepositoryRoot {
         Collections.sort(result, TSuiteResultComparator_)
         return Collections.unmodifiableList(result)
     }
+    
+    
     
     /**
      * returns the sorted list of TSuiteResults ordered by
@@ -222,6 +237,7 @@ final class RepositoryRoot {
     }
 
 
+    
     // -------------- overriding java.lang.Object methods ---------------------
     @Override
     boolean equals(Object obj) {

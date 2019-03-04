@@ -393,6 +393,22 @@ class StorageScannerSpec extends Specification {
         sw.toString().contains('invalid')
     }
     
+
+    def test_Options_previousImageDeltaStats_shouldBeRelativized() {
+        when:
+        Path absolutePath = specOutputDir.
+            resolve('test_Options_previousImageDeltaStats_shouldBeRelativized').
+            resolve('image-delta-stats.json').
+            toAbsolutePath()
+        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized absolutePath=${absolutePath}")
+        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized current dir =${Paths.get('.').toAbsolutePath()}")
+        Path relativePath = Paths.get('.').toAbsolutePath().relativize(absolutePath)
+        StorageScanner.Options options = new Options.Builder().
+            previousImageDeltaStats( absolutePath ).build()
+        then:
+        options.getPreviousImageDeltaStats().equals(relativePath)
+    }
+    
     def testPersist() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("testPersist")

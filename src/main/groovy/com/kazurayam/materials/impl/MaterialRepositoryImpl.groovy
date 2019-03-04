@@ -29,9 +29,19 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryImpl.class)
 
+    /**
+     * path of the Materials directory
+     */
     private Path baseDir_
+    
+    /**
+     * path of the Reports directory
+     */
+    private Path reportsDir_
+    
     private TSuiteName currentTSuiteName_
     private TSuiteTimestamp currentTSuiteTimestamp_
+    
     private RepositoryRoot repoRoot_
 
     // ---------------------- constructors & initializer ----------------------
@@ -42,30 +52,44 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    private MaterialRepositoryImpl(Path baseDir) {
-        Objects.requireNonNull(baseDir)
+    private MaterialRepositoryImpl(Path baseDir, Path reportsDir) {
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
+        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
         //
-        if (!baseDir.toFile().exists()) {
+        if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
+        if (!Files.exists(reportsDir)) {
+            throw new IllegalArgumentException("${reportsDir} does not exist")
+        }
         baseDir_ = baseDir
-        // create the directory if not present
+        reportsDir_ = reportsDir
+        
+        // create the Materials directory and the Reports directory if not present
         Helpers.ensureDirs(baseDir_)
-
+        Helpers.ensureDirs(reportsDir_)
+        
         // load data from the local disk
         this.scan()
-
+        
         // set default Material path to the "./${baseDir name}/_/_" directory
         this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+
     }
 
-    static MaterialRepositoryImpl newInstance(Path baseDir) {
-        return new MaterialRepositoryImpl(baseDir)    
+    /**
+     * 
+     * @param baseDir
+     * @param reportsDir
+     * @return
+     */
+    static MaterialRepositoryImpl newInstance(Path baseDir, Path reportsDir) {
+        return new MaterialRepositoryImpl(baseDir, reportsDir)    
     }
     
     @Override
     void scan() {
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -380,6 +404,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     Path makeIndex() {
         Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(baseDir_)
+        indexer.setReportsDir(reportsDir_)
         Path index = baseDir_.resolve('index.html')
         indexer.setOutput(index)
         indexer.execute()

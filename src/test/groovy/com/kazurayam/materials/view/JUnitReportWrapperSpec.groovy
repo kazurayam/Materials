@@ -29,7 +29,9 @@ class JUnitReportWrapperSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        mri_ = MaterialRepositoryImpl.newInstance(workdir_.resolve('Materials'))
+        Path materialsDir = workdir_.resolve('Materials')
+        Path reportsDir   = workdir_.resolve('Reports')
+        mri_ = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
 
     }
     def setup() {

@@ -21,7 +21,7 @@ class TCaseResultSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
 
     // fixture methods
@@ -31,7 +31,9 @@ class TCaseResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
+        Path materialsDir = workdir_.resolve('Materials')
+        Path reportsDir   = workdir_.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

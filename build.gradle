@@ -59,9 +59,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/StatsEntrySpec.class'
-    //include '**/StorageScannerSpec.class'
-    include '**/MaterialStatsSpec.class'
+    //include '**/TSuiteResultSpec.class'
+    include '**/JUnitReportWrapperSpec.class'
     outputs.upToDateWhen {false}
 }
 

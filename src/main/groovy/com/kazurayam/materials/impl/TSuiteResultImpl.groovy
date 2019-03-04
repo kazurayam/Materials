@@ -69,8 +69,8 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
                 repoRoot_.getBaseDir()
                     .resolve(this.getId().getTSuiteName().getValue())
                     .resolve(this.getId().getTSuiteTimestamp().format())
-        junitReportWrapper_ = createJUnitReportWrapper()
-        executionPropertiesWrapper_ = createExecutionPropertiesWrapper()
+        junitReportWrapper_ = createJUnitReportWrapper(repoRoot_.getReportsDir())
+        executionPropertiesWrapper_ = createExecutionPropertiesWrapper(repoRoot_.getReportsDir())
         return this
     }
 
@@ -151,41 +151,30 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
      * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
      */
     @Override
-    JUnitReportWrapper createJUnitReportWrapper() {
-        if (this.getRepositoryRoot() != null) {
-            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
-            Path reportFilePath = reportsDirPath.
+    JUnitReportWrapper createJUnitReportWrapper(Path reportsDir) {
+        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
+        Path reportFilePath = reportsDir.
                     resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
                     resolve(this.getId().getTSuiteTimestamp().format()).
                     resolve('JUnit_Report.xml')
-            if (Files.exists(reportFilePath)) {
-                return new JUnitReportWrapper(reportFilePath)
-            } else {
-                logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
-                return null
-            }
+        if (Files.exists(reportFilePath)) {
+            return new JUnitReportWrapper(reportFilePath)
         } else {
-            logger_.debug("#createJUnitReportWrapper this.getRepositoryRoot() returned null")
+            logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
             return null
         }
     }
 
     @Override
-    ExecutionPropertiesWrapper createExecutionPropertiesWrapper() {
-        if (this.getRepositoryRoot() != null) {
-            Path reportsDirPath = this.getRepositoryRoot().getBaseDir().resolve('../Reports')
-            Path expropFilePath = reportsDirPath.
+    ExecutionPropertiesWrapper createExecutionPropertiesWrapper(Path reportsDir) {
+        Path expropFilePath = reportsDir.
                     resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
                     resolve(this.getId().getTSuiteTimestamp().format()).
                     resolve('execution.properties')
-            if (Files.exists(expropFilePath)) {
-                return new ExecutionPropertiesWrapper(expropFilePath)
-            } else {
-                logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
-                return null
-            }
+        if (Files.exists(expropFilePath)) {
+            return new ExecutionPropertiesWrapper(expropFilePath)
         } else {
-            logger_.debug("#createExecutionPropertiesWrapper this.getRepositoryRoot() returned null")
+            logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
             return null
         }
     }

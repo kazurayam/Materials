@@ -26,7 +26,7 @@ class RepositoryFileScannerSpec extends Specification {
 
     // fields
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
 
     // fixture methods
     def setupSpec() {
@@ -52,9 +52,10 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScan")
         Helpers.copyDirectory(fixture_, casedir)
-
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         when:
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
@@ -108,7 +109,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         Material mate0 = materials[0]
         String p0 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
-            '/testScan/main.TS1/20180530_130419' +
+            '/testScan/Materials/main.TS1/20180530_130419' +
             '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
         mate0.getParent() == tCaseResult
@@ -119,7 +120,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         Material mate1 = materials[1]
         String p1 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
-                '/testScan/main.TS1/20180530_130419' +
+                '/testScan/Materials/main.TS1/20180530_130419' +
                 '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mate1.getParent() == tCaseResult
@@ -138,7 +139,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("test_lastModifiedOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
@@ -168,7 +171,10 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScan_lastModifiedOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
@@ -191,7 +197,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScan_lengthOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
@@ -208,7 +216,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScan_lengthOfTCaseResult")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
@@ -234,7 +244,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScan_MaterialsUnderSubpath")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         when:
@@ -255,7 +267,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForMiscellaneousImages")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -274,7 +288,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForExcel")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -305,7 +321,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve("testScanForPDF")
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
@@ -325,7 +343,9 @@ class RepositoryFileScannerSpec extends Specification {
         setup:
         Path casedir = workdir_.resolve('testPrettyPrint')
         Helpers.copyDirectory(fixture_, casedir)
-        RepositoryFileScanner scanner = new RepositoryFileScanner(casedir)
+        Path materialsDir = fixture_.resolve('Materials')
+        Path reportsDir   = fixture_.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         when:
         logger_.debug(JsonOutput.prettyPrint(scanner.toJsonText()))

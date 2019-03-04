@@ -16,7 +16,24 @@ final class MaterialRepositoryFactory {
     static MaterialRepository createInstance(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
-        return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir)
+        // set the defalult location of the Reports dir 
+        Path reportsDir = baseDir.resolve('../Reports')
+        return createInstance(baseDir, reportsDir)
+    }
+    
+    /**
+     * creates the baseDir and the reportsDir, then instanciate a MaterialRepository object
+     * 
+     * @param baseDir
+     * @param reportsDir
+     * @return
+     */
+    static MaterialRepository createInstance(Path baseDir, Path reportsDir) {
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
+        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
+        Helpers.ensureDirs(baseDir)
+        Helpers.ensureDirs(reportsDir)
+        return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir, reportsDir)
     }
 
 }

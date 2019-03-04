@@ -42,11 +42,13 @@ class MaterialRepositoryImplSpec extends Specification {
     def testGetBaseDir() {
         setup:
         Path casedir = workdir_.resolve('testGetBaseDir')
-        Helpers.copyDirectory(materials_, casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
         when:
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         then:
-        mri.getBaseDir() == casedir
+        mri.getBaseDir() == materialsDir
     }
 
 
@@ -54,8 +56,10 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName ='testResolveMaterialPath'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         String materialFileName = MaterialFileName.format(
@@ -66,15 +70,17 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/testOutput/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
     }
 
     def testResolveMaterialPath_withSuffix() {
         setup:
         def methodName = 'testResolveMaterialPath_withSuffix'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
         String materialFileName = MaterialFileName.format(
@@ -85,15 +91,17 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/testOutput/${classShortName_}/${methodName}/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testResolveMaterialPath_new() {
         setup:
         def methodName = 'testResolveMaterialPath_new'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
@@ -103,7 +111,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/testOutput/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         Files.exists(p.getParent())
     }
 
@@ -111,8 +119,10 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterialPath_withSuffix_new'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
@@ -122,7 +132,7 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
         p != null
         p.toString().replace('\\', '/') ==
-            "build/tmp/testOutput/${classShortName_}/${methodName}/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+            "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS3/20180614_152000/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
         Files.exists(p.getParent())
     }
 
@@ -130,22 +140,26 @@ class MaterialRepositoryImplSpec extends Specification {
         setup:
         def methodName = 'testResolveMaterial_png_SuitelessTimeless'
         Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         Path p = mri.resolveMaterialPath('TC1', materialFileName)
         then:
         p != null
-        p.toString().replace('\\', '/') == "build/tmp/testOutput/${classShortName_}/${methodName}/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
+        p.toString().replace('\\', '/') == "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png"
     }
 
     def testToJsonText() {
         setup:
         Path casedir = workdir_.resolve('testToJsonText')
-        Helpers.copyDirectory(materials_, casedir)
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(casedir)
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         mri.putCurrentTestSuite('TS1')
         when:
         def str = mri.toJsonText()
