@@ -44,19 +44,17 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract boolean isLatestModified()
 
     abstract TSuiteResult setLatestModified(Boolean isLatest)
+    
+    // 
+    
+    abstract JUnitReportWrapper createJUnitReportWrapper(Path reportsDir)
+
+    abstract ExecutionPropertiesWrapper createExecutionPropertiesWrapper(Path reportsDir)
 
     abstract JUnitReportWrapper getJUnitReportWrapper()
-
+    
     abstract ExecutionPropertiesWrapper getExecutionPropertiesWrapper()
-
-    /**
-     *
-     * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
-     */
-    abstract JUnitReportWrapper createJUnitReportWrapper()
-
-    abstract ExecutionPropertiesWrapper createExecutionPropertiesWrapper()
-
+    
     // ------------------ add/get child nodes ------------------------------
     
     abstract TCaseResult getTCaseResult(TCaseName tCaseName)

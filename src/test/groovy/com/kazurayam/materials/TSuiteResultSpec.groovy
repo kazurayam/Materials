@@ -34,7 +34,9 @@ class TSuiteResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        mri_ = MaterialRepositoryImpl.newInstance(workdir_.resolve('Materials'))
+        Path materialsDir = workdir_.resolve('Materials')
+        Path reportsDir   = workdir_.resolve('Reports')
+        mri_ = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
         ms_  = MaterialStorageFactory.createInstance(workdir_.resolve('Storage'))
     }
     def setup() {}
@@ -248,7 +250,9 @@ class TSuiteResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180805_081908'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         when:
-        JUnitReportWrapper instance = tsr.createJUnitReportWrapper()
+        RepositoryRoot repoRoot = tsr.getRepositoryRoot()
+        Path reportsDir = repoRoot.getReportsDir()
+        JUnitReportWrapper instance = tsr.createJUnitReportWrapper(reportsDir)
         then:
         instance != null
     }
@@ -259,7 +263,9 @@ class TSuiteResultSpec extends Specification {
                 new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180805_081908'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         when:
-        ExecutionPropertiesWrapper instance = tsr.createExecutionPropertiesWrapper()
+        RepositoryRoot repoRoot = tsr.getRepositoryRoot()
+        Path reportsDir = repoRoot.getReportsDir()
+        ExecutionPropertiesWrapper instance = tsr.createExecutionPropertiesWrapper(reportsDir)
         then:
         instance != null
     }

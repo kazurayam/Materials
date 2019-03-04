@@ -33,7 +33,8 @@ class IndexerByVisitorImplSpec extends Specification {
     // fields
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static Path materials_
+    private static Path materialsDir_
+    private static Path reportsDir_
     private static RepositoryRoot repoRoot_
 
     // fixture methods
@@ -43,8 +44,9 @@ class IndexerByVisitorImplSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        materials_ = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials_)
+        materialsDir_ = workdir_.resolve('Materials')
+        reportsDir_   = workdir_.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir_, reportsDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -57,8 +59,9 @@ class IndexerByVisitorImplSpec extends Specification {
     def testSmoke() {
         setup:
         IndexerByVisitorImpl indexer = new IndexerByVisitorImpl()
-        indexer.setBaseDir(materials_)
-        Path index = materials_.resolve('index.html')
+        indexer.setBaseDir(materialsDir_)
+        indexer.setReportsDir(reportsDir_)
+        Path index = materialsDir_.resolve('index.html')
         indexer.setOutput(index)
         when:
         indexer.execute()
