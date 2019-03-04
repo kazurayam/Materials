@@ -1,5 +1,6 @@
 package com.kazurayam.materials.stats
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -14,6 +15,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialStatsSpec extends Specification {
@@ -154,6 +156,79 @@ class MaterialStatsSpec extends Specification {
         //println "#testToString str:\n" + str
         then:
         str.contains("criteriaPercentage")
+    }
+    
+    /**
+     * Test if a MaterialStats object works fine in a marginal condition where we have:
+     *     <PRE>build/tmp/testOutput/MaterialStatsSpec/testMarginalCondition/Storage/</PRE>
+     * but we do not have
+     *     <PRE>build/tmp/testOutput/MaterialStatsSpec/testMarginalCondition/Storage/47News_chronos_capture</PRE>
+     */
+    def testMarginalCondition0_noTSuiteName() {   
+    }
+    
+    def testMarginalCondition0_noTSuiteTimestamp() {
+    }
+    
+    def testMarginalCondition0_noMaterials() {
+    }
+    
+    /**
+     * Test if a MaterialStats object works fine in a marginal condition where we have:
+     *     <PRE>build/tmp/testOutput/MaterialStatsSpec/testMarginalCondition1/Storage/47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png</PRE>
+     * but we have no other Materials.
+     * 
+     */
+    @IgnoreRest
+    def testMarginalCondition1() {
+        setup:
+        Path caseOutputDir = workdir_.resolve('testMarginalCondition1')
+        Path storageDir = caseOutputDir.resolve('Storage')
+        Path fixtureSourceDir = fixture_.resolve('Storage').resolve('47News_chronos_capture').resolve('20190216_204329')
+        Path fixtureTargetDir = storageDir.resolve('47News_chronos_capture').resolve('20190216_204329')
+        Files.createDirectories(fixtureTargetDir)
+        Helpers.copyDirectory(fixtureSourceDir, fixtureTargetDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
+        StorageScanner scanner = new StorageScanner(ms)
+        ImageDeltaStats ids = scanner.scan(new TSuiteName('47News_chronos_capture'))
+        StatsEntry se = ids.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        MaterialStats materialStats = se.getMaterialStats(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
+        when:
+        double[] data = materialStats.data()
+        then:
+        data.length == 0
+        when:
+        int degree = materialStats.degree()
+        then:
+        degree == 0
+        when:
+        double sum = materialStats.sum()
+        then:
+        sum == 0.0
+        when:
+        double mean = materialStats.mean()
+        then:
+        mean == 0.0
+        when:
+        double variance = materialStats.variance()
+        then:
+        variance == 0.0
+        when:
+        double standardDeviation = materialStats.standardDeviation()
+        then:
+        standardDeviation == 0.0
+        when:
+        double tDistribution = materialStats.tDistribution()
+        then:
+        tDistribution == 0.0
+        when:
+        ConfidenceInterval interval = materialStats.getConfidenceInterval()
+        then:
+        interval == null
+        when:
+        double criteriaPercentage = materialStats.getCriteriaPercentage()
+        then:
+        criteriaPercentage == 0.0
     }
 
 }
