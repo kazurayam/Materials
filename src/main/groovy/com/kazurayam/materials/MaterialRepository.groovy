@@ -123,6 +123,18 @@ interface MaterialRepository {
     Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url)
     
     /**
+     * 
+     * @param testCaseId
+     * @param url
+     * @param startingDepth
+     * @return
+     */
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth)
+    
+    /**
      *
      * @param testCaseId
      * @param fileName

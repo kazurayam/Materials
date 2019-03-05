@@ -141,14 +141,10 @@ class MaterialStats {
     }
     
     ConfidenceInterval getConfidenceInterval() {
-        println("#getConfidenceInterval degree=${this.degree()}, " + 
-            "mean=${this.mean()}, tDistribution=${this.tDistribution()}, " +
-            "standardDeviation=${this.standardDeviation()}")
         if (this.degree() > 0) {
             double lowerBound = this.mean() - this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
             double upperBound = this.mean() + this.tDistribution() * this.standardDeviation() / Math.sqrt(this.degree())
             double confidenceLevel = this.probability
-            println("#getConfidenceInterval lowerBound=${lowerBound}, upperBound=${upperBound}, confidenceLevel=${confidenceLevel}")
             return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
         } else {
             //logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
