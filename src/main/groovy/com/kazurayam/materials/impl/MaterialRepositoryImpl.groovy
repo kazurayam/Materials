@@ -303,14 +303,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return this.resolveScreenshotPath(tCaseName, Paths.get('.'), url)
     }
 
-
-    /**
-     *
-     * @param testCaseName
-     * @param subpath sub-path under the TCaseResult directory
-     * @param url
-     * @return
-     */
     @Override
     Path resolveScreenshotPath(String testCaseId, Path subpath, URL url) {
         TCaseName tCaseName = new TCaseName(testCaseId)
@@ -338,13 +330,81 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             logger_.debug("#resolveScreenshotPath newSuffix is ${newSuffix.toString()}")
             material = MaterialImpl.newInstance(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
-
         Helpers.ensureDirs(material.getPath().getParent())
         return material.getPath()
     }
+    
+    /**
+     * 
+     */
+    @Override
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth = 0) {
+        return this.resolveScreenshotPathByURLPathComponents(testCaseId, Paths.get('.'), url, startingDepth)
+    }
+    
+    @Override
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth = 0) {
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, Paths.get('.'), url, startingDepth)
+    }
+    
+    @Override
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth = 0) {
+        TCaseName tCaseName = new TCaseName(testCaseId)
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, subpath, url, startingDepth)
+    }
+    
+    @Override
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth = 0) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(subpath, "subpath must not be null")
+        Objects.requireNonNull(url, "url must not be null")
+        if (startingDepth < 0) {
+            throw new IllegalArgumentException("startingDepth=${startingDepth} must not be negative")
+        }
+        StringBuilder sb = new StringBuilder()
+        if (url.getPath() != null && url.getPath() != '') {
+            Path p = Paths.get(url.getPath())
+            if (startingDepth < p.getNameCount()) {
+                for (int i = 0; i < p.getNameCount(); i++) {
+                    if (startingDepth <= i) {
+                        if (sb.length() > 0) {
+                            sb.append('%2F')
+                        }
+                        sb.append(URLEncoder.encode(p.getName(i).toString(), 'utf-8'))
+                    }
+                }
+                if (url.getQuery() != null) {
+                    sb.append(URLEncoder.encode('?', 'utf-8'))
+                    sb.append(URLEncoder.encode(url.getQuery(), 'utf-8'))
+                }
+                if (url.getRef() != null) {
+                    sb.append(URLEncoder.encode('#', 'utf-8'))
+                    sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
+                }
+                sb.append('.png')
+                return resolveMaterialPath(tCaseName, subpath, sb.toString())
+            } else {
+                return resolveScreenshotPath(tCaseName, subpath, url)    
+            }
+        } else {
+            return resolveScreenshotPath(tCaseName, subpath, url)
+        }
+        
+    }
 
-
-
+    /**
+     * given 'corp=abcd&foo=bar' as queryString, return ['corp':'abcd','foo':'bar']
+     */
+    protected static final Map<String, String> parseQuery(String query) {
+        Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+        String[] pairs = query.split("&");
+        for (String pair : pairs) {
+            int idx = pair.indexOf("=");
+            query_pairs.put(pair.substring(0, idx), pair.substring(idx + 1));
+        }
+        return query_pairs;
+    }
+    
     /**
      *
      */
@@ -358,20 +418,12 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return resolveMaterialPath(tCaseName, Paths.get('.'), fileName)
     }
 
-    /**
-     * returns a Path which represents a file created by the TestCase.
-     * The file will be located under the subpath under the TCaseResult directory.
-     * The parent directories will be created if not present.
-     * 
-     * @param testCaseId
-     * @param subpath sub-path under TCaseResult directory
-     * @param fileName
-     */
     @Override
     Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         return this.resolveMaterialPath(tCaseName, subpath, fileName)
     }
+    
     @Override
     Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")

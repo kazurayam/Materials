@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.apache.commons.math3.distribution.TDistribution
-import org.apache.commons.math3.stat.interval.ConfidenceInterval
+//import org.apache.commons.math3.stat.interval.ConfidenceInterval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -102,7 +102,7 @@ class MaterialStats {
             double mean = this.sum()/ this.degree()
             return mean
         } else {
-            logger_.warn("mean() returned 0 because this.degree() returned 0")
+            //logger_.warn("mean() returned 0 because this.degree() returned 0")
             return 0
         }
     }
@@ -118,7 +118,7 @@ class MaterialStats {
             double variance = ssum / this.degree()
             return variance
         } else {
-            logger_.warn("variance() returned 0 because this.degree() returned 0")
+            //logger_.warn("variance() returned 0 because this.degree() returned 0")
             return 0
         }
     }
@@ -135,7 +135,7 @@ class MaterialStats {
             TDistribution tdist = new org.apache.commons.math3.distribution.TDistribution(this.degree() - 1)
             return tdist.inverseCumulativeProbability(this.probability)
         } else {
-            logger_.warn("tDistribution() returned 0 because this.degree() was ${this.degree()}")
+            //logger_.warn("tDistribution() returned 0 because this.degree() was ${this.degree()}")
             return 0
         }
     }
@@ -147,8 +147,8 @@ class MaterialStats {
             double confidenceLevel = this.probability
             return new ConfidenceInterval(lowerBound, upperBound, confidenceLevel)
         } else {
-            logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
-            return new ConfidenceInterval(0.0, 100.0, 0.999)
+            //logger_.warn("getConfidenceInterval() returned meaningless result because this.degree() returned 0")
+            return ConfidenceInterval.NULL
         }
     }
     
@@ -234,12 +234,9 @@ class MaterialStats {
         sb.append("\"variance\":${this.variance()},")
         sb.append("\"standardDeviation\":${this.standardDeviation()},")
         sb.append("\"tDistribution\":${this.tDistribution()},")
-        sb.append("\"confidenceInterval\":{")
-        sb.append("\"lowerBound\":")
-        sb.append(this.getConfidenceInterval().getLowerBound())
-        sb.append(",\"upperBound\":")
-        sb.append(this.getConfidenceInterval().getUpperBound())
-        sb.append("},")
+        sb.append("\"confidenceInterval\":")
+        sb.append(this.getConfidenceInterval().toJsonText())
+        sb.append(",")
         sb.append("\"criteriaPercentage\":")
         sb.append(this.getCriteriaPercentageAsString())
         sb.append(",")
@@ -316,6 +313,93 @@ class MaterialStats {
             return materialStats
         } else {
                 throw new IllegalArgumentException("jsonObject should be an instance of Map but was ${jsonObject.class.getName()}")
+        }
+    }
+    
+    /**
+     * Mimic of apache commons2 math ConfidenceInterval without parameter checks
+     * http://home.apache.org/~luc/commons-math-3.6-RC2-site/jacoco/org.apache.commons.math3.stat.interval/ConfidenceInterval.java.html
+     * 
+     */
+    static class ConfidenceInterval {
+        
+        public static final NULL = new ConfidenceInterval(0.0, 0.0, 0.0)
+        
+        /** Lower endpoint of the interval */
+        private double lowerBound
+    
+        /** Upper endpoint of the interval */
+        private double upperBound
+    
+        /**
+         * The asserted probability that the interval contains the population parameter
+         */
+        private double confidenceLevel
+        
+        /**
+         * Create a confidence interval with the given bounds and confidence level.
+         * <p>
+         * Preconditions:
+         * <ul>
+         * <li>{@code lower} must be strictly less than {@code upper}</li>
+         * <li>{@code confidenceLevel} must be strictly between 0 and 1 (exclusive)</li>
+         * </ul>
+         * </p>
+         *
+         * @param lowerBound lower endpoint of the interval
+         * @param upperBound upper endpoint of the interval
+         * @param confidenceLevel coverage probability
+         * @throws MathIllegalArgumentException if the preconditions are not met
+         */
+        public ConfidenceInterval(double lowerBound, double upperBound, double confidenceLevel) {
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+            this.confidenceLevel = confidenceLevel;
+        }
+    
+        /**
+         * @return the lower endpoint of the interval
+         */
+        public double getLowerBound() {
+            return lowerBound;
+        }
+    
+        /**
+         * @return the upper endpoint of the interval
+         */
+        public double getUpperBound() {
+            return upperBound;
+        }
+    
+        /**
+         * @return the asserted probability that the interval contains the
+         *         population parameter
+         */
+        public double getConfidenceLevel() {
+            return confidenceLevel;
+        }
+    
+        /**
+         * @return String representation of the confidence interval
+         */
+        @Override
+        public String toString() {
+            return this.toJsonText()
+        }
+        
+        String toJsonText() {
+            StringBuilder sb = new StringBuilder()
+            sb.append("{")
+            sb.append("\"lowerBound\":")
+            sb.append(this.getLowerBound())
+            sb.append(",")
+            sb.append("\"uppderBound\":")
+            sb.append(this.getUpperBound())
+            sb.append(",")
+            sb.append("\"confidenceLevel\":")
+            sb.append(this.getConfidenceLevel())
+            sb.append("}")
+            return sb.toString()
         }
     }
 }

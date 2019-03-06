@@ -14,6 +14,7 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -51,7 +52,109 @@ class MaterialRepositoryImplSpec extends Specification {
         mri.getBaseDir() == materialsDir
     }
 
-
+    def testResolveScreenshotPath() {
+        setup:
+        Path casedir = workdir_.resolve('testResolveScreenshotPath')
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+        mri.putCurrentTestSuite('TS1', '20180530_130604')
+        when:
+        Path p1 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+            new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
+        then:
+        p1.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
+        when:
+        Path p2 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+            new URL('https://foo:bar@dev.home.net/gnc/issueList.html?corp=abcd'))
+        then:
+        p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'   
+    }
+    
+    
+    def testURL() {
+        setup:
+        URL url = new URL('https://my.home.net/gn/issueList.html?corp=abcd&foo=bar#top')
+        expect:
+        url.getPath() == '/gn/issueList.html'
+        when:
+        Path p = Paths.get(url.getPath())
+        then:
+        p.getNameCount() == 2
+        p.getName(0).toString() == 'gn'
+        p.getName(1).toString() == 'issueList.html'
+        expect:
+        url.getQuery() == 'corp=abcd&foo=bar'
+        url.getRef() == 'top'
+        when:
+        Map<String, String> queries = MaterialRepositoryImpl.parseQuery(url.getQuery())
+        then:
+        queries.size() == 2
+        queries.containsKey('corp')
+        queries.containsKey('foo')
+        queries.get('corp') == 'abcd'
+        queries.get('foo') == 'bar'
+        when:
+        url = new URL('https://www.google.com')
+        then:
+        url.getPath() == ''
+    }
+    
+    def testParseQuery() {
+        setup:
+        String query = 'corp=abcd&foo=bar'
+        when:
+        Map<String, String> queries = MaterialRepositoryImpl.parseQuery(query)
+        then:
+        queries.size() == 2
+        queries.containsKey('corp')
+        queries.containsKey('foo')
+        queries.get('corp') == 'abcd'
+        queries.get('foo') == 'bar'    
+    }
+    
+    
+    def testResolveScreenshotPathByURLPathComponents() {
+        setup:
+        Path casedir = workdir_.resolve('testResolveScreenshotPathByURLPathComponents')
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        Path reportsDir   = casedir.resolve('Reports')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+        mri.putCurrentTestSuite('TS1', '20180530_130604')
+        when:
+        Path p = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+                        new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
+        then:
+        p.getName(p.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+        p.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+        //
+        when:
+        Path p0 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+                        new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 0)
+        then:
+        p0.getName(p0.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+        p0.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+        //
+        when:
+        Path p1 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+                        new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 1)
+        then:
+        p1.getFileName().toString() == 'issueList.html%3Fcorp%3Dabcd.png'
+        when:
+        Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+                        new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 2)
+        then:
+        p2.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
+        //
+        when:
+        Path google = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            new URL('https://www.google.com'))
+        then:
+        google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
+    }
+    
     def testResolveMaterialPath() {
         setup:
         def methodName ='testResolveMaterialPath'
@@ -169,6 +272,5 @@ class MaterialRepositoryImplSpec extends Specification {
         str.contains(Helpers.escapeAsJsonText(casedir.toString()))
         str.contains('}}')
     }
-
 
 }
