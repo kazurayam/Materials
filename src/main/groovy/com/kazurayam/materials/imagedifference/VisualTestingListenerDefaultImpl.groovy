@@ -4,8 +4,9 @@ package com.kazurayam.materials.imagedifference
 //import com.kms.katalon.core.util.KeywordUtil
 
 /**
- * The instance of DefaulVisualTestingListener registered into ImageCollectionDiffer will
- * print messages emitted by ImageCollectionDiffer
+ * The instance of DefaulVisualTestingListener is to be registered into ImageCollectionProcessor.
+ * The instance will print messages emitted by ImageCollectionProcessor.
+ * The messages will be direted into System.out.
  * 
  * @author kazurayam
  */
