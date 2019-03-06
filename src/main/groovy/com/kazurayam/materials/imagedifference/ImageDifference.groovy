@@ -1,5 +1,6 @@
 package com.kazurayam.materials.imagedifference
 
+import java.nio.file.Path
 import java.awt.image.BufferedImage
 
 import org.slf4j.Logger
@@ -22,10 +23,13 @@ class ImageDifference {
     private BufferedImage diffImage_
     private Double ratio_ = 0.0        // percentage
     
+    private Path storedInto_
+    
     ImageDifference()
     {
         expectedImage_ = null
         actualImage_ = null
+        storedInto_ = null
     }
 
     ImageDifference(BufferedImage expected, BufferedImage actual)
@@ -35,6 +39,7 @@ class ImageDifference {
         ImageDiff imgDiff = makeImageDiff(expectedImage_, actualImage_)
         ratio_ = calculateRatioPercent(imgDiff)
         diffImage_ = imgDiff.getMarkedImage()
+        storedInto_ = null
     }
 
     private ImageDiff makeImageDiff(BufferedImage expected, BufferedImage actual)
@@ -110,4 +115,20 @@ class ImageDifference {
     Boolean imagesAreSimilar(double criteria) {
         return (ratio_ <= criteria)
     }
+    
+    /**
+     * 
+     * @param savedInto path where the ImageDifferes is storeded into
+     */
+    void setStoredInto(Path storedInto) {
+        this.storedInto_ = storedInto
+    }
+    
+    /**
+     * @return Path where the ImageDiffers is stored into
+     */
+    Path getStoredInto() {
+        return this.storedInto_
+    }
+    
 }

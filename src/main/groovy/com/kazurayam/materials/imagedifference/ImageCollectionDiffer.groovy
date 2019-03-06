@@ -126,9 +126,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
-            this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
             //this.writeDiffImage   (pair.getExpected(), pair.getActual(), tCaseName, criteriaPercent)
-            this.endMaterialPair  (tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            this.endMaterialPair  (imageDifference, criteriaPercentage)
         }
         this.endImageCollection(tCaseName)
     }
@@ -151,10 +151,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
 
     @Override
-    void endMaterialPair(TCaseName tCaseName,
-            Material expectedMaterial, Material actualMaterial,
-            double criteriaPercentage) throws ImageDifferenceException {
-        //throw new UnsupportedOperationException("TODO")
+    void endMaterialPair(ImageDifference diff, double criteriaPercentage) throws ImageDifferenceException {
+            // verify the diffRatio, fail the test if the ratio is greater than criteria
+        if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
+            this.vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
+        }
+    
     }
     
     @Override
@@ -163,7 +165,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
 
     @Override
-    void startMaterialPair(TCaseName tCaseName,
+    ImageDifference startMaterialPair(TCaseName tCaseName,
                 Material expectedMaterial, Material actualMaterial,
                 double criteriaPercentage) throws ImageDifferenceException {
         // create ImageDifference of the 2 given images
@@ -187,10 +189,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         // write the ImageDiff into the output file
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
     
-        // verify the diffRatio, fail the test if the ratio is greater than criteria
-        if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
-            this.vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
-        }
+        //
+        diff.setStoredInto(pngFile)
+        
+        return diff
     }
 
     /**
