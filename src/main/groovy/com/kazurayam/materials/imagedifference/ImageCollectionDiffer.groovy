@@ -52,8 +52,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     private ImageCollectionDiffer() {}
 
-    void setImageDifferenceFilenameResolver(ImageDifferenceFilenameResolver idfResolver) {
-        this.filenameResolver_ = idfResolver
+    void setImageDifferenceFilenameResolver(ImageDifferenceFilenameResolver filenameResolver) {
+        this.filenameResolver_ = filenameResolver
     }
 
     /**
@@ -84,8 +84,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
             Path path = expected.getPathRelativeToTSuiteTimestamp()
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
-            // make a diff image
-            this.writeDiffImage(pair.getExpected(), pair.getActual(), tCaseName, criteriaPercentage)
+            // make an ImageDifference object and store it into file
+            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            // logging etc
+            this.endMaterialPair  (imageDifference, criteriaPercentage)
         }
         this.endImageCollection(tCaseName)
     }
@@ -126,8 +128,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
+            // make an ImageDifference object and store it into file
             ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            //this.writeDiffImage   (pair.getExpected(), pair.getActual(), tCaseName, criteriaPercent)
+            // logging etc
             this.endMaterialPair  (imageDifference, criteriaPercentage)
         }
         this.endImageCollection(tCaseName)
@@ -195,42 +198,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         return diff
     }
 
-    /**
-     * 
-     * @param expMate
-     * @param actMate
-     * @param tCaseName
-     * @param criteriaPercent
-     * @return
-     */
-    private void writeDiffImage(Material expMate, Material actMate, TCaseName tCaseName, double criteriaPercentage) {
-        // create ImageDifference of the 2 given images
-        ImageDifference diff = new ImageDifference(
-                ImageIO.read(expMate.getPath().toFile()),
-                ImageIO.read(actMate.getPath().toFile()))
-
-        // resolve the name of output file to save the ImageDiff
-        String fileName = this.filenameResolver_.resolveImageDifferenceFilename(
-                                                    expMate,
-                                                    actMate,
-                                                    diff,
-                                                    criteriaPercentage)
-
-        // resolve the path of output file to save the ImageDiff
-        Path pngFile = mr_.resolveMaterialPath(
-                            tCaseName,
-                            expMate.getDirpathRelativeToTSuiteResult(),
-                            fileName)
-
-        // write the ImageDiff into the output file
-        ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
-
-        // verify the diffRatio, fail the test if the ratio is greater than criteria
-        if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
-            vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
-        }
-    }
-        
+            
     /**
      * 
      */
