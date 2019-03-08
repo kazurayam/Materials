@@ -179,7 +179,6 @@ class MaterialStatsSpec extends Specification {
      * but we have no other Materials.
      * 
      */
-    @IgnoreRest
     def testMarginalCondition1() {
         setup:
         Path caseOutputDir = workdir_.resolve('testMarginalCondition1')
