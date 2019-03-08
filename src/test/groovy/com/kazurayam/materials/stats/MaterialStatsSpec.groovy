@@ -4,7 +4,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import org.apache.commons.math3.stat.interval.ConfidenceInterval
+import com.kazurayam.materials.stats.MaterialStats.ConfidenceInterval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -179,7 +179,6 @@ class MaterialStatsSpec extends Specification {
      * but we have no other Materials.
      * 
      */
-    @IgnoreRest
     def testMarginalCondition1() {
         setup:
         Path caseOutputDir = workdir_.resolve('testMarginalCondition1')
@@ -224,7 +223,7 @@ class MaterialStatsSpec extends Specification {
         when:
         ConfidenceInterval interval = materialStats.getConfidenceInterval()
         then:
-        interval == null
+        interval == new ConfidenceInterval(0.00, 0.00, 0.00)
         when:
         double criteriaPercentage = materialStats.getCriteriaPercentage()
         then:
