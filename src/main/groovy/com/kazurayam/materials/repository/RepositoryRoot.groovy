@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
@@ -59,6 +61,15 @@ final class RepositoryRoot {
         }
     }
 
+    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
+        TCaseResult tCaseResult = null
+        TSuiteResult tsr = this.getTSuiteResult(tSuiteName, tSuiteTimestamp)
+        if (tsr != null) {
+            tCaseResult = tsr.getTCaseResult(tCaseName)
+        }
+        return tCaseResult  
+    }
+    
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName)
         Objects.requireNonNull(tSuiteTimestamp)
@@ -236,7 +247,19 @@ final class RepositoryRoot {
         return Collections.unmodifiableList(list)
     }
 
-
+    Material getMaterial(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
+        List<Material> materials = this.getMaterials(tSuiteName, tSuiteTimestamp)
+        if (materials.size() > 0) {
+            for (Material material : materials) {
+                if (material.getTCaseName().equals(tCaseName)) {
+                    return material
+                }
+            }
+            return null
+        } else {
+            return null
+        }
+    }
     
     // -------------- overriding java.lang.Object methods ---------------------
     @Override

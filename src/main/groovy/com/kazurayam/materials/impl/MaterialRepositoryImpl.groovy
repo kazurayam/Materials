@@ -642,6 +642,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
+    /**
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @param tCaseName
+     * @return a TCaseResult object with tCaseName inside the tSuiteName + tSuiteTimestamp directory. Returns null if not found.@return 
+     */
+    @Override
+    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
+        return repoRoot_.getTCaseResult(tSuiteName, tSuiteTimestamp, tCaseName)
+    }
 
     // ---------------------- overriding Object properties --------------------
     @Override
