@@ -27,14 +27,11 @@ import com.kazurayam.materials.stats.ImageDeltaStats
  *
  * @author kazurayam
  */
-class ImageCollectionDiffer {
+final class ImageCollectionDiffer extends ImageCollectionProcessor {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageCollectionDiffer.class)
 
     private MaterialRepository mr_
-    private ImageDifferenceFilenameResolver idfResolver_
-    private VisualTestingListener listener_ = new VisualTestingListenerDefaultImpl()
-    
 
     /**
      * constructor
@@ -43,18 +40,20 @@ class ImageCollectionDiffer {
      * @author kazurayam
      */
     ImageCollectionDiffer(MaterialRepository mr) {
-        mr_ = mr
-        idfResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
+        this.mr_ = mr
+        this.errorHandler_ = new ImageDiffProcessingErrorHandler()
+        this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
+        this.vtListener_ = new VisualTestingListenerDefaultImpl()
     }
 
     /*
      * Non-argument constructor is required to pass "Test Cases/Test/Prologue"
      * which calls `CustomKeywords."${className}.getClass"().getName()`
      */
-    ImageCollectionDiffer() {}
+    private ImageCollectionDiffer() {}
 
-    void setImageDifferenceFilenameResolver(ImageDifferenceFilenameResolver idfResolver) {
-        idfResolver_ = idfResolver
+    void setImageDifferenceFilenameResolver(ImageDifferenceFilenameResolver filenameResolver) {
+        this.filenameResolver_ = filenameResolver
     }
 
     /**
@@ -63,7 +62,7 @@ class ImageCollectionDiffer {
      * @param listener
      */
     void setVTListener(VisualTestingListener listener) {
-        listener_ = listener
+        this.vtListener_ = listener
     }
 
     /**
@@ -72,10 +71,12 @@ class ImageCollectionDiffer {
      * @param tCaseName
      * @param imageDeltaStats
      */
-    void makeImageCollectionDifferences(
-            List<MaterialPair> materialPairs,
-            TCaseName tCaseName,
-            ImageDeltaStats imageDeltaStats) {
+    @Override
+    void chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+        Objects.requireNonNull(this.errorHandler_, "this.errorHandler_ must not be null")
+        Objects.requireNonNull(this.filenameResolver_, "this.filenameResolver_ must not be null")
+        Objects.requireNonNull(this.vtListener_, "this.vtListener_ must not be null")
+        this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
             // resolve the criteria percentage for this Material
@@ -83,11 +84,26 @@ class ImageCollectionDiffer {
             TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
             Path path = expected.getPathRelativeToTSuiteTimestamp()
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
-            // make a diff image
-            this.writeDiffImage(pair.getExpected(), pair.getActual(), tCaseName, criteriaPercentage)
+            // make an ImageDifference object and store it into file
+            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            // logging etc
+            this.endMaterialPair  (imageDifference, criteriaPercentage)
         }
+        this.endImageCollection(tCaseName)
     }
-        
+    
+    /**
+     * alias to chronos(MaterialPair, TCaseName, ImageDeltaStats)
+     * 
+     * @param materialPairs
+     * @param tCaseName
+     * @param imageDeltaStats
+     */
+    void makeImageCollectionDifferences(
+            List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+        this.chronos(materialPairs, tCaseName, imageDeltaStats)
+    }
+     
     /**
      * compare 2 Material files in each MaterialPair object,
      * create ImageDiff and store the diff image files under the directory
@@ -104,51 +120,106 @@ class ImageCollectionDiffer {
      *     a MaterialPair is greater than this,
      *     the MaterialPair is evaluated FAILED
      */
-    void makeImageCollectionDifferences(
-            List<MaterialPair> materialPairs,
-            TCaseName tCaseName,
-            double criteriaPercent) {
+    @Override
+    void twins(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+        Objects.requireNonNull(this.errorHandler_, "this.errorHandler_ must not be null")
+        Objects.requireNonNull(this.filenameResolver_, "this.filenameResolver_ must not be null")
+        Objects.requireNonNull(this.vtListener_, "this.vtListener_ must not be null")
+        this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
-            this.writeDiffImage(pair.getExpected(), pair.getActual(), tCaseName, criteriaPercent)
+            // make an ImageDifference object and store it into file
+            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            // logging etc
+            this.endMaterialPair  (imageDifference, criteriaPercentage)
         }
+        this.endImageCollection(tCaseName)
     }
-    
-    
+
     /**
+     * alias to twins(MaterialPair, TCaseName, double)
      * 
-     * @param expMate
-     * @param actMate
+     * @param materialPairs
      * @param tCaseName
      * @param criteriaPercent
-     * @return
      */
-    private writeDiffImage(Material expMate, Material actMate, TCaseName tCaseName, double criteriaPercent) {
+    void makeImageCollectionDifferences(
+            List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+        this.twins(materialPairs, tCaseName, criteriaPercentage)
+    }
+    
+    @Override
+    void endImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
+        //throw new UnsupportedOperationException("TODO")
+    }
+
+    @Override
+    void endMaterialPair(ImageDifference diff, double criteriaPercentage) throws ImageDifferenceException {
+            // verify the diffRatio, fail the test if the ratio is greater than criteria
+        if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
+            this.vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
+        }
+    
+    }
+    
+    @Override
+    void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
+        //throw new UnsupportedOperationException("TODO")
+    }
+
+    @Override
+    ImageDifference startMaterialPair(TCaseName tCaseName,
+                Material expectedMaterial, Material actualMaterial,
+                double criteriaPercentage) throws ImageDifferenceException {
         // create ImageDifference of the 2 given images
         ImageDifference diff = new ImageDifference(
-                ImageIO.read(expMate.getPath().toFile()),
-                ImageIO.read(actMate.getPath().toFile()))
-
+                                    ImageIO.read(expectedMaterial.getPath().toFile()),
+                                    ImageIO.read(actualMaterial.getPath().toFile()))
+    
         // resolve the name of output file to save the ImageDiff
-        String fileName = idfResolver_.resolveImageDifferenceFilename(
-                expMate,
-                actMate,
-                diff,
-                criteriaPercent)
-
+        String fileName = this.filenameResolver_.resolveImageDifferenceFilename(
+                                        expectedMaterial,
+                                        actualMaterial,
+                                        diff,
+                                        criteriaPercentage)
+    
         // resolve the path of output file to save the ImageDiff
-        Path pngFile = mr_.resolveMaterialPath(
-                tCaseName,
-                expMate.getDirpathRelativeToTSuiteResult(),
-                fileName)
-
+        Path pngFile = this.mr_.resolveMaterialPath(
+                            tCaseName,
+                            expectedMaterial.getDirpathRelativeToTSuiteResult(),
+                            fileName)
+    
         // write the ImageDiff into the output file
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
+    
+        //
+        diff.setStoredInto(pngFile)
+        
+        return diff
+    }
 
-        // verify the diffRatio, fail the test if the ratio is greater than criteria
-        if (diff.getRatio() > criteriaPercent && listener_ != null) {
-            listener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercent}")
+            
+    /**
+     * 
+     */
+    static class ImageDiffProcessingErrorHandler implements ImageCollectionProcessingErrorHandler {
+        
+        @Override
+        void error(ImageDifferenceException ex) {
+            //throw new UnsupportedOperationException("TODO")
         }
+        
+        @Override
+        void fatalError(ImageDifferenceException ex) {
+            //throw new UnsupportedOperationException("TODO")
+        }
+        
+        @Override
+        void warning(ImageDifferenceException ex) {
+            //throw new UnsupportedOperationException("TODO")
+        }
+        
+        
     }
 
 }

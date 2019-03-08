@@ -401,5 +401,24 @@ class MaterialStats {
             sb.append("}")
             return sb.toString()
         }
+        
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ConfidenceInterval)) { return false }
+            ConfidenceInterval other = (ConfidenceInterval)obj
+            return this.getLowerBound() == other.getLowerBound() &&
+                    this.getUpperBound() == other.getUpperBound() &&
+                    this.getConfidenceLevel() == other.getConfidenceLevel()
+        }
+        
+        @Override
+        public int hashCode() {
+            int hash = 7
+            hash = 31 * hash + (int)Math.round(this.getLowerBound())
+            hash = 31 * hash + (int)Math.round(this.getUpperBound())
+            hash = 31 * hash + (int)Math.round(this.getConfidenceLevel())
+            return hash
+        }
+        
     }
 }
