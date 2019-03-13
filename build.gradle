@@ -17,14 +17,19 @@ ext {
     slf4jVersion   = '1.7.2'
 }
 
+configurations {
+    generateDocs
+}
+
 repositories {
     jcenter()
     mavenLocal()
 }
 
 dependencies {
-    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-
+    compile      "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    generateDocs "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
 
@@ -68,6 +73,7 @@ task groovydoc(type: Groovydoc, overwrite: true) {
     description = 'Generates Public API documents.'
     source = sourceSets.main.allGroovy
     classpath = sourceSets.main.runtimeClasspath
+    groovyClasspath = project.configurations.generateDocs
     //options.memberLevel = JavadocMemberLevel.PUBLIC
     //include '**/Helpers.groovy'
     //include '**/Material.groovy'

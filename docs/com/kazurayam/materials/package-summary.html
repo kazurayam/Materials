@@ -22,16 +22,16 @@
 <html>
 <head>
 
-<title>com.kazurayam.materials (Materials 0.22.0 API)</title>
+<title>com.kazurayam.materials (Materials 0.47.0 API)</title>
 <meta name="keywords" content="com.kazurayam.materials package">
-<meta http-equiv="Content-Type" content="text/html; charset=windows-31j">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" title="Style">
 <link href="../../../groovy.ico" type="image/x-icon" rel="shortcut icon">
 <link href="../../../groovy.ico" type="image/x-icon" rel="icon">
 <script type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="com.kazurayam.materials (Materials 0.22.0 API)";
+    parent.document.title="com.kazurayam.materials (Materials 0.47.0 API)";
 }
 </script>
 <noscript>
@@ -78,7 +78,7 @@ function windowTitle()
  other types of files: a PDF file downloaded from web site, an Excel file created by test script,
  XML/JSON document responded by RESTful API call.
 
- One-off file path for a screen shot is easy to make; e.g., <code>C:\Users\myname\tmp\sample.png</code>
+ One-off file path for a screen shot is easy to make; e.g., <code>C:¥Users¥myname¥tmp¥sample.png</code>
  would be enough. However, if we want to reused the file after interacting with web, we soon realized
  that the one-off file path is not enough. We need to design a file path format. Both of program that
  writes a file and program that reads the file need to share the format and respect it. In order to
@@ -104,8 +104,32 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
+                                <strong><a href="ExecutionProfile.html" title="class in com/kazurayam/materials">
+                                    ExecutionProfile
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
                                 <strong><a href="Indexer.html" title="class in com/kazurayam/materials">
                                     Indexer
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="Material.html" title="class in com/kazurayam/materials">
+                                    Material
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MaterialPair.html" title="class in com/kazurayam/materials">
+                                    MaterialPair
                                 </a></strong>
                             </td>
                             <td></td>
@@ -121,11 +145,12 @@ function windowTitle()
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="RepositoryVisitor.html" title="class in com/kazurayam/materials">
-                                    RepositoryVisitor
+                                <strong><a href="MaterialStorage.html" title="class in com/kazurayam/materials">
+                                    MaterialStorage
                                 </a></strong>
                             </td>
-                            <td>RepositoryRoot > TSuiteResult > TCaseResult > Material</td>
+                            <td>MaterialStorage is an external directory for Materials outside a Katalon Studio project.
+ </td>
                         </tr>
 
                     </tbody>
@@ -149,31 +174,6 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="DownloadsDirectoryHelper.html" title="class in com/kazurayam/materials">
-                                    DownloadsDirectoryHelper
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="ExecutionProfile.html" title="class in com/kazurayam/materials">
-                                    ExecutionProfile
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="ExecutionPropertiesWrapper.html" title="class in com/kazurayam/materials">
-                                    ExecutionPropertiesWrapper
-                                </a></strong>
-                            </td>
-                            <td>This class wrapps the JSON file
- <project>/Reports/<test suite subdirs>/<test suite timestamp>/execution.properties</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
                                 <strong><a href="Helpers.html" title="class in com/kazurayam/materials">
                                     Helpers
                                 </a></strong>
@@ -182,72 +182,8 @@ function windowTitle()
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="IndexerByVisitorImpl.html" title="class in com/kazurayam/materials">
-                                    IndexerByVisitorImpl
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData.html" title="class in com/kazurayam/materials">
-                                    IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData
-                                </a></strong>
-                            </td>
-                            <td>@author kazurayam</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal.html" title="class in com/kazurayam/materials">
-                                    IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
-                                </a></strong>
-                            </td>
-                            <td>@author kazurayam</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
                                 <strong><a href="IndexerFactory.html" title="class in com/kazurayam/materials">
                                     IndexerFactory
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="IndexerRudimentaryImpl.html" title="class in com/kazurayam/materials">
-                                    IndexerRudimentaryImpl
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="JUnitReportWrapper.html" title="class in com/kazurayam/materials">
-                                    JUnitReportWrapper
-                                </a></strong>
-                            </td>
-                            <td>@author kazurayam</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="Material.html" title="class in com/kazurayam/materials">
-                                    Material
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="MaterialFileName.html" title="class in com/kazurayam/materials">
-                                    MaterialFileName
-                                </a></strong>
-                            </td>
-                            <td>This class wrapps the file name applying the file name format rule for Material.</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="MaterialPair.html" title="class in com/kazurayam/materials">
-                                    MaterialPair
                                 </a></strong>
                             </td>
                             <td></td>
@@ -262,60 +198,36 @@ function windowTitle()
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="MaterialRepositoryImpl.html" title="class in com/kazurayam/materials">
-                                    MaterialRepositoryImpl
+                                <strong><a href="MaterialStorageFactory.html" title="class in com/kazurayam/materials">
+                                    MaterialStorageFactory
                                 </a></strong>
                             </td>
                             <td></td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="RepositoryFileScanner.html" title="class in com/kazurayam/materials">
-                                    RepositoryFileScanner
+                                <strong><a href="RetrievalBy.html" title="class in com/kazurayam/materials">
+                                    RetrievalBy
                                 </a></strong>
                             </td>
-                            <td>RepositoryScanner scans a file system tree under the baseDir directory.
+                            <td>Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
  </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="RepositoryFileVisitor.html" title="class in com/kazurayam/materials">
-                                    RepositoryFileVisitor
+                                <strong><a href="RetrievalBy.RetrievalByBefore.html" title="class in com/kazurayam/materials">
+                                    RetrievalBy.RetrievalByBefore
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Implementation of the RetrivalBy interface</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="RepositoryRoot.html" title="class in com/kazurayam/materials">
-                                    RepositoryRoot
+                                <strong><a href="RetrievalBy.SearchContext.html" title="class in com/kazurayam/materials">
+                                    RetrievalBy.SearchContext
                                 </a></strong>
                             </td>
                             <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="RepositoryVisitorSimpleImpl.html" title="class in com/kazurayam/materials">
-                                    RepositoryVisitorSimpleImpl
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="RepositoryWalker.html" title="class in com/kazurayam/materials">
-                                    RepositoryWalker
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="Suffix.html" title="class in com/kazurayam/materials">
-                                    Suffix
-                                </a></strong>
-                            </td>
-                            <td>Given the following files in a directory:</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -323,7 +235,7 @@ function windowTitle()
                                     TCaseName
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>I made the constructor of this class public. </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -339,12 +251,29 @@ function windowTitle()
                                     TSuiteName
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>I made the constructor of this class public. </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
                                 <strong><a href="TSuiteResult.html" title="class in com/kazurayam/materials">
                                     TSuiteResult
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="TSuiteResult.TimestampFirstTSuiteResultComparator.html" title="class in com/kazurayam/materials">
+                                    TSuiteResult.TimestampFirstTSuiteResultComparator
+                                </a></strong>
+                            </td>
+                            <td>sort a list of TSuiteResult by
+ 1. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="TSuiteResultId.html" title="class in com/kazurayam/materials">
+                                    TSuiteResultId
                                 </a></strong>
                             </td>
                             <td></td>
@@ -381,14 +310,6 @@ function windowTitle()
                             <td class="colOne">
                                 <strong><a href="FileType.html" title="class in com/kazurayam/materials">
                                     FileType
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="RepositoryVisitResult.html" title="class in com/kazurayam/materials">
-                                    RepositoryVisitResult
                                 </a></strong>
                             </td>
                             <td></td>
