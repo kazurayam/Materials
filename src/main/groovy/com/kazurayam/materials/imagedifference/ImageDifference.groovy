@@ -1,7 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
-import java.nio.file.Path
 import java.awt.image.BufferedImage
+import java.nio.file.Path
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -109,8 +109,10 @@ class ImageDifference {
 
     /**
      * @return true if the expected image and the actual image pair has
-     *         smaller difference than the criteria = these are similar enough,
-     *         otherwise false.
+     *         smaller difference than or equal to the criteria in percentage
+     *         (e.g, 5.0 means five point zero percentage); 
+     *         this means they are similar enough.
+     *         false otherwise.
      */
     Boolean imagesAreSimilar(double criteria) {
         return (ratio_ <= criteria)
