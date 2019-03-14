@@ -53,7 +53,9 @@ class StorageScanner {
         // speed up ImageIO!
         ImageIO.setUseCache(false)
         //
-        if ( ! options_.getPreviousImageDeltaStats().equals(Options.NULL_PREVIOUS_IMAGE_DELTA_STATS) ) {
+        println "#StorageScanner options_getPreviousImageDeltaStats()=\"${options_.getPreviousImageDeltaStats()}\""
+        println "#StorageScanner Options.NULL_PREVIOUS_IMAGE_DELTA_STATS=\"${Options.USERDIR}\""
+        if ( ! options_.getPreviousImageDeltaStats().equals(Options.USERDIR) ) {
             /*
              * We will try to open the previos image-delta-stats.json file.
              * Even if failed to open, we will just ignore it and continue.
@@ -61,19 +63,27 @@ class StorageScanner {
             Path path = options_.getPreviousImageDeltaStats()
             try {
                 previousImageDeltaStats_ = ImageDeltaStats.fromJsonFile(path)
-                logger_.info("Successfully loaded previousImageDeltaStats(${path.toString()})")
+                String msg = "Successfully loaded previousImageDeltaStats(${path.toString()})"
+                println msg
+                logger_.info(msg)
             } catch (FileNotFoundException ex) {
-                logger_.warn("File not found: previousImageDeltaStats(${path.toString()});" + 
-                    " will ignore and continue")
+                String msg = "File not found: previousImageDeltaStats(${path.toString()});" + 
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 previousImageDeltaStats_ = null
             } catch (IOException ex) {
-                logger_.warn("IOException for previousImageDeltaStats(${path.toString()});" +
-                    " will ignore and continue")
+                String msg = "IOException for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
             } catch (Exception ex) {
-                logger_.warn("${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
-                    " will ignore and continue")
+                String msg = "${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
             }
@@ -192,16 +202,33 @@ class StorageScanner {
                     i < materials.size() - 1 &&
                     i < options_.getMaximumNumberOfImageDeltas();
                     i++) {
+            
                 ImageDelta imageDelta
-                if (previousImageDeltaStats_ != null &&
-                    previousImageDeltaStats_.hasImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
-                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
-                            )) {
-                    imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
-                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
-                            )
+                println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
+                if (previousImageDeltaStats_ != null) {
+                    boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
+                                                    pathRelativeToTSuiteTimestampDir,
+                                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                    
+                    println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
+                    if (condition) {
+                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, 
+                                                pathRelativeToTSuiteTimestampDir,
+                                                materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                                materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                        // turn this imageDelta marked isCached
+                        imageDelta.setCached(true)
+                    
+                    } else {
+                        println "#makeMaterialStats tSuiteName=${tSuiteName}"
+                        println "#makeMaterialStats pathRelativeToTSuiteTimestamp=${pathRelativeToTSuiteTimestampDir}"
+                        println "#makeMaterialStats i=${i}"
+                        println "#makeMaterialStats materials.get(i)..TSuiteTimestamp=${materials.get(i).getParent().getParent().getTSuiteTimestamp()}"
+                        println "#makeMaterialStats materials.get(i+1)..TSuiteTimestamp=${materials.get(i+1).getParent().getParent().getTSuiteTimestamp()}"
+                        println ""
+                        imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                    }
                 } else {
                     // the following 1 line causes many ImageIO and significant amount of calcuration,
                     // will require many seconds of processing
@@ -311,7 +338,8 @@ class StorageScanner {
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
         // make the delta
-        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio())
+        boolean cached = false
+        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio(), cached)
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()
@@ -405,10 +433,10 @@ class StorageScanner {
                     }
                 }
             }
-            return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
+            return StorageScanner.Options.USERDIR
         } else {
             logger_.warn("No TSuiteName=${tSuiteNameExam} is found in ${materialStorage.toString()}")
-            return StorageScanner.Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
+            return StorageScanner.Options.USERDIR
         }
     }
 
@@ -440,7 +468,7 @@ class StorageScanner {
      */
     static class Options {
         
-        public static Path NULL_PREVIOUS_IMAGE_DELTA_STATS = Paths.get('.')
+        public static Path USERDIR = new File(System.getProperty('user.dir')).toPath()
         
         private double shiftCriteriaPercentageBy
         private double filterDataLessThan
@@ -449,6 +477,7 @@ class StorageScanner {
         private TSuiteTimestamp onlySince
         private boolean onlySinceInclusive
         private Path previousImageDeltaStats
+        private Path projectDirectory
         
         static class Builder {
             private double shiftCriteriaPercentageBy
@@ -458,6 +487,7 @@ class StorageScanner {
             private TSuiteTimestamp onlySince
             private boolean onlySinceInclusive
             private Path previousImageDeltaStats
+            private Path projectDirectory
             
             /*
              * constructor, where we set the default values
@@ -469,8 +499,10 @@ class StorageScanner {
                 this.maximumNumberOfImageDeltas = MaterialStats.DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS
                 this.onlySince = new TSuiteTimestamp('19990101_000000')
                 this.onlySinceInclusive = true
-                this.previousImageDeltaStats = Options.NULL_PREVIOUS_IMAGE_DELTA_STATS
+                this.previousImageDeltaStats = Options.USERDIR
+                this.projectDirectory = null
             }
+            
             Builder shiftCriteriaPercentageBy(double value) {
                 if (value < 0.0) {
                     throw new IllegalArgumentException("shiftCriteriaPercentageBy must not be negative")
@@ -481,6 +513,7 @@ class StorageScanner {
                 this.shiftCriteriaPercentageBy = value
                 return this
             }
+            
             Builder filterDataLessThan(double value) {
                 if (value < 0.0) {
                     throw new IllegalArgumentException("filterDataLessThan must not be negative")
@@ -491,6 +524,7 @@ class StorageScanner {
                 this.filterDataLessThan = value
                 return this
             }
+            
             Builder probability(double value) {
                 if (value < 0.0) {
                     throw new IllegalArgumentException("probability must not be negative")
@@ -501,6 +535,7 @@ class StorageScanner {
                 this.probability = value
                 return this
             }
+            
             Builder maximumNumberOfImageDeltas(int value) {
                 if (value < 1) {
                     throw new IllegalArgumentException("maximumNumberOfImageDeltas must not be less than 1")
@@ -508,26 +543,29 @@ class StorageScanner {
                 this.maximumNumberOfImageDeltas = value
                 return this
             }
+            
             Builder onlySince(TSuiteTimestamp tSuiteTimestamp, boolean inclusive = true) {
                 this.onlySince = tSuiteTimestamp
                 this.onlySinceInclusive = inclusive
                 return this
             }
+            
             /**
              * 
              * @param path to image-delta-stats.json file in the Storage dir. 
              *        You can pass a path either absolute or relative to the project dir.
-             *        The give path will be intentionally transformed to a relative path to the project dir.
              * @return
              */
             Builder previousImageDeltaStats(Path path) {
-                if (path.isAbsolute()) {
-                    this.previousImageDeltaStats = Paths.get('.').toAbsolutePath().relativize(path)
-                } else {
-                    this.previousImageDeltaStats = Paths.get('.').relativize(path)
-                }
+                this.previousImageDeltaStats = path.toAbsolutePath().normalize()
                 return this
             }
+            
+            Builder projectDirectory(Path path) {
+                this.projectDirectory = path.toAbsolutePath().normalize()
+                return this
+            }
+            
             Options build() {
                 return new Options(this)
             }
@@ -541,6 +579,7 @@ class StorageScanner {
             this.onlySince = builder.onlySince
             this.onlySinceInclusive = builder.onlySinceInclusive
             this.previousImageDeltaStats = builder.previousImageDeltaStats
+            this.projectDirectory = builder.projectDirectory
         }
         
         double getShiftCriteriaPercentageBy() {
@@ -569,6 +608,20 @@ class StorageScanner {
         
         Path getPreviousImageDeltaStats() {
             return this.previousImageDeltaStats
+        }
+        
+        Path getPreviousImageDeltaStatsRelativeToProjectDirectory() {
+            if (this.projectDirectory != null) {
+                logger_.debug("#getPreviousImageDeltaStatsRelativeToProjectDirectory this.projectDirectory=${this.projectDirectory}")
+                logger_.debug("#getPreviousImageDeltaStatsRelativeToProjectDirectory this.previousImageDeltaStats=${this.previousImageDeltaStats}")
+                return this.projectDirectory.relativize(this.previousImageDeltaStats).normalize()
+            } else {
+                return this.previousImageDeltaStats
+            }       
+        }
+        
+        Path getProjectDirectory() {
+            return this.projectDirectory
         }
         
         @Override
@@ -604,10 +657,19 @@ class StorageScanner {
             sb.append(this.getProbability())
             sb.append(",")
             //
+            sb.append("\"projectDirectory\":")
+            sb.append("\"")
+            if (this.projectDirectory != null) {
+                sb.append(Helpers.escapeAsJsonText(this.getProjectDirectory().toString()))
+            } else {
+                sb.append('')
+            }
+            sb.append("\",")
+            //
             sb.append("\"previousImageDeltaStats\":")
             if (this.getPreviousImageDeltaStats() != null) {
                 sb.append("\"")
-                sb.append(Helpers.escapeAsJsonText(this.getPreviousImageDeltaStats().toString()))
+                sb.append(Helpers.escapeAsJsonText(this.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString()))
                 sb.append("\"")
             } else {
                 sb.append("\"\"")

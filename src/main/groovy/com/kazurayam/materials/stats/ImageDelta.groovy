@@ -7,11 +7,17 @@ class ImageDelta {
     private TSuiteTimestamp a
     private TSuiteTimestamp b
     private double d
+    private boolean cached
     
     ImageDelta(TSuiteTimestamp a, TSuiteTimestamp b, double d) {
+        this(a, b, d, false)    
+    }
+    
+    ImageDelta(TSuiteTimestamp a, TSuiteTimestamp b, double d, boolean cached) {
         this.a = a
         this.b = b
         this.d = d
+        this.cached = cached
     }
     
     TSuiteTimestamp getA() {
@@ -24,6 +30,14 @@ class ImageDelta {
     
     double getD() {
         return d
+    }
+    
+    boolean isCached() {
+        return cached    
+    }
+    
+    void setCached(boolean cached) {
+        this.cached = cached
     }
     
     @Override
@@ -40,6 +54,9 @@ class ImageDelta {
         sb.append("\"${b.format()}\",")
         sb.append("\"d\":")
         sb.append(String.format('%1$.2f', this.getD()))
+        sb.append(",")
+        sb.append("\"cached\":")
+        sb.append(this.cached)
         sb.append("}")
         return sb.toString()
     }
@@ -57,7 +74,8 @@ class ImageDelta {
             TSuiteTimestamp a = new TSuiteTimestamp(imageDeltaJsonObject.a)
             TSuiteTimestamp b = new TSuiteTimestamp(imageDeltaJsonObject.b)
             double d = imageDeltaJsonObject.d
-            return new ImageDelta(a, b, d)
+            boolean cached = true
+            return new ImageDelta(a, b, d, cached)
         } else {
             throw new IllegalArgumentException("#fromJsonObject ")
         }          
@@ -69,7 +87,8 @@ class ImageDelta {
         ImageDelta other = (ImageDelta)obj
         return this.getA().equals(other.getA()) &&
                 this.getB().equals(other.getB()) &&
-                this.getD() == other.getD()
+                this.getD() == other.getD() &&
+                this.cached == other.cached
     }
     
     @Override

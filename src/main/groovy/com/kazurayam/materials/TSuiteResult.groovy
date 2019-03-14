@@ -146,12 +146,12 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         int compare(TSuiteResult a, TSuiteResult b) {
             int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
             if (v < 0) {
-                return v
+                return v * -1
             } else if (v == 0) {
                 v = a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName())
                 return v
             } else {
-                return v
+                return v * -1
             }
         }
     }

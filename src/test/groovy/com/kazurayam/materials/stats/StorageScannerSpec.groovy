@@ -26,6 +26,7 @@ import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class StorageScannerSpec extends Specification {
@@ -393,20 +394,27 @@ class StorageScannerSpec extends Specification {
         sw.toString().contains('invalid')
     }
     
-
-    def test_Options_previousImageDeltaStats_shouldBeRelativized() {
+    @IgnoreRest
+    def test_Options_getPreviousImageDeltaStatsRelativeToProjectDirectory() {
         when:
         Path absolutePath = specOutputDir.
-            resolve('test_Options_previousImageDeltaStats_shouldBeRelativized').
+            resolve('test_Options_previousImageDeltaStats_relativized').
             resolve('image-delta-stats.json').
             toAbsolutePath()
-        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized absolutePath=${absolutePath}")
-        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized current dir =${Paths.get('.').toAbsolutePath()}")
-        Path relativePath = Paths.get('.').toAbsolutePath().relativize(absolutePath)
-        StorageScanner.Options options = new Options.Builder().
-            previousImageDeltaStats( absolutePath ).build()
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized absolutePath=${absolutePath}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized current dir =${Paths.get('.').toAbsolutePath()}")
+        Path projectDirectory = Paths.get('.')
+        Path relativePath = projectDirectory.toAbsolutePath().relativize(absolutePath)
+        StorageScanner.Options options = 
+                                    new Options.Builder().
+                                            projectDirectory(projectDirectory).
+                                            previousImageDeltaStats( absolutePath ).build()
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized options.getPreviousImageDeltaStats()=${options.getPreviousImageDeltaStats()}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized relativePath=${relativePath}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized options.getPreviousImageDeltaStatsRelativeToProjectDirectory()=${options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString()}")
         then:
-        options.getPreviousImageDeltaStats().equals(relativePath)
+        options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString().equals(relativePath.toString())
+        options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString().startsWith('build')   // build\tmp\testOutput\StorageScannerSpec\ .. 
     }
     
     def testPersist() {
@@ -436,10 +444,17 @@ class StorageScannerSpec extends Specification {
     }
     
     /**
-     * this test case may take longer seconds than 20
+     * test StorageScanner#findLatestImageDeltaStats() method.
+     * 
+     * This test calls StorageScanner#scan() twice to create 2 image-delta-stats.json files.
+     * Once 2 json files are created, this test calls findLatestImageDeltaStats() and assert
+     * it returns the json with newer timestamp.
+     * 
+     * this test case may take long time; more than 20 seconds
      */
     def testFindLatestImageDeltaStats() {
         setup:
+        // create case output directory with fixture
         Path caseOutputDir = specOutputDir.resolve("testFindLatestImageDeltaStats")
         if (Files.exists(caseOutputDir)) {
             // intentionally delete the previous fixture
@@ -449,27 +464,31 @@ class StorageScannerSpec extends Specification {
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        //
-        TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47News_chronos_exam")
-        TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190216_064149")
-        TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
         when:
-        StorageScanner.Options options = new Options.Builder().
-                                            previousImageDeltaStats(previousIDS).
-                                            build()
-        StorageScanner scanner = new StorageScanner(ms, options)
-        ImageDeltaStats imageDeltaStats = scanner.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
-        //
-        Path p = scanner.persist(imageDeltaStats, tSuiteNameExam, tSuiteTimestampExam, tCaseNameExam)
+        // 1st scanning
+        TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47News_chronos_exam")
+        TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        TSuiteTimestamp tSuiteTimestampExam1 = new TSuiteTimestamp("20190215_222316")
+        StorageScanner scanner1 = new StorageScanner(ms, new Options.Builder().build())
+        ImageDeltaStats imageDeltaStats1 = scanner1.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
+        Path p1 = scanner1.persist(imageDeltaStats1, tSuiteNameExam, tSuiteTimestampExam1, tCaseNameExam)
         then:
-        Files.exists(p)
+        Files.exists(p1)
+        // 2nd scanning
+        TSuiteTimestamp tSuiteTimestampExam2 = new TSuiteTimestamp("20190216_063205")
+        StorageScanner scanner2 = new StorageScanner(ms, new Options.Builder().build())
+        ImageDeltaStats imageDeltaStats2 = scanner1.scan(new TSuiteName("Test Suites/47News_chronos_capture"))
+        Path p2 = scanner2.persist(imageDeltaStats2, tSuiteNameExam, tSuiteTimestampExam2, tCaseNameExam)
+        then:
+        Files.exists(p2)
         when:
         // Now we test the method in question
-        Path latestPath = scanner.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
+        Path latestPath = scanner2.findLatestImageDeltaStats(tSuiteNameExam, tCaseNameExam)
         logger_.debug("#testFindLatestImageDeltaStats latestPath=${latestPath}")
         then:
         latestPath.toString().endsWith(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        latestPath.toString().contains('20190216_063205')   // we expect to get the newer timestamp
+        // if failed, you should verify if the sorting feature is functioning properly or not
     }
     
     /**

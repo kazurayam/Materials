@@ -11,6 +11,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -134,6 +135,15 @@ class MaterialRepositorySpec extends Specification {
         paths.size() == 16
     }
 
+    def testGetTCaseResult() {
+        when:
+        TCaseResult tCaseResult = mr_.getTCaseResult(new TSuiteName('Test Suites/main/TS1'),
+                                        new TSuiteTimestamp('20180530_130419'),
+                                        new TCaseName('Test Cases/main/TC1'))
+        then:
+        tCaseResult != null    
+    }
+    
     def testGetTestCaseDirectory() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')

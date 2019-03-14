@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.47.0'
+version  = '0.47.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -48,6 +48,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 
+
+    // https://mvnrepository.com/artifact/net.coobird/thumbnailator
+    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+
+
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 }
@@ -64,7 +69,9 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/MaterialStatsSpec.class'
+    //include '**/MaterialRepositorySpec.class'
+    //include '**/RepositoryRootSpec.class'
+    include '**/StorageScannerSpec.class'
     outputs.upToDateWhen {false}
 }
 
