@@ -135,7 +135,6 @@ class MaterialRepositorySpec extends Specification {
         paths.size() == 16
     }
 
-    @IgnoreRest
     def testGetTCaseResult() {
         when:
         TCaseResult tCaseResult = mr_.getTCaseResult(new TSuiteName('Test Suites/main/TS1'),

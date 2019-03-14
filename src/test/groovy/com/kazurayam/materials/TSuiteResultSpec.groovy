@@ -271,7 +271,6 @@ class TSuiteResultSpec extends Specification {
         instance != null
     }
     
-    @IgnoreRest
     def test_TimestampFirstTSuiteResultComparator() {
         setup:
         List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))

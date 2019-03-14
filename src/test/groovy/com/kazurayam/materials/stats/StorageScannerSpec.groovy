@@ -394,20 +394,27 @@ class StorageScannerSpec extends Specification {
         sw.toString().contains('invalid')
     }
     
-
-    def test_Options_previousImageDeltaStats_shouldBeRelativized() {
+    @IgnoreRest
+    def test_Options_getPreviousImageDeltaStatsRelativeToProjectDirectory() {
         when:
         Path absolutePath = specOutputDir.
-            resolve('test_Options_previousImageDeltaStats_shouldBeRelativized').
+            resolve('test_Options_previousImageDeltaStats_relativized').
             resolve('image-delta-stats.json').
             toAbsolutePath()
-        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized absolutePath=${absolutePath}")
-        logger_.debug("#test_Options_previousImageDeltaStats_shouldBeRelativized current dir =${Paths.get('.').toAbsolutePath()}")
-        Path relativePath = Paths.get('.').toAbsolutePath().relativize(absolutePath)
-        StorageScanner.Options options = new Options.Builder().
-            previousImageDeltaStats( absolutePath ).build()
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized absolutePath=${absolutePath}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized current dir =${Paths.get('.').toAbsolutePath()}")
+        Path projectDirectory = Paths.get('.')
+        Path relativePath = projectDirectory.toAbsolutePath().relativize(absolutePath)
+        StorageScanner.Options options = 
+                                    new Options.Builder().
+                                            projectDirectory(projectDirectory).
+                                            previousImageDeltaStats( absolutePath ).build()
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized options.getPreviousImageDeltaStats()=${options.getPreviousImageDeltaStats()}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized relativePath=${relativePath}")
+        logger_.debug("#test_Options_previousImageDeltaStats_relativized options.getPreviousImageDeltaStatsRelativeToProjectDirectory()=${options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString()}")
         then:
-        options.getPreviousImageDeltaStats().equals(relativePath)
+        options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString().equals(relativePath.toString())
+        options.getPreviousImageDeltaStatsRelativeToProjectDirectory().toString().startsWith('build')   // build\tmp\testOutput\StorageScannerSpec\ .. 
     }
     
     def testPersist() {
@@ -445,7 +452,6 @@ class StorageScannerSpec extends Specification {
      * 
      * this test case may take long time; more than 20 seconds
      */
-    @IgnoreRest
     def testFindLatestImageDeltaStats() {
         setup:
         // create case output directory with fixture
