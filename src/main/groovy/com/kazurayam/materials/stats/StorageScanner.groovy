@@ -53,6 +53,8 @@ class StorageScanner {
         // speed up ImageIO!
         ImageIO.setUseCache(false)
         //
+        println "#StorageScanner options_getPreviousImageDeltaStats()=\"${options_.getPreviousImageDeltaStats()}\""
+        println "#StorageScanner Options.NULL_PREVIOUS_IMAGE_DELTA_STATS=\"${Options.NULL_PREVIOUS_IMAGE_DELTA_STATS}\""
         if ( ! options_.getPreviousImageDeltaStats().equals(Options.NULL_PREVIOUS_IMAGE_DELTA_STATS) ) {
             /*
              * We will try to open the previos image-delta-stats.json file.
@@ -61,19 +63,27 @@ class StorageScanner {
             Path path = options_.getPreviousImageDeltaStats()
             try {
                 previousImageDeltaStats_ = ImageDeltaStats.fromJsonFile(path)
-                logger_.info("Successfully loaded previousImageDeltaStats(${path.toString()})")
+                String msg = "Successfully loaded previousImageDeltaStats(${path.toString()})"
+                println msg
+                logger_.info(msg)
             } catch (FileNotFoundException ex) {
-                logger_.warn("File not found: previousImageDeltaStats(${path.toString()});" + 
-                    " will ignore and continue")
+                String msg = "File not found: previousImageDeltaStats(${path.toString()});" + 
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 previousImageDeltaStats_ = null
             } catch (IOException ex) {
-                logger_.warn("IOException for previousImageDeltaStats(${path.toString()});" +
-                    " will ignore and continue")
+                String msg = "IOException for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
             } catch (Exception ex) {
-                logger_.warn("${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
-                    " will ignore and continue")
+                String msg = "${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
+                    " will ignore and continue"
+                println msg
+                logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
             }
@@ -192,16 +202,33 @@ class StorageScanner {
                     i < materials.size() - 1 &&
                     i < options_.getMaximumNumberOfImageDeltas();
                     i++) {
+            
                 ImageDelta imageDelta
-                if (previousImageDeltaStats_ != null &&
-                    previousImageDeltaStats_.hasImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
-                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
-                            )) {
-                    imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, pathRelativeToTSuiteTimestampDir,
-                            materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                            materials.get(i + 1).getParent().getParent().getTSuiteTimestamp()
-                            )
+                println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
+                if (previousImageDeltaStats_ != null) {
+                    boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
+                                                    pathRelativeToTSuiteTimestampDir,
+                                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                    
+                    println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
+                    if (condition) {
+                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, 
+                                                pathRelativeToTSuiteTimestampDir,
+                                                materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                                materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                        // turn this imageDelta marked isCached
+                        imageDelta.setCached(true)
+                    
+                    } else {
+                        println "#makeMaterialStats tSuiteName=${tSuiteName}"
+                        println "#makeMaterialStats pathRelativeToTSuiteTimestamp=${pathRelativeToTSuiteTimestampDir}"
+                        println "#makeMaterialStats i=${i}"
+                        println "#makeMaterialStats materials.get(i)..TSuiteTimestamp=${materials.get(i).getParent().getParent().getTSuiteTimestamp()}"
+                        println "#makeMaterialStats materials.get(i+1)..TSuiteTimestamp=${materials.get(i+1).getParent().getParent().getTSuiteTimestamp()}"
+                        println ""
+                        imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                    }
                 } else {
                     // the following 1 line causes many ImageIO and significant amount of calcuration,
                     // will require many seconds of processing
@@ -311,7 +338,8 @@ class StorageScanner {
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
         // make the delta
-        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio())
+        boolean cached = false
+        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio(), cached)
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()

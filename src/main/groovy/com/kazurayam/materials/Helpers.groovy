@@ -3,6 +3,7 @@ package com.kazurayam.materials
 import static java.nio.file.FileVisitResult.*
 import static java.nio.file.StandardCopyOption.*
 
+import java.nio.file.DirectoryNotEmptyException
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
@@ -82,7 +83,11 @@ final class Helpers {
                 FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
                     if (exception == null) {
                         logger_.debug("#deleteDirectory deleting directory ${dir.toString()}")
-                        Files.delete(dir)
+                        try {
+                            Files.delete(dir)
+                        } catch (DirectoryNotEmptyException e) {
+                            throw new IOException("Failed to delete ${dir} because it is not empty", e)
+                        }
                         return checkNotExist(dir)
                     }
                     return CONTINUE

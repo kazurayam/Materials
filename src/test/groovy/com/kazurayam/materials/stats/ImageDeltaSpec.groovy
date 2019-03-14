@@ -86,5 +86,12 @@ class ImageDeltaSpec extends Specification {
         imageDelta.hashCode() == -1219059235
     }
     
+    def testCached() {
+        when:
+        ImageDelta imageDelta = new ImageDelta(a, b, d, true)
+        then:
+        imageDelta.isCached() == true
+    }
+    
     
 }

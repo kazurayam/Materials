@@ -14,6 +14,7 @@ import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -268,6 +269,19 @@ class TSuiteResultSpec extends Specification {
         ExecutionPropertiesWrapper instance = tsr.createExecutionPropertiesWrapper(reportsDir)
         then:
         instance != null
+    }
+    
+    @IgnoreRest
+    def test_TimestampFirstTSuiteResultComparator() {
+        setup:
+        List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> tSuiteResultList = mri_.getTSuiteResultList(tSuiteResultIdList)
+        when:
+        Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
+        then:
+        tSuiteResultList.get(0).getTSuiteTimestamp().equals(new TSuiteTimestamp('20181014_060501'))
+        tSuiteResultList.get(1).getTSuiteTimestamp().equals(new TSuiteTimestamp('20181014_060500'))
+        tSuiteResultList.get(2).getTSuiteTimestamp().equals(new TSuiteTimestamp('20180805_081908'))
     }
     // helper methods
 }
