@@ -92,6 +92,16 @@ interface MaterialRepository {
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)
+    
+    /**
+     * 
+     * @param tSuiteName
+     * @param tSuiteTimestamp
+     * @param tCaseName
+     * @return a TCaseResult object with tCaseName inside the tSuiteName + tSuiteTimestamp directory. Returns null if not found.
+     */
+    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName)
+    
     List<TSuiteName> getTSuiteNameList()
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
