@@ -85,8 +85,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             Path path = expected.getPathRelativeToTSuiteTimestamp()
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
             // make an ImageDifference object and store it into file
-            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            this.endMaterialPair  (new ImageDifferenceEvaluation(imageDifference, criteriaPercentage))
+            EvaluationResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            this.endMaterialPair(evalResult)
         }
         this.endImageCollection(tCaseName)
     }
@@ -127,10 +127,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
-            // make an ImageDifference object and store it into file
-            ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            // compare 2 images, make an diff image, store it into file, record and return the comparison result
+            EvaluationResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
             // logging etc
-            this.endMaterialPair  (new ImageDifferenceEvaluation(imageDifference, criteriaPercentage))
+            this.endMaterialPair(evalResult)
         }
         this.endImageCollection(tCaseName)
     }
@@ -153,14 +153,15 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
 
     @Override
-    void endMaterialPair(ImageDifferenceEvaluation diffEvaluation) throws ImageDifferenceException {
+    void endMaterialPair(EvaluationResult evalResult) throws ImageDifferenceException {
         // verify the diffRatio, fail the test if the ratio is greater than criteria
-        ImageDifference diff = diffEvaluation.getImageDifference()
-        double criteriaPercentage = diffEvaluation.getCriteriaPercentage()
-        if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
-            this.vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
+        if (this.vtListener_ != null && ! evalResult.imagesAreSimilar()) {
+            StringBuilder sb = new StringBuilder()
+            sb.append(">>> diffRatio(${evalResult.getDiffRatio()}) > criteria(${evalResult.getCriteriaPercentage()}) ")
+            sb.append("expected(${evalResult.getExpectedMaterial().getPathRelativeToRepositoryRoot()}) ")
+            sb.append("actual(${evalResult.getActualMaterial().getPathRelativeToRepositoryRoot()})")
+            this.vtListener_.failed(sb.toString())
         }
-    
     }
     
     @Override
@@ -169,9 +170,11 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
 
     @Override
-    ImageDifference startMaterialPair(TCaseName tCaseName,
-                Material expectedMaterial, Material actualMaterial,
-                double criteriaPercentage) throws ImageDifferenceException {
+    EvaluationResult startMaterialPair( TCaseName tCaseName,
+                                        Material expectedMaterial,
+                                        Material actualMaterial,
+                                        double criteriaPercentage) throws ImageDifferenceException {
+
         // create ImageDifference of the 2 given images
         ImageDifference diff = new ImageDifference(
                                     ImageIO.read(expectedMaterial.getPath().toFile()),
@@ -192,11 +195,15 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     
         // write the ImageDiff into the output file
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
-    
-        //
-        diff.setStoredInto(pngFile)
         
-        return diff
+        // construct a record of image comparison
+        EvaluationResult evalResult = new EvaluationResult( expectedMaterial,
+                                                            actualMaterial,
+                                                            criteriaPercentage,
+                                                            diff.imagesAreSimilar(criteriaPercentage),
+                                                            diff.getRatio(),
+                                                            pngFile)
+        return evalResult
     }
 
             

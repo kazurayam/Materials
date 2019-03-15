@@ -69,9 +69,9 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/MaterialRepositorySpec.class'
-    //include '**/RepositoryRootSpec.class'
-    include '**/StorageScannerSpec.class'
+    include '**/EvaluationResultSpec.class'
+    include '**/ImageCollectionDifferSpec.class'
+    //include '**/ImageDifferenceSpec.class'
     outputs.upToDateWhen {false}
 }
 
