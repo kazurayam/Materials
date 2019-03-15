@@ -394,7 +394,7 @@ class StorageScannerSpec extends Specification {
         sw.toString().contains('invalid')
     }
     
-    @IgnoreRest
+    
     def test_Options_getPreviousImageDeltaStatsRelativeToProjectDirectory() {
         when:
         Path absolutePath = specOutputDir.

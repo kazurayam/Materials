@@ -7,7 +7,7 @@ interface ImageCollectionProcessingContentHandler {
 
     void endImageCollection(TCaseName tCaseName) throws ImageDifferenceException
     
-    void endMaterialPair(ImageDifference imageDifference, double criteriaPercentage) throws ImageDifferenceException
+    void endMaterialPair(ImageDifferenceEvaluation imageDifferenceEvaluation) throws ImageDifferenceException
     
     void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException
     

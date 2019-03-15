@@ -86,8 +86,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
             // make an ImageDifference object and store it into file
             ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            // logging etc
-            this.endMaterialPair  (imageDifference, criteriaPercentage)
+            this.endMaterialPair  (new ImageDifferenceEvaluation(imageDifference, criteriaPercentage))
         }
         this.endImageCollection(tCaseName)
     }
@@ -131,7 +130,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             // make an ImageDifference object and store it into file
             ImageDifference imageDifference = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
             // logging etc
-            this.endMaterialPair  (imageDifference, criteriaPercentage)
+            this.endMaterialPair  (new ImageDifferenceEvaluation(imageDifference, criteriaPercentage))
         }
         this.endImageCollection(tCaseName)
     }
@@ -154,8 +153,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
 
     @Override
-    void endMaterialPair(ImageDifference diff, double criteriaPercentage) throws ImageDifferenceException {
-            // verify the diffRatio, fail the test if the ratio is greater than criteria
+    void endMaterialPair(ImageDifferenceEvaluation diffEvaluation) throws ImageDifferenceException {
+        // verify the diffRatio, fail the test if the ratio is greater than criteria
+        ImageDifference diff = diffEvaluation.getImageDifference()
+        double criteriaPercentage = diffEvaluation.getCriteriaPercentage()
         if (diff.getRatio() > criteriaPercentage && this.vtListener_ != null) {
             this.vtListener_.failed(">>> diffRatio = ${diff.getRatio()} is exceeding criteria = ${criteriaPercentage}")
         }
