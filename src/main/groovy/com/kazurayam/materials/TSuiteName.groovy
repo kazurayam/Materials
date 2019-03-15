@@ -6,22 +6,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * I made the constructor of this class public. It was my mistake. I regret it.
- * The public constructor new TSuiteName("TS1") is already used by the applications. For example:
- *     https://github.com/kazurayam/VisualTestingInKatalonStudio/blob/master/Scripts/Main/ImageDiff/Script1535336589503.groovy
- * 
- * I regret it that I published the public constructor. Instead, I should have make the constructor private, and
- * add a static factory method
- *     public static TSuiteName newInstance()
- * 
- * If I did it, I could 
- * (1) add a class com.kazurayam.materials.model.TSuiteNameImpl and
- * (2) move the implementation code of getId() and getValue() there.
- * (3) change the com.kazurayam.materials.TSuiteName class to be skeltal. 
- *     - apply the Composite pattern; it contains a private instance of TSuiteNameImpl
- *     - delegates getId() to the TSuiteNameImpl.getId()
- *     - delegates getValue() to the TSuiteNameImpl.getValue()
- *
  * @author kazurayam
  *
  */

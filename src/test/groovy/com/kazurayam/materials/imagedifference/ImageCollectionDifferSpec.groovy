@@ -63,10 +63,10 @@ class ImageCollectionDifferSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
         List<MaterialPair> materialPairs =
-        // we use Java 8 Stream API to filter entries
-        mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).stream().filter { mp ->
-                mp.getLeft().getFileType() == FileType.PNG
-            }.collect(Collectors.toList())
+            // we use Java 8 Stream API to filter entries
+            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).stream().filter { mp ->
+                    mp.getLeft().getFileType() == FileType.PNG
+                }.collect(Collectors.toList())
 
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(

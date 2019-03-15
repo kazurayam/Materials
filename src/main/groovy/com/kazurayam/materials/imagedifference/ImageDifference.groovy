@@ -1,10 +1,12 @@
 package com.kazurayam.materials.imagedifference
 
-import java.nio.file.Path
 import java.awt.image.BufferedImage
+import java.nio.file.Path
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import com.kazurayam.materials.TSuiteName
 
 import ru.yandex.qatools.ashot.Screenshot
 import ru.yandex.qatools.ashot.comparison.ImageDiff
@@ -23,13 +25,10 @@ class ImageDifference {
     private BufferedImage diffImage_
     private Double ratio_ = 0.0        // percentage
     
-    private Path storedInto_
-    
     ImageDifference()
     {
         expectedImage_ = null
         actualImage_ = null
-        storedInto_ = null
     }
 
     ImageDifference(BufferedImage expected, BufferedImage actual)
@@ -39,7 +38,6 @@ class ImageDifference {
         ImageDiff imgDiff = makeImageDiff(expectedImage_, actualImage_)
         ratio_ = calculateRatioPercent(imgDiff)
         diffImage_ = imgDiff.getMarkedImage()
-        storedInto_ = null
     }
 
     private ImageDiff makeImageDiff(BufferedImage expected, BufferedImage actual)
@@ -109,26 +107,13 @@ class ImageDifference {
 
     /**
      * @return true if the expected image and the actual image pair has
-     *         smaller difference than the criteria = these are similar enough,
-     *         otherwise false.
+     *         smaller difference than or equal to the criteria in percentage
+     *         (e.g, 5.0 means five point zero percentage); 
+     *         this means they are similar enough.
+     *         false otherwise.
      */
     Boolean imagesAreSimilar(double criteria) {
         return (ratio_ <= criteria)
     }
-    
-    /**
-     * 
-     * @param savedInto path where the ImageDifferes is storeded into
-     */
-    void setStoredInto(Path storedInto) {
-        this.storedInto_ = storedInto
-    }
-    
-    /**
-     * @return Path where the ImageDiffers is stored into
-     */
-    Path getStoredInto() {
-        return this.storedInto_
-    }
-    
+        
 }
