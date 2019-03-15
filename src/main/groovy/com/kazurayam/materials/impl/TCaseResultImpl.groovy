@@ -2,6 +2,8 @@ package com.kazurayam.materials.impl
 
 import java.nio.file.Path
 import java.time.LocalDateTime
+import java.util.regex.Pattern
+import java.util.regex.Matcher
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -99,11 +101,42 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
 
     // --------------------- create/add/get child nodes ----------------------
 
+    /**
+     * @return all of Material objects in the TCaseResult directory
+     */
     @Override
     List<Material> getMaterialList() {
         return materials_
     }
 
+    /**
+     * @return select Material objects while matching the file name with the pattern.
+     * The pattern is interpreted as a RegExp (case-insensitive) if the second arg is true,
+     * otherwise the pattern is interpreted as the file name itself.
+     * The 2nd argument is optional, default is false.
+     */
+    @Override
+    List<Material> getMaterialList(String pattern, boolean isRegex = false) {
+        Objects.requireNonNull(pattern, "pattern must not be null")
+        List<Material> result = new ArrayList<>()
+        if (isRegex) {
+            Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+            for (Material mate: this.materials_) {
+                Matcher m = p.matcher(mate.getPath().getFileName().toString())
+                if (m.find()) {
+                    result.add(mate)
+                }
+            }
+        } else {
+            for (Material mate: this.materials_) {
+                if (mate.getPath().getFileName().toString().equals(pattern)) {
+                    result.add(mate)
+                }
+            }    
+        }
+        return result
+    }
+    
     //@Override
     List<Material> getMaterialList(Path dirpath, URL url, FileType fileType) {
         Objects.requireNonNull(dirpath)

@@ -1,5 +1,6 @@
 package com.kazurayam.materials.imagedifference
 
+import java.nio.file.Files
 import java.nio.file.Path
 
 import javax.imageio.ImageIO
@@ -13,6 +14,8 @@ import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.stats.ImageDeltaStats
+
+import groovy.json.JsonOutput
 
 /**
  * This class is designed to implement the "Visual Testing in Katalon Studio" feature.
@@ -32,7 +35,13 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     static Logger logger_ = LoggerFactory.getLogger(ImageCollectionDiffer.class)
 
     private MaterialRepository mr_
+    
+    private List<ComparisonResult> comparisonResults_
 
+    private Path output_
+    
+    static final String OUTPUT_FILENAME = 'ComparisonResults.json'
+    
     /**
      * constructor
      *
@@ -44,6 +53,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.errorHandler_ = new ImageDiffProcessingErrorHandler()
         this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
         this.vtListener_ = new VisualTestingListenerDefaultImpl()
+        this.comparisonResults_ = new ArrayList<>()
     }
 
     /*
@@ -73,9 +83,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     @Override
     void chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
-        Objects.requireNonNull(this.errorHandler_, "this.errorHandler_ must not be null")
-        Objects.requireNonNull(this.filenameResolver_, "this.filenameResolver_ must not be null")
-        Objects.requireNonNull(this.vtListener_, "this.vtListener_ must not be null")
+        Objects.requireNonNull(materialPairs, "materialPairs must not be null")
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(imageDeltaStats, "imageDeltaStats must not be null")
+        //
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
@@ -85,7 +96,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             Path path = expected.getPathRelativeToTSuiteTimestamp()
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
             // make an ImageDifference object and store it into file
-            EvaluationResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
             this.endMaterialPair(evalResult)
         }
         this.endImageCollection(tCaseName)
@@ -121,14 +132,14 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     @Override
     void twins(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
-        Objects.requireNonNull(this.errorHandler_, "this.errorHandler_ must not be null")
-        Objects.requireNonNull(this.filenameResolver_, "this.filenameResolver_ must not be null")
-        Objects.requireNonNull(this.vtListener_, "this.vtListener_ must not be null")
+        Objects.requireNonNull(materialPairs, "materialPairs must not be null")
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        //
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs) {
             // compare 2 images, make an diff image, store it into file, record and return the comparison result
-            EvaluationResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
             // logging etc
             this.endMaterialPair(evalResult)
         }
@@ -147,13 +158,46 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.twins(materialPairs, tCaseName, criteriaPercentage)
     }
     
+    
+    
+    
+    
+    
+    // -------- implementation of ImageCollectionProcessingContentHandler -----
+    
+    /**
+     * serialize the list of EvaluationResult objects into file.
+     */
     @Override
     void endImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
-        //throw new UnsupportedOperationException("TODO")
+        this.output_.text = stringifyComparisonResults(this.comparisonResults_)
+    }
+    
+    private String stringifyComparisonResults(List<ComparisonResult> comparisonResults) {
+        StringBuilder sb = new StringBuilder()
+        sb.append('[')
+        int count = 0
+        for (ComparisonResult cmpResult: this.comparisonResults_) {
+            if (count > 0) {
+                sb.append(',')
+            }
+            count += 1
+            sb.append(cmpResult.toJsonText())
+        }
+        sb.append(']')
+        return JsonOutput.prettyPrint(sb.toString())
     }
 
+    /**
+     * 
+     */
     @Override
-    void endMaterialPair(EvaluationResult evalResult) throws ImageDifferenceException {
+    void endMaterialPair(ComparisonResult evalResult) throws ImageDifferenceException {
+        
+        // memorize all of the EvaluationResult objects.
+        // EvaluationResult object is just a struct of references and has no large byte array. Its size is small.
+        this.comparisonResults_.add(evalResult)
+        
         // verify the diffRatio, fail the test if the ratio is greater than criteria
         if (this.vtListener_ != null && ! evalResult.imagesAreSimilar()) {
             StringBuilder sb = new StringBuilder()
@@ -164,13 +208,21 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         }
     }
     
+    /**
+     * prepare File of 'comparison-result.json'
+     */
     @Override
     void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
-        //throw new UnsupportedOperationException("TODO")
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        this.output_ = this.mr_.resolveMaterialPath(tCaseName, OUTPUT_FILENAME)
+        Files.createDirectories(this.output_.getParent())
     }
 
+    /**
+     * This method is the core part of ImageCollectionDiffer.
+     */
     @Override
-    EvaluationResult startMaterialPair( TCaseName tCaseName,
+    ComparisonResult startMaterialPair( TCaseName tCaseName,
                                         Material expectedMaterial,
                                         Material actualMaterial,
                                         double criteriaPercentage) throws ImageDifferenceException {
@@ -197,7 +249,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
         
         // construct a record of image comparison
-        EvaluationResult evalResult = new EvaluationResult( expectedMaterial,
+        ComparisonResult evalResult = new ComparisonResult( expectedMaterial,
                                                             actualMaterial,
                                                             criteriaPercentage,
                                                             diff.imagesAreSimilar(criteriaPercentage),

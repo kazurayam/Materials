@@ -20,9 +20,11 @@ import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import spock.lang.Specification
 
-class EvaluationResultSpec extends Specification {
+class ComparisonResultSpec extends Specification {
     
     private static Path fixtureDir
     private static Path specOutputDir
@@ -31,7 +33,7 @@ class EvaluationResultSpec extends Specification {
         Path projectDir = Paths.get(".")
         fixtureDir = projectDir.resolve("src/test/fixture")
         Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
-        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(EvaluationResultSpec.class))
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ComparisonResultSpec.class))
     }
     def setup() {}
     def cleanup() {}
@@ -73,7 +75,7 @@ class EvaluationResultSpec extends Specification {
             fileName)
         boolean imagesAreSimilar = diff.imagesAreSimilar(criteriaPercentage)
         double diffRatio = 3.56
-        EvaluationResult result = new EvaluationResult(expected, actual, criteriaPercentage, imagesAreSimilar, diffRatio , diffFile)
+        ComparisonResult result = new ComparisonResult(expected, actual, criteriaPercentage, imagesAreSimilar, diffRatio , diffFile)
         then:
         result != null
         result.getExpectedMaterial().equals(expected)
@@ -82,6 +84,18 @@ class EvaluationResultSpec extends Specification {
         result.imagesAreSimilar() == true
         result.getDiffRatio() == 3.56
         result.getDiff().toString().contains('imageDiff')
+        when:
+        String jsonText = result.toJsonText()
+        String pretty = JsonOutput.prettyPrint(jsonText)
+        println pretty
+        then:
+        pretty != null
+        pretty.contains('ComparisonResult')
+        when:
+        JsonSlurper slurper = new JsonSlurper()
+        def deserialized = slurper.parseText(jsonText)
+        then:
+        deserialized != null
     }
 }
 
