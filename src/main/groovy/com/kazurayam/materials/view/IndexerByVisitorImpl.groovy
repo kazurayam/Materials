@@ -38,6 +38,11 @@ class IndexerByVisitorImpl implements Indexer {
     }
 
     @Override
+    Path getOutput() {
+        return this.output_
+    }
+    
+    @Override
     void setBaseDir(Path baseDir) {
         if (baseDir == null) {
             def msg = "#setBaseDir baseDir argument is null"
