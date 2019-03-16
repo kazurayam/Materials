@@ -97,6 +97,7 @@ class BaseIndexer implements Indexer {
         def titleStr = currDir.relativize(
                         repoRoot.getBaseDir().normalize().toAbsolutePath()).
                             toString()
+        mb.doubleQuotes = true        // use "value" rather than 'value'
         mb.html {
             head {
                 meta(['http-equiv':'X-UA-Compatible', 'content': 'IE=edge'])

@@ -69,7 +69,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/BaseIndexerSpec.class'
+    include '**/ModularizedXmlBuilderSpec.class'
+    include '**/JsonToXmlConverterSpec.class'
     //include '**/IndexerByVisitorImplSpec.class'
     outputs.upToDateWhen {false}
 }
