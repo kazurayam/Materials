@@ -23,7 +23,6 @@ import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGenera
 import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
 
 import groovy.json.JsonOutput
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class IndexerByVisitorImplSpec extends Specification {
@@ -55,7 +54,7 @@ class IndexerByVisitorImplSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    @Ignore
+    
     def testSmoke() {
         setup:
         IndexerByVisitorImpl indexer = new IndexerByVisitorImpl()

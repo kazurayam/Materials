@@ -104,17 +104,17 @@ class IndexerByVisitorImpl implements Indexer {
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        OutputStream os = output_.toFile().newOutputStream()
-        generate(repoRoot, os)
+        String html = generate(repoRoot)
+        output_.withWriter('utf-8') { writer ->
+            writer.write(html)
+        }
         logger_.info("generated ${output_.toString()}")
     }
 
-    void generate(RepositoryRoot repoRoot, OutputStream os) throws IOException {
+    String generate(RepositoryRoot repoRoot) throws IOException {
         Objects.requireNonNull(repoRoot)
-        Objects.requireNonNull(os)
         def dir = repoRoot.getBaseDir().resolve('../..').normalize().toAbsolutePath()
         def title = dir.relativize(repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
-        def writer = new OutputStreamWriter(os, 'UTF-8')
         //
         StringWriter htmlFragments = new StringWriter()
         def htmlVisitor = new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
@@ -211,10 +211,7 @@ modalize();
 
         //
         String html = sb.toString()
-        writer.write(html)
-        writer.flush()
-        writer.close()
-
+        return html
     }
 
     /**

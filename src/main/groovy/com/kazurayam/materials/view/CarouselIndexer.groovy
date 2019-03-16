@@ -81,13 +81,16 @@ class CarouselIndexer implements Indexer {
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        OutputStream os = output_.toFile().newOutputStream()
-        generate(repoRoot, os)
+        String html = generate(repoRoot)
+        output_.withWriter('utf-8') { writer ->
+            writer.write(html)
+        }
         logger_.info("generated ${output_.toString()}")
             throw new UnsupportedOperationException("TODO")
     }
     
-    void generate(RepositoryRoot repoRoot, OutputStream os) throws IOException {
+    String generate(RepositoryRoot repoRoot) {
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
         throw new UnsupportedOperationException("TODO")
     }
 }
