@@ -13,9 +13,9 @@ import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.xml.MarkupBuilder
 
-class CarouselIndexer implements Indexer {
+class BaseIndexer implements Indexer {
     
-    static Logger logger_ = LoggerFactory.getLogger(CarouselIndexer.class)
+    static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)
     
     private Path baseDir_
     private Path reportsDir_
@@ -92,12 +92,15 @@ class CarouselIndexer implements Indexer {
     void generate(RepositoryRoot repoRoot, MarkupBuilder mb) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
         Objects.requireNonNull(mb, "mb must not be null")
-        Path currDir = repoRoot.getBaseDir().getParent().getParent().normalize().toAbsolutePath()
+        Path currDir = repoRoot.getBaseDir().getParent().getParent().
+                                            normalize().toAbsolutePath()
+        def titleStr = currDir.relativize(
+                        repoRoot.getBaseDir().normalize().toAbsolutePath()).
+                            toString()
         mb.html {
             head {
                 meta(['http-equiv':'X-UA-Compatible', 'content': 'IE=edge'])
-                title currDir.relativize(
-                        repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
+                title "${titleStr}"
                 meta(['charset':'utf-8'])
                 meta(['name':'descrition', 'content':''])
                 meta(['name':'author', 'content':''])
@@ -123,7 +126,29 @@ class CarouselIndexer implements Indexer {
 '''
             }
             body {
-                p 'Hey this is a simple HTML paragraph created with a Groovy Builder!'
+                div(['class':'container']) {
+                    h3 "${titleStr}"
+                    div(['id':'tree'])
+                    div(['id':'footer'])
+                    div(['id':'modal-windows']) {
+                        mkp.comment('here is inserted the output of RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal')
+                        mkp.comment('end of the output')
+                    }
+                }
+                mkp.comment('SCRIPTS')
+                script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+                        'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
+                        'crossorigin':'anonymous'])
+                script(['src':'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
+                        'integrity':'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49',
+                        'crossorigin':'anonymous'])
+                script(['src':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
+                        'integrity':'sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
+                        'crossorigin':'anonymous'])
+                script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'])
+                script {
+                    mkp.comment('here is inserted the output of RepositoryVisitorGeneratingBootstrapTreeviewData')
+                }
             }
         }
     }

@@ -11,9 +11,9 @@ import com.kazurayam.materials.Helpers
 
 import spock.lang.Specification
 
-class CarouselIndexerSpec extends Specification {
+class BaseIndexerSpec extends Specification {
     
-    static Logger logger_ = LoggerFactory.getLogger(CarouselIndexerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(BaseIndexerSpec.class)
     
     // fields
     static Path specOutputDir
@@ -23,7 +23,7 @@ class CarouselIndexerSpec extends Specification {
     def setupSpec() {
         Path projectDir = Paths.get('.')
         Path testOutputDir = projectDir.resolve('./build/tmp/testOutput')
-        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(CarouselIndexerSpec.class)}")
+        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(BaseIndexerSpec.class)}")
         if (specOutputDir.toFile().exists()) {
             Helpers.deleteDirectoryContents(specOutputDir)
         }
@@ -39,7 +39,7 @@ class CarouselIndexerSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
-        CarouselIndexer indexer = makeIndexer(caseOutputDir)
+        BaseIndexer indexer = makeIndexer(caseOutputDir)
         when:
         indexer.execute()
         Path index = indexer.getOutput()
@@ -56,8 +56,18 @@ class CarouselIndexerSpec extends Specification {
         // html.contains('<!-- [if lt IE 9]')
         html.contains('bootstrap.min.css')
         html.contains('bootstrap-treeview.min.css')
-        html.contains('.list-group-item > .badge {')
+        // html.contains('.list-group-item > .badge {')
         html.contains('<body>')
+        html.contains('<div id=\'tree\'')
+        html.contains('<div id=\'footer\'')
+        html.contains('<div id=\'modal-windows\'')
+        
+        html.contains('jquery')
+        html.contains('popper')
+        html.contains('bootstrap')
+        html.contains('bootstrap-treeview')
+        
+        
     }
     
     /**
@@ -65,10 +75,10 @@ class CarouselIndexerSpec extends Specification {
      * @param caseOutputDir
      * @return a CarouselIndexer object
      */
-    private CarouselIndexer makeIndexer(Path caseOutputDir) {
+    private BaseIndexer makeIndexer(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
-        CarouselIndexer indexer = new CarouselIndexer()
+        BaseIndexer indexer = new BaseIndexer()
         indexer.setBaseDir(materialsDir)
         indexer.setReportsDir(reportsDir)
         Path index = materialsDir.resolve('index.html')

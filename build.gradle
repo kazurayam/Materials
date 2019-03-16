@@ -69,7 +69,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/CarouselIndexerSpec.class'
+    include '**/BaseIndexerSpec.class'
     //include '**/IndexerByVisitorImplSpec.class'
     outputs.upToDateWhen {false}
 }
