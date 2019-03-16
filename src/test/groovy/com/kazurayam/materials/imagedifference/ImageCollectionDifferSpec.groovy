@@ -178,10 +178,16 @@ class ImageCollectionDifferSpec extends Specification {
         TSuiteResult tsr = mr.getTSuiteResult(tsri)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
         List<Material> mateList = tcr.getMaterialList()
-        assert mateList.size() == 1
-        Material diffImage = mateList.get(0)
+        assert mateList.size() == 2                     // diffImage + ComparisonResult.json
+        Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
         diffImage.getPath().toString().endsWith('.(16.86)FAILED.png')
+        //
+        when:
+        // assert that we have ComparisonResults.json
+        List<Material> jsons = tcr.getMaterialList('ComparisonResults.json')
+        then:
+        jsons.size() == 1
     }
     
     /**
@@ -242,8 +248,8 @@ class ImageCollectionDifferSpec extends Specification {
         TSuiteResult tsr = mr.getTSuiteResult(tsri)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
         List<Material> mateList = tcr.getMaterialList()
-        assert mateList.size() == 1
-        Material diffImage = mateList.get(0)
+        assert mateList.size() == 2          // diffImage + ComparisonResults.json
+        Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
         diffImage.getPath().toString().endsWith('.(16.86).png')
     }
