@@ -13,7 +13,7 @@ import spock.lang.Specification
 
 class CarouselIndexerSpec extends Specification {
     
-    static Logger logger = LoggerFactory.getLogger(CarouselIndexerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(CarouselIndexerSpec.class)
     
     // fields
     static Path specOutputDir
@@ -43,12 +43,21 @@ class CarouselIndexerSpec extends Specification {
         when:
         indexer.execute()
         Path index = indexer.getOutput()
+        logger_.debug("#testSmoke index=${index.toString()}")
         then:
         Files.exists(index)
         when:
-        String content = index.toFile().text
+        String html = index.toFile().text
         then:
-        content.contains('<html')
+        html.contains('<html')
+        html.contains('<head')
+        html.contains('http-equiv')
+        html.contains('<meta charset')
+        // html.contains('<!-- [if lt IE 9]')
+        html.contains('bootstrap.min.css')
+        html.contains('bootstrap-treeview.min.css')
+        html.contains('.list-group-item > .badge {')
+        html.contains('<body>')
     }
     
     /**

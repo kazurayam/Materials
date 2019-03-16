@@ -11,6 +11,8 @@ import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.xml.MarkupBuilder
+
 class CarouselIndexer implements Indexer {
     
     static Logger logger_ = LoggerFactory.getLogger(CarouselIndexer.class)
@@ -81,16 +83,48 @@ class CarouselIndexer implements Indexer {
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        String html = generate(repoRoot)
-        output_.withWriter('utf-8') { writer ->
-            writer.write(html)
-        }
+        Writer w = new OutputStreamWriter(new FileOutputStream(output_.toFile()), 'utf-8')
+        MarkupBuilder mb = new MarkupBuilder(w)
+        generate(repoRoot, mb)
         logger_.info("generated ${output_.toString()}")
-            throw new UnsupportedOperationException("TODO")
     }
     
-    String generate(RepositoryRoot repoRoot) {
+    void generate(RepositoryRoot repoRoot, MarkupBuilder mb) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
-        throw new UnsupportedOperationException("TODO")
+        Objects.requireNonNull(mb, "mb must not be null")
+        Path currDir = repoRoot.getBaseDir().getParent().getParent().normalize().toAbsolutePath()
+        mb.html {
+            head {
+                meta(['http-equiv':'X-UA-Compatible', 'content': 'IE=edge'])
+                title currDir.relativize(
+                        repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
+                meta(['charset':'utf-8'])
+                meta(['name':'descrition', 'content':''])
+                meta(['name':'author', 'content':''])
+                meta(['name':'viewport', 'content':'width=device-width, iniital-scale=1'])
+                link(['rel':'stylesheet', 'href':''])
+                mkp.comment(''' [if lt IE 9]
+<script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif] ''')
+                link(['rel':'shortcut icon', 'href':''])
+                link(['href':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',
+                    'rel':'stylesheet',
+                    'integrity':'sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB',
+                    'crossorigin':'anonymous'
+                    ])
+                link(['href':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css',
+                    'rel':'stylesheet'
+                    ])
+                style '''
+.list-group-item > .badge {
+    float: right;
+}
+'''
+            }
+            body {
+                p 'Hey this is a simple HTML paragraph created with a Groovy Builder!'
+            }
+        }
     }
 }
