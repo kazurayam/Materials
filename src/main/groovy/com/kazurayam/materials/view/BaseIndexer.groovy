@@ -106,24 +106,18 @@ class BaseIndexer implements Indexer {
                             toString()
         
         // closure to generate html as modal window for Materials
-        def generateModalDivs = { RepositoryRoot rp -> 
+        def generateHtmlDivsAsModal = { RepositoryRoot rp -> 
             delegate.p "FOO"
         }
-        generateModalDivs.delegate = markupBuilder
+        generateHtmlDivsAsModal.delegate = markupBuilder
         
         // closure which generates javascript code for utilizing Bootstrap Treeview
-        def getTreeJs = { rp ->
+        def generateJsAsBootstrapTreeviewData = { rp ->
             delegate.mkp.comment "BAR"
             StringWriter jsonSiniped = new StringWriter()
         }
-        getTreeJs.delegate = markupBuilder
+        generateJsAsBootstrapTreeviewData.delegate = markupBuilder
         
-        // sub-closure which generates a node for Bootstrap Treeview
-        def getTreeviewNode = { rp ->
-            delegate.p "BAZ"
-        }
-        getTreeviewNode.delegate = getTreeJs
-                            
         // now drive the MarkeupBuilder
         markupBuilder.doubleQuotes = true   // use "value" rather than 'value'
         markupBuilder.html {
@@ -161,7 +155,7 @@ class BaseIndexer implements Indexer {
                     div(['id':'footer'])
                     div(['id':'modal-windows']) {
                         mkp.comment('here is inserted the output of RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal')
-                        generateModalDivs(repoRoot)
+                        generateHtmlDivsAsModal(repoRoot)
                         mkp.comment('end of the output')
                     }
                 }
@@ -178,7 +172,7 @@ class BaseIndexer implements Indexer {
                 script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'])
                 script {
                     mkp.comment('here is inserted the output of RepositoryVisitorGeneratingBootstrapTreeviewData')
-                    getTreeJs(repoRoot)
+                    generateJsAsBootstrapTreeviewData(repoRoot)
                 }
             }
         }
