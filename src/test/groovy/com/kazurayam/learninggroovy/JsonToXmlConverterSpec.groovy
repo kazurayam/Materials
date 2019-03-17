@@ -1,6 +1,6 @@
-package com.kazurayam.markupbuilder
+package com.kazurayam.learninggroovy
 
-import com.kazurayam.markupbuilder.JsonToXmlConverter.KeyValue
+import com.kazurayam.learninggroovy.JsonToXmlConverter.KeyValue
 
 import spock.lang.Ignore
 import spock.lang.Specification

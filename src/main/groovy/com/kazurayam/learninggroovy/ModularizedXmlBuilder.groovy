@@ -1,4 +1,4 @@
-package com.kazurayam.markupbuilder
+package com.kazurayam.learninggroovy
 
 import groovy.xml.MarkupBuilder
 
@@ -11,6 +11,8 @@ import groovy.xml.MarkupBuilder
 class ModularizedXmlBuilder {
     
     /**
+     * The methods here generates the following string in XML using
+     * Groovy's MarkupBuilder.
      * <PRE>
      * <root>
   <id>1</id>
@@ -28,7 +30,8 @@ class ModularizedXmlBuilder {
   </company>
 </root>
      * </PRE>
-     * @return
+     * I want to find out a way to modularize the method generate1, which is
+     * monolithic. I could do it using closures and delegate.
      */
     static String generate1() {
         StringWriter sw = new StringWriter()
@@ -73,6 +76,13 @@ class ModularizedXmlBuilder {
         return sw.toString()
     }
     
+    /**
+     * Groovy's MarkupBuidler is nice. It is even more powerfull if you
+     * modularize the code by closures. Callee closure is linked with
+     * caller closure by setting the caller reference to the delegate 
+     * property to the callee.
+     * This test case shows an example of this practice.
+     */
     static String generate3() {
         StringWriter sw = new StringWriter()
         MarkupBuilder mb = new MarkupBuilder(sw)
@@ -81,7 +91,7 @@ class ModularizedXmlBuilder {
                 name(n)
             }
         }
-        c.delegate = mb
+        c.delegate = mb   // Here is the magic.
         //
         mb.root(){
             id(1)

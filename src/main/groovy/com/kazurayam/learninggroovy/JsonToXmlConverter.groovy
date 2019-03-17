@@ -1,4 +1,4 @@
-package com.kazurayam.markupbuilder
+package com.kazurayam.learninggroovy
 
 /**
  * http://npnl.hatenablog.jp/entry/20110315/1300210292

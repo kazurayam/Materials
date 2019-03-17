@@ -1,4 +1,6 @@
-package com.kazurayam.markupbuilder
+package com.kazurayam.learninggroovy
+
+import com.kazurayam.learninggroovy.ModularizedXmlBuilder
 
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -21,6 +23,7 @@ class ModularizedXmlBuilderSpec extends Specification {
         s == ""
     }
     
+    @Ignore
     def test_generate3() {
         when:
         String s = ModularizedXmlBuilder.generate3()

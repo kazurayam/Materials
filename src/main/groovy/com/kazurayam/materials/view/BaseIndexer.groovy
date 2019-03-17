@@ -10,6 +10,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryWalker
 
 import groovy.xml.MarkupBuilder
 
@@ -89,16 +90,44 @@ class BaseIndexer implements Indexer {
         logger_.info("generated ${output_.toString()}")
     }
     
-    void generate(RepositoryRoot repoRoot, MarkupBuilder mb) {
+    /**
+     * generate the Materials/index.html using Groovy's MarkupBuilder
+     * 
+     * @param repoRoot
+     * @param mb
+     */
+    void generate(RepositoryRoot repoRoot, MarkupBuilder markupBuilder) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
-        Objects.requireNonNull(mb, "mb must not be null")
+        Objects.requireNonNull(markupBuilder, "markupBuilder must not be null")
+        // title
         Path currDir = repoRoot.getBaseDir().getParent().getParent().
                                             normalize().toAbsolutePath()
         def titleStr = currDir.relativize(
                         repoRoot.getBaseDir().normalize().toAbsolutePath()).
                             toString()
-        mb.doubleQuotes = true        // use "value" rather than 'value'
-        mb.html {
+        
+        // closure to generate html as modal window for Materials
+        def generateModalDivs = { rp -> 
+            delegate.p "FOO"
+        }
+        generateModalDivs.delegate = markupBuilder
+        
+        // closure which generates javascript code for utilizing Bootstrap Treeview
+        def getTreeJs = { rp ->
+            delegate.mkp.comment "BAR"
+            StringWriter jsonSiniped = new StringWriter()
+        }
+        getTreeJs.delegate = markupBuilder
+        
+        // sub-closure which generates a node for Bootstrap Treeview
+        def getTreeviewNode = { rp ->
+            delegate.p "BAZ"
+        }
+        getTreeviewNode.delegate = getTreeJs
+                            
+        // now drive the MarkeupBuilder
+        markupBuilder.doubleQuotes = true   // use "value" rather than 'value'
+        markupBuilder.html {
             head {
                 meta(['http-equiv':'X-UA-Compatible', 'content': 'IE=edge'])
                 title "${titleStr}"
@@ -133,6 +162,7 @@ class BaseIndexer implements Indexer {
                     div(['id':'footer'])
                     div(['id':'modal-windows']) {
                         mkp.comment('here is inserted the output of RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal')
+                        RepositoryWalker.walkRepository(repoRoot, generateModalDivs)
                         mkp.comment('end of the output')
                     }
                 }
@@ -149,6 +179,7 @@ class BaseIndexer implements Indexer {
                 script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'])
                 script {
                     mkp.comment('here is inserted the output of RepositoryVisitorGeneratingBootstrapTreeviewData')
+                    RepositoryWalker.walkRepository(repoRoot, getTreeJs)
                 }
             }
         }
