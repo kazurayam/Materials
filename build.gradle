@@ -71,7 +71,7 @@ test {
 
 task pinpoint(type: Test) {
     include '**/view/BaseIndexerSpec.class'
-    //include '**/JsonToXmlConverterSpec.class'
+    include '**/view/IndexerByVisitorImplSpec.class'
     //include '**/IndexerByVisitorImplSpec.class'
     exclude '**/learninggroovy/*'
     outputs.upToDateWhen {false}

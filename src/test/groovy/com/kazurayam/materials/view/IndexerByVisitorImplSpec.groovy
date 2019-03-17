@@ -19,8 +19,7 @@ import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryWalker
-import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
-import com.kazurayam.materials.view.IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
+import com.kazurayam.materials.view.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal as HTMLVisitor
 
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -76,8 +75,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testWalkWithJSONVisitor() {
         setup:
         StringWriter jsonSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+        RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
+            new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
         when:
         // now walk the repository to generate a json text
         RepositoryWalker.walkRepository(repoRoot_, jsonVisitor)
@@ -91,8 +90,8 @@ class IndexerByVisitorImplSpec extends Specification {
      def testJSONVisitorVisitMaterial() {
          setup:
          StringWriter jsonSnippet = new StringWriter()
-         IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
-             new IndexerByVisitorImpl.RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+         RepositoryVisitorGeneratingBootstrapTreeviewData jsonVisitor =
+             new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
          //
          TSuiteResult tsr = repoRoot_.getTSuiteResult(
              new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
@@ -114,7 +113,7 @@ class IndexerByVisitorImplSpec extends Specification {
     def testWalkWithHTMLVisitor() {
         setup:
         StringWriter htmlFragments = new StringWriter()
-        def htmlVisitor = new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
+        def htmlVisitor = new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
         when:
         RepositoryWalker.walkRepository(repoRoot_, htmlVisitor)
         String content = htmlFragments.toString()
@@ -138,8 +137,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testHTMLVisitorMarkupInModalWindow() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
@@ -158,8 +157,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testToHtmlAsModalWindow_PNG() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
@@ -179,8 +178,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testToHtmlAsModalWindow_miscellaneousImages() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
@@ -239,8 +238,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testToHtmlAsModalWindow_CSV() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
@@ -261,8 +260,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testToHtmlAsModalWindow_PDF() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
@@ -283,8 +282,8 @@ class IndexerByVisitorImplSpec extends Specification {
     def testToHtmlAsModalWindow_XLSX() {
         setup:
         StringWriter htmlSnippet = new StringWriter()
-        IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
-            new IndexerByVisitorImpl.RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
+        RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal htmlVisitor =
+            new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlSnippet)
         //
         TSuiteResult tsr = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS3'),
                                                     TSuiteTimestamp.newInstance('20180627_140853'))
