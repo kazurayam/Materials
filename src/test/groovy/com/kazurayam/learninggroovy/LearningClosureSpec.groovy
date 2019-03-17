@@ -281,5 +281,7 @@ class LearningClosureSpec extends Specification {
         when:
             Greeter greeter = { 'Groovy' } as Greeter
             greeter.greet()
+        then:
+            false
     }
 }

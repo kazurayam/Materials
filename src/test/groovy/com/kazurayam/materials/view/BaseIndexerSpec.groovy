@@ -58,15 +58,14 @@ class BaseIndexerSpec extends Specification {
         html.contains('bootstrap-treeview.min.css')
         // html.contains('.list-group-item > .badge {')
         html.contains('<body>')
-        html.contains('<div id=\'tree\'')
-        html.contains('<div id=\'footer\'')
-        html.contains('<div id=\'modal-windows\'')
+        html.contains('<div id="tree"')
+        html.contains('<div id="footer"')
+        html.contains('<div id="modal-windows"')
         
         html.contains('jquery')
         html.contains('popper')
         html.contains('bootstrap')
         html.contains('bootstrap-treeview')
-        
         
     }
     

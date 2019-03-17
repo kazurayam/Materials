@@ -64,15 +64,16 @@ tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncodi
 test {
     include '**/materials/*Spec.class'
     include '**/materials/**/*Spec.class'
+    exclude '**/learninggroovy/*'
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
 
 task pinpoint(type: Test) {
-    include '**/LearningClosureSpec.class'
-    //include '**/ModularizedXmlBuilderSpec.class'
+    include '**/view/BaseIndexerSpec.class'
     //include '**/JsonToXmlConverterSpec.class'
     //include '**/IndexerByVisitorImplSpec.class'
+    exclude '**/learninggroovy/*'
     outputs.upToDateWhen {false}
 }
 

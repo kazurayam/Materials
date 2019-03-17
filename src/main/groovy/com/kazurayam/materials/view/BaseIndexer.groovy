@@ -10,7 +10,6 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.repository.RepositoryWalker
 
 import groovy.xml.MarkupBuilder
 
@@ -107,7 +106,7 @@ class BaseIndexer implements Indexer {
                             toString()
         
         // closure to generate html as modal window for Materials
-        def generateModalDivs = { rp -> 
+        def generateModalDivs = { RepositoryRoot rp -> 
             delegate.p "FOO"
         }
         generateModalDivs.delegate = markupBuilder
@@ -162,7 +161,7 @@ class BaseIndexer implements Indexer {
                     div(['id':'footer'])
                     div(['id':'modal-windows']) {
                         mkp.comment('here is inserted the output of RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal')
-                        RepositoryWalker.walkRepository(repoRoot, generateModalDivs)
+                        generateModalDivs(repoRoot)
                         mkp.comment('end of the output')
                     }
                 }
@@ -179,7 +178,7 @@ class BaseIndexer implements Indexer {
                 script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'])
                 script {
                     mkp.comment('here is inserted the output of RepositoryVisitorGeneratingBootstrapTreeviewData')
-                    RepositoryWalker.walkRepository(repoRoot, getTreeJs)
+                    getTreeJs(repoRoot)
                 }
             }
         }
