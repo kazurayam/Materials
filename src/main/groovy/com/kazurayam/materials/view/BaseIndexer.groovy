@@ -112,13 +112,15 @@ class BaseIndexer implements Indexer {
         //    delegate.p "FOO"
         //}
         //generateHtmlDivsAsModal.delegate = markupBuilder
-        def generateHtmlDivsAsModal = new RepositoryVisitorGeneratingHtmlDivsAsModal()
+        def generateHtmlDivsAsModal = { RepositoryRoot rp ->
+            // generate HTML <div> tags as Modal window
+            def htmlVisitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
+            RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
+        }
         generateHtmlDivsAsModal.delegate = markupBuilder
         
         // closure which generates javascript code for utilizing Bootstrap Treeview
-        def generateJsAsBootstrapTreeviewData = { RepositoryRoot rp->
-            //delegate.mkp.comment "BAR"
-            
+        def generateJsAsBootstrapTreeviewData = { RepositoryRoot rp ->
             // generate the data for Bootstrap Treeview
             StringWriter jsonSnippet = new StringWriter()
             def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
@@ -192,9 +194,7 @@ modalize();
                     div(['id':'tree'])
                     div(['id':'footer'])
                     div(['id':'modal-windows']) {
-                        mkp.comment('here is inserted the output of RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal')
-                        generateHtmlDivsAsModal(repoRoot)
-                        mkp.comment('end of the output')
+                        generateHtmlDivsAsModal()
                     }
                 }
                 mkp.comment('SCRIPTS')

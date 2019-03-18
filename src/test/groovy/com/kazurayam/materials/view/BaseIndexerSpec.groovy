@@ -24,9 +24,9 @@ class BaseIndexerSpec extends Specification {
         Path projectDir = Paths.get('.')
         Path testOutputDir = projectDir.resolve('./build/tmp/testOutput')
         specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(BaseIndexerSpec.class)}")
-        if (specOutputDir.toFile().exists()) {
-            Helpers.deleteDirectoryContents(specOutputDir)
-        }
+        //if (specOutputDir.toFile().exists()) {
+        //    Helpers.deleteDirectoryContents(specOutputDir)
+        //}
         fixtureDir = projectDir.resolve('src').resolve('test').resolve('fixture')
     }
     def setup() {}
@@ -38,7 +38,7 @@ class BaseIndexerSpec extends Specification {
         setup:
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
         Files.createDirectories(caseOutputDir)
-        Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        Helpers.copyDirectory(fixtureDir, caseOutputDir, true)  // 3rd arg means 'skipIfIdentical'
         BaseIndexer indexer = makeIndexer(caseOutputDir)
         when:
         indexer.execute()
@@ -63,13 +63,13 @@ class BaseIndexerSpec extends Specification {
         html.contains('<div id="modal-windows"')
         
         // div tags as Modal
-        html.contains('FOOfooFOO BAR')
+        html.contains('FOOfooFOO')
         
+        // script tags
         html.contains('jquery')
         html.contains('popper')
         html.contains('bootstrap')
         html.contains('bootstrap-treeview')
-        
         
         // Bootstrap Treeview data
         html.contains('function getTree() {')
