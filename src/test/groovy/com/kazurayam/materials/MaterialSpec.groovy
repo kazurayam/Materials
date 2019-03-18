@@ -393,7 +393,6 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
-    @IgnoreRest
     def testGetHrefToReport() {
         setup:
         String timestamp = '20180805_081908'
@@ -404,7 +403,7 @@ class MaterialSpec extends Specification {
         when:
         String href = mate1.getHrefToReport()
         then:
-        href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html"))
+        href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html").toString())
     }
     
     def testSetGetLastModified_long() {

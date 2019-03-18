@@ -70,9 +70,9 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/view/BaseIndexerSpec.class'
-    //include '**/view/IndexerByVisitorImplSpec.class'
-    include '**/MaterialSpec.class'
+    include '**/view/BaseIndexerSpec.class'
+    include '**/view/IndexerByVisitorImplSpec.class'
+    //include '**/MaterialSpec.class'
     exclude '**/learninggroovy/*'
     outputs.upToDateWhen {false}
 }

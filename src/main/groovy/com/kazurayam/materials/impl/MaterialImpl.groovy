@@ -14,8 +14,10 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.repository.RepositoryRoot
 
 class MaterialImpl implements Material {
     
@@ -193,6 +195,38 @@ class MaterialImpl implements Material {
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
+    }
+    
+    /**
+     * Provided that the Material exists at 
+     *    - TSuiteName: 'Test Suites/main/TS1'
+     *    - TSuiteTimestamp: '20180805_081908'
+     *    - TCaseName: 'Test Cases/main/TC1'
+     *    - Material's relative path to the TCaseResult dir: 'screenshot.png'
+     * then hrefToReport() should return
+     *    '../Reports/main/TS1/20180805_081908/Report.html'
+     * here we assume the Reports directory is located sibling to the Materials directory.
+     */
+    @Override
+    String getHrefToReport() {
+        TCaseResult tCaseResult = this.getParent()
+        TSuiteResult tSuiteResult = tCaseResult.getParent()
+        RepositoryRoot repoRoot = tSuiteResult.getParent()
+        Path reportsDir = repoRoot.getReportsDir()
+        if (reportsDir != null) {
+            println "reportsDir=${reportsDir.toString()}"
+            println "TSuiteName=${tSuiteResult.getTSuiteName().toString()}"
+            println "TSuiteName.getAbbreviatedId()=${tSuiteResult.getTSuiteName().getAbbreviatedId()}"
+            Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
+            Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
+            Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
+            // we need to relativise it; relative to the Materials dir
+            Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
+            Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
+            return relativeHtmlPath.toString()
+        } else {
+            return null
+        }
     }
 
     // unused?

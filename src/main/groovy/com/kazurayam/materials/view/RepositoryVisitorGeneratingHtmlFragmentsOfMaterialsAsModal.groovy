@@ -173,7 +173,7 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
     }
 
     String anchorToReport(Material mate) {
-        String reportHref = hrefToReport(mate)
+        String reportHref = mate.getHrefToReport()
         if (reportHref != null) {
             Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
             if (Files.exists(p)) {
@@ -192,6 +192,7 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
         }
     }
 
+    /*
     String hrefToReport(Material mate) {
         TSuiteResult tsr = mate.getParent().getParent()
         if (tsr != null) {
@@ -206,4 +207,5 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
             return null
         }
     }
+    */
 }

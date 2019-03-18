@@ -15,6 +15,7 @@ final class TCaseName implements Comparable<TCaseName> {
     static final String prefix_ = 'Test Cases/'
 
     private String id_
+    private String abbreviatedId_
     private String value_
 
     /**
@@ -24,14 +25,18 @@ final class TCaseName implements Comparable<TCaseName> {
     TCaseName(String testCaseId) {
         Objects.requireNonNull(testCaseId)
         id_ = testCaseId
-        def s = testCaseId
-        if (s.startsWith(prefix_)) {
-            s = s.substring(prefix_.length())
-        }
-        s = s.replace('/', '.')
-        value_ = s
+        abbreviatedId_ = abbreviate(testCaseId)
+        value_ = abbreviatedId_.replace('/', '.')
     }
 
+    private String abbreviate(String id) {
+        if (id.startsWith(prefix_)) {
+            return id.substring(prefix_.length())
+        } else {
+            return id
+        }
+    }
+    
     /**
      *
      * @param path ./Material/main.TC1/yyyyMMdd_hhmmss/<TestCaseName> where TestCaseName is 'main.TC1' for example
@@ -40,12 +45,17 @@ final class TCaseName implements Comparable<TCaseName> {
         Objects.requireNonNull(path)
         value_ = path.getFileName().toString()
         id_ = prefix_ + value_.replace('.', '/')
+        abbreviatedId_ = abbreviate(id_)
     }
 
     String getId() {
         return id_
     }
 
+    String getAbbreviatedId() {
+        return abbreviatedId_
+    }
+    
     String getValue() {
         return value_
     }
@@ -61,6 +71,9 @@ final class TCaseName implements Comparable<TCaseName> {
         sb.append('{')
         sb.append('"id": "')
         sb.append(id_)
+        sb.append('",')
+        sb.append('"abbreviatedId": "')
+        sb.append(abbreviatedId_)
         sb.append('",')
         sb.append('"value": "')
         sb.append(value_)

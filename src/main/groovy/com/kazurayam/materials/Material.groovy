@@ -14,6 +14,7 @@ interface Material extends Comparable<Material> {
     String getFileName()
     FileType getFileType()
     String getHrefRelativeToRepositoryRoot()
+    String getHrefToReport()
 
     /**
      * returns the identifier of the Material which is used as
