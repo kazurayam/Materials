@@ -60,10 +60,19 @@ class BaseIndexerSpec extends Specification {
         html.contains('<body>')
         html.contains('<div id="tree"')
         html.contains('<div id="footer"')
-        html.contains('<div id="modal-windows"')
         
         // div tags as Modal
-        html.contains('FOOfooFOO')
+        html.contains('<div id="modal-windows"')
+        html.contains('class="modal fade"')
+        html.contains('<div class="modal-dialog modal-lg"')
+        html.contains('<div class="modal-content"')
+        html.contains('<div class="modal-header"')
+        html.contains('<p class="modal-title"')
+        html.contains('<div class="modal-body"')
+        html.contains('<img src="')
+        html.contains('<div class="modal-footer"')
+        html.contains('class="btn')
+        
         
         // script tags
         html.contains('jquery')

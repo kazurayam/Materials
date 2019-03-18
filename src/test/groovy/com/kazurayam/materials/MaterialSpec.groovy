@@ -14,6 +14,7 @@ import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -26,6 +27,7 @@ class MaterialSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
     private static TCaseResult tcr_
+    private static Path reports
 
 
     // fixture methods
@@ -36,7 +38,7 @@ class MaterialSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        Path reports = workdir_.resolve('Reports')
+        reports = workdir_.resolve('Reports')
         RepositoryFileScanner scanner = new RepositoryFileScanner(materials, reports)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
@@ -391,7 +393,20 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
-
+    @IgnoreRest
+    def testGetHrefToReport() {
+        setup:
+        String timestamp = '20180805_081908'
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
+        Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
+        when:
+        String href = mate1.getHrefToReport()
+        then:
+        href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html"))
+    }
+    
     def testSetGetLastModified_long() {
         setup:
         Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
