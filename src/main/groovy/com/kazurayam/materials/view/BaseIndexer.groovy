@@ -10,7 +10,9 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryWalker
 
+import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
 
 class BaseIndexer implements Indexer {
@@ -106,17 +108,53 @@ class BaseIndexer implements Indexer {
                             toString()
         
         // closure to generate html as modal window for Materials
-        def generateHtmlDivsAsModal = { RepositoryRoot rp -> 
-            delegate.p "FOO"
-        }
+        //def generateHtmlDivsAsModal = { RepositoryRoot rp -> 
+        //    delegate.p "FOO"
+        //}
+        //generateHtmlDivsAsModal.delegate = markupBuilder
+        def generateHtmlDivsAsModal = new RepositoryVisitorGeneratingHtmlDivsAsModal()
         generateHtmlDivsAsModal.delegate = markupBuilder
         
         // closure which generates javascript code for utilizing Bootstrap Treeview
-        def generateJsAsBootstrapTreeviewData = { rp ->
-            delegate.mkp.comment "BAR"
-            StringWriter jsonSiniped = new StringWriter()
+        def generateJsAsBootstrapTreeviewData = { RepositoryRoot rp->
+            //delegate.mkp.comment "BAR"
+            
+            // generate the data for Bootstrap Treeview
+            StringWriter jsonSnippet = new StringWriter()
+            def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+            RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
+            //
+            delegate.mkp.comment '''
+function getTree() {
+    var data = ''' + JsonOutput.prettyPrint(jsonSnippet.toString()) + ''';
+    return data;
+}
+//
+function modalize() {
+    $('#tree a').each(function() {
+        if ($(this).attr('href') && $(this).attr('href') != '#') {
+            $(this).attr('data-toggle', 'modal');
+            $(this).attr('data-target', $(this).attr('href'));
+            $(this).attr('href', '#');
         }
-        generateJsAsBootstrapTreeviewData.delegate = markupBuilder
+    });
+}
+//
+$('#tree').treeview({
+    data: getTree(),
+    enableLinks: true,
+    levels: 1,
+    multiSelect: false,
+    showTags: true,
+    onNodeSelected: function(event, data) {
+        modalize();
+    }
+});
+//
+modalize();
+            '''
+        }
+        generateJsAsBootstrapTreeviewData.delegate = markupBuilder  // important!
         
         // now drive the MarkeupBuilder
         markupBuilder.doubleQuotes = true   // use "value" rather than 'value'

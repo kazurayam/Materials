@@ -62,11 +62,21 @@ class BaseIndexerSpec extends Specification {
         html.contains('<div id="footer"')
         html.contains('<div id="modal-windows"')
         
+        // div tags as Modal
+        html.contains('FOOfooFOO BAR')
+        
         html.contains('jquery')
         html.contains('popper')
         html.contains('bootstrap')
         html.contains('bootstrap-treeview')
         
+        
+        // Bootstrap Treeview data
+        html.contains('function getTree() {')
+        html.contains('var data = [')
+        html.contains('function modalize() {')
+        html.contains('$(\'#tree\').treeview({')
+        html.contains('modalize();')
     }
     
     /**
