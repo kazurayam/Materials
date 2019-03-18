@@ -46,7 +46,16 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     
     def visitMaterialAction = { material ->
         Objects.requireNonNull(material, "material must not be null")
-        //builder.div(['id': material.hashCode(), 'class':'modal fade'])
+        builder.div(['id': material.hashCode(), 'class':'modal fade']) {
+            builder.div(['class':'modal-dialog modal-lg', 'role':'document']) {
+                builder.div(['class':'modal-content']) {
+                    builder.div(['class':'modal-header']) {
+                        builder.p(['class':'modal-title', 'id': material.hashCode() + 'title'])
+                    }
+                    builder.div(['class':'modal-body]')
+                }
+            }
+        }
     }
                         
     /*
