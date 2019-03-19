@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import java.nio.file.Paths
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -7,6 +9,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
@@ -19,10 +22,14 @@ import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
  */
 class RepositoryVisitorGeneratingBootstrapTreeviewData
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+     
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
+     
      private int tSuiteResultCount
      private int tCaseResultCount
      private int materialsCount
+     private def comparisonResultBundle
+     
      RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
          super(writer)
      }
@@ -95,6 +102,15 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          pw_.print(sb.toString())
          pw_.flush()
          materialsCount = 0
+         //
+         Material crbMaterial = tCaseResult.getMaterial(Paths.get(ComparisonResultBundle.SERIALIZED_FILE_NAME))
+         if (crbMaterial != null) {
+             String jsonText = crbMaterial.getPath().toFile().text
+             this.comparisonResultBundle = ComparisonResultBundle.deserializeToJsonObject(jsonText)
+         } else {
+             logger_.infoEnabled("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
+         }
+         //
          return RepositoryVisitResult.SUCCESS
      }
      @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
@@ -123,6 +139,9 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          sb.append('}')
          pw_.print(sb.toString())
          pw_.flush()
+         //
+         this.comparisonResultBundle = null
+         //
          return RepositoryVisitResult.SUCCESS
      }
      @Override RepositoryVisitResult visitMaterial(Material material) {
@@ -131,6 +150,9 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              sb.append(',')
          }
          materialsCount += 1
+         
+         // TODO Carousel based on the info of the comparisonResultBundle
+         
          sb.append('{')
          sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
          sb.append('"selectable":true,')

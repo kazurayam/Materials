@@ -34,8 +34,6 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageCollectionDiffer.class)
     
-    static final String SERIALIZED_FILE_NAME = 'comparison-result-bundle.json'
-    
     private MaterialRepository mr_
     
     private ComparisonResultBundle bundle_
@@ -201,7 +199,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     @Override
     void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        this.output_ = this.mr_.resolveMaterialPath(tCaseName, ImageCollectionDiffer.SERIALIZED_FILE_NAME)
+        this.output_ = this.mr_.resolveMaterialPath(tCaseName, ComparisonResultBundle.SERIALIZED_FILE_NAME)
         Files.createDirectories(this.output_.getParent())
     }
 

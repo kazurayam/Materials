@@ -2,6 +2,7 @@ package com.kazurayam.materials.view
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,13 +12,14 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitResult
+import com.kazurayam.materials.repository.RepositoryVisitor
 
 import groovy.json.JsonOutput
-import groovy.xml.XmlUtil
 import groovy.xml.MarkupBuilder
+import groovy.xml.XmlUtil
 
 /**
  * This class is a Closure, which works as a part of Closure 
@@ -35,10 +37,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     static final String classShortName = Helpers.getClassShortName(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
     
-    MarkupBuilder builder
+    private MarkupBuilder builder
+    private def comparisonResultBundle
     
     RepositoryVisitorGeneratingHtmlDivsAsModal(MarkupBuilder builder) {
         this.builder = builder
+        this.comparisonResultBundle = null
     }
     
     def preVisitRepositoryRootAction = {
@@ -74,6 +78,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         builder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(), 'class':'img-fluid',
             'style':'border: 1px solid #ddd', 'alt':'material'])
     }
+    
     
     def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
@@ -175,8 +180,18 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * If found, instanciate a ComparisonResult object of thest Test Case from the file. 
      */
     @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
+        Material mate =
+            tCaseResult.getMaterial(Paths.get(ComparisonResultBundle.SERIALIZED_FILE_NAME))
+        if (mate != null) {
+            String jsonText = mate.getPath().toFile().text
+            this.comparisonResultBundle = ComparisonResultBundle.deserializeToJsonObject(jsonText)
+        }
+        return RepositoryVisitResult.SUCCESS
     }
-    @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {}
+    @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
+        this.comparisonResultBundle = null
+        return RepositoryVisitResult.SUCCESS
+    }
     
     @Override RepositoryVisitResult visitMaterial(Material material) {
         visitMaterialAction(material)

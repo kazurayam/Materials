@@ -2,10 +2,10 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,8 +16,6 @@ import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
-
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -108,7 +106,6 @@ class MaterialSpec extends Specification {
         mate.getDirpath() == Paths.get('foo/bar')
         mate.getPath().toString().contains('main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls'.replace('/', File.separator))
     }
-
 
     def testEquals() {
         when:
@@ -413,7 +410,8 @@ class MaterialSpec extends Specification {
         setup:
         Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
         LocalDateTime ldtNow = LocalDateTime.now()
-        Instant instantNow = ldtNow.toInstant(ZoneOffset.UTC)
+        ZonedDateTime zdt = ldtNow.atZone(ZoneId.of("UTC"))
+        Instant instantNow = zdt.toInstant()
         long longNow = instantNow.toEpochMilli()
         when:
         mate.setLastModified(longNow)
@@ -454,5 +452,4 @@ class MaterialSpec extends Specification {
         str.contains('"fileType":')
         str.endsWith('"}}')
     }
-
 }

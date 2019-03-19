@@ -19,8 +19,6 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
 
-import groovy.json.JsonSlurper
-
 class MaterialImpl implements Material {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
@@ -74,23 +72,36 @@ class MaterialImpl implements Material {
         return this.getTCaseResult()
     }
     
+    /**
+     * @return a TCaseName object, same as this.getTCaseResult().getTcaseName(); may return null
+     */
     @Override
     TCaseName getTCaseName() {
-        return this.getTCaseResult().getTCaseName()
+        if (this.getTCaseResult() != null) {
+            return this.getTCaseResult().getTCaseName()
+        } else {
+            return null
+        }
     }
     
+    /**
+     * @return a TCaseResult object, may return null
+     */
     @Override
     TCaseResult getTCaseResult() {
         return parent_
     }
 
+    /**
+     * @return a URL object set by the constructor, may return null
+     */
     @Override    
     URL getURL() {
         return materialFileName_.getURL()
     }
     
     /**
-     * 
+     * @return may return null
      */
     @Override
     Path getSubpath() {
@@ -112,7 +123,7 @@ class MaterialImpl implements Material {
         return materialFileName_.getFileType()
     }
 
-    @Override    
+    @Override
     Path getPath() {
         if (parent_ != null) {
             return parent_.getTCaseDirectory().resolve(dirpath_).resolve(materialFileName_.getFileName()).normalize()
@@ -329,4 +340,5 @@ class MaterialImpl implements Material {
         sb.append('}}')
         return sb.toString()
     }
+    
 }

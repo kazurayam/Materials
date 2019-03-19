@@ -43,8 +43,53 @@ class ComparisonResultBundleSpec extends Specification {
     def cleanupSpec() {}
     
     def test_deserializeToJsonObject() {
-        setup:
+        when:
             Path caseOutputDir = specOutputDir.resolve("test_deserializeToJsonObject")
+            String jsonText = makeJsonText(caseOutputDir)
+            def obj = ComparisonResultBundle.deserializeToJsonObject(jsonText)
+        then:
+            obj.size() == 1
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.expectedMaterial.Material.path,
+                 "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_064354\\main.TC_47News.visitSite\\47NEWS_TOP.png")
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.actualMaterial.Material.path,
+                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_204329\\main.TC_47News.visitSite\\47NEWS_TOP.png")
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.diff,
+                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\ImageDiff\\20190216_210203\\ImageDiff\\main.TC_47News.visitSite\\47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
+            obj.ComparisonResultBundle[0].ComparisonResult.criteriaPercentage    > 30.0
+            obj.ComparisonResultBundle[0].ComparisonResult.imagesAreSimilar      == true
+            obj.ComparisonResultBundle[0].ComparisonResult.diffRatio             == 16.86
+    }
+    
+    /*
+    def test_deserialize() {
+        when:
+            Path caseOutputDir = specOutputDir.resolve("test_deserialize")
+            String jsontText = makeJsonText(caseOutputDir)
+            ComparisonResultBundle bundle = ComparisonResultBundle.deserialize(jsonText)
+        then:
+            bundle.size() == 1
+        when:
+            ComparisonResult cr = bundle.get(0)
+            Path imageDiffPath = cr.getDiff()
+        then:
+            bundle.containsImageDiff(imageDiffPath)
+        when:
+            ComparisonResult cr2 = bundle.get(imageDiffPath)
+        then:
+            cr2 != null
+        when:
+            String srcExpected = bundle.srcOfExpectedMaterial(imageDiffPath)
+        then:
+            srcExpected == "foo"
+        when:
+            String srcActual = bundle.srcOfActualMaterial(imageDiffPath)
+        then:
+            srcActual == "bar"
+    }
+     */
+    
+    String makeJsonText(Path caseOutputDir) {
+        //setup:
             Path materials = caseOutputDir.resolve('Materials')
             Path storage = caseOutputDir.resolve('Storage')
             Files.createDirectories(materials)
@@ -62,7 +107,7 @@ class ComparisonResultBundleSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
             mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
-        when:
+        //when:
             // we use Java 8 Stream API to filter entries
             List<MaterialPair> materialPairs =
                 mr.createMaterialPairs(tsn).stream().filter { mp ->
@@ -79,9 +124,9 @@ class ComparisonResultBundleSpec extends Specification {
             double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
-        then:
-            30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
-        when:
+        //then:
+            assert 30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
+        //when:
             ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
             icd.makeImageCollectionDifferences(
                 materialPairs,
@@ -100,18 +145,7 @@ class ComparisonResultBundleSpec extends Specification {
             Material bundleJson = tcr.getMaterialList('json$', true).get(0)
             String jsonText = bundleJson.getPath().toFile().text
             println "jsonText=${jsonText}"
-            def obj = ComparisonResultBundle.deserializeToJsonObject(jsonText)
-        then:
-            obj.size() == 1
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.expectedMaterial.Material.path,
-                 "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_064354\\main.TC_47News.visitSite\\47NEWS_TOP.png")
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.actualMaterial.Material.path,
-                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_204329\\main.TC_47News.visitSite\\47NEWS_TOP.png")
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.diff,
-                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\ImageDiff\\20190216_210203\\ImageDiff\\main.TC_47News.visitSite\\47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
-            obj.ComparisonResultBundle[0].ComparisonResult.criteriaPercentage    > 30.0
-            obj.ComparisonResultBundle[0].ComparisonResult.imagesAreSimilar      == true
-            obj.ComparisonResultBundle[0].ComparisonResult.diffRatio             == 16.86
+            return jsonText
     }
     
     boolean comparePaths(String path1, String path2) {
