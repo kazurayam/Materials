@@ -107,11 +107,6 @@ class BaseIndexer implements Indexer {
                         repoRoot.getBaseDir().normalize().toAbsolutePath()).
                             toString()
         
-        // closure to generate html as modal window for Materials
-        //def generateHtmlDivsAsModal = { RepositoryRoot rp -> 
-        //    delegate.p "FOO"
-        //}
-        //generateHtmlDivsAsModal.delegate = markupBuilder
         def generateHtmlDivsAsModal = { RepositoryRoot rp ->
             // generate HTML <div> tags as Modal window
             def htmlVisitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
@@ -126,7 +121,8 @@ class BaseIndexer implements Indexer {
             def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
             RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
             //
-            delegate.mkp.comment '''
+            delegate.script(['type':'text/javascript']) {
+                delegate.mkp.yieldUnescaped('''
 function getTree() {
     var data = ''' + JsonOutput.prettyPrint(jsonSnippet.toString()) + ''';
     return data;
@@ -154,7 +150,8 @@ $('#tree').treeview({
 });
 //
 modalize();
-            '''
+            ''')
+            }
         }
         generateJsAsBootstrapTreeviewData.delegate = markupBuilder  // important!
         
@@ -182,17 +179,20 @@ modalize();
                 link(['href':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css',
                     'rel':'stylesheet'
                     ])
-                style '''
+                style {
+                    mkp.yieldUnescaped('''
 .list-group-item > .badge {
     float: right;
 }
 '''
+                        )
+                }
             }
             body {
                 div(['class':'container']) {
                     h3 "${titleStr}"
-                    div(['id':'tree'])
-                    div(['id':'footer'])
+                    div(['id':'tree'], '')
+                    div(['id':'footer'], '')
                     div(['id':'modal-windows']) {
                         generateHtmlDivsAsModal()
                     }
@@ -200,18 +200,16 @@ modalize();
                 mkp.comment('SCRIPTS')
                 script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
                         'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
-                        'crossorigin':'anonymous'])
+                        'crossorigin':'anonymous'], '')
                 script(['src':'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
                         'integrity':'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49',
-                        'crossorigin':'anonymous'])
+                        'crossorigin':'anonymous'], '')
                 script(['src':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
                         'integrity':'sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
-                        'crossorigin':'anonymous'])
-                script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'])
-                script {
-                    mkp.comment('here is inserted the output of RepositoryVisitorGeneratingBootstrapTreeviewData')
-                    generateJsAsBootstrapTreeviewData(repoRoot)
-                }
+                        'crossorigin':'anonymous'], '')
+                script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'], '')
+                //
+                generateJsAsBootstrapTreeviewData(repoRoot)
             }
         }
     }

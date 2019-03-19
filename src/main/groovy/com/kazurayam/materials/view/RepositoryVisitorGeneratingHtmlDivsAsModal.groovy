@@ -43,7 +43,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     
     def preVisitRepositoryRootAction = {
         builder.mkp.comment "here is inserted the output of ${classShortName}"
-        builder.p "FOOfooBAR"
     }
     
     def postVisitRepositoryRootAction = {
@@ -82,9 +81,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     'style':'border: 1px solid #ddd', 'alt':'material'])
                 break
             case FileType.CSV:
-                builder.pre(['class':'pre-scrollable']) {
-                    builder.code(mate.getPath().toFile().getText('UTF-8'))
-                }
+                builder.pre(['class':'pre-scrollable'], mate.getPath().toFile().getText('UTF-8'))
                 break
             case FileType.TXT:
                 builder.div(['style':'height:350px;overflow:auto;']) {
@@ -95,25 +92,19 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 }
                 break
             case FileType.JSON:
-                builder.div(['style':'height:350px;overflow:auto;']) {
-                    def content = mate.getPath().toFile().getText('UTF-8')
-                    content = JsonOutput.prettyPrint(content)
-                    builder.pre(['class':'pre-scrollable']) {
-                        builder.code content
-                    }
-                }
+                def content = mate.getPath().toFile().getText('UTF-8')
+                def pp = JsonOutput.prettyPrint(content)
+                builder.pre(['class':'pre-scrollable'], pp)
                 break
             case FileType.XML:
                 def content = mate.getPath().toFile().getText('UTF-8')
                 content = XmlUtil.serialize(content)
-                builder.pre(['class':'pre-scrollable']) {
-                    builder.code content
-                }
+                builder.pre(['class':'pre-scrollable'], content)
                 break
             case FileType.PDF:
                 builder.div(['class':'embed-responsive embed-responsive-16by9', 'style':'padding-bottom:150%']) {
                     builder.object(['class':'embed-responsive-item', 'data':mate.getEncodedHrefRelativeToRepositoryRoot(),
-                                    'type':'application/pdf', 'width':'100%', 'height':'100%'])
+                                    'type':'application/pdf', 'width':'100%', 'height':'100%'],'')
                     builder.div {
                         builder.a(['href': mate.getEncodedHrefRelativeToRepositoryRoot() ],
                             mate.getPathRelativeToRepositoryRoot())

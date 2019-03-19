@@ -167,7 +167,7 @@ class IndexerByVisitorImpl implements Indexer {
         sb.append(' crossorigin="anonymous"></script>'                                        + "\n")
         sb.append('    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"')
         sb.append('></script>'                                                                + "\n")
-        sb.append('    <script type="text/javascript"><!--'                                   + "\n")
+        sb.append('    <script type="text/javascript">'                                   + "\n")
         sb.append('''
 function getTree() {
     var data = ''' + JsonOutput.prettyPrint(jsonSnippet.toString()) + ''';
@@ -197,7 +197,7 @@ $('#tree').treeview({
 //
 modalize();
 ''')
-        sb.append('--></script>'                                                              + "\n")
+        sb.append('</script>'                                                              + "\n")
         sb.append('  </body>'                                                                 + "\n")
         sb.append('</html>'                                                                   + "\n")
 
