@@ -25,7 +25,6 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
-
 import spock.lang.Specification
 
 class ComparisonResultBundleSpec extends Specification {
@@ -104,11 +103,18 @@ class ComparisonResultBundleSpec extends Specification {
             def obj = ComparisonResultBundle.deserializeToJsonObject(jsonText)
         then:
             obj.size() == 1
-            obj.ComparisonResultBundle[0].ComparisonResult.expectedMaterial.Material.path == "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_064354\\main.TC_47News.visitSite\\47NEWS_TOP.png"
-            obj.ComparisonResultBundle[0].ComparisonResult.actualMaterial.Material.path   == "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_204329\\main.TC_47News.visitSite\\47NEWS_TOP.png"
-            obj.ComparisonResultBundle[0].ComparisonResult.diff                  == "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\ImageDiff\\20190216_210203\\ImageDiff\\main.TC_47News.visitSite\\47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png"
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.expectedMaterial.Material.path,
+                 "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_064354\\main.TC_47News.visitSite\\47NEWS_TOP.png")
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.actualMaterial.Material.path,
+                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_204329\\main.TC_47News.visitSite\\47NEWS_TOP.png")
+            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.diff,
+                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\ImageDiff\\20190216_210203\\ImageDiff\\main.TC_47News.visitSite\\47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
             obj.ComparisonResultBundle[0].ComparisonResult.criteriaPercentage    > 30.0
             obj.ComparisonResultBundle[0].ComparisonResult.imagesAreSimilar      == true
             obj.ComparisonResultBundle[0].ComparisonResult.diffRatio             == 16.86
+    }
+    
+    boolean comparePaths(String path1, String path2) {
+        return path1.replace('\\', '/').equals(path2.replace('\\','/'))
     }
 }
