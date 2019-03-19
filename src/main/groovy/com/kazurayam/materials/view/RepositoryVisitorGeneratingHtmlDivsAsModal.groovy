@@ -70,6 +70,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
     }
     
+    def generateImgTags = { Material mate ->
+        builder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(), 'class':'img-fluid',
+            'style':'border: 1px solid #ddd', 'alt':'material'])
+    }
+    
     def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
             case FileType.BMP:
@@ -77,8 +82,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             case FileType.JPG:
             case FileType.JPEG:
             case FileType.PNG:
-                builder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(), 'class':'img-fluid',
-                    'style':'border: 1px solid #ddd', 'alt':'material'])
+                generateImgTags(mate)
                 break
             case FileType.CSV:
                 builder.pre(['class':'pre-scrollable'], mate.getPath().toFile().getText('UTF-8'))
@@ -162,9 +166,16 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         postVisitRepositoryRootAction()
         return RepositoryVisitResult.SUCCESS
     }
+    
     @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {}
     @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {}
-    @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {}
+    
+    /**
+     * Check if ComarisonResults.json file is there in the TCaseResult directory.
+     * If found, instanciate a ComparisonResult object of thest Test Case from the file. 
+     */
+    @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
+    }
     @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {}
     
     @Override RepositoryVisitResult visitMaterial(Material material) {

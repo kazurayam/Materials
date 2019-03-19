@@ -19,6 +19,8 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonSlurper
+
 class MaterialImpl implements Material {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
@@ -327,5 +329,4 @@ class MaterialImpl implements Material {
         sb.append('}}')
         return sb.toString()
     }
-
 }

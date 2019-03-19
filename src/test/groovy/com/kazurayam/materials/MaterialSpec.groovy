@@ -2,6 +2,7 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -13,6 +14,8 @@ import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
+
+import groovy.json.JsonOutput
 
 import spock.lang.IgnoreRest
 import spock.lang.Specification
@@ -442,7 +445,7 @@ class MaterialSpec extends Specification {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def str = mate.toString()
-        //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
+        println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"Material":{"url":"')
         str.contains('"suffix":')

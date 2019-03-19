@@ -33,14 +33,16 @@ import groovy.json.JsonOutput
 final class ImageCollectionDiffer extends ImageCollectionProcessor {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageCollectionDiffer.class)
-
+    
+    static final String SERIALIZED_FILE_NAME = 'comparison-result-bundle.json'
+    
     private MaterialRepository mr_
     
-    private List<ComparisonResult> comparisonResults_
+    private ComparisonResultBundle bundle_
 
     private Path output_
     
-    static final String OUTPUT_FILENAME = 'ComparisonResults.json'
+    
     
     /**
      * constructor
@@ -53,7 +55,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.errorHandler_ = new ImageDiffProcessingErrorHandler()
         this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
         this.vtListener_ = new VisualTestingListenerDefaultImpl()
-        this.comparisonResults_ = new ArrayList<>()
+        this.bundle_ = new ComparisonResultBundle()
     }
 
     /*
@@ -170,40 +172,25 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     @Override
     void endImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
-        this.output_.text = stringifyComparisonResults(this.comparisonResults_)
+        this.output_.text = JsonOutput.prettyPrint(this.bundle_.toJsonText())
     }
     
-    private String stringifyComparisonResults(List<ComparisonResult> comparisonResults) {
-        StringBuilder sb = new StringBuilder()
-        sb.append('[')
-        int count = 0
-        for (ComparisonResult cmpResult: this.comparisonResults_) {
-            if (count > 0) {
-                sb.append(',')
-            }
-            count += 1
-            sb.append(cmpResult.toJsonText())
-        }
-        sb.append(']')
-        return JsonOutput.prettyPrint(sb.toString())
-    }
-
     /**
      * 
      */
     @Override
-    void endMaterialPair(ComparisonResult evalResult) throws ImageDifferenceException {
+    void endMaterialPair(ComparisonResult cr) throws ImageDifferenceException {
         
         // memorize all of the EvaluationResult objects.
         // EvaluationResult object is just a struct of references and has no large byte array. Its size is small.
-        this.comparisonResults_.add(evalResult)
+        this.bundle_.addComparisonResult(cr)
         
         // verify the diffRatio, fail the test if the ratio is greater than criteria
-        if (this.vtListener_ != null && ! evalResult.imagesAreSimilar()) {
+        if (this.vtListener_ != null && ! cr.imagesAreSimilar()) {
             StringBuilder sb = new StringBuilder()
-            sb.append(">>> diffRatio(${evalResult.getDiffRatio()}) > criteria(${evalResult.getCriteriaPercentage()}) ")
-            sb.append("expected(${evalResult.getExpectedMaterial().getPathRelativeToRepositoryRoot()}) ")
-            sb.append("actual(${evalResult.getActualMaterial().getPathRelativeToRepositoryRoot()})")
+            sb.append(">>> diffRatio(${cr.getDiffRatio()}) > criteria(${cr.getCriteriaPercentage()}) ")
+            sb.append("expected(${cr.getExpectedMaterial().getPathRelativeToRepositoryRoot()}) ")
+            sb.append("actual(${cr.getActualMaterial().getPathRelativeToRepositoryRoot()})")
             this.vtListener_.failed(sb.toString())
         }
     }
@@ -214,7 +201,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     @Override
     void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        this.output_ = this.mr_.resolveMaterialPath(tCaseName, OUTPUT_FILENAME)
+        this.output_ = this.mr_.resolveMaterialPath(tCaseName, ImageCollectionDiffer.SERIALIZED_FILE_NAME)
         Files.createDirectories(this.output_.getParent())
     }
 

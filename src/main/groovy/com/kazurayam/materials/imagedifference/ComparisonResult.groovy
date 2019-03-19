@@ -6,6 +6,8 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteName
 
+import groovy.json.JsonSlurper
+
 /**
  * This class encloses an instance of ImageDifference and a criteriaPercentage against which
  * the ImageDifference is evaluated to see if 2 images are similar enough or not
@@ -14,7 +16,7 @@ import com.kazurayam.materials.TSuiteName
  *
  */
 class ComparisonResult implements Comparable<ComparisonResult> {
-
+    
     private Material expectedMaterial_
     private Material actualMaterial_
     private double criteriaPercentage_
@@ -35,7 +37,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         this.diffRatio_ = diffRatio
         this.diff_ = diff
     }
-    
+        
     Material getExpectedMaterial() {
         return this.expectedMaterial_
     }
@@ -159,4 +161,5 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         sb.append('}')
         return sb.toString()
     }
+    
 }

@@ -213,6 +213,7 @@ class RepositoryRootSpec extends Specification {
         then:
         true
     }
+    
 
     /*
     def testToBootstrapTreeviewData() {

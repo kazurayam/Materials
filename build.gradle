@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.53.1'
+version  = '0.53.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -70,9 +70,10 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/HelpersSpec.class'
-    include '**/IndexerFactorySpec.class'
-    //include '**/MaterialSpec.class'
+    include '**/ComparisonResultBundleSpec.class'
+    include '**/ImageCollectionDifferSpec.class'
+    include '**/TCaseResultSpec.class'
+    include '**/MaterialSpec.class'
     exclude '**/learninggroovy/*'
     outputs.upToDateWhen {false}
 }
