@@ -3,7 +3,6 @@ package com.kazurayam.materials.imagedifference
 import java.nio.file.Path
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialCore
 
 /**
@@ -36,11 +35,11 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         this.diff_ = diff
     }
         
-    Material getExpectedMaterial() {
+    MaterialCore getExpectedMaterial() {
         return this.expectedMaterial_
     }
     
-    Material getActualMaterial() {
+    MaterialCore getActualMaterial() {
         return this.actualMaterial_
     }
     

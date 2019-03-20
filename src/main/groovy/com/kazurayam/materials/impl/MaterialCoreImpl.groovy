@@ -36,13 +36,20 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         
         JsonSlurper slurper = new JsonSlurper()
         def jsonObject = slurper.parseText(jsonText)
-        if (jsonObject.MaterialCore == null) {
-            throw new IllegalArgumentException("jsonText is not a MaterialCore json: ${jsonText}")
+        if (jsonObject == null) {
+            throw new IllegalArgumentException("can not parse jsonText: ${jsonText}")
         }
-        if (jsonObject.MaterialCore.path == null) {
-            throw new IllegalArgumentException("MaterialCore.path is not found in : ${jsonText}")
+        // we need to look for 'Material' property, not 'MaterialCore' property,
+        // so that we can digest the comparison-result-bundle.json file created by
+        // the ImageCollectionDiffer object.
+        //
+        if (jsonObject.Material == null) {
+            throw new IllegalArgumentException("jsonText is not a Material json: ${jsonText}")
         }
-        this.path_ = Paths.get(jsonObject.MaterialCore.path).normalize()
+        if (jsonObject.Material.path == null) {
+            throw new IllegalArgumentException("Material.path is not found in : ${jsonText}")
+        }
+        this.path_ = Paths.get(jsonObject.Material.path).normalize()
     }
     
     MaterialCoreImpl(Path baseDir, Path path) {
@@ -76,7 +83,7 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('"MaterialCore":{')
+        sb.append('"Material":{')
         //sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir()) + '",')
         //sb.append('"pathRelativeToRepositoryRoot":"' + 
         //    Helpers.escapeAsJsonText(this.getPathRelativeToRepositoryRoot()) + '",')

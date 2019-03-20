@@ -1,7 +1,12 @@
 package com.kazurayam.materials.imagedifference
 
 import java.nio.file.Path
+import java.nio.file.Paths
 
+import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.impl.MaterialCoreImpl
+
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 class ComparisonResultBundle {
@@ -12,6 +17,37 @@ class ComparisonResultBundle {
     
     ComparisonResultBundle() {
         bundle_ = new ArrayList<ComparisonResult>()
+    }
+    
+    
+    ComparisonResultBundle(Path baseDir, String jsonText) {
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
+        Objects.requireNonNull(jsonText, "jsonText must not be null")
+        bundle_ = new ArrayList<ComparisonResult>()
+        //
+        JsonSlurper slurper = new JsonSlurper()
+        def jsonObjectCRB = slurper.parseText(jsonText)
+        if (jsonObjectCRB.ComparisonResultBundle == null) {
+            throw new IllegalArgumentException("jsonText does not have ComparisonResultBundle; ${jsonText}")
+        }
+        def comparisonResults = jsonObjectCRB.ComparisonResultBundle
+        if ( ! comparisonResults instanceof List ) {
+            throw new IllegalArgumentException("comparisonResults was expected to be List but was ${comparisonResults.class.getName()}")
+        }
+
+        for (def jsonObjectCR : comparisonResults) {
+            // println "#ComparisonResultBundle jsonObjectCR=${jsonObjectCR}"
+            MaterialCore expected     = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.expectedMaterial))
+            MaterialCore actual       = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.actualMaterial))
+            double criteriaPercentage = jsonObjectCR.ComparisonResult.criteriaPercentage
+            boolean imagesAreSimilar  = jsonObjectCR.ComparisonResult.imagesAreSimilar
+            double diffRatio          = jsonObjectCR.ComparisonResult.diffRatio
+            Path diff                 = Paths.get(jsonObjectCR.ComparisonResult.diff)
+            //
+            ComparisonResult cr = new ComparisonResult(expected, actual,
+                                            criteriaPercentage, imagesAreSimilar, diffRatio, diff)
+            bundle_.add(cr)
+        }
     }
     
     void addComparisonResult(ComparisonResult cp) {
@@ -85,9 +121,4 @@ class ComparisonResultBundle {
         return sb.toString()
     }
     
-    static def deserializeToJsonObject(String jsonText) {
-        JsonSlurper slurper = new JsonSlurper()
-        def jsonObject = slurper.parseText(jsonText)
-        return jsonObject
-    }
 }

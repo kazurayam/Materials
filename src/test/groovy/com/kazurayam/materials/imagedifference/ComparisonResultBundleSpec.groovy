@@ -42,51 +42,54 @@ class ComparisonResultBundleSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
     
-    def test_deserializeToJsonObject() {
+    def test_constructor_withJson() {
         when:
-            Path caseOutputDir = specOutputDir.resolve("test_deserializeToJsonObject")
+            Path caseOutputDir = specOutputDir.resolve("test_constructor_withJson")
+            Path materials = caseOutputDir.resolve('Materials')
             String jsonText = makeJsonText(caseOutputDir)
-            def obj = ComparisonResultBundle.deserializeToJsonObject(jsonText)
         then:
-            obj.size() == 1
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.expectedMaterial.Material.path,
-                 "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_064354\\main.TC_47News.visitSite\\47NEWS_TOP.png")
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.actualMaterial.Material.path,
-                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\47News_chronos_capture\\20190216_204329\\main.TC_47News.visitSite\\47NEWS_TOP.png")
-            comparePaths(obj.ComparisonResultBundle[0].ComparisonResult.diff,
-                "build\\tmp\\testOutput\\ComparisonResultBundleSpec\\test_deserializeToJsonObject\\Materials\\ImageDiff\\20190216_210203\\ImageDiff\\main.TC_47News.visitSite\\47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
-            obj.ComparisonResultBundle[0].ComparisonResult.criteriaPercentage    > 30.0
-            obj.ComparisonResultBundle[0].ComparisonResult.imagesAreSimilar      == true
-            obj.ComparisonResultBundle[0].ComparisonResult.diffRatio             == 16.86
-    }
-    
-    /*
-    def test_deserialize() {
+            jsonText != null
         when:
-            Path caseOutputDir = specOutputDir.resolve("test_deserialize")
-            String jsontText = makeJsonText(caseOutputDir)
-            ComparisonResultBundle bundle = ComparisonResultBundle.deserialize(jsonText)
+            //println "#test_constructor_withJson jsonText=${jsonText}"
+            ComparisonResultBundle bundle = new ComparisonResultBundle(materials, jsonText)
         then:
             bundle.size() == 1
         when:
             ComparisonResult cr = bundle.get(0)
-            Path imageDiffPath = cr.getDiff()
         then:
-            bundle.containsImageDiff(imageDiffPath)
-        when:
-            ComparisonResult cr2 = bundle.get(imageDiffPath)
-        then:
-            cr2 != null
-        when:
-            String srcExpected = bundle.srcOfExpectedMaterial(imageDiffPath)
-        then:
-            srcExpected == "foo"
-        when:
-            String srcActual = bundle.srcOfActualMaterial(imageDiffPath)
-        then:
-            srcActual == "bar"
+            comparePaths(
+                cr.getExpectedMaterial().getBaseDir(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials')
+                )
+            comparePaths(
+                cr.getExpectedMaterial().getPath(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
+                )
+            comparePaths(
+                cr.getExpectedMaterial().getPathRelativeToRepositoryRoot(),
+                Paths.get('47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
+                )
+            comparePaths(
+                cr.getActualMaterial().getBaseDir(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials')
+                )
+            comparePaths(
+                cr.getActualMaterial().getPath(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
+                )
+            comparePaths(
+                cr.getActualMaterial().getPathRelativeToRepositoryRoot(),
+                Paths.get('47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
+                )
+            comparePaths(
+                cr.getDiff(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png')
+                )
+            cr.imagesAreSimilar() == true
+            cr.getDiffRatio()== 16.86
+            cr.getCriteriaPercentage() > 30.0 && cr.getCriteriaPercentage() < 31.0
     }
-     */
+    
     
     String makeJsonText(Path caseOutputDir) {
         //setup:
@@ -148,7 +151,7 @@ class ComparisonResultBundleSpec extends Specification {
             return jsonText
     }
     
-    boolean comparePaths(String path1, String path2) {
-        return path1.replace('\\', '/').equals(path2.replace('\\','/'))
+    boolean comparePaths(Path path1, Path path2) {
+        return path1.toString().replace('\\', '/').equals(path2.toString().replace('\\','/'))
     }
 }
