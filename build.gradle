@@ -69,7 +69,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/ComparisonResultBundleSpec.class'
+    include '**/MaterialCoreImplSpec.class'
     outputs.upToDateWhen {false}
 }
 
