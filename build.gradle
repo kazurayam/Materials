@@ -69,7 +69,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/MaterialAltImplSpec.class'
+    //include '**/MaterialSpec.class'
+    include '**/MaterialCoreImplSpec.class'
     outputs.upToDateWhen {false}
 }
 

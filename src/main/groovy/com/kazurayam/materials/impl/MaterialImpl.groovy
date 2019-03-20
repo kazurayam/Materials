@@ -19,7 +19,7 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
 
-class MaterialImpl implements Material {
+class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     
@@ -191,9 +191,17 @@ class MaterialImpl implements Material {
     }
     
     @Override
+    Path getBaseDir() {
+        TCaseResult tcr = this.getParent()
+        TSuiteResult tsr = tcr.getParent()
+        RepositoryRoot repoRoot = tsr.getParent()
+        return repoRoot.getBaseDir()
+        // for short, return this.getParent().getParent().getParent().getBaseDir()
+    }
+    
+    @Override
     Path getPathRelativeToRepositoryRoot() {
-        Path rootDir            = this.getParent().getParent().getParent().getBaseDir()
-        return getPathRelativeTo(rootDir)
+        return getPathRelativeTo(this.getBaseDir())
     }
     
     //
@@ -208,6 +216,11 @@ class MaterialImpl implements Material {
     String getHrefRelativeToRepositoryRoot() {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getHrefRelativeTo(rootDir)
+    }
+    String getHrefRelativeTo(Path base) {
+        Objects.requireNonNull(base)
+        Path href = base.relativize(this.getPath())
+        return href.normalize().toString().replace('\\', '/')
     }
     
     /**
@@ -242,12 +255,7 @@ class MaterialImpl implements Material {
         }
     }
 
-    // unused?
-    String getHrefRelativeTo(Path base) {
-        Objects.requireNonNull(base)
-        Path href = base.relativize(this.getPath())
-        return href.normalize().toString().replace('\\', '/')
-    }
+    
 
     // ---------------------------------------------
 
@@ -256,8 +264,6 @@ class MaterialImpl implements Material {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getEncodedHrefRelativeTo(rootDir)
     }
-
-    // unused?
     String getEncodedHrefRelativeTo(Path base) {
         Objects.requireNonNull(base)
         String baseUri = base.toUri()

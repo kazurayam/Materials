@@ -4,9 +4,7 @@ import java.nio.file.Path
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.TSuiteName
-
-import groovy.json.JsonSlurper
+import com.kazurayam.materials.MaterialCore
 
 /**
  * This class encloses an instance of ImageDifference and a criteriaPercentage against which
@@ -17,15 +15,15 @@ import groovy.json.JsonSlurper
  */
 class ComparisonResult implements Comparable<ComparisonResult> {
     
-    private Material expectedMaterial_
-    private Material actualMaterial_
+    private MaterialCore expectedMaterial_
+    private MaterialCore actualMaterial_
     private double criteriaPercentage_
     private boolean imagesAreSimilar_
     private double diffRatio_
     private Path diff_
     
-    ComparisonResult(Material expected,
-                        Material actual, 
+    ComparisonResult(MaterialCore expected,
+                        MaterialCore actual, 
                         double criteriaPercentage,
                         boolean imagesAreSimilar,
                         double diffRatio,
@@ -107,35 +105,15 @@ class ComparisonResult implements Comparable<ComparisonResult> {
 {
     "ComparisonResult": {
         "expectedMaterial": {
-            "Material": {
-                "url": "null",
-                "suffix": "",
-                "fileType": {
-                    "FileType": {
-                        "extension": "png",
-                        "mimeTypes": [
-                            "image/png"
-                        ]
-                    }
-                },
+            "MaterialCore": {
                 "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060500\\Main.Basic\\CURA_Appointment.png",
-                "lastModified": "2019-03-04T00:26:49.686"
+                "pathRelativeToRepositoryRoot": "main.TS1\\20181014_060500\\Main.Basic\\CURA_Appointment.png"
             }
         },
         "actualMaterial": {
-            "Material": {
-                "url": "null",
-                "suffix": "",
-                "fileType": {
-                    "FileType": {
-                        "extension": "png",
-                        "mimeTypes": [
-                            "image/png"
-                        ]
-                    }
-                },
+            "MaterialCore": {
                 "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png",
-                "lastModified": "2019-03-04T00:26:49.733"
+                "pathRelativeToRepositoryRoot": "main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png"
             }
         },
         "criteriaPercentage": 5.0,
