@@ -108,7 +108,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              String jsonText = crbMaterial.getPath().toFile().text
              this.comparisonResultBundle = ComparisonResultBundle.deserializeToJsonObject(jsonText)
          } else {
-             logger_.infoEnabled("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
+             logger_.info("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
          }
          //
          return RepositoryVisitResult.SUCCESS

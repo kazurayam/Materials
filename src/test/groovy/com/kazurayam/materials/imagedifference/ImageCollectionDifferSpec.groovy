@@ -185,7 +185,7 @@ class ImageCollectionDifferSpec extends Specification {
         //
         when:
         // assert that we have ComparisonResults.json
-        List<Material> jsons = tcr.getMaterialList(ImageCollectionDiffer.SERIALIZED_FILE_NAME)
+        List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
         then:
         jsons.size() == 1
     }
