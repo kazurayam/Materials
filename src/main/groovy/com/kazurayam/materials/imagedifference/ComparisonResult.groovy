@@ -1,8 +1,5 @@
 package com.kazurayam.materials.imagedifference
 
-import java.nio.file.Path
-
-import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialCore
 
 /**
@@ -16,23 +13,23 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     
     private MaterialCore expectedMaterial_
     private MaterialCore actualMaterial_
+    private MaterialCore diff_
     private double criteriaPercentage_
     private boolean imagesAreSimilar_
     private double diffRatio_
-    private Path diff_
     
     ComparisonResult(MaterialCore expected,
-                        MaterialCore actual, 
+                        MaterialCore actual,
+                        MaterialCore diff,
                         double criteriaPercentage,
                         boolean imagesAreSimilar,
-                        double diffRatio,
-                        Path diff) {
+                        double diffRatio) {
         this.expectedMaterial_ = expected
         this.actualMaterial_   = actual
+        this.diff_ = diff
         this.criteriaPercentage_ = criteriaPercentage
         this.imagesAreSimilar_ = imagesAreSimilar
         this.diffRatio_ = diffRatio
-        this.diff_ = diff
     }
         
     MaterialCore getExpectedMaterial() {
@@ -41,6 +38,10 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     
     MaterialCore getActualMaterial() {
         return this.actualMaterial_
+    }
+    
+    MaterialCore getDiff() {
+        return this.diff_
     }
     
     double getCriteriaPercentage() {
@@ -55,9 +56,6 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         return this.diffRatio_
     }
     
-    Path getDiff() {
-        return this.diff_
-    }
     
     @Override
     public boolean equals(Object obj) {
@@ -104,21 +102,23 @@ class ComparisonResult implements Comparable<ComparisonResult> {
 {
     "ComparisonResult": {
         "expectedMaterial": {
-            "MaterialCore": {
-                "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060500\\Main.Basic\\CURA_Appointment.png",
-                "pathRelativeToRepositoryRoot": "main.TS1\\20181014_060500\\Main.Basic\\CURA_Appointment.png"
+            "Material": {
+                "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060500\\Main.Basic\\CURA_Appointment.png"
             }
         },
         "actualMaterial": {
-            "MaterialCore": {
-                "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png",
-                "pathRelativeToRepositoryRoot": "main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png"
+            "Material": {
+                "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png"
             }
         },
+        "diff": {
+            "Material": {
+                "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\ImageDiff\\20181014_060501\\imageDiff\\Main.Basic\\CURA_Appointment.20181014_060500_product-20181014_060501_develop.(0.01).png"
+            }
+        }
         "criteriaPercentage": 5.0,
         "imagesAreSimilar": true,
-        "diffRatio": 3.56,
-        "diff": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\ImageDiff\\20181014_060501\\imageDiff\\Main.Basic\\CURA_Appointment.20181014_060500_product-20181014_060501_develop.(0.01).png"
+        "diffRatio": 3.56
     }
 }
      * </PRE>
@@ -130,10 +130,10 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         sb.append('\"ComparisonResult\":{')
         sb.append('\"expectedMaterial\":'   + this.getExpectedMaterial().toJsonText() + ',')
         sb.append('\"actualMaterial\":'     + this.getActualMaterial().toJsonText() + ',')
+        sb.append('\"diff\":\"'             + this.getDiff().toJsonText() + ',')
         sb.append('\"criteriaPercentage\":' + this.getCriteriaPercentage() + ',')
         sb.append('\"imagesAreSimilar\":'   + this.imagesAreSimilar() + ',')
-        sb.append('\"diffRatio\":'          + this.getDiffRatio() + ',')
-        sb.append('\"diff\":\"' + Helpers.escapeAsJsonText(this.getDiff().toString()) + '\"')
+        sb.append('\"diffRatio\":'          + this.getDiffRatio())
         sb.append('}')
         sb.append('}')
         return sb.toString()

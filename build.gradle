@@ -69,6 +69,7 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/ComparisonResultSpec.class'
     include '**/CarouselIndexerSpec.class'
     outputs.upToDateWhen {false}
 }
