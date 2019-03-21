@@ -12,6 +12,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
@@ -38,7 +39,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
     
     private MarkupBuilder builder
-    private def comparisonResultBundle
+    private ComparisonResultBundle comparisonResultBundle
     
     RepositoryVisitorGeneratingHtmlDivsAsModal(MarkupBuilder builder) {
         this.builder = builder
@@ -66,7 +67,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     }
                     builder.div(['class':'modal-footer']) {
                         builder.button(['type':'button', 'class':'btn btn-primary',
-                                        'data-dismiss':'modal'], 'Close')
+                            'data-dismiss':'modal'], 'Close')
                         anchorToReport(material)
                     }
                 }
@@ -75,8 +76,63 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     }
     
     def generateImgTags = { Material mate ->
-        builder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(), 'class':'img-fluid',
-            'style':'border: 1px solid #ddd', 'alt':'material'])
+        if (this.comparisonResultBundle != null &&
+            this.comparisonResultBundle.containsImageDiff(mate.getPath())) {
+            // This material is a diff image, so render it in Crousel format of Back > Diff > Forth
+            ComparisonResult cr = comparisonResultBundle.get(mate.getPath())
+            builder.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
+                builder.div(['class':'carousel-inner']) {
+                    builder.div(['class':'carousel-item']) {
+                        builder.div(['class':'carousel-caption d-none d-md-block']) {
+                            builder.p "Back ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
+                        }
+                        builder.img(['src': "${cr.getExpectedMaterial().getPath().toString().replace('\\','/')}",
+                                    'class': 'img-fluid d-block w-100',
+                                    'style': 'border: 1px solid #ddd',
+                                    'alt' : "Back"])
+                    }
+                    builder.div(['class':'carousel-item active']) {
+                        builder.div(['class':'carousel-caption d-none d-md-block']) {
+                            String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different." 
+                            String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
+                            builder.p "${eval} diffRatio=${cr.getDiffRatio()} criteria=${cr.getCriteriaPercentage()}"
+                        }
+                        builder.img(['src': "${cr.getDiff().toString().replace('\\','/')}",
+                                    'class': 'img-fluid d-block w-100',
+                                    'style': 'border: 1px solid #ddd',
+                                    'alt' : "Diff"])
+                    }
+                    builder.div(['class':'carousel-item']) {
+                        builder.div(['class':'carousel-caption d-none d-md-block']) {
+                            builder.p "Forth ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
+                        }
+                        builder.img(['src': "${cr.getActualMaterial().getPath().toString().replace('\\','/')}",
+                                    'class': 'img-fluid d-block w-100',
+                                    'style': 'border: 1px solid #ddd',
+                                    'alt' : "Forth"])
+                    }
+                    builder.a(['class':'carousel-control-prev',
+                                'href':"#${mate.hashCode()}carousel",
+                                'role':'button',
+                                'data-slide':'prev']) {
+                        builder.span(['class':'carousel-control-prev-icon',
+                                        'area-hidden':'true'], '')
+                        builder.span(['class':'sr-only'], 'Back')
+                    }
+                    builder.a(['class':'carousel-control-next',
+                                'href':"#${mate.hashCode()}carousel",
+                                'role':'button',
+                                'data-slide':'next']) {
+                        builder.span(['class':'carousel-control-next-icon',
+                                        'area-hidden':'true'], '')
+                        builder.span(['class':'sr-only'], 'Forth')
+                    }
+                }
+            }
+        } else {
+            builder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
+                'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
+        }
     }
     
     

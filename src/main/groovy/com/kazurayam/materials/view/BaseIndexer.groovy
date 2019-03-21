@@ -184,8 +184,32 @@ modalize();
 .list-group-item > .badge {
     float: right;
 }
-'''
-                        )
+''')
+                }
+                // style for Carousel
+                style {
+                    mkp.yieldUnescaped('''
+     .carousel-item img {
+         margin-top: 30px;
+     }
+     .carousel-control-next, .carousel-control-prev {
+         align-items: flex-start;
+         padding-top: 20px;
+     }
+     .carousel-control-next-icon, .carousel-control-prev-icon {
+         background-color: #666;
+     }
+     .carousel-caption {
+         position: absolute;
+         top: -28px;
+         bottom: initial;
+         padding-top: 0px;
+         padding-bottom: 0px;
+     }
+     .carousel-caption p {
+         color: #999;
+     }
+''')
                 }
             }
             body {
