@@ -69,7 +69,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/MaterialCoreImplSpec.class'
+    include '**/CarouselIndexerSpec.class'
     outputs.upToDateWhen {false}
 }
 

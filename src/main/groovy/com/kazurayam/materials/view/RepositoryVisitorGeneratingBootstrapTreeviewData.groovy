@@ -1,5 +1,6 @@
 package com.kazurayam.materials.view
 
+import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.slf4j.Logger
@@ -105,8 +106,9 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          //
          Material crbMaterial = tCaseResult.getMaterial(Paths.get(ComparisonResultBundle.SERIALIZED_FILE_NAME))
          if (crbMaterial != null) {
+             Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
              String jsonText = crbMaterial.getPath().toFile().text
-             this.comparisonResultBundle = ComparisonResultBundle.deserializeToJsonObject(jsonText)
+             this.comparisonResultBundle = new ComparisonResultBundle(baseDir, jsonText)
          } else {
              logger_.info("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
          }

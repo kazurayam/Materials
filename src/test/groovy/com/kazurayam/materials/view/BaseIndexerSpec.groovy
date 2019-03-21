@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Indexer
 
 import spock.lang.Specification
 
@@ -39,7 +40,7 @@ class BaseIndexerSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir, true)  // 3rd arg means 'skipIfIdentical'
-        BaseIndexer indexer = makeIndexer(caseOutputDir)
+        Indexer indexer = makeIndexer(caseOutputDir)
         when:
         indexer.execute()
         Path index = indexer.getOutput()
@@ -93,10 +94,10 @@ class BaseIndexerSpec extends Specification {
      * @param caseOutputDir
      * @return a CarouselIndexer object
      */
-    private BaseIndexer makeIndexer(Path caseOutputDir) {
+    private Indexer makeIndexer(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
-        BaseIndexer indexer = new BaseIndexer()
+        Indexer indexer = new BaseIndexer()
         indexer.setBaseDir(materialsDir)
         indexer.setReportsDir(reportsDir)
         Path index = materialsDir.resolve('index.html')

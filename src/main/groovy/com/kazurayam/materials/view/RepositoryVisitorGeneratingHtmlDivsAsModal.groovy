@@ -183,8 +183,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         Material mate =
             tCaseResult.getMaterial(Paths.get(ComparisonResultBundle.SERIALIZED_FILE_NAME))
         if (mate != null) {
+            Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
             String jsonText = mate.getPath().toFile().text
-            this.comparisonResultBundle = ComparisonResultBundle.deserializeToJsonObject(jsonText)
+            this.comparisonResultBundle = new ComparisonResultBundle(baseDir, jsonText)
         }
         return RepositoryVisitResult.SUCCESS
     }
