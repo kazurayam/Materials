@@ -80,13 +80,15 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             this.comparisonResultBundle.containsImageDiff(mate.getPath())) {
             // This material is a diff image, so render it in Crousel format of Back > Diff > Forth
             ComparisonResult cr = comparisonResultBundle.get(mate.getPath())
+            Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
             builder.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 builder.div(['class':'carousel-inner']) {
                     builder.div(['class':'carousel-item']) {
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
                             builder.p "Back ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
                         }
-                        builder.img(['src': "${cr.getExpectedMaterial().getPath().toString().replace('\\','/')}",
+                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getExpectedMaterial().getPath())
+                        builder.img(['src': "${src}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Back"])
@@ -97,7 +99,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                             String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
                             builder.p "${eval} diffRatio=${cr.getDiffRatio()} criteria=${cr.getCriteriaPercentage()}"
                         }
-                        builder.img(['src': "${cr.getDiff().toString().replace('\\','/')}",
+                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getDiff())
+                        builder.img(['src': "${src}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Diff"])
@@ -106,7 +109,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
                             builder.p "Forth ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
                         }
-                        builder.img(['src': "${cr.getActualMaterial().getPath().toString().replace('\\','/')}",
+                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getActualMaterial().getPath())
+                        builder.img(['src': "${src}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Forth"])
@@ -135,6 +139,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
     }
     
+    String toSrcRelativeToRepositoryRoot(Path repoRoot, Path p) {
+        Path absRepoRoot = repoRoot.toAbsolutePath()
+        Path absP = p.toAbsolutePath()
+        Path relativePath = absRepoRoot.relativize(absP)
+        return relativePath.normalize().toString().replace('\\', '/')
+    }
     
     def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
