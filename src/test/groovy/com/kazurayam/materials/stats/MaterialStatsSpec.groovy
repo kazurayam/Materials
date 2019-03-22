@@ -113,10 +113,17 @@ class MaterialStatsSpec extends Specification {
     
     def testGetCriteriaPercentage() {
         when:
-        double upperBound = materialStats_.getCriteriaPercentage() // "criteriaPercentage": 18.003
+        double criteria = materialStats_.getCriteriaPercentage() // "criteriaPercentage": 15.20
         then:
-        15.00 < upperBound
-        upperBound < 16.00
+        15.00 < criteria
+        criteria < 16.00
+    }
+    
+    def testGetCriteriaPercengate_shouldBeRounded() {
+        when:
+        double criteria = materialStats_.getCriteriaPercentage() // "criteriaPercentage": 15.20
+        then:
+        15.20 == criteria
     }
     
     def testHasMaterialStats() {

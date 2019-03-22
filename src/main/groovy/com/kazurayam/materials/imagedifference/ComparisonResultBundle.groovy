@@ -72,7 +72,7 @@ class ComparisonResultBundle {
      */
     ComparisonResult get(Path imageDiffPath) {
         for (ComparisonResult cr : bundle_) {
-            if (cr.getDiff().equals(imageDiffPath)) {
+            if (cr.getDiffMaterial().getPath().equals(imageDiffPath)) {
                 return cr
             }
         }

@@ -69,10 +69,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/ComparisonResultBundleSpec.class'
-    //include '**/ImageCollectionDifferSPec.class'
-    include '**/MaterialStorageSpec.class'
-    // include '**/BaselIndexerSpec.class'
+    //include '**/MaterialStatsSpec.class'
+    include '**/CarouselIndexerSpec.class'
     outputs.upToDateWhen {false}
 }
 

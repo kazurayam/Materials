@@ -87,8 +87,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
                             builder.p "Back ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
                         }
-                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getExpectedMaterial().getPath())
-                        builder.img(['src': "${src}",
+                        builder.img(['src': "${cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Back"])
@@ -97,10 +96,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different." 
                             String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
-                            builder.p "${eval} diffRatio=${cr.getDiffRatio()} criteria=${cr.getCriteriaPercentage()}"
+                            builder.p "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
                         }
-                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getDiff())
-                        builder.img(['src': "${src}",
+                        builder.img(['src': "${cr.getDiffMaterial().getHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Diff"])
@@ -109,8 +107,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
                             builder.p "Forth ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
                         }
-                        String src = toSrcRelativeToRepositoryRoot(repoRoot, cr.getActualMaterial().getPath())
-                        builder.img(['src': "${src}",
+                        builder.img(['src': "${cr.getActualMaterial().getHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Forth"])
@@ -138,14 +135,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
         }
     }
-    
-    String toSrcRelativeToRepositoryRoot(Path repoRoot, Path p) {
-        Path absRepoRoot = repoRoot.toAbsolutePath()
-        Path absP = p.toAbsolutePath()
-        Path relativePath = absRepoRoot.relativize(absP)
-        return relativePath.normalize().toString().replace('\\', '/')
-    }
-    
+        
     def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
             case FileType.BMP:

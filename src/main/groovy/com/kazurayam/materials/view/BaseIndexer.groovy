@@ -194,7 +194,6 @@ modalize();
      }
      .carousel-control-next, .carousel-control-prev {
          align-items: flex-start;
-         padding-top: 20px;
      }
      .carousel-control-next-icon, .carousel-control-prev-icon {
          background-color: #666;
