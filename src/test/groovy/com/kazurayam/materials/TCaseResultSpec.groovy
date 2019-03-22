@@ -126,13 +126,53 @@ class TCaseResultSpec extends Specification {
     }
 
     def testGetMaterialList() {
-        when:
+        setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        when:
         List<Material> materials = tcr.getMaterialList()
         then:
         materials.size() == 2
+    }
+    
+    def testGetMaterialList_withPattern() {
+        setup:
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        when:
+        List<Material> m1 = tcr.getMaterialList('http%3A%2F%2Fdemoaut.katalon.com%2F.bmp')
+        then:
+        m1.size() == 1
+        when:
+        List<Material> m2 = tcr.getMaterialList('http%3A%2F%2Fdemoaut.katalon.com%2F.bmp', false)
+        then:
+        m2.size() == 1
+        when:
+        List<Material> m3 = tcr.getMaterialList('^http', true)
+        then:
+        m3.size() == 5
+        when:
+        List<Material> m4 = tcr.getMaterialList('demoaut', true)
+        then:
+        m4.size() == 5
+        when:
+        List<Material> m5 = tcr.getMaterialList('\\.png$', true)
+        then:
+        m5.size() == 1
+        when:
+        List<Material> m6 = tcr.getMaterialList('\\.PNG$', true)
+        then:
+        m6.size() == 1
+        when:
+        List<Material> m7 = tcr.getMaterialList('\\.jpe?g', true)
+        then:
+        m7.size() == 2
+        when:
+        List<Material> m8 = tcr.getMaterialList('\\.(bmp|gif|png)', true)
+        then:
+        m8.size() == 3
     }
 
 

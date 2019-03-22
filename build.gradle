@@ -6,7 +6,7 @@ apply plugin: 'maven'
 
 group    = 'com.kazurayam'
 //artifact = 'Materials'
-version  = '0.50.0'
+version  = '0.53.3'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -69,9 +69,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/EvaluationResultSpec.class'
-    include '**/ImageCollectionDifferSpec.class'
-    //include '**/ImageDifferenceSpec.class'
+    include '**/BaseIndexerSpec.class'
     outputs.upToDateWhen {false}
 }
 

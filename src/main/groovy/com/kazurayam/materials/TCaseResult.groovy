@@ -35,11 +35,13 @@ abstract class TCaseResult implements Comparable<TCaseResult> {
 
     abstract List<Material> getMaterialList()
 
+    abstract List<Material> getMaterialList(String pattern, boolean isRegex)
+    
     //abstract List<Material> getMaterialList(Path dirpath, URL url, FileType fileType)
 
     abstract Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType)
-
-    //abstract Material getMaterial(Path subpathUnderTCaseResult)
+    
+    abstract Material getMaterial(Path subpathUnderTCaseResult)
     
     abstract boolean addMaterial(Material material)
     

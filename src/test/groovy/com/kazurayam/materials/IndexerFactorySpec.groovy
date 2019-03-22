@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.view.BaseIndexer
 import com.kazurayam.materials.view.IndexerByVisitorImpl
 import com.kazurayam.materials.view.IndexerRudimentaryImpl
 
@@ -32,7 +33,7 @@ class IndexerFactorySpec extends Specification {
         Indexer indexer = IndexerFactory.newIndexer()
         then:
         indexer != null
-        indexer.getClass().getName() == IndexerByVisitorImpl.class.getName()
+        indexer.getClass().getName() == BaseIndexer.class.getName()
     }
 
     def testNewIndexerWithArg() {

@@ -22,19 +22,24 @@ final class TSuiteName implements Comparable<TSuiteName> {
     static final String prefix_ = 'Test Suites/'
 
     private String id_
+    private String abbreviatedId_
     private String value_
 
     TSuiteName(String testSuiteId) {
         Objects.requireNonNull(testSuiteId)
         id_ = testSuiteId
-        def s = testSuiteId
-        if (s.startsWith(prefix_)) {
-            s = s.substring(prefix_.length())
-        }
-        s = s.replace('/', '.')
-        value_ = s
+        abbreviatedId_ = abbreviate(testSuiteId)
+        value_ = abbreviatedId_.replace('/', '.')
     }
 
+    private String abbreviate(String id) {
+        if (id.startsWith(prefix_)) {
+            return id.substring(prefix_.length())
+        } else {
+            return id
+        } 
+    }
+    
     /**
      *
      * @param path ./Materials/<TSuiteName>/ where <TSuiteName> is 'main.TC1' for example
@@ -43,12 +48,17 @@ final class TSuiteName implements Comparable<TSuiteName> {
         Objects.requireNonNull(path)
         value_ = path.getFileName().toString()
         id_ = prefix_ + value_.replace('.', '/')
+        abbreviatedId_ = abbreviate(id_)
     }
 
     String getId() {
         return id_
     }
 
+    String getAbbreviatedId() {
+        return abbreviatedId_    
+    }
+    
     String getValue() {
         return value_
     }
@@ -64,6 +74,9 @@ final class TSuiteName implements Comparable<TSuiteName> {
         sb.append('{')
         sb.append('"id": "')
         sb.append(this.getId())
+        sb.append('",')
+        sb.append('"abbreviatedId": "')
+        sb.append(this.getAbbreviatedId())
         sb.append('",')
         sb.append('"value": "')
         sb.append(this.getValue())

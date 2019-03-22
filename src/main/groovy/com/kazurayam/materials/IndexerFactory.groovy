@@ -1,6 +1,8 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.view.BaseIndexer
 import com.kazurayam.materials.view.IndexerByVisitorImpl
+import com.kazurayam.materials.view.IndexerRudimentaryImpl
 
 final class IndexerFactory {
 
@@ -8,7 +10,9 @@ final class IndexerFactory {
     
     static Indexer newIndexer() {
         //return new IndexerRudimentaryImpl()
-        return new IndexerByVisitorImpl()
+        //return new IndexerByVisitorImpl()     // commented out at 2019/03/19
+        
+        return new BaseIndexer()
     }
 
     static Indexer newIndexer(String indexerClassName)

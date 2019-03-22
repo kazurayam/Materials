@@ -10,6 +10,8 @@ interface Indexer {
     void setReportsDir(Path reportsDir)
 
     void setOutput(Path outputFile)
+    
+    Path getOutput()
 
     void execute() throws IOException
 
