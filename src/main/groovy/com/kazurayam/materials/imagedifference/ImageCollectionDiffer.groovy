@@ -9,10 +9,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.impl.MaterialCoreImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 
 import groovy.json.JsonOutput
@@ -232,14 +234,15 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     
         // write the ImageDiff into the output file
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
-        
+        MaterialCoreImpl diffMaterial = new MaterialCoreImpl(mr_.getBaseDir(), pngFile)
         // construct a record of image comparison
         ComparisonResult evalResult = new ComparisonResult( expectedMaterial,
                                                             actualMaterial,
+                                                            diffMaterial,
                                                             criteriaPercentage,
                                                             diff.imagesAreSimilar(criteriaPercentage),
-                                                            diff.getRatio(),
-                                                            pngFile)
+                                                            diff.getRatio()
+                                                            )
         return evalResult
     }
 

@@ -13,7 +13,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     
     private MaterialCore expectedMaterial_
     private MaterialCore actualMaterial_
-    private MaterialCore diff_
+    private MaterialCore diffMaterial_
     private double criteriaPercentage_
     private boolean imagesAreSimilar_
     private double diffRatio_
@@ -26,7 +26,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
                         double diffRatio) {
         this.expectedMaterial_ = expected
         this.actualMaterial_   = actual
-        this.diff_ = diff
+        this.diffMaterial_     = diff
         this.criteriaPercentage_ = criteriaPercentage
         this.imagesAreSimilar_ = imagesAreSimilar
         this.diffRatio_ = diffRatio
@@ -40,8 +40,8 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         return this.actualMaterial_
     }
     
-    MaterialCore getDiff() {
-        return this.diff_
+    MaterialCore getDiffMaterial() {
+        return this.diffMaterial_
     }
     
     double getCriteriaPercentage() {
@@ -66,7 +66,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         ComparisonResult other = (ComparisonResult)obj
         return this.getExpectedMaterial().equals(other.getExpectedMaterial()) &&
                this.getActualMaterial().equals(other.getActualMaterial()) &&
-               this.getDiff().equals(other.getDiff())
+               this.getDiffMaterial().equals(other.getDiffMaterial())
     }
 
     @Override
@@ -83,7 +83,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         if (orderOfExpected == 0) {
             int orderOfActual = this.getActualMaterial().compareTo(other.getActualMaterial())
             if (orderOfActual == 0) {
-                return this.getDiff().compareTo(other.getDiff())
+                return this.getDiffMaterial().compareTo(other.getDiffMaterial())
             } else {
                 return orderOfActual
             }
@@ -111,7 +111,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
                 "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\main.TS1\\20181014_060501\\Main.Basic\\CURA_Appointment.png"
             }
         },
-        "diff": {
+        "diffMaterial": {
             "Material": {
                 "path": "build\\tmp\\testOutput\\EvaluationResultSpec\\testSmoke\\Materials\\ImageDiff\\20181014_060501\\imageDiff\\Main.Basic\\CURA_Appointment.20181014_060500_product-20181014_060501_develop.(0.01).png"
             }
@@ -127,10 +127,11 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('\"ComparisonResult\":{')
+        sb.append('\"ComparisonResult\":')
+        sb.append('{')
         sb.append('\"expectedMaterial\":'   + this.getExpectedMaterial().toJsonText() + ',')
         sb.append('\"actualMaterial\":'     + this.getActualMaterial().toJsonText() + ',')
-        sb.append('\"diff\":\"'             + this.getDiff().toJsonText() + ',')
+        sb.append('\"diffMaterial\":'       + this.getDiffMaterial().toJsonText() + ',')
         sb.append('\"criteriaPercentage\":' + this.getCriteriaPercentage() + ',')
         sb.append('\"imagesAreSimilar\":'   + this.imagesAreSimilar() + ',')
         sb.append('\"diffRatio\":'          + this.getDiffRatio())

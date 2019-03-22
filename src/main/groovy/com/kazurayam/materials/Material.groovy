@@ -12,10 +12,6 @@ interface Material extends MaterialCore {
     Path getDirpathRelativeToTSuiteResult()
     String getEncodedHrefRelativeToRepositoryRoot()
     
-    //Path getPath()
-    //Path getPathRelativeToRepositoryRoot()
-    
-    String getHrefRelativeToRepositoryRoot()
     Path getPathRelativeToTSuiteTimestamp()
     Path getSubpath()
     String getHrefToReport()

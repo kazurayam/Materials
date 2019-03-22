@@ -15,11 +15,13 @@ import com.kazurayam.materials.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.impl.MaterialCoreImpl
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -74,24 +76,37 @@ class ComparisonResultSpec extends Specification {
                 new TCaseName("imageDiff"),
                 expected.getDirpathRelativeToTSuiteResult(),
                 fileName)
+            MaterialCore diffMaterial = new MaterialCoreImpl(mr.getBaseDir(), diffFile)
             boolean imagesAreSimilar = diff.imagesAreSimilar(criteriaPercentage)
             double diffRatio = 3.56
-            ComparisonResult result = new ComparisonResult(expected, actual, criteriaPercentage, imagesAreSimilar, diffRatio , diffFile)
+            ComparisonResult result = new ComparisonResult(
+                                                (MaterialCore)expected,
+                                                (MaterialCore)actual,
+                                                diffMaterial,
+                                                criteriaPercentage,
+                                                imagesAreSimilar,
+                                                diffRatio)
         then:
             result != null
             result.getExpectedMaterial().equals(expected)
             result.getActualMaterial().equals(actual)
+            result.getDiffMaterial().toString().contains('imageDiff')
             result.getCriteriaPercentage() == criteriaPercentage
             result.imagesAreSimilar() == true
             result.getDiffRatio() == 3.56
-            result.getDiff().toString().contains('imageDiff')
         when:
             String jsonText = result.toJsonText()
+            println "#testSmoke jsonText=${jsonText}"
             String pretty = JsonOutput.prettyPrint(jsonText)
-            println pretty
+            println "#testSmoke pretty=${pretty}"
         then:
             pretty != null
             pretty.contains('ComparisonResult')
+            pretty.contains('expectedMaterial')
+            pretty.contains('actualMaterial')
+            pretty.contains('criteriaPercentage')
+            pretty.contains('diffRatio')
+            pretty.contains('imagesAreSimilar')
         when:
             JsonSlurper slurper = new JsonSlurper()
             def deserialized = slurper.parseText(jsonText)

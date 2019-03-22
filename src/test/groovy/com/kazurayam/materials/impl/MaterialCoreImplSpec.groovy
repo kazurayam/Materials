@@ -55,7 +55,8 @@ class MaterialCoreImplSpec extends Specification {
                 Paths.get("build/tmp/testOutput/MaterialCoreImplSpec/testSmoke/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png"))
             matec.getPathRelativeToRepositoryRoot().equals(
                 Paths.get("47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png"))
-    // ../47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png
+            matec.getHrefRelativeToRepositoryRoot().equals(
+                "47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png")
     }
     
 }

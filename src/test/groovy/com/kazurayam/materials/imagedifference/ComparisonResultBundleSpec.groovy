@@ -82,8 +82,16 @@ class ComparisonResultBundleSpec extends Specification {
                 Paths.get('47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
                 )
             comparePaths(
-                cr.getDiff(),
+                cr.getDiffMaterial().getBaseDir(),
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials')
+            )
+            comparePaths(
+                cr.getDiffMaterial().getPath(),
                 Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png')
+            )                
+            comparePaths(
+                cr.getDiffMaterial().getPathRelativeToRepositoryRoot(),
+                Paths.get('ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png')
                 )
             cr.imagesAreSimilar() == true
             cr.getDiffRatio()== 16.86

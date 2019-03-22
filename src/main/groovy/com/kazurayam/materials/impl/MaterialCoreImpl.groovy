@@ -57,6 +57,7 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         this.path_    = path.normalize()
     }
     
+    @Override
     Path getBaseDir() {
         return this.baseDir_
     }
@@ -68,13 +69,17 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     
     @Override
     Path getPathRelativeToRepositoryRoot() {
-        println "baseDir_=${baseDir_}"
-        println "path_   =${path_}"
         Path p = baseDir_.relativize(path_).normalize()
-        println "p       =${p}"
         return p
     }
     
+    @Override
+    String getHrefRelativeToRepositoryRoot() {
+        Path p = this.getPathRelativeToRepositoryRoot()
+        return p.toString().replace('\\', '/')
+    }
+    
+    // --------- overriding methods inherited from java.lang.Object -----------
     @Override
     String toString() {
         return this.toJsonText()
@@ -84,10 +89,10 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"Material":{')
-        //sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir()) + '",')
+        //sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
         //sb.append('"pathRelativeToRepositoryRoot":"' + 
-        //    Helpers.escapeAsJsonText(this.getPathRelativeToRepositoryRoot()) + '",')
-        sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath()) + '"')
+        //    Helpers.escapeAsJsonText(this.getPathRelativeToRepositoryRoot().toString()) + '",')
+        sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '"')
         sb.append('}')
         sb.append('}')
         return sb.toString()

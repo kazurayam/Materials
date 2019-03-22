@@ -39,13 +39,13 @@ class ComparisonResultBundle {
             // println "#ComparisonResultBundle jsonObjectCR=${jsonObjectCR}"
             MaterialCore expected     = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.expectedMaterial))
             MaterialCore actual       = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.actualMaterial))
+            MaterialCore diff         = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.diffMaterial))
             double criteriaPercentage = jsonObjectCR.ComparisonResult.criteriaPercentage
             boolean imagesAreSimilar  = jsonObjectCR.ComparisonResult.imagesAreSimilar
             double diffRatio          = jsonObjectCR.ComparisonResult.diffRatio
-            Path diff                 = Paths.get(jsonObjectCR.ComparisonResult.diff)
             //
-            ComparisonResult cr = new ComparisonResult(expected, actual,
-                                            criteriaPercentage, imagesAreSimilar, diffRatio, diff)
+            ComparisonResult cr = new ComparisonResult(expected, actual, diff,
+                                            criteriaPercentage, imagesAreSimilar, diffRatio)
             bundle_.add(cr)
         }
     }
