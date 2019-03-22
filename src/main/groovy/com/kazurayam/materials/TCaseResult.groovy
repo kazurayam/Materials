@@ -41,7 +41,7 @@ abstract class TCaseResult implements Comparable<TCaseResult> {
 
     abstract Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType)
     
-    //abstract Material getMaterial(Path subpathUnderTCaseResult)
+    abstract Material getMaterial(Path subpathUnderTCaseResult)
     
     abstract boolean addMaterial(Material material)
     

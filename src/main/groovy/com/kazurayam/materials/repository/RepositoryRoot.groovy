@@ -2,6 +2,7 @@ package com.kazurayam.materials.repository
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.LocalDateTime
 
 import org.slf4j.Logger
@@ -16,6 +17,8 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
+
+import groovy.json.JsonSlurper
 
 final class RepositoryRoot {
 
@@ -302,9 +305,12 @@ final class RepositoryRoot {
             count += 1
             sb.append(tsr.toJsonText())
         }
-        sb.append(']')
+        sb.append('],')
+        sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
+        sb.append('"reportsDir":"' + Helpers.escapeAsJsonText(this.getReportsDir().toString()) + '",')
         sb.append('}}')
         return sb.toString()
     }
 
+    
 }

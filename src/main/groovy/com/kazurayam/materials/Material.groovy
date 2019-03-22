@@ -6,15 +6,20 @@ import java.time.LocalDateTime
 
 import com.kazurayam.materials.model.Suffix
 
-interface Material extends Comparable<Material> {
+interface Material extends MaterialCore {
 
     Path getDirpath()
     Path getDirpathRelativeToTSuiteResult()
     String getEncodedHrefRelativeToRepositoryRoot()
-    String getFileName()
-    FileType getFileType()
-    String getHrefRelativeToRepositoryRoot()
+    
+    Path getPathRelativeToTSuiteTimestamp()
+    Path getSubpath()
+    String getHrefToReport()
 
+    String getFileName()
+    Suffix getSuffix()
+    FileType getFileType()
+    
     /**
      * returns the identifier of the Material which is used as
      * - the name in the Bootstrap Treeview
@@ -23,14 +28,12 @@ interface Material extends Comparable<Material> {
      * @return
      */
     String getIdentifier()
+    
     LocalDateTime getLastModified()
     long getLength()
+    
     TCaseResult getParent()
-    Path getPath()
-    Path getPathRelativeToRepositoryRoot()
-    Path getPathRelativeToTSuiteTimestamp()
-    Path getSubpath()
-    Suffix getSuffix()
+    
     TCaseName getTCaseName()
     TCaseResult getTCaseResult()
     URL getURL()

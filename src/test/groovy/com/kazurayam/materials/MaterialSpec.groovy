@@ -4,7 +4,8 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,6 +15,7 @@ import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 //@Ignore
@@ -26,6 +28,7 @@ class MaterialSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
     private static TCaseResult tcr_
+    private static Path reports
 
 
     // fixture methods
@@ -36,7 +39,7 @@ class MaterialSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        Path reports = workdir_.resolve('Reports')
+        reports = workdir_.resolve('Reports')
         RepositoryFileScanner scanner = new RepositoryFileScanner(materials, reports)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
@@ -103,7 +106,6 @@ class MaterialSpec extends Specification {
         mate.getDirpath() == Paths.get('foo/bar')
         mate.getPath().toString().contains('main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls'.replace('/', File.separator))
     }
-
 
     def testEquals() {
         when:
@@ -391,12 +393,39 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
-
+    def testGetHrefToReport() {
+        setup:
+            String timestamp = '20180805_081908'
+            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
+            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
+            Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
+        when:
+            String href = mate1.getHrefToReport()
+        then:
+            href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html").toString())
+    }
+    
+    def testSetGetDescription() {
+        setup:
+            String timestamp = '20180805_081908'
+            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
+            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
+            Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
+        when:
+            mate1.setDescription(timestamp)
+        then:
+            mate1.getDescription().equals(timestamp)
+            
+    }
+    
     def testSetGetLastModified_long() {
         setup:
         Material mate = MaterialImpl.newInstance(Paths.get('.'), new URL('http://demoaut.katalon.com/'), new Suffix(3), FileType.PNG).setParent(tcr_)
         LocalDateTime ldtNow = LocalDateTime.now()
-        Instant instantNow = ldtNow.toInstant(ZoneOffset.UTC)
+        ZonedDateTime zdt = ldtNow.atZone(ZoneId.of("UTC"))
+        Instant instantNow = zdt.toInstant()
         long longNow = instantNow.toEpochMilli()
         when:
         mate.setLastModified(longNow)
@@ -428,7 +457,7 @@ class MaterialSpec extends Specification {
         when:
         Material mate = tcr_.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def str = mate.toString()
-        //System.out.println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
+        println("#testToJson:\n${JsonOutput.prettyPrint(str)}")
         then:
         str.startsWith('{"Material":{"url":"')
         str.contains('"suffix":')
@@ -437,5 +466,4 @@ class MaterialSpec extends Specification {
         str.contains('"fileType":')
         str.endsWith('"}}')
     }
-
 }

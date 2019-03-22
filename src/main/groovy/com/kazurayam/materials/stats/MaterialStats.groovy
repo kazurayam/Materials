@@ -158,7 +158,10 @@ class MaterialStats {
      */
     double getCriteriaPercentage() {
         if (this.degree() > 0) {
-            return this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
+            double d = this.getConfidenceInterval().getUpperBound() + this.shiftCriteriaPercentageBy
+            BigDecimal bd = new BigDecimal(d)
+            BigDecimal bdUP = bd.setScale(2, BigDecimal.ROUND_UP);  // 0.001 -> 0.01
+            return bdUP.doubleValue()
         } else {
             return this.shiftCriteriaPercentageBy
         }

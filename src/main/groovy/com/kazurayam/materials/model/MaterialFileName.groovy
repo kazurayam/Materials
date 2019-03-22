@@ -74,6 +74,10 @@ final class MaterialFileName {
         return parts[0]
     }
 
+    /**
+     * 
+     * @return a URL found in the file name, may return null
+     */
     URL getURL() {
         return url_
     }

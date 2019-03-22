@@ -14,10 +14,12 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
+import com.kazurayam.materials.repository.RepositoryRoot
 
-class MaterialImpl implements Material {
+class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     
@@ -26,6 +28,11 @@ class MaterialImpl implements Material {
     private MaterialFileName materialFileName_
     private LocalDateTime lastModified_
     private long length_
+    
+    // folloing properties are optional
+    private String description_ = null
+    
+    // -------- constructors --------------------------------------------------
     
     private MaterialImpl(Path dirpath, URL url, Suffix suffix, FileType fileType) {
         Objects.requireNonNull(dirpath)
@@ -52,6 +59,57 @@ class MaterialImpl implements Material {
         return new MaterialImpl(parent, filePath)
     }
     
+    // ------- implematation of MaterialCore interface ------------------------
+    
+    @Override
+    Path getBaseDir() {
+        TCaseResult tcr = this.getParent()
+        TSuiteResult tsr = tcr.getParent()
+        RepositoryRoot repoRoot = tsr.getParent()
+        return repoRoot.getBaseDir()
+        // for short, return this.getParent().getParent().getParent().getBaseDir()
+    }
+    
+    @Override
+    Path getPath() {
+        if (parent_ != null) {
+            return parent_.getTCaseDirectory().resolve(dirpath_).resolve(materialFileName_.getFileName()).normalize()
+        } else {
+            throw new IllegalStateException("parent_ is not set")
+        }
+    }
+
+    @Override
+    Path getPathRelativeToRepositoryRoot() {
+        //return getPathRelativeTo(this.getBaseDir())
+        return this.getBaseDir().relativize(this.getPath())
+    }
+    //
+    //private Path getPathRelativeTo(Path base) {
+    //    Objects.requireNonNull(base)
+    //    Path path =  base.relativize(this.getPath())
+    //    logger_.debug("#getPathRelativeTo base=${base} this.getPath()=${this.getPath()} path=${path}")
+    //    return path
+    //}
+    
+    @Override
+    String getHrefRelativeToRepositoryRoot() {
+        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
+        Path href = rootDir.relativize(this.getPath())
+        return href.normalize().toString().replace('\\', '/')
+    }
+    
+    @Override
+    String getDescription() {
+        return this.description_
+    }
+    
+    @Override
+    void setDescription(String description) {
+        this.description_ = description
+    }
+
+    // ------------- implematation of Material interface ----------------------
     @Override
     Material setParent(TCaseResult parent) {
         Objects.requireNonNull(parent)
@@ -70,23 +128,36 @@ class MaterialImpl implements Material {
         return this.getTCaseResult()
     }
     
+    /**
+     * @return a TCaseName object, same as this.getTCaseResult().getTcaseName(); may return null
+     */
     @Override
     TCaseName getTCaseName() {
-        return this.getTCaseResult().getTCaseName()
+        if (this.getTCaseResult() != null) {
+            return this.getTCaseResult().getTCaseName()
+        } else {
+            return null
+        }
     }
     
+    /**
+     * @return a TCaseResult object, may return null
+     */
     @Override
     TCaseResult getTCaseResult() {
         return parent_
     }
 
+    /**
+     * @return a URL object set by the constructor, may return null
+     */
     @Override    
     URL getURL() {
         return materialFileName_.getURL()
     }
     
     /**
-     * 
+     * @return may return null
      */
     @Override
     Path getSubpath() {
@@ -108,15 +179,7 @@ class MaterialImpl implements Material {
         return materialFileName_.getFileType()
     }
 
-    @Override    
-    Path getPath() {
-        if (parent_ != null) {
-            return parent_.getTCaseDirectory().resolve(dirpath_).resolve(materialFileName_.getFileName()).normalize()
-        } else {
-            throw new IllegalStateException("parent_ is not set")
-        }
-    }
-
+    
     @Override    
     Path getDirpath() {
         return dirpath_
@@ -170,37 +233,48 @@ class MaterialImpl implements Material {
     @Override
     Path getPathRelativeToTSuiteTimestamp() {
         Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
-        Path path = getPathRelativeTo(tSuiteTimestampDir)
-        logger_.debug("#getPathRelativeToTSuiteTimestamp path=${path}")
-        return path
+        Path relativeToTS = tSuiteTimestampDir.relativize(this.getPath())
+        logger_.debug("#getPathRelativeToTSuiteTimestamp relativeToTS=${relativeToTS}")
+        return relativeToTS
     }
     
+    
+    
+    
+    
+    /**
+     * Provided that the Material exists at 
+     *    - TSuiteName: 'Test Suites/main/TS1'
+     *    - TSuiteTimestamp: '20180805_081908'
+     *    - TCaseName: 'Test Cases/main/TC1'
+     *    - Material's relative path to the TCaseResult dir: 'screenshot.png'
+     * then hrefToReport() should return
+     *    '../Reports/main/TS1/20180805_081908/Report.html'
+     * here we assume the Reports directory is located sibling to the Materials directory.
+     */
     @Override
-    Path getPathRelativeToRepositoryRoot() {
-        Path rootDir            = this.getParent().getParent().getParent().getBaseDir()
-        return getPathRelativeTo(rootDir)
-    }
-    
-    //
-    Path getPathRelativeTo(Path base) {
-        Objects.requireNonNull(base)
-        Path path =  base.relativize(this.getPath())
-        logger_.debug("#getPathRelativeTo base=${base} this.getPath()=${this.getPath()} path=${path}")
-        return path
-    }
-    
-    @Override
-    String getHrefRelativeToRepositoryRoot() {
-        Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
-        return this.getHrefRelativeTo(rootDir)
+    String getHrefToReport() {
+        TCaseResult tCaseResult = this.getParent()
+        TSuiteResult tSuiteResult = tCaseResult.getParent()
+        RepositoryRoot repoRoot = tSuiteResult.getParent()
+        Path reportsDir = repoRoot.getReportsDir()
+        if (reportsDir != null) {
+            println "reportsDir=${reportsDir.toString()}"
+            println "TSuiteName=${tSuiteResult.getTSuiteName().toString()}"
+            println "TSuiteName.getAbbreviatedId()=${tSuiteResult.getTSuiteName().getAbbreviatedId()}"
+            Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
+            Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
+            Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
+            // we need to relativise it; relative to the Materials dir
+            Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
+            Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
+            return relativeHtmlPath.toString()
+        } else {
+            return null
+        }
     }
 
-    // unused?
-    String getHrefRelativeTo(Path base) {
-        Objects.requireNonNull(base)
-        Path href = base.relativize(this.getPath())
-        return href.normalize().toString().replace('\\', '/')
-    }
+    
 
     // ---------------------------------------------
 
@@ -209,8 +283,6 @@ class MaterialImpl implements Material {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getEncodedHrefRelativeTo(rootDir)
     }
-
-    // unused?
     String getEncodedHrefRelativeTo(Path base) {
         Objects.requireNonNull(base)
         String baseUri = base.toUri()
@@ -290,8 +362,12 @@ class MaterialImpl implements Material {
         sb.append('"fileType":'      + this.getFileType().toString() + ',')
         sb.append('"path":"'         + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '"')
+        if (this.getDescription() != null) {
+            sb.append(',')
+            sb.append('"description":"' + Helpers.escapeAsJsonText(this.getDescription()) + '"')
+        }
         sb.append('}}')
         return sb.toString()
     }
-
+    
 }

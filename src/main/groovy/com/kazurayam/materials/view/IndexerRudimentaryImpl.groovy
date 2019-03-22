@@ -30,6 +30,11 @@ final class IndexerRudimentaryImpl implements Indexer {
         reportsDir_ = null
         output_ = null
     }
+    
+    @Override
+    Path getOutput() {
+        return this.output_
+    }
 
     @Override
     void setBaseDir(Path baseDir) {
