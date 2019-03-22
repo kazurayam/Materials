@@ -43,7 +43,8 @@ class MaterialCoreImplSpec extends Specification {
             String jsonText = '''
 {
     "Material": {
-        "path": "build/tmp/testOutput/MaterialCoreImplSpec/testSmoke/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png"
+        "path": "build/tmp/testOutput/MaterialCoreImplSpec/testSmoke/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png",
+        "description": "20190322_130000"
      }
 }
 '''
@@ -57,6 +58,7 @@ class MaterialCoreImplSpec extends Specification {
                 Paths.get("47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png"))
             matec.getHrefRelativeToRepositoryRoot().equals(
                 "47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png")
+            matec.getDescription() == '20190322_130000'
     }
     
 }

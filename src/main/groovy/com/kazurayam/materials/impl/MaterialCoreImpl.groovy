@@ -14,6 +14,9 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     private Path baseDir_ = null
     private Path path_ = null
     
+    // following properties are optional
+    private String description_ = null
+    
     /**
      * construct a MaterialCoreImpl with a json text which was created by the toJsonText() of
      * its own. Only the path property will be picked up from the json text, while the 1st
@@ -50,6 +53,9 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
             throw new IllegalArgumentException("Material.path is not found in : ${jsonText}")
         }
         this.path_ = Paths.get(jsonObject.Material.path).normalize()
+        if (jsonObject.Material.description != null) {
+            this.setDescription(jsonObject.Material.description)
+        }
     }
     
     MaterialCoreImpl(Path baseDir, Path path) {
@@ -79,6 +85,16 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         return p.toString().replace('\\', '/')
     }
     
+    @Override
+    String getDescription() {
+        return this.description_
+    }
+    
+    @Override
+    void setDescription(String description) {
+        this.description_ = description
+    }
+    
     // --------- overriding methods inherited from java.lang.Object -----------
     @Override
     String toString() {
@@ -93,6 +109,10 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         //sb.append('"pathRelativeToRepositoryRoot":"' + 
         //    Helpers.escapeAsJsonText(this.getPathRelativeToRepositoryRoot().toString()) + '",')
         sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '"')
+        if (this.getDescription() != null) {
+            sb.append(',')
+            sb.append('"description":"' + Helpers.escapeAsJsonText(this.getDescription()) + '"')
+        }
         sb.append('}')
         sb.append('}')
         return sb.toString()

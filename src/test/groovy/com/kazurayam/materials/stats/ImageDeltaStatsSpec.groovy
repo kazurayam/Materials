@@ -113,32 +113,30 @@ class ImageDeltaStatsSpec extends Specification {
     
     def testGetCriteriaPercentage_customizingProbability() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
-        Path fixtureStorage = fixtureDir.resolve('Storage')
-        Path outputStorage = caseOutputDir.resolve('Storage')
-        Files.createDirectories(outputStorage)
-        Helpers.copyDirectory(fixtureStorage, outputStorage)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+            Path caseOutputDir = specOutputDir.resolve("testGetCriteriaPercentage_customizingProbability")
+            Path fixtureStorage = fixtureDir.resolve('Storage')
+            Path outputStorage = caseOutputDir.resolve('Storage')
+            Files.createDirectories(outputStorage)
+            Helpers.copyDirectory(fixtureStorage, outputStorage)
+            MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+            //
+            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             probability(0.75).  // LOOK HERE
                                             build()
-        StorageScanner scanner = new StorageScanner(ms, options)
+            StorageScanner scanner = new StorageScanner(ms, options)
         when:
-        TSuiteName tsn = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats ids = scanner.scan(tsn)
+            TSuiteName tsn = new TSuiteName("47News_chronos_capture")
+            ImageDeltaStats ids = scanner.scan(tsn)
         //
         scanner.persist(ids, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
         //
         double criteriaPercentage = ids.getCriteriaPercentage(tsn, Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
         then:
-        // criteriaPercentage == 15.197159598135954
-        15.00 < criteriaPercentage
-        criteriaPercentage < 15.20
+            criteriaPercentage == 15.20
     }
     
     /**
@@ -269,8 +267,7 @@ class ImageDeltaStatsSpec extends Specification {
         ids.imageDeltaStatsEntries[0].materialStatsList[0].getPath().equals(
             Paths.get('main.TC_47News.visitSite/47NEWS_TOP.png'))
         ids.imageDeltaStatsEntries[0].materialStatsList[0].degree() == 5
-        ids.imageDeltaStatsEntries[0].materialStatsList[0].getCriteriaPercentage() > 15.19 // 15.197159598135954
-        ids.imageDeltaStatsEntries[0].materialStatsList[0].getCriteriaPercentage() < 15.20 // 15.197159598135954
+        ids.imageDeltaStatsEntries[0].materialStatsList[0].getCriteriaPercentage() == 15.2
         ids.imageDeltaStatsEntries[0].materialStatsList[0].data()[0] == 16.86
         ids.imageDeltaStatsEntries[0].materialStatsList[0].getImageDeltaList()[0].d == 16.86
     }

@@ -395,15 +395,29 @@ class MaterialSpec extends Specification {
 
     def testGetHrefToReport() {
         setup:
-        String timestamp = '20180805_081908'
-        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
-        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
-        Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
+            String timestamp = '20180805_081908'
+            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
+            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
+            Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
         when:
-        String href = mate1.getHrefToReport()
+            String href = mate1.getHrefToReport()
         then:
-        href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html").toString())
+            href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html").toString())
+    }
+    
+    def testSetGetDescription() {
+        setup:
+            String timestamp = '20180805_081908'
+            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
+            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
+            Material mate1 = MaterialImpl.newInstance(tcr1, filePath).setParent(tcr1)
+        when:
+            mate1.setDescription(timestamp)
+        then:
+            mate1.getDescription().equals(timestamp)
+            
     }
     
     def testSetGetLastModified_long() {

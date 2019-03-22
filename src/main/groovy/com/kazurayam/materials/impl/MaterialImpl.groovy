@@ -29,6 +29,9 @@ class MaterialImpl implements Material, Comparable<Material> {
     private LocalDateTime lastModified_
     private long length_
     
+    // folloing properties are optional
+    private String description_ = null
+    
     // -------- constructors --------------------------------------------------
     
     private MaterialImpl(Path dirpath, URL url, Suffix suffix, FileType fileType) {
@@ -96,6 +99,16 @@ class MaterialImpl implements Material, Comparable<Material> {
         return href.normalize().toString().replace('\\', '/')
     }
     
+    @Override
+    String getDescription() {
+        return this.description_
+    }
+    
+    @Override
+    void setDescription(String description) {
+        this.description_ = description
+    }
+
     // ------------- implematation of Material interface ----------------------
     @Override
     Material setParent(TCaseResult parent) {
@@ -349,6 +362,10 @@ class MaterialImpl implements Material, Comparable<Material> {
         sb.append('"fileType":'      + this.getFileType().toString() + ',')
         sb.append('"path":"'         + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '"')
+        if (this.getDescription() != null) {
+            sb.append(',')
+            sb.append('"description":"' + Helpers.escapeAsJsonText(this.getDescription()) + '"')
+        }
         sb.append('}}')
         return sb.toString()
     }

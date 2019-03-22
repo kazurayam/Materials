@@ -8,5 +8,7 @@ interface MaterialCore {
     Path getPath()
     Path getPathRelativeToRepositoryRoot()
     String getHrefRelativeToRepositoryRoot()
+    String getDescription()
+    void setDescription(String description)
     
 }

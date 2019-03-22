@@ -174,6 +174,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 Material material = MaterialImpl.newInstance(tCaseResult_, file)
                 material.setLastModified(file.toFile().lastModified())
                 material.setLength(file.toFile().length())
+                material.setDescription(tCaseResult_.getParent().getTSuiteTimestamp().format())
                 tCaseResult_.addMaterial(material)
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
                 break

@@ -85,7 +85,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 builder.div(['class':'carousel-inner']) {
                     builder.div(['class':'carousel-item']) {
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
-                            builder.p "Back ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
+                            builder.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
                         }
                         builder.img(['src': "${cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
@@ -105,7 +105,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     }
                     builder.div(['class':'carousel-item']) {
                         builder.div(['class':'carousel-caption d-none d-md-block']) {
-                            builder.p "Forth ${mate.getParent().getParent().getTSuiteTimestamp().format()}"
+                            builder.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
                         }
                         builder.img(['src': "${cr.getActualMaterial().getHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
