@@ -1,11 +1,23 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.8.4"
+}
+
+apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
-//artifact = 'Materials'
+// artifact = 'Materials'
 version  = '0.54.0'
 
 sourceCompatibility = '1.8'
@@ -15,6 +27,11 @@ ext {
     groovyVersion  = '2.4.9'
     logbackVersion = '1.2.3'
     slf4jVersion   = '1.7.2'
+
+    // for Bintray
+    libraryId      = 'Materials'
+    siteUrl        = 'https://github.com/kazurayam/Materials'
+    githubUrl      = 'https://github.com/kazurayam/Materials'
 }
 
 configurations {
@@ -94,3 +111,32 @@ task publishGroovydoc(type: Copy) {
 }
 
 groovydoc.finalizedBy publishGroovydoc
+
+
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    configurations = ['archives']
+
+    libraryId  = 'Materials'
+    siteUrl    = 'https://github.com/kazurayam/Materials'
+    githubUrl  = 'https://github.com/kazurayam/Materials'
+
+    pkg {
+        repo = 'maven'
+        name = libraryId
+        userOrg  = user
+        licenses = ['GPL-3.0']
+        websiteUrl = siteUrl
+        issueTrackerUrl = githubUrl + '/issues'
+        vcsUrl = githubUrl + '.git'
+        publicDownloadNumbers = true
+        version {
+            name   = '1.0-Beta'
+            desc   = 'Kazurayam Materials 1.0 beta'
+            vcsTag = project.version
+            attributes = [:]
+        }
+    }
+}
