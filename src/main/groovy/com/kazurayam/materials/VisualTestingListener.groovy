@@ -1,4 +1,4 @@
-package com.kazurayam.materials.imagedifference
+package com.kazurayam.materials
 
 /**
  *

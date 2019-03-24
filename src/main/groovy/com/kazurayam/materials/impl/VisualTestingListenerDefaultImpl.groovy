@@ -1,4 +1,6 @@
-package com.kazurayam.materials.imagedifference
+package com.kazurayam.materials.impl
+
+import com.kazurayam.materials.VisualTestingListener
 
 //import com.kms.katalon.core.logging.KeywordLogger
 //import com.kms.katalon.core.util.KeywordUtil

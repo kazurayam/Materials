@@ -14,7 +14,9 @@ import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.VisualTestingListener
 import com.kazurayam.materials.impl.MaterialCoreImpl
+import com.kazurayam.materials.impl.VisualTestingListenerDefaultImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 
 import groovy.json.JsonOutput

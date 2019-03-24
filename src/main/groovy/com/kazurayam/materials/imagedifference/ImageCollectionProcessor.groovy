@@ -2,6 +2,7 @@ package com.kazurayam.materials.imagedifference
 
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.VisualTestingListener
 import com.kazurayam.materials.stats.ImageDeltaStats
 
 abstract class ImageCollectionProcessor implements ImageCollectionProcessingContentHandler {
