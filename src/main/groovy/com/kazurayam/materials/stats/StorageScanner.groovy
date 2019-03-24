@@ -3,7 +3,6 @@ package com.kazurayam.materials.stats
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 import javax.imageio.ImageIO
@@ -22,6 +21,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.VisualTestingListener
 import com.kazurayam.materials.imagedifference.ImageDifference
 
 /**
@@ -31,12 +31,14 @@ import com.kazurayam.materials.imagedifference.ImageDifference
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
+    private VisualTestingListener listener_ = null
     
     private MaterialStorage materialStorage_
     private Options options_
     private BufferedImageBuffer biBuffer_
     
     private ImageDeltaStats previousImageDeltaStats_
+    
     
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
@@ -53,8 +55,8 @@ class StorageScanner {
         // speed up ImageIO!
         ImageIO.setUseCache(false)
         //
-        println "#StorageScanner options_getPreviousImageDeltaStats()=\"${options_.getPreviousImageDeltaStats()}\""
-        println "#StorageScanner Options.NULL_PREVIOUS_IMAGE_DELTA_STATS=\"${Options.USERDIR}\""
+        //println "#StorageScanner options_getPreviousImageDeltaStats()=\"${options_.getPreviousImageDeltaStats()}\""
+        //println "#StorageScanner Options.NULL_PREVIOUS_IMAGE_DELTA_STATS=\"${Options.USERDIR}\""
         if ( ! options_.getPreviousImageDeltaStats().equals(Options.USERDIR) ) {
             /*
              * We will try to open the previos image-delta-stats.json file.
@@ -64,25 +66,25 @@ class StorageScanner {
             try {
                 previousImageDeltaStats_ = ImageDeltaStats.fromJsonFile(path)
                 String msg = "Successfully loaded previousImageDeltaStats(${path.toString()})"
-                println msg
+                //println msg
                 logger_.info(msg)
             } catch (FileNotFoundException ex) {
                 String msg = "File not found: previousImageDeltaStats(${path.toString()});" + 
                     " will ignore and continue"
-                println msg
+                //println msg
                 logger_.warn(msg)
                 previousImageDeltaStats_ = null
             } catch (IOException ex) {
                 String msg = "IOException for previousImageDeltaStats(${path.toString()});" +
                     " will ignore and continue"
-                println msg
+                //println msg
                 logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
             } catch (Exception ex) {
                 String msg = "${ex.class.getName()} was raised for previousImageDeltaStats(${path.toString()});" +
                     " will ignore and continue"
-                println msg
+                //println msg
                 logger_.warn(msg)
                 ex.printStackTrace()
                 previousImageDeltaStats_ = null
@@ -100,6 +102,14 @@ class StorageScanner {
         return this.options_
     }
     
+    /**
+     * Caller can set a VisualTestingListener to hear from the StorageScanner
+     * 
+     * @param listener
+     */
+    void setVisualTestingListener(VisualTestingListener listener) {
+        this.listener_ = listener
+    }
     
     /**
      * This will return
@@ -131,7 +141,8 @@ class StorageScanner {
         ImageDeltaStats ids = builder.build()
         
         stopWatch.stop()
-        logger_.debug("#scan(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        logger_.debug(msg)
         return ids
     }
         
@@ -161,7 +172,11 @@ class StorageScanner {
             statsEntry.addMaterialStats(materialStats)
         }
         stopWatch.stop()
-        logger_.debug("#makeStatsEntry(${tSuiteName}) took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds")
+        String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        logger_.debug(msg)
+        if (listener_ != null) {
+            listener_.info(msg)
+        }
         return statsEntry
     }
 
@@ -204,14 +219,14 @@ class StorageScanner {
                     i++) {
             
                 ImageDelta imageDelta
-                println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
+                //println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
                 if (previousImageDeltaStats_ != null) {
                     boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
                                                     pathRelativeToTSuiteTimestampDir,
                                                     materials.get(i).getParent().getParent().getTSuiteTimestamp(),
                                                     materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                     
-                    println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
+                    //println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
                     if (condition) {
                         imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, 
                                                 pathRelativeToTSuiteTimestampDir,
@@ -221,12 +236,12 @@ class StorageScanner {
                         imageDelta.setCached(true)
                     
                     } else {
-                        println "#makeMaterialStats tSuiteName=${tSuiteName}"
-                        println "#makeMaterialStats pathRelativeToTSuiteTimestamp=${pathRelativeToTSuiteTimestampDir}"
-                        println "#makeMaterialStats i=${i}"
-                        println "#makeMaterialStats materials.get(i)..TSuiteTimestamp=${materials.get(i).getParent().getParent().getTSuiteTimestamp()}"
-                        println "#makeMaterialStats materials.get(i+1)..TSuiteTimestamp=${materials.get(i+1).getParent().getParent().getTSuiteTimestamp()}"
-                        println ""
+                        //println "#makeMaterialStats tSuiteName=${tSuiteName}"
+                        //println "#makeMaterialStats pathRelativeToTSuiteTimestamp=${pathRelativeToTSuiteTimestampDir}"
+                        //println "#makeMaterialStats i=${i}"
+                        //println "#makeMaterialStats materials.get(i)..TSuiteTimestamp=${materials.get(i).getParent().getParent().getTSuiteTimestamp()}"
+                        //println "#makeMaterialStats materials.get(i+1)..TSuiteTimestamp=${materials.get(i+1).getParent().getParent().getTSuiteTimestamp()}"
+                        //println ""
                         imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
                     }
                 } else {
@@ -247,10 +262,13 @@ class StorageScanner {
         
         //
         stopWatch.stop()
-        String msg = "#makeMaterialStats(${tSuiteName},${pathRelativeToTSuiteTimestampDir} " + 
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        String msg = "#makeMaterialStats " + 
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for " +
+            "${tSuiteName},${pathRelativeToTSuiteTimestampDir}"
         //logger_.debug(msg)
-        //
+        if (listener_ != null) {
+            listener_.info(msg)
+        }
         return materialStats
     }
 
@@ -296,10 +314,13 @@ class StorageScanner {
             }
         })
         stopWatch.stop()
-        String msg = "#getMaterialsOfARelativePathInATSuiteName(${tSuiteName},${pathRelativeToTSuiteTimestamp} " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        String msg = "#getMaterialsOfARelativePathInATSuiteName " +
+            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for "
+            "${tSuiteName},${pathRelativeToTSuiteTimestamp}"
         //logger_.debug(msg)
-        //    
+        //if (listener_ != null) {
+        //    listener_.info(msg)
+        //}
         return materialList
     }
 
@@ -346,7 +367,9 @@ class StorageScanner {
         String msg = "#makeImageDelta(${a}, ${b}) " +
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
         //logger_.debug(msg)
-        //
+        //if (listener_ != null) {
+        //    listener_.info(msg)
+        //}
         return imageDelta
     }
     

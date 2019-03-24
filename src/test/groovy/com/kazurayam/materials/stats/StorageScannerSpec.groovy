@@ -20,13 +20,12 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.VisualTestingListener
 import com.kazurayam.materials.stats.StorageScanner.BufferedImageBuffer
 import com.kazurayam.materials.stats.StorageScanner.Options
-import com.kazurayam.materials.stats.StorageScanner.Options.Builder
 
 import groovy.json.JsonOutput
 import spock.lang.Ignore
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class StorageScannerSpec extends Specification {
@@ -50,33 +49,40 @@ class StorageScannerSpec extends Specification {
     
     def testScan_47News() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testScan_47News")
-        Files.createDirectories(caseOutputDir)
-        Helpers.copyDirectory(fixtureDir, caseOutputDir)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-        //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-        StorageScanner.Options options = new Options.Builder().
+            Path caseOutputDir = specOutputDir.resolve("testScan_47News")
+            Files.createDirectories(caseOutputDir)
+            Helpers.copyDirectory(fixtureDir, caseOutputDir)
+            MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+            //
+            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
-        StorageScanner scanner = new StorageScanner(ms, options)
+            StorageScanner scanner = new StorageScanner(ms, options)
+            StringWriter messageBuffer = new StringWriter()
+            VisualTestingListener listener = new VisualTestingListenerCustomImpl(messageBuffer)
+            scanner.setVisualTestingListener(listener)
         when:
-        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats stats = scanner.scan(tSuiteName)
-        //
-        scanner.persist(stats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-        //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+            TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
+            ImageDeltaStats stats = scanner.scan(tSuiteName)
+            //
+            scanner.persist(stats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            //
+            StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         then:
-        statsEntry != null
-        statsEntry.getTSuiteName().equals(tSuiteName)
+            statsEntry != null
+            statsEntry.getTSuiteName().equals(tSuiteName)
         when:
-        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+            MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
-        mstats != null
-        mstats.getPath().equals(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
+            mstats != null
+            mstats.getPath().equals(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
+        when:
+            println messageBuffer.toString()
+        then:
+            true
     }
     
     def testBufferedImageBuffer() {
@@ -550,4 +556,28 @@ class StorageScannerSpec extends Specification {
     @Ignore
     def void anything() {}
     
+    /**
+     * 
+     * @author kazurayam
+     *
+     */
+    static class VisualTestingListenerCustomImpl implements VisualTestingListener {
+        private Writer writer = null
+        VisualTestingListenerCustomImpl(Writer writer) {
+            this.writer = writer
+        }
+        @Override
+        void info(String message) {
+            writer.write("INFO " + message)
+        }
+        @Override
+        void fatal(String message) {
+            writer.write("FATAL " + message)
+        }
+        @Override
+        void failed(String message) {
+            writer.write("FAILED " + message)
+        }
+        
+    }
 }
