@@ -250,7 +250,7 @@ class MaterialStorageSpec extends Specification {
         num == 1
     }
     
-    def testList_all() {
+    def testStatus_all() {
         setup:
         Path stepWork = workdir_.resolve("testList_all")
         Path msdir = stepWork.resolve("Storage")
@@ -259,7 +259,7 @@ class MaterialStorageSpec extends Specification {
         when:
         StringWriter sw = new StringWriter()
         Map options = new HashMap()
-        ms.list(sw, options)
+        ms.status(sw, options)
         String output = sw.toString()
         println output
         then:
@@ -268,7 +268,7 @@ class MaterialStorageSpec extends Specification {
         output.contains('1,924,038')
     }
     
-    def testList_one() {
+    def testStatus_one() {
         setup:
         Path stepWork = workdir_.resolve("testList_one")
         Path msdir = stepWork.resolve("Storage")
@@ -278,7 +278,7 @@ class MaterialStorageSpec extends Specification {
         StringWriter sw = new StringWriter()
         Map<String, Object> options = new HashMap()
         options.put('TSuiteName', new TSuiteName('Monitor47News'))
-        ms.list(sw, options)
+        ms.status(sw, options)
         String output = sw.toString()
         println output
         then:
