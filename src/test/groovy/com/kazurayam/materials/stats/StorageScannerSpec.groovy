@@ -63,7 +63,7 @@ class StorageScannerSpec extends Specification {
             StorageScanner scanner = new StorageScanner(ms, options)
             StringWriter messageBuffer = new StringWriter()
             VisualTestingLogger listener = new VisualTestingListenerCustomImpl(messageBuffer)
-            scanner.setVisualTestingListener(listener)
+            scanner.setVisualTestingLogger(listener)
         when:
             TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
             ImageDeltaStats stats = scanner.scan(tSuiteName)

@@ -31,7 +31,8 @@ import com.kazurayam.materials.imagedifference.ImageDifference
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
-    private VisualTestingLogger listener_ = null
+    
+    private VisualTestingLogger vtLogger_ = null
     
     private MaterialStorage materialStorage_
     private Options options_
@@ -107,8 +108,8 @@ class StorageScanner {
      * 
      * @param listener
      */
-    void setVisualTestingListener(VisualTestingLogger listener) {
-        this.listener_ = listener
+    void setVisualTestingLogger(VisualTestingLogger logger) {
+        this.vtLogger_ = logger
     }
     
     /**
@@ -174,8 +175,8 @@ class StorageScanner {
         stopWatch.stop()
         String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
         logger_.debug(msg)
-        if (listener_ != null) {
-            listener_.info(msg)
+        if (vtLogger_ != null) {
+            vtLogger_.info(msg)
         }
         return statsEntry
     }
@@ -266,8 +267,8 @@ class StorageScanner {
             "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for " +
             "${tSuiteName},${pathRelativeToTSuiteTimestampDir}"
         //logger_.debug(msg)
-        if (listener_ != null) {
-            listener_.info(msg)
+        if (vtLogger_ != null) {
+            vtLogger_.info(msg)
         }
         return materialStats
     }
@@ -364,12 +365,12 @@ class StorageScanner {
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()
-        String msg = "#makeImageDelta(${a}, ${b}) " +
-            "took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds"
+        String msg = "#makeImageDelta took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for " + 
+            "(${a.getPathRelativeToRepositoryRoot().toString()}, ${b.getPathRelativeToRepositoryRoot()})"
         //logger_.debug(msg)
-        //if (listener_ != null) {
-        //    listener_.info(msg)
-        //}
+        if (vtLogger_ != null) {
+            vtLogger_.info(msg)
+        }
         return imageDelta
     }
     
