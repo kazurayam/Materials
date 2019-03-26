@@ -20,7 +20,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.VisualTestingListener
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.stats.StorageScanner.BufferedImageBuffer
 import com.kazurayam.materials.stats.StorageScanner.Options
 
@@ -62,7 +62,7 @@ class StorageScannerSpec extends Specification {
                                             build()
             StorageScanner scanner = new StorageScanner(ms, options)
             StringWriter messageBuffer = new StringWriter()
-            VisualTestingListener listener = new VisualTestingListenerCustomImpl(messageBuffer)
+            VisualTestingLogger listener = new VisualTestingListenerCustomImpl(messageBuffer)
             scanner.setVisualTestingListener(listener)
         when:
             TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
@@ -561,7 +561,7 @@ class StorageScannerSpec extends Specification {
      * @author kazurayam
      *
      */
-    static class VisualTestingListenerCustomImpl implements VisualTestingListener {
+    static class VisualTestingListenerCustomImpl implements VisualTestingLogger {
         private Writer writer = null
         VisualTestingListenerCustomImpl(Writer writer) {
             this.writer = writer

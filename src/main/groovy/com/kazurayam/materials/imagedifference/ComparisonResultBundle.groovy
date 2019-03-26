@@ -58,6 +58,28 @@ class ComparisonResultBundle {
         return bundle_.size()
     }
     
+    /**
+     * 
+     * @return int how many ComparisonResult in this bundle returns false for the call to imagesAreSimilar()
+     */
+    int sizeOfDifferentComparisonResults() {
+        int result = 0
+        for (ComparisonResult cr : bundle_) {
+            if ( ! cr.imagesAreSimilar() ) {
+                result += 1
+            }
+        }
+        return result
+    }
+    
+    /**
+     * 
+     * @return true if all of ComparisonResult in this bundle returns true for the call to imagesAreSimilar() 
+     */
+    boolean allOfImagesAreSimilar() {
+        return this.sizeOfDifferentComparisonResults() == 0
+    }
+    
     ComparisonResult get(index) {
         return bundle_.get(index)
     }
@@ -86,7 +108,7 @@ class ComparisonResultBundle {
     boolean containsImageDiff(Path imageDiffPath) {
         return this.get(imageDiffPath) != null
     }
-    
+        
     String srcOfExpectedMaterial(Path imageDiffPath) {
         ComparisonResult cr = this.get(imageDiffPath)
         if (cr != null) {

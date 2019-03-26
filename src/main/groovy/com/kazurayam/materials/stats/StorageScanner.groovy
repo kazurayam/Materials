@@ -21,7 +21,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.VisualTestingListener
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.imagedifference.ImageDifference
 
 /**
@@ -31,7 +31,7 @@ import com.kazurayam.materials.imagedifference.ImageDifference
 class StorageScanner {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
-    private VisualTestingListener listener_ = null
+    private VisualTestingLogger listener_ = null
     
     private MaterialStorage materialStorage_
     private Options options_
@@ -107,7 +107,7 @@ class StorageScanner {
      * 
      * @param listener
      */
-    void setVisualTestingListener(VisualTestingListener listener) {
+    void setVisualTestingListener(VisualTestingLogger listener) {
         this.listener_ = listener
     }
     
