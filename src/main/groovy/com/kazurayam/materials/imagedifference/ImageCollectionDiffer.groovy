@@ -14,7 +14,9 @@ import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.MaterialCoreImpl
+import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 
 import groovy.json.JsonOutput
@@ -52,9 +54,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     ImageCollectionDiffer(MaterialRepository mr) {
         this.mr_ = mr
-        this.errorHandler_ = new ImageDiffProcessingErrorHandler()
         this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
-        this.vtListener_ = new VisualTestingListenerDefaultImpl()
+        this.vtLogger_ = new VisualTestingLoggerDefaultImpl()
         this.bundle_ = new ComparisonResultBundle()
     }
 
@@ -73,8 +74,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * 
      * @param listener
      */
-    void setVTListener(VisualTestingListener listener) {
-        this.vtListener_ = listener
+    void setVisualTestingLogger(VisualTestingLogger logger) {
+        this.vtLogger_ = logger
     }
 
     /**
@@ -84,7 +85,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param imageDeltaStats
      */
     @Override
-    void chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+    boolean chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(imageDeltaStats, "imageDeltaStats must not be null")
@@ -102,6 +103,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             this.endMaterialPair(evalResult)
         }
         this.endImageCollection(tCaseName)
+        
+        return bundle_.allOfImagesAreSimilar()
     }
     
     /**
@@ -111,9 +114,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param tCaseName
      * @param imageDeltaStats
      */
-    void makeImageCollectionDifferences(
+    boolean makeImageCollectionDifferences(
             List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
-        this.chronos(materialPairs, tCaseName, imageDeltaStats)
+        return this.chronos(materialPairs, tCaseName, imageDeltaStats)
     }
      
     /**
@@ -133,7 +136,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      *     the MaterialPair is evaluated FAILED
      */
     @Override
-    void twins(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+    boolean twins(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         //
@@ -146,6 +149,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             this.endMaterialPair(evalResult)
         }
         this.endImageCollection(tCaseName)
+        
+        return bundle_.allOfImagesAreSimilar()
     }
 
     /**
@@ -155,9 +160,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param tCaseName
      * @param criteriaPercent
      */
-    void makeImageCollectionDifferences(
+    boolean makeImageCollectionDifferences(
             List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
-        this.twins(materialPairs, tCaseName, criteriaPercentage)
+        return this.twins(materialPairs, tCaseName, criteriaPercentage)
     }
     
     
@@ -186,12 +191,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.bundle_.addComparisonResult(cr)
         
         // verify the diffRatio, fail the test if the ratio is greater than criteria
-        if (this.vtListener_ != null && ! cr.imagesAreSimilar()) {
+        if (this.vtLogger_ != null && ! cr.imagesAreSimilar()) {
             StringBuilder sb = new StringBuilder()
             sb.append(">>> diffRatio(${cr.getDiffRatio()}) > criteria(${cr.getCriteriaPercentage()}) ")
             sb.append("expected(${cr.getExpectedMaterial().getPathRelativeToRepositoryRoot()}) ")
             sb.append("actual(${cr.getActualMaterial().getPathRelativeToRepositoryRoot()})")
-            this.vtListener_.failed(sb.toString())
+            this.vtLogger_.failed(sb.toString())
         }
     }
     
@@ -244,30 +249,6 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                                                             diff.getRatio()
                                                             )
         return evalResult
-    }
-
-            
-    /**
-     * 
-     */
-    static class ImageDiffProcessingErrorHandler implements ImageCollectionProcessingErrorHandler {
-        
-        @Override
-        void error(ImageDifferenceException ex) {
-            //throw new UnsupportedOperationException("TODO")
-        }
-        
-        @Override
-        void fatalError(ImageDifferenceException ex) {
-            //throw new UnsupportedOperationException("TODO")
-        }
-        
-        @Override
-        void warning(ImageDifferenceException ex) {
-            //throw new UnsupportedOperationException("TODO")
-        }
-        
-        
     }
 
 }

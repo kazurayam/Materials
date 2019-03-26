@@ -240,7 +240,7 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    void list(Writer output, Map<String, Object> options) {
+    void status(Writer output, Map<String, Object> options) {
         TSuiteName pTSuiteName = null
         String key = 'TSuiteName'
         if (options.containsKey(key) &&

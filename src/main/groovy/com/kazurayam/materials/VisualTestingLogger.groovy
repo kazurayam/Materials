@@ -1,11 +1,11 @@
-package com.kazurayam.materials.imagedifference
+package com.kazurayam.materials
 
 /**
  *
  * @author kazurayam
  *
  */
-interface VisualTestingListener {
+interface VisualTestingLogger {
 
     void info(String message)
 

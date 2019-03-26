@@ -143,7 +143,7 @@ interface MaterialStorage {
      * @param options
      * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
      */
-    void list(Writer output, Map options)
+    void status(Writer output, Map options)
     
     /**
      * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.

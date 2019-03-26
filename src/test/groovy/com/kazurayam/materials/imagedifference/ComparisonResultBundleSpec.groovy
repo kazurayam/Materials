@@ -99,6 +99,29 @@ class ComparisonResultBundleSpec extends Specification {
     }
     
     
+    def test_allOfImagesAreSimilar() {
+        when:
+            Path caseOutputDir = specOutputDir.resolve("test_allOfImagesAreSimilar")
+            Path materials = caseOutputDir.resolve('Materials')
+            String jsonText = makeJsonText(caseOutputDir)
+        then:
+            jsonText != null
+        when:
+            //println "#test_constructor_withJson jsonText=${jsonText}"
+            ComparisonResultBundle bundle = new ComparisonResultBundle(materials, jsonText)
+        then:
+            bundle.size() == 1
+        when:
+            int sizeDifferent = bundle.sizeOfDifferentComparisonResults()
+        then:
+            sizeDifferent == 0
+        when:
+            boolean allSimilar = bundle.allOfImagesAreSimilar()
+        then:
+            allSimilar == true
+        
+    }
+    
     String makeJsonText(Path caseOutputDir) {
         //setup:
             Path materials = caseOutputDir.resolve('Materials')
@@ -162,4 +185,6 @@ class ComparisonResultBundleSpec extends Specification {
     boolean comparePaths(Path path1, Path path2) {
         return path1.toString().replace('\\', '/').equals(path2.toString().replace('\\','/'))
     }
+    
+    
 }
