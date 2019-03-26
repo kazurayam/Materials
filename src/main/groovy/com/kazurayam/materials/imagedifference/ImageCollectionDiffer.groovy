@@ -98,10 +98,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
             Path path = expected.getPathRelativeToTSuiteTimestamp()
             double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
-            // make an ImageDifference object and store it into file
-            ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            this.endMaterialPair(evalResult)
+            // compare 2 images and create a ComparisonResult object
+            ComparisonResult cr = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+            // and put the ComparisonResult into buffer
+            this.endMaterialPair(cr)
         }
+        // 
         this.endImageCollection(tCaseName)
         
         return bundle_.allOfImagesAreSimilar()
@@ -241,13 +243,19 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
         MaterialCoreImpl diffMaterial = new MaterialCoreImpl(mr_.getBaseDir(), pngFile)
         // construct a record of image comparison
+        boolean similarity = diff.imagesAreSimilar(criteriaPercentage)
         ComparisonResult evalResult = new ComparisonResult( expectedMaterial,
                                                             actualMaterial,
                                                             diffMaterial,
                                                             criteriaPercentage,
-                                                            diff.imagesAreSimilar(criteriaPercentage),
+                                                            similarity,
                                                             diff.getRatio()
                                                             )
+        if (vtLogger_ != null) {
+            String eval = (similarity) ? 'Similar' : 'Different'
+            vtLogger_.info("${eval} ${diffMaterial.getPathRelativeToRepositoryRoot().toString()} ")
+        }
+            
         return evalResult
     }
 
