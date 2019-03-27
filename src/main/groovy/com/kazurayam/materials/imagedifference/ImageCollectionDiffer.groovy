@@ -57,6 +57,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
         this.vtLogger_ = new VisualTestingLoggerDefaultImpl()
         this.bundle_ = new ComparisonResultBundle()
+		this.output_ = null
     }
 
     /*
@@ -167,8 +168,13 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         return this.twins(materialPairs, tCaseName, criteriaPercentage)
     }
     
-    
-    
+    /**
+     * 
+     * @return the Path of comparison-result-bundle.json file created by endImageCollection() method call.
+     */
+    Path getOutput() {
+		return this.output_
+	}
     
     
     
