@@ -10,7 +10,9 @@ abstract class ImageCollectionProcessor implements ImageCollectionProcessingCont
     protected ImageDifferenceFilenameResolver       filenameResolver_
     protected VisualTestingLogger                   vtLogger_
     
-    abstract boolean chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats)
+	abstract boolean makeImageCollectionDifferences(List<MaterialPair> magerialPairs, TCaseName tCaseName, double criteriaPercentage)
+	
+    abstract boolean makeImageCollectionDifferences(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats)
     
     void setImageDifferenceFilenameResolver(ImageDifferenceFilenameResolver filenameResolver) {
         Objects.requireNonNull(filenameResolver, "filenameResolver must not be null")
@@ -22,6 +24,5 @@ abstract class ImageCollectionProcessor implements ImageCollectionProcessingCont
         this.vtLogger_ = vtLogger
     }
     
-    abstract boolean twins(List<MaterialPair> magerialPairs, TCaseName tCaseName, double criteriaPercentage)
     
 }
