@@ -338,23 +338,30 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * 
      */
     @Override
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth = 0) {
-        return this.resolveScreenshotPathByURLPathComponents(testCaseId, Paths.get('.'), url, startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url,
+			int startingDepth = 0, String defaultName = 'default') {
+        return this.resolveScreenshotPathByURLPathComponents(testCaseId, Paths.get('.'), url,
+			startingDepth, defaultName)
     }
     
     @Override
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth = 0) {
-        return this.resolveScreenshotPathByURLPathComponents(tCaseName, Paths.get('.'), url, startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url,
+			int startingDepth = 0, String defaultName = 'default') {
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, Paths.get('.'), url,
+			startingDepth, defaultName)
     }
     
     @Override
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth = 0) {
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url,
+			int startingDepth = 0, String defaultName = 'default') {
         TCaseName tCaseName = new TCaseName(testCaseId)
-        return this.resolveScreenshotPathByURLPathComponents(tCaseName, subpath, url, startingDepth)
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, subpath, url,
+			startingDepth, defaultName)
     }
     
     @Override
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth = 0) {
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url,
+			int startingDepth = 0, String defaultName = 'default') {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(url, "url must not be null")
@@ -364,7 +371,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         StringBuilder sb = new StringBuilder()
         if (url.getPath() != null && url.getPath() != '') {
             Path p = Paths.get(url.getPath())
-            if (startingDepth < p.getNameCount()) {
+            
+			logger_.debug("#resolveScreenshotPathByURLPathComponents p=${p.toString()}")
+			logger_.debug("#resolveScreenshotPathByURLPathComponents p.getNameCount()=${p.getNameCount()}")
+			for (int i=0; i < p.getNameCount(); i++) {
+				logger_.debug("#resolveScreenshotPathByURLPathComponents p.getName(${i})=${p.getName(i)}")	
+			}
+			
+			if (startingDepth < p.getNameCount()) {
                 for (int i = 0; i < p.getNameCount(); i++) {
                     if (startingDepth <= i) {
                         if (sb.length() > 0) {
@@ -384,7 +398,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 sb.append('.png')
                 return resolveMaterialPath(tCaseName, subpath, sb.toString())
             } else {
-                return resolveScreenshotPath(tCaseName, subpath, url)    
+                return resolveMaterialPath(tCaseName, subpath, defaultName + '.png')    
             }
         } else {
             return resolveScreenshotPath(tCaseName, subpath, url)

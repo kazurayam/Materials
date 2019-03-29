@@ -132,7 +132,7 @@ class MaterialRepositorySpec extends Specification {
         ]
          */
         then:
-        paths.size() == 16
+        paths.size() == 18
     }
 
     def testGetTCaseResult() {
@@ -213,7 +213,24 @@ class MaterialRepositorySpec extends Specification {
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
+	
+	def testResolveScreenshotPathByURLPathComponents_top() {
+		when:
+			mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+			Path path = mr_.resolveScreenshotPathByURLPathComponents(
+							'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
+		then:
+			path.getFileName().toString()== 'top.png'
+	}
 
+	def testResolveScreenshotPathByURLPathComponents_login() {
+		when:
+			mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+			Path path = mr_.resolveScreenshotPathByURLPathComponents(
+							'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
+		then:
+			path.getFileName().toString()== 'profile.php%23login.png'
+	}
 
     def testMakeIndex() {
         when:
@@ -313,5 +330,14 @@ class MaterialRepositorySpec extends Specification {
         then:
         ! Files.exists(tsnDir)
     }
+
+	def testResolveScreenshotPathByURLPathComponents_login() {
+		when:
+			mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+			Path path = mr_.resolveScreenshotPathByURLPathComponents(
+							'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
+		then:
+			path.getFileName().toString()== 'profile.php%23login.png'
+	}
 }
 
