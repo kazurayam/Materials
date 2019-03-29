@@ -86,7 +86,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param imageDeltaStats
      */
     @Override
-    boolean chronos(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+    boolean makeImageCollectionDifferences(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(imageDeltaStats, "imageDeltaStats must not be null")
@@ -110,19 +110,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         return bundle_.allOfImagesAreSimilar()
     }
     
-    /**
-     * alias to chronos(MaterialPair, TCaseName, ImageDeltaStats)
-     * 
-     * @param materialPairs
-     * @param tCaseName
-     * @param imageDeltaStats
-     */
-    boolean makeImageCollectionDifferences(
-            List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
-        return this.chronos(materialPairs, tCaseName, imageDeltaStats)
-    }
-     
-    /**
+	/**
      * compare 2 Material files in each MaterialPair object,
      * create ImageDiff and store the diff image files under the directory
      * 
@@ -139,7 +127,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      *     the MaterialPair is evaluated FAILED
      */
     @Override
-    boolean twins(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+    boolean makeImageCollectionDifferences(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         //
@@ -154,18 +142,6 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.endImageCollection(tCaseName)
         
         return bundle_.allOfImagesAreSimilar()
-    }
-
-    /**
-     * alias to twins(MaterialPair, TCaseName, double)
-     * 
-     * @param materialPairs
-     * @param tCaseName
-     * @param criteriaPercent
-     */
-    boolean makeImageCollectionDifferences(
-            List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
-        return this.twins(materialPairs, tCaseName, criteriaPercentage)
     }
     
     /**

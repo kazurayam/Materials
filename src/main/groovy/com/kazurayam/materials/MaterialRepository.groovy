@@ -139,10 +139,10 @@ interface MaterialRepository {
      * @param startingDepth
      * @return
      */
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth, String defaultName)
     
     /**
      *
