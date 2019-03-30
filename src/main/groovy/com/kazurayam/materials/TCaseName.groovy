@@ -19,8 +19,8 @@ final class TCaseName implements Comparable<TCaseName> {
     private String value_
 
     /**
-     *
-     * @param testCaseId
+     * When testCaseId == 'Test Cases'
+     * @param testCaseId e.g. 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner'
      */
     TCaseName(String testCaseId) {
         Objects.requireNonNull(testCaseId)
@@ -47,15 +47,38 @@ final class TCaseName implements Comparable<TCaseName> {
         id_ = prefix_ + value_.replace('.', '/')
         abbreviatedId_ = abbreviate(id_)
     }
+    
 
+    /**
+     * @return When given testCaseId is 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner',
+     * then returns 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner'. 
+     * Just the same as the contructor parameter
+     * 
+     */
     String getId() {
         return id_
     }
 
+    /**
+     * @return When given testCaseId is 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner',
+     * then returns 'test/com.kazurayam.visualtesting/AllTestRunner'.
+     * The prefix 'Test Cases/' is abbreviated.
+     * 
+     * @return
+     */
     String getAbbreviatedId() {
         return abbreviatedId_
     }
     
+    /**
+     * @return When given testCaseId is 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner',
+     * then returns 'test.com.kazurayam.visualtesting.AllTestRunner'.
+     * The prefix 'Test Cases/' is abbreviated, and '/' is translated to '.'
+     * 
+     * The value is the name of directory under the 'Materials' directory:
+     * Materials/<TSuiteName>/<TSuiteTimestamp>/<TCaseName>
+     * 
+     */
     String getValue() {
         return value_
     }
