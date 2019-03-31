@@ -23,6 +23,8 @@ class TCaseResultSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
+    private static Path materialsDir
+    private static Path reportsDir
 
     // fixture methods
     def setupSpec() {
@@ -31,13 +33,14 @@ class TCaseResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        Path materialsDir = workdir_.resolve('Materials')
-        Path reportsDir   = workdir_.resolve('Reports')
+        materialsDir = workdir_.resolve('Materials')
+        reportsDir   = workdir_.resolve('Reports')
+    }
+    def setup() {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
-    def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
@@ -109,20 +112,6 @@ class TCaseResultSpec extends Specification {
         mate.getURL().toString() == url.toString()
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG
-    }
-
-    def testAddMaterial_parentIsNotSet() {
-        when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        URL url = new URL('http://demoaut.katalon.com/')
-        Suffix suffix = new Suffix(2)
-        //Material mate = new Material(url, suffix, FileType.PNG).setParent(tcr)
-        Material mate = new MaterialImpl(tcr, Paths.get('.'), url, suffix, FileType.PNG)
-        tcr.addMaterial(mate)
-        then:
-        thrown(IllegalStateException)
     }
 
     def testGetMaterialList() {

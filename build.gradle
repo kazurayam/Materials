@@ -86,10 +86,15 @@ test {
 }
 
 task pinpoint(type: Test) {
+    include '**/MaterialRepositoryImplSpec.class'
+    //include '**/MaterialStorageImplSpec.class'
+    //include '**/ComparisonResultSpec.class'
+    //include '**/ComparisonResultBundleSpec.class'
+    //include '**/ImageCollectionDifferSpec.class'
     //include '**/PathResolutionLogSpec.class'
-    //include '**/PathResolutionLogBundleSpec.class'
-    //include '**/MaterialRepositorySpec.class'
-    include '**/MaterialSpec.class'
+    //include '**/BaseIndexerSpec.class'
+    //include '**/TCaseResultSpec.class'
+    exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
 

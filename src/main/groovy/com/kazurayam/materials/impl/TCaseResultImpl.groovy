@@ -146,8 +146,8 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         List<Material> list = new ArrayList<Material>()
         logger_.debug("#getMaterials materials_.size()=${materials_.size()}")
         for (Material mate : materials_) {
-            logger_.debug("#getMaterials mate.getDirpath()=${mate.getDirpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
-            if (mate.getDirpath() == subpath &&
+            logger_.debug("#getMaterials mate.getDirpath()=${mate.getSubpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
+            if (mate.getSubpath() == subpath &&
                 mate.getURL().toString() == url.toString() &&
                 mate.getFileType() == fileType) {
                 list.add(mate)
