@@ -7,6 +7,7 @@ import com.kazurayam.materials.TCaseName
 interface PathResolutionLog {
     
     String toJsonText()
+    void serialize(Writer writer)
     
     // accessors for mandatory properties
     Path getMaterialPath()

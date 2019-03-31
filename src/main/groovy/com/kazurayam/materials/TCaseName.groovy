@@ -23,7 +23,7 @@ final class TCaseName implements Comparable<TCaseName> {
      * @param testCaseId e.g. 'Test Cases/test/com.kazurayam.visualtesting/AllTestRunner'
      */
     TCaseName(String testCaseId) {
-        Objects.requireNonNull(testCaseId)
+        Objects.requireNonNull(testCaseId, "testCaseId must not be null")
         id_ = testCaseId
         abbreviatedId_ = abbreviate(testCaseId)
         value_ = abbreviatedId_.replace('/', '.')
@@ -42,7 +42,7 @@ final class TCaseName implements Comparable<TCaseName> {
      * @param path ./Material/main.TC1/yyyyMMdd_hhmmss/<TestCaseName> where TestCaseName is 'main.TC1' for example
      */
     TCaseName(Path path) {
-        Objects.requireNonNull(path)
+        Objects.requireNonNull(path, "path must not be null")
         value_ = path.getFileName().toString()
         id_ = prefix_ + value_.replace('.', '/')
         abbreviatedId_ = abbreviate(id_)

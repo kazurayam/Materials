@@ -10,14 +10,11 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TCaseName
 
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-import spock.lang.Ignore
 import spock.lang.Specification
 
-class PathResolutionLogSpec extends Specification {
+class PathResolutionLogBundleSpec extends Specification {
     
-    static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogBundleSpec.class)
     
     // fields
     private static Path fixtureDir_ = Paths.get("./src/test/fixture")
@@ -25,7 +22,7 @@ class PathResolutionLogSpec extends Specification {
     
     // fixture methods
     def setupSpec() {
-        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(PathResolutionLogSpec.class)}")
+        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(PathResolutionLogBundleSpec.class)}")
         if (! Files.exists(specOutputDir_)) {
             Files.createDirectories(specOutputDir_)
         }
@@ -35,34 +32,9 @@ class PathResolutionLogSpec extends Specification {
     def cleanupSpec() {}
 
     // feature methods
-    def testConstructor() {
+    def testSmoke() {
         setup:
             Path caseOutputDir = specOutputDir_.resolve('testConstructor')
-            Path materials = caseOutputDir.resolve('Materials')
-            Files.createDirectories(materials)
-            Helpers.copyDirectory(fixtureDir_.resolve('Materials'), materials)
-        when:
-            TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
-            Path materialPath = materials.resolve('main.TS1').
-                                            resolve('20180530_130419').
-                                                resolve(tCaseName.getValue()).
-                                                    resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png').
-                                                        normalize()
-            PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
-                tCaseName,
-                materialPath
-                )
-        then:
-            resolution != null
-            resolution.getInvokedMethodName() == InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName()
-            resolution.getTCaseName() == tCaseName
-            resolution.getMaterialPath() == materialPath
-    }
-    
-    def testResolveScreenshotPathByUrlComponents() {
-        setup:
-            Path caseOutputDir = specOutputDir_.resolve('testResolveScreenshotPathByUrlComponents')
             Path materials = caseOutputDir.resolve('Materials')
             Path monitor47NewsDir = materials.resolve('Monitor47News')
             Files.createDirectories(monitor47NewsDir)
@@ -72,7 +44,7 @@ class PathResolutionLogSpec extends Specification {
         when:
             TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
             Path materialPath = materials.resolve('Monitor47News').
-                                            resolve('20100123_153854').
+                                            resolve('20190123_153854').
                                                 resolve(tCaseName.getValue()).
                                                     resolve('47NEWS_TOP.png').
                                                         normalize()
@@ -83,28 +55,26 @@ class PathResolutionLogSpec extends Specification {
             )
             //
             Path p = Paths.get('')
-            URL url = new URL('https://www.47news.jp/')
+            URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
             resolution.setSubPath(p)
             resolution.setUrl(url)
         then:
-            resolution.getSubPath() == p
             resolution.getUrl() == url
-            resolution.getFileName() == null
         when:
-            String jsonText = resolution.toJsonText()
-            logger_.debug("#testResolveScreenshotPathByUrlComponents jsonText=${jsonText}")
+            PathResolutionLogBundle bundle = new PathResolutionLogBundle()
+            bundle.add(resolution)
         then:
-            jsonText != null
+            bundle.size() == 1
         when:
-            JsonSlurper slurper = new JsonSlurper()
-            def jsonObject = slurper.parseText(jsonText)
+            List<PathResolutionLog> list = bundle.findByMaterialPath(materialPath)
         then:
-            jsonObject != null
+            list.size()== 1
         when:
-            String pp = JsonOutput.prettyPrint(jsonText)
-            logger_.debug("#testResolveScreenshotPathByUrlComponents pp=${pp}")
+            PathResolutionLog last = bundle.findLastByMaterialPath(materialPath)
         then:
-            pp != null
+            last != null
+            last.getMaterialPath() == materialPath
+            last.getUrl()== url
     }
     
     def testSerializeAndDeserialize() {
@@ -128,20 +98,25 @@ class PathResolutionLogSpec extends Specification {
                 tCaseName,
                 materialPath
             )
+            //
             Path p = Paths.get('')
-            URL url = new URL('https://www.47news.jp/')
+            URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
             resolution.setSubPath(p)
             resolution.setUrl(url)
             //
-            Path serialized = tSuiteResultPath.resolve('path-resolution-log.json')
+            PathResolutionLogBundle bundle = new PathResolutionLogBundle()
+            bundle.add(resolution)
+            //
+            Path serialized = tSuiteResultPath.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
             OutputStream os = new FileOutputStream(serialized.toFile())
             Writer writer = new OutputStreamWriter(os, "UTF-8")
-            resolution.serialize(writer)
+            bundle.serialize(writer)
         then:
             Files.exists(serialized)
+        when:
+            PathResolutionLogBundle deserialized = PathResolutionLogBundle.deserialize(serialized)
+        then:
+            deserialized != null
+            
     }
-    
-    @Ignore
-    def testIgnoring() {}
-
 }

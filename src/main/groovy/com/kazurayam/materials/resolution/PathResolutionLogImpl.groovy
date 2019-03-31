@@ -1,12 +1,20 @@
 package com.kazurayam.materials.resolution
 
 import java.nio.file.Path
+import java.nio.file.Paths
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TCaseName
 
-class PathResolutionLogImpl implements PathResolutionLog, Comparable<PathResolutionLogImpl> {
+import groovy.json.JsonOutput
 
+class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
+
+    static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogImpl.class)
+    
     // mandatory properties
     private String invokedMethodName_
     private TCaseName tCaseName_
@@ -23,8 +31,44 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<PathResolut
         this.materialPath_ = materialPath
     }
     
-    static PathResolutionLogImpl deserialize(def jsonObject) {
-        throw new UnsupportedOperationException("TODO")
+    static PathResolutionLog deserialize(Map jsonObject) {
+        String pp = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
+        String imn = jsonObject.PathResolutionLog['InvokedMethodName']
+        String tcn = jsonObject.PathResolutionLog['TCaseName']
+        String mp  = jsonObject.PathResolutionLog['MaterialPath']
+        if (imn == null) {
+            throw new IllegalArgumentException(
+                "No \'InvokedMethodName\' is found in ${pp}")
+        }
+        if (tcn == null) {
+            throw new IllegalArgumentException(
+                "No \'TCaseName\' is found in ${pp}")
+        }
+        if (mp == null) {
+            throw new IllegalArgumentException(
+                "No \'MaterialPath\' is found in ${pp}")
+        }
+        TCaseName tCaseName = new TCaseName(jsonObject.PathResolutionLog['TCaseName'])
+        Path materialPath = Paths.get(mp)
+        PathResolutionLog log = new PathResolutionLogImpl(imn, tCaseName, materialPath)
+        //
+        if (jsonObject.PathResolutionLog['SubPath']) {
+            log.setSubPath(Paths.get(jsonObject.PathResolutionLog['SubPath']))
+        }
+        if (jsonObject.PathResolutionLog['URL']) {
+            log.setUrl(new URL(jsonObject.PathResolutionLog['URL']))
+        }
+        if (jsonObject.PathResolutionLog['FileName']) {
+            log.setFileName(jsonObject.PathResolutionLog['FileName'])
+        }
+        //
+        return log
+    }
+    
+    @Override
+    void serialize(Writer writer) {
+        writer.print(JsonOutput.prettyPrint(this.toJsonText()))
+        writer.flush()
     }
     
     @Override
@@ -73,18 +117,19 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<PathResolut
     }
     
     @Override
-    int compareTo(PathResolutionLogImpl other) {
-        throw new UnsupportedOperationException("TODO")
-    }
-    
-    @Override
     boolean equals(Object obj) {
-        throw new UnsupportedOperationException("TODO")
+        if (! obj instanceof PathResolutionLog) {
+            return false
+        }
+        PathResolutionLog other = (PathResolutionLog)obj
+        return this.getMaterialPath() == other.getMaterialPath() &&
+                this.getInvokedMethodName() == other.getInvokedMethodName() &&
+                this.getTCaseName() == other.getTCaseName()
     }
     
     @Override
     int hashCode() {
-        throw new UnsupportedOperationException("TODO")
+        return this.getMaterialPath().hashCode()
     }
     
     @Override
@@ -125,5 +170,14 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<PathResolut
     @Override
     String toString() {
         return this.toJsonText()
+    }
+    
+    @Override
+    int compareTo(Object object) {
+        if (! object instanceof PathResolutionLog) {
+            throw new IllegalArgumentException("object is not instance of PathResolutionLog")
+        }
+        PathResolutionLog other = (PathResolutionLog)object
+        return this.getMaterialPath().compareTo(other.getMaterialPath())
     }
 }
