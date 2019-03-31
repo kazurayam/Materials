@@ -14,6 +14,7 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -163,6 +164,7 @@ class MaterialRepositoryImplSpec extends Specification {
             Files.exists(resolutionLogs)
     }
     
+    @IgnoreRest
     def testResolveMaterialPath() {
         setup:
             def methodName ='testResolveMaterialPath'

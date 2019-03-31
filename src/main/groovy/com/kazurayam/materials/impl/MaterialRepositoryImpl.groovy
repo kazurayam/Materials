@@ -555,9 +555,12 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
+        //logger_.debug("#resolveMaterialPath tCaseResult=${tCaseResult}")
+        
         Material material = new MaterialImpl(tCaseResult, subpath.resolve(fileName))
         //
         logger_.debug("#resolveMaterialPath material=${material}")
+        logger_.debug("#resolveMaterialPath material.getParent()=${material.getParent()}")
         logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")
         logger_.debug("#resolveMaterialPath material.getPath().getParent()=${material.getPath().getParent()}")
         

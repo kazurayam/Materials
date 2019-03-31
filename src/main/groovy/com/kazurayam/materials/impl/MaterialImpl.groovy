@@ -26,7 +26,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     
-    private TCaseResult parent_
+    private TCaseResult parentTCR_
     private Path subpath_
     private MaterialFileName materialFileName_
     
@@ -41,7 +41,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     MaterialImpl(TCaseResult parent, Path subpath, URL url, Suffix suffix, FileType fileType) {
         Objects.requireNonNull(parent, "parent TCaseResult must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
-        parent_ = parent
+        parentTCR_ = parent
         subpath_ = subpath.normalize()
         materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
@@ -56,7 +56,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     MaterialImpl(TCaseResult parent, Path filePath) {
         Objects.requireNonNull(parent, "parent must not be null")
         Objects.requireNonNull(filePath, "filePath must not be null")
-        parent_ = parent
+        parentTCR_ = parent
         subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize())
         if (subpath_.toString() == '') {
             subpath_ = Paths.get('.')
@@ -77,8 +77,14 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     @Override
     Path getPath() {
-        if (parent_ != null) {
-            return parent_.getTCaseDirectory().resolve(subpath_).resolve(materialFileName_.getFileName()).normalize()
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parent.getTCaseDirectory()}")
+        logger_.debug("#getPath subpath_=${subpath_}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parent.getTCaseDirectory().resolve(subpath_)}")
+        logger_.debug("#getPath materialFileName_.getFileName()=${materialFileName_.getFileName()}")
+        if (parentTCR_ != null) {
+            Path p = parentTCR_.getTCaseDirectory().resolve(subpath_).resolve(materialFileName_.getFileName()).normalize()
+            logger_.debug("#getPath p=${p}")
+            return p
         } else {
             throw new IllegalStateException("parent_ is not set")
         }
@@ -118,7 +124,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     @Override
     Material setParent(TCaseResult parent) {
         Objects.requireNonNull(parent)
-        parent_ = parent
+        parentTCR_ = parent
         return this
     }
     
@@ -150,7 +156,7 @@ class MaterialImpl implements Material, Comparable<Material> {
      */
     @Override
     TCaseResult getTCaseResult() {
-        return parent_
+        return parentTCR_
     }
 
     /**
@@ -203,7 +209,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     @Override
     Path getParentDirectoryPathRelativeToTSuiteResult() {
         Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
-        return tSuiteTimestampDir.relativize(parent_.getTCaseDirectory().resolve(subpath_))
+        return tSuiteTimestampDir.relativize(parentTCR_.getTCaseDirectory().resolve(subpath_))
     }
         
     @Override    
@@ -327,7 +333,7 @@ class MaterialImpl implements Material, Comparable<Material> {
                 sb.append(this.getFileType().name())
             }
         } else {
-            Path subpath = parent_.getTCaseDirectory().relativize(this.getPath())
+            Path subpath = parentTCR_.getTCaseDirectory().relativize(this.getPath())
             sb.append(subpath.toString().replace(File.separator, '/'))
         }
         return sb.toString()
