@@ -387,19 +387,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                         sb.append(URLEncoder.encode(p.getName(i).toString(), 'utf-8'))
                     }
                 }
-                if (url.getQuery() != null) {
-                    sb.append(URLEncoder.encode('?', 'utf-8'))
-                    sb.append(URLEncoder.encode(url.getQuery(), 'utf-8'))
-                }
-                if (url.getRef() != null) {
-                    sb.append(URLEncoder.encode('#', 'utf-8'))
-                    sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
-                }
-                sb.append('.png')
-                return resolveMaterialPath(tCaseName, subpath, sb.toString())
             } else {
-                return resolveMaterialPath(tCaseName, subpath, defaultName + '.png')    
+                sb.append(defaultName)
             }
+            if (url.getQuery() != null) {
+                sb.append(URLEncoder.encode('?', 'utf-8'))
+                sb.append(URLEncoder.encode(url.getQuery(), 'utf-8'))
+            }
+            if (url.getRef() != null) {
+                sb.append(URLEncoder.encode('#', 'utf-8'))
+                sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
+            }
+            sb.append('.png')
+            return resolveMaterialPath(tCaseName, subpath, sb.toString())
+
         } else {
             return resolveScreenshotPath(tCaseName, subpath, url)
         }

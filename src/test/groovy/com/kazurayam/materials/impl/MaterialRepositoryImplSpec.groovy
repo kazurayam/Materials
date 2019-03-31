@@ -14,7 +14,6 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -146,7 +145,7 @@ class MaterialRepositoryImplSpec extends Specification {
         Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 2)
         then:
-        p2.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
+        p2.getFileName().toString() == 'default%3Fcorp%3Dabcd.png'
         //
         when:
         Path google = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
