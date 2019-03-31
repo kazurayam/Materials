@@ -12,7 +12,7 @@ interface PathResolutionLog {
     // accessors for mandatory properties
     Path getMaterialPath()
     TCaseName getTCaseName()
-    String getInvokedMethodName()
+    InvokedMethodName getInvokedMethodName()
     
     // accessors for optional properties
     void setSubPath(Path path)

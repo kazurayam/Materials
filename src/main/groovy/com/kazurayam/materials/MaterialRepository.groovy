@@ -90,6 +90,8 @@ interface MaterialRepository {
     
     long getSize()
     
+    Path getPathResolutionLogBundleAt()
+    
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)
     

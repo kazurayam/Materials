@@ -24,6 +24,11 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.resolution.InvokedMethodName
+import com.kazurayam.materials.resolution.PathResolutionLog
+import com.kazurayam.materials.resolution.PathResolutionLogBundle
+import com.kazurayam.materials.resolution.PathResolutionLogImpl
+
 
 final class MaterialRepositoryImpl implements MaterialRepository {
 
@@ -43,6 +48,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private TSuiteTimestamp currentTSuiteTimestamp_
     
     private RepositoryRoot repoRoot_
+    
+    private Path pathResolutionLogBundleAt_
+    private PathResolutionLogBundle pathResolutionLogBundle_
 
     // ---------------------- constructors & initializer ----------------------
 
@@ -141,8 +149,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tSuiteTimestamp
      */
     private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        Objects.requireNonNull(tSuiteName)
-        Objects.requireNonNull(tSuiteTimestamp)
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // memorize the specified TestSuite
         currentTSuiteName_ = tSuiteName
@@ -157,6 +165,30 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (tsr == null) {
             tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
+        }
+        
+        // prepare PathResolutionLogBundle instance
+        pathResolutionLogBundleAt_ = 
+            tsr.getTSuiteTimestampDirectory().resolve(
+                PathResolutionLogBundle.SERIALIZED_FILE_NAME)
+        
+        //logger_.debug("#putCurrentTSuiteResult pathResolutionLogBundleAt_ is ${pathResolutionLogBundleAt_.toString()}")
+        //logger_.debug("#putCurrentTSuiteResult Files.exists(pathResolutionLogBundleAt_) returned ${Files.exists(pathResolutionLogBundleAt_)}")
+        
+        if (Files.exists(pathResolutionLogBundleAt_)) {
+            // create instance from JSON file
+            try {
+                pathResolutionLogBundle_ = 
+                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_)
+            } catch (Exception e) {
+                logger_.warn("failed to deserialize ${pathResolutionLogBundleAt_.toString()}, will create new one")
+                pathResolutionLogBundle_ =
+                    new PathResolutionLogBundle()
+            }
+        } else {
+            // JSON file is not there, so create new one
+            pathResolutionLogBundle_ = 
+                new PathResolutionLogBundle()
         }
     }
 
@@ -287,10 +319,24 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return repoRoot_.getTSuiteResults()
     }
 
-    // -------------------------- do the business -----------------------------
+    
+    
+    
+    
+    // ------------------ methods to resolve Material Paths  ------------------
 
-
-
+    private void addPathResolutionLog(PathResolutionLog resolutionLog) {
+        Objects.requireNonNull(pathResolutionLogBundleAt_,
+                                "pathResolutionLogBundleAt_ must not be null")
+        Objects.requireNonNull(pathResolutionLogBundle_,
+            "pathResolutionLogBundle_ must not be null")
+        pathResolutionLogBundle_.add(resolutionLog)
+        OutputStream os = new FileOutputStream(pathResolutionLogBundleAt_.toFile())
+        Writer writer = new OutputStreamWriter(os, "UTF-8")
+        pathResolutionLogBundle_.serialize(writer)
+        writer.close()
+    }
+    
     /**
      *
      */
@@ -331,7 +377,18 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             material = MaterialImpl.newInstance(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
         }
         Helpers.ensureDirs(material.getPath().getParent())
-        return material.getPath()
+        
+        // log resolution of a Material path
+        PathResolutionLog resolution =
+            new PathResolutionLogImpl(
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH,
+                    tCaseName,
+                    material.getPath().normalize())
+        resolution.setSubPath(subpath)
+        resolution.setUrl(url)
+        this.addPathResolutionLog(resolution)
+        
+        return material.getPath().normalize()
     }
     
     /**
@@ -369,6 +426,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalArgumentException("startingDepth=${startingDepth} must not be negative")
         }
         StringBuilder sb = new StringBuilder()
+        Path resultPath
         if (url.getPath() != null && url.getPath() != '') {
             Path p = Paths.get(url.getPath())
 
@@ -399,11 +457,23 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
             }
             sb.append('.png')
-            return resolveMaterialPath(tCaseName, subpath, sb.toString())
+            resultPath = resolveMaterialPath(tCaseName, subpath, sb.toString())
 
         } else {
-            return resolveScreenshotPath(tCaseName, subpath, url)
+            resultPath = resolveScreenshotPath(tCaseName, subpath, url)
         }
+        
+        // log resolution of a Material path
+        PathResolutionLog resolution =
+            new PathResolutionLogImpl(
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                    tCaseName,
+                    resultPath.normalize())
+        resolution.setSubPath(subpath)
+        resolution.setUrl(url)
+        this.addPathResolutionLog(resolution)
+        
+        return resultPath.normalize()
     }
 
     /**
@@ -452,10 +522,21 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         //
-        Path targetFile = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName).normalize()
-        Files.createDirectories(targetFile.getParent())
-        Helpers.touch(targetFile)
-        return targetFile
+        Path resultPath = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName).normalize()
+        Files.createDirectories(resultPath.getParent())
+        Helpers.touch(resultPath)
+        
+        // log resolution of a Material path
+        PathResolutionLog resolution =
+            new PathResolutionLogImpl(
+                    InvokedMethodName.RESOLVE_MATERIAL_PATH,
+                    tCaseName,
+                    resultPath.normalize())
+        resolution.setSubPath(subpath)
+        resolution.setFileName(fileName)
+        this.addPathResolutionLog(resolution)
+        //
+        return resultPath
     }
 
 
@@ -598,6 +679,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return count
     }
 
+    Path getPathResolutionLogBundleAt() {
+        return this.pathResolutionLogBundleAt_
+    }
 
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_

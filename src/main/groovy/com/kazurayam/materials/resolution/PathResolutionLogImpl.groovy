@@ -16,7 +16,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogImpl.class)
     
     // mandatory properties
-    private String invokedMethodName_
+    private InvokedMethodName invokedMethodName_
     private TCaseName tCaseName_
     private Path materialPath_
     
@@ -25,7 +25,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     private URL url_
     private String fileName_
     
-    PathResolutionLogImpl(String invokedMethodName, TCaseName tCaseName, Path materialPath) {
+    PathResolutionLogImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, Path materialPath) {
         this.invokedMethodName_ = invokedMethodName
         this.tCaseName_ = tCaseName
         this.materialPath_ = materialPath
@@ -50,7 +50,10 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         }
         TCaseName tCaseName = new TCaseName(jsonObject.PathResolutionLog['TCaseName'])
         Path materialPath = Paths.get(mp)
-        PathResolutionLog log = new PathResolutionLogImpl(imn, tCaseName, materialPath)
+        PathResolutionLog log = new PathResolutionLogImpl(
+                                        InvokedMethodName.get(imn),
+                                        tCaseName,
+                                        materialPath)
         //
         if (jsonObject.PathResolutionLog['SubPath']) {
             log.setSubPath(Paths.get(jsonObject.PathResolutionLog['SubPath']))
@@ -72,7 +75,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     }
     
     @Override
-    String getInvokedMethodName() {
+    InvokedMethodName getInvokedMethodName() {
         return this.invokedMethodName_
     }
     
@@ -144,7 +147,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         sb.append(Helpers.escapeAsJsonText(this.getTCaseName().getId()))
         sb.append('\",')
         sb.append('\"InvokedMethodName\":\"')
-        sb.append(Helpers.escapeAsJsonText(this.getInvokedMethodName()))
+        sb.append(Helpers.escapeAsJsonText(this.getInvokedMethodName().toString()))
         sb.append('\"')
         if (this.getSubPath() != null) {
             sb.append(',\"SubPath\":\"')

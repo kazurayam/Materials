@@ -12,7 +12,7 @@ class PathResolutionLogBundle {
 
     static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogBundle.class)
     
-    static final String SERIALIZED_FILE_NAME = 'path-resolution-logs.json'
+    static final String SERIALIZED_FILE_NAME = 'path-resolution-log-bundle.json'
     static final String TOP_PROPERTY_NAME = 'PathResolutionLogBundle'
     
     private static List<PathResolutionLog> bundle_

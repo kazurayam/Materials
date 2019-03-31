@@ -8,6 +8,15 @@ enum InvokedMethodName {
     
     private final String methodName_
     
+    // Reverse-lookup map for getting a InvokeMethodName from an string value
+    private static final Map<String, InvokedMethodName> lookup = new HashMap<String, InvokedMethodName>()
+    
+    static {
+        for (InvokedMethodName n : InvokedMethodName.values()) {
+            lookup.putAt(n.getMethodName(), n)
+        }
+    }
+    
     InvokedMethodName(String methodName) {
         this.methodName_ = methodName
     }
@@ -18,6 +27,10 @@ enum InvokedMethodName {
     
     @Override
     String toString() {
-        return methodName_
+        return this.getMethodName()
+    }
+    
+    static InvokedMethodName get(String methodName) {
+        return lookup.get(methodName)
     }
 }
