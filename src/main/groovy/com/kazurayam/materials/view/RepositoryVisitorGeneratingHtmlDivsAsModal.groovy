@@ -17,6 +17,8 @@ import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
+import com.kazurayam.materials.resolution.PathResolutionLog
+import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
 import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
@@ -61,6 +63,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 builder.div(['class':'modal-content']) {
                     builder.div(['class':'modal-header']) {
                         builder.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
+                        //
+                        String originHref = this.getOriginHref(material)
+                        if (originHref != null) {
+                            builder.a([
+                                'href': originHref,
+                                'class':'btn btn-link', 'role':'button'],
+                                'Origin')
+                        }
                     }
                     builder.div(['class':'modal-body']) {
                         markupInModalWindowAction(material)
@@ -72,6 +82,26 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     }
                 }
             }
+        }
+    }
+    
+    private String getOriginHref(Material material) {
+        TCaseResult tcr = material.getParent()
+        TSuiteResult tsr = tcr.getParent()
+        Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
+        if (Files.exists(path)) {
+            try {
+                PathResolutionLogBundle bundle = PathResolutionLogBundle.deserialize(path)
+                PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getPath().normalize)
+                if (resolution != null) {
+                    return resolution.getUrl()   // may return null
+                }
+            } catch (Exception e) {
+                logger_.warn("failed to deserialize PathResolutionLogBundle instance from ${path}")
+                return null
+            }
+        } else {
+            return null
         }
     }
     
