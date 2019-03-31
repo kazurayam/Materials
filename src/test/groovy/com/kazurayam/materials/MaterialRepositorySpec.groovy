@@ -1,7 +1,5 @@
 package com.kazurayam.materials
 
-import static groovy.json.JsonOutput.*
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -240,7 +238,7 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
-    
+    @IgnoreRest
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
         List<MaterialPair> list = mr_.createMaterialPairs(new TSuiteName('TS1'))

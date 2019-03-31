@@ -366,15 +366,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
             tSuiteResult.addTCaseResult(tCaseResult)
         }
-        //
+        // check if a Material is already there 
         Material material = tCaseResult.getMaterial(subpath, url, Suffix.NULL, FileType.PNG)
         logger_.debug("#resolveScreenshotPath material is ${material.toString()}")
         if (material == null) {
-            material = MaterialImpl.newInstance(subpath, url, Suffix.NULL, FileType.PNG).setParent(tCaseResult)
+            // not there, create new one
+            material = new MaterialImpl(tCaseResult, subpath, url, Suffix.NULL, FileType.PNG)
         } else {
+            // "file.png" is already there, allocate new file name like "file(2).png" 
             Suffix newSuffix = tCaseResult.allocateNewSuffix(subpath, url, FileType.PNG)
             logger_.debug("#resolveScreenshotPath newSuffix is ${newSuffix.toString()}")
-            material = MaterialImpl.newInstance(subpath, url, newSuffix, FileType.PNG).setParent(tCaseResult)
+            material = new MaterialImpl(tCaseResult, subpath, url, newSuffix, FileType.PNG)
         }
         Helpers.ensureDirs(material.getPath().getParent())
         
@@ -383,7 +385,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH,
                     tCaseName,
-                    material.getPath().normalize())
+                    material.getPathRelativeToRepositoryRoot().normalize())
         resolution.setSubPath(subpath)
         resolution.setUrl(url)
         this.addPathResolutionLog(resolution)
@@ -425,55 +427,84 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (startingDepth < 0) {
             throw new IllegalArgumentException("startingDepth=${startingDepth} must not be negative")
         }
-        StringBuilder sb = new StringBuilder()
-        Path resultPath
-        if (url.getPath() != null && url.getPath() != '') {
-            Path p = Paths.get(url.getPath())
-
-            //logger_.debug("#resolveScreenshotPathByURLPathComponents p=${p.toString()}")
-            //logger_.debug("#resolveScreenshotPathByURLPathComponents p.getNameCount()=${p.getNameCount()}")
-            for (int i=0; i < p.getNameCount(); i++) {
-                logger_.debug("#resolveScreenshotPathByURLPathComponents p.getName(${i})=${p.getName(i)}")	
-            }
-
-            if (startingDepth < p.getNameCount()) {
-                for (int i = 0; i < p.getNameCount(); i++) {
-                    if (startingDepth <= i) {
-                        if (sb.length() > 0) {
-                            sb.append('%2F')
-                        }
-                        sb.append(URLEncoder.encode(p.getName(i).toString(), 'utf-8'))
-                    }
-                }
-            } else {
-                sb.append(defaultName)
-            }
-            if (url.getQuery() != null) {
-                sb.append(URLEncoder.encode('?', 'utf-8'))
-                sb.append(URLEncoder.encode(url.getQuery(), 'utf-8'))
-            }
-            if (url.getRef() != null) {
-                sb.append(URLEncoder.encode('#', 'utf-8'))
-                sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
-            }
-            sb.append('.png')
-            resultPath = resolveMaterialPath(tCaseName, subpath, sb.toString())
-
-        } else {
-            resultPath = resolveScreenshotPath(tCaseName, subpath, url)
+        if (url.getPath() == null || url.getPath() == '') {
+            return resolveScreenshotPath(tCaseName, subpath, url)
         }
+        
+        String fileName = resolveFileNameByURLPathComponents(url,
+                                startingDepth, defaultName)
+        
+        TSuiteResult tSuiteResult = getCurrentTSuiteResult()
+        if (tSuiteResult == null) {
+            throw new IllegalStateException("tSuiteResult is null")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
+            tSuiteResult.addTCaseResult(tCaseResult)
+        }
+        Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
+        
+        Material material = new MaterialImpl(tCaseResult, subpath.resolve(fileName)).
+                                setParent(tCaseResult)
+        //
+        Files.createDirectories(material.getPath().getParent())
+        //Helpers.touch(material.getPath())
+        
+        Path resultPath = material.getPathRelativeToRepositoryRoot().normalize()
         
         // log resolution of a Material path
         PathResolutionLog resolution =
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                     tCaseName,
-                    resultPath.normalize())
+                    resultPath)
         resolution.setSubPath(subpath)
         resolution.setUrl(url)
         this.addPathResolutionLog(resolution)
         
-        return resultPath.normalize()
+        return resultPath
+    }
+    
+    /**
+     * 
+     * @param url
+     * @param startingDepth
+     * @param defaultName
+     * @return
+     */
+    protected String resolveFileNameByURLPathComponents(URL url,
+                                int startingDepth = 0, String defaultName) {
+        StringBuilder sb = new StringBuilder()
+        Path p = Paths.get(url.getPath())
+        //logger_.debug("#resolveScreenshotPathByURLPathComponents p=${p.toString()}")
+        //logger_.debug("#resolveScreenshotPathByURLPathComponents p.getNameCount()=${p.getNameCount()}")
+        //for (int i=0; i < p.getNameCount(); i++) {
+            //logger_.debug("#resolveScreenshotPathByURLPathComponents p.getName(${i})=${p.getName(i)}")
+        //}
+        if (startingDepth < p.getNameCount()) {
+            for (int i = 0; i < p.getNameCount(); i++) {
+                if (startingDepth <= i) {
+                    if (sb.length() > 0) {
+                        sb.append('%2F')
+                    }
+                    sb.append(URLEncoder.encode(p.getName(i).toString(), 'utf-8'))
+                }
+            }
+        } else {
+            sb.append(defaultName)
+        }
+        if (url.getQuery() != null) {
+            sb.append(URLEncoder.encode('?', 'utf-8'))
+            sb.append(URLEncoder.encode(url.getQuery(), 'utf-8'))
+        }
+        if (url.getRef() != null) {
+            sb.append(URLEncoder.encode('#', 'utf-8'))
+            sb.append(URLEncoder.encode(url.getRef(), 'utf-8'))
+        }
+        sb.append('.png')
+        String fileName = sb.toString()
+        return fileName
     }
 
     /**
@@ -511,6 +542,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(subpath, "subpath must not be null")
+        Objects.requireNonNull(fileName, "fileName must not be null")
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -521,22 +554,27 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             tSuiteResult.addTCaseResult(tCaseResult)
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
+        
+        Material material = new MaterialImpl(tCaseResult, subpath.resolve(fileName))
         //
-        Path resultPath = tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName).normalize()
-        Files.createDirectories(resultPath.getParent())
-        Helpers.touch(resultPath)
+        logger_.debug("#resolveMaterialPath material=${material}")
+        logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")
+        logger_.debug("#resolveMaterialPath material.getPath().getParent()=${material.getPath().getParent()}")
+        
+        Files.createDirectories(material.getPath().getParent())
+        //Helpers.touch(material.getPath())
         
         // log resolution of a Material path
         PathResolutionLog resolution =
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_MATERIAL_PATH,
                     tCaseName,
-                    resultPath.normalize())
+                    material.getPathRelativeToRepositoryRoot().normalize())
         resolution.setSubPath(subpath)
         resolution.setFileName(fileName)
         this.addPathResolutionLog(resolution)
         //
-        return resultPath
+        return material.getPath().normalize()
     }
 
 
@@ -580,7 +618,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
-
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         
         List<MaterialPair> result = new ArrayList<MaterialPair>()
@@ -609,6 +646,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             for (Material actMate : actMaterials) {
                 Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
                 // create a MateialPair object and add it to the result
+                logger_.debug("#createMaterialPairs expPath=${expPath}")
+                logger_.debug("#createMaterialPairs actPath=${actPath}")
                 if (expPath == actPath) {
                     result.add(MaterialPairImpl.newInstance().setExpected(expMate).setActual(actMate))
                 }

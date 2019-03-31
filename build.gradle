@@ -88,8 +88,8 @@ test {
 task pinpoint(type: Test) {
     //include '**/PathResolutionLogSpec.class'
     //include '**/PathResolutionLogBundleSpec.class'
-    //include '**/MaterialRepository*Spec.class'
-    include '**/BaseIndexerSpec.class'
+    //include '**/MaterialRepositorySpec.class'
+    include '**/MaterialSpec.class'
     outputs.upToDateWhen {false}
 }
 

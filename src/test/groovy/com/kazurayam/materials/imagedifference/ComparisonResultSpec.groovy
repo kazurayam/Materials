@@ -74,7 +74,7 @@ class ComparisonResultSpec extends Specification {
                 criteriaPercentage)
             Path diffFile = mr.resolveMaterialPath(
                 new TCaseName("imageDiff"),
-                expected.getDirpathRelativeToTSuiteResult(),
+                expected.getParentDirectoryPathRelativeToTSuiteResult(),
                 fileName)
             MaterialCore diffMaterial = new MaterialCoreImpl(mr.getBaseDir(), diffFile)
             boolean imagesAreSimilar = diff.imagesAreSimilar(criteriaPercentage)

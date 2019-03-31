@@ -2,8 +2,8 @@ package com.kazurayam.materials.impl
 
 import java.nio.file.Path
 import java.time.LocalDateTime
-import java.util.regex.Pattern
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -138,16 +138,16 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
     }
     
     //@Override
-    List<Material> getMaterialList(Path dirpath, URL url, FileType fileType) {
-        Objects.requireNonNull(dirpath)
+    List<Material> getMaterialList(Path subpath, URL url, FileType fileType) {
+        Objects.requireNonNull(subpath)
         Objects.requireNonNull(url)
         Objects.requireNonNull(fileType)
-        logger_.debug("#getMaterials subpath=${dirpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
+        logger_.debug("#getMaterials subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Material> list = new ArrayList<Material>()
         logger_.debug("#getMaterials materials_.size()=${materials_.size()}")
         for (Material mate : materials_) {
             logger_.debug("#getMaterials mate.getDirpath()=${mate.getDirpath()}, mate.getURL()=${mate.getURL()}, mate.getFileType()=${mate.getFileType()}, mate.getPath()=${mate.getPath()}}")
-            if (mate.getDirpath() == dirpath &&
+            if (mate.getDirpath() == subpath &&
                 mate.getURL().toString() == url.toString() &&
                 mate.getFileType() == fileType) {
                 list.add(mate)
