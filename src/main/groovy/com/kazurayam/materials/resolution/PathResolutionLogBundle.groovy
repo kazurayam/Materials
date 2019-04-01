@@ -65,7 +65,7 @@ class PathResolutionLogBundle {
         return this.bundle_.get(index)
     }
     
-    List<PathResolutionLog> findByMaterialPath(Path materialPath) {
+    List<PathResolutionLog> findByMaterialPath(String materialPath) {
         List<PathResolutionLog> list = new ArrayList<PathResolutionLog>()
         for (PathResolutionLog entry : bundle_) {
             if (entry.getMaterialPath() == materialPath) {
@@ -80,7 +80,7 @@ class PathResolutionLogBundle {
      * @param materialPath
      * @return
      */
-    PathResolutionLog findLastByMaterialPath(Path materialPath) {
+    PathResolutionLog findLastByMaterialPath(String materialPath) {
         List<PathResolutionLog> list = this.findByMaterialPath(materialPath)
         if (list.size() > 0) {
             Collections.sort(list)

@@ -10,7 +10,7 @@ interface PathResolutionLog {
     void serialize(Writer writer)
     
     // accessors for mandatory properties
-    Path getMaterialPath()
+    String getMaterialPath()
     TCaseName getTCaseName()
     InvokedMethodName getInvokedMethodName()
     

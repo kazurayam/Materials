@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 
 import groovy.json.JsonOutput
@@ -18,20 +19,27 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     // mandatory properties
     private InvokedMethodName invokedMethodName_
     private TCaseName tCaseName_
-    private Path materialPath_
+    private String materialPath_
     
     // optional properties
     private String subPath_
     private URL url_
     private String fileName_
     
-    PathResolutionLogImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, Path materialPath) {
+	/**
+	 * 
+	 * @param invokedMethodName
+	 * @param tCaseName
+	 * @param materialPath Path of a Material file relative to the baseDir of MaterialRepository = the 'Materials' directory
+	 */
+    PathResolutionLogImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, String materialPath) {
         this.invokedMethodName_ = invokedMethodName
         this.tCaseName_ = tCaseName
         this.materialPath_ = materialPath
     }
     
     static PathResolutionLog deserialize(Map jsonObject) {
+		Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         String pp = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
         String imn = jsonObject.PathResolutionLog['InvokedMethodName']
         String tcn = jsonObject.PathResolutionLog['TCaseName']
@@ -49,11 +57,16 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
                 "No \'MaterialPath\' is found in ${pp}")
         }
         TCaseName tCaseName = new TCaseName(jsonObject.PathResolutionLog['TCaseName'])
-        Path materialPath = Paths.get(mp)
-        PathResolutionLog log = new PathResolutionLogImpl(
+        String materialPath = mp
+		
+		logger_.debug("#deserialize mp                 =${mp}")
+		logger_.debug("#deserialize materialPath       =${materialPath}")
+		
+		PathResolutionLog log = new PathResolutionLogImpl(
                                         InvokedMethodName.get(imn),
                                         tCaseName,
-                                        materialPath)
+                                        materialPath
+										)
         //
         if (jsonObject.PathResolutionLog['SubPath']) {
             log.setSubPath(Paths.get(jsonObject.PathResolutionLog['SubPath']))
@@ -85,7 +98,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     }
     
     @Override
-    Path getMaterialPath() {
+    String getMaterialPath() {
         return this.materialPath_
     }
     
@@ -141,7 +154,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         sb.append('{')
         sb.append('\"PathResolutionLog\":{')
         sb.append('\"MaterialPath\":\"')
-        sb.append(Helpers.escapeAsJsonText(this.getMaterialPath().toString()))
+        sb.append(Helpers.escapeAsJsonText(this.getMaterialPath()))
         sb.append('\",')
         sb.append('\"TCaseName\":\"')
         sb.append(Helpers.escapeAsJsonText(this.getTCaseName().getId()))

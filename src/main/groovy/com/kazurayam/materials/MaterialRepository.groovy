@@ -124,7 +124,9 @@ interface MaterialRepository {
     void putCurrentTestSuite(TSuiteResultId tSuiteResultId)
     
     /**
-     *
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
+     * 
      * @param testCaseId e.g., 'Test Cases/TC1'
      * @param url e.g., 'http://demoaut.katalon.com/'
      * @return
@@ -135,6 +137,8 @@ interface MaterialRepository {
     Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url)
     
     /**
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
      * 
      * @param testCaseId
      * @param url
@@ -147,7 +151,9 @@ interface MaterialRepository {
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url, int startingDepth, String defaultName)
     
     /**
-     *
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
+     * 
      * @param testCaseId
      * @param fileName
      * @return

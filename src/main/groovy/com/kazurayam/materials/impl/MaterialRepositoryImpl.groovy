@@ -179,7 +179,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             // create instance from JSON file
             try {
                 pathResolutionLogBundle_ = 
-                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_)
+                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_, this)
             } catch (Exception e) {
                 logger_.warn("failed to deserialize ${pathResolutionLogBundleAt_.toString()}, will create new one")
                 pathResolutionLogBundle_ =
@@ -388,7 +388,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH,
                     tCaseName,
-                    material.getPathRelativeToRepositoryRoot().normalize())
+                    material.getHrefRelativeToRepositoryRoot())
         resolution.setSubPath(subpath)
         resolution.setUrl(url)
         this.addPathResolutionLog(resolution)
@@ -453,19 +453,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())
         
-        Path resultPath = material.getPathRelativeToRepositoryRoot().normalize()
-        
         // log resolution of a Material path
         PathResolutionLog resolution =
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                     tCaseName,
-                    resultPath)
+                    material.getHrefRelativeToRepositoryRoot())
         resolution.setSubPath(subpath)
         resolution.setUrl(url)
         this.addPathResolutionLog(resolution)
         
-        return resultPath
+        return material.getPath().normalize()
     }
     
     /**
@@ -561,11 +559,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
         
 		//
-		logger_.debug("#resolveMaterialPath")
-        logger_.debug("#resolveMaterialPath material=${material}")
-        logger_.debug("#resolveMaterialPath material.getParent()=${material.getParent()}")
-        logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")
-        logger_.debug("#resolveMaterialPath material.getPath().getParent()=${material.getPath().getParent()}")
+		//logger_.debug("#resolveMaterialPath")
+        //logger_.debug("#resolveMaterialPath material=${material}")
+        //logger_.debug("#resolveMaterialPath material.getParent()=${material.getParent()}")
+        //logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")
+        //logger_.debug("#resolveMaterialPath material.getPath().getParent()=${material.getPath().getParent()}")
         
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())
@@ -575,7 +573,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             new PathResolutionLogImpl(
                     InvokedMethodName.RESOLVE_MATERIAL_PATH,
                     tCaseName,
-                    material.getPathRelativeToRepositoryRoot().normalize())
+                    material.getHrefRelativeToRepositoryRoot())
         resolution.setSubPath(subpath)
         resolution.setFileName(fileName)
         this.addPathResolutionLog(resolution)

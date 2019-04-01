@@ -43,11 +43,11 @@ class PathResolutionLogSpec extends Specification {
             Helpers.copyDirectory(fixtureDir_.resolve('Materials'), materials)
         when:
             TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
-            Path materialPath = materials.resolve('main.TS1').
-                                            resolve('20180530_130419').
-                                                resolve(tCaseName.getValue()).
-                                                    resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png').
-                                                        normalize()
+			String materialPath = materials.resolve('main.TS1').
+											resolve('20180530_130419').
+												resolve(tCaseName.getValue()).
+													resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png').
+														normalize().toString()
             PathResolutionLog resolution = new PathResolutionLogImpl(
                 InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
@@ -71,11 +71,11 @@ class PathResolutionLogSpec extends Specification {
                 monitor47NewsDir)
         when:
             TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
-            Path materialPath = materials.resolve('Monitor47News').
-                                            resolve('20100123_153854').
-                                                resolve(tCaseName.getValue()).
-                                                    resolve('47NEWS_TOP.png').
-                                                        normalize()
+			String materialPath = materials.resolve('Monitor47News').
+											resolve('20100123_153854').
+												resolve(tCaseName.getValue()).
+													resolve('47NEWS_TOP.png').
+														normalize().toString()
             PathResolutionLog resolution = new PathResolutionLogImpl(
                 InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
@@ -119,9 +119,10 @@ class PathResolutionLogSpec extends Specification {
             TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
             Path tSuiteResultPath = materials.resolve('Monitor47News').
                                             resolve('20190123_153854')
-            Path materialPath = tSuiteResultPath.
-                                    resolve(tCaseName.getValue()).
-                                        resolve('47NEWS_TOP.png').normalize()
+			String materialPath = tSuiteResultPath.
+										resolve(tCaseName.getValue()).
+											resolve('47NEWS_TOP.png').
+												normalize().toString()
             PathResolutionLog resolution = new PathResolutionLogImpl(
                 InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
