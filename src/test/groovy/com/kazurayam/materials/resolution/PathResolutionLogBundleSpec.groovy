@@ -49,14 +49,13 @@ class PathResolutionLogBundleSpec extends Specification {
                                                     resolve('47NEWS_TOP.png').
                                                         normalize()
             PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
                 materialPath
             )
             //
-            Path p = Paths.get('')
+            resolution.setSubPath('')
             URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
-            resolution.setSubPath(p)
             resolution.setUrl(url)
         then:
             resolution.getUrl() == url
@@ -94,14 +93,13 @@ class PathResolutionLogBundleSpec extends Specification {
                                     resolve(tCaseName.getValue()).
                                         resolve('47NEWS_TOP.png').normalize()
             PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
                 materialPath
             )
             //
-            Path p = Paths.get('')
+            resolution.setSubPath('')
             URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
-            resolution.setSubPath(p)
             resolution.setUrl(url)
             //
             PathResolutionLogBundle bundle = new PathResolutionLogBundle()

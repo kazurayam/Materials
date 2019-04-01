@@ -19,13 +19,17 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
 
+/**
+ * A Material has a Path <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/<subpath>/<MaterialFileName>
+ */
 class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     
-    private TCaseResult parent_
-    private Path dirpath_
+    private TCaseResult parentTCR_
+    private String subpath_
     private MaterialFileName materialFileName_
+    
     private LocalDateTime lastModified_
     private long length_
     
@@ -34,29 +38,27 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     // -------- constructors --------------------------------------------------
     
-    private MaterialImpl(Path dirpath, URL url, Suffix suffix, FileType fileType) {
-        Objects.requireNonNull(dirpath)
-        dirpath_ = dirpath.normalize()
+    MaterialImpl(TCaseResult parent, String subpath, URL url, Suffix suffix, FileType fileType) {
+        Objects.requireNonNull(parent, "parent TCaseResult must not be null")
+        Objects.requireNonNull(subpath, "subpath must not be null")
+        parentTCR_ = parent
+        subpath_ = subpath
         materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
     
-    private MaterialImpl(TCaseResult parent, Path filePath) {
-        Objects.requireNonNull(parent)
-        Objects.requireNonNull(filePath)
-        parent_ = parent
-        dirpath_ = parent.getTCaseDirectory().relativize(filePath.normalize().getParent()).normalize()
-        if (dirpath_.toString() == '') {
-            dirpath_ = Paths.get('.')
-        }
+    /**
+     * 
+     * @param parent TCaserResult at './Materials/main.TS1/20180530_130419/main.TC1'
+     * @param filePath './Materials/main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls'
+     * 
+     * supath_ should be equal to Paths.get('foo/bar')
+     */
+    MaterialImpl(TCaseResult parent, Path filePath) {
+        Objects.requireNonNull(parent, "parent must not be null")
+        Objects.requireNonNull(filePath, "filePath must not be null")
+        parentTCR_ = parent
+        subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize()).toString()
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
-    }
-    
-    static Material newInstance(Path dirpath, URL url, Suffix suffix, FileType fileType) {
-        return new MaterialImpl(dirpath, url, suffix, fileType)
-    }
-    
-    static Material newInstance(TCaseResult parent, Path filePath) {
-        return new MaterialImpl(parent, filePath)
     }
     
     // ------- implematation of MaterialCore interface ------------------------
@@ -72,8 +74,14 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     @Override
     Path getPath() {
-        if (parent_ != null) {
-            return parent_.getTCaseDirectory().resolve(dirpath_).resolve(materialFileName_.getFileName()).normalize()
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parent.getTCaseDirectory()}")
+        logger_.debug("#getPath subpath_=${subpath_}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parent.getTCaseDirectory().resolve(subpath_)}")
+        logger_.debug("#getPath materialFileName_.getFileName()=${materialFileName_.getFileName()}")
+        if (parentTCR_ != null) {
+            Path p = parentTCR_.getTCaseDirectory().resolve(subpath_).resolve(materialFileName_.getFileName()).normalize()
+            logger_.debug("#getPath p=${p}")
+            return p
         } else {
             throw new IllegalStateException("parent_ is not set")
         }
@@ -113,7 +121,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     @Override
     Material setParent(TCaseResult parent) {
         Objects.requireNonNull(parent)
-        parent_ = parent
+        parentTCR_ = parent
         return this
     }
     
@@ -145,7 +153,7 @@ class MaterialImpl implements Material, Comparable<Material> {
      */
     @Override
     TCaseResult getTCaseResult() {
-        return parent_
+        return parentTCR_
     }
 
     /**
@@ -156,18 +164,6 @@ class MaterialImpl implements Material, Comparable<Material> {
         return materialFileName_.getURL()
     }
     
-    /**
-     * @return may return null
-     */
-    @Override
-    Path getSubpath() {
-        Path p = this.getPathRelativeToTSuiteTimestamp()   // main.TC4\foo\bar\smilechart.xls
-        try {
-            return p.subpath(1, p.getNameCount() - 1)      // -> foo\bar
-        } catch (IllegalArgumentException ex) {
-            return null                                    // main.TC1\somefile.txt --> no subpath here, return null
-        }
-    }
     
     @Override
     Suffix getSuffix() {
@@ -181,21 +177,36 @@ class MaterialImpl implements Material, Comparable<Material> {
 
     
     @Override    
-    Path getDirpath() {
-        return dirpath_
+    String getSubpath() {
+        return subpath_
     }
-        
+    
+    /**
+     * @return may return null
+     *
+    @Override
+    Path getSubpath() {
+        Path p = this.getPathRelativeToTSuiteTimestamp()   // main.TC4\foo\bar\smilechart.xls
+        try {
+            return p.subpath(1, p.getNameCount() - 1)      // -> foo\bar
+        } catch (IllegalArgumentException ex) {
+            return null                                    // main.TC1\somefile.txt --> no subpath here, return null
+        }
+    }
+     */
+
         
     /**
      * if this.getPath() returns Paths.get("C:\tmp\VisualTesting\Materials\TS0\20181003_105321\TC1\foo\bar.png")
      * then the method returns Path('TC1\foo').
-     * In other words, reutrns the Path of the parent directory of this Material, relative to the TSuiteResult.
+     * In other words, returns the Path of the parent directory of this Material, relative to the TSuiteResult.
      *
      * @return
      */
-    Path getDirpathRelativeToTSuiteResult() {
+    @Override
+    Path getParentDirectoryPathRelativeToTSuiteResult() {
         Path tSuiteTimestampDir = this.getParent().getParent().getTSuiteTimestampDirectory()
-        return tSuiteTimestampDir.relativize(parent_.getTCaseDirectory().resolve(dirpath_))
+        return tSuiteTimestampDir.relativize(parentTCR_.getTCaseDirectory().resolve(subpath_))
     }
         
     @Override    
@@ -303,8 +314,8 @@ class MaterialImpl implements Material, Comparable<Material> {
     String getIdentifier() {
         StringBuilder sb = new StringBuilder()
         if (this.getURL() != null) {
-            if (this.getDirpath().toString() != '' && this.getDirpath().toString() != '.') {
-                sb.append(this.getDirpath().toString())
+            if (this.getSubpath().toString() != '' && this.getSubpath().toString() != '.') {
+                sb.append(this.getSubpath().toString())
                 sb.append('/')
                 sb.append(' ')
             }
@@ -319,7 +330,7 @@ class MaterialImpl implements Material, Comparable<Material> {
                 sb.append(this.getFileType().name())
             }
         } else {
-            Path subpath = parent_.getTCaseDirectory().relativize(this.getPath())
+            Path subpath = parentTCR_.getTCaseDirectory().relativize(this.getPath())
             sb.append(subpath.toString().replace(File.separator, '/'))
         }
         return sb.toString()

@@ -72,7 +72,7 @@ class MaterialStorageImpl implements MaterialStorage {
         List<Material> sourceList = fromMR.getTSuiteResult(tSuiteResultId).getMaterialList()
         for (Material sourceMate : sourceList) {
             TCaseName tcn = sourceMate.getTCaseName()
-            Path subpath = sourceMate.getSubpath()
+            String subpath = sourceMate.getSubpath()
             String fileName = sourceMate.getFileName()
             Path copyTo
             if (subpath != null) {
@@ -216,7 +216,7 @@ class MaterialStorageImpl implements MaterialStorage {
             List<Material> sourceList = tsr.getMaterialList()
             for (Material sourceMate : sourceList) {
                 TCaseName tcn = sourceMate.getTCaseName()
-                Path subpath = sourceMate.getSubpath()
+                String subpath = sourceMate.getSubpath()
                 String fileName = sourceMate.getFileName()
                 Path copyTo
                 if (subpath != null) {

@@ -39,13 +39,13 @@ abstract class TCaseResult implements Comparable<TCaseResult> {
     
     //abstract List<Material> getMaterialList(Path dirpath, URL url, FileType fileType)
 
-    abstract Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType)
+    abstract Material getMaterial(String subpath, URL url, Suffix suffix, FileType fileType)
     
     abstract Material getMaterial(Path subpathUnderTCaseResult)
     
     abstract boolean addMaterial(Material material)
     
-    abstract Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType)
+    abstract Suffix allocateNewSuffix(String subpath, URL url, FileType fileType)
     
     abstract String toJsonText()
 

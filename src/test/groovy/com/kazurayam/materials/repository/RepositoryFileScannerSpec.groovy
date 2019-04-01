@@ -299,7 +299,7 @@ class RepositoryFileScannerSpec extends Specification {
         // .xlsx
         when:
         Material mate = tcr.getMaterial(
-            Paths.get('.'),
+            '',
             new URL("http://www.kazurayam.com/carmina/example/Book1.xlsx"),
             Suffix.NULL,
             FileType.XLSX)
@@ -308,7 +308,7 @@ class RepositoryFileScannerSpec extends Specification {
         // .xlsm
         when:
         mate = tcr.getMaterial(
-            Paths.get('.'),
+            '',
             new URL("http://www.kazurayam.com/carmina/example/Book1.xlsm"),
             Suffix.NULL,
             FileType.XLSM)
@@ -331,7 +331,7 @@ class RepositoryFileScannerSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         when:
         Material mate = tcr.getMaterial(
-            Paths.get('.'),
+            '',
             new URL("http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf"),
             Suffix.NULL,
             FileType.PDF)

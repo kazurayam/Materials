@@ -86,10 +86,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/PathResolutionLogSpec.class'
-    //include '**/PathResolutionLogBundleSpec.class'
-    //include '**/MaterialRepository*Spec.class'
-    include '**/BaseIndexerSpec.class'
+    include '**/IndexerByVisitorImplSpec.class'
+    exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
 

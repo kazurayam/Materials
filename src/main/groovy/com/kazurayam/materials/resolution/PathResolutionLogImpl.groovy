@@ -21,7 +21,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     private Path materialPath_
     
     // optional properties
-    private Path subPath_
+    private String subPath_
     private URL url_
     private String fileName_
     
@@ -90,12 +90,12 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     }
     
     @Override
-    void setSubPath(Path subPath) {
+    void setSubPath(String subPath) {
         this.subPath_ = subPath
     }
     
     @Override
-    Path getSubPath() {
+    String getSubPath() {
         return subPath_
     }
     
