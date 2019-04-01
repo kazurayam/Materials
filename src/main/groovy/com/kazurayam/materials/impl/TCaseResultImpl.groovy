@@ -138,7 +138,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
     }
     
     //@Override
-    List<Material> getMaterialList(Path subpath, URL url, FileType fileType) {
+    List<Material> getMaterialList(String subpath, URL url, FileType fileType) {
         Objects.requireNonNull(subpath)
         Objects.requireNonNull(url)
         Objects.requireNonNull(fileType)
@@ -157,8 +157,8 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
     }
 
     @Override
-    Material getMaterial(Path dirpath, URL url, Suffix suffix, FileType fileType) {
-        Objects.requireNonNull(dirpath)
+    Material getMaterial(String subpath, URL url, Suffix suffix, FileType fileType) {
+        Objects.requireNonNull(subpath)
         Objects.requireNonNull(url)
         Objects.requireNonNull(suffix)
         Objects.requireNonNull(fileType)
@@ -215,11 +215,11 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
 
     // -------------------------- helpers -------------------------------------
     @Override
-    Suffix allocateNewSuffix(Path subpath, URL url, FileType fileType) {
+    Suffix allocateNewSuffix(String subpath, URL url, FileType fileType) {
         Objects.requireNonNull(subpath)
         Objects.requireNonNull(url)
         Objects.requireNonNull(fileType)
-        logger_.debug("#allocateNewSuffix subpath=${subpath.toString()}, url=${url.toString()}, fileType=${fileType.toString()}")
+        logger_.debug("#allocateNewSuffix subpath=${subpath}, url=${url.toString()}, fileType=${fileType.toString()}")
         List<Suffix> suffixList = new ArrayList<>()
         List<Material> mateList = this.getMaterialList(subpath, url, fileType)
         logger_.debug("#allocateNewSuffix mateList.size()=${mateList.size()}")

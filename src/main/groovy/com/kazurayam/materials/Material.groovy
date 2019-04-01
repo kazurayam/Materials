@@ -12,7 +12,7 @@ interface Material extends MaterialCore {
     String getEncodedHrefRelativeToRepositoryRoot()
     
     Path getPathRelativeToTSuiteTimestamp()
-    Path getSubpath()
+    String getSubpath()
     String getHrefToReport()
 
     String getFileName()

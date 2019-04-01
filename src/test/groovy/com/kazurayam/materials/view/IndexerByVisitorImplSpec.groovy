@@ -96,7 +96,7 @@ class IndexerByVisitorImplSpec extends Specification {
          TSuiteResult tsr = repoRoot_.getTSuiteResult(
              new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
          TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-         Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+         Material mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
          when:
          // now test visitMaterial() method
          def result = jsonVisitor.visitMaterial(mate)
@@ -143,7 +143,7 @@ class IndexerByVisitorImplSpec extends Specification {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        Material mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
         String markup = htmlVisitor.markupInModalWindow(mate)
         logger_.debug("#testHTMLVisitorMarkupInModalWindow markup=\n${markup}")
@@ -163,7 +163,7 @@ class IndexerByVisitorImplSpec extends Specification {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        Material mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
         def result = htmlVisitor.visitMaterial(mate)
         def str = htmlSnippet.toString()
@@ -189,7 +189,7 @@ class IndexerByVisitorImplSpec extends Specification {
         tcr.getMaterialList().size() == 5
         when:
         htmlSnippet.getBuffer().setLength(0)
-        def mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        def mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         def result = htmlVisitor.visitMaterial(mate)
         def str = htmlSnippet.toString()
         then:
@@ -198,7 +198,7 @@ class IndexerByVisitorImplSpec extends Specification {
         //
         when:
         htmlSnippet.getBuffer().setLength(0)
-        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.BMP)
+        mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.BMP)
         result = htmlVisitor.visitMaterial(mate)
         str = htmlSnippet.toString()
         then:
@@ -207,7 +207,7 @@ class IndexerByVisitorImplSpec extends Specification {
         //
         when:
         htmlSnippet.getBuffer().setLength(0)
-        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.GIF)
+        mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.GIF)
         result = htmlVisitor.visitMaterial(mate)
         str = htmlSnippet.toString()
         then:
@@ -216,7 +216,7 @@ class IndexerByVisitorImplSpec extends Specification {
         //
         when:
         htmlSnippet.getBuffer().setLength(0)
-        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPEG)
+        mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPEG)
         result = htmlVisitor.visitMaterial(mate)
         str = htmlSnippet.toString()
         then:
@@ -225,7 +225,7 @@ class IndexerByVisitorImplSpec extends Specification {
         //
         when:
         htmlSnippet.getBuffer().setLength(0)
-        mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPG)
+        mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.JPG)
         result = htmlVisitor.visitMaterial(mate)
         str = htmlSnippet.toString()
         then:
@@ -249,7 +249,7 @@ class IndexerByVisitorImplSpec extends Specification {
         //
         when:
         String url = 'https://fixturedownload.com/download/csv/fifa-world-cup-2018/japan'
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.CSV)
+        Material mate = tcr.getMaterial('', new URL(url), Suffix.NULL, FileType.CSV)
         def result = htmlVisitor.visitMaterial(mate)
         def str = htmlSnippet.toString()
         then:
@@ -270,7 +270,7 @@ class IndexerByVisitorImplSpec extends Specification {
         tcr != null
         when:
         String url = 'http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.PDF)
+        Material mate = tcr.getMaterial('', new URL(url), Suffix.NULL, FileType.PDF)
         def result = htmlVisitor.visitMaterial(mate)
         def str = htmlSnippet.toString()
         then:
@@ -292,7 +292,7 @@ class IndexerByVisitorImplSpec extends Specification {
         tcr != null
         when:
         String url = 'https://fixturedownload.com/download/xlsx/fifa-world-cup-2018/japan'
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL(url), Suffix.NULL, FileType.XLSX)
+        Material mate = tcr.getMaterial('', new URL(url), Suffix.NULL, FileType.XLSX)
         def result = htmlVisitor.visitMaterial(mate)
         def str = htmlSnippet.toString()
         //logger_.debug("#testToHtmlAsModalWindow_XLSX str=${str}")

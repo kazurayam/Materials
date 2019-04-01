@@ -165,6 +165,33 @@ class MaterialRepositoryImplSpec extends Specification {
     }
     
     @IgnoreRest
+	/**
+MaterialRepositoryImpl DEBUG #resolveMaterialPath count=1
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material={"Material":{"url":"http://demoaut.katalon.com/","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"http%3A%2F%2Fdemoaut.katalon.com%2F.png","lastModified":"null"}}
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getParent()={"TCaseResult":{"tCaseName":{"id": "TC1","abbreviatedId": "TC1","value": "TC1"},"tCaseDir":"build\\tmp\\testOutput\\MaterialRepositoryImplSpec\\testResolveMaterialPath\\Materials\\TS1\\20180530_130604\\TC1","lastModified":"-999999999-01-01T00:00","length":0,"materials":[]}}
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getPath()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getPath().getParent()=null
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+	 */
     def testResolveMaterialPath() {
         setup:
             def methodName ='testResolveMaterialPath'

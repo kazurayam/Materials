@@ -49,13 +49,13 @@ class PathResolutionLogSpec extends Specification {
                                                     resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png').
                                                         normalize()
             PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
                 materialPath
                 )
         then:
             resolution != null
-            resolution.getInvokedMethodName() == InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName()
+            resolution.getInvokedMethodName() == InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS
             resolution.getTCaseName() == tCaseName
             resolution.getMaterialPath() == materialPath
     }
@@ -77,17 +77,16 @@ class PathResolutionLogSpec extends Specification {
                                                     resolve('47NEWS_TOP.png').
                                                         normalize()
             PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
                 materialPath
             )
             //
-            Path p = Paths.get('')
+            resolution.setSubPath('')
             URL url = new URL('https://www.47news.jp/')
-            resolution.setSubPath(p)
             resolution.setUrl(url)
         then:
-            resolution.getSubPath() == p
+            resolution.getSubPath() == ''
             resolution.getUrl() == url
             resolution.getFileName() == null
         when:
@@ -124,13 +123,12 @@ class PathResolutionLogSpec extends Specification {
                                     resolve(tCaseName.getValue()).
                                         resolve('47NEWS_TOP.png').normalize()
             PathResolutionLog resolution = new PathResolutionLogImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS.getMethodName(),
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                 tCaseName,
                 materialPath
             )
-            Path p = Paths.get('')
+            resolution.setSubPath('')
             URL url = new URL('https://www.47news.jp/')
-            resolution.setSubPath(p)
             resolution.setUrl(url)
             //
             Path serialized = tSuiteResultPath.resolve('path-resolution-log.json')

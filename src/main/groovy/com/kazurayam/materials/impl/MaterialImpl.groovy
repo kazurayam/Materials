@@ -27,7 +27,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     
     private TCaseResult parentTCR_
-    private Path subpath_
+    private String subpath_
     private MaterialFileName materialFileName_
     
     private LocalDateTime lastModified_
@@ -38,11 +38,11 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     // -------- constructors --------------------------------------------------
     
-    MaterialImpl(TCaseResult parent, Path subpath, URL url, Suffix suffix, FileType fileType) {
+    MaterialImpl(TCaseResult parent, String subpath, URL url, Suffix suffix, FileType fileType) {
         Objects.requireNonNull(parent, "parent TCaseResult must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         parentTCR_ = parent
-        subpath_ = subpath.normalize()
+        subpath_ = subpath
         materialFileName_ = new MaterialFileName(MaterialFileName.format(url, suffix, fileType))
     }
     
@@ -57,10 +57,7 @@ class MaterialImpl implements Material, Comparable<Material> {
         Objects.requireNonNull(parent, "parent must not be null")
         Objects.requireNonNull(filePath, "filePath must not be null")
         parentTCR_ = parent
-        subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize())
-        if (subpath_.toString() == '') {
-            subpath_ = Paths.get('.')
-        }
+        subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize()).toString()
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
     }
     
@@ -180,7 +177,7 @@ class MaterialImpl implements Material, Comparable<Material> {
 
     
     @Override    
-    Path getSubpath() {
+    String getSubpath() {
         return subpath_
     }
     

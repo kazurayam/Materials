@@ -130,9 +130,9 @@ interface MaterialRepository {
      * @return
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
-    Path resolveScreenshotPath(String testCaseId, Path subpath, URL url)
+    Path resolveScreenshotPath(String testCaseId, String subpath, URL url)
     Path resolveScreenshotPath(TCaseName tCaseName, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url)
     
     /**
      * 
@@ -142,9 +142,9 @@ interface MaterialRepository {
      * @return
      */
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url, int startingDepth, String defaultName)
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url, int startingDepth, String defaultName)
     
     /**
      *
@@ -153,9 +153,9 @@ interface MaterialRepository {
      * @return
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
-    Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
+    Path resolveMaterialPath(String testCaseId, String subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, String subpath, String fileName)
     
     /**
      * scan the baseDir to recognize the current directories/files configuration

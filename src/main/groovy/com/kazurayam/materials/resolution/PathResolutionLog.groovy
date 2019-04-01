@@ -15,8 +15,8 @@ interface PathResolutionLog {
     InvokedMethodName getInvokedMethodName()
     
     // accessors for optional properties
-    void setSubPath(Path path)
-    Path getSubPath()
+    void setSubPath(String subpath)
+    String getSubPath()
     
     void setUrl(URL url)
     URL getUrl()

@@ -342,21 +342,24 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     Path resolveScreenshotPath(String testCaseId, URL url) {
-        return this.resolveScreenshotPath(testCaseId, Paths.get('.'), url)
+        return this.resolveScreenshotPath(testCaseId, '', url)
     }
     @Override
     Path resolveScreenshotPath(TCaseName tCaseName, URL url) {
-        return this.resolveScreenshotPath(tCaseName, Paths.get('.'), url)
+        return this.resolveScreenshotPath(tCaseName, '', url)
     }
 
     @Override
-    Path resolveScreenshotPath(String testCaseId, Path subpath, URL url) {
+    Path resolveScreenshotPath(String testCaseId, String subpath, URL url) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         return this.resolveScreenshotPath(tCaseName, subpath, url)
     }
     @Override
-    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url) {
+    Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+		Objects.requireNonNull(subpath, "subpath must not be null")
+		Objects.requireNonNull(url, "url must not be null")
+		
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -399,30 +402,30 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url,
             int startingDepth = 0, String defaultName = 'default') {
-        return this.resolveScreenshotPathByURLPathComponents(testCaseId, Paths.get('.'), url,
-            startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(
+			testCaseId, '', url, startingDepth, defaultName)
     }
     
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url,
             int startingDepth = 0, String defaultName = 'default') {
-        return this.resolveScreenshotPathByURLPathComponents(tCaseName, Paths.get('.'), url,
-            startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(
+			tCaseName, '', url, startingDepth, defaultName)
     }
     
     @Override
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url,
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url,
             int startingDepth = 0, String defaultName = 'default') {
         TCaseName tCaseName = new TCaseName(testCaseId)
-        return this.resolveScreenshotPathByURLPathComponents(tCaseName, subpath, url,
-            startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(
+			tCaseName, subpath, url, startingDepth, defaultName)
     }
     
     @Override
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url,
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url,
             int startingDepth = 0, String defaultName = 'default') {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        Objects.requireNonNull(subpath, "subpath must not be null")
+		Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(url, "url must not be null")
         if (startingDepth < 0) {
             throw new IllegalArgumentException("startingDepth=${startingDepth} must not be negative")
@@ -431,8 +434,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             return resolveScreenshotPath(tCaseName, subpath, url)
         }
         
-        String fileName = resolveFileNameByURLPathComponents(url,
-                                startingDepth, defaultName)
+        String fileName = resolveFileNameByURLPathComponents(url, startingDepth, defaultName)
         
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -445,9 +447,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
-        Material material = new MaterialImpl(tCaseResult, subpath.resolve(fileName)).
-                                setParent(tCaseResult)
-        //
+		Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
+		
+		//
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())
         
@@ -525,24 +527,24 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     Path resolveMaterialPath(String testCaseId, String fileName) {
-        return resolveMaterialPath(testCaseId, Paths.get('.'), fileName)
+        return resolveMaterialPath(testCaseId, '', fileName)
     }
 
     @Override
     Path resolveMaterialPath(TCaseName tCaseName, String fileName) {
-        return resolveMaterialPath(tCaseName, Paths.get('.'), fileName)
+        return resolveMaterialPath(tCaseName, '', fileName)
     }
 
     @Override
-    Path resolveMaterialPath(String testCaseId, Path subpath, String fileName) {
+    Path resolveMaterialPath(String testCaseId, String subpath, String fileName) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         return this.resolveMaterialPath(tCaseName, subpath, fileName)
     }
     
     @Override
-    Path resolveMaterialPath(TCaseName tCaseName, Path subpath, String fileName) {
+    Path resolveMaterialPath(TCaseName tCaseName, String subpath, String fileName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        Objects.requireNonNull(subpath, "subpath must not be null")
+		Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(fileName, "fileName must not be null")
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -556,9 +558,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
         //logger_.debug("#resolveMaterialPath tCaseResult=${tCaseResult}")
+        Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
         
-        Material material = new MaterialImpl(tCaseResult, subpath.resolve(fileName))
-        //
+		//
+		logger_.debug("#resolveMaterialPath")
         logger_.debug("#resolveMaterialPath material=${material}")
         logger_.debug("#resolveMaterialPath material.getParent()=${material.getParent()}")
         logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")

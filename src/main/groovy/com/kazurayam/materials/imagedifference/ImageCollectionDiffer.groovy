@@ -218,7 +218,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         // resolve the path of output file to save the ImageDiff
         Path pngFile = this.mr_.resolveMaterialPath(
                             tCaseName,
-                            expectedMaterial.getParentDirectoryPathRelativeToTSuiteResult(),
+                            expectedMaterial.getParentDirectoryPathRelativeToTSuiteResult().toString(),
                             fileName)
     
         // write the ImageDiff into the output file
