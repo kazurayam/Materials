@@ -2,110 +2,110 @@
     "PathResolutionLogBundle": [
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\47reporters.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\47reporters",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "47reporters.png"
+                "URL": "https://www.47news.jp/47reporters"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\culture.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\culture",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "culture.png"
+                "URL": "https://www.47news.jp/culture"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\economics.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\economics",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "economics.png"
+                "URL": "https://www.47news.jp/economics"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\localnews.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\localnews",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "localnews.png"
+                "URL": "https://www.47news.jp/localnews"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\national.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\national",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "national.png"
+                "URL": "https://www.47news.jp/national"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\news.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\news",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "news.png"
+                "URL": "https://www.47news.jp/news"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\photo.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\photo",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "photo.png"
+                "URL": "https://www.47news.jp/photo"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\politics.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\politics",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "politics.png"
+                "URL": "https://www.47news.jp/politics"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\ranking.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\ranking",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "ranking.png"
+                "URL": "https://www.47news.jp/ranking"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\sports.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\sports",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "sports.png"
+                "URL": "https://www.47news.jp/sports"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\top.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\top",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "top.png"
+                "URL": "https://www.47news.jp/"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\world.png",
+                "MaterialPath": "47news.chronos_capture\\20190401_142748\\47news.visitSite\\world",
                 "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveMaterialPath",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "FileName": "world.png"
+                "URL": "https://www.47news.jp/world"
             }
         }
     ]
