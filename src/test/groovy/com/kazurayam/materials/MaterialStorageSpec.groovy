@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.RetrievalBy.SearchContext
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialStorageSpec extends Specification {
@@ -119,6 +120,9 @@ class MaterialStorageSpec extends Specification {
         tSuiteResults.size() == 0
     }
     
+	/**
+	 * 
+	 */
     def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("imageDeltaStatsEntries.get(tSuiteName)")

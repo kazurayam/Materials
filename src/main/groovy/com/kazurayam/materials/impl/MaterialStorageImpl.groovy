@@ -71,15 +71,8 @@ class MaterialStorageImpl implements MaterialStorage {
         componentMR_.putCurrentTestSuite(tSuiteResultId)
         List<Material> sourceList = fromMR.getTSuiteResult(tSuiteResultId).getMaterialList()
         for (Material sourceMate : sourceList) {
-            TCaseName tcn = sourceMate.getTCaseName()
-            String subpath = sourceMate.getSubpath()
-            String fileName = sourceMate.getFileName()
-            Path copyTo
-            if (subpath != null) {
-                copyTo = componentMR_.resolveMaterialPath(tcn, subpath, fileName)
-            } else {
-                copyTo = componentMR_.resolveMaterialPath(tcn, fileName)
-            }
+            Path copyTo = componentMR_.getBaseDir().resolve(sourceMate.getHrefRelativeToRepositoryRoot())
+			Files.createDirectories(copyTo.getParent())
             CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
             Files.copy(sourceMate.getPath(), copyTo, options)
             logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
@@ -215,15 +208,8 @@ class MaterialStorageImpl implements MaterialStorage {
         if (tsr != null) {
             List<Material> sourceList = tsr.getMaterialList()
             for (Material sourceMate : sourceList) {
-                TCaseName tcn = sourceMate.getTCaseName()
-                String subpath = sourceMate.getSubpath()
-                String fileName = sourceMate.getFileName()
-                Path copyTo
-                if (subpath != null) {
-                    copyTo = intoMR.resolveMaterialPath(tcn, subpath, fileName)
-                } else {
-                    copyTo = intoMR.resolveMaterialPath(tcn, fileName)
-                }
+				Path copyTo = intoMR.getBaseDir().resolve(sourceMate.getHrefRelativeToRepositoryRoot())
+				Files.createDirectories(copyTo.getParent())
                 CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
                 Files.copy(sourceMate.getPath(), copyTo, options)
                 logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")

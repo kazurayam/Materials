@@ -3,6 +3,8 @@ package com.kazurayam.materials
 import static java.nio.file.FileVisitResult.*
 import static java.nio.file.StandardCopyOption.*
 
+import org.apache.commons.io.FileUtils
+
 import java.nio.file.DirectoryNotEmptyException
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
@@ -70,10 +72,12 @@ final class Helpers {
     static int deleteDirectory(Path directory) throws IOException {
         Objects.requireNonNull(directory, 'directory must not be null')
         if (!Files.exists(directory)) {
-            throw new IOException("${directory.normalize().toAbsolutePath()} does not exist")
+            logger_.warn("${directory.normalize().toAbsolutePath()} does not exist")
+			return 0
         }
         if (!Files.isDirectory(directory)) {
-            throw new IOException("${directory.normalize().toAbsolutePath()} is not a directory")
+            logger_.warn("${directory.normalize().toAbsolutePath()} is not a directory")
+			return 0
         }
         int count = 0
         Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
@@ -83,12 +87,18 @@ final class Helpers {
                 FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
                     if (exception == null) {
                         logger_.debug("#deleteDirectory deleting directory ${dir.toString()}")
-                        try {
-                            Files.delete(dir)
-                        } catch (DirectoryNotEmptyException e) {
-                            throw new IOException("Failed to delete ${dir} because it is not empty", e)
-                        }
-                        return checkNotExist(dir)
+						
+                        //try {
+                        //    Files.delete(dir)
+                        //} catch (DirectoryNotEmptyException e) {
+                        //    throw new IOException("Failed to delete ${dir} because it is not empty", e)
+                        //}
+						boolean result = FileUtils.deleteQuietly(dir.toFile())
+                        if (!result) {
+							logger_.warn("#deleteDirectory problem occured when deleting ${dir} quietly")
+						}
+						
+						//return checkNotExist(dir)
                     }
                     return CONTINUE
                 }
@@ -113,7 +123,7 @@ final class Helpers {
     
     private static FileVisitResult checkNotExist(final Path path) throws IOException {
         if (! Files.exists(path)) {
-            return FileVisitResult.CONTINUE
+            return 
         } else {
             throw new IOException("${path} remains")
         }
