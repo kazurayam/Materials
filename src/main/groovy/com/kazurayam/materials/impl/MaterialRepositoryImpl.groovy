@@ -179,7 +179,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             // create instance from JSON file
             try {
                 pathResolutionLogBundle_ = 
-                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_, this)
+                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_)
             } catch (Exception e) {
                 logger_.warn("failed to deserialize ${pathResolutionLogBundleAt_.toString()}, will create new one")
                 pathResolutionLogBundle_ =

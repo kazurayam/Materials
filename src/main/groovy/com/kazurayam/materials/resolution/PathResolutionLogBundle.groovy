@@ -41,7 +41,7 @@ class PathResolutionLogBundle {
             throw new IllegalArgumentException("No \'${TOP_PROPERTY_NAME}\' found in ${jsonObject}")
         }
         for (def logJsonObject : logs) {
-            logger_.debug("#deserialize logJsonObject=${JsonOutput.prettyPrint(JsonOutput.toJson(logJsonObject))}")
+            //logger_.debug("#deserialize logJsonObject=${JsonOutput.prettyPrint(JsonOutput.toJson(logJsonObject))}")
             PathResolutionLog log = PathResolutionLogImpl.deserialize((Map)logJsonObject)
             instance.add(log)
         }
