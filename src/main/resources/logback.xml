@@ -18,6 +18,7 @@
     <logger name="com.kazurayam.materials.repository.RepositoryFileScanner"      level="info"/>
     <logger name="com.kazurayam.materials.repository.RepositoryFileVisitor"      level="info"/>
     <logger name="com.kazurayam.materials.repository.RepositoryWalker"           level="info"/>
+    <logger name="com.kazurayam.materials.resolution.PathResolutionLogImpl"      level="info"/>
     <logger name="com.kazurayam.materials.model.MaterialFileName"                level="info"/>
     <logger name="com.kazurayam.materials.model.TCaseResult"                     level="info"/>
     <logger name="com.kazurayam.materials.view.IndexerByVisitorImpl"             level="info"/>
