@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.imagedifference.ComparisonResult
@@ -21,6 +22,7 @@ import com.kazurayam.materials.resolution.PathResolutionLog
 import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
 
@@ -82,32 +84,38 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     }
     
     private void generateAnchorsToOrigins(MarkupBuilder builder, Material material) {
-        String originHref = this.getImmediateOriginHref(material)
+        String originHref = this.getOriginHref(material)
         if (originHref != null) {
             builder.a([
                 'href': originHref,
-                'class':'btn btn-link', 'role':'button'],
+                'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
                 'Origin')
         }
         //
         if (this.comparisonResultBundle_ != null) {
             ComparisonResult cr = this.comparisonResultBundle_.getByDiffMaterial(material.getHrefRelativeToRepositoryRoot())
             if (cr != null) {
-                builder.a([
-                    'href': cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot(),
-                    'class':'btn btn-link', 'role':'button'],
-                    'Back origin')
-                builder.a([
-                    'href': cr.getActualMaterial().getHrefRelativeToRepositoryRoot(),
-                    'class':'btn btn-link', 'role':'button'],
-                    'Forth origin')
+                String expectedMaterialHref = this.getExpectedMaterialOriginHref(material.getBaseDir(), cr)
+                if (expectedMaterialHref != null) {
+                    builder.a([
+                        'href': expectedMaterialHref,
+                        'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
+                        'Back')
+                }
+                String actualMaterialHref = this.getActualMaterialOriginHref(cr)
+                if (actualMaterialHref != null) {
+                    builder.a([
+                        'href': actualMaterialHref,
+                        'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
+                        'Forth')
+                }
             }
         } else {
             logger_.warn("#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null")
         }
     }
 
-    private String getImmediateOriginHref(Material material) {
+    private String getOriginHref(Material material) {
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
@@ -120,15 +128,15 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
             if (resolution != null) {
                 String result = resolution.getUrl()   // getUrl() may return null
-                logger_.debug("#getImmediateOriginHref returning ${result}")
+                logger_.debug("#getOriginHref returning ${result}")
                 return result
             } else {
-                logger_.warn("#getImmediateOriginHref could not find a PathResolutionLog entry of ${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}")
-                logger_.debug("#getImmediateOriginHref bundle=${JsonOutput.prettyPrint(bundle.toString())}")
+                logger_.warn("#getOriginHref could not find a PathResolutionLog entry of ${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}")
+                logger_.debug("#getOriginHref bundle=${JsonOutput.prettyPrint(bundle.toString())}")
                 return null
             }
         } else {
-            logger_.warn("#getImmediateOriginHref ${path} does not exist")
+            logger_.warn("#getOriginHref ${path} does not exist")
             return null
         }
     }
@@ -193,6 +201,72 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
         }
     }
+    
+    
+    /**
+     * 
+     */
+    /* A example of ComparisonResult instance is as follows:
+{
+ "ComparisonResult": {
+     "expectedMaterial": {
+         "Material": {
+             ...
+             "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
+             ...
+         }
+     },
+     "actualMaterial": {
+         "Material": {
+             ...
+             "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
+             ...
+         }
+     },
+     "diffMaterial": {
+         "Material": {
+             "hrefRelativeToRepositoryRoot": "47news.chronos_exam/20190404_112054/47news.ImageDiff/47news.visitSite/top.20190404_111956_default-20190404_112053_default.(16.99).png"
+         }
+     },
+     ...
+ }
+}
+      */
+    String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+        return getXMaterialOriginHref(baseDir, cr.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
+    }
+    
+    String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+        return getXMaterialOriginHref(baseDir, cr.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
+    }
+    
+    String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
+        String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', '20190404_111956', '47news.visitSite', 'top.png' ]
+        if (components.length > 2) {
+            Path pathResolutionLogBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
+            assert Files.exists(pathResolutionLogBundlePath)
+            PathResolutionLogBundle prlb = PathResolutionLogBundle.deserialize(pathResolutionLogBundlePath)
+            PathResolutionLog prl = prlb.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
+            /*
+             * An instance of PathResolutionLog is, for example:
+{
+    "PathResolutionLogBundle": [
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
+                "TCaseName": "Test Cases/47news/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "https://www.47news.jp/"
+            }
+        }
+    ]
+}
+             */
+            return prl.getUrl().toExternalForm()
+        }
+    }
+    
         
     def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
@@ -298,12 +372,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
             String jsonText = mate.getPath().toFile().text
             this.comparisonResultBundle_ = new ComparisonResultBundle(baseDir, jsonText)
+            logger_.debug("#preVisitTCaseResult comparisonResultBundle_ is set to be ${comparisonResultBundle_}")
         }
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
         this.comparisonResultBundle_ = null
+        logger_.debug("#postVisitTCaseResult comparisonResultBundle_ is set to be null")
         return RepositoryVisitResult.SUCCESS
     }
     

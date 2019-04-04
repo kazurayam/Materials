@@ -152,4 +152,9 @@ class ComparisonResultBundle {
         return sb.toString()
     }
     
+    @Override
+    String toString() {
+        return this.toJsonText()
+    }
+    
 }

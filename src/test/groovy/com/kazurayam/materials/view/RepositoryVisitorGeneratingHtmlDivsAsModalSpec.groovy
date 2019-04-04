@@ -92,8 +92,23 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             String html = output.toFile().text
         then:
             html.contains('Origin')
+
+        /* In order to see "Back origin" and "Forth origin", visitor.visitMaterial(mate) is not enough
+         * we need to visit the "Materials" directory as a whole.
+        when:
+            tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
+                            new TSuiteName('Test Suites/47news/chronos_exam'),
+                            new TSuiteTimestamp('20190404_112054')))
+            tcr = tsr.getTCaseResult(new TCaseName('Test Cases/47news/ImageDiff'))
+            materialList = tcr.getMaterialList()
+            mate = materialList.get(0)
+            visitor.visitMaterial(mate)
+            writer.flush()
+            html = output.toFile().text
+        then:
             html.contains('Back origin')
             html.contains('Forth origin')
+         */
     }
 
     @Ignore
