@@ -45,14 +45,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
     // feature methods
     def testSmoke() {
         setup:
-            Path inputDirOfCapture = fixture_.resolve('Storage').resolve('47news.chronos_capture')
+            // copy files from the fixture_origin directory to the Storage directory 
             Path caseOutputDir = specOutputDir_.resolve('testSmoke')
+            Helpers.copyDirectory(fixture_, caseOutputDir)
+            //
             Path materialsDir = caseOutputDir.resolve('Materials')
             Path storageDir = caseOutputDir.resolve('Storage')
-            Path outputDirOfCapture = storageDir.resolve('47news.chronos_capture')
-            Files.createDirectories(outputDirOfCapture)
-            // copy files from the fixture_origin directory to the Storage directory 
-            Helpers.copyDirectory(inputDirOfCapture, outputDirOfCapture)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
@@ -61,7 +59,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
                 TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_112053')),
             ])
         when:
-            Path output = caseOutputDir.resolve('output.html')
+            Path output = caseOutputDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)
@@ -83,8 +81,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
         then:
             materialList != null
             materialList.size()> 0
+        // check  
         when:
-            Material mate = materialList.get(0)
+            Material mate = materialList.get(0)    // 
             visitor.visitMaterial(mate)
             writer.flush()
         then:
@@ -93,6 +92,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             String html = output.toFile().text
         then:
             html.contains('Origin')
+            html.contains('Back origin')
+            html.contains('Forth origin')
     }
 
     @Ignore
