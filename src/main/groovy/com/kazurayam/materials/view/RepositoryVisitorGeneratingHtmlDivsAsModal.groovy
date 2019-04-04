@@ -67,13 +67,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 builder_.div(['class':'modal-content']) {
                     builder_.div(['class':'modal-header']) {
                         builder_.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
-                        //
-                        this.generateAnchorsToOrigins(builder_, material)
                     }
                     builder_.div(['class':'modal-body']) {
                         markupInModalWindowAction(material)
                     }
                     builder_.div(['class':'modal-footer']) {
+                        // link to "Origin"
+                        this.generateAnchorsToOrigins(builder_, material)
+                        // Close button
                         builder_.button(['type':'button', 'class':'btn btn-primary',
                             'data-dismiss':'modal'], 'Close')
                         anchorToReport(material)
@@ -102,7 +103,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
                         'Back')
                 }
-                String actualMaterialHref = this.getActualMaterialOriginHref(cr)
+                String actualMaterialHref = this.getActualMaterialOriginHref(material.getBaseDir(), cr)
                 if (actualMaterialHref != null) {
                     builder.a([
                         'href': actualMaterialHref,
@@ -233,11 +234,13 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
 }
       */
     String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
-        return getXMaterialOriginHref(baseDir, cr.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
+        def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
+        return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
     String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
-        return getXMaterialOriginHref(baseDir, cr.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
+        def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
+        return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
     String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
