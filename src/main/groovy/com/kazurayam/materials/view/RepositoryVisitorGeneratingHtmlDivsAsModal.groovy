@@ -64,14 +64,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     builder.div(['class':'modal-header']) {
                         builder.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
                         //
-                        //String originHref = this.getOriginHref(material)
-                        //logger_.debug("#visitMaterialAction originHref of ${material.getPath()} is ${originHref}")
-                        //if (originHref != null) {
-                        //    builder.a([
-                        //        'href': originHref,
-                        //        'class':'btn btn-link', 'role':'button'],
-                        //        'Origin')
-                        //}
                         this.generateAnchorsToOrigins(builder, material)
                     }
                     builder.div(['class':'modal-body']) {

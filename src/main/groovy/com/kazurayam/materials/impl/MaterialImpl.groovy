@@ -381,6 +381,7 @@ class MaterialImpl implements Material, Comparable<Material> {
         sb.append('"suffix":"'       + Helpers.escapeAsJsonText(this.getSuffix().toString())+ '",')
         sb.append('"fileType":'      + this.getFileType().toString() + ',')
         sb.append('"path":"'         + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
+        sb.append('"hrefRelativeToRepositoryRoot":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToRepositoryRoot()) + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '"')
         if (this.getDescription() != null) {
             sb.append(',')

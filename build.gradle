@@ -86,8 +86,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/BaseIndexerSpec.class'
-    include '**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class'
+    //include '**/Material*Spec.class'
+    include '**/ComparisonResultBundleSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
