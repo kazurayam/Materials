@@ -3,9 +3,6 @@ package com.kazurayam.materials
 import static java.nio.file.FileVisitResult.*
 import static java.nio.file.StandardCopyOption.*
 
-import org.apache.commons.io.FileUtils
-
-import java.nio.file.DirectoryNotEmptyException
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
@@ -17,6 +14,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
+import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -225,6 +223,7 @@ final class Helpers {
                         sourceF.lastModified() == targetF.lastModified()) {
                         ; // skip copying if sourceF and targetF are identical
                     } else {
+                        logger_.debug("#copyDirectory copied ${file} to ${targetFile}")
                         Files.copy(file, targetFile, REPLACE_EXISTING, COPY_ATTRIBUTES)
                         count += 1
                     }

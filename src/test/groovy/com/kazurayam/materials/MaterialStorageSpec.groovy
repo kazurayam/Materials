@@ -1,9 +1,9 @@
 package com.kazurayam.materials
 
 import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.time.LocalDateTime
 
 import org.slf4j.Logger
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialStorageSpec extends Specification {
@@ -51,7 +50,7 @@ class MaterialStorageSpec extends Specification {
         when:
         int num = ms.backup(mr_, tsri)
         then:
-        num == 2
+        num == 1
     }
     
     
@@ -65,7 +64,7 @@ class MaterialStorageSpec extends Specification {
         when:
         int num = ms.backup(mr_)
         then:
-        num == 48
+        num > 1
     }
     
     /**
@@ -116,12 +115,12 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 2   // 2 files will be copied
+        num == 1
         when:
         ms.clear(tsri)
         List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
         then:
-        tSuiteResults.size() == 1
+        tSuiteResults.size() == 0
     }
 
     def testClear_withOnlyTSuiteName() {
@@ -136,7 +135,7 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 2   // 2 files will be copied
+        num == 1
         when:
         ms.clear(tsn)    // HERE is difference
         List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
@@ -156,7 +155,7 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 2
+        num == 1
         when:
         ms.empty()
         List<TSuiteResult> tSuiteResults = ms.getTSuiteResultList()
@@ -180,7 +179,7 @@ class MaterialStorageSpec extends Specification {
         Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
         logger_.debug("#testGetSetOfMaterialPathRelativeToTSuiteTimestamp " + set)
         then:
-        set.size() == 16
+        set.size() == 2
     }
         
     def testGetTSuiteResult() {
@@ -195,7 +194,7 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 22
+        num == 2
         when:
         TSuiteResult tsr = ms.getTSuiteResult(tsri)
         then:
@@ -216,12 +215,12 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 22
+        num == 2
         when:
         List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn)
         then:
         list != null
-        list.size() == 6
+        list.size() == 1
     }
     
     def testGetTSuiteResultIdList_withTSuiteName() {
@@ -236,12 +235,12 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 22
+        num == 2
         when:
         List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn)
         then:
         list != null
-        list.size() == 6
+        list.size() == 1
     }
     
     def testGetTSuiteResultIdList() {
@@ -256,12 +255,12 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 22
+        num == 2
         when:
         List<TSuiteResultId> list = ms.getTSuiteResultIdList()
         then:
         list != null
-        list.size() == 6
+        list.size() == 1
     }
     
     def testGetTSuiteResultList_noArgs() {
@@ -296,13 +295,13 @@ class MaterialStorageSpec extends Specification {
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
         then:
-        num == 2
+        num == 1
         when:
         Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         num = ms.restore(restored, tsri)
         then:
-        num == 2
+        num == 1
     }
     
     def testStatus_all() {
@@ -382,11 +381,11 @@ class MaterialStorageSpec extends Specification {
                                 tsn,
                                 RetrievalBy.before(baseD))
         then:
-        num == 22
+        num == 2
         when:
         List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
         then:
-        tsriListRestored.size()== 6
+        tsriListRestored.size()== 1
         tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180718_142832")))
     }
 
@@ -411,7 +410,7 @@ class MaterialStorageSpec extends Specification {
                                     tsn,
                                     RetrievalBy.before(TSuiteTimestamp.newInstance("20180805_081908")))
         then:
-        num == 22
+        num == 10
         when:
         List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
         then:

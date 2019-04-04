@@ -1,24 +1,18 @@
 package com.kazurayam.materials.impl
 
-import java.nio.file.CopyOption
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.RetrievalBy
-import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -71,8 +65,8 @@ class MaterialStorageImpl implements MaterialStorage {
         if (fromMR.getTSuiteResult(tSuiteResultId) == null) {
             throw new IllegalArgumentException("${tSuiteResultId} is not found in ${fromMR.getBaseDir()}")
         }
-        Path fromDir = fromMR.getTSuiteResult(tSuiteResultId).getTSuiteNameDirectory()
-        Path   toDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteNameDirectory()
+        Path fromDir = fromMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        Path   toDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         boolean skipIfIdentical = true
         
         int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
@@ -203,10 +197,11 @@ class MaterialStorageImpl implements MaterialStorage {
         if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
             throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
         }
-        Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteNameDirectory()
-        Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteNameDirectory()
+        Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         boolean skipIfIdentical = true
         
+        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
         int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
         
         // let the MaterialRepository to scan the disk to reflesh its internal data structure
