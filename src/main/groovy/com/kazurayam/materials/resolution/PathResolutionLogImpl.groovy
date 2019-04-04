@@ -37,9 +37,9 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         this.tCaseName_ = tCaseName
         this.materialPath_ = materialPath
     }
-    
+
     static PathResolutionLog deserialize(Map jsonObject) {
-		Objects.requireNonNull(jsonObject, "jsonObject must not be null")
+        Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         String pp = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
         String imn = jsonObject.PathResolutionLog['InvokedMethodName']
         String tcn = jsonObject.PathResolutionLog['TCaseName']
@@ -58,15 +58,15 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         }
         TCaseName tCaseName = new TCaseName(jsonObject.PathResolutionLog['TCaseName'])
         String materialPath = mp
-		
-		logger_.debug("#deserialize mp                 =${mp}")
-		logger_.debug("#deserialize materialPath       =${materialPath}")
-		
-		PathResolutionLog log = new PathResolutionLogImpl(
+
+        logger_.debug("#deserialize mp                 =${mp}")
+        logger_.debug("#deserialize materialPath       =${materialPath}")
+
+        PathResolutionLog log = new PathResolutionLogImpl(
                                         InvokedMethodName.get(imn),
                                         tCaseName,
                                         materialPath
-										)
+                                        )
         //
         if (jsonObject.PathResolutionLog['SubPath']) {
             log.setSubPath(Paths.get(jsonObject.PathResolutionLog['SubPath']))
@@ -80,7 +80,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
         //
         return log
     }
-    
+
     @Override
     void serialize(Writer writer) {
         writer.print(JsonOutput.prettyPrint(this.toJsonText()))

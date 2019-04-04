@@ -91,24 +91,24 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-			PathResolutionLogBundle bundle
-			try {
+            PathResolutionLogBundle bundle
+            try {
                 bundle = PathResolutionLogBundle.deserialize(path)
-			} catch (Exception e) {
-				logger_.warn("#getOriginHref failed to deserialize PathResolutionLogBundle instance from ${path}")
-				return null
-			}
-			PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
+            } catch (Exception e) {
+                logger_.warn("#getOriginHref failed to deserialize PathResolutionLogBundle instance from ${path}")
+                return null
+            }
+            PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
             if (resolution != null) {
                 String result = resolution.getUrl()   // getUrl() may return null
-				logger_.debug("#getOriginHref returning ${result}")
-				return result
+                logger_.debug("#getOriginHref returning ${result}")
+                return result
             } else {
-				logger_.warn("#getOriginHref could not find a PathResolutionLog of ${material.getHrefRelativeToRepositoryRoot()}")
-				return null
-			}
+                logger_.warn("#getOriginHref could not find a PathResolutionLog of ${material.getHrefRelativeToRepositoryRoot()}")
+                return null
+            }
         } else {
-			logger_.warn("#getOriginHref ${path} does not exist")
+            logger_.warn("#getOriginHref ${path} does not exist")
             return null
         }
     }
