@@ -31,7 +31,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
 
     // fields
     private static Path specOutputDir_
-    private static Path fixture_ = Paths.get("./src/test/fixture")
+    private static Path fixture_ = Paths.get("./src/test/fixture_origin")    // Please note this special fixture
 
     // fixture methods
     def setupSpec() {
@@ -51,12 +51,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             Path storageDir = caseOutputDir.resolve('Storage')
             Path outputDirOfCapture = storageDir.resolve('47news.chronos_capture')
             Files.createDirectories(outputDirOfCapture)
+            // copy files from the fixture_origin directory to the Storage directory 
             Helpers.copyDirectory(inputDirOfCapture, outputDirOfCapture)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
+            // copy files from the Storage directory to the Materials directory
             ms.restore(mr, [
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190401_142150')),
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190401_142748')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_111956')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_112053')),
             ])
         when:
             Path output = caseOutputDir.resolve('output.html')
@@ -66,9 +68,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
         then:
             visitor != null
         when:
+            mr.scan()   // refresh MaterialRepository's internal data structure with the updated file tree on disk
             TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
                                     new TSuiteName('Test Suites/47news/chronos_capture'),
-                                    new TSuiteTimestamp('20190401_142150')))
+                                    new TSuiteTimestamp('20190404_111956')))
         then:
             tsr != null
         when:

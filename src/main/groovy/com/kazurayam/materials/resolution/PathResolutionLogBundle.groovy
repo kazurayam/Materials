@@ -109,7 +109,7 @@ class PathResolutionLogBundle {
     
     @Override
     String toString() {
-        throw this.toJsonText()
+        return this.toJsonText()
     }
     
 }

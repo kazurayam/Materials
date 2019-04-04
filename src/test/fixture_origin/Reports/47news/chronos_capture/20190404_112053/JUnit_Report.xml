@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="chronos_capture" time="15" tests="3" failures="0" errors="0">
+   <testsuite name="chronos_capture" tests="3" failures="0" errors="0" time="15" timestamp="2019-04-04 11:21:02" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/47news/chronos_capture">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform" value=""/>
+         <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Reports\\47news\\chronos_capture\\20190404_112053"/>
+         <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Reports\\47news\\chronos_capture\\20190404_112053\\execution0.log"/>
+         <property name="attachments" value=""/>
+         <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+         <property name="os" value="Windows 10 64bit"/>
+         <property name="katalonVersion" value="6.1.0.1"/>
+         <property name="browser" value="Firefox 66.0"/>
+         <property name="hostAddress" value="172.19.71.132"/>
+         <property name="sessionId" value="be31e39a-960c-4bab-b9d0-f77ed6ee3e56"/>
+         <property name="seleniumVersion" value="3.7.1"/>
+         <property name="proxyInformation" value="ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}"/>
+         <property name="platform" value="Windows 10"/>
+      </properties>
+      <testcase name="Test Cases/47news/visitSite" classname="Test Cases/47news/visitSite" status="PASSED">
+         <system-out><![CDATA[2019-04-04 11:21:03 - [TEST_CASE][PASSED] - Test Cases/47news/visitSite: Test Cases/47news/visitSite
+
+2019-04-04 11:21:03 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:03 - [TEST_STEP][PASSED] - comment("VTListener#beforeTestCase() was invoked"): VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:03 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is "Test Suites/47news/chronos_capture"
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is "20190404_112053"
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is "Test Cases/47news/visitSite"
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is "{"MaterialRepository":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","currentTsName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"currentTsTimestamp":{"TSuiteTimestamp":{"timestamp":"20190404_112053"}},"repoRoot":{"RepositoryRoot":{"tSuiteResults":[{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"tSuiteTimestamp": "20190404_112053","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}},{"TSuiteResult":{"tSuiteName":{"id": "_","abbreviatedId": "_","value": "_"},"tSuiteTimestamp": "_","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\_\\_","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}}],"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","reportsDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\..\\Reports",}}}}"
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:03 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null
+
+2019-04-04 11:21:03 - [TEST_STEP][PASSED] - openBrowser(""): Browser is opened with url: ''
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - Starting 'Firefox' driver
+
+2019-04-04 11:21:03 - [MESSAGE][INFO] - Action delay is set to 0 seconds
+
+2019-04-04 11:21:07 - [MESSAGE][PASSED] - Browser is opened with url: ''
+
+2019-04-04 11:21:07 - [TEST_STEP][PASSED] - setViewPortSize(1100, 800): Viewport is set to new size with width = 1100 and height = 800
+
+2019-04-04 11:21:07 - [MESSAGE][PASSED] - Viewport is set to new size with width = 1100 and height = 800
+
+2019-04-04 11:21:07 - [TEST_STEP][PASSED] - testData = findTestData("URLs"): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - allData = testData.getAllData(): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - for ([index = 0, index < allData.size(), (index++)]): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - if (DEBUG_MODE == true && index >= MAX_LINES_DEBUG): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - line = allData.get(index): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - url = line.get(0): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - visitPage(mr, new java.net.URL(url)): null
+
+2019-04-04 11:21:08 - [TEST_STEP][PASSED] - navigateToUrl(url.toExternalForm()): Navigate to 'https://www.47news.jp/' successfully
+
+2019-04-04 11:21:10 - [MESSAGE][PASSED] - Navigate to 'https://www.47news.jp/' successfully
+
+2019-04-04 11:21:10 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("47news/div_partners"), 10): Object 'Object Repository/47news/div_partners' is present
+
+2019-04-04 11:21:11 - [MESSAGE][PASSED] - Object 'Object Repository/47news/div_partners' is present
+
+2019-04-04 11:21:11 - [TEST_STEP][PASSED] - delay(1): Delayed 1 second(s)
+
+2019-04-04 11:21:12 - [MESSAGE][PASSED] - Delayed 1 second(s)
+
+2019-04-04 11:21:12 - [TEST_STEP][PASSED] - pathRelativeToMaterialsDir = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], url, 0, "top"): null
+
+2019-04-04 11:21:12 - [TEST_STEP][PASSED] - writablePath = getBaseDir().resolve(pathRelativeToMaterialsDir): null
+
+2019-04-04 11:21:12 - [TEST_STEP][PASSED] - comment(screenshot will be saved into $writablePath.toString()): screenshot will be saved into C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials\47news.chronos_capture\20190404_112053\47news.visitSite\top.png
+
+2019-04-04 11:21:12 - [MESSAGE][INFO] - screenshot will be saved into C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials\47news.chronos_capture\20190404_112053\47news.visitSite\top.png
+
+2019-04-04 11:21:12 - [TEST_STEP][PASSED] - options = addIgnoredElement(findTestObject("47news/div_footer-ad")).build(): null
+
+2019-04-04 11:21:12 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.saveEntirePageImage(writablePath.toFile(), options): com.kazurayam.ksbackyard.ScreenshotDriver.saveEntirePageImage is PASSED
+
+2019-04-04 11:21:15 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.saveEntirePageImage is PASSED
+
+2019-04-04 11:21:15 - [TEST_STEP][PASSED] - comment(Screenshot of $url was saved into $writablePath.toString()): null
+
+2019-04-04 11:21:15 - [MESSAGE][INFO] - Screenshot of https://www.47news.jp/ was saved into C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials\47news.chronos_capture\20190404_112053\47news.visitSite\top.png
+
+2019-04-04 11:21:15 - [TEST_STEP][PASSED] - if (DEBUG_MODE == true && index >= MAX_LINES_DEBUG): null
+
+2019-04-04 11:21:15 - [TEST_STEP][PASSED] - break: null
+
+2019-04-04 11:21:15 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed
+
+2019-04-04 11:21:16 - [MESSAGE][PASSED] - Browser is closed
+
+2019-04-04 11:21:16 - [TEST_STEP][PASSED] - mr.scan(): null]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <testcase name="Test Cases/VT/backupCurrentTSuiteResult" classname="Test Cases/VT/backupCurrentTSuiteResult" status="PASSED">
+         <system-out><![CDATA[2019-04-04 11:21:16 - [TEST_CASE][PASSED] - Test Cases/VT/backupCurrentTSuiteResult: Test Cases/VT/backupCurrentTSuiteResult
+
+2019-04-04 11:21:16 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:16 - [TEST_STEP][PASSED] - comment("VTListener#beforeTestCase() was invoked"): VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:16 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is "Test Suites/47news/chronos_capture"
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is "20190404_112053"
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is "Test Cases/VT/backupCurrentTSuiteResult"
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is "{"MaterialRepository":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","currentTsName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"currentTsTimestamp":{"TSuiteTimestamp":{"timestamp":"20190404_112053"}},"repoRoot":{"RepositoryRoot":{"tSuiteResults":[{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"tSuiteTimestamp": "20190404_112053","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053","lastModified":"2019-04-04T02:21:15.085","length":1912653,"tCaseResults": [{"TCaseResult":{"tCaseName":{"id": "Test Cases/47news/visitSite","abbreviatedId": "47news/visitSite","value": "47news.visitSite"},"tCaseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053\\47news.visitSite","lastModified":"2019-04-04T02:21:15.085","length":1912653,"materials":[{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053\\47news.visitSite\\top.png","lastModified":"2019-04-04T02:21:15.085","description":"20190404_112053"}}]}}]}}],"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","reportsDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\..\\Reports",}}}}"
+
+2019-04-04 11:21:16 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - ms = internal.GlobalVariable[MATERIAL_STORAGE.getName()]: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - comment(mr.getCurrentTestSuiteId(): $mr.getCurrentTestSuiteId()): mr.getCurrentTestSuiteId(): Test Suites/47news/chronos_capture
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - mr.getCurrentTestSuiteId(): Test Suites/47news/chronos_capture
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - currentTSRI = TSuiteResultId.newInstance(new com.kazurayam.materials.TSuiteName(mr.getCurrentTestSuiteId()), TSuiteTimestamp.newInstance(mr.getCurrentTestSuiteTimestamp())): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - count = ms.backup(mr, currentTSRI): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - comment(copied $count files from $mr.getBaseDir().toString() to $ms.getBaseDir().toString()): copied 2 files from C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Storage
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - copied 2 files from C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Storage]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <testcase name="Test Cases/47news/restorePreviousScreenshots" classname="Test Cases/47news/restorePreviousScreenshots" status="PASSED">
+         <system-out><![CDATA[2019-04-04 11:21:17 - [TEST_CASE][PASSED] - Test Cases/47news/restorePreviousScreenshots: Test Cases/47news/restorePreviousScreenshots
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - comment("VTListener#beforeTestCase() was invoked"): VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is "Test Suites/47news/chronos_capture"
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is "20190404_112053"
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is "Test Cases/47news/restorePreviousScreenshots"
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is "{"MaterialRepository":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","currentTsName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"currentTsTimestamp":{"TSuiteTimestamp":{"timestamp":"20190404_112053"}},"repoRoot":{"RepositoryRoot":{"tSuiteResults":[{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/47news/chronos_capture","abbreviatedId": "47news/chronos_capture","value": "47news.chronos_capture"},"tSuiteTimestamp": "20190404_112053","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053","lastModified":"2019-04-04T02:21:15.085","length":1912653,"tCaseResults": [{"TCaseResult":{"tCaseName":{"id": "Test Cases/47news/visitSite","abbreviatedId": "47news/visitSite","value": "47news.visitSite"},"tCaseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053\\47news.visitSite","lastModified":"2019-04-04T02:21:15.085","length":1912653,"materials":[{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053\\47news.visitSite\\top.png","lastModified":"2019-04-04T02:21:15.085","description":"20190404_112053"}}]}}]}}],"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","reportsDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\..\\Reports",}}}}"
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - callTestCase(findTestCase("Test Cases/VT/restorePreviousTSuiteResult"), ["STRATEGY":"last"]): Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' successfully
+
+2019-04-04 11:21:17 - [TEST_CASE][PASSED] - Test Cases/VT/restorePreviousTSuiteResult: Test Cases/VT/restorePreviousTSuiteResult
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - ms = internal.GlobalVariable[MATERIAL_STORAGE.getName()]: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - tsn = new com.kazurayam.materials.TSuiteName(mr.getCurrentTestSuiteId()): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - tst = TSuiteTimestamp.newInstance(mr.getCurrentTestSuiteTimestamp()): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - count = 0: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - switch (STRATEGY): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - case "last":: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - count = ms.restoreUnary(mr, tsn, RetrievalBy.before(tst)): null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - break: null
+
+2019-04-04 11:21:17 - [TEST_STEP][PASSED] - comment(copied $count files from $mr.getBaseDir().toString() to $ms.getBaseDir().toString()): copied 4 files from C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Storage
+
+2019-04-04 11:21:17 - [MESSAGE][INFO] - copied 4 files from C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\ChronologicalVisualTestingInKatalonStudio\Storage
+
+2019-04-04 11:21:17 - [MESSAGE][PASSED] - Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' successfully]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <system-out><![CDATA[2019-04-04 11:21:02 - [TEST_SUITE][PASSED] - chronos_capture: Test Cases/47news/restorePreviousScreenshots]]></system-out>
+      <system-err><![CDATA[]]></system-err>
+   </testsuite>
+</testsuites>

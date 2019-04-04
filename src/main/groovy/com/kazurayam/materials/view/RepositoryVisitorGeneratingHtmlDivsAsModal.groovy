@@ -64,14 +64,15 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     builder.div(['class':'modal-header']) {
                         builder.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
                         //
-                        String originHref = this.getOriginHref(material)
-						logger_.debug("#visitMaterialAction originHref of ${material.getPath()} is ${originHref}")
-                        if (originHref != null) {
-                            builder.a([
-                                'href': originHref,
-                                'class':'btn btn-link', 'role':'button'],
-                                'Origin')
-                        }
+                        //String originHref = this.getOriginHref(material)
+                        //logger_.debug("#visitMaterialAction originHref of ${material.getPath()} is ${originHref}")
+                        //if (originHref != null) {
+                        //    builder.a([
+                        //        'href': originHref,
+                        //        'class':'btn btn-link', 'role':'button'],
+                        //        'Origin')
+                        //}
+                        this.generateAnchorsToOrigins(builder, material)
                     }
                     builder.div(['class':'modal-body']) {
                         markupInModalWindowAction(material)
@@ -86,6 +87,17 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
     }
     
+    private void generateAnchorsToOrigins(MarkupBuilder builder, Material material) {
+        String originHref = this.getOriginHref(material)
+        logger_.debug("#generateAnchorsToOrigins originHref of ${material.getPath()} is ${originHref}")
+        if (originHref != null) {
+            builder.a([
+                'href': originHref,
+                'class':'btn btn-link', 'role':'button'],
+                'Origin')
+        }
+    }
+
     private String getOriginHref(Material material) {
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
@@ -104,7 +116,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 logger_.debug("#getOriginHref returning ${result}")
                 return result
             } else {
-                logger_.warn("#getOriginHref could not find a PathResolutionLog of ${material.getHrefRelativeToRepositoryRoot()}")
+                logger_.warn("#getOriginHref could not find a PathResolutionLog entry of ${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}")
+                logger_.debug("#getOriginHref bundle=${JsonOutput.prettyPrint(bundle.toString())}")
                 return null
             }
         } else {
@@ -224,7 +237,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 def msg = "this.getFileType()='${mate.getFileType()}' is unexpected"
                 logger_.warn('markupInModalWindow' + msg)
                 builder.p msg
-        }    
+        }
     }
     
     def anchorToReport = { Material mate ->
@@ -253,7 +266,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         return mate.hrefToReport()
     }
     */
-                  
+
     /*
      * implementing methods required by RepositoryVisitor
      */
@@ -283,6 +296,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
         return RepositoryVisitResult.SUCCESS
     }
+
     @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
         this.comparisonResultBundle = null
         return RepositoryVisitResult.SUCCESS

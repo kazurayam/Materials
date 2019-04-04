@@ -307,6 +307,15 @@ class MaterialImpl implements Material, Comparable<Material> {
      * returns the identifier of the Material which is used as
      * - the name in the Bootstrap Treeview
      * - the title of Modal window
+     * 
+     * The identifer is in the following format:
+     * 
+     * <PRE>subpath under the TCaseResult directory/filename</PRE>
+     * 
+     * For example, an identifier could be
+     * 
+     * <PRE>fundDetail#corp=ecza&code=01311962.1024x768.png</PRE>
+     * <PRE>main.fnhp.visitAllFunds_ecza_pc/fundDetail#corp=ecza&code=47311037.1024x768.20190403_100516_product-20190403_100517_develop.(0.12).png</PRE>
      *
      * @return
      */

@@ -1,0 +1,35 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+chronos_capture,Firefox 66.0,,2019-04-04 11:20:04,2019-04-04 11:20:20,15.973s,PASSED
+,,,,,,
+Test Cases/47news/visitSite,Firefox 66.0,,2019-04-04 11:20:05,2019-04-04 11:20:20,14.257s,PASSED
+Start listener action : beforeTestCase,Firefox 66.0,,2019-04-04 11:20:05,2019-04-04 11:20:06,0.065s,PASSED
+mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()],Firefox 66.0,,2019-04-04 11:20:06,2019-04-04 11:20:06,0.001s,PASSED
+"openBrowser("""")",Firefox 66.0,,2019-04-04 11:20:06,2019-04-04 11:20:10,4.252s,PASSED
+"setViewPortSize(1100, 800)",Firefox 66.0,,2019-04-04 11:20:10,2019-04-04 11:20:10,0.054s,PASSED
+"testData = findTestData(""URLs"")",Firefox 66.0,,2019-04-04 11:20:10,2019-04-04 11:20:10,0.015s,PASSED
+allData = testData.getAllData(),Firefox 66.0,,2019-04-04 11:20:10,2019-04-04 11:20:10,0.019s,PASSED
+"for ([index = 0, index < allData.size(), (index++)])",Firefox 66.0,,2019-04-04 11:20:10,2019-04-04 11:20:10,0.007s,PASSED
+navigateToUrl(url.toExternalForm()),Firefox 66.0,,2019-04-04 11:20:10,2019-04-04 11:20:14,3.360s,PASSED
+"verifyElementPresent(findTestObject(""47news/div_partners""), 10)",Firefox 66.0,,2019-04-04 11:20:14,2019-04-04 11:20:14,0.149s,PASSED
+delay(1),Firefox 66.0,,2019-04-04 11:20:14,2019-04-04 11:20:15,1.011s,PASSED
+"pathRelativeToMaterialsDir = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], url, 0, ""top"")",Firefox 66.0,,2019-04-04 11:20:15,2019-04-04 11:20:15,0.065s,PASSED
+writablePath = getBaseDir().resolve(pathRelativeToMaterialsDir),Firefox 66.0,,2019-04-04 11:20:15,2019-04-04 11:20:15,0.002s,PASSED
+comment(screenshot will be saved into $writablePath.toString()),Firefox 66.0,,2019-04-04 11:20:15,2019-04-04 11:20:15,0.004s,PASSED
+"options = addIgnoredElement(findTestObject(""47news/div_footer-ad"")).build()",Firefox 66.0,,2019-04-04 11:20:15,2019-04-04 11:20:15,0.028s,PASSED
+"com.kazurayam.ksbackyard.ScreenshotDriver.saveEntirePageImage(writablePath.toFile(), options)",Firefox 66.0,,2019-04-04 11:20:15,2019-04-04 11:20:18,2.990s,PASSED
+comment(Screenshot of $url was saved into $writablePath.toString()),Firefox 66.0,,2019-04-04 11:20:18,2019-04-04 11:20:18,0.004s,PASSED
+closeBrowser(),Firefox 66.0,,2019-04-04 11:20:18,2019-04-04 11:20:20,1.881s,PASSED
+mr.scan(),Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.012s,PASSED
+,,,,,,
+Test Cases/VT/backupCurrentTSuiteResult,Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.215s,PASSED
+Start listener action : beforeTestCase,Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.033s,PASSED
+mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()],Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.000s,PASSED
+ms = internal.GlobalVariable[MATERIAL_STORAGE.getName()],Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.001s,PASSED
+comment(mr.getCurrentTestSuiteId(): $mr.getCurrentTestSuiteId()),Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.004s,PASSED
+"currentTSRI = TSuiteResultId.newInstance(new com.kazurayam.materials.TSuiteName(mr.getCurrentTestSuiteId()), TSuiteTimestamp.newInstance(mr.getCurrentTestSuiteTimestamp()))",Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.001s,PASSED
+"count = ms.backup(mr, currentTSRI)",Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.082s,PASSED
+comment(copied $count files from $mr.getBaseDir().toString() to $ms.getBaseDir().toString()),Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.003s,PASSED
+,,,,,,
+Test Cases/47news/restorePreviousScreenshots,Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.411s,PASSED
+Start listener action : beforeTestCase,Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.031s,PASSED
+"callTestCase(findTestCase(""Test Cases/VT/restorePreviousTSuiteResult""), [""STRATEGY"":""last""])",Firefox 66.0,,2019-04-04 11:20:20,2019-04-04 11:20:20,0.342s,PASSED

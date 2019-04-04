@@ -1,0 +1,51 @@
+{
+    "storageScannerOptions": {
+        "shiftCriteriaPercentageBy": 1.0,
+        "filterDataLessThan": 1.0,
+        "maximumNumberOfImageDeltas": 10,
+        "onlySince": "19990101_000000",
+        "onlySinceInclusive": true,
+        "probability": 0.95,
+        "projectDirectory": "",
+        "previousImageDeltaStats": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage\\47news.chronos_exam\\20190404_111957\\47news.ImageDiff\\image-delta-stats.json"
+    },
+    "imageDeltaStatsEntries": [
+        {
+            "TSuiteName": "47news.chronos_capture",
+            "materialStatsList": [
+                {
+                    "path": "47news.visitSite/top.png",
+                    "degree": 1,
+                    "sum": 16.99,
+                    "mean": 16.99,
+                    "variance": 0.0,
+                    "standardDeviation": 0.0,
+                    "tDistribution": 0.0,
+                    "confidenceInterval": {
+                        "lowerBound": 16.99,
+                        "uppderBound": 16.99,
+                        "confidenceLevel": 0.95
+                    },
+                    "criteriaPercentage": 17.99,
+                    "data": [
+                        16.99
+                    ],
+                    "imageDeltaList": [
+                        {
+                            "a": "20190404_112053",
+                            "b": "20190404_111956",
+                            "d": 16.99,
+                            "cached": false
+                        },
+                        {
+                            "a": "20190404_111956",
+                            "b": "20190404_111825",
+                            "d": 0.08,
+                            "cached": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
