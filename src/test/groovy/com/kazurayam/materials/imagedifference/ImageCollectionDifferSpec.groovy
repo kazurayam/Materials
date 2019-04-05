@@ -53,12 +53,8 @@ class ImageCollectionDifferSpec extends Specification {
         Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
-        when:
-        boolean materialsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
-        boolean reportsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
-        then:
-        materialsCopyResult
-        reportsCopyResult
+        Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
+        Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
@@ -91,12 +87,8 @@ class ImageCollectionDifferSpec extends Specification {
         Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
-        when:
-        boolean materialsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
-        boolean reportsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
-        then:
-        materialsCopyResult
-        reportsCopyResult
+        Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
+        Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
@@ -133,7 +125,7 @@ class ImageCollectionDifferSpec extends Specification {
             Path storage = caseOutputDir.resolve('Storage')
             Files.createDirectories(materials)
             FileUtils.deleteQuietly(materials.toFile())
-            assert Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+            Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
 			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
 			TSuiteName tsn = new TSuiteName('47News_chronos_capture')
@@ -206,7 +198,7 @@ class ImageCollectionDifferSpec extends Specification {
 			Path storage = caseOutputDir.resolve('Storage')
 			Files.createDirectories(materials)
 			FileUtils.deleteQuietly(materials.toFile())
-			assert Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+			Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
 			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
 			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
 			//

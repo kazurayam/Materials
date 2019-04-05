@@ -149,7 +149,7 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName) {
         return componentMR_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
     }
     

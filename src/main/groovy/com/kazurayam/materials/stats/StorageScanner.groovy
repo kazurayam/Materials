@@ -153,7 +153,8 @@ class StorageScanner {
      *     {
      *          "TSuiteName": "47News_chronos_capture",
      *          "materialStatsList": [
-     *              // list of MaterialStats objects
+     *              // list of MaterialStats objects like
+     *              // 
      *          ]
      *     }
      * </PRE>
@@ -167,7 +168,7 @@ class StorageScanner {
         stopWatch.start()
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
         Set<Path> set = 
-            materialStorage_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
+            materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
         for (Path path : set) {
             MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)
@@ -178,6 +179,7 @@ class StorageScanner {
         if (vtLogger_ != null) {
             vtLogger_.info(msg)
         }
+        logger_.debug("#makeStatsEntry statsEntry=${statsEntry}")
         return statsEntry
     }
 
@@ -189,8 +191,36 @@ class StorageScanner {
      *                  "path: "main.TC_47News.visitSite/47NEWS_TOP.png",
      *                  "imageDeltaList": [
      *                      // list of ImageDelta objects
+     *                      {
+     *                          "path": "47news.visitSite/47reporters.png",
+     *                          "degree": 9,
+     *                          "sum": 49.339999999999996,
+     *                          "mean": 5.482222222222222,
+     *                          "variance": 2.2697232411502397,
+     *                          "standardDeviation": 1.506560068882167,
+     *                          "tDistribution": 1.8595480375401174,
+     *                          "confidenceInterval": {
+     *                              "lowerBound": 4.548381949046843,
+     *                              "uppderBound": 6.416062495397601,
+     *                              "confidenceLevel": 0.95
+     *                          },
+     *                          "criteriaPercentage": 7.42,
+     *                          "data": [
+     *                              33.99,
+     *                              ...
+     *                              1.95
+     *                          ],
+     *                          "imageDeltaList": [
+     *                              {
+     *                                  "a": "20190401_142150",
+     *                                  "b": "20190401_141839",
+     *                                  "d": 0.00,
+     *                                  "cached": false
+     *                              },
+     *                              ...
+     *                          ]
+     *                      },
      *                  ],
-     *                  
      *              }
      * </PRE>
      * 
