@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialStorageSpec extends Specification {
@@ -163,12 +164,13 @@ class MaterialStorageSpec extends Specification {
         tSuiteResults.size() == 0
     }
     
-	/**
-	 * 
-	 */
-    def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
+    /**
+     * 
+     */
+    @IgnoreRest
+    def testGetSetOfMaterialPathRelativeToTSuiteName() {
         setup:
-        Path stepWork = workdir_.resolve("imageDeltaStatsEntries.get(tSuiteName)")
+        Path stepWork = workdir_.resolve("testGetSetOfMaterialPathRelativeToTSuiteName")
         Path msdir = stepWork.resolve("Storage")
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -176,8 +178,8 @@ class MaterialStorageSpec extends Specification {
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         int num = ms.backup(mr_, tsri)
-        Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
-        logger_.debug("#testGetSetOfMaterialPathRelativeToTSuiteTimestamp " + set)
+        Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteName(tsn)
+        logger_.debug("#testGetSetOfMaterialPathRelativeToTSuiteName " + set)
         then:
         set.size() == 2
     }

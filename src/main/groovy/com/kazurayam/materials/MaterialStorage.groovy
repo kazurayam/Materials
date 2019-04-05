@@ -94,7 +94,7 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName)
     
     /**
      * 

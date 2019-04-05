@@ -41,12 +41,8 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
-        when:
-        boolean materialsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
-        boolean reportsCopyResult = Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
-        then:
-        materialsCopyResult
-        reportsCopyResult
+        Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
+        Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         TSuiteName tsn = new TSuiteName('main/TS1')
