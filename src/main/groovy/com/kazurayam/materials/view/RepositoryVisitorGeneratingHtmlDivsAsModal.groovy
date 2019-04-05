@@ -89,7 +89,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         if (originHref != null) {
             builder.a([
                 'href': originHref,
-                'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
+                'class':'btn btn-link', 'role':'button', 'target': '_blank'],
                 'Origin')
         }
         //
@@ -100,14 +100,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 if (expectedMaterialHref != null) {
                     builder.a([
                         'href': expectedMaterialHref,
-                        'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
+                        'class':'btn btn-link', 'role':'button', 'target': '_blank'],
                         'Back')
                 }
                 String actualMaterialHref = this.getActualMaterialOriginHref(material.getBaseDir(), cr)
                 if (actualMaterialHref != null) {
                     builder.a([
                         'href': actualMaterialHref,
-                        'class':'btn btn-link', 'role':'button', 'target': 'Origin'],
+                        'class':'btn btn-link', 'role':'button', 'target': '_blank'],
                         'Forth')
                 }
             }
