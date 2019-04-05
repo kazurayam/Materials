@@ -18,7 +18,7 @@ interface MaterialStorage {
      * @param fromMR
      * @param tSuiteResultId
      * @param scan whether to call this.scan after backing up this TSuiteResultId
-     * @return number of Material files transfered
+     * @return number of files transfered
      * @throws IOException
      */
     int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
@@ -28,9 +28,9 @@ interface MaterialStorage {
      * from the project's Materials folder (fromMR) into this Material Storage.
      * 
      * @param fromMR
-     * @param tSuiteName
-     * @param retrievalBy
-     * @return number of Material files transfered
+     * @param tSuiteReultId
+     * @param scan if true, fromMR.scan() will be called; otherwise no scan() will be called
+     * @return number of files transfered
      * @throws IOException
      */
     int backup(MaterialRepository fromMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
@@ -40,7 +40,7 @@ interface MaterialStorage {
      * at the timing of invokation into this Material Storage
      *
      * @param fromMR
-     * @return
+     * @return number of files transfered 
      * @throws IOException
      */
     int backup(MaterialRepository fromMR) throws IOException

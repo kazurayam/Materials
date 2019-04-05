@@ -26,6 +26,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     private final TSuiteResultId tSuiteResultId_
     
     private RepositoryRoot repoRoot_
+    private Path tSuiteNameDirectory_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
@@ -65,10 +66,8 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
-        tSuiteTimestampDirectory_ =
-                repoRoot_.getBaseDir()
-                    .resolve(this.getId().getTSuiteName().getValue())
-                    .resolve(this.getId().getTSuiteTimestamp().format())
+        tSuiteNameDirectory_ = repoRoot_.getBaseDir().resolve(this.getId().getTSuiteName().getValue())
+        tSuiteTimestampDirectory_ = tSuiteNameDirectory_.resolve(this.getId().getTSuiteTimestamp().format())
         junitReportWrapper_ = createJUnitReportWrapper(repoRoot_.getReportsDir())
         executionPropertiesWrapper_ = createExecutionPropertiesWrapper(repoRoot_.getReportsDir())
         return this
@@ -82,6 +81,11 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     @Override
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_
+    }
+    
+    @Override
+    Path getTSuiteNameDirectory() {
+        return tSuiteNameDirectory_
     }
     
     @Override

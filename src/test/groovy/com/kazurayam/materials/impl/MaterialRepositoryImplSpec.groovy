@@ -31,9 +31,10 @@ class MaterialRepositoryImplSpec extends Specification {
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/testOutput/${classShortName_}")
-        if (!workdir_.toFile().exists()) {
-            workdir_.toFile().mkdirs()
+        if (Files.exists(workdir_)) {
+            Helpers.deleteDirectoryContents(workdir_)
         }
+        Files.createDirectories(workdir_)
     }
     def setup() {}
     def cleanup() {}
@@ -54,22 +55,26 @@ class MaterialRepositoryImplSpec extends Specification {
 
     def testResolveScreenshotPath() {
         setup:
-        Path casedir = workdir_.resolve('testResolveScreenshotPath')
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materialsDir = casedir.resolve('Materials')
-        Path reportsDir   = casedir.resolve('Reports')
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
-        mri.putCurrentTestSuite('TS1', '20180530_130604')
+            Path casedir = workdir_.resolve('testResolveScreenshotPath')
+            Helpers.copyDirectory(fixture_, casedir)
+            Path materialsDir = casedir.resolve('Materials')
+            Path reportsDir   = casedir.resolve('Reports')
+            MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+            mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p1 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
-            new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
+            Path p1 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+                new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
         then:
-        p1.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
+            p1.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
         when:
-        Path p2 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
-            new URL('https://foo:bar@dev.home.net/gnc/issueList.html?corp=abcd'))
+            Path p2 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+                new URL('https://foo:bar@dev.home.net/gnc/issueList.html?corp=abcd'))
         then:
-        p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'   
+            p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'
+        when:
+            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+        then:
+            Files.exists(resolutionLogs)
     }
     
     
@@ -117,63 +122,99 @@ class MaterialRepositoryImplSpec extends Specification {
     
     def testResolveScreenshotPathByURLPathComponents() {
         setup:
-        Path casedir = workdir_.resolve('testResolveScreenshotPathByURLPathComponents')
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materialsDir = casedir.resolve('Materials')
-        Path reportsDir   = casedir.resolve('Reports')
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
-        mri.putCurrentTestSuite('TS1', '20180530_130604')
+            Path casedir = workdir_.resolve('testResolveScreenshotPathByURLPathComponents')
+            Helpers.copyDirectory(fixture_, casedir)
+            Path materialsDir = casedir.resolve('Materials')
+            Path reportsDir   = casedir.resolve('Reports')
+            MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+            mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-        Path p = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
         then:
-        p.getName(p.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
-        p.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
-        //
+            p.getName(p.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+            p.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+            //
         when:
-        Path p0 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p0 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 0)
         then:
-        p0.getName(p0.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
-        p0.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+            p0.getName(p0.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
+            p0.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
         //
         when:
-        Path p1 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p1 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 1)
         then:
-        p1.getFileName().toString() == 'issueList.html%3Fcorp%3Dabcd.png'
+            p1.getFileName().toString() == 'issueList.html%3Fcorp%3Dabcd.png'
         when:
-        Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 2)
         then:
-        p2.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
+            p2.getFileName().toString() == 'default%3Fcorp%3Dabcd.png'
         //
         when:
-        Path google = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
-            new URL('https://www.google.com'))
+            Path google = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+                new URL('https://www.google.com'))
         then:
-        google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
+            google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
+        when:
+            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+        then:
+            Files.exists(resolutionLogs)
     }
     
+    @IgnoreRest
+	/**
+MaterialRepositoryImpl DEBUG #resolveMaterialPath count=1
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material={"Material":{"url":"http://demoaut.katalon.com/","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"http%3A%2F%2Fdemoaut.katalon.com%2F.png","lastModified":"null"}}
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getParent()={"TCaseResult":{"tCaseName":{"id": "TC1","abbreviatedId": "TC1","value": "TC1"},"tCaseDir":"build\\tmp\\testOutput\\MaterialRepositoryImplSpec\\testResolveMaterialPath\\Materials\\TS1\\20180530_130604\\TC1","lastModified":"-999999999-01-01T00:00","length":0,"materials":[]}}
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getPath()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialRepositoryImpl DEBUG #resolveMaterialPath material.getPath().getParent()=null
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
+MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1\..\..\..\..\..\..\..\..\..\
+MaterialImpl DEBUG #getPath materialFileName_.getFileName()=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
+	 */
     def testResolveMaterialPath() {
         setup:
-        def methodName ='testResolveMaterialPath'
-        Path casedir = workdir_.resolve(methodName)
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materialsDir = casedir.resolve('Materials')
-        Path reportsDir   = casedir.resolve('Reports')
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
-        mri.putCurrentTestSuite('TS1', '20180530_130604')
+            def methodName ='testResolveMaterialPath'
+            Path casedir = workdir_.resolve(methodName)
+            Helpers.copyDirectory(fixture_, casedir)
+            Path materialsDir = casedir.resolve('Materials')
+            Path reportsDir   = casedir.resolve('Reports')
+            MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+            mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-        String materialFileName = MaterialFileName.format(
-            new URL('http://demoaut.katalon.com/'),
-            Suffix.NULL,
-            FileType.PNG)
-        Path p = mri.resolveMaterialPath('TC1', materialFileName)
+            String materialFileName = MaterialFileName.format(
+                new URL('http://demoaut.katalon.com/'),
+                Suffix.NULL,
+                FileType.PNG)
+            Path p = mri.resolveMaterialPath('TC1', materialFileName)
         then:
-        p != null
-        p.toString().replace('\\', '/') ==
-            "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+            p != null
+            p.toString().replace('\\', '/') ==
+                "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        when:
+            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+        then:
+            Files.exists(resolutionLog)
     }
 
     def testResolveMaterialPath_withSuffix() {

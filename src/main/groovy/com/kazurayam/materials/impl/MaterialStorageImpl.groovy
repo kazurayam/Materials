@@ -1,24 +1,18 @@
 package com.kazurayam.materials.impl
 
-import java.nio.file.CopyOption
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.RetrievalBy
-import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -60,31 +54,23 @@ class MaterialStorageImpl implements MaterialStorage {
     /**
      * copy Material files belonging to the tSuiteName + tSuiteTimestamp 
      * from the Materials dir of the project into the external Storage directory
+     * 
+     * @return number of Files copied
      */
     @Override
     int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        //
-        int count = 0
-        //
         componentMR_.putCurrentTestSuite(tSuiteResultId)
-        List<Material> sourceList = fromMR.getTSuiteResult(tSuiteResultId).getMaterialList()
-        for (Material sourceMate : sourceList) {
-            TCaseName tcn = sourceMate.getTCaseName()
-            Path subpath = sourceMate.getSubpath()
-            String fileName = sourceMate.getFileName()
-            Path copyTo
-            if (subpath != null) {
-                copyTo = componentMR_.resolveMaterialPath(tcn, subpath, fileName)
-            } else {
-                copyTo = componentMR_.resolveMaterialPath(tcn, fileName)
-            }
-            CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
-            Files.copy(sourceMate.getPath(), copyTo, options)
-            logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
-            count += 1
+        if (fromMR.getTSuiteResult(tSuiteResultId) == null) {
+            throw new IllegalArgumentException("${tSuiteResultId} is not found in ${fromMR.getBaseDir()}")
         }
+        Path fromDir = fromMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        Path   toDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        boolean skipIfIdentical = true
+        
+        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
+        
         // scan the directories/files to update the internal status of componentMR
         if (scan) {
             componentMR_.scan()
@@ -205,33 +191,20 @@ class MaterialStorageImpl implements MaterialStorage {
      */
     @Override
     int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
-        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
-        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
-        intoMR.putCurrentTestSuite(tsri)
-        //
-        int count = 0
-        TSuiteResult tsr = componentMR_.getTSuiteResult(tsri)
-        if (tsr != null) {
-            List<Material> sourceList = tsr.getMaterialList()
-            for (Material sourceMate : sourceList) {
-                TCaseName tcn = sourceMate.getTCaseName()
-                Path subpath = sourceMate.getSubpath()
-                String fileName = sourceMate.getFileName()
-                Path copyTo
-                if (subpath != null) {
-                    copyTo = intoMR.resolveMaterialPath(tcn, subpath, fileName)
-                } else {
-                    copyTo = intoMR.resolveMaterialPath(tcn, fileName)
-                }
-                CopyOption[] options = [ StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES ]
-                Files.copy(sourceMate.getPath(), copyTo, options)
-                logger_.info("copied ${sourceMate.getPath().toString()} into ${copyTo.toString()}")
-                count += 1
-            }
-        } else {
-            logger_.warn("No TSuiteResult of ${tsri.toString()} is not found in ${componentMR_.toString()}")
+        Objects.requireNonNull(intoMR, "intoMR must not be null")
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+        intoMR.putCurrentTestSuite(tSuiteResultId)
+        if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
+            throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
         }
+        Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        boolean skipIfIdentical = true
+        
+        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
+        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
+        
+        // let the MaterialRepository to scan the disk to reflesh its internal data structure
         if (scan) {
             intoMR.scan()
         }

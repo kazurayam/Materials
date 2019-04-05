@@ -3,7 +3,6 @@ package com.kazurayam.materials
 import static java.nio.file.FileVisitResult.*
 import static java.nio.file.StandardCopyOption.*
 
-import java.nio.file.DirectoryNotEmptyException
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
@@ -15,6 +14,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
+import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -70,10 +70,12 @@ final class Helpers {
     static int deleteDirectory(Path directory) throws IOException {
         Objects.requireNonNull(directory, 'directory must not be null')
         if (!Files.exists(directory)) {
-            throw new IOException("${directory.normalize().toAbsolutePath()} does not exist")
+            logger_.warn("${directory.normalize().toAbsolutePath()} does not exist")
+            return 0
         }
         if (!Files.isDirectory(directory)) {
-            throw new IOException("${directory.normalize().toAbsolutePath()} is not a directory")
+            logger_.warn("${directory.normalize().toAbsolutePath()} is not a directory")
+            return 0
         }
         int count = 0
         Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
@@ -83,12 +85,16 @@ final class Helpers {
                 FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
                     if (exception == null) {
                         logger_.debug("#deleteDirectory deleting directory ${dir.toString()}")
-                        try {
-                            Files.delete(dir)
-                        } catch (DirectoryNotEmptyException e) {
-                            throw new IOException("Failed to delete ${dir} because it is not empty", e)
+                        //try {
+                        //    Files.delete(dir)
+                        //} catch (DirectoryNotEmptyException e) {
+                        //    throw new IOException("Failed to delete ${dir} because it is not empty", e)
+                        //}
+                        boolean result = FileUtils.deleteQuietly(dir.toFile())
+                        if (!result) {
+                            logger_.warn("#deleteDirectory problem occured when deleting ${dir} quietly")
                         }
-                        return checkNotExist(dir)
+                        //return checkNotExist(dir)
                     }
                     return CONTINUE
                 }
@@ -113,7 +119,7 @@ final class Helpers {
     
     private static FileVisitResult checkNotExist(final Path path) throws IOException {
         if (! Files.exists(path)) {
-            return FileVisitResult.CONTINUE
+            return 
         } else {
             throw new IOException("${path} remains")
         }
@@ -131,15 +137,15 @@ final class Helpers {
     static void deleteDirectoryContents(Path directory) throws IOException {
         if (Files.exists(directory)) {
            List<Path> children = Files.list(directory).collect(Collectors.toList());
-    	   for (Path child : children) {
-	           if (Files.isRegularFile(child)) {
-	               Files.delete(child)
-	           } else if (Files.isDirectory(child)) {
-	               deleteDirectory(child)
-	           } else {
-	               logger_.warn("#deleteDirectoryContents ${child.toString()} " +
-	                   "is not a File nor a Directory")
-	           }
+           for (Path child : children) {
+               if (Files.isRegularFile(child)) {
+                   Files.delete(child)
+               } else if (Files.isDirectory(child)) {
+                   deleteDirectory(child)
+               } else {
+                   logger_.warn("#deleteDirectoryContents ${child.toString()} " +
+                       "is not a File nor a Directory")
+               }
             }
         }
     }
@@ -169,7 +175,7 @@ final class Helpers {
      * @param skipExisting default to true
      * @return
      */
-    static boolean copyDirectory(Path source, Path target, boolean skipIfIdentical = true) {
+    static int copyDirectory(Path source, Path target, boolean skipIfIdentical = true) {
         if (source == null) {
             throw new IllegalArgumentException('source is null')
         }
@@ -185,6 +191,13 @@ final class Helpers {
         if (target == null) {
             throw new IllegalArgumentException('target is null')
         }
+        
+        // if target directory is not there, create it
+        Files.createDirectories(target)
+        
+        // number of files copied
+        int count = 0
+        
         Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
             Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
@@ -210,12 +223,16 @@ final class Helpers {
                         sourceF.lastModified() == targetF.lastModified()) {
                         ; // skip copying if sourceF and targetF are identical
                     } else {
+                        logger_.debug("#copyDirectory copied ${file} to ${targetFile}")
                         Files.copy(file, targetFile, REPLACE_EXISTING, COPY_ATTRIBUTES)
+                        count += 1
                     }
                     return CONTINUE
                 }
             }
         )
+        
+        return count
     }
 
     /**

@@ -1,0 +1,9 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+makeIndex,,,2019-04-04 11:21:28,2019-04-04 11:21:30,1.882s,PASSED
+,,,,,,
+Test Cases/VT/makeIndex,,,2019-04-04 11:21:29,2019-04-04 11:21:30,0.725s,PASSED
+Start listener action : beforeTestCase,,,2019-04-04 11:21:29,2019-04-04 11:21:29,0.067s,PASSED
+mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()],,,2019-04-04 11:21:29,2019-04-04 11:21:29,0.001s,PASSED
+assert mr != null,,,2019-04-04 11:21:29,2019-04-04 11:21:29,0.001s,PASSED
+index = mr.makeIndex(),,,2019-04-04 11:21:29,2019-04-04 11:21:30,0.561s,PASSED
+comment(>>> $index.toString() is updated),,,2019-04-04 11:21:30,2019-04-04 11:21:30,0.004s,PASSED

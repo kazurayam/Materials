@@ -28,6 +28,7 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class BaseIndexerSpec extends Specification {
@@ -209,6 +210,75 @@ class BaseIndexerSpec extends Specification {
             html.contains('$(\'#tree\').treeview({')
             html.contains('modalize();')
     }
+
+	@IgnoreRest
+	def testCarouselWithLinkToOrigin() {
+		setup:
+			Path caseOutputDir = specOutputDir.resolve('testCarouselWithLinkToOrigin')
+			Path materials = caseOutputDir.resolve('Materials')
+			Path storage = caseOutputDir.resolve('Storage')
+			Files.createDirectories(materials)
+			Files.createDirectories(storage)
+			Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+			//
+			TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47news/chronos_exam")
+			TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
+			Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+			//
+			TSuiteName tsn = new TSuiteName('Test Suites/47news/chronos_capture')
+			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142150')))
+			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
+			mr.scan()
+			mr.putCurrentTestSuite('Test Suites/47news/ImageDiff', '20190401_142749')
+		when:
+			List<MaterialPair> materialPairs =
+			mr.createMaterialPairs(tsn).stream().filter { mp ->
+				mp.getLeft().getFileType() == FileType.PNG
+			}.collect(Collectors.toList())
+			StorageScanner.Options options = new StorageScanner.Options.Builder().
+			previousImageDeltaStats(previousIDS).
+				shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
+				build()
+			StorageScanner storageScanner = new StorageScanner(ms, options)
+			ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+			//
+			storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+			double ccp = imageDeltaStats.getCriteriaPercentage(
+							new TSuiteName("47news/chronos_capture"),
+							Paths.get('47news.visitSite').resolve('top.png'))
+		then:
+			27.0 < ccp && ccp < 28.0
+		when:
+			ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+			icd.makeImageCollectionDifferences(
+				materialPairs,
+				new TCaseName('Test Cases/47news/ImageDiff'),
+				imageDeltaStats)
+			mr.scan()
+			List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/47news/ImageDiff'))
+			assert tsriList.size() == 1
+			TSuiteResultId tsri = tsriList.get(0)
+			TSuiteResult tsr = mr.getTSuiteResult(tsri)
+			TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/47news/ImageDiff"))
+			List<Material> mateList = tcr.getMaterialList()
+		then:
+		mateList.size() == 13          // diffImage + comparison-result-bundle.json
+		when:
+			Indexer indexer = makeIndexer(caseOutputDir)
+			indexer.execute()
+			Path index = indexer.getOutput()
+			logger_.debug("#testSmoke index=${index.toString()}")
+		then:
+			Files.exists(index)
+		when:
+			String html = index.toFile().text
+		then:
+			html.contains('<a')
+			html.contains('btn btn-link')
+			html.contains('Origin')
+	}
 
     /**
      * helper to make a CarouselIndexer object

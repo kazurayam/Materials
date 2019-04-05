@@ -33,13 +33,13 @@ class SpecTemplate extends Specification {
     // feature methods
     def testSomething() {
         setup:
-        anything()
+            anything()
         when:
-        anything()
+            anything()
         then:
-        anything()
+            anything()
         cleanup:
-        anything()
+            anything()
     }
 
     @Ignore

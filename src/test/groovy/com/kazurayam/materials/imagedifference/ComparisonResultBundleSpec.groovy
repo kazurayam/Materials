@@ -6,6 +6,8 @@ import java.nio.file.Paths
 import java.util.stream.Collectors
 
 import org.apache.commons.io.FileUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
@@ -25,9 +27,13 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 class ComparisonResultBundleSpec extends Specification {
+    
+    // fields
+    static Logger logger_ = LoggerFactory.getLogger(ComparisonResultBundleSpec.class)
     
     private static Path fixtureDir
     private static Path specOutputDir
@@ -50,7 +56,7 @@ class ComparisonResultBundleSpec extends Specification {
         then:
             jsonText != null
         when:
-            //println "#test_constructor_withJson jsonText=${jsonText}"
+            //logger_.debug("#test_constructor_withJson jsonText=${jsonText}")
             ComparisonResultBundle bundle = new ComparisonResultBundle(materials, jsonText)
         then:
             bundle.size() == 1
@@ -107,7 +113,7 @@ class ComparisonResultBundleSpec extends Specification {
         then:
             jsonText != null
         when:
-            //println "#test_constructor_withJson jsonText=${jsonText}"
+            //logger_.debug("#test_constructor_withJson jsonText=${jsonText}")
             ComparisonResultBundle bundle = new ComparisonResultBundle(materials, jsonText)
         then:
             bundle.size() == 1
@@ -122,20 +128,40 @@ class ComparisonResultBundleSpec extends Specification {
         
     }
     
+    def test_getByDiffMaterial() {
+        when:
+            Path caseOutputDir = specOutputDir.resolve("test_getByDiffMaterial")
+            Path materials = caseOutputDir.resolve('Materials')
+            String jsonText = makeJsonText(caseOutputDir)
+        then:
+            jsonText != null
+        when:
+            ComparisonResultBundle bundle = new ComparisonResultBundle(materials, jsonText)
+        then:
+            bundle.size()== 1
+        when:
+            ComparisonResult cr = bundle.getByDiffMaterial("ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
+        then:
+            cr != null
+            cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot() == '47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png'
+            cr.getActualMaterial().getHrefRelativeToRepositoryRoot()   == '47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png'
+    }
+    
     String makeJsonText(Path caseOutputDir) {
         //setup:
             Path materials = caseOutputDir.resolve('Materials')
             Path storage = caseOutputDir.resolve('Storage')
             Files.createDirectories(materials)
-            FileUtils.deleteQuietly(materials.toFile())
-            assert Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+            Helpers.deleteDirectoryContents(materials)
+            // copy fixtures from the src dir to the Storage dir
+            Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
             //
             TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
             Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-            //
+            // copy fixtures from the Stroage dir to the Materials dir
             TSuiteName tsn = new TSuiteName('47News_chronos_capture')
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))

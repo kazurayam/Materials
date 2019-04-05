@@ -1,20 +1,23 @@
 package com.kazurayam.materials
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.RetrievalBy.SearchContext
+import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
 import spock.lang.Specification
 
 class MaterialStorageSpec extends Specification {
     
     // fields
-    static Logger logger_ = LoggerFactory.getLogger(MaterialStorageSpec);
+    static Logger logger_ = LoggerFactory.getLogger(MaterialStorageSpec)
     
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
@@ -36,6 +39,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName("Monitor47News"),
@@ -54,18 +58,56 @@ class MaterialStorageSpec extends Specification {
     def testBackup_all() {
         setup:
         Path stepWork = workdir_.resolve("testBackup_all")
-        Path msdir = stepWork.resolve("Storage")
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        Path storageDir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(storageDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
         when:
         int num = ms.backup(mr_)
         then:
         num > 1
     }
     
+    /**
+     * MaterialStorage#restore() method should be able to copy 
+     */
+    def testRestore_including_PathResolutionLogBundle_file() {
+        setup:
+            Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
+            Path materialsDir = caseOutputDir.resolve('Materials')
+            Path storageDir = caseOutputDir.resolve('Storage')
+            Path fixtureSource = fixture_.resolve('Storage/47news.chronos_capture')
+            Path fixtureTarget = storageDir.resolve('47news.chronos_capture')
+            Helpers.deleteDirectoryContents(fixtureTarget)
+            Helpers.copyDirectory(fixtureSource, fixtureTarget)
+            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+            MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
+        when:
+            // test MaterialStorage#restore() method
+            // copy a set of files under Storage directory to Materials directory and make sure TCaseResult/path-resolution-long-bundle.json file is copied
+            TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName('47news/chronos_capture'), new TSuiteTimestamp('20190401_142150'))
+            int count = ms.restore(mr, tsri)
+        then:
+            count >= 0
+        when:
+            Path tSuiteTimestampDir_inMR = mr.getTSuiteResult(tsri).getTSuiteTimestampDirectory()
+        then:
+            Files.exists(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME))
+        when:
+            // test backup() method
+            String clonedFileName = "__" + PathResolutionLogBundle.SERIALIZED_FILE_NAME
+            Files.copy(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME), 
+                        tSuiteTimestampDir_inMR.resolve(clonedFileName), StandardCopyOption.REPLACE_EXISTING)
+            count = ms.backup(mr, tsri)
+        then:
+            count >= 0
+            Files.exists(ms.getTSuiteResult(tsri).getTSuiteTimestampDirectory().resolve(clonedFileName))
+    }
+
     def testClear_withTSuiteNameAndTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testClear")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -85,6 +127,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testClear_withOnlyTSuiteName")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         TSuiteName tsn = new TSuiteName("Monitor47News")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
@@ -104,6 +147,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testEmpty")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -119,6 +163,9 @@ class MaterialStorageSpec extends Specification {
         tSuiteResults.size() == 0
     }
     
+	/**
+	 * 
+	 */
     def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("imageDeltaStatsEntries.get(tSuiteName)")
@@ -139,6 +186,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResult")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -159,6 +207,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResult_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -178,6 +227,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -197,6 +247,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -216,6 +267,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetTSuiteResult_noArgs")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -235,6 +287,7 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
         Path restoredDir = stepWork.resolve("Materials_restored")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -244,6 +297,7 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 1
         when:
+        Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         num = ms.restore(restored, tsri)
         then:
@@ -309,6 +363,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_LocalDateTime_restoreUnary")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -318,6 +373,7 @@ class MaterialStorageSpec extends Specification {
         num == 22
         when:
         Path restoredDir = stepWork.resolve("Materials_restored")
+        Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
         LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
@@ -337,6 +393,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective")
         Path msdir = stepWork.resolve("Storage")
+        Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -346,6 +403,7 @@ class MaterialStorageSpec extends Specification {
         num == 22
         when:
         Path restoredDir = stepWork.resolve("Materials_restored")
+        Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(ms, tsn)
         num = ms.restoreCollective(restored,

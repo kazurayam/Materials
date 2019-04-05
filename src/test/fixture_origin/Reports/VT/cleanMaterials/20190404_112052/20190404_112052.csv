@@ -1,0 +1,8 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+cleanMaterials,,,2019-04-04 11:20:58,2019-04-04 11:20:59,1.560s,PASSED
+,,,,,,
+Test Cases/VT/cleanMaterials,,,2019-04-04 11:20:59,2019-04-04 11:20:59,0.318s,PASSED
+Start listener action : beforeTestCase,,,2019-04-04 11:20:59,2019-04-04 11:20:59,0.107s,PASSED
+mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()],,,2019-04-04 11:20:59,2019-04-04 11:20:59,0.000s,PASSED
+assert mr != null,,,2019-04-04 11:20:59,2019-04-04 11:20:59,0.000s,PASSED
+Helpers.deleteDirectoryContents(mr.getBaseDir()),,,2019-04-04 11:20:59,2019-04-04 11:20:59,0.139s,PASSED

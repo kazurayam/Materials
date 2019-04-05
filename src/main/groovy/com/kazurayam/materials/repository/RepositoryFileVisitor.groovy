@@ -171,7 +171,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TESTCASE :
             case Layer.SUBDIR :
-                Material material = MaterialImpl.newInstance(tCaseResult_, file)
+                Material material = new MaterialImpl(tCaseResult_, file)
                 material.setLastModified(file.toFile().lastModified())
                 material.setLength(file.toFile().length())
                 material.setDescription(tCaseResult_.getParent().getTSuiteTimestamp().format())

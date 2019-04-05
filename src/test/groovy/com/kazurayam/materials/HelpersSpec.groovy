@@ -106,18 +106,20 @@ class HelpersSpec extends Specification {
 
     def testCopyDirectory() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials')
-        Path targetDir = workdir_.resolve('testCopyDirectory')
+            Path sourceDir = Paths.get('./src/test/fixture/Materials')
+            Path targetDir = workdir_.resolve('testCopyDirectory')
+            boolean skipIfExisting = false
         when:
-        Helpers.copyDirectory(sourceDir, targetDir)
+            int count = Helpers.copyDirectory(sourceDir, targetDir, skipIfExisting)
         then:
-        Files.exists(targetDir.resolve('main.TS1'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130419'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130604'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1'))
-        Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+            count > 0
+            Files.exists(targetDir.resolve('main.TS1'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130419'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130604'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1'))
+            Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
     
     /**
@@ -129,29 +131,31 @@ class HelpersSpec extends Specification {
      */
     def testCopyDirectory_ensuringModified() {
         setup:
-        Path sourceDir = Paths.get('./src/test/fixture/Materials')
-        Path targetDir = workdir_.resolve('testCopyDirectory_ensuringModified')
+            Path sourceDir = Paths.get('./src/test/fixture/Materials')
+            Path targetDir = workdir_.resolve('testCopyDirectory_ensuringModified')
+            boolean skipIfExisting = false
         when:
-        if (Files.exists(targetDir)) {
-            Helpers.deleteDirectory(targetDir)
-        }
-        Files.createDirectory(targetDir)
-        StopWatch stopWatch1 = new StopWatch()
-        stopWatch1.start()
-        Helpers.copyDirectory(sourceDir, targetDir)
-        stopWatch1.stop()
-        long time1 = stopWatch1.getTime()
+            if (Files.exists(targetDir)) {
+                Helpers.deleteDirectory(targetDir)
+            }
+            Files.createDirectory(targetDir)
+            StopWatch stopWatch1 = new StopWatch()
+            stopWatch1.start()
+            int count = Helpers.copyDirectory(sourceDir, targetDir, skipIfExisting)
+            stopWatch1.stop()
+            long time1 = stopWatch1.getTime()
         then:
-        time1 < 2000
-        //
+            count > 0
+            time1 < 2000
         when:
-        StopWatch stopWatch2 = new StopWatch()
-        stopWatch2.start()
-        Helpers.copyDirectory(sourceDir, targetDir, true)   // 3rd arg is unnecessary whichi defaults to true
-        stopWatch2.stop()
-        long time2 = stopWatch2.getTime()
+            StopWatch stopWatch2 = new StopWatch()
+            stopWatch2.start()
+            count = Helpers.copyDirectory(sourceDir, targetDir, true)
+            stopWatch2.stop()
+            long time2 = stopWatch2.getTime()
         then:
-        time2 < time1 * 0.5   // time2 is expected to be much smaller than time1
+            count == 0
+            time2 < time1 * 0.5   // time2 is expected to be much smaller than time1
     }
 
     def testGetClassShortName() {

@@ -1,0 +1,53 @@
+{
+    "ComparisonResultBundle": [
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_111956\\47news.visitSite\\top.png",
+                        "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
+                        "lastModified": "2019-04-04T02:20:18.269",
+                        "description": "20190404_111956"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_capture\\20190404_112053\\47news.visitSite\\top.png",
+                        "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
+                        "lastModified": "2019-04-04T02:21:15.085",
+                        "description": "20190404_112053"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\47news.chronos_exam\\20190404_112054\\47news.ImageDiff\\47news.visitSite\\top.20190404_111956_default-20190404_112053_default.(16.99).png",
+                        "hrefRelativeToRepositoryRoot": "47news.chronos_exam/20190404_112054/47news.ImageDiff/47news.visitSite/top.20190404_111956_default-20190404_112053_default.(16.99).png"
+                    }
+                },
+                "criteriaPercentage": 17.99,
+                "imagesAreSimilar": true,
+                "diffRatio": 16.99
+            }
+        }
+    ]
+}

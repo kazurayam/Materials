@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="cleanMaterials" time="1" tests="1" failures="0" errors="0">
+   <testsuite name="cleanMaterials" tests="1" failures="0" errors="0" time="1" timestamp="2019-04-04 11:18:29" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/VT/cleanMaterials">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform" value=""/>
+         <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Reports\\VT\\cleanMaterials\\20190404_111824"/>
+         <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Reports\\VT\\cleanMaterials\\20190404_111824\\execution0.log"/>
+         <property name="attachments" value=""/>
+         <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+         <property name="hostAddress" value="172.19.71.132"/>
+         <property name="os" value="Windows 10 64bit"/>
+         <property name="katalonVersion" value="6.1.0.1"/>
+      </properties>
+      <testcase name="Test Cases/VT/cleanMaterials" classname="Test Cases/VT/cleanMaterials" status="PASSED">
+         <system-out><![CDATA[2019-04-04 11:18:30 - [TEST_CASE][PASSED] - Test Cases/VT/cleanMaterials: Test Cases/VT/cleanMaterials
+
+2019-04-04 11:18:30 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:18:30 - [TEST_STEP][PASSED] - comment("VTListener#beforeTestCase() was invoked"): VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:18:30 - [MESSAGE][INFO] - VTListener#beforeTestCase() was invoked
+
+2019-04-04 11:18:30 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:18:31 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is "Test Suites/VT/cleanMaterials"
+
+2019-04-04 11:18:31 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is "20190404_111824"
+
+2019-04-04 11:18:31 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is "Test Cases/VT/cleanMaterials"
+
+2019-04-04 11:18:31 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is "{"MaterialRepository":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","currentTsName":{"id": "Test Suites/VT/cleanMaterials","abbreviatedId": "VT/cleanMaterials","value": "VT.cleanMaterials"},"currentTsTimestamp":{"TSuiteTimestamp":{"timestamp":"20190404_111824"}},"repoRoot":{"RepositoryRoot":{"tSuiteResults":[{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/VT/cleanMaterials","abbreviatedId": "VT/cleanMaterials","value": "VT.cleanMaterials"},"tSuiteTimestamp": "20190404_111824","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\VT.cleanMaterials\\20190404_111824","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}},{"TSuiteResult":{"tSuiteName":{"id": "_","abbreviatedId": "_","value": "_"},"tSuiteTimestamp": "_","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\_\\_","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}}],"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials","reportsDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Materials\\..\\Reports",}}}}"
+
+2019-04-04 11:18:31 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage"}}"
+
+2019-04-04 11:18:31 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null
+
+2019-04-04 11:18:31 - [TEST_STEP][PASSED] - assert mr != null: null
+
+2019-04-04 11:18:31 - [TEST_STEP][PASSED] - Helpers.deleteDirectoryContents(mr.getBaseDir()): null]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <system-out><![CDATA[2019-04-04 11:18:29 - [TEST_SUITE][PASSED] - cleanMaterials: Test Cases/VT/cleanMaterials]]></system-out>
+      <system-err><![CDATA[]]></system-err>
+   </testsuite>
+</testsuites>

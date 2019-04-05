@@ -26,6 +26,8 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract RepositoryRoot getParent()
 
     abstract RepositoryRoot getRepositoryRoot()
+    
+    abstract Path getTSuiteNameDirectory()
 
     abstract TSuiteName getTSuiteName()
     

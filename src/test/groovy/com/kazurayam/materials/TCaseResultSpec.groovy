@@ -23,6 +23,8 @@ class TCaseResultSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
+    private static Path materialsDir
+    private static Path reportsDir
 
     // fixture methods
     def setupSpec() {
@@ -31,13 +33,14 @@ class TCaseResultSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        Path materialsDir = workdir_.resolve('Materials')
-        Path reportsDir   = workdir_.resolve('Reports')
+        materialsDir = workdir_.resolve('Materials')
+        reportsDir   = workdir_.resolve('Reports')
+    }
+    def setup() {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
-    def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
@@ -60,7 +63,7 @@ class TCaseResultSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         logger_.debug("#testGetMaterial tcr=${tcr.toString()}")
         URL url = new URL('http://demoaut.katalon.com/')
-        Material mate = tcr.getMaterial(Paths.get('.'), url, Suffix.NULL, FileType.PNG)
+        Material mate = tcr.getMaterial('', url, Suffix.NULL, FileType.PNG)
         then:
         mate != null
         mate.getURL().toString() == url.toString()
@@ -75,7 +78,7 @@ class TCaseResultSpec extends Specification {
             new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
-        List<Material> mateList = tcr.getMaterialList(Paths.get('.'), new URL('http://demoaut.katalon.com/'), FileType.PNG)
+        List<Material> mateList = tcr.getMaterialList('', new URL('http://demoaut.katalon.com/'), FileType.PNG)
         then:
         mateList.size() == 2
     }
@@ -100,29 +103,15 @@ class TCaseResultSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         URL url = new URL('http://demoaut.katalon.com/')
         Suffix suffix = new Suffix(1)
-        Material mate = MaterialImpl.newInstance(Paths.get('.'), url, suffix, FileType.PNG).setParent(tcr)
+        Material mate = new MaterialImpl(tcr, '', url, suffix, FileType.PNG)
         tcr.addMaterial(mate)
-        mate = tcr.getMaterial(Paths.get('.'), url, suffix, FileType.PNG)
+        mate = tcr.getMaterial('', url, suffix, FileType.PNG)
         then:
         mate != null
         mate.getParent() == tcr
         mate.getURL().toString() == url.toString()
         mate.getSuffix() == suffix
         mate.getFileType() == FileType.PNG
-    }
-
-    def testAddMaterial_parentIsNotSet() {
-        when:
-        TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
-        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        URL url = new URL('http://demoaut.katalon.com/')
-        Suffix suffix = new Suffix(2)
-        //Material mate = new Material(url, suffix, FileType.PNG).setParent(tcr)
-        Material mate = MaterialImpl.newInstance(Paths.get('.'), url, suffix, FileType.PNG)
-        tcr.addMaterial(mate)
-        then:
-        thrown(IllegalStateException)
     }
 
     def testGetMaterialList() {
@@ -181,7 +170,7 @@ class TCaseResultSpec extends Specification {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
                 new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-        Material mate = tcr.getMaterial(Paths.get('.'), new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
+        Material mate = tcr.getMaterial('', new URL('http://demoaut.katalon.com/'), Suffix.NULL, FileType.PNG)
         when:
         def str = tcr.toString()
         println ">>>>>>>>>>>>>>" + str

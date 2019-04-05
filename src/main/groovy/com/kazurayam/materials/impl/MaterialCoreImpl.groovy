@@ -108,7 +108,8 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         //sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
         //sb.append('"pathRelativeToRepositoryRoot":"' + 
         //    Helpers.escapeAsJsonText(this.getPathRelativeToRepositoryRoot().toString()) + '",')
-        sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '"')
+        sb.append('"path":"' + Helpers.escapeAsJsonText(this.getPath().toString()) + '",')
+        sb.append('"hrefRelativeToRepositoryRoot":"' + Helpers.escapeAsJsonText(this.getHrefRelativeToRepositoryRoot()) + '"')
         if (this.getDescription() != null) {
             sb.append(',')
             sb.append('"description":"' + Helpers.escapeAsJsonText(this.getDescription()) + '"')

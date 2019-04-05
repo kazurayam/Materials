@@ -90,6 +90,8 @@ interface MaterialRepository {
     
     long getSize()
     
+    Path getPathResolutionLogBundleAt()
+    
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)
     
@@ -122,17 +124,21 @@ interface MaterialRepository {
     void putCurrentTestSuite(TSuiteResultId tSuiteResultId)
     
     /**
-     *
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
+     * 
      * @param testCaseId e.g., 'Test Cases/TC1'
      * @param url e.g., 'http://demoaut.katalon.com/'
      * @return
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
-    Path resolveScreenshotPath(String testCaseId, Path subpath, URL url)
+    Path resolveScreenshotPath(String testCaseId, String subpath, URL url)
     Path resolveScreenshotPath(TCaseName tCaseName, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, Path subpath, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url)
     
     /**
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
      * 
      * @param testCaseId
      * @param url
@@ -140,20 +146,22 @@ interface MaterialRepository {
      * @return
      */
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, Path subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url, int startingDepth, String defaultName)
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, Path subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url, int startingDepth, String defaultName)
     
     /**
-     *
+     * Returns a Path of a Material file.
+     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
+     * 
      * @param testCaseId
      * @param fileName
      * @return
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
-    Path resolveMaterialPath(String testCaseId, Path subpath, String fileName)
+    Path resolveMaterialPath(String testCaseId, String subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, Path subpath, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, String subpath, String fileName)
     
     /**
      * scan the baseDir to recognize the current directories/files configuration

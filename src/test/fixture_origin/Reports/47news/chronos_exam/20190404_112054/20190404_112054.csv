@@ -1,0 +1,8 @@
+Suite/Test/Step Name,Browser,Description,Start time,End time,Duration,Status
+chronos_exam,,,2019-04-04 11:21:20,2019-04-04 11:21:26,6.128s,PASSED
+,,,,,,
+Test Cases/47news/ImageDiff,,,2019-04-04 11:21:21,2019-04-04 11:21:26,4.768s,PASSED
+Start listener action : beforeTestCase,,,2019-04-04 11:21:21,2019-04-04 11:21:21,0.084s,PASSED
+"TESTSUITE_ID = ""47news/chronos_capture""",,,2019-04-04 11:21:21,2019-04-04 11:21:21,0.001s,PASSED
+options = 0).build(),,,2019-04-04 11:21:21,2019-04-04 11:21:21,0.013s,PASSED
+"com.kazurayam.visualtesting.ImageDiffer.runChronos(TESTSUITE_ID, options)",,,2019-04-04 11:21:21,2019-04-04 11:21:26,4.581s,PASSED

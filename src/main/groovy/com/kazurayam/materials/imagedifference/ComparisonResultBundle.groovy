@@ -92,9 +92,18 @@ class ComparisonResultBundle {
      * @param imageDiff
      * @return
      */
-    ComparisonResult get(Path imageDiffPath) {
+    ComparisonResult get(Path diffMaterialPath) {
         for (ComparisonResult cr : bundle_) {
-            if (cr.getDiffMaterial().getPath().equals(imageDiffPath)) {
+            if (cr.getDiffMaterial().getPath().equals(diffMaterialPath)) {
+                return cr
+            }
+        }
+        return null
+    }
+    
+    ComparisonResult getByDiffMaterial(String diffMaterialHrefRelativeToRepositoryRoot) {
+        for (ComparisonResult cr : bundle_) {
+            if (cr.getDiffMaterial().getHrefRelativeToRepositoryRoot().equals(diffMaterialHrefRelativeToRepositoryRoot)) {
                 return cr
             }
         }
@@ -141,6 +150,11 @@ class ComparisonResultBundle {
         }
         sb.append(']}')
         return sb.toString()
+    }
+    
+    @Override
+    String toString() {
+        return this.toJsonText()
     }
     
 }

@@ -161,6 +161,16 @@ class TSuiteResultSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
+    
+    def testGetTSuiteNameDirectory() {
+        when:
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
+        Path dir = tsr.getTSuiteNameDirectory()
+        then:
+        dir.getFileName().toString() == 'main.TS1'
+    }
 
     def testGetTSuiteTimestampDirectory() {
         when:
