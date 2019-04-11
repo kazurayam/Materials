@@ -3,12 +3,17 @@ package com.kazurayam.materials.impl
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialCore
 
 import groovy.json.JsonSlurper
 
 class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
+    
+    static Logger logger_ = LoggerFactory.getLogger(MaterialCoreImpl.class)
     
     // following properties are required
     private Path baseDir_ = null
@@ -75,6 +80,7 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     
     @Override
     Path getPathRelativeToRepositoryRoot() {
+        logger_.debug("#getPathRelativeToRepositoryRoot baseDir_ is ${baseDir_.toString()}, path_ is ${path_.toString()}")
         Path p = baseDir_.relativize(path_).normalize()
         return p
     }

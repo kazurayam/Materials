@@ -28,6 +28,7 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
+import groovy.util.AntBuilder
 import spock.lang.IgnoreRest
 import spock.lang.Specification
 
@@ -54,6 +55,7 @@ class BaseIndexerSpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
+    @IgnoreRest
     def testSmoke() {
         setup:
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
@@ -211,7 +213,7 @@ class BaseIndexerSpec extends Specification {
             html.contains('modalize();')
     }
 
-	@IgnoreRest
+	
 	def testCarouselWithLinkToOrigin() {
 		setup:
 			Path caseOutputDir = specOutputDir.resolve('testCarouselWithLinkToOrigin')
@@ -280,6 +282,46 @@ class BaseIndexerSpec extends Specification {
 			html.contains('Origin')
 	}
 
+    /**
+     * The src attribute of img element contains a relative URL to the PNG file as a ImageDiff. 
+     * The PNG file name may contain some special characters that require URL-encoding.
+     * For example, a '%' character must be escaped as '%25'.
+     * 
+     * Therefore should not generate this:
+     *    <img src="CURA.visitSite/appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130900_ProductionEnv.(0.00).png" ... >
+     * 
+     * Rather should generate this:
+     *    <img src="CURA.visitSite/appointment.php%2523summary.20190411_130900_ProductionEnv-20190411_130900_ProductionEnv.(0.00).png" ...>
+     *
+     * @return
+     */
+    def testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding() {
+        setup:
+            Path sourceDir = fixtureDir.resolve('Materials')
+            Path caseOutputDir = specOutputDir.resolve('testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding')
+            Path materials = caseOutputDir.resolve('Materials')
+            Files.createDirectories(materials.resolve('CURA.twins_capture'))
+            Files.createDirectories(materials.resolve('CURA.twins_exam'))
+            def ant = new AntBuilder()
+            ant.copy(todir:materials.toFile(), overwrite:'yes') {
+                fileset(dir:sourceDir) {
+                    include(name:'CURA.twins_capture/**')
+                    include(name:'CURA.twins_examp/**')
+                }
+            }
+        when:
+            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+            Indexer indexer = makeIndexer(caseOutputDir)
+            indexer.execute()
+            Path index = indexer.getOutput()
+        then:
+            Files.exists(index)
+        when:
+            String html = index.toFile().text
+        then:
+            html.contains('CURA.visitSite/appointment.php%2523summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png')
+    }
+    
     /**
      * helper to make a CarouselIndexer object
      * @param caseOutputDir

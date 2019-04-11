@@ -73,7 +73,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
     
-    // required for AntBuilder#copy() in tests
+    // required by groovy.util.AntBuilder#copy() used in tests
     testCompile("ant:ant:1.7.0")
 }
 
@@ -92,7 +92,7 @@ task pinpoint(type: Test) {
     //include '**/MaterialStorageSpec.class'
     //include '**/ImageCollectionDifferSpec.class'
     //include '**/MaterialRepositoryImplSpec.class'
-    include '**/MaterialRepositorySpec.class'
+    include '**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class'
     include '**/BaseIndexerSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}

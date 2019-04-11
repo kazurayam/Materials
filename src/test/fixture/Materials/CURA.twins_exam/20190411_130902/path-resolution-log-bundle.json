@@ -1,0 +1,49 @@
+{
+    "PathResolutionLogBundle": [
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/comparison-result-bundle.json",
+                "TCaseName": "Test Cases/CURA/ImageDiff_twins",
+                "InvokedMethodName": "resolveMaterialPath",
+                "SubPath": "",
+                "FileName": "comparison-result-bundle.json"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png",
+                "TCaseName": "Test Cases/CURA/ImageDiff_twins",
+                "InvokedMethodName": "resolveMaterialPath",
+                "SubPath": "CURA.visitSite",
+                "FileName": "appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/profile.php%23login.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png",
+                "TCaseName": "Test Cases/CURA/ImageDiff_twins",
+                "InvokedMethodName": "resolveMaterialPath",
+                "SubPath": "CURA.visitSite",
+                "FileName": "profile.php%23login.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/top.png%23appointment.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png",
+                "TCaseName": "Test Cases/CURA/ImageDiff_twins",
+                "InvokedMethodName": "resolveMaterialPath",
+                "SubPath": "CURA.visitSite",
+                "FileName": "top.png%23appointment.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/top.png.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png",
+                "TCaseName": "Test Cases/CURA/ImageDiff_twins",
+                "InvokedMethodName": "resolveMaterialPath",
+                "SubPath": "CURA.visitSite",
+                "FileName": "top.png.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+            }
+        }
+    ]
+}
