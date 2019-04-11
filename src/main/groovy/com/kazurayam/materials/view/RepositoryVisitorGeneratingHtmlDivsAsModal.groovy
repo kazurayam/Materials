@@ -252,21 +252,29 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             PathResolutionLog prl = prlb.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
             /*
              * An instance of PathResolutionLog is, for example:
-{
-    "PathResolutionLogBundle": [
-        {
-            "PathResolutionLog": {
-                "MaterialPath": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
-                "TCaseName": "Test Cases/47news/visitSite",
-                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
-                "SubPath": "",
-                "URL": "https://www.47news.jp/"
-            }
-        }
-    ]
-}
+             * <PRE>
+             * {
+             *   "PathResolutionLogBundle": [
+             *     {
+             *       "PathResolutionLog": {
+             *         "MaterialPath": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
+             *         "TCaseName": "Test Cases/47news/visitSite",
+             *         "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+             *         "SubPath": "",
+             *         "URL": "https://www.47news.jp/"
+             *       }
+             *     }
+             *   ]
+             * }
+             * </PRE>
+             * but, remember, InvokeMethodName can also be resolveMaterialPath, and in that case
+             * there would not be URL property.
              */
-            return prl.getUrl().toExternalForm()
+            if (prl.getUrl() != null) {
+                return prl.getUrl().toExternalForm()
+            } else {
+                return null
+            }
         }
     }
     
