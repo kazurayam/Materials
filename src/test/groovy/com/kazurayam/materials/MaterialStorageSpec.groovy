@@ -167,7 +167,7 @@ class MaterialStorageSpec extends Specification {
     /**
      * 
      */
-    @IgnoreRest
+    
     def testGetSetOfMaterialPathRelativeToTSuiteName() {
         setup:
         Path stepWork = workdir_.resolve("testGetSetOfMaterialPathRelativeToTSuiteName")

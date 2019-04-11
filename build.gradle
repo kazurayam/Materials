@@ -18,7 +18,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.66.0'
+version  = '0.66.1'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -72,6 +72,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+    
+    // required for AntBuilder#copy() in tests
+    testCompile("ant:ant:1.7.0")
 }
 
 def defaultEncoding = 'UTF-8'
@@ -88,7 +91,9 @@ test {
 task pinpoint(type: Test) {
     //include '**/MaterialStorageSpec.class'
     //include '**/ImageCollectionDifferSpec.class'
-    include '**/MaterialSpec.class'
+    //include '**/MaterialRepositoryImplSpec.class'
+    include '**/MaterialRepositorySpec.class'
+    include '**/BaseIndexerSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

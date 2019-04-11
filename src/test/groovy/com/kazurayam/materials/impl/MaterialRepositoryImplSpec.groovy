@@ -62,12 +62,12 @@ class MaterialRepositoryImplSpec extends Specification {
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
             mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-            Path p1 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+            Path p1 = mri.resolveScreenshotPath('TC1',
                 new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
         then:
             p1.getFileName().toString() == 'https%3A%2F%2Fmy.home.net%2Fgn%2FissueList.html%3Fcorp%3Dabcd.png'
         when:
-            Path p2 = mri.resolveScreenshotPath('TC1', Paths.get('.'),
+            Path p2 = mri.resolveScreenshotPath('TC1', '.',
                 new URL('https://foo:bar@dev.home.net/gnc/issueList.html?corp=abcd'))
         then:
             p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'
@@ -129,32 +129,32 @@ class MaterialRepositoryImplSpec extends Specification {
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
             mri.putCurrentTestSuite('TS1', '20180530_130604')
         when:
-            Path p = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p = mri.resolveScreenshotPathByURLPathComponents('TC1',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
         then:
             p.getName(p.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
             p.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
             //
         when:
-            Path p0 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p0 = mri.resolveScreenshotPathByURLPathComponents('TC1', '.',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 0)
         then:
             p0.getName(p0.getNameCount() - 1).toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
             p0.getFileName().toString() == 'gn%2FissueList.html%3Fcorp%3Dabcd.png'
         //
         when:
-            Path p1 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p1 = mri.resolveScreenshotPathByURLPathComponents('TC1',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 1)
         then:
             p1.getFileName().toString() == 'issueList.html%3Fcorp%3Dabcd.png'
         when:
-            Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path p2 = mri.resolveScreenshotPathByURLPathComponents('TC1', '.',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'), 2)
         then:
             p2.getFileName().toString() == 'default%3Fcorp%3Dabcd.png'
         //
         when:
-            Path google = mri.resolveScreenshotPathByURLPathComponents('TC1', Paths.get('.'),
+            Path google = mri.resolveScreenshotPathByURLPathComponents('TC1',
                 new URL('https://www.google.com'))
         then:
             google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
@@ -164,7 +164,7 @@ class MaterialRepositoryImplSpec extends Specification {
             Files.exists(resolutionLogs)
     }
     
-    @IgnoreRest
+
 	/**
 MaterialRepositoryImpl DEBUG #resolveMaterialPath count=1
 MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
