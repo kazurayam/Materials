@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import groovy.util.AntBuilder
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest
 import spock.lang.Specification
@@ -26,7 +27,13 @@ class MaterialRepositorySpec extends Specification {
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture_, workdir_)
+        //Helpers.copyDirectory(fixture_, workdir_)
+        def ant = new AntBuilder()
+        ant.copy(todir:workdir_.toFile(), overwrite:'yes') {
+            fileset(dir:fixture_) {
+                exclude(name:'Materials/CURA.twins_exam/**')
+            }
+        }
     }
 
     def setup() {
@@ -112,25 +119,8 @@ class MaterialRepositorySpec extends Specification {
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
         Set<Path> paths = mr_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
         logger_.debug( "#testGetSetOfMaterialPathRelativeToTSuiteTimestmp: " + paths)
-        /*
-        [
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.bmp,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.gif,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.jpeg,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.jpg,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180530_130604/main.TC2/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180718_142832/main.TC4/foo/bar/smilechart.xls,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC1/https%3A%2F%2Fkatalon-demo-cura.herokuapp.com%2F.png,
-            ../../../../../build/tmp/MaterialRepositorySpec/Materials/main.TS1/20180805_081908/main.TC2/smilechart.xls
-            and more
-        ]
-         */
         then:
-        paths.size() == 18
+        paths.size() == 16
     }
 
     def testGetTCaseResult() {
@@ -238,7 +228,7 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
-    @IgnoreRest
+   
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
         List<MaterialPair> list = mr_.createMaterialPairs(new TSuiteName('TS1'))
