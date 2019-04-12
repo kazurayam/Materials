@@ -55,7 +55,6 @@ class BaseIndexerSpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
-    @IgnoreRest
     def testSmoke() {
         setup:
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
@@ -213,74 +212,73 @@ class BaseIndexerSpec extends Specification {
             html.contains('modalize();')
     }
 
-	
-	def testCarouselWithLinkToOrigin() {
-		setup:
-			Path caseOutputDir = specOutputDir.resolve('testCarouselWithLinkToOrigin')
-			Path materials = caseOutputDir.resolve('Materials')
-			Path storage = caseOutputDir.resolve('Storage')
-			Files.createDirectories(materials)
-			Files.createDirectories(storage)
-			Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
-			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
-			//
-			TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47news/chronos_exam")
-			TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
-			Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-			//
-			TSuiteName tsn = new TSuiteName('Test Suites/47news/chronos_capture')
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142150')))
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
-			mr.scan()
-			mr.putCurrentTestSuite('Test Suites/47news/ImageDiff', '20190401_142749')
-		when:
-			List<MaterialPair> materialPairs =
-			mr.createMaterialPairs(tsn).stream().filter { mp ->
-				mp.getLeft().getFileType() == FileType.PNG
-			}.collect(Collectors.toList())
-			StorageScanner.Options options = new StorageScanner.Options.Builder().
-			previousImageDeltaStats(previousIDS).
-				shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
-				build()
-			StorageScanner storageScanner = new StorageScanner(ms, options)
-			ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
-			//
-			storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-			double ccp = imageDeltaStats.getCriteriaPercentage(
-							new TSuiteName("47news/chronos_capture"),
-							Paths.get('47news.visitSite').resolve('top.png'))
-		then:
-			27.0 < ccp && ccp < 28.0
-		when:
-			ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
-			icd.makeImageCollectionDifferences(
-				materialPairs,
-				new TCaseName('Test Cases/47news/ImageDiff'),
-				imageDeltaStats)
-			mr.scan()
-			List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/47news/ImageDiff'))
-			assert tsriList.size() == 1
-			TSuiteResultId tsri = tsriList.get(0)
-			TSuiteResult tsr = mr.getTSuiteResult(tsri)
-			TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/47news/ImageDiff"))
-			List<Material> mateList = tcr.getMaterialList()
-		then:
-		mateList.size() == 13          // diffImage + comparison-result-bundle.json
-		when:
-			Indexer indexer = makeIndexer(caseOutputDir)
-			indexer.execute()
-			Path index = indexer.getOutput()
-			logger_.debug("#testSmoke index=${index.toString()}")
-		then:
-			Files.exists(index)
-		when:
-			String html = index.toFile().text
-		then:
-			html.contains('<a')
-			html.contains('btn btn-link')
-			html.contains('Origin')
-	}
+    def testCarouselWithLinkToOrigin() {
+        setup:
+            Path caseOutputDir = specOutputDir.resolve('testCarouselWithLinkToOrigin')
+            Path materials = caseOutputDir.resolve('Materials')
+            Path storage = caseOutputDir.resolve('Storage')
+            Files.createDirectories(materials)
+            Files.createDirectories(storage)
+            Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+            MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+            //
+            TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47news/chronos_exam")
+            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            //
+            TSuiteName tsn = new TSuiteName('Test Suites/47news/chronos_capture')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142150')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
+            mr.scan()
+            mr.putCurrentTestSuite('Test Suites/47news/ImageDiff', '20190401_142749')
+        when:
+            List<MaterialPair> materialPairs =
+            mr.createMaterialPairs(tsn).stream().filter { mp ->
+                mp.getLeft().getFileType() == FileType.PNG
+            }.collect(Collectors.toList())
+            StorageScanner.Options options = new StorageScanner.Options.Builder().
+            previousImageDeltaStats(previousIDS).
+                shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
+                build()
+            StorageScanner storageScanner = new StorageScanner(ms, options)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            //
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            double ccp = imageDeltaStats.getCriteriaPercentage(
+                                                new TSuiteName("47news/chronos_capture"),
+                                                Paths.get('47news.visitSite').resolve('top.png'))
+        then:
+            27.0 < ccp && ccp < 28.0
+        when:
+            ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+            icd.makeImageCollectionDifferences(
+                materialPairs,
+                new TCaseName('Test Cases/47news/ImageDiff'),
+                imageDeltaStats)
+            mr.scan()
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/47news/ImageDiff'))
+            assert tsriList.size() == 1
+            TSuiteResultId tsri = tsriList.get(0)
+            TSuiteResult tsr = mr.getTSuiteResult(tsri)
+            TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/47news/ImageDiff"))
+            List<Material> mateList = tcr.getMaterialList()
+        then:
+            mateList.size() == 13          // diffImage + comparison-result-bundle.json
+        when:
+            Indexer indexer = makeIndexer(caseOutputDir)
+            indexer.execute()
+            Path index = indexer.getOutput()
+            logger_.debug("#testSmoke index=${index.toString()}")
+        then:
+            Files.exists(index)
+        when:
+            String html = index.toFile().text
+        then:
+            html.contains('<a')
+            html.contains('btn btn-link')
+            html.contains('Origin')
+    }
 
     /**
      * The src attribute of img element contains a relative URL to the PNG file as a ImageDiff. 
@@ -295,20 +293,18 @@ class BaseIndexerSpec extends Specification {
      *
      * @return
      */
+    @IgnoreRest
     def testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding() {
         setup:
-            Path sourceDir = fixtureDir.resolve('Materials')
             Path caseOutputDir = specOutputDir.resolve('testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding')
-            Path materials = caseOutputDir.resolve('Materials')
-            Files.createDirectories(materials.resolve('CURA.twins_capture'))
-            Files.createDirectories(materials.resolve('CURA.twins_exam'))
             def ant = new AntBuilder()
-            ant.copy(todir:materials.toFile(), overwrite:'yes') {
-                fileset(dir:sourceDir) {
-                    include(name:'CURA.twins_capture/**')
-                    include(name:'CURA.twins_examp/**')
+            ant.copy(todir:caseOutputDir.toFile(), overwrite:'yes') {
+                fileset(dir:fixtureDir) {
+                    include(name:'Materials/CURA.twins_capture/**')
+                    include(name:'Materials/CURA.twins_exam/**')
                 }
             }
+            Path materials = caseOutputDir.resolve('Materials')
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             Indexer indexer = makeIndexer(caseOutputDir)
@@ -319,7 +315,8 @@ class BaseIndexerSpec extends Specification {
         when:
             String html = index.toFile().text
         then:
-            html.contains('CURA.visitSite/appointment.php%2523summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png')
+            html.contains('CURA.twins_exam/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.%280.00%29.png')
+            //                                                                                    ^^^                                                                           ^^^    ^^^
     }
     
     /**

@@ -18,7 +18,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.66.1'
+version  = '0.67.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -89,10 +89,6 @@ test {
 }
 
 task pinpoint(type: Test) {
-    //include '**/MaterialStorageSpec.class'
-    //include '**/ImageCollectionDifferSpec.class'
-    //include '**/MaterialRepositoryImplSpec.class'
-    include '**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class'
     include '**/BaseIndexerSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}

@@ -9,7 +9,6 @@ import com.kazurayam.materials.model.Suffix
 interface Material extends MaterialCore {
 
     Path getParentDirectoryPathRelativeToTSuiteResult()
-    String getEncodedHrefRelativeToRepositoryRoot()
     
     Path getPathRelativeToTSuiteTimestamp()
     String getSubpath()

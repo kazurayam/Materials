@@ -11,7 +11,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.kazurayam.materials.Helpers"                               level="debug"/>
+    <logger name="com.kazurayam.materials.Helpers"                               level="info"/>
     <logger name="com.kazurayam.materials.impl.MaterialImpl"                     level="info"/>
     <logger name="com.kazurayam.materials.impl.TSuiteResultImpl"                 level="info"/>
     <logger name="com.kazurayam.materials.repository.RepositoryRoot"             level="info"/>

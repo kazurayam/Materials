@@ -2,16 +2,16 @@
     "PathResolutionLogBundle": [
         {
             "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_capture/20190411_130901/CURA.visitSite/top.png.png",
+                "MaterialPath": "CURA.twins_capture/20190412_161620/CURA.visitSite/top.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "URL": "http://demoaut-mimic.kazurayam.com/"
+                "URL": "http://demoaut.katalon.com/"
             }
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_capture/20190411_130901/CURA.visitSite/profile.php%23login.png",
+                "MaterialPath": "CURA.twins_capture/20190412_161620/CURA.visitSite/profile.php%23login.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
@@ -20,7 +20,7 @@
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_capture/20190411_130901/CURA.visitSite/top.png%23appointment.png",
+                "MaterialPath": "CURA.twins_capture/20190412_161620/CURA.visitSite/top%23appointment.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
@@ -29,7 +29,7 @@
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_capture/20190411_130901/CURA.visitSite/appointment.php%23summary.png",
+                "MaterialPath": "CURA.twins_capture/20190412_161620/CURA.visitSite/appointment.php%23summary.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
@@ -38,7 +38,7 @@
         },
         {
             "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_capture/20190411_130901/CURA.visitSite/top.png.png",
+                "MaterialPath": "CURA.twins_capture/20190412_161620/CURA.visitSite/top.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",

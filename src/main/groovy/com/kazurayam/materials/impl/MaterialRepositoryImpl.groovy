@@ -357,9 +357,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-		Objects.requireNonNull(subpath, "subpath must not be null")
-		Objects.requireNonNull(url, "url must not be null")
-		
+        Objects.requireNonNull(subpath, "subpath must not be null")
+        Objects.requireNonNull(url, "url must not be null")
+
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -402,30 +402,27 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url,
             int startingDepth = 0, String defaultName = 'default') {
-        return this.resolveScreenshotPathByURLPathComponents(
-			testCaseId, '', url, startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(testCaseId, '', url, startingDepth, defaultName)
     }
     
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url,
             int startingDepth = 0, String defaultName = 'default') {
-        return this.resolveScreenshotPathByURLPathComponents(
-			tCaseName, '', url, startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, '', url, startingDepth, defaultName)
     }
     
     @Override
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url,
             int startingDepth = 0, String defaultName = 'default') {
         TCaseName tCaseName = new TCaseName(testCaseId)
-        return this.resolveScreenshotPathByURLPathComponents(
-			tCaseName, subpath, url, startingDepth, defaultName)
+        return this.resolveScreenshotPathByURLPathComponents(tCaseName, subpath, url, startingDepth, defaultName)
     }
     
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url,
             int startingDepth = 0, String defaultName = 'default') {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-		Objects.requireNonNull(subpath, "subpath must not be null")
+        Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(url, "url must not be null")
         if (startingDepth < 0) {
             throw new IllegalArgumentException("startingDepth=${startingDepth} must not be negative")
@@ -447,9 +444,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
-		Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
-		
-		//
+        Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
+
+        //
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())
         
@@ -542,7 +539,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path resolveMaterialPath(TCaseName tCaseName, String subpath, String fileName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-		Objects.requireNonNull(subpath, "subpath must not be null")
+        Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(fileName, "fileName must not be null")
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -558,8 +555,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         //logger_.debug("#resolveMaterialPath tCaseResult=${tCaseResult}")
         Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subpath).resolve(fileName))
         
-		//
-		//logger_.debug("#resolveMaterialPath")
+        //
+        //logger_.debug("#resolveMaterialPath")
         //logger_.debug("#resolveMaterialPath material=${material}")
         //logger_.debug("#resolveMaterialPath material.getParent()=${material.getParent()}")
         //logger_.debug("#resolveMaterialPath material.getPath()=${material.getPath()}")
