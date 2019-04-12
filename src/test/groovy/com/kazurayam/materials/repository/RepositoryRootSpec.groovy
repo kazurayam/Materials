@@ -31,10 +31,18 @@ class RepositoryRootSpec extends Specification {
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
-        if (!workdir_.toFile().exists()) {
+        if (workdir_.toFile().exists()) {
+            Helpers.deleteDirectoryContents(workdir_)
+        } else {
             workdir_.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture_, workdir_)
+        def ant = new AntBuilder()
+        ant.copy(todir:workdir_.toFile(), overwrite:'yes') {
+            fileset(dir:fixture_) {
+                exclude(name:'Materials/CURA.twins_capture/**')
+                exclude(name:'Materials/CURA.twins_exam/**')
+            }
+        }
         Path materialsDir = workdir_.resolve('Materials')
         Path reportsDir   = workdir_.resolve('Reports')
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
@@ -130,6 +138,7 @@ class RepositoryRootSpec extends Specification {
         tsrList.size() == 0
     }
     
+    @IgnoreRest
     def testGetSortedTSuiteResults() {
         when:
         Path materialsDir = workdir_.resolve('Materials')

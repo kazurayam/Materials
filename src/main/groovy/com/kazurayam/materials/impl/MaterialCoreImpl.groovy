@@ -69,7 +69,7 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         if (jsonObject.Material.hrefRelativeToRepositoryRoot == null) {
             throw new IllegalArgumentException("Material.hrefRelativeToRepositoryRoot is not found in : ${jsonText}")
         }
-        this.path_ = baseDir.resolve(jsonObject.Material.hrefRelativeToRepositoryRoot)
+        this.path_ = baseDir.resolve(jsonObject.Material.hrefRelativeToRepositoryRoot).normalize()
                 
         if (jsonObject.Material.description != null) {
             this.setDescription(jsonObject.Material.description)
@@ -98,7 +98,7 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     
     @Override
     Path getPathRelativeToRepositoryRoot() {
-        Path p = baseDir_.relativize(path_).normalize()
+        Path p = baseDir_.relativize(path)
         logger_.debug("#getPathRelativeToRepositoryRoot baseDir_ is ${baseDir_.toString()}, " + 
             "path_ is ${path_.toString()}, returning ${p.toString()}")
         return p

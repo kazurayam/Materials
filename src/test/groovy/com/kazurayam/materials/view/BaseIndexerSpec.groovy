@@ -55,7 +55,6 @@ class BaseIndexerSpec extends Specification {
     def cleanupSpec() {}
     
     // feature methods
-    @IgnoreRest
     def testSmoke() {
         setup:
         Path caseOutputDir = specOutputDir.resolve('testSmoke')

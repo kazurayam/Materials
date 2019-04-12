@@ -28,6 +28,7 @@ import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class ComparisonResultBundleSpec extends Specification {
@@ -128,6 +129,7 @@ class ComparisonResultBundleSpec extends Specification {
         
     }
     
+    
     def test_getByDiffMaterial() {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_getByDiffMaterial")
@@ -209,7 +211,9 @@ class ComparisonResultBundleSpec extends Specification {
     }
     
     boolean comparePaths(Path path1, Path path2) {
-        return path1.toString().replace('\\', '/').equals(path2.toString().replace('\\','/'))
+        Path p1 = path1.normalize()
+        Path p2 = path2.normalize()
+        return p1.toString().replace('\\', '/').equals(p2.toString().replace('\\','/'))
     }
     
     

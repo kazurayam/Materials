@@ -24,13 +24,15 @@ class MaterialRepositorySpec extends Specification {
 
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialRepositorySpec.class)}")
-        if (!workdir_.toFile().exists()) {
+        if (workdir_.toFile().exists()) {
+            Helpers.deleteDirectoryContents(workdir_)
+        } else {
             workdir_.toFile().mkdirs()
         }
-        //Helpers.copyDirectory(fixture_, workdir_)
         def ant = new AntBuilder()
         ant.copy(todir:workdir_.toFile(), overwrite:'yes') {
             fileset(dir:fixture_) {
+                exclude(name:'Materials/CURA.twins_capture/**')
                 exclude(name:'Materials/CURA.twins_exam/**')
             }
         }
@@ -140,6 +142,7 @@ class MaterialRepositorySpec extends Specification {
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
     }
     
+
     def testGetTSuiteNameList() {
         when:
         List<TSuiteName> tsnList = mr_.getTSuiteNameList()
