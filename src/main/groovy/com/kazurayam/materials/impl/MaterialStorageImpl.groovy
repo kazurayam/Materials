@@ -34,6 +34,9 @@ class MaterialStorageImpl implements MaterialStorage {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
+        if (baseDir.isAbsolute()) {
+            throw new IllegalArgumentException("baseDir(${baseDir}) must be a relative path to the current directory")
+        }
         baseDir_ = baseDir
         // create the directory if not present
         Helpers.ensureDirs(baseDir_)

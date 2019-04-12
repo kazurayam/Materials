@@ -67,6 +67,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
+        if (baseDir.isAbsolute()) {
+            throw new IllegalArgumentException("baseDir(${baseDir}) must be a relative path to the current directory")
+        }
         if (!Files.exists(reportsDir)) {
             throw new IllegalArgumentException("${reportsDir} does not exist")
         }

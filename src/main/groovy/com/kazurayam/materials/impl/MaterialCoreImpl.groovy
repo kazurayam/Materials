@@ -39,7 +39,6 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     MaterialCoreImpl(Path baseDir, String jsonText) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Objects.requireNonNull(jsonText, "jsonText must not be null")
-        
         this.baseDir_ = baseDir.normalize()
         
         JsonSlurper slurper = new JsonSlurper()
@@ -54,15 +53,34 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         if (jsonObject.Material == null) {
             throw new IllegalArgumentException("jsonText is not a Material json: ${jsonText}")
         }
-        if (jsonObject.Material.path == null) {
-            throw new IllegalArgumentException("Material.path is not found in : ${jsonText}")
+        
+        //if (jsonObject.Material.path == null) {
+        //    throw new IllegalArgumentException("Material.path is not found in : ${jsonText}")
+        //}
+        //   I should not rely on the jsonObject.Material.path
+        
+        //this.path_ = Paths.get(jsonObject.Material.path).normalize()
+        //   the above 1 line was inappropriate.
+        //   I should not rely on the jsonObject.Material.path value because the JSON file might be imported from other PC,
+        //   therefore the jsonObject.Materail.Path value has other PC's path info, which we should not refer to.
+        
+        // Instead I should rely on the jsonObject.Material.hrefRelativeToRepositoryRoot info;
+        // as the relative path is valid on anywhere.
+        if (jsonObject.Material.hrefRelativeToRepositoryRoot == null) {
+            throw new IllegalArgumentException("Material.hrefRelativeToRepositoryRoot is not found in : ${jsonText}")
         }
-        this.path_ = Paths.get(jsonObject.Material.path).normalize()
+        this.path_ = baseDir.resolve(jsonObject.Material.hrefRelativeToRepositoryRoot)
+                
         if (jsonObject.Material.description != null) {
             this.setDescription(jsonObject.Material.description)
         }
     }
     
+    /**
+     * 
+     * @param baseDir of the 'Materials' directory
+     * @param path of the Material file
+     */
     MaterialCoreImpl(Path baseDir, Path path) {
         this.baseDir_ = baseDir.normalize()
         this.path_    = path.normalize()
@@ -80,8 +98,9 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     
     @Override
     Path getPathRelativeToRepositoryRoot() {
-        logger_.debug("#getPathRelativeToRepositoryRoot baseDir_ is ${baseDir_.toString()}, path_ is ${path_.toString()}")
         Path p = baseDir_.relativize(path_).normalize()
+        logger_.debug("#getPathRelativeToRepositoryRoot baseDir_ is ${baseDir_.toString()}, " + 
+            "path_ is ${path_.toString()}, returning ${p.toString()}")
         return p
     }
     

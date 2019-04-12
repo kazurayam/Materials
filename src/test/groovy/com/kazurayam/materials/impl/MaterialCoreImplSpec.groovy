@@ -44,6 +44,7 @@ class MaterialCoreImplSpec extends Specification {
 {
     "Material": {
         "path": "build/tmp/testOutput/MaterialCoreImplSpec/testSmoke/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png",
+        "hrefRelativeToRepositoryRoot": "47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png",
         "description": "20190322_130000"
      }
 }
@@ -59,6 +60,40 @@ class MaterialCoreImplSpec extends Specification {
             matec.getHrefRelativeToRepositoryRoot().equals(
                 "47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png")
             matec.getDescription() == '20190322_130000'
+    }
+    
+    /**
+     * Reproducing a problem when
+     *     com.kazurayam.materials.impl.MaterialCoreImpl DEBUG #getPathRelativeToRepositoryRoot 
+     *         baseDir_ is build\tmp\testOutput\BaseIndexerSpec\testSmoke\Materials, 
+     *         path_ is C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190411_130900\CURA.visitSite\appointment.php%23summary.png
+     * then
+     *     java.lang.IllegalArgumentException: 'other' is different type of Path
+     *         at sun.nio.fs.WindowsPath.relativize(WindowsPath.java:388)
+     *         at sun.nio.fs.WindowsPath.relativize(WindowsPath.java:44)
+     *         at com.kazurayam.materials.impl.MaterialCoreImpl.getPathRelativeToRepositoryRoot(MaterialCoreImpl.groovy:93)
+     *         ...
+     * @return
+     */
+    def test_getPathRelativeToRepositoryRoot() {
+        setup:
+            String jsonText = '''{
+    "Material": {
+        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+    }
+}'''
+            // I got rid of this:
+            //     "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190411_130902\\CURA.ImageDiff_twins\\CURA.visitSite\\appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png",
+            // because JsonSlurper found it enable to decode due to UNICODE escaping
+
+            Path baseDir = Paths.get('build', 'tmp', 'testOutput', 'BaseIndexerSpec', 'testSmoke', 'Materials')
+            MaterialCore mc = new MaterialCoreImpl(baseDir, jsonText)
+        when:
+            Path p = mc.getPathRelativeToRepositoryRoot()
+        then:
+            p != null
+            p == Paths.get('CURA.twins_exam', '20190411_130902', 'CURA.ImageDiff_twins', 'CURA.visitSite',
+                            'appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png')
     }
     
 }
