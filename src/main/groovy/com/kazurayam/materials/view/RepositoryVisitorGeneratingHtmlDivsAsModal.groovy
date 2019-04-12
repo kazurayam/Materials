@@ -154,7 +154,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder_.div(['class':'carousel-caption d-none d-md-block']) {
                             builder_.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
                         }
-                        builder_.img(['src': "${cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot()}",
+                        builder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Back"])
@@ -165,7 +165,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                             String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
                             builder_.p "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
                         }
-                        builder_.img(['src': "${cr.getDiffMaterial().getHrefRelativeToRepositoryRoot()}",
+                        builder_.img(['src': "${cr.getDiffMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Diff"])
@@ -174,7 +174,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         builder_.div(['class':'carousel-caption d-none d-md-block']) {
                             builder_.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
                         }
-                        builder_.img(['src': "${cr.getActualMaterial().getHrefRelativeToRepositoryRoot()}",
+                        builder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block w-100',
                                     'style': 'border: 1px solid #ddd',
                                     'alt' : "Forth"])

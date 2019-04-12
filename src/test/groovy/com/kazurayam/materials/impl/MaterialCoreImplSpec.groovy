@@ -96,4 +96,27 @@ class MaterialCoreImplSpec extends Specification {
                             'appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png')
     }
     
+    
+    
+    
+    /**
+     * 
+     * @return
+     */
+    def test_getEncodedHrefRelativeToRepositoryRoot() {
+        setup:
+        String jsonText = '''{
+    "Material": {
+        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png"
+    }
+}'''
+        Path baseDir = Paths.get('build', 'tmp', 'testOutput', 'BaseIndexerSpec', 'testSmoke', 'Materials')
+        MaterialCore mc = new MaterialCoreImpl(baseDir, jsonText)
+    when:
+        String enc = mc.getEncodedHrefRelativeToRepositoryRoot()
+    then:
+        enc != null
+        enc == 'CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%2523summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.%280.00%29.png'
+    }
+    
 }
