@@ -44,37 +44,37 @@ repositories {
 }
 
 dependencies {
-    compile      "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    implementation      "org.codehaus.groovy:groovy-all:${groovyVersion}"
     generateDocs "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
-    compile group: 'ch.qos.logback', name: 'logback-core', version: "${logbackVersion}"
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: "${logbackVersion}"
 
     // https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot
-    compile group: 'ru.yandex.qatools.ashot', name: 'ashot', version: '1.5.4'
+    implementation group: 'ru.yandex.qatools.ashot', name: 'ashot', version: '1.5.4'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
-    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 
 
     // https://mvnrepository.com/artifact/net.coobird/thumbnailator
-    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
 
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
-    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+    testImplementation group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
     
     // required by groovy.util.AntBuilder#copy() used in tests
-    testCompile("ant:ant:1.7.0")
+    testImplementation("ant:ant:1.7.0")
 }
 
 def defaultEncoding = 'UTF-8'
