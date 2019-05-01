@@ -125,11 +125,17 @@ interface MaterialRepository {
     
     /**
      * Returns a Path of a Material file.
-     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
      * 
-     * @param testCaseId e.g., 'Test Cases/TC1'
-     * @param url e.g., 'http://demoaut.katalon.com/'
-     * @return
+     * Examples:
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr.resolveScreenshotPath(
+     *                 'Test Cases/main/TC1',
+     *                 new URL('https://katalon-demo-cura.herokuapp.com/'))
+     * assert path.toString() == 'Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'
+     * 
+     * </PRE>
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
     Path resolveScreenshotPath(String testCaseId, String subpath, URL url)
@@ -138,27 +144,76 @@ interface MaterialRepository {
     
     /**
      * Returns a Path of a Material file.
-     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
      * 
-     * @param testCaseId
-     * @param url
-     * @param startingDepth
-     * @return
+     * Examples:
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr.resolveScreenshotPathByURLPathComponents(
+     *                 'Test Cases/main/TC1',
+     *                 new URL('https://katalon-demo-cura.herokuapp.com/'),
+     *                 0,
+     *                 'top')
+     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/top.png')
+     * </PRE>
+     * 
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr.resolveScreenshotPathByURLPathComponents(
+     *                 'Test Cases/main/TC1',
+     *                 new URL('https://katalon-demo-cura.herokuapp.com/aaa/appointment'),
+     *                 1,
+     *                 'top')
+     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/appointment.png')
+     * </PRE>
+     * 
      */
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
+    /**
+     * Returns a Path of a Material file.
+     *
+     * Examples:
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr.resolveScreenshotPathByURLPathComponents(
+     *                 'Test Cases/main/TC1',
+     *                 'aaa/bbb',
+     *                 new URL('https://katalon-demo-cura.herokuapp.com/'),
+     *                 0,
+     *                 'top')
+     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/top.png')
+     * </PRE>
+     */
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url, int startingDepth, String defaultName)
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url, int startingDepth, String defaultName)
     
     /**
      * Returns a Path of a Material file.
-     * The path is relative to the baseDir of MaterialRespository instance, which is the 'Materials' diretory.
      * 
-     * @param testCaseId
-     * @param fileName
-     * @return
+     * Example:
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'screenshot1.png')
+     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
+     * </PRE>
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
+    
+    /**
+     * Returns a Path of a Material file.
+     *
+     * Example:
+     * <PRE>
+     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
+     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
+     * Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
+     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
+     * </PRE>
+     */
     Path resolveMaterialPath(String testCaseId, String subpath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String subpath, String fileName)
