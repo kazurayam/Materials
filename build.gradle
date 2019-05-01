@@ -89,7 +89,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/BaseIndexerSpec.class'
+    include '**/MaterialRepositorySpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
