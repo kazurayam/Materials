@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -195,22 +196,23 @@ class MaterialRepositorySpec extends Specification {
         list.size() == 15
     }
 
+    @IgnoreRest
     def testResolveMaterialPath() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'screenshot1.png')
         then:
-        path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
+        path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
     }
     
+    @IgnoreRest
     def testResolveMaterialPathWithSubpath() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
         then:
-        path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
+        path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
     }
-    
     
     def testResolveScreenshotPath() {
         when:
@@ -219,26 +221,28 @@ class MaterialRepositorySpec extends Specification {
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
-	
-	def testResolveScreenshotPathByURLPathComponents_top() {
-		when:
-			mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
-			Path path = mr_.resolveScreenshotPathByURLPathComponents(
-							'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
-		then:
-			path.getFileName().toString()== 'top.png'
-            path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/top.png')
-	}
 
-	def testResolveScreenshotPathByURLPathComponents_login() {
-		when:
-			mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
-			Path path = mr_.resolveScreenshotPathByURLPathComponents(
-							'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
-		then:
-			path.getFileName().toString()== 'profile.php%23login.png'
-            path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/profile.php%23login.png')
-	}
+    @IgnoreRest
+    def testResolveScreenshotPathByURLPathComponents_top() {
+        when:
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+        Path path = mr_.resolveScreenshotPathByURLPathComponents(
+            'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
+        then:
+        path.getFileName().toString()== 'top.png'
+            path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/top.png')
+    }
+
+    @IgnoreRest
+    def testResolveScreenshotPathByURLPathComponents_login() {
+        when:
+        mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+        Path path = mr_.resolveScreenshotPathByURLPathComponents(
+            'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
+        then:
+        path.getFileName().toString()== 'profile.php%23login.png'
+        path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/profile.php%23login.png')
+    }
 
     def testMakeIndex() {
         when:

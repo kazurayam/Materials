@@ -54,10 +54,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     ImageCollectionDiffer(MaterialRepository mr) {
         this.mr_ = mr
-        this.filenameResolver_ = new ImageDifferenceFilenameResolverDefaultImpl()
+        this.filenameResolver_ = new ImageDifferenceFilenameResolverCompactImpl()
         this.vtLogger_ = new VisualTestingLoggerDefaultImpl()
         this.bundle_ = new ComparisonResultBundle()
-		this.output_ = null
+        this.output_ = null
     }
 
     /*
