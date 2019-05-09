@@ -49,6 +49,7 @@ class ComparisonResultBundleSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
     
+
     def test_constructor_withJson() {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_constructor_withJson")
@@ -94,11 +95,11 @@ class ComparisonResultBundleSpec extends Specification {
             )
             comparePaths(
                 cr.getDiffMaterial().getPath(),
-                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png')
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
             )                
             comparePaths(
                 cr.getDiffMaterial().getPathRelativeToRepositoryRoot(),
-                Paths.get('ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png')
+                Paths.get('ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
                 )
             cr.imagesAreSimilar() == true
             cr.getDiffRatio()== 16.86
@@ -142,7 +143,7 @@ class ComparisonResultBundleSpec extends Specification {
         then:
             bundle.size()== 1
         when:
-            ComparisonResult cr = bundle.getByDiffMaterial("ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP.20190216_064354_-20190216_204329_.(16.86).png")
+            ComparisonResult cr = bundle.getByDiffMaterial("ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png")
         then:
             cr != null
             cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot() == '47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png'

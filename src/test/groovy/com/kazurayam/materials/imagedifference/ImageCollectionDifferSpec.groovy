@@ -73,7 +73,7 @@ class ImageCollectionDifferSpec extends Specification {
         then:
         Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic'))
         Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic/' +
-            'CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72)FAILED.png'))
+            'CURA_Homepage(6.72)FAILED.png'))
     }
     
     /**
@@ -107,7 +107,7 @@ class ImageCollectionDifferSpec extends Specification {
         then:
         Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic'))
         Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic/' +
-            'CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72).png'))   
+            'CURA_Homepage(6.72).png'))   
             // here we expect the file to be (6.72).png, rather than (6.72)FAILED.png
     }
 
@@ -176,7 +176,7 @@ class ImageCollectionDifferSpec extends Specification {
 			assert mateList.size() == 2                     // diffImage + ComparisonResult.json
 			Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
-        	diffImage.getPath().toString().endsWith('.(16.86)FAILED.png')
+        	diffImage.getPath().toString().endsWith('(16.86)FAILED.png')
 			//
         when:
         	// assert that we have ComparisonResults.json
@@ -249,6 +249,6 @@ class ImageCollectionDifferSpec extends Specification {
 			assert mateList.size() == 2          // diffImage + ComparisonResults.json
 			Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
-        	diffImage.getPath().toString().endsWith('.(16.86).png')
+        	diffImage.getPath().toString().endsWith('(16.86).png')
     }
 }

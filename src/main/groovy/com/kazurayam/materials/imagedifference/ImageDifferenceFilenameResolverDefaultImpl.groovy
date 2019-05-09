@@ -33,8 +33,6 @@ class ImageDifferenceFilenameResolverDefaultImpl implements ImageDifferenceFilen
             ImageDifference diff,
             double criteriaPercent) {
         
-        // FIXME: the depencency to the "Reports" directory here makes this method fragile
-        //        should parameterize those ExecutionProfiles  
         TSuiteResult tSuiteResultExpected = expMate.getParent().getParent()
         TSuiteResult tSuiteResultActual   = actMate.getParent().getParent()
         logger_.debug("#resolveImageDifferenceFilename tSuiteResultExpected=${tSuiteResultExpected}")
