@@ -93,8 +93,7 @@ task pinpoint(type: Test) {
     //include '**/ImageDifferenceFilenameResolverDefaultImplSpec.class'
     //include '**/ImageDifferenceFilenameResolverCompactImplSpec.class'
     //include '**/ComparisonResultBundleSpec.class'
-    include '**/ImageCollectionDifferSpec.class'
-    //include '**/MaterialRepositorySpec.class'
+    include '**/BaseIndexerSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
