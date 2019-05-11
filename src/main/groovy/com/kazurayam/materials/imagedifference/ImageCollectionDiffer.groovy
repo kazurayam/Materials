@@ -101,7 +101,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
                 double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
                 // compare 2 images and create a ComparisonResult object
-                ComparisonResult cr = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+                ComparisonResult cr = this.startMaterialPair(tCaseName, pair, criteriaPercentage)
                 // and put the ComparisonResult into buffer
                 this.endMaterialPair(cr)
             }
@@ -138,7 +138,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         for (MaterialPair pair : materialPairs.getList()) {
             if (pair.hasExpected() && pair.hasActual()) {
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
-                ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+                ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair, criteriaPercentage)
                 // logging etc
                 this.endMaterialPair(evalResult)
             }
@@ -203,12 +203,13 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      */
     @Override
     ComparisonResult startMaterialPair( TCaseName tCaseName,
-                                        Material expectedMaterial,
-                                        Material actualMaterial,
+                                        MaterialPair materialPair,
                                         double criteriaPercentage) throws ImageDifferenceException {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        Objects.requireNonNull(expectedMaterial, "expectedMaterial must not be null")
-        Objects.requireNonNull(actualMaterial, "actualMaterial must not be null")
+        Objects.requireNonNull(materialPair, "materialPair must not be null")
+
+        Material expectedMaterial = materialPair.getExpected()
+        Material actualMaterial = materialPair.getActual()
 
         // create ImageDifference of the 2 given images
         ImageDifference diff = new ImageDifference(
