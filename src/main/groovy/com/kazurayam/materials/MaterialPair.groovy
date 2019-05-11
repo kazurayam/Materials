@@ -12,6 +12,14 @@ interface MaterialPair extends Comparable<MaterialPair> {
 
     MaterialPair setActual(Material actual)
 
+    boolean hasLeft()
+    
+    boolean hasExpected()
+    
+    boolean hasRight()
+    
+    boolean hasActual()
+    
     Material getLeft()
 
     Material getExpected()

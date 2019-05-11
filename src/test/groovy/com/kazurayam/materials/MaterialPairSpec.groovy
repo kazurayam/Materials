@@ -104,5 +104,33 @@ class MaterialPairSpec extends Specification {
         then:
         buffImg != null
     }
+    
+    def test_hasExpected_truthy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        then:
+        mp.hasExpected()
+    }
+    
+    def test_hasExpected_falsy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance()
+        then:
+        ! mp.hasExpected()
+    }
+    
+    def test_hasActual_truthy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        then:
+        mp.hasActual()
+    }
+    
+    def test_hasActual_falsy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance()
+        then:
+        ! mp.hasActual()
+    }
 
 }
