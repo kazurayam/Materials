@@ -73,6 +73,18 @@ class MaterialPairsSpec extends Specification {
         pair == mp
     }
     
+    def test_getList() {
+        setup:
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
+        when:
+        List<MaterialPair> list = mps.getList()
+        then:
+        list != null
+        list.size() == 1
+    }
+    
     def test_keySet() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)

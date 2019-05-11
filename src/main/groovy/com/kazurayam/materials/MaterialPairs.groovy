@@ -12,6 +12,8 @@ interface MaterialPairs {
     
     MaterialPair get(Path pathRelativeToTSuiteTimestamp)
     
+    List<MaterialPair> getList()
+    
     Set<Path> keySet()
     
     boolean containsKey(Path pathRelativeToTSuiteTimestamp)
