@@ -73,7 +73,7 @@ interface MaterialRepository {
      *
      * @return List<MaterialPair>
      */
-    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName)
+    MaterialPairs createMaterialPairs(TSuiteName tSuiteName)
 
     /**
      *

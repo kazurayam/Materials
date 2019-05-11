@@ -89,7 +89,12 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/MaterialPairSpec.class'
+    //include '**/ComparisonResultSpec.class'
+    //include '**/ImageDifferenceFilenameResolverDefaultImplSpec.class'
+    //include '**/ImageDifferenceFilenameResolverCompactImplSpec.class'
+    //include '**/ComparisonResultBundleSpec.class'
+    include '**/ImageCollectionDifferSpec.class'
+    //include '**/MaterialRepositorySpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

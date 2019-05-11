@@ -3,14 +3,12 @@ package com.kazurayam.materials.imagedifference
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.stream.Collectors
 
 import org.apache.commons.io.FileUtils
 
-import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
@@ -45,7 +43,6 @@ class ImageCollectionDifferSpec extends Specification {
     /**
      * PNG file should end with "FAILED.png"
      */
-    
     def test_makeImageCollectionDifferences_twins_shouldCreatePngWithFAILED() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithFAILED")
@@ -58,11 +55,8 @@ class ImageCollectionDifferSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
-        List<MaterialPair> materialPairs =
-            // we use Java 8 Stream API to filter entries
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).stream().filter { mp ->
-                    mp.getLeft().getFileType() == FileType.PNG
-                }.collect(Collectors.toList())
+        MaterialPairs materialPairs =
+            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
 
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(
@@ -75,11 +69,10 @@ class ImageCollectionDifferSpec extends Specification {
         Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic/' +
             'CURA_Homepage(6.72)FAILED.png'))
     }
-    
+
     /**
      * PNG file should not end with "FAILED.png"
      */
-    
     def test_makeImageCollectionDifferences_twins_shouldCreatePngWithoutFAILED() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithoutFAILED")
@@ -92,11 +85,8 @@ class ImageCollectionDifferSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
-        List<MaterialPair> materialPairs =
-            // we use Java 8 Stream API to filter entries
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).stream().filter { mp ->
-                mp.getLeft().getFileType() == FileType.PNG
-            }.collect(Collectors.toList())
+        MaterialPairs materialPairs =
+            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
 
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(
@@ -117,7 +107,6 @@ class ImageCollectionDifferSpec extends Specification {
      * the actual diffRation of a Material is 16.86, and is regarded as FAILED.
      * @return
      */
-    
     def test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage() {
         setup:
             Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage")
@@ -127,64 +116,62 @@ class ImageCollectionDifferSpec extends Specification {
             FileUtils.deleteQuietly(materials.toFile())
             Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
-			TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
-			mr.scan()
-			mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
+            MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+            TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
+            mr.scan()
+            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
         when:
-        	// we use Java 8 Stream API to filter entries
-        	List<MaterialPair> materialPairs =
-            	mr.createMaterialPairs(tsn).stream().filter { mp ->
-					mp.getLeft().getFileType() == FileType.PNG
-				}.collect(Collectors.toList())
-			//
-			TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-			TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-			Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-			//
-			StorageScanner.Options options = new StorageScanner.Options.Builder().
+            // we use Java 8 Stream API to filter entries
+            MaterialPairs materialPairs =
+                mr.createMaterialPairs(tsn)
+            //
+            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            //
+            StorageScanner.Options options = new StorageScanner.Options.Builder().
                                                 previousImageDeltaStats(previousIDS).
                                                 build()
-			StorageScanner storageScanner = new StorageScanner(ms, options)
-			ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
-			//
-			storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-			//
-			double ccp = imageDeltaStats.getCriteriaPercentage(
+            StorageScanner storageScanner = new StorageScanner(ms, options)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            //
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            //
+            double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
-        	15.0 < ccp && ccp < 16.0 // ccp == 15.197159598135954
+            15.0 < ccp && ccp < 16.0 // ccp == 15.197159598135954
         when:
-        	ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
-			icd.makeImageCollectionDifferences(
-				materialPairs,
-				new TCaseName('Test Cases/ImageDiff'),
-				imageDeltaStats)
-			mr.scan()
-		then:
-		    icd.getOutput() != null
-		when:    
-        	List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
-			assert tsriList.size() == 1
-			TSuiteResultId tsri = tsriList.get(0)
-			TSuiteResult tsr = mr.getTSuiteResult(tsri)
-			TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
-			List<Material> mateList = tcr.getMaterialList()
-			assert mateList.size() == 2                     // diffImage + ComparisonResult.json
-			Material diffImage = tcr.getMaterialList('png$', true).get(0)
+            ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+            icd.makeImageCollectionDifferences(
+                materialPairs,
+                new TCaseName('Test Cases/ImageDiff'),
+                imageDeltaStats)
+            mr.scan()
         then:
-        	diffImage.getPath().toString().endsWith('(16.86)FAILED.png')
-			//
+            icd.getOutput() != null
         when:
-        	// assert that we have ComparisonResults.json
-        	List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+            assert tsriList.size() == 1
+            TSuiteResultId tsri = tsriList.get(0)
+            TSuiteResult tsr = mr.getTSuiteResult(tsri)
+            TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
+            List<Material> mateList = tcr.getMaterialList()
+            assert mateList.size() == 2                     // diffImage + ComparisonResult.json
+            Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
-        	jsons.size() == 1
+            diffImage.getPath().toString().endsWith('(16.86)FAILED.png')
+            //
+        when:
+            // assert that we have ComparisonResults.json
+            List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
+        then:
+            jsons.size() == 1
     }
-    
+
     /**
      * Run ImageCollectionDiffer#makeImageCollectionDifferences() with ImageDeletaStats object as an arugment.
      * In this case, the criteriaPercentage is calculated to be 30.19, and
@@ -193,62 +180,60 @@ class ImageCollectionDifferSpec extends Specification {
      */
     def test_makeImageCollectionDifferences_chronos_largerCriteriaPercentage() {
         setup:
-        	Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_largerCriteriaPercentage")
-			Path materials = caseOutputDir.resolve('Materials')
-			Path storage = caseOutputDir.resolve('Storage')
-			Files.createDirectories(materials)
-			FileUtils.deleteQuietly(materials.toFile())
-			Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
-			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-			MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
-			//
-			TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-			TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-			Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-			//
-			TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-			ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
-			mr.scan()
-			mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
+            Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_largerCriteriaPercentage")
+            Path materials = caseOutputDir.resolve('Materials')
+            Path storage = caseOutputDir.resolve('Storage')
+            Files.createDirectories(materials)
+            FileUtils.deleteQuietly(materials.toFile())
+            Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+            MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+            //
+            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            //
+            TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
+            mr.scan()
+            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
         when:
-        	// we use Java 8 Stream API to filter entries
-        	List<MaterialPair> materialPairs =
-            	mr.createMaterialPairs(tsn).stream().filter { mp ->
-					mp.getLeft().getFileType() == FileType.PNG
-				}.collect(Collectors.toList())
-			StorageScanner.Options options = new StorageScanner.Options.Builder().
-            	previousImageDeltaStats(previousIDS).
-				shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
-				build()
-			StorageScanner storageScanner = new StorageScanner(ms, options)
-			ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
-			//
-			storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-			double ccp = imageDeltaStats.getCriteriaPercentage(
+            // we use Java 8 Stream API to filter entries
+            MaterialPairs materialPairs =
+                mr.createMaterialPairs(tsn)
+            StorageScanner.Options options = new StorageScanner.Options.Builder().
+                previousImageDeltaStats(previousIDS).
+                shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
+                build()
+            StorageScanner storageScanner = new StorageScanner(ms, options)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            //
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
-        	30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
+            30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
         when:
-        	ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
-			icd.makeImageCollectionDifferences(
-				materialPairs,
-				new TCaseName('Test Cases/ImageDiff'),
-				imageDeltaStats)
-			mr.scan()
-		then:
-		    icd.getOutput() != null
-		when:    
-        	List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
-			assert tsriList.size() == 1
-			TSuiteResultId tsri = tsriList.get(0)
-			TSuiteResult tsr = mr.getTSuiteResult(tsri)
-			TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
-			List<Material> mateList = tcr.getMaterialList()
-			assert mateList.size() == 2          // diffImage + ComparisonResults.json
-			Material diffImage = tcr.getMaterialList('png$', true).get(0)
+            ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+            icd.makeImageCollectionDifferences(
+                materialPairs,
+                new TCaseName('Test Cases/ImageDiff'),
+                imageDeltaStats)
+            mr.scan()
         then:
-        	diffImage.getPath().toString().endsWith('(16.86).png')
+            icd.getOutput() != null
+        when:
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+            assert tsriList.size() == 1
+            TSuiteResultId tsri = tsriList.get(0)
+            TSuiteResult tsr = mr.getTSuiteResult(tsri)
+            TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
+            List<Material> mateList = tcr.getMaterialList()
+            assert mateList.size() == 2          // diffImage + ComparisonResults.json
+            Material diffImage = tcr.getMaterialList('png$', true).get(0)
+        then:
+            diffImage.getPath().toString().endsWith('(16.86).png')
     }
 }

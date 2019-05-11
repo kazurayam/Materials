@@ -12,7 +12,10 @@ final class MaterialPairImpl implements MaterialPair {
     private Material left_
     private Material right_
 
-    private MaterialPairImpl() {}
+    private MaterialPairImpl() {
+        left_ = null
+        right_ = null
+    }
 
     public static MaterialPair() {
         return new MaterialPairImpl()
@@ -36,6 +39,26 @@ final class MaterialPairImpl implements MaterialPair {
 
     MaterialPair setActual(Material actual) {
         return this.setRight(actual)
+    }
+    
+    @Override
+    boolean hasLeft() {
+        return this.getLeft() != null
+    }
+    
+    @Override
+    boolean hasExpected() {
+        return this.hasLeft()
+    }
+    
+    @Override
+    boolean hasRight() {
+        return this.getRight() != null
+    }
+    
+    @Override
+    boolean hasActual() {
+        return this.hasRight()
     }
 
     Material getLeft() {
@@ -73,10 +96,18 @@ final class MaterialPairImpl implements MaterialPair {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"left": ')
-        sb.append(left_.toJsonText())
+        if (left_ != null) {
+            sb.append(left_.toJsonText())
+        } else {
+            sb.append('null')
+        }
         sb.append(',')
         sb.append('"right": ')
-        sb.append(right_.toJsonText())
+        if (right_ != null) {
+            sb.append(right_.toJsonText())
+        } else {
+            sb.append('null')
+        }
         sb.append('')
         sb.append('}')
         return sb.toString()

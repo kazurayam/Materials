@@ -1,6 +1,5 @@
 package com.kazurayam.materials.imagedifference
 
-import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -10,8 +9,6 @@ import javax.imageio.ImageIO
 
 import org.apache.commons.io.FileUtils
 
-import com.kazurayam.materials.imagedifference.ComparisonResult
-import com.kazurayam.materials.imagedifference.ImageDifference
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
@@ -56,7 +53,7 @@ class ComparisonResultSpec extends Specification {
             mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
             List<MaterialPair> materialPairs =
             // we use Java 8 Stream API to filter entries
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).stream().filter { mp ->
+            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).getList().stream().filter { mp ->
                     mp.getLeft().getFileType() == FileType.PNG
                 }.collect(Collectors.toList())
             Material expected = materialPairs.get(0).getExpected()

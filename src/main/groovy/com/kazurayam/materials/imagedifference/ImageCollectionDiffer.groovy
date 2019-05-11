@@ -9,8 +9,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
@@ -86,23 +86,25 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param imageDeltaStats
      */
     @Override
-    boolean makeImageCollectionDifferences(List<MaterialPair> materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(imageDeltaStats, "imageDeltaStats must not be null")
         //
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
-        for (MaterialPair pair : materialPairs) {
+        for (MaterialPair pair : materialPairs.getList()) {
             // resolve the criteria percentage for this Material
-            Material expected = pair.getExpected()
-            TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
-            Path path = expected.getPathRelativeToTSuiteTimestamp()
-            double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
-            // compare 2 images and create a ComparisonResult object
-            ComparisonResult cr = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            // and put the ComparisonResult into buffer
-            this.endMaterialPair(cr)
+            if (pair.hasExpected() && pair.hasActual()) {
+                Material expected = pair.getExpected()
+                TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
+                Path path = expected.getPathRelativeToTSuiteTimestamp()
+                double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
+                // compare 2 images and create a ComparisonResult object
+                ComparisonResult cr = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+                // and put the ComparisonResult into buffer
+                this.endMaterialPair(cr)
+            }
         }
         // 
         this.endImageCollection(tCaseName)
@@ -127,17 +129,19 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      *     the MaterialPair is evaluated FAILED
      */
     @Override
-    boolean makeImageCollectionDifferences(List<MaterialPair> materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName tCaseName, double criteriaPercentage) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         //
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
-        for (MaterialPair pair : materialPairs) {
-            // compare 2 images, make an diff image, store it into file, record and return the comparison result
-            ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
-            // logging etc
-            this.endMaterialPair(evalResult)
+        for (MaterialPair pair : materialPairs.getList()) {
+            if (pair.hasExpected() && pair.hasActual()) {
+                // compare 2 images, make an diff image, store it into file, record and return the comparison result
+                ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair.getExpected(), pair.getActual(), criteriaPercentage)
+                // logging etc
+                this.endMaterialPair(evalResult)
+            }
         }
         this.endImageCollection(tCaseName)
         
@@ -202,25 +206,28 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                                         Material expectedMaterial,
                                         Material actualMaterial,
                                         double criteriaPercentage) throws ImageDifferenceException {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(expectedMaterial, "expectedMaterial must not be null")
+        Objects.requireNonNull(actualMaterial, "actualMaterial must not be null")
 
         // create ImageDifference of the 2 given images
         ImageDifference diff = new ImageDifference(
                                     ImageIO.read(expectedMaterial.getPath().toFile()),
                                     ImageIO.read(actualMaterial.getPath().toFile()))
-    
+
         // resolve the name of output file to save the ImageDiff
         String fileName = this.filenameResolver_.resolveImageDifferenceFilename(
                                         expectedMaterial,
                                         actualMaterial,
                                         diff,
                                         criteriaPercentage)
-    
+
         // resolve the path of output file to save the ImageDiff
         Path pngFile = this.mr_.resolveMaterialPath(
                             tCaseName,
                             expectedMaterial.getParentDirectoryPathRelativeToTSuiteResult().toString(),
                             fileName)
-    
+
         // write the ImageDiff into the output file
         ImageIO.write(diff.getDiffImage(), "PNG", pngFile.toFile())
         MaterialCoreImpl diffMaterial = new MaterialCoreImpl(mr_.getBaseDir(), pngFile)
@@ -237,7 +244,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
             String eval = (similarity) ? 'Similar' : 'Different'
             vtLogger_.info("${eval} ${diffMaterial.getPathRelativeToRepositoryRoot().toString()} ")
         }
-            
+
         return evalResult
     }
 

@@ -28,8 +28,6 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
-import groovy.util.AntBuilder
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class BaseIndexerSpec extends Specification {
@@ -293,7 +291,7 @@ class BaseIndexerSpec extends Specification {
      *
      * @return
      */
-    @IgnoreRest
+
     def testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding() {
         setup:
             Path caseOutputDir = specOutputDir.resolve('testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding')
