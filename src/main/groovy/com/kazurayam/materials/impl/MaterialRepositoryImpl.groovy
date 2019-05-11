@@ -611,8 +611,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
      * 4. please note that we do not check the profile name which was applied to each Test Suite run. also we do
      *    not check the browser type used to each Test Suite run. 
-     * 5. Scan the 2 directories selected and create a List of Material objects. 2 files which have the same path
-     *    under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
+     * 5. Scan the 2 directories selected and create a List of Material objects. 
+     *    5.1 Two files which have the same path under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
+     *    5.2 The orphan file found in the ActualTSuiteResult will be silently ignored.
+     *    5.3 The orphan file found in the ExpectedTSuiteResult will also be silently ignored.
      * 6. A List&lt;MaterialPair&gt; is created, fulfilled and returned as the result
      *
      * @return List<MaterialPair>
