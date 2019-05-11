@@ -6,6 +6,10 @@ interface MaterialPairs {
     
     MaterialPair put(Path pathRelativeToTSuiteTimestamp, MaterialPair materialPair)
     
+    MaterialPair putExpectedMaterial(Material expectedMaterial)
+    
+    MaterialPair putActualMaterial(Material actualMaterial)
+    
     MaterialPair get(Path pathRelativeToTSuiteTimestamp)
     
     Set<Path> keySet()

@@ -102,6 +102,34 @@ class MaterialPairsSpec extends Specification {
         mps.size() == 1
     }
     
+    def test_setExpectedMaterial() {
+        setup:
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        when:
+        mps.putExpectedMaterial(expectedMaterial_)
+        then:
+        mps.size() == 1
+        mps.containsKey(expectedMaterial_.getPathRelativeToTSuiteTimestamp())
+        when:
+        MaterialPair pair = mps.get(expectedMaterial_.getPathRelativeToTSuiteTimestamp())
+        then:
+        pair.hasExpected()
+    }
+    
+    def test_putActualMaterial() {
+        setup:
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        when:
+        mps.putActualMaterial(actualMaterial_)
+        then:
+        mps.size() == 1
+        mps.containsKey(actualMaterial_.getPathRelativeToTSuiteTimestamp())
+        when:
+        MaterialPair pair = mps.get(actualMaterial_.getPathRelativeToTSuiteTimestamp())
+        then:
+        pair.hasActual()
+    }
+    
     @Ignore
     def testIgnoring() {}
     
