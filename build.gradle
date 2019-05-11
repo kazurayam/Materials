@@ -89,9 +89,7 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/ImageDifferenceFilenameResolver*.class'
-    include '**/ComparisonResultBundleSpec.class'
-    include '**/ImageCollectionDifferSpec.class'
+    include '**/MaterialPairSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

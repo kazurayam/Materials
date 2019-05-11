@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import java.awt.image.BufferedImage
+
 interface MaterialPair extends Comparable<MaterialPair> {
 
     MaterialPair setLeft(Material left)
@@ -17,5 +19,9 @@ interface MaterialPair extends Comparable<MaterialPair> {
     Material getRight()
 
     Material getActual()
+
+    BufferedImage getExpectedBufferedImage()
+    
+    BufferedImage getActualBufferedImage()
 
 }

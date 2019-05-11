@@ -252,7 +252,7 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
-   
+    @IgnoreRest
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
         List<MaterialPair> list = mr_.createMaterialPairs(new TSuiteName('TS1'))

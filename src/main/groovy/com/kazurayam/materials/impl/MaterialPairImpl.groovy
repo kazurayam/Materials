@@ -1,5 +1,9 @@
 package com.kazurayam.materials.impl
 
+import java.awt.image.BufferedImage
+
+import javax.imageio.ImageIO
+
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 
@@ -49,7 +53,16 @@ final class MaterialPairImpl implements MaterialPair {
     Material getActual() {
         return this.getRight()
     }
+    
+    @Override
+    BufferedImage getExpectedBufferedImage() {
+        return ImageIO.read(this.getExpected().getPath().toFile())
+    }
 
+    @Override
+    BufferedImage getActualBufferedImage() {
+        return ImageIO.read(this.getActual().getPath().toFile())
+    }
     // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
