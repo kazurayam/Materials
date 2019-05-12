@@ -16,7 +16,6 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
@@ -138,7 +137,7 @@ class RepositoryRootSpec extends Specification {
         tsrList.size() == 0
     }
     
-    @IgnoreRest
+    
     def testGetSortedTSuiteResults() {
         when:
         Path materialsDir = workdir_.resolve('Materials')

@@ -1,5 +1,6 @@
 package com.kazurayam.materials
 
+import java.awt.image.BufferedImage
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -85,4 +86,51 @@ class MaterialPairSpec extends Specification {
         then:
         actual == actualMaterial_
     }
+    
+    def testGetExpectedBufferedImage() {
+        setup:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        when:
+        BufferedImage buffImg = mp.getExpectedBufferedImage()
+        then:
+        buffImg != null
+    }
+    
+    def testGetActualBufferedImage() {
+        setup:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        when:
+        BufferedImage buffImg = mp.getActualBufferedImage()
+        then:
+        buffImg != null
+    }
+    
+    def test_hasExpected_truthy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        then:
+        mp.hasExpected()
+    }
+    
+    def test_hasExpected_falsy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance()
+        then:
+        ! mp.hasExpected()
+    }
+    
+    def test_hasActual_truthy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance().setExpected(expectedMaterial_).setActual(actualMaterial_)
+        then:
+        mp.hasActual()
+    }
+    
+    def test_hasActual_falsy() {
+        when:
+        MaterialPair mp = MaterialPairImpl.newInstance()
+        then:
+        ! mp.hasActual()
+    }
+
 }

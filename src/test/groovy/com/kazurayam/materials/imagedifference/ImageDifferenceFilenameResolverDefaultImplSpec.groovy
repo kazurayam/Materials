@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.TSuiteName
@@ -46,16 +47,16 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         TSuiteName tsn = new TSuiteName('main/TS1')
-        List<MaterialPair> materialPairList = mr.createMaterialPairs(tsn)
+        MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
         then:
-        materialPairList.size() > 0
+        materialPairs.size() > 0
         when:
         TSuiteTimestamp tstExp = TSuiteTimestamp.newInstance('20181014_060500')
         TSuiteTimestamp tstAct = TSuiteTimestamp.newInstance('20181014_060501')
         Path relativePath = Paths.get('Main.Basic/CURA_Homepage.png')
         Material expMate = null
         Material actMate = null
-        for (MaterialPair pair: materialPairList) {
+        for (MaterialPair pair: materialPairs.getList()) {
             if (pair.getLeft().getPathRelativeToTSuiteTimestamp() == relativePath) {
                 expMate = pair.getLeft()
                 actMate = pair.getRight()

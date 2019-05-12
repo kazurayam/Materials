@@ -1,6 +1,6 @@
 package com.kazurayam.materials.imagedifference
 
-import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.TCaseName
 
 interface ImageCollectionProcessingContentHandler {
@@ -12,7 +12,6 @@ interface ImageCollectionProcessingContentHandler {
     void startImageCollection(TCaseName tCaseName) throws ImageDifferenceException
     
     ComparisonResult startMaterialPair( TCaseName tCaseName,
-                                        Material expectedMaterial,
-                                        Material actualMaterial,
+                                        MaterialPair materialPair,
                                         double criteriaPercentage) throws ImageDifferenceException
 }

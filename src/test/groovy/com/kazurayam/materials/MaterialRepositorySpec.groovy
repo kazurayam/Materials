@@ -9,7 +9,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -196,7 +195,7 @@ class MaterialRepositorySpec extends Specification {
         list.size() == 15
     }
 
-    @IgnoreRest
+
     def testResolveMaterialPath() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
@@ -205,7 +204,7 @@ class MaterialRepositorySpec extends Specification {
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
     }
     
-    @IgnoreRest
+
     def testResolveMaterialPathWithSubpath() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
@@ -222,7 +221,7 @@ class MaterialRepositorySpec extends Specification {
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
 
-    @IgnoreRest
+
     def testResolveScreenshotPathByURLPathComponents_top() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
@@ -233,7 +232,7 @@ class MaterialRepositorySpec extends Specification {
             path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/top.png')
     }
 
-    @IgnoreRest
+
     def testResolveScreenshotPathByURLPathComponents_login() {
         when:
         mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
@@ -252,14 +251,14 @@ class MaterialRepositorySpec extends Specification {
         Files.exists(index)
     }
 
-   
+
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
-        List<MaterialPair> list = mr_.createMaterialPairs(new TSuiteName('TS1'))
+        MaterialPairs mps = mr_.createMaterialPairs(new TSuiteName('TS1'))
         then:
-        list.size() == 1
+        mps.size() == 1
         when:
-        MaterialPair mp = list.get(0)
+        MaterialPair mp = mps.get(Paths.get('TC1/CURA_Healthcare_Service.png'))
         Material expected = mp.getExpected()
         Material actual = mp.getActual()
         then:

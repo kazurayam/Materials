@@ -3,16 +3,13 @@ package com.kazurayam.materials.imagedifference
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.stream.Collectors
 
-import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
@@ -27,8 +24,6 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
-import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class ComparisonResultBundleSpec extends Specification {
@@ -172,10 +167,8 @@ class ComparisonResultBundleSpec extends Specification {
             mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
         //when:
             // we use Java 8 Stream API to filter entries
-            List<MaterialPair> materialPairs =
-                mr.createMaterialPairs(tsn).stream().filter { mp ->
-                    mp.getLeft().getFileType() == FileType.PNG
-                }.collect(Collectors.toList())
+            MaterialPairs materialPairs =
+                mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT

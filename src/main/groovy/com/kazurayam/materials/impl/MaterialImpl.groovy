@@ -1,7 +1,7 @@
 package com.kazurayam.materials.impl
 
+import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -85,6 +85,11 @@ class MaterialImpl implements Material, Comparable<Material> {
         } else {
             throw new IllegalStateException("parent_ is not set")
         }
+    }
+    
+    @Override
+    boolean fileExists() {
+        return Files.exists(this.getPath())
     }
 
     @Override

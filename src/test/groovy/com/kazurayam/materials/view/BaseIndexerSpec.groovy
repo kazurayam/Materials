@@ -3,16 +3,14 @@ package com.kazurayam.materials.view
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.stream.Collectors
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
@@ -28,8 +26,6 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
-import groovy.util.AntBuilder
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class BaseIndexerSpec extends Specification {
@@ -130,10 +126,7 @@ class BaseIndexerSpec extends Specification {
             mr.scan()
             mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
         when:
-            List<MaterialPair> materialPairs =
-            mr.createMaterialPairs(tsn).stream().filter { mp ->
-                mp.getLeft().getFileType() == FileType.PNG
-            }.collect(Collectors.toList())
+            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
@@ -233,10 +226,7 @@ class BaseIndexerSpec extends Specification {
             mr.scan()
             mr.putCurrentTestSuite('Test Suites/47news/ImageDiff', '20190401_142749')
         when:
-            List<MaterialPair> materialPairs =
-            mr.createMaterialPairs(tsn).stream().filter { mp ->
-                mp.getLeft().getFileType() == FileType.PNG
-            }.collect(Collectors.toList())
+            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
@@ -293,7 +283,7 @@ class BaseIndexerSpec extends Specification {
      *
      * @return
      */
-    @IgnoreRest
+
     def testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding() {
         setup:
             Path caseOutputDir = specOutputDir.resolve('testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding')
