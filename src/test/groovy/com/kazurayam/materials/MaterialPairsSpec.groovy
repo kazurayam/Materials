@@ -11,6 +11,7 @@ import com.kazurayam.materials.impl.MaterialPairsImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonOutput
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -143,6 +144,20 @@ class MaterialPairsSpec extends Specification {
         MaterialPair pair = mps.get(actualMaterial_.getPathRelativeToTSuiteTimestamp())
         then:
         pair.hasActual()
+    }
+    
+    def test_toJsonText() {
+        setup:
+        MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
+        mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
+        when:
+        String json = mps.toJsonText()
+        println "#test_toJsonText json=${json}"
+        String pretty = JsonOutput.prettyPrint(json)
+        println "#test_toJsonText pretty=${pretty}"
+        then:
+        pretty != null
     }
     
     @Ignore

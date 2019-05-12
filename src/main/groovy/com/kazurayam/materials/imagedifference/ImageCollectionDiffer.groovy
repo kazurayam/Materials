@@ -1,5 +1,6 @@
 package com.kazurayam.materials.imagedifference
 
+import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -8,14 +9,18 @@ import javax.imageio.ImageIO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.MaterialCoreImpl
+import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 
@@ -94,8 +99,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
-            //
-            MaterialPair decorated = decorateMaterialPair(pair, materialPairs)
+            // make an orphan material paired
+            MaterialPair decorated = decorateMaterialPair(
+                                        pair, 
+                                        materialPairs.getExpectedTSuiteResult(),
+                                        materialPairs.getActualTSuiteResult())
+            
             // resolve the criteria percentage for this Material
             if (decorated.hasExpected() && decorated.hasActual()) {
                 Material expected = decorated.getExpected()
@@ -138,7 +147,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
-            MaterialPair decorated = decorateMaterialPair(pair, materialPairs)
+            // make an orphan material paired
+            MaterialPair decorated = decorateMaterialPair(
+                                        pair, 
+                                        materialPairs.getExpectedTSuiteResult(),
+                                        materialPairs.getActualTSuiteResult())
+            
             if (decorated.hasExpected() && decorated.hasActual()) {
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
                 ComparisonResult evalResult = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
@@ -214,11 +228,23 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         Material expectedMaterial = materialPair.getExpected()
         Material actualMaterial = materialPair.getActual()
         
+        BufferedImage expectedBI
+        if (expectedMaterial.fileExists()) {
+            expectedBI = ImageIO.read(expectedMaterial.getPath().toFile())
+        } else {
+            expectedBI = Helpers.convertTextToImage("file ${expectedMaterial.getPath()} is not found")
+        }
+        
+        BufferedImage actualBI
+        if (actualMaterial.fileExists()) {
+            actualBI = ImageIO.read(actualMaterial.getPath().toFile())
+        } else {
+            actualBI = Helpers.convertTextToImage("file ${actualMaterial.getPath()} is not found")
+        }
+        
         // create ImageDifference of the 2 given images
-        ImageDifference diff = new ImageDifference(
-                                    ImageIO.read(expectedMaterial.getPath().toFile()),
-                                    ImageIO.read(actualMaterial.getPath().toFile()))
-
+        ImageDifference diff = new ImageDifference(expectedBI, actualBI)
+        
         // resolve the name of output file to save the ImageDiff
         String fileName = this.filenameResolver_.resolveImageDifferenceFilename(
                                         expectedMaterial,
@@ -253,15 +279,49 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
     }
     
     /**
-     * Check source if it lacks the Expected Material or it lacks the Actual Material.
-     * Fill the lack with a Material object which returns fileExists()==false
+     * Check the source MaterialPair has an orphan, which means 
+     * if it lacks the Expected Material or it lacks the Actual Material.
+     * Fill the vacancy with a Material object which returns fileExists()==false
      * 
      * @param source
      * @return
      */
-    private MaterialPair decorateMaterialPair(MaterialPair source, MaterialPairs context) {
-        // TODO
-        return source
+    static MaterialPair decorateMaterialPair(MaterialPair source, TSuiteResult expectedTSR, TSuiteResult actualTSR) {
+        
+        Objects.requireNonNull(source, "source must not be null")
+        Objects.requireNonNull(expectedTSR, "expectedTSR must not be null")
+        Objects.requireNonNull(actualTSR, "actualTSR must not be null")
+        
+        if (!source.hasExpected() && !source.hasActual()) {
+            throw new IllegalStateException("!source.hasExpected() && !source.hasActual()")
+        }
+        MaterialPair clone = source.clone()
+        if (!source.hasExpected()) {
+            // make a fake Material object as the Expected one
+            clone.setExpected(fakeMaterial(expectedTSR, source.getActual()))
+        }
+        if (!source.hasActual()) {
+            // make a fake Material object as the Actuail one
+            clone.setActual(fakeMaterial(actualTSR, source.getExpected()))
+        }
+        return clone
+    }
+
+    /**
+     * @param targetTSuiteResult e.g, './Materials/main.TS1/20180530_130419/'
+     * @param existingMaterial   e.g, './Materials/main.TS1/20180530_150000/main.TC1/foo/bar/fixture.xls'
+     * @return fakeMaterial with path './Materials/main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls'
+     */
+    static fakeMaterial(TSuiteResult targetTSuiteResult, Material existingMaterial) {
+        TCaseName tcn = existingMaterial.getParent().getTCaseName()
+        TCaseResult fakeTCR = TCaseResult.newInstance(tcn)
+        fakeTCR.setParent(targetTSuiteResult)
+        //
+        Path fakePath = targetTSuiteResult.getTSuiteTimestampDirectory()
+                            .resolve(existingMaterial.getPathRelativeToTSuiteTimestamp())
+        //
+        Material result = new MaterialImpl(fakeTCR, fakePath)
+        return result
     }
 
 }

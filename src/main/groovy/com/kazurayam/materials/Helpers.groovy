@@ -3,6 +3,12 @@ package com.kazurayam.materials
 import static java.nio.file.FileVisitResult.*
 import static java.nio.file.StandardCopyOption.*
 
+import java.awt.Color
+import java.awt.Font
+import java.awt.Graphics2D
+import java.awt.font.FontRenderContext
+import java.awt.geom.Rectangle2D
+import java.awt.image.BufferedImage
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
@@ -273,6 +279,48 @@ final class Helpers {
         return DateTimeFormatter.ofPattern(TSuiteTimestamp.DATE_TIME_PATTERN).format(LocalDateTime.now())
     }
 
+    /**
+     * creates a BufferedImage that shows the given text
+     * 
+     * see http://burnignorance.com/java-web-development-tips/converting-text-to-image-in-java-awt/
+     */
+    static BufferedImage convertTextToImage(String text) {
+        Objects.requireNonNull(text, "text must not be null")
+        
+        // create the font I wish to use
+        Font font = new Font("Arial", Font.PLAIN, 20)
+        
+        // create the FontRenderContext object which helps us to measure the text
+        FontRenderContext frc = new FontRenderContext(
+            null /*AffinTransform*/,
+            true /*isAntiAliased*/,
+            true /*useFractionalMetris*/)
+        
+        // get the height and widht of the text
+        Rectangle2D bounds = font.getStringBounds(text, frc)
+        int w = (int)bounds.getWidth() + 6
+        int h = (int)bounds.getHeight() + 3
+        
+        // create a BufferedImage object
+        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB)
+        
+        // calling createGraphics() to get the Graphics2D
+        Graphics2D g = image.createGraphics()
+        
+        // set color and other parameters
+        Color LIGHT_YELLOW = new Color(255,255,153)
+        Color GOLD = new Color(255,204,51)
+        g.setColor(GOLD)
+        g.fillRect(0, 0, w, h)
+        g.setColor(Color.BLACK)
+        g.setFont(font)
+        
+        g.drawString(text, (float)bounds.getX(), (float) -bounds.getY())
 
+        // releasing resources
+        g.dispose()
+        
+        return image
+    }
 
 }

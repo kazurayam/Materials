@@ -199,7 +199,6 @@ class ImageCollectionDifferSpec extends Specification {
             mr.scan()
             mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
         when:
-            // we use Java 8 Stream API to filter entries
             MaterialPairs materialPairs =
                 mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
@@ -235,5 +234,106 @@ class ImageCollectionDifferSpec extends Specification {
             Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
             diffImage.getPath().toString().endsWith('(16.86).png')
+    }
+    
+    /**
+     * This case test:
+     * static fakeMaterial(TSuiteResult targetTSuiteResult, Material existingMaterial) 
+     * 
+     * @return
+     */
+    def test_fakeMaterial() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("test_fakeMaterial")
+        Path materials = caseOutputDir.resolve('Materials')
+        Path storage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(materials)
+        FileUtils.deleteQuietly(materials.toFile())
+        Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+        TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
+        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_153731'))
+        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_154033'))
+        ms.restore(mr, tsr0)
+        ms.restore(mr, tsr1)
+        mr.scan()
+        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190512_154033')
+        
+        when:
+        // revisited.png is found in the tsr1 but not in the tsr0
+        TCaseResult tcr1 = mr.getTCaseResult(
+                            tsn,
+                            TSuiteTimestamp.newInstance('20190512_154033'),
+                            new TCaseName('Test Cases/CURA/visitSite'))
+        Material existing1 = tcr1.getMaterial(Paths.get('revisited.png'))
+        assert existing1 != null
+        Material fake1 = ImageCollectionDiffer.fakeMaterial(
+                                    mr.getTSuiteResult(tsr0),
+                                    existing1)
+        println "fake1.getPath()=${fake1.getPath().toString()}"
+        then:
+        fake1 != null
+        fake1.getPath().toString().endsWith("revisited.png")
+        ! fake1.fileExists()
+        
+        when:
+        // appointment.php%23summary.png is found in the tsr0 but not in the tsr1
+        TCaseResult tcr2 = mr.getTCaseResult(
+                            tsn,
+                            TSuiteTimestamp.newInstance('20190512_153731'),
+                            new TCaseName('Test Cases/CURA/visitSite'))
+        Material existing2 = tcr2.getMaterial(Paths.get('appointment.php%23summary.png'))
+        assert existing2 != null
+        Material fake2 = ImageCollectionDiffer.fakeMaterial(
+                                    mr.getTSuiteResult(tsr1),
+                                    existing2)
+        println "fake2.getPath()=${fake2.getPath().toString()}"
+        then:
+        fake2 != null
+        fake2.getPath().toString().endsWith("appointment.php%23summary.png")
+        ! fake2.fileExists()
+    }
+    
+    
+    def test_decoratedExpectedImage() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("test_decoratedExpectedImage")
+        Path materials = caseOutputDir.resolve('Materials')
+        Path storage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(materials)
+        FileUtils.deleteQuietly(materials.toFile())
+        Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+        TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
+        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_153731'))
+        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_154033'))
+        ms.restore(mr, tsr0)
+        ms.restore(mr, tsr1)
+        mr.scan()
+        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190512_154033')
+        
+        when:
+        // revisited.png is found in the tsr1 but not in the tsr0
+        MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+        StorageScanner storageScanner = new StorageScanner(ms)
+        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+        ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+        icd.makeImageCollectionDifferences(
+            materialPairs,
+            new TCaseName('Test Cases/ImageDiff'),
+            imageDeltaStats)
+        mr.scan()
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+        assert tsriList.size() == 1
+        TSuiteResultId tsri = tsriList.get(0)
+        TSuiteResult tsr = mr.getTSuiteResult(tsri)
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
+        List<Material> mateList = tcr.getMaterialList()
+        assert mateList.size() == 6          // diffImage + ComparisonResults.json
+        Material diffImage = tcr.getMaterialList('png$', true).get(0)
+        then:
+        diffImage.getPath().toString().endsWith('(100.00)FAILED.png')
     }
 }

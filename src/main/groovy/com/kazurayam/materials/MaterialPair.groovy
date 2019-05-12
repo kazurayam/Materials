@@ -31,5 +31,8 @@ interface MaterialPair extends Comparable<MaterialPair> {
     BufferedImage getExpectedBufferedImage()
     
     BufferedImage getActualBufferedImage()
+    
+    MaterialPair clone()
 
+    String toJsonText()
 }

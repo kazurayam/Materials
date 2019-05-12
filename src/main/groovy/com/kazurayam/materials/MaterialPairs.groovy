@@ -24,4 +24,5 @@ interface MaterialPairs {
     
     int size()
     
+    String toJsonText()
 }

@@ -98,4 +98,41 @@ class MaterialPairsImpl implements MaterialPairs {
     public TSuiteResult getActualTSuiteResult() {
         return this.actualTSR
     }
+    
+    @Override
+    String toString() {
+        return this.toJsonText()
+    }
+
+    @Override
+    String toJsonText() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("{")
+        sb.append("\"MaterialPairs\": {")
+        sb.append("\"expectedTSuiteResult\":")
+        sb.append(this.getExpectedTSuiteResult().toJsonText())
+        sb.append(",")
+        sb.append("\"actualTSuiteResult\":")
+        sb.append(this.getActualTSuiteResult().toJsonText())
+        sb.append(",")
+        sb.append("\"map\":[")
+        int count = 0
+        for (Path path : this.keySet()) {
+            if (count > 0) {
+                sb.append(",")
+            }
+            count += 1
+            sb.append("{")
+            sb.append("\"key\":\"")
+            sb.append(path.toString())
+            sb.append("\",")
+            sb.append("\"value\":")
+            sb.append(this.get(path).toJsonText())
+            sb.append("}")
+        }
+        sb.append("]")
+        sb.append("}")
+        sb.append("}")
+        return sb.toString()
+    }
 }

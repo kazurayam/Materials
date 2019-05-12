@@ -21,6 +21,17 @@ final class MaterialPairImpl implements MaterialPair {
         return new MaterialPairImpl()
     }
     
+    MaterialPair clone() {
+        MaterialPair mp = new MaterialPairImpl()
+        if (this.hasLeft()) {
+            mp.setLeft(this.getLeft())
+        }
+        if (this.hasRight()) {
+            mp.setRight(this.getRight())
+        }
+        return mp
+    }
+    
     MaterialPair setLeft(Material left) {
         Objects.requireNonNull(left)
         left_ = left
@@ -92,6 +103,7 @@ final class MaterialPairImpl implements MaterialPair {
         return this.toJsonText()
     }
 
+    @Override
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
