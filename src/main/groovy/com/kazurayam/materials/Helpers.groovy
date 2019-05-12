@@ -6,6 +6,7 @@ import static java.nio.file.StandardCopyOption.*
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.font.FontRenderContext
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
@@ -293,8 +294,8 @@ final class Helpers {
         // create the FontRenderContext object which helps us to measure the text
         FontRenderContext frc = new FontRenderContext(
             null /*AffinTransform*/,
-            true /*isAntiAliased*/,
-            true /*useFractionalMetris*/)
+            RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT /*aaHint*/,
+            RenderingHints.VALUE_FRACTIONALMETRICS_DEFAULT /*fmHint*/)
         
         // get the height and widht of the text
         Rectangle2D bounds = font.getStringBounds(text, frc)

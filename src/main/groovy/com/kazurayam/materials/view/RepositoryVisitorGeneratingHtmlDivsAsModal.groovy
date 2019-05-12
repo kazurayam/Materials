@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.imagedifference.ComparisonResult
@@ -270,7 +269,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 * but, remember, InvokeMethodName can also be resolveMaterialPath, and in that case
                 * there would not be URL property.
                 */
-                if (prl.getUrl() != null) {
+                if (prl != null && prl.getUrl() != null) {
                     return prl.getUrl().toExternalForm()
                 } else {
                     return null

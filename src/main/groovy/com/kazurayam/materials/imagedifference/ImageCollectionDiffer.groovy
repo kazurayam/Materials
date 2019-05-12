@@ -9,6 +9,7 @@ import javax.imageio.ImageIO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
@@ -106,7 +107,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                                         materialPairs.getActualTSuiteResult())
             
             // resolve the criteria percentage for this Material
-            if (decorated.hasExpected() && decorated.hasActual()) {
+            if (decorated.hasExpected() && decorated.hasActual() &&
+                decorated.getExpected().getFileType() == FileType.PNG &&
+                decorated.getActual().getFileType() == FileType.PNG) {
                 Material expected = decorated.getExpected()
                 TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
@@ -153,7 +156,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                                         materialPairs.getExpectedTSuiteResult(),
                                         materialPairs.getActualTSuiteResult())
             
-            if (decorated.hasExpected() && decorated.hasActual()) {
+            if (decorated.hasExpected() && decorated.hasActual() &&
+                decorated.getExpected().getFileType() == FileType.PNG &&
+                decorated.getActual().getFileType() == FileType.PNG) {
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
                 ComparisonResult evalResult = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
                 // logging etc
@@ -232,14 +237,20 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         if (expectedMaterial.fileExists()) {
             expectedBI = ImageIO.read(expectedMaterial.getPath().toFile())
         } else {
+            // generate a marker image and save it
             expectedBI = Helpers.convertTextToImage("file ${expectedMaterial.getPath()} is not found")
+            Files.createDirectories(expectedMaterial.getPath().getParent())
+            ImageIO.write(expectedBI, "PNG", expectedMaterial.getPath().toFile())
         }
         
         BufferedImage actualBI
         if (actualMaterial.fileExists()) {
             actualBI = ImageIO.read(actualMaterial.getPath().toFile())
         } else {
+            // generate a marker image and save it
             actualBI = Helpers.convertTextToImage("file ${actualMaterial.getPath()} is not found")
+            Files.createDirectories(actualMaterial.getPath().getParent())
+            ImageIO.write(actualBI, "PNG", actualMaterial.getPath().toFile())
         }
         
         // create ImageDifference of the 2 given images
