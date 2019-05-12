@@ -13,7 +13,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.IndexerFactory
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialPair
+import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
@@ -611,17 +611,18 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
      * 4. please note that we do not check the profile name which was applied to each Test Suite run. also we do
      *    not check the browser type used to each Test Suite run. 
-     * 5. Scan the 2 directories selected and create a List of Material objects. 2 files which have the same path
-     *    under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
+     * 5. Scan the 2 directories selected and create a List of Material objects. 
+     *    5.1 Two files which have the same path under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
+     *    5.2 The orphan file found in the ActualTSuiteResult will be silently ignored.
+     *    5.3 The orphan file found in the ExpectedTSuiteResult will also be silently ignored.
      * 6. A List&lt;MaterialPair&gt; is created, fulfilled and returned as the result
      *
      * @return List<MaterialPair>
      */
     @Override
-    List<MaterialPair> createMaterialPairs(TSuiteName tSuiteName) {    
+    MaterialPairs createMaterialPairs(TSuiteName tSuiteName) {    
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         
-        List<MaterialPair> result = new ArrayList<MaterialPair>()
         
         // before sorting, create copy of the list which is unmodifiable
         List<TSuiteResult> tSuiteResults = new ArrayList<>(repoRoot_.getTSuiteResults(tSuiteName))
@@ -631,7 +632,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             logger_.debug("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} < 2")
             return result
         }
-        
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
         Collections.sort(tSuiteResults, Comparator.reverseOrder())
 
@@ -639,22 +639,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteResult actualTSR   = tSuiteResults[0]
         TSuiteResult expectedTSR = tSuiteResults[1]
 
-        // create the instance of List<MaterialPairs>
-        List<Material> expMaterials = expectedTSR.getMaterialList()
-        List<Material> actMaterials = actualTSR.getMaterialList()
-        for (Material expMate : expMaterials) {
-            Path expPath = expMate.getPathRelativeToTSuiteTimestamp()
-            for (Material actMate : actMaterials) {
-                Path actPath = actMate.getPathRelativeToTSuiteTimestamp()
-                // create a MateialPair object and add it to the result
-                logger_.debug("#createMaterialPairs expPath=${expPath}")
-                logger_.debug("#createMaterialPairs actPath=${actPath}")
-                if (expPath == actPath) {
-                    result.add(MaterialPairImpl.newInstance().setExpected(expMate).setActual(actMate))
-                }
-            }
+        // the result to be returned
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
+        
+        // fill in entries into the MaterialPairs object
+        for (Material expectedMaterial : expectedTSR.getMaterialList()) {
+            mps.putExpectedMaterial(expectedMaterial)
         }
-        return Collections.unmodifiableList(result)
+        for (Material actualMaterial : actualTSR.getMaterialList()) {
+            mps.putActualMaterial(actualMaterial)
+        }
+        return mps
     }
 
     // -------------------- House cleaning -----------------------------------

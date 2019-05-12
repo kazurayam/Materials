@@ -1,10 +1,13 @@
 package com.kazurayam.materials
 
+import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Pattern
+
+import javax.imageio.ImageIO
 
 import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
@@ -146,7 +149,7 @@ class HelpersSpec extends Specification {
             long time1 = stopWatch1.getTime()
         then:
             count > 0
-            time1 < 2000
+            time1 < 4000
         when:
             StopWatch stopWatch2 = new StopWatch()
             stopWatch2.start()
@@ -198,6 +201,22 @@ class HelpersSpec extends Specification {
         true
     }
 
+
+    def test_convertTextToImage() {
+        when:
+        Path targetDir = workdir_.resolve('test_convertTextToImage')
+        Files.createDirectories(targetDir)
+        Path out = targetDir.resolve("out.png")
+        String text = Paths.get('.').toAbsolutePath().toString() + " is found "
+        BufferedImage image = Helpers.convertTextToImage(text)
+        then:
+        image != null
+        when:
+        ImageIO.write(image, "PNG", out.toFile())
+        then:
+        out.toFile().exists()
+        out.toFile().length() > 0
+    }
 
 
     // helper methods

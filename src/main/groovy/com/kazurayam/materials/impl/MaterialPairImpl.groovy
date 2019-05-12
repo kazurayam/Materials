@@ -1,5 +1,9 @@
 package com.kazurayam.materials.impl
 
+import java.awt.image.BufferedImage
+
+import javax.imageio.ImageIO
+
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 
@@ -8,10 +12,24 @@ final class MaterialPairImpl implements MaterialPair {
     private Material left_
     private Material right_
 
-    private MaterialPairImpl() {}
+    private MaterialPairImpl() {
+        left_ = null
+        right_ = null
+    }
 
     public static MaterialPair() {
         return new MaterialPairImpl()
+    }
+    
+    MaterialPair clone() {
+        MaterialPair mp = new MaterialPairImpl()
+        if (this.hasLeft()) {
+            mp.setLeft(this.getLeft())
+        }
+        if (this.hasRight()) {
+            mp.setRight(this.getRight())
+        }
+        return mp
     }
     
     MaterialPair setLeft(Material left) {
@@ -33,6 +51,26 @@ final class MaterialPairImpl implements MaterialPair {
     MaterialPair setActual(Material actual) {
         return this.setRight(actual)
     }
+    
+    @Override
+    boolean hasLeft() {
+        return this.getLeft() != null
+    }
+    
+    @Override
+    boolean hasExpected() {
+        return this.hasLeft()
+    }
+    
+    @Override
+    boolean hasRight() {
+        return this.getRight() != null
+    }
+    
+    @Override
+    boolean hasActual() {
+        return this.hasRight()
+    }
 
     Material getLeft() {
         return left_
@@ -49,21 +87,39 @@ final class MaterialPairImpl implements MaterialPair {
     Material getActual() {
         return this.getRight()
     }
+    
+    @Override
+    BufferedImage getExpectedBufferedImage() {
+        return ImageIO.read(this.getExpected().getPath().toFile())
+    }
 
+    @Override
+    BufferedImage getActualBufferedImage() {
+        return ImageIO.read(this.getActual().getPath().toFile())
+    }
     // ---------------- overriding Object properties --------------------------
     @Override
     String toString() {
         return this.toJsonText()
     }
 
+    @Override
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
         sb.append('"left": ')
-        sb.append(left_.toJsonText())
+        if (left_ != null) {
+            sb.append(left_.toJsonText())
+        } else {
+            sb.append('null')
+        }
         sb.append(',')
         sb.append('"right": ')
-        sb.append(right_.toJsonText())
+        if (right_ != null) {
+            sb.append(right_.toJsonText())
+        } else {
+            sb.append('null')
+        }
         sb.append('')
         sb.append('}')
         return sb.toString()

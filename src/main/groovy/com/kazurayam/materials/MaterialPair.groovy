@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import java.awt.image.BufferedImage
+
 interface MaterialPair extends Comparable<MaterialPair> {
 
     MaterialPair setLeft(Material left)
@@ -10,6 +12,14 @@ interface MaterialPair extends Comparable<MaterialPair> {
 
     MaterialPair setActual(Material actual)
 
+    boolean hasLeft()
+    
+    boolean hasExpected()
+    
+    boolean hasRight()
+    
+    boolean hasActual()
+    
     Material getLeft()
 
     Material getExpected()
@@ -18,4 +28,11 @@ interface MaterialPair extends Comparable<MaterialPair> {
 
     Material getActual()
 
+    BufferedImage getExpectedBufferedImage()
+    
+    BufferedImage getActualBufferedImage()
+    
+    MaterialPair clone()
+
+    String toJsonText()
 }

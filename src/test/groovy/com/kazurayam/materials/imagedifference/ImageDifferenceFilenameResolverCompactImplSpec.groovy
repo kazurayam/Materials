@@ -20,7 +20,7 @@ import com.kazurayam.materials.TSuiteTimestamp
 
 import spock.lang.Specification
 
-class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
+class ImageDifferenceFilenameResolverCompactImplSpec extends Specification {
     
     private static Path fixtureDir
     private static Path specOutputDir
@@ -29,7 +29,7 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         Path projectDir = Paths.get(".")
         fixtureDir = projectDir.resolve("src/test/fixture")
         Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
-        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDifferenceFilenameResolverDefaultImplSpec.class))
+        specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(ImageDifferenceFilenameResolverCompactImplSpec.class))
     }
     def setup() {}
     def cleanup() {}
@@ -76,17 +76,17 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         when:
         // verify the case of criteriaPercent is less than the actual diff magnitude -> file name should end with 'FAILED.png'
         double criteriaPercentF = 5.0
-        ImageDifferenceFilenameResolverDefaultImpl instanceF = new ImageDifferenceFilenameResolverDefaultImpl()
+        ImageDifferenceFilenameResolverCompactImpl instanceF = new ImageDifferenceFilenameResolverCompactImpl()
         String fileNameF = instanceF.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentF)
         then:
-        fileNameF == "CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72)FAILED.png"
+        fileNameF == "CURA_Homepage(6.72)FAILED.png"
         when:
         // verify the case of criteriaPercent is greater than the actual diff magnitude -> file name should end with '.png'
         Double criteriaPercentP = 10.0
-        ImageDifferenceFilenameResolverDefaultImpl instanceP = new ImageDifferenceFilenameResolverDefaultImpl()
+        ImageDifferenceFilenameResolverCompactImpl instanceP = new ImageDifferenceFilenameResolverCompactImpl()
         String fileNameP = instanceP.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentP)
         then:
-        fileNameP == "CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72).png"
+        fileNameP == "CURA_Homepage(6.72).png"
         
     }
     

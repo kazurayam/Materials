@@ -299,6 +299,7 @@ class MaterialSpec extends Specification {
         path.toString().contains(
             'main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
         !path.toString().contains('..')   // should be normalized
+        mate.fileExists()
     }
 
     def testGetPath_Excel() {
@@ -311,6 +312,7 @@ class MaterialSpec extends Specification {
         for (Material mate : materials) {
             logger_.debug("#testGetPath_Excel mate.getPath()=${mate.getPath()}")
             assert !mate.getPath().contains('..')
+            mate.fileExists()
         }
         then:
         true
@@ -326,6 +328,20 @@ class MaterialSpec extends Specification {
         png != null
         png.getPath().toString().contains(
                 'main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
+        png.fileExists()
+    }
+    
+    /**
+     * It is possible to instanciate a Material object which does NOT have a file on disk
+     * 
+     * @return
+     */
+    def test_fileExists_falsy() {
+        when:
+        Material mate = new MaterialImpl(tcr_, '', new URL('https://demoaut.katalon.com/'),
+                                Suffix.NULL, FileType.PNG)
+        then:
+        ! mate.fileExists()
     }
 
     def testGetPathRelativeToTSuiteTimestamp() {
