@@ -5,17 +5,22 @@ import java.nio.file.Path
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialPairs
+import com.kazurayam.materials.TSuiteResult
 
 class MaterialPairsImpl implements MaterialPairs {
 
+    private TSuiteResult expectedTSR
+    private TSuiteResult actualTSR
     private Map<Path, MaterialPair> map
     
-    private MaterialPairsImpl() {
-        map = new HashMap<Path, MaterialPair>()
+    private MaterialPairsImpl(TSuiteResult expected, TSuiteResult actual) {
+        this.expectedTSR = expected
+        this.actualTSR = actual 
+        this.map = new HashMap<Path, MaterialPair>()
     }
     
-    public static MaterialPairs() {
-        return new MaterialPairsImpl()
+    public static MaterialPairs(TSuiteResult expected, TSuiteResult actual) {
+        return new MaterialPairsImpl(expected, actual)
     }
 
     @Override
@@ -82,5 +87,15 @@ class MaterialPairsImpl implements MaterialPairs {
     @Override
     public int size() {
         return map.size()
+    }
+    
+    @Override
+    public TSuiteResult getExpectedTSuiteResult() {
+        return this.expectedTSR
+    }
+    
+    @Override
+    public TSuiteResult getActualTSuiteResult() {
+        return this.actualTSR
     }
 }

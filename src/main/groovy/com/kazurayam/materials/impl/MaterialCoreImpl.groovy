@@ -1,7 +1,7 @@
 package com.kazurayam.materials.impl
 
+import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -94,6 +94,11 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
     @Override
     Path getPath() {
         return this.path_
+    }
+    
+    @Override
+    boolean fileExists() {
+        return Files.exists(this.getPath())
     }
     
     @Override

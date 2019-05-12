@@ -94,21 +94,23 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
+            //
+            MaterialPair decorated = decorateMaterialPair(pair, materialPairs)
             // resolve the criteria percentage for this Material
-            if (pair.hasExpected() && pair.hasActual()) {
-                Material expected = pair.getExpected()
+            if (decorated.hasExpected() && decorated.hasActual()) {
+                Material expected = decorated.getExpected()
                 TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
                 double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
                 // compare 2 images and create a ComparisonResult object
-                ComparisonResult cr = this.startMaterialPair(tCaseName, pair, criteriaPercentage)
+                ComparisonResult cr = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
                 // and put the ComparisonResult into buffer
                 this.endMaterialPair(cr)
             }
         }
         // 
         this.endImageCollection(tCaseName)
-        
+        //
         return bundle_.allOfImagesAreSimilar()
     }
     
@@ -136,15 +138,16 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         this.startImageCollection(tCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
-            if (pair.hasExpected() && pair.hasActual()) {
+            MaterialPair decorated = decorateMaterialPair(pair, materialPairs)
+            if (decorated.hasExpected() && decorated.hasActual()) {
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
-                ComparisonResult evalResult = this.startMaterialPair(tCaseName, pair, criteriaPercentage)
+                ComparisonResult evalResult = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
                 // logging etc
                 this.endMaterialPair(evalResult)
             }
         }
         this.endImageCollection(tCaseName)
-        
+        //
         return bundle_.allOfImagesAreSimilar()
     }
     
@@ -210,7 +213,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
 
         Material expectedMaterial = materialPair.getExpected()
         Material actualMaterial = materialPair.getActual()
-
+        
         // create ImageDifference of the 2 given images
         ImageDifference diff = new ImageDifference(
                                     ImageIO.read(expectedMaterial.getPath().toFile()),
@@ -247,6 +250,18 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         }
 
         return evalResult
+    }
+    
+    /**
+     * Check source if it lacks the Expected Material or it lacks the Actual Material.
+     * Fill the lack with a Material object which returns fileExists()==false
+     * 
+     * @param source
+     * @return
+     */
+    private MaterialPair decorateMaterialPair(MaterialPair source, MaterialPairs context) {
+        // TODO
+        return source
     }
 
 }

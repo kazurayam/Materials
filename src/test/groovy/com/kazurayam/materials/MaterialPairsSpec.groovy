@@ -22,6 +22,8 @@ class MaterialPairsSpec extends Specification {
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
+    private TSuiteResult expectedTsr_
+    private TSuiteResult actualTsr_
     private Material expectedMaterial_
     private Material actualMaterial_
     
@@ -40,13 +42,14 @@ class MaterialPairsSpec extends Specification {
     }
     def setup() {
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130419'))
-        TCaseResult expectedTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
+        //
+        expectedTsr_ = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130419'))
+        TCaseResult expectedTcr = expectedTsr_.getTCaseResult(new TCaseName('main.TC1'))
         expectedMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         //
-        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130604'))
-        TCaseResult actualTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
-        actualMaterial_   = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+        actualTsr_ = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130604'))
+        TCaseResult actualTcr = actualTsr_.getTCaseResult(new TCaseName('main.TC1'))
+        actualMaterial_   = actualTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -55,7 +58,7 @@ class MaterialPairsSpec extends Specification {
     def test_put() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         when:
         MaterialPair pair = mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         then:
@@ -65,7 +68,7 @@ class MaterialPairsSpec extends Specification {
     def test_get() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         when:
         MaterialPair pair = mps.get(actualMaterial_.getPathRelativeToTSuiteTimestamp())
@@ -76,7 +79,7 @@ class MaterialPairsSpec extends Specification {
     def test_getList() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         when:
         List<MaterialPair> list = mps.getList()
@@ -88,7 +91,7 @@ class MaterialPairsSpec extends Specification {
     def test_keySet() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         when:
         Set<Path> ks = mps.keySet()
@@ -99,7 +102,7 @@ class MaterialPairsSpec extends Specification {
     def test_containsKey() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         expect:
         mps.containsKey(actualMaterial_.getPathRelativeToTSuiteTimestamp())
@@ -108,7 +111,7 @@ class MaterialPairsSpec extends Specification {
     def test_size() {
         setup:
         MaterialPair mp = MaterialPairImpl.newInstance().setLeft(expectedMaterial_).setRight(actualMaterial_)
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         mps.put(actualMaterial_.getPathRelativeToTSuiteTimestamp(), mp)
         expect:
         mps.size() == 1
@@ -116,7 +119,7 @@ class MaterialPairsSpec extends Specification {
     
     def test_setExpectedMaterial() {
         setup:
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         when:
         mps.putExpectedMaterial(expectedMaterial_)
         then:
@@ -130,7 +133,7 @@ class MaterialPairsSpec extends Specification {
     
     def test_putActualMaterial() {
         setup:
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, actualTsr_)
         when:
         mps.putActualMaterial(actualMaterial_)
         then:

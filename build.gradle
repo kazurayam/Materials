@@ -89,9 +89,8 @@ test {
 }
 
 task pinpoint(type: Test) {
-    include '**/ComparisonResultBundleSpec.class'
-    include '**/ImageCollectionDifferSpec.class'
-    include '**/BaseIndexerSpec.class'
+    include '**/MaterialRepositoryImplSpec.class'
+    include '**/MaterialPairsSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

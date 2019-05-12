@@ -623,8 +623,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     MaterialPairs createMaterialPairs(TSuiteName tSuiteName) {    
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         
-        // the result to be returned
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs()
         
         // before sorting, create copy of the list which is unmodifiable
         List<TSuiteResult> tSuiteResults = new ArrayList<>(repoRoot_.getTSuiteResults(tSuiteName))
@@ -641,6 +639,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteResult actualTSR   = tSuiteResults[0]
         TSuiteResult expectedTSR = tSuiteResults[1]
 
+        // the result to be returned
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
+        
         // fill in entries into the MaterialPairs object
         for (Material expectedMaterial : expectedTSR.getMaterialList()) {
             mps.putExpectedMaterial(expectedMaterial)

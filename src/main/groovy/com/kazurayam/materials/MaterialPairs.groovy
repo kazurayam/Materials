@@ -14,6 +14,10 @@ interface MaterialPairs {
     
     List<MaterialPair> getList()
     
+    TSuiteResult getExpectedTSuiteResult()
+    
+    TSuiteResult getActualTSuiteResult()
+    
     Set<Path> keySet()
     
     boolean containsKey(Path pathRelativeToTSuiteTimestamp)

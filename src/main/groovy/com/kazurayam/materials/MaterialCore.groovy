@@ -11,5 +11,5 @@ interface MaterialCore {
     String getHrefRelativeToRepositoryRoot()
     String getDescription()
     void setDescription(String description)
-    
+    boolean fileExists()
 }
