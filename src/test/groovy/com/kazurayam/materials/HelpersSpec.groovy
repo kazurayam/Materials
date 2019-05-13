@@ -13,6 +13,7 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 /**
@@ -217,7 +218,52 @@ class HelpersSpec extends Specification {
         out.toFile().exists()
         out.toFile().length() > 0
     }
+    
+    @IgnoreRest
+    def test_convertMultiLineTextToImage() {
+        when:
+        Path targetDir = workdir_.resolve('test_convertMultiLineTextToImage')
+        Files.createDirectories(targetDir)
+        Path out = targetDir.resolve("out.png")
+        String text = """
+File not found:
+C:
+└─Users
+  └─qcq0264
+    └─eclipse-workspace
+      └─Materials
+        └─src
+          └─main
+            └─groovy
+              └─com
+                └─kazurayam
+                  └─materials
+                    └─Helpers.groovy
 
+"""
+        BufferedImage image = Helpers.convertMultiLineTextToImage(text)
+        then:
+        image != null
+        when:
+        ImageIO.write(image, "PNG", out.toFile())
+        then:
+        out.toFile().exists()
+        out.toFile().length() > 0
+    }
+
+    def test_toTreeFormat() {
+        when:
+        Path p = Paths.get("C:\\Users\\myname\\eclipse-workspace\\Materials\\src\\main\\groovy\\com\\kazurayam\\materials\\Helpers.groovy")
+        List<String> tree = Helpers.toTreeFormat(p)
+        println "${p.toString()}"
+        for (String node : tree) {
+            println "${node}"
+        }
+        then:
+        tree.size() == 12
+        tree.get(0) == 'C:\\'
+        tree.get(11).endsWith('Helpers.groovy')
+    }
 
     // helper methods
     private boolean someHelper() {

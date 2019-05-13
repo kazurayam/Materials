@@ -237,8 +237,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         if (expectedMaterial.fileExists()) {
             expectedBI = ImageIO.read(expectedMaterial.getPath().toFile())
         } else {
-            // generate a marker image and save it
-            expectedBI = Helpers.convertTextToImage("file ${expectedMaterial.getPath()} is not found")
+            // generate a marker image which shows "File not found" and save it
+            expectedBI = makeMarkerImage(expectedMaterial.getPath())
             Files.createDirectories(expectedMaterial.getPath().getParent())
             ImageIO.write(expectedBI, "PNG", expectedMaterial.getPath().toFile())
         }
@@ -247,8 +247,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         if (actualMaterial.fileExists()) {
             actualBI = ImageIO.read(actualMaterial.getPath().toFile())
         } else {
-            // generate a marker image and save it
-            actualBI = Helpers.convertTextToImage("file ${actualMaterial.getPath()} is not found")
+            // generate a marker image which shows "File not found" and save it
+            actualBI = makeMarkerImage(actualMaterial.getPath())
             Files.createDirectories(actualMaterial.getPath().getParent())
             ImageIO.write(actualBI, "PNG", actualMaterial.getPath().toFile())
         }
@@ -287,6 +287,27 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         }
 
         return evalResult
+    }
+    
+    /**
+     * make a Marker image which shows 
+     * """File not found:
+     * C:
+     * └─Users
+     *   └─qcq0264
+     *     └─eclipse-workspace
+     *       ...
+     * """
+     * @param pathNotFound
+     * @return
+     */
+    static BufferedImage makeMarkerImage(Path pathNotFound) {
+        List<String> lines = new ArrayList<String>()
+        lines.add("File not found:")
+        for (String pathElement: Helpers.toTreeFormat(pathNotFound)) {
+            lines.add(pathElement)
+        }
+        return Helpers.convertMultiLineTextToImage(lines)
     }
     
     /**

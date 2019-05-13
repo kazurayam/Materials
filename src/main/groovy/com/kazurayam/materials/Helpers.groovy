@@ -291,6 +291,10 @@ final class Helpers {
         // create the font I wish to use
         Font font = new Font("Arial", Font.PLAIN, 20)
         
+        // background-color
+        Color LIGHT_YELLOW = new Color(255,255,153)
+        Color GOLD = new Color(255,204,51)
+        
         // create the FontRenderContext object which helps us to measure the text
         FontRenderContext frc = new FontRenderContext(
             null /*AffinTransform*/,
@@ -307,10 +311,6 @@ final class Helpers {
         
         // calling createGraphics() to get the Graphics2D
         Graphics2D g = image.createGraphics()
-        
-        // set color and other parameters
-        Color LIGHT_YELLOW = new Color(255,255,153)
-        Color GOLD = new Color(255,204,51)
         g.setColor(GOLD)
         g.fillRect(0, 0, w, h)
         g.setColor(Color.BLACK)
@@ -322,6 +322,132 @@ final class Helpers {
         g.dispose()
         
         return image
+    }
+    
+    /**
+     * Generate a BufferedImage that shows a long path of a file in tree format so that the image has width as small as possible
+     * 
+     * @param multiLineText e.g, 
+     * """
+     * File not found:
+     * C:
+     * └─Users
+     *   └─qcq0264
+     *     └─eclipse-workspace
+     *       └─Materials
+     *         └─src
+     *           └─main
+     *             └─groovy
+     *               └─com
+     *                 └─kazurayam
+     *                   └─materials
+     *                     └─Helpers.groovy
+     * """
+     * @return a BufferedImage which shows the above text
+     */
+    static BufferedImage convertMultiLineTextToImage(String multiLineText) {
+        Objects.requireNonNull(multiLineText, "multiLineText must not be null")
+        BufferedReader br = new BufferedReader(new StringReader(multiLineText))
+        List<String> lines = new ArrayList<String>()
+        String line
+        while ((line = br.readLine()) != null) {
+            lines.add(line)
+        }
+        br.close()
+        return convertMultiLineTextToImage(lines)
+    }
+    
+    static BufferedImage convertMultiLineTextToImage(List<String> lines) {
+        Objects.requireNonNull(lines, "lines must not be null")
+        //println "lines: ${lines}"
+        int MIN_IMAGE_WIDTH = 800
+        int MIN_IMAGE_HEIGHT = 200
+        // create the font I wish to use
+        Font font = new Font("Courier", Font.PLAIN, 20)
+        // create the FontRenderContext object which helps us to measure the text
+        FontRenderContext frc = new FontRenderContext(
+            null /*AffinTransform*/,
+            RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT /*aaHint*/,
+            RenderingHints.VALUE_FRACTIONALMETRICS_DEFAULT /*fmHint*/)
+        // find the longest line to resolve the width of image
+        int imageWidth = 0
+        for (String line : lines) {
+            Rectangle2D bounds = font.getStringBounds(line, frc)
+            int w = (int)bounds.getWidth()
+            imageWidth = (w > imageWidth) ? w : imageWidth
+        }
+        imageWidth = (imageWidth > MIN_IMAGE_WIDTH) ? imageWidth : MIN_IMAGE_WIDTH
+        // accumulate the line height of the lines to resolve the height of image
+        int lineHeight = 0
+        int imageHeight = 0
+        for (String line : lines) {
+            Rectangle2D bounds = font.getStringBounds(line, frc)
+            int h = (int)bounds.getHeight() + 3
+            imageHeight += h
+            lineHeight = h
+        }
+        imageHeight = (imageHeight > MIN_IMAGE_HEIGHT) ? imageHeight : MIN_IMAGE_HEIGHT
+        // create a BufferedImage object
+        Color GOLD = new Color(255,204,51)
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
+        Graphics2D g = image.createGraphics()
+        int c = 1
+        for (String line : lines) {
+            //println "drawing ${line}"
+            Rectangle2D bounds = font.getStringBounds(line, frc)
+            g.setColor(GOLD)
+            g.fillRect(0, lineHeight * (c - 1), imageWidth, lineHeight)
+            g.setColor(Color.BLACK)
+            g.setFont(font)
+            g.drawString(line, (float)bounds.getX(), (float) -(bounds.getY() * c))
+            c += 1
+        }
+        g.dispose()
+        
+        return image
+    }
+    
+    /**
+     * Given a long Path, return an array of String which shows the give path in tree format.
+     * 
+     * @param Path e.g, "C:\Users\myname\eclipse-workspace\Materials\src\main\groovy\com\kazurayam\materials\Helpers.groovy"
+     * @return List<String>; indented with 2 white space, with branch mark └─.  e.g,
+     * """
+     * C:
+     * └─Users
+     *   └─qcq0264
+     *     └─eclipse-workspace
+     *       └─Materials
+     *         └─src
+     *           └─main
+     *             └─groovy
+     *               └─com
+     *                 └─kazurayam
+     *                   └─materials
+     *                     └─Helpers.groovy
+     * """
+     */
+    static List<String> toTreeFormat(Path path) {
+        String BRANCH = '└─'
+        String INDENT = '  '
+        List<String> list = new ArrayList<String>()
+        if (path.getRoot() != null) {
+            list.add(path.getRoot().toString())
+        }
+        int depth = 1
+        Iterator iter = path.iterator()
+        while (iter.hasNext()) {
+            Path e = iter.next()
+            StringBuilder sb = new StringBuilder()
+            if (depth > 0) {
+                sb.append(INDENT * depth)
+                sb.append(BRANCH)
+            }
+            sb.append(e.toString())
+            list.add(sb.toString())
+            depth += 1
+        }
+        return list
     }
 
 }
