@@ -3,6 +3,9 @@ package com.kazurayam.materials.imagedifference
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.awt.image.BufferedImage
+
+import javax.imageio.ImageIO
 
 import org.apache.commons.io.FileUtils
 
@@ -23,6 +26,7 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class ImageCollectionDifferSpec extends Specification {
@@ -335,5 +339,22 @@ class ImageCollectionDifferSpec extends Specification {
         Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
         diffImage.getPath().toString().endsWith('(100.00)FAILED.png')
+    }
+    
+    @IgnoreRest
+    def test_makeMarkerImage() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("test_makeMarkerImage")
+        Files.createDirectories(caseOutputDir)
+        Path out = caseOutputDir.resolve("out.png")
+        Path dir = Paths.get(".").toAbsolutePath()
+        Path file = dir.resolve("fake.png")
+        when:
+        BufferedImage bi = ImageCollectionDiffer.makeMarkerImage(file)
+        assert bi != null
+        ImageIO.write(bi, "PNG", out.toFile())
+        then:
+        Files.exists(out)
+        out.toFile().length() > 0
     }
 }
