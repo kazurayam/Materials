@@ -113,7 +113,8 @@ final class RepositoryFileScanner {
     void scan() {
         Files.walkFileTree(
                 repoRoot_.getBaseDir(),
-                EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
+                new HashSet<>(),
+                Integer.MAX_VALUE,
                 new RepositoryFileVisitor(repoRoot_)
         )
         //
