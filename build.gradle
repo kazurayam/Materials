@@ -18,7 +18,8 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.70.2'
+version  = '0.70.4'
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -87,7 +88,7 @@ test {
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
-test.dependsOn(clean)
+
 
 task pinpoint(type: Test) {
     //include '**/HelpersSpec.class'

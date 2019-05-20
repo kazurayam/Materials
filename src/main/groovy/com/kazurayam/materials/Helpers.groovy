@@ -11,6 +11,7 @@ import java.awt.font.FontRenderContext
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.nio.file.FileAlreadyExistsException
+import java.nio.file.FileSystemLoopException
 import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -85,7 +86,8 @@ final class Helpers {
             return 0
         }
         int count = 0
-        Files.walkFileTree(directory, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+        Files.walkFileTree(directory,
+            new HashSet<>(),
             Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
                 @Override
@@ -118,6 +120,19 @@ final class Helpers {
                     } else {
                         throw new IOException()
                     }
+                }
+                @Override
+                FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    if (exc instanceof FileSystemLoopException) {
+                        //logger_.warn("circular link was detected: " + file)
+                        System.err.println("[RepositoryFileVisitor#visitFileFailed] circular link was detected: "
+                            + file + ", which will be ignored")
+                    } else {
+                        //logger_.warn("unable to process file: " + file)
+                        System.err.println("[RepositoryFileVisitor#visitFileFailed] unable to process file: "
+                            + file + ", which will be ignored")
+                    }
+                    return CONTINUE
                 }
             }
         )
@@ -205,7 +220,8 @@ final class Helpers {
         // number of files copied
         int count = 0
         
-        Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+        Files.walkFileTree(source, 
+            new HashSet<>(),
             Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
                 @Override
@@ -233,6 +249,19 @@ final class Helpers {
                         logger_.debug("#copyDirectory copied ${file} to ${targetFile}")
                         Files.copy(file, targetFile, REPLACE_EXISTING, COPY_ATTRIBUTES)
                         count += 1
+                    }
+                    return CONTINUE
+                }
+                @Override
+                FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    if (exc instanceof FileSystemLoopException) {
+                        //logger_.warn("circular link was detected: " + file)
+                        System.err.println("[RepositoryFileVisitor#visitFileFailed] circular link was detected: "
+                            + file + ", which will be ignored")
+                    } else {
+                        //logger_.warn("unable to process file: " + file)
+                        System.err.println("[RepositoryFileVisitor#visitFileFailed] unable to process file: "
+                            + file + ", which will be ignored")
                     }
                     return CONTINUE
                 }
