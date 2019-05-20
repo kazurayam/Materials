@@ -20,6 +20,8 @@ class MaterialPairsImpl implements MaterialPairs {
     }
     
     public static MaterialPairs(TSuiteResult expected, TSuiteResult actual) {
+        Objects.requireNonNull(expected, "expected TSuiteResult must not be null")
+        Objects.requireNonNull(actual, "actual TSuiteResult must not be null")
         return new MaterialPairsImpl(expected, actual)
     }
 
