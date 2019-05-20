@@ -628,10 +628,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         List<TSuiteResult> tSuiteResults = new ArrayList<>(repoRoot_.getTSuiteResults(tSuiteName))
         
         // we expect 2 or more TSuiteResult objects with the tSuiteName
-        if (tSuiteResults.size() < 2) {
-            logger_.debug("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} < 2")
-            return tSuiteResults
+        if (tSuiteResults.size() == 0) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 0")
+            throw new IllegalStateException("No sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}.")
+        } else if (tSuiteResults.size()== 1) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 1")
+            throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}." 
+                + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
+                + " Don\'t get surprized. Just execute the chronos test suite again."
+                + " Possibly Chronos mode will work fine next time.")
         }
+        
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
         Collections.sort(tSuiteResults, Comparator.reverseOrder())
 

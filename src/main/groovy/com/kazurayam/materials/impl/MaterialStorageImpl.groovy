@@ -194,9 +194,13 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
         intoMR.putCurrentTestSuite(tSuiteResultId)
+        
         if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
-            throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
+            //throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
+            System.err.println("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
+            return 0
         }
+        
         Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         boolean skipIfIdentical = true
