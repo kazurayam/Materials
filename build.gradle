@@ -18,7 +18,8 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.70.3'
+version  = '0.70.4'
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
