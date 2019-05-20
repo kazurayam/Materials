@@ -630,7 +630,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // we expect 2 or more TSuiteResult objects with the tSuiteName
         if (tSuiteResults.size() < 2) {
             logger_.debug("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} < 2")
-            return result
+            return tSuiteResults
         }
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
         Collections.sort(tSuiteResults, Comparator.reverseOrder())

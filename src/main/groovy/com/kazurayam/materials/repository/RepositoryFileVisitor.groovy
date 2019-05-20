@@ -2,6 +2,7 @@ package com.kazurayam.materials.repository
 
 import static java.nio.file.FileVisitResult.*
 
+import java.nio.file.FileSystemLoopException
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
@@ -182,13 +183,26 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
         return CONTINUE
     }
 
+
     /**
      * Invoked for a file that could not be visited.
-     *
-     @Override
-      FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {}
+     * 
+     * See https://github.com/kazurayam/Materials/issues/2 why we deal with
+     * FileSystemLoopException explicitly.
      */
-
+    @Override
+    FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        if (exc instanceof FileSystemLoopException) {
+            //logger_.warn("circular link was detected: " + file)
+            System.err.println("[RepositoryFileVisitor#visitFileFailed] circular link was detected: "
+                + file + ", which will be ignored")
+        } else {
+            //logger_.warn("unable to process file: " + file)
+            System.err.println("[RepositoryFileVisitor#visitFileFailed] unable to process file: "
+                + file + ", which will be ignored")
+        }
+        return CONTINUE
+    }
 
 
     // helpers
