@@ -87,7 +87,7 @@ test {
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
-test.dependsOn(clean)
+
 
 task pinpoint(type: Test) {
     //include '**/HelpersSpec.class'

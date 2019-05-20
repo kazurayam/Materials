@@ -341,7 +341,6 @@ class ImageCollectionDifferSpec extends Specification {
         diffImage.getPath().toString().endsWith('(100.00)FAILED.png')
     }
     
-    @IgnoreRest
     def test_makeMarkerImage() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeMarkerImage")

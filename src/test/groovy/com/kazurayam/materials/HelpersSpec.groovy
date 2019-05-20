@@ -219,7 +219,7 @@ class HelpersSpec extends Specification {
         out.toFile().length() > 0
     }
     
-    @IgnoreRest
+    
     def test_convertMultiLineTextToImage() {
         when:
         Path targetDir = workdir_.resolve('test_convertMultiLineTextToImage')
