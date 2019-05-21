@@ -73,9 +73,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         baseDir_ = baseDir
         reportsDir_ = reportsDir
         
-        // create the Materials directory and the Reports directory if not present
+        // create the Materials directory if not present
         Helpers.ensureDirs(baseDir_)
-        Helpers.ensureDirs(reportsDir_)
+        
+        // create the Reports directory if not present
+        //Helpers.ensureDirs(reportsDir_)
         
         // load data from the local disk
         this.scan()

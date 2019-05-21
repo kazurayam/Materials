@@ -192,20 +192,4 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
         }
     }
 
-    /*
-    String hrefToReport(Material mate) {
-        TSuiteResult tsr = mate.getParent().getParent()
-        if (tsr != null) {
-            StringBuilder sb = new StringBuilder()
-            sb.append('../Reports/')
-            sb.append(tsr.getId().getTSuiteName().getValue().replace('.', '/'))
-            sb.append('/')
-            sb.append(tsr.getId().getTSuiteTimestamp().format())
-            sb.append('/Report.html')
-            return sb.toString()
-        } else {
-            return null
-        }
-    }
-    */
 }

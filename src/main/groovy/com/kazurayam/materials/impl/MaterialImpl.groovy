@@ -266,7 +266,17 @@ class MaterialImpl implements Material, Comparable<Material> {
      *    - Material's relative path to the TCaseResult dir: 'screenshot.png'
      * then hrefToReport() should return
      *    '../Reports/main/TS1/20180805_081908/Report.html'
-     * here we assume the Reports directory is located sibling to the Materials directory.
+     * here we assume that the Materials directory and the Reports directory is 
+     * located under a single parent directory.
+     * 
+     * Howerver, if you locate the Materials directory on a network drive (or on a Newowrk File System)
+     * and you use the GUI mode of Katalon Studio,
+     * there is a case where the Materials directory and the Reports directory are isolated.
+     * In that case this getHrefToReport() returns null.
+     * 
+     * If you run Katalon Studio in Console Mode specifying -reportDir option, you can move
+     * the Reports directory to the sibling of the Materials directory. In this case this getHrefToReport()
+     * should return a valid path string.
      */
     @Override
     String getHrefToReport() {
@@ -283,9 +293,17 @@ class MaterialImpl implements Material, Comparable<Material> {
             Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
             // we need to relativise it; relative to the Materials dir
             Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
-            Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
-            return relativeHtmlPath.toString()
+            if (htmlPath.getRoot() == baseDir.getRoot()) {
+                Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
+                return relativeHtmlPath.toString()
+            } else {
+                logger_.info("[getHrefToReport] different root. htmlPath=${htmlPath} baseDir=${baseDir}")
+                System.err.println("[getHrefToReport] different root. htmlPath=${htmlPath} baseDir=${baseDir}")
+                return null
+            }
         } else {
+            logger_.warn("[getHrefToReport] reportsDir is null")
+            System.err.println("[getHrefToReport] reportsDir is null")
             return null
         }
     }

@@ -352,15 +352,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
     }
     
-    /**
-     * returns a URL string for the Report.html
-     *  
-     * href="../Reports/main.TS1/20190321_103759/Report.html"
-     *
-    def hrefToReport = { Material mate ->
-        return mate.hrefToReport()
-    }
-    */
 
     /*
      * implementing methods required by RepositoryVisitor

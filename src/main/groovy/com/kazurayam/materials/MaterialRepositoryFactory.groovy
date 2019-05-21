@@ -32,7 +32,7 @@ final class MaterialRepositoryFactory {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Objects.requireNonNull(reportsDir, "reportsDir must not be null")
         Helpers.ensureDirs(baseDir)
-        Helpers.ensureDirs(reportsDir)
+        //Helpers.ensureDirs(reportsDir)
         return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir, reportsDir)
     }
 
