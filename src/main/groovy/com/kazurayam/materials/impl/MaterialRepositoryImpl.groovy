@@ -21,6 +21,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -52,6 +53,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private Path pathResolutionLogBundleAt_
     private PathResolutionLogBundle pathResolutionLogBundle_
 
+    private VisualTestingLogger vtLogger_ = null
+    
     // ---------------------- constructors & initializer ----------------------
 
     /**
@@ -72,6 +75,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         baseDir_ = baseDir
         reportsDir_ = reportsDir
+        
+        vtLogger_ = new VisualTestingLoggerDefaultImpl()
         
         // create the Materials directory if not present
         Helpers.ensureDirs(baseDir_)
@@ -581,7 +586,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
 
 
     /**
@@ -595,6 +603,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         indexer.setReportsDir(reportsDir_)
         Path index = baseDir_.resolve('index.html')
         indexer.setOutput(index)
+        if (vtLogger_ != null) {
+            indexer.setVisualTestingLogger(vtLogger_)
+        }
         indexer.execute()
         return index
     }

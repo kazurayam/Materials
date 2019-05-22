@@ -10,6 +10,7 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
@@ -26,8 +27,12 @@ import groovy.xml.XmlUtil
 class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal.class)
+    private VisualTestingLogger vtLogger_
     RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(Writer writer) {
         super(writer)
+    }
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
     @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {}
     @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {}

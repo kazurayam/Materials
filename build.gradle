@@ -91,7 +91,7 @@ test {
 
 
 task pinpoint(type: Test) {
-    include '**/BaseIndexerSpec.class'
+    include '**/HelpersSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

@@ -10,6 +10,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
@@ -25,6 +26,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
      
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
+     private VisualTestingLogger vtLogger_ = null
      
      private int tSuiteResultCount
      private int tCaseResultCount
@@ -34,6 +36,31 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
      RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
          super(writer)
      }
+     
+     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+         this.vtLogger_ = vtLogger
+     }
+     
+     private void logDebug(String message) {
+         logger_.info(message)
+     }
+     
+     private void logInfo(String message) {
+         logger_.info(message)
+         if (vtLogger_ != null) {
+             vtLogger_.info("[${RepositoryVisitorGeneratingBootstrapTreeviewData.getName()}] " 
+                 + message)
+         }
+     }
+     
+     private void logError(String message) {
+         logger_.error(message)
+         if (vtLogger_ != null) {
+             vtLogger_.failed("[${RepositoryVisitorGeneratingBootstrapTreeviewData.getName()}] "
+                 + message)
+         }
+     }
+     
      @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
          tSuiteResultCount = 0
          pw_.print('[')
@@ -71,7 +98,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          if (tSuiteResult.getJUnitReportWrapper() != null) {
              sb.append(',')
              sb.append('"tags": ["')
-             logger_.debug("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
+             logInfo("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
              sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
              sb.append('"')
              sb.append(',')
@@ -110,7 +137,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              String jsonText = crbMaterial.getPath().toFile().text
              this.comparisonResultBundle = new ComparisonResultBundle(baseDir, jsonText)
          } else {
-             logger_.info("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
+             logInfo("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
          }
          //
          return RepositoryVisitResult.SUCCESS
