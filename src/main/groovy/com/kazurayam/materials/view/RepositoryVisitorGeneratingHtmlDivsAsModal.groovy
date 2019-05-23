@@ -56,6 +56,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
+        this.pathResolutionLogBundleCache_.setVisualTestingLogger(vtLogger_)
     }
     
     private void logDebug(String message) {
@@ -432,9 +433,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     static class PathResolutionLogBundleCache {
         
         private Map<Path, PathResolutionLogBundle> cache_
+        private VisualTestingLogger vtLogger_
         
         PathResolutionLogBundleCache() {
             cache_ = new HashMap<Path, PathResolutionLogBundle>()
+        }
+        
+        void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+            this.vtLogger_ = vtLogger
         }
         
         PathResolutionLogBundle get(Path bundleFile) {
@@ -450,6 +456,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     return null
                 }
                 return bundle
+            }
+        }
+        
+        private logInfo(String message) {
+            if (vtLogger_ != null) {
+                vtLogger_.info(message)
             }
         }
     }
