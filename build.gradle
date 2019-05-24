@@ -91,7 +91,10 @@ test {
 
 
 task pinpoint(type: Test) {
-    include '**/HelpersSpec.class'
+    include '**/MaterialImplSpec.class'
+    include '**/BaseIndexerSpec.class'
+    include '**/RepositoryVisitorGeneratingBootstrapTreeviewDataSpec.class'
+    include '**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class'
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

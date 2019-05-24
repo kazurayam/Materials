@@ -15,6 +15,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -25,6 +26,7 @@ import com.kazurayam.materials.repository.RepositoryRoot
 class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private TCaseResult parentTCR_
     private String subpath_
@@ -74,16 +76,16 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     @Override
     Path getPath() {
-        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parent.getTCaseDirectory()}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parentTCR_.getTCaseDirectory()}")
         logger_.debug("#getPath subpath_=${subpath_}")
-        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parent.getTCaseDirectory().resolve(subpath_)}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parentTCR_.getTCaseDirectory().resolve(subpath_)}")
         logger_.debug("#getPath materialFileName_.getFileName()=${materialFileName_.getFileName()}")
         if (parentTCR_ != null) {
             Path p = parentTCR_.getTCaseDirectory().resolve(subpath_).resolve(materialFileName_.getFileName()).normalize()
             logger_.debug("#getPath p=${p}")
             return p
         } else {
-            throw new IllegalStateException("parent_ is not set")
+            throw new IllegalStateException("parentTCR_ is not set")
         }
     }
     
@@ -120,6 +122,11 @@ class MaterialImpl implements Material, Comparable<Material> {
     @Override
     void setDescription(String description) {
         this.description_ = description
+    }
+    
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
 
     // ------------- implematation of Material interface ----------------------
@@ -285,9 +292,8 @@ class MaterialImpl implements Material, Comparable<Material> {
         RepositoryRoot repoRoot = tSuiteResult.getParent()
         Path reportsDir = repoRoot.getReportsDir()
         if (reportsDir != null) {
-            println "reportsDir=${reportsDir.toString()}"
-            println "TSuiteName=${tSuiteResult.getTSuiteName().toString()}"
-            println "TSuiteName.getAbbreviatedId()=${tSuiteResult.getTSuiteName().getAbbreviatedId()}"
+            vtLogger_.info("#getHrefToReport reportsDir=${reportsDir.toString()}")
+            vtLogger_.info("#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
             Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
             Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
             Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
@@ -297,13 +303,11 @@ class MaterialImpl implements Material, Comparable<Material> {
                 Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
                 return relativeHtmlPath.toString()
             } else {
-                logger_.info("[getHrefToReport] different root. htmlPath=${htmlPath} baseDir=${baseDir}")
-                System.err.println("[getHrefToReport] different root. htmlPath=${htmlPath} baseDir=${baseDir}")
+                vtLogger_.failed("#getHrefToReport different root. htmlPath=${htmlPath} baseDir=${baseDir}")
                 return null
             }
         } else {
-            logger_.warn("[getHrefToReport] reportsDir is null")
-            System.err.println("[getHrefToReport] reportsDir is null")
+            vtLogger_.failed("#getHrefToReport reportsDir is null")
             return null
         }
     }
@@ -369,7 +373,6 @@ class MaterialImpl implements Material, Comparable<Material> {
     }
 
     // ---------------- helpers -----------------------------------------------
-
 
     // ---------------- overriding java.lang.Object properties --------------------------
     @Override

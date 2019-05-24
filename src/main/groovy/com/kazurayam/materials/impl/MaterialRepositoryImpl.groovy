@@ -53,7 +53,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private Path pathResolutionLogBundleAt_
     private PathResolutionLogBundle pathResolutionLogBundle_
 
-    private VisualTestingLogger vtLogger_ = null
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     // ---------------------- constructors & initializer ----------------------
 

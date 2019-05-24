@@ -15,6 +15,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
+import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
@@ -39,7 +40,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
     
-    private VisualTestingLogger vtLogger_
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     static final String classShortName = Helpers.getClassShortName(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
@@ -59,24 +60,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         this.pathResolutionLogBundleCache_.setVisualTestingLogger(vtLogger_)
     }
     
-    private void logDebug(String message) {
-        logger_.info(message)
-    }
-    
-    private void logInfo(String message) {
-        logger_.info(message)
-        if (vtLogger_ != null) {
-            vtLogger_.info("[${classShortName}] " + message)
-        }
-    }
-    
-    private void logFailed(String message) {
-        logger_.warn(message)
-        if (vtLogger_ != null) {
-            vtLogger_.failed("[${classShortName}] " + message)
-        }
-    }
-
     def preVisitRepositoryRootAction = {
         builder_.mkp.comment "here is inserted the output of ${classShortName}"
     }
@@ -137,7 +120,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 }
             }
         } else {
-            logInfo("#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null")
+            String msg = "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
+            logger_.warn(msg)
+            vtLogger_.info(msg)
         }
     }
 
@@ -154,15 +139,20 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
             if (resolution != null) {
                 String result = resolution.getUrl()   // getUrl() may return null
-                logInfo("#getOriginHref returning ${result}")
+                logger_.info("#getOriginHref returning ${result}")
                 return result
             } else {
-                logInfo("#getOriginHref could not find a PathResolutionLog entry of ${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}")
-                logInfo("#getOriginHref bundle=${JsonOutput.prettyPrint(bundle.toString())}")
+                String msg = "#getOriginHref could not find a PathResolutionLog entry of " + 
+                            "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
+                            " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
+                logger_.warn(msg)
+                vtLogger_.failed(msg)
                 return null
             }
         } else {
-            logInfo("#getOriginHref ${path} does not exist")
+            String msg = "#getOriginHref ${path} does not exist"
+            logger_.info(msg)
+            vtLogger_.failed(msg)
             return null
         }
     }
@@ -301,7 +291,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     return null
                 }
             } else {
-                logInfo("#getXMaterialOriginHref pathResolutionLogBundlePath(${pathResolutionLogBundlePath}) does ot exist")
+                String msg = "#getXMaterialOriginHref pathResolutionLogBundlePath(${pathResolutionLogBundlePath}) does ot exist"
+                logger_.warn(msg)
+                vtLogger_.failed(msg)
                 return null
             }
         }
@@ -356,24 +348,30 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 break
             default:
                 def msg = "this.getFileType()='${mate.getFileType()}' is unexpected"
-                logInfo('markupInModalWindow' + msg)
+                logger_.info('markupInModalWindow' + msg)
                 builder_.p msg
         }
     }
     
     def anchorToReport = { Material mate ->
+        Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = mate.getHrefToReport()
+        logger_.debug("#anchorToReport baseDir=${baseDir.toString()}, reportHref=${reportHref}")
         if (reportHref != null) {
-            Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
+            Path p = baseDir.resolve(reportHref)
             if (Files.exists(p)) {
                 builder_.a(['href':reportHref, 'class':'btn btn-default', 'role':'button',
                             'target':'_blank'], 'Report')
             } else {
-                logInfo("#anchorToReport ${p} does not exist")
+                String msg = "#anchorToReport ${p} does not exist"
+                logger_.warn(msg)
+                vtLogger_.failed(msg)
                 return null
             }
         } else {
-            logInfo("#anchorToReport this.hrefToReport(mate) return null for ${mate.toString()}")
+            String msg = "#anchorToReport mate.getHrefToReport() returned null. mate is ${mate.toString()}"
+            logger_.warnEnabled(msg)
+            vtLogger_.failed(msg)
             return null
         }
     }
@@ -403,14 +401,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
             String jsonText = mate.getPath().toFile().text
             this.comparisonResultBundle_ = new ComparisonResultBundle(baseDir, jsonText)
-            logInfo("#preVisitTCaseResult comparisonResultBundle_ is set to be ${comparisonResultBundle_}")
+            logger_.debug("#preVisitTCaseResult comparisonResultBundle_ is set to be ${comparisonResultBundle_}")
         }
         return RepositoryVisitResult.SUCCESS
     }
 
     @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
         this.comparisonResultBundle_ = null
-        logInfo("#postVisitTCaseResult comparisonResultBundle_ is set to be null")
+        logger_.info("#postVisitTCaseResult comparisonResultBundle_ is set to be null")
         return RepositoryVisitResult.SUCCESS
     }
     
@@ -432,8 +430,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      */
     static class PathResolutionLogBundleCache {
         
+        static Logger logger_ = LoggerFactory.getLogger(
+            PathResolutionLogBundleCache.class)
+
+        static final String classShortName = Helpers.getClassShortName(
+            PathResolutionLogBundleCache.class)
+        
         private Map<Path, PathResolutionLogBundle> cache_
-        private VisualTestingLogger vtLogger_
+        private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
         
         PathResolutionLogBundleCache() {
             cache_ = new HashMap<Path, PathResolutionLogBundle>()
@@ -452,16 +456,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     bundle = PathResolutionLogBundle.deserialize(bundleFile)
                     cache_.put(bundleFile, bundle)
                 } catch (Exception e) {
-                    logInfo("#PathResolutionLogBundleCache#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}")
+                    String msg = "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
+                    logger_.warn(msg)
+                    vtLogger_.failed(msg)
                     return null
                 }
                 return bundle
-            }
-        }
-        
-        private logInfo(String message) {
-            if (vtLogger_ != null) {
-                vtLogger_.info(message)
             }
         }
     }
