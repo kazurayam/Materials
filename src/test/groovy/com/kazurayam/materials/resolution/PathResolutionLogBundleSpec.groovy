@@ -89,13 +89,15 @@ class PathResolutionLogBundleSpec extends Specification {
     def testSerializeAndDeserialize() {
         setup:
             Path caseOutputDir = specOutputDir_.resolve('testSerializeAndDeserialize')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
             Path materials = caseOutputDir.resolve('Materials')
             Path monitor47NewsDir = materials.resolve('Monitor47News')
             Files.createDirectories(monitor47NewsDir)
             Helpers.copyDirectory(
                 fixtureDir_.resolve('Materials').resolve('Monitor47News'),
                 monitor47NewsDir)
-			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         when:
 			TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
 													new TSuiteName('Monitor47News'),

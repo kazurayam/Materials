@@ -71,7 +71,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         if (!Files.exists(reportsDir)) {
-            throw new IllegalArgumentException("${reportsDir} does not exist")
+            logger_.warn("${reportsDir} does not exist")
         }
         baseDir_ = baseDir
         reportsDir_ = reportsDir

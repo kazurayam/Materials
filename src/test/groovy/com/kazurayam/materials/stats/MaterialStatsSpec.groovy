@@ -190,6 +190,8 @@ class MaterialStatsSpec extends Specification {
         setup:
         Path caseOutputDir = workdir_.resolve('testMarginalCondition1')
         Path storageDir = caseOutputDir.resolve('Storage')
+        Path reports = caseOutputDir.resolve('Reports')
+        Files.createDirectories(reports)
         Path fixtureSourceDir = fixture_.resolve('Storage').resolve('47News_chronos_capture').resolve('20190216_204329')
         Path fixtureTargetDir = storageDir.resolve('47News_chronos_capture').resolve('20190216_204329')
         Files.createDirectories(fixtureTargetDir)

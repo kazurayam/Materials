@@ -91,10 +91,13 @@ test {
 
 
 task pinpoint(type: Test) {
-    include '**/MaterialImplSpec.class'
-    include '**/BaseIndexerSpec.class'
-    include '**/RepositoryVisitorGeneratingBootstrapTreeviewDataSpec.class'
-    include '**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class'
+    //include "**/ComparisonResultBundleSpec.class"
+    //include "**/ImageCollectionDifferSpec.class"
+    //include "**/MaterialRepositoryFactorySpec.class"
+    //include "**/MaterialStorageSpec.class"
+    //include "**/PathResolutionLogBundleSpec.class"
+    include "**/MaterialStatsSpec.class"
+    include "**/ImageDeltaStatsSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

@@ -49,6 +49,8 @@ class ComparisonResultBundleSpec extends Specification {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_constructor_withJson")
             Path materials = caseOutputDir.resolve('Materials')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
             String jsonText = makeJsonText(caseOutputDir)
         then:
             jsonText != null
@@ -106,6 +108,8 @@ class ComparisonResultBundleSpec extends Specification {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_allOfImagesAreSimilar")
             Path materials = caseOutputDir.resolve('Materials')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
             String jsonText = makeJsonText(caseOutputDir)
         then:
             jsonText != null
@@ -130,6 +134,8 @@ class ComparisonResultBundleSpec extends Specification {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_getByDiffMaterial")
             Path materials = caseOutputDir.resolve('Materials')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
             String jsonText = makeJsonText(caseOutputDir)
         then:
             jsonText != null
