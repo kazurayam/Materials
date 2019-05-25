@@ -39,6 +39,7 @@ interface Material extends MaterialCore {
     Material setLastModified(long lastModified)
     Material setLength(long length)
     Material setParent(TCaseResult parent)
+    void setVisualTestingLogger(VisualTestingLogger vtLogger)
     String toJsonText()
 
 }

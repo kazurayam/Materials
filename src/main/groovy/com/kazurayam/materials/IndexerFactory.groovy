@@ -1,8 +1,6 @@
 package com.kazurayam.materials
 
 import com.kazurayam.materials.view.BaseIndexer
-import com.kazurayam.materials.view.IndexerByVisitorImpl
-import com.kazurayam.materials.view.IndexerRudimentaryImpl
 
 final class IndexerFactory {
 
@@ -22,4 +20,5 @@ final class IndexerFactory {
         Indexer indexer = (Indexer)c.newInstance()
         return indexer
     }
+
 }

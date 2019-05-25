@@ -15,6 +15,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -25,6 +26,7 @@ import com.kazurayam.materials.repository.RepositoryRoot
 class MaterialImpl implements Material, Comparable<Material> {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private TCaseResult parentTCR_
     private String subpath_
@@ -74,16 +76,16 @@ class MaterialImpl implements Material, Comparable<Material> {
     
     @Override
     Path getPath() {
-        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parent.getTCaseDirectory()}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory()=${parentTCR_.getTCaseDirectory()}")
         logger_.debug("#getPath subpath_=${subpath_}")
-        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parent.getTCaseDirectory().resolve(subpath_)}")
+        logger_.debug("#getPath parentTCR_.getTCaseDirectory().resolve(subpath_)=${parentTCR_.getTCaseDirectory().resolve(subpath_)}")
         logger_.debug("#getPath materialFileName_.getFileName()=${materialFileName_.getFileName()}")
         if (parentTCR_ != null) {
             Path p = parentTCR_.getTCaseDirectory().resolve(subpath_).resolve(materialFileName_.getFileName()).normalize()
             logger_.debug("#getPath p=${p}")
             return p
         } else {
-            throw new IllegalStateException("parent_ is not set")
+            throw new IllegalStateException("parentTCR_ is not set")
         }
     }
     
@@ -120,6 +122,11 @@ class MaterialImpl implements Material, Comparable<Material> {
     @Override
     void setDescription(String description) {
         this.description_ = description
+    }
+    
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
 
     // ------------- implematation of Material interface ----------------------
@@ -265,9 +272,20 @@ class MaterialImpl implements Material, Comparable<Material> {
      *    - TCaseName: 'Test Cases/main/TC1'
      *    - Material's relative path to the TCaseResult dir: 'screenshot.png'
      * then hrefToReport() should return
-     *    '../Reports/main/TS1/20180805_081908/Report.html'
-     * here we assume the Reports directory is located sibling to the Materials directory.
+     *    '../Reports/main/TS1/20180805_081908/20180805_081908.html'
+     * here we assume that the Materials directory and the Reports directory is 
+     * located under a single parent directory.
+     * 
+     * Howerver, if you locate the Materials directory on a network drive (or on a Newowrk File System)
+     * and you use the GUI mode of Katalon Studio,
+     * there is a case where the Materials directory and the Reports directory are isolated.
+     * In that case this getHrefToReport() returns null.
+     * 
+     * If you run Katalon Studio in Console Mode specifying -reportDir option, you can move
+     * the Reports directory to the sibling of the Materials directory. In this case this getHrefToReport()
+     * should return a valid path string.
      */
+    //FIXME
     @Override
     String getHrefToReport() {
         TCaseResult tCaseResult = this.getParent()
@@ -275,17 +293,22 @@ class MaterialImpl implements Material, Comparable<Material> {
         RepositoryRoot repoRoot = tSuiteResult.getParent()
         Path reportsDir = repoRoot.getReportsDir()
         if (reportsDir != null) {
-            println "reportsDir=${reportsDir.toString()}"
-            println "TSuiteName=${tSuiteResult.getTSuiteName().toString()}"
-            println "TSuiteName.getAbbreviatedId()=${tSuiteResult.getTSuiteName().getAbbreviatedId()}"
+            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport reportsDir=${reportsDir.toString()}")
+            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
             Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
             Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
-            Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
+            Path htmlPath = tstPath.resolve(tstPath.getFileName().toString() + '.html').toAbsolutePath()
             // we need to relativise it; relative to the Materials dir
             Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
-            Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
-            return relativeHtmlPath.toString()
+            if (htmlPath.getRoot() == baseDir.getRoot()) {
+                Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
+                return relativeHtmlPath.toString()
+            } else {
+                vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport different root. htmlPath=${htmlPath} baseDir=${baseDir}")
+                return null
+            }
         } else {
+            vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport reportsDir is null")
             return null
         }
     }
@@ -351,7 +374,6 @@ class MaterialImpl implements Material, Comparable<Material> {
     }
 
     // ---------------- helpers -----------------------------------------------
-
 
     // ---------------- overriding java.lang.Object properties --------------------------
     @Override

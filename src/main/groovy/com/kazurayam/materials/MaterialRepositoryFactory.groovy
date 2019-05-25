@@ -17,7 +17,7 @@ final class MaterialRepositoryFactory {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
         // set the defalult location of the Reports dir 
-        Path reportsDir = baseDir.resolve('../Reports')
+        Path reportsDir = baseDir.resolve('..').resolve('Reports')
         return createInstance(baseDir, reportsDir)
     }
     
@@ -31,8 +31,20 @@ final class MaterialRepositoryFactory {
     static MaterialRepository createInstance(Path baseDir, Path reportsDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Objects.requireNonNull(reportsDir, "reportsDir must not be null")
+        if ( !baseDir.normalize().toString().endsWith("Materials") &&
+             !baseDir.normalize().toString().endsWith("Storage")     ) {
+            throw new IllegalArgumentException(
+                this.class.getSimpleName() + 
+                "#createInstance baseDir(${baseDir}) is expected to have a dir name 'Materials' or 'Storage' but not")
+        }
         Helpers.ensureDirs(baseDir)
-        Helpers.ensureDirs(reportsDir)
+        
+        if ( !reportsDir.normalize().toString().endsWith("Reports") ) {
+            throw new IllegalArgumentException(
+                this.class.getSimpleName() +
+                "#createInstance reportsDir(${reportsDir}) is expected to have a dir name 'Reports' but not")
+        }
+        
         return (MaterialRepository)MaterialRepositoryImpl.newInstance(baseDir, reportsDir)
     }
 

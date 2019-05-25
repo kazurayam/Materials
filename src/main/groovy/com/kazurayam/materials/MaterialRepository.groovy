@@ -218,6 +218,8 @@ interface MaterialRepository {
     Path resolveMaterialPath(TCaseName testCaseName, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String subpath, String fileName)
     
+    void setVisualTestingLogger(VisualTestingLogger vtLogger)
+    
     /**
      * scan the baseDir to recognize the current directories/files configuration
      */

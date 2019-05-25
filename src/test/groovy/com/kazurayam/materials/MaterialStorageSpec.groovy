@@ -30,6 +30,7 @@ class MaterialStorageSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         //
         mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve("Materials"))
+        
     }
     def setup() {}
     def cleanup() {}
@@ -40,6 +41,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -60,6 +63,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testBackup_all")
         Path storageDir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(storageDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
         when:
@@ -76,6 +81,9 @@ class MaterialStorageSpec extends Specification {
             Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
             Path materialsDir = caseOutputDir.resolve('Materials')
             Path storageDir = caseOutputDir.resolve('Storage')
+            Path reportsDir = caseOutputDir.resolve("Reports")
+            Files.createDirectories(reportsDir)
+
             Path fixtureSource = fixture_.resolve('Storage/47news.chronos_capture')
             Path fixtureTarget = storageDir.resolve('47news.chronos_capture')
             Helpers.deleteDirectoryContents(fixtureTarget)
@@ -108,6 +116,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testClear")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -128,6 +138,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testClear_withOnlyTSuiteName")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -148,6 +160,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testEmpty")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -172,6 +186,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetSetOfMaterialPathRelativeToTSuiteName")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -189,6 +205,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -210,6 +228,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -230,6 +250,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -250,6 +272,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -270,6 +294,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult_noArgs")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -290,6 +316,8 @@ class MaterialStorageSpec extends Specification {
         Path msdir = stepWork.resolve("Storage")
         Path restoredDir = stepWork.resolve("Materials_restored")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -310,6 +338,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testList_all")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         int numberOfMaterialsCopied = ms.backup(mr_)
         when:
@@ -328,6 +358,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testList_one")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         int numberOfMaterialsCopied = ms.backup(mr_)
         when:
@@ -347,6 +379,8 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testList_one")
         Path msdir = stepWork.resolve("Storage")
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         int numberOfMaterialsCopied = ms.backup(mr_)
         when:
@@ -366,6 +400,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_LocalDateTime_restoreUnary")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -396,6 +432,8 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")

@@ -110,6 +110,8 @@ class BaseIndexerSpec extends Specification {
             Path caseOutputDir = specOutputDir.resolve('testCarousel')
             Path materials = caseOutputDir.resolve('Materials')
             Path storage = caseOutputDir.resolve('Storage')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
             Files.createDirectories(materials)
             Files.createDirectories(storage)
             Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
@@ -210,8 +212,10 @@ class BaseIndexerSpec extends Specification {
             Path caseOutputDir = specOutputDir.resolve('testCarouselWithLinkToOrigin')
             Path materials = caseOutputDir.resolve('Materials')
             Path storage = caseOutputDir.resolve('Storage')
+            Path reports = caseOutputDir.resolve('Reports')
             Files.createDirectories(materials)
             Files.createDirectories(storage)
+            Files.createDirectories(reports)
             Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
@@ -295,6 +299,8 @@ class BaseIndexerSpec extends Specification {
                 }
             }
             Path materials = caseOutputDir.resolve('Materials')
+            Path reports = caseOutputDir.resolve('Reports')
+            Files.createDirectories(reports)
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             Indexer indexer = makeIndexer(caseOutputDir)

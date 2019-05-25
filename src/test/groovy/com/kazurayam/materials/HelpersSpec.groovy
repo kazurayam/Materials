@@ -1,6 +1,8 @@
 package com.kazurayam.materials
 
 import java.awt.image.BufferedImage
+import java.nio.file.FileSystem
+import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -13,7 +15,6 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 /**
@@ -252,8 +253,12 @@ C:
     }
 
     def test_toTreeFormat() {
+        setup:
+        FileSystem fs = FileSystems.getDefault()
         when:
-        Path p = Paths.get("C:\\Users\\myname\\eclipse-workspace\\Materials\\src\\main\\groovy\\com\\kazurayam\\materials\\Helpers.groovy")
+        String s = "C:\\Users\\myname\\eclipse-workspace\\Materials\\src\\main\\groovy\\com\\kazurayam\\materials\\Helpers.groovy"
+        String ns = s.replace('\\', fs.getSeparator())
+        Path p = Paths.get(ns)
         List<String> tree = Helpers.toTreeFormat(p)
         println "${p.toString()}"
         for (String node : tree) {
@@ -261,7 +266,7 @@ C:
         }
         then:
         tree.size() == 12
-        tree.get(0) == 'C:\\'
+        tree.get(0).contains('C:')
         tree.get(11).endsWith('Helpers.groovy')
     }
 

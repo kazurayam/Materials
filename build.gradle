@@ -6,6 +6,7 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.8.4"
+    id 'maven-publish'
 }
 
 apply plugin: 'java'
@@ -18,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.70.6'
+version  = '0.70.7'
 
 
 sourceCompatibility = '1.8'
@@ -91,8 +92,13 @@ test {
 
 
 task pinpoint(type: Test) {
-    //include '**/HelpersSpec.class'
-    include '**/ImageCollectionDifferSpec.class'
+    //include "**/ComparisonResultBundleSpec.class"
+    //include "**/ImageCollectionDifferSpec.class"
+    //include "**/MaterialRepositoryFactorySpec.class"
+    //include "**/MaterialStorageSpec.class"
+    //include "**/PathResolutionLogBundleSpec.class"
+    include "**/MaterialStatsSpec.class"
+    include "**/ImageDeltaStatsSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.VisualTestingLogger
+import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryWalker
@@ -18,6 +20,7 @@ import groovy.xml.MarkupBuilder
 class BaseIndexer implements Indexer {
     
     static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private Path baseDir_
     private Path reportsDir_
@@ -32,12 +35,10 @@ class BaseIndexer implements Indexer {
     void setBaseDir(Path baseDir) {
         if (baseDir == null) {
             def msg = "#setBaseDir baseDir argument is null"
-            logger_.error(msg)
             throw new IllegalArgumentException(msg)
         }
         if (Files.notExists(baseDir)) {
             def msg = "#setBaseDir basedir ${baseDir.toString()} does not exist"
-            logger_.error(msg)
             throw new IllegalArgumentException(msg)
         }
         this.baseDir_ = baseDir
@@ -47,12 +48,10 @@ class BaseIndexer implements Indexer {
     void setReportsDir(Path reportsDir) {
         if (reportsDir == null) {
             def msg = "#setReportsDir reportsDir argument is null"
-            logger_.error(msg)
             throw new IllegalArgumentException(msg)
         }
         if (Files.notExists(reportsDir)) {
             def msg = "#setReportsDir reportsDir ${reportsDir.toString()} does not exist"
-            logger_.error(msg)
             throw new IllegalArgumentException(msg)
         }
         this.reportsDir_ = reportsDir
@@ -66,22 +65,27 @@ class BaseIndexer implements Indexer {
     }
     
     @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
+    
+    @Override
     void execute() throws IOException {
         if (baseDir_ == null) {
             def msg = "#execute baseDir_ is null"
-            logger_.error(msg)
             throw new IllegalStateException(msg)
         }
         if (reportsDir_ == null) {
             def msg = "#execute reportsDir_ is null"
-            logger_.error(msg)
             throw new IllegalStateException(msg)
         }
         if (output_ == null) {
             def msg = "#execute output_ is null"
-            logger_.error(msg)
             throw new IllegalStateException(msg)
         }
+        vtLogger_.info(this.class.getSimpleName() + "#execute baseDir is ${baseDir_}")
+        vtLogger_.info(this.class.getSimpleName() + "#execute reportsDir is ${reportsDir_}")
+        vtLogger_.info(this.class.getSimpleName() + "#execute output is ${output_}")
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
@@ -91,6 +95,7 @@ class BaseIndexer implements Indexer {
         logger_.info("generated ${output_.toString()}")
     }
     
+
     /**
      * generate the Materials/index.html using Groovy's MarkupBuilder
      * 
@@ -110,6 +115,9 @@ class BaseIndexer implements Indexer {
         def generateHtmlDivsAsModal = { RepositoryRoot rp ->
             // generate HTML <div> tags as Modal window
             def htmlVisitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
+            if (vtLogger_ != null) {
+                htmlVisitor.setVisualTestingLogger(vtLogger_)
+            }
             RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
         }
         generateHtmlDivsAsModal.delegate = markupBuilder
@@ -119,6 +127,9 @@ class BaseIndexer implements Indexer {
             // generate the data for Bootstrap Treeview
             StringWriter jsonSnippet = new StringWriter()
             def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+            if (vtLogger_ != null) {
+                jsonVisitor.setVisualTestingLogger(vtLogger_)
+            }
             RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
             //
             delegate.script(['type':'text/javascript']) {

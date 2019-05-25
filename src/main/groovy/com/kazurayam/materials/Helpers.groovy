@@ -12,7 +12,6 @@ import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.FileSystemLoopException
-import java.nio.file.FileVisitOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
@@ -478,5 +477,7 @@ final class Helpers {
         }
         return list
     }
+    
+    
 
 }

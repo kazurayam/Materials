@@ -21,6 +21,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -52,6 +53,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private Path pathResolutionLogBundleAt_
     private PathResolutionLogBundle pathResolutionLogBundle_
 
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
+    
     // ---------------------- constructors & initializer ----------------------
 
     /**
@@ -68,14 +71,18 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         if (!Files.exists(reportsDir)) {
-            throw new IllegalArgumentException("${reportsDir} does not exist")
+            logger_.warn("${reportsDir} does not exist")
         }
         baseDir_ = baseDir
         reportsDir_ = reportsDir
         
-        // create the Materials directory and the Reports directory if not present
+        vtLogger_ = new VisualTestingLoggerDefaultImpl()
+        
+        // create the Materials directory if not present
         Helpers.ensureDirs(baseDir_)
-        Helpers.ensureDirs(reportsDir_)
+        
+        // create the Reports directory if not present
+        //Helpers.ensureDirs(reportsDir_)
         
         // load data from the local disk
         this.scan()
@@ -97,6 +104,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     @Override
     void scan() {
+        //vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#scan reportsDir is ${reportsDir_}")
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
@@ -579,7 +588,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
 
 
     /**
@@ -593,6 +605,12 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         indexer.setReportsDir(reportsDir_)
         Path index = baseDir_.resolve('index.html')
         indexer.setOutput(index)
+        if (vtLogger_ != null) {
+            indexer.setVisualTestingLogger(vtLogger_)
+        }
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex baseDir is ${baseDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex reportsDir is ${reportsDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex index is ${index}")
         indexer.execute()
         return index
     }

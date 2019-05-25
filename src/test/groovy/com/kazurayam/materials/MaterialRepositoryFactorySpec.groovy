@@ -14,7 +14,7 @@ class MaterialRepositoryFactorySpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositoryFactorySpec.class)
 
     private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
+    private static Path fixture_ = Paths.get("./src/test/fixture")
 
     // fixture methods
     def setupSpec() {
@@ -31,7 +31,8 @@ class MaterialRepositoryFactorySpec extends Specification {
     // feature methods
     def testCreateInstance() {
         when:
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(workdir_)
+        Path materials = workdir_.resolve('Materials')
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.putCurrentTestSuite('Test Suites/TS1')
         then:
         mr != null

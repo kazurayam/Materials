@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -24,6 +25,8 @@ final class IndexerRudimentaryImpl implements Indexer {
     private Path baseDir_
     private Path reportsDir_
     private Path output_
+    
+    private VisualTestingLogger vtLogger_
 
     IndexerRudimentaryImpl() {
         baseDir_ = null
@@ -70,6 +73,11 @@ final class IndexerRudimentaryImpl implements Indexer {
     void setOutput(Path outputFile) {
         output_ = outputFile
         Helpers.ensureDirs(outputFile.getParent())
+    }
+    
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
 
     /**

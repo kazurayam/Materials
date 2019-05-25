@@ -52,7 +52,12 @@ class TSuiteTimestamp implements Comparable<TSuiteTimestamp> {
         if (ldt != null) {
             timestamp_ = ignoreMilliseconds(ldt)
         } else {
-            throw new IllegalArgumentException("unable to parse '${timestamp}' as TestSuiteTimestamp")
+            try {
+                throw new IllegalArgumentException("unable to parse '${timestamp}' as TestSuiteTimestamp")
+            } catch (Exception e) {
+                e.printStackTrace()
+                throw e
+            }
         }
     }
     
