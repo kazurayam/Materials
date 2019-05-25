@@ -120,7 +120,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 }
             }
         } else {
-            String msg = "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
+            String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
             logger_.warn(msg)
             vtLogger_.info(msg)
         }
@@ -356,20 +356,21 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     def anchorToReport = { Material mate ->
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = mate.getHrefToReport()
-        logger_.debug("#anchorToReport baseDir=${baseDir.toString()}, reportHref=${reportHref}")
+        vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
+        vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
         if (reportHref != null) {
             Path p = baseDir.resolve(reportHref)
             if (Files.exists(p)) {
                 builder_.a(['href':reportHref, 'class':'btn btn-default', 'role':'button',
                             'target':'_blank'], 'Report')
             } else {
-                String msg = "#anchorToReport ${p} does not exist"
+                String msg = this.class.getSimpleName() + "#anchorToReport file not found: ${p}"
                 logger_.warn(msg)
                 vtLogger_.failed(msg)
                 return null
             }
         } else {
-            String msg = "#anchorToReport mate.getHrefToReport() returned null. mate is ${mate.toString()}"
+            String msg = this.class.getSimpleName() + "#anchorToReport mate.getHrefToReport() returned null. mate is ${mate.toString()}"
             logger_.warnEnabled(msg)
             vtLogger_.failed(msg)
             return null
@@ -456,7 +457,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                     bundle = PathResolutionLogBundle.deserialize(bundleFile)
                     cache_.put(bundleFile, bundle)
                 } catch (Exception e) {
-                    String msg = "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
+                    String msg = this.class.getSimpleName() + "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
                     logger_.warn(msg)
                     vtLogger_.failed(msg)
                     return null

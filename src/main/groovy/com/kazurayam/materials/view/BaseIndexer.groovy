@@ -83,6 +83,9 @@ class BaseIndexer implements Indexer {
             def msg = "#execute output_ is null"
             throw new IllegalStateException(msg)
         }
+        vtLogger_.info(this.class.getSimpleName() + "#execute baseDir is ${baseDir_}")
+        vtLogger_.info(this.class.getSimpleName() + "#execute reportsDir is ${reportsDir_}")
+        vtLogger_.info(this.class.getSimpleName() + "#execute output is ${output_}")
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()

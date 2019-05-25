@@ -272,7 +272,7 @@ class MaterialImpl implements Material, Comparable<Material> {
      *    - TCaseName: 'Test Cases/main/TC1'
      *    - Material's relative path to the TCaseResult dir: 'screenshot.png'
      * then hrefToReport() should return
-     *    '../Reports/main/TS1/20180805_081908/Report.html'
+     *    '../Reports/main/TS1/20180805_081908/20180805_081908.html'
      * here we assume that the Materials directory and the Reports directory is 
      * located under a single parent directory.
      * 
@@ -285,6 +285,7 @@ class MaterialImpl implements Material, Comparable<Material> {
      * the Reports directory to the sibling of the Materials directory. In this case this getHrefToReport()
      * should return a valid path string.
      */
+    //FIXME
     @Override
     String getHrefToReport() {
         TCaseResult tCaseResult = this.getParent()
@@ -292,22 +293,22 @@ class MaterialImpl implements Material, Comparable<Material> {
         RepositoryRoot repoRoot = tSuiteResult.getParent()
         Path reportsDir = repoRoot.getReportsDir()
         if (reportsDir != null) {
-            vtLogger_.info("#getHrefToReport reportsDir=${reportsDir.toString()}")
-            vtLogger_.info("#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
+            vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport reportsDir=${reportsDir.toString()}")
+            vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
             Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
             Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
-            Path htmlPath = tstPath.resolve('Report.html').toAbsolutePath()
+            Path htmlPath = tstPath.resolve(tstPath.getFileName().toString() + '.html').toAbsolutePath()
             // we need to relativise it; relative to the Materials dir
             Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
             if (htmlPath.getRoot() == baseDir.getRoot()) {
                 Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
                 return relativeHtmlPath.toString()
             } else {
-                vtLogger_.failed("#getHrefToReport different root. htmlPath=${htmlPath} baseDir=${baseDir}")
+                vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport different root. htmlPath=${htmlPath} baseDir=${baseDir}")
                 return null
             }
         } else {
-            vtLogger_.failed("#getHrefToReport reportsDir is null")
+            vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport reportsDir is null")
             return null
         }
     }
