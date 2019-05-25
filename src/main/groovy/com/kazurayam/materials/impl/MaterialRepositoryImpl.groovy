@@ -104,8 +104,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     @Override
     void scan() {
-        vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
-        vtLogger_.info(this.class.getSimpleName() + "#scan reportsDir is ${reportsDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#scan reportsDir is ${reportsDir_}")
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
@@ -608,9 +608,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (vtLogger_ != null) {
             indexer.setVisualTestingLogger(vtLogger_)
         }
-        vtLogger_.info(this.class.getSimpleName() + "#makeIndex baseDir is ${baseDir_}")
-        vtLogger_.info(this.class.getSimpleName() + "#makeIndex reportsDir is ${reportsDir_}")
-        vtLogger_.info(this.class.getSimpleName() + "#makeIndex index is ${index}")
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex baseDir is ${baseDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex reportsDir is ${reportsDir_}")
+        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex index is ${index}")
         indexer.execute()
         return index
     }

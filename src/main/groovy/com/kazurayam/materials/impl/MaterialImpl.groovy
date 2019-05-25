@@ -293,8 +293,8 @@ class MaterialImpl implements Material, Comparable<Material> {
         RepositoryRoot repoRoot = tSuiteResult.getParent()
         Path reportsDir = repoRoot.getReportsDir()
         if (reportsDir != null) {
-            vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport reportsDir=${reportsDir.toString()}")
-            vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
+            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport reportsDir=${reportsDir.toString()}")
+            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
             Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
             Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
             Path htmlPath = tstPath.resolve(tstPath.getFileName().toString() + '.html').toAbsolutePath()

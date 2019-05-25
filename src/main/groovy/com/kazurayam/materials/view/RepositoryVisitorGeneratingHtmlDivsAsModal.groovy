@@ -122,7 +122,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         } else {
             String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
             logger_.warn(msg)
-            vtLogger_.info(msg)
+            //vtLogger_.info(msg)
         }
     }
 
@@ -356,8 +356,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     def anchorToReport = { Material mate ->
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = mate.getHrefToReport()
-        vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
-        vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
+        //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
+        //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
         if (reportHref != null) {
             Path p = baseDir.resolve(reportHref)
             if (Files.exists(p)) {
@@ -459,7 +459,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 } catch (Exception e) {
                     String msg = this.class.getSimpleName() + "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
                     logger_.warn(msg)
-                    vtLogger_.failed(msg)
+                    //vtLogger_.failed(msg)
                     return null
                 }
                 return bundle
