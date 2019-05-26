@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialStorageSpec extends Specification {
@@ -314,7 +313,7 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
-        Path restoredDir = stepWork.resolve("Materials_restored")
+        Path restoredDir = stepWork.resolve("Materials")
         Helpers.deleteDirectoryContents(msdir)
         Path reportsDir = stepWork.resolve("Reports")
         Files.createDirectories(reportsDir)
@@ -410,7 +409,7 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 22
         when:
-        Path restoredDir = stepWork.resolve("Materials_restored")
+        Path restoredDir = stepWork.resolve("Materials")
         Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
@@ -442,7 +441,7 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 22
         when:
-        Path restoredDir = stepWork.resolve("Materials_restored")
+        Path restoredDir = stepWork.resolve("Materials")
         Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(ms, tsn)
