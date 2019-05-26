@@ -211,7 +211,7 @@ class MaterialSpec extends Specification {
         when:
             String href = mate1.getHrefToReport()
         then:
-            href.equals(Paths.get("../Reports/main/TS1/${timestamp}/Report.html").toString())
+            href.equals(Paths.get("../Reports/main/TS1/${timestamp}/${timestamp}.html").toString())
     }
 
     def testGetIdentifier_FileTypeOmmited() {
