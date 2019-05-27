@@ -371,7 +371,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             }
         } else {
             String msg = this.class.getSimpleName() + "#anchorToReport mate.getHrefToReport() returned null. mate is ${mate.toString()}"
-            logger_.warnEnabled(msg)
+            logger_.warn(msg)
             vtLogger_.failed(msg)
             return null
         }
