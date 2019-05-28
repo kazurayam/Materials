@@ -97,8 +97,7 @@ task pinpoint(type: Test) {
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/PathResolutionLogBundleSpec.class"
-    include "**/MaterialSpec.class"
-    include "**/MaterialStorageSpec.class"
+    include "**/ReportsAccessorSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
