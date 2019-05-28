@@ -33,16 +33,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     private boolean latestModified_
     private long size_
 
-    /*
-     * wraps ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
-     */
-    private JUnitReportWrapper junitReportWrapper_
-
-    /*
-     *  wraps ./Reports/xxx/xxx/yyyMMdd_hhmmss/execution.properties
-     */
-    private ExecutionPropertiesWrapper executionPropertiesWrapper_
-
     // ------------------ constructors & initializer -------------------------------
     TSuiteResultImpl(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
         Objects.requireNonNull(testSuiteName)
@@ -67,9 +57,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
         tSuiteNameDirectory_ = repoRoot_.getBaseDir().resolve(this.getId().getTSuiteName().getValue())
-        tSuiteTimestampDirectory_ = tSuiteNameDirectory_.resolve(this.getId().getTSuiteTimestamp().format())
-        junitReportWrapper_ = createJUnitReportWrapper(repoRoot_.getReportsDir())
-        executionPropertiesWrapper_ = createExecutionPropertiesWrapper(repoRoot_.getReportsDir())
+        tSuiteTimestampDirectory_ = tSuiteNameDirectory_.resolve(this.getId().getTSuiteTimestamp().format())        
         return this
     }
 
@@ -140,48 +128,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         return this
     }
 
-    @Override
-    JUnitReportWrapper getJUnitReportWrapper() {
-        return this.junitReportWrapper_
-    }
-
-    @Override
-    ExecutionPropertiesWrapper getExecutionPropertiesWrapper() {
-        return this.executionPropertiesWrapper_
-    }
-
-    /**
-     *
-     * @return DOM of ./Reports/xxx/xxx/yyyyMMdd_hhmmss/JUnit_Report.xml
-     */
-    @Override
-    JUnitReportWrapper createJUnitReportWrapper(Path reportsDir) {
-        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
-        Path reportFilePath = reportsDir.
-                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getId().getTSuiteTimestamp().format()).
-                    resolve('JUnit_Report.xml')
-        if (Files.exists(reportFilePath)) {
-            return new JUnitReportWrapper(reportFilePath)
-        } else {
-            logger_.debug("#createJUnitReportWrapper ${reportFilePath} does not exist")
-            return null
-        }
-    }
-
-    @Override
-    ExecutionPropertiesWrapper createExecutionPropertiesWrapper(Path reportsDir) {
-        Path expropFilePath = reportsDir.
-                    resolve(this.getId().getTSuiteName().getValue().replace('.', '/')).
-                    resolve(this.getId().getTSuiteTimestamp().format()).
-                    resolve('execution.properties')
-        if (Files.exists(expropFilePath)) {
-            return new ExecutionPropertiesWrapper(expropFilePath)
-        } else {
-            logger_.debug("#createExecutionPropertiesWrapper ${expropFilePath} does not exist")
-            return null
-        }
-    }
 
     // ------------------ add/get child nodes ------------------------------
     @Override

@@ -92,12 +92,33 @@ test {
 
 
 task pinpoint(type: Test) {
-    //include "**/ComparisonResultBundleSpec.class"
-    //include "**/ImageCollectionDifferSpec.class"
+    //include "**/IndexerSpec.class"
+    //include "**/MaterialPairSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
+    //include "**/MaterialRepositorySpec.class"
+    //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
+    //include "**/ReportsAccessorSpec.class"
+    //include "**/RetrievalBySpec.class"
+    //include "**/TCaseResultSpec.class"
+    //include "**/ComparisonResultBundleSpec.class"
+    //include "**/ComparisonResultSpec.class"
+    //include "**/ImageCollectionDifferSpec.class"
+    //include "**/ImageDifferenceFilenameResolverCompactImplSpec.class"
+    //include "**/ImageDifferenceFilenameResolverDefaultImplSpec.class"
+    //include "**/MaterialRepositoryImplSpec.class"
+    //include "**/RepositoryFileScannerSpec.class"
+    //include "**/RepositoryRootSpec.class"
+    //include "**/RepositoryWalkerSpec.class"
     //include "**/PathResolutionLogBundleSpec.class"
-    include "**/ReportsAccessorSpec.class"
+    //include "**/ImageDeltaStatsSpec.class"
+    //include "**/MaterialStatsSpec.class"
+    //include "**/StatsEntrySpec.class"
+    //include "**/StorageScannerSpec.class"
+    //include "**/BaseIndexerSpec.class"
+    include "**/IndexerByVisitorImplSpec.class"
+    //include "**/JUnitReportWrapperSpec.class"
+    //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

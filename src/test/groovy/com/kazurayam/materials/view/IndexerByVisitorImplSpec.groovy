@@ -43,8 +43,8 @@ class IndexerByVisitorImplSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         materialsDir_ = workdir_.resolve('Materials')
-        reportsDir_   = workdir_.resolve('Reports')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir_, reportsDir_)
+        reportsDir_ = workdir_.resolve('Reports')
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

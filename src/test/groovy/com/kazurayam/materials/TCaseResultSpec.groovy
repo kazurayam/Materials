@@ -24,7 +24,6 @@ class TCaseResultSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
     private static Path materialsDir
-    private static Path reportsDir
 
     // fixture methods
     def setupSpec() {
@@ -34,10 +33,9 @@ class TCaseResultSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         materialsDir = workdir_.resolve('Materials')
-        reportsDir   = workdir_.resolve('Reports')
     }
     def setup() {
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

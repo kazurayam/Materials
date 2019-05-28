@@ -40,11 +40,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     private Path baseDir_
     
-    /**
-     * path of the Reports directory
-     */
-    private Path reportsDir_
-    
     private TSuiteName currentTSuiteName_
     private TSuiteTimestamp currentTSuiteTimestamp_
     
@@ -63,50 +58,38 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tsName required
      * @param tsTimestamp required
      */
-    private MaterialRepositoryImpl(Path baseDir, Path reportsDir) {
+    private MaterialRepositoryImpl(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
-        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
         //
         if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
-        if (!Files.exists(reportsDir)) {
-            logger_.warn("${reportsDir} does not exist")
-        }
         baseDir_ = baseDir
-        reportsDir_ = reportsDir
-        
         vtLogger_ = new VisualTestingLoggerDefaultImpl()
-        
+
         // create the Materials directory if not present
         Helpers.ensureDirs(baseDir_)
-        
-        // create the Reports directory if not present
-        //Helpers.ensureDirs(reportsDir_)
-        
+
         // load data from the local disk
         this.scan()
         
         // set default Material path to the "./${baseDir name}/_/_" directory
         this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
-
     }
 
     /**
      * 
      * @param baseDir
-     * @param reportsDir
      * @return
      */
-    static MaterialRepositoryImpl newInstance(Path baseDir, Path reportsDir) {
-        return new MaterialRepositoryImpl(baseDir, reportsDir)    
+    static MaterialRepositoryImpl newInstance(Path baseDir) {
+        return new MaterialRepositoryImpl(baseDir)    
     }
     
     @Override
     void scan() {
         //vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
-        //vtLogger_.info(this.class.getSimpleName() + "#scan reportsDir is ${reportsDir_}")
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -597,7 +580,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     /**
      * create index.html file in the current <test suite name>/<test suite timestamp>/ directory.
      * returns the Path of the index.html
-     */
+     *
     @Override
     Path makeIndex() {
         Indexer indexer = IndexerFactory.newIndexer()
@@ -614,7 +597,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         indexer.execute()
         return index
     }
-
+     */
     
     
     /**

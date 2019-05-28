@@ -111,12 +111,6 @@ interface MaterialRepository {
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     
-    /**
-     * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
-     * @return
-     */
-    Path makeIndex()
-    
     void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
