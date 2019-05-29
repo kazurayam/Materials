@@ -183,7 +183,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         for (Material mate : materials) {
             Path matePath = mate.getPath()
             Path subpath = this.getTCaseDirectory().relativize(matePath)
-            logger_.debug("#getMaterial(Path) matePath=${matePath} subpath=${subpath} subpathUnderTCaseResult=${subpathUnderTCaseResult}")
+            //logger_.debug("#getMaterial(Path) matePath=${matePath} subpath=${subpath} subpathUnderTCaseResult=${subpathUnderTCaseResult}")
             if (subpath.equals(subpathUnderTCaseResult)) {
                 return mate
             }

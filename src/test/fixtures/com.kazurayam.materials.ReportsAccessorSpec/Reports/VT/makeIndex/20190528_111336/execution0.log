@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688138</millis>
+  <sequence>0</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startSuite</method>
+  <thread>1</thread>
+  <message>Start Test Suite : Test Suites/VT/makeIndex</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="name">makeIndex</property>
+  <property name="description"></property>
+  <property name="id">Test Suites/VT/makeIndex</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688153</millis>
+  <sequence>1</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostName = qcq0264 - N19-D267.quick.local</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostName">qcq0264 - N19-D267.quick.local</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688154</millis>
+  <sequence>2</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>os = Windows 10 64bit</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="os">Windows 10 64bit</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688154</millis>
+  <sequence>3</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostAddress = 172.19.71.132</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostAddress">172.19.71.132</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688156</millis>
+  <sequence>4</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>katalonVersion = 6.1.5.3</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="katalonVersion">6.1.5.3</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688183</millis>
+  <sequence>5</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Execution Profile &amp;apos;CURA_DevelopmentEnv&amp;apos; is applied</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688246</millis>
+  <sequence>6</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>AUXILIARY_VT_PROJECT_DIR is not defined in vt-config.json. Materials and Storage dir will be located in C:/Users/qcq0264/katalon-workspace/VisualTestingInKatalonStudio</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688248</millis>
+  <sequence>7</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Execution Profile &amp;apos;CURA_DevelopmentEnv&amp;apos; is applied</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688251</millis>
+  <sequence>8</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>AUXILIARY_VT_PROJECT_DIR is not defined in vt-config.json. Materials and Storage dir will be located in C:/Users/qcq0264/katalon-workspace/VisualTestingInKatalonStudio</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688272</millis>
+  <sequence>9</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Reports dir is located at C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688276</millis>
+  <sequence>10</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688283</millis>
+  <sequence>12</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">16</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688666</millis>
+  <sequence>13</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>materialsDir=C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688669</millis>
+  <sequence>14</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>reportsDir=C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:48</date>
+  <millis>1559009688672</millis>
+  <sequence>15</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>reportFolder=C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\VT\\makeIndex\\20190528_111336</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689274</millis>
+  <sequence>17</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689275</millis>
+  <sequence>18</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689448</millis>
+  <sequence>19</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startTest</method>
+  <thread>1</thread>
+  <message>Start Test Case : Test Cases/VT/makeIndex</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="name">Test Cases/VT/makeIndex</property>
+  <property name="description"></property>
+  <property name="id">Test Cases/VT/makeIndex</property>
+  <property name="source">C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Test Cases\\VT\\makeIndex.tc</property>
+  <property name="tag"></property>
+  <property name="isOptional">false</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689465</millis>
+  <sequence>21</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689466</millis>
+  <sequence>23</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">22</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689492</millis>
+  <sequence>24</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is \&amp;quot;Test Suites/VT/makeIndex\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689495</millis>
+  <sequence>25</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is \&amp;quot;20190528_111336\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689498</millis>
+  <sequence>26</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is \&amp;quot;Test Cases/VT/makeIndex\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689511</millis>
+  <sequence>27</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is \&amp;quot;{\&amp;quot;MaterialRepository\&amp;quot;:{\&amp;quot;baseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\&amp;quot;,\&amp;quot;currentTsName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Suites/VT/makeIndex\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;VT/makeIndex\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;VT.makeIndex\&amp;quot;},\&amp;quot;currentTsTimestamp\&amp;quot;:{\&amp;quot;TSuiteTimestamp\&amp;quot;:{\&amp;quot;timestamp\&amp;quot;:\&amp;quot;20190528_111336\&amp;quot;}},\&amp;quot;repoRoot\&amp;quot;:{\&amp;quot;RepositoryRoot\&amp;quot;:{\&amp;quot;tSuiteResults\&amp;quot;:[{\&amp;quot;TSuiteResult\&amp;quot;:{\&amp;quot;tSuiteName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Suites/CURA/twins_capture\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/twins_capture\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.twins_capture\&amp;quot;},\&amp;quot;tSuiteTimestamp\&amp;quot;: \&amp;quot;20190528_111333\&amp;quot;,\&amp;quot;tSuiteTimestampDir\&amp;quot;: \&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:09.412\&amp;quot;,\&amp;quot;length\&amp;quot;:6130359,\&amp;quot;tCaseResults\&amp;quot;: [{\&amp;quot;TCaseResult\&amp;quot;:{\&amp;quot;tCaseName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Cases/CURA/visitSite\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/visitSite\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.visitSite\&amp;quot;},\&amp;quot;tCaseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:09.412\&amp;quot;,\&amp;quot;length\&amp;quot;:6130359,\&amp;quot;materials\&amp;quot;:[{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\\\\appointment.php%23summary.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111333/CURA.visitSite/appointment.php%23summary.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:06.925\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111333\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\\\\default%23appointment.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111333/CURA.visitSite/default%23appointment.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:04.324\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111333\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\\\\home.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111333/CURA.visitSite/home.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:13:57.321\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111333\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\\\\profile.php%23login.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111333/CURA.visitSite/profile.php%23login.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:00.483\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111333\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111333\\\\CURA.visitSite\\\\revisited.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111333/CURA.visitSite/revisited.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:09.412\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111333\&amp;quot;}}]}}]}},{\&amp;quot;TSuiteResult\&amp;quot;:{\&amp;quot;tSuiteName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Suites/CURA/twins_capture\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/twins_capture\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.twins_capture\&amp;quot;},\&amp;quot;tSuiteTimestamp\&amp;quot;: \&amp;quot;20190528_111334\&amp;quot;,\&amp;quot;tSuiteTimestampDir\&amp;quot;: \&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:38.013\&amp;quot;,\&amp;quot;length\&amp;quot;:5949570,\&amp;quot;tCaseResults\&amp;quot;: [{\&amp;quot;TCaseResult\&amp;quot;:{\&amp;quot;tCaseName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Cases/CURA/visitSite\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/visitSite\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.visitSite\&amp;quot;},\&amp;quot;tCaseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:38.013\&amp;quot;,\&amp;quot;length\&amp;quot;:5949570,\&amp;quot;materials\&amp;quot;:[{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\\\\appointment.php%23summary.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111334/CURA.visitSite/appointment.php%23summary.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:35.547\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111334\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\\\\default%23appointment.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111334/CURA.visitSite/default%23appointment.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:32.915\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111334\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\\\\home.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111334/CURA.visitSite/home.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:25.806\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111334\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\\\\profile.php%23login.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111334/CURA.visitSite/profile.php%23login.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:29.121\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111334\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_capture\\\\20190528_111334\\\\CURA.visitSite\\\\revisited.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_capture/20190528_111334/CURA.visitSite/revisited.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:38.013\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111334\&amp;quot;}}]}}]}},{\&amp;quot;TSuiteResult\&amp;quot;:{\&amp;quot;tSuiteName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Suites/CURA/twins_exam\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/twins_exam\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.twins_exam\&amp;quot;},\&amp;quot;tSuiteTimestamp\&amp;quot;: \&amp;quot;20190528_111335\&amp;quot;,\&amp;quot;tSuiteTimestampDir\&amp;quot;: \&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.589\&amp;quot;,\&amp;quot;length\&amp;quot;:5004501,\&amp;quot;tCaseResults\&amp;quot;: [{\&amp;quot;TCaseResult\&amp;quot;:{\&amp;quot;tCaseName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Cases/CURA/ImageDiff_twins\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;CURA/ImageDiff_twins\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;CURA.ImageDiff_twins\&amp;quot;},\&amp;quot;tCaseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.589\&amp;quot;,\&amp;quot;length\&amp;quot;:5004501,\&amp;quot;materials\&amp;quot;:[{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;json\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;application/json\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\comparison-result-bundle.json\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/comparison-result-bundle.json\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.589\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\CURA.visitSite\\\\appointment.php%23summary(0.00).png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary(0.00).png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:43.920\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\CURA.visitSite\\\\default%23appointment(0.00).png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/default%23appointment(0.00).png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:44.194\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\CURA.visitSite\\\\home(47.87)FAILED.png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/home(47.87)FAILED.png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.118\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\CURA.visitSite\\\\profile.php%23login(0.00).png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/profile.php%23login(0.00).png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.343\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}},{\&amp;quot;Material\&amp;quot;:{\&amp;quot;url\&amp;quot;:\&amp;quot;null\&amp;quot;,\&amp;quot;suffix\&amp;quot;:\&amp;quot;\&amp;quot;,\&amp;quot;fileType\&amp;quot;:{\&amp;quot;FileType\&amp;quot;:{\&amp;quot;extension\&amp;quot;:\&amp;quot;png\&amp;quot;,\&amp;quot;mimeTypes\&amp;quot;:[\&amp;quot;image/png\&amp;quot;]}},\&amp;quot;path\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\CURA.twins_exam\\\\20190528_111335\\\\CURA.ImageDiff_twins\\\\CURA.visitSite\\\\revisited(0.00).png\&amp;quot;,\&amp;quot;hrefRelativeToRepositoryRoot\&amp;quot;:\&amp;quot;CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/revisited(0.00).png\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;2019-05-28T02:14:45.573\&amp;quot;,\&amp;quot;description\&amp;quot;:\&amp;quot;20190528_111335\&amp;quot;}}]}}]}},{\&amp;quot;TSuiteResult\&amp;quot;:{\&amp;quot;tSuiteName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;Test Suites/VT/makeIndex\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;VT/makeIndex\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;VT.makeIndex\&amp;quot;},\&amp;quot;tSuiteTimestamp\&amp;quot;: \&amp;quot;20190528_111336\&amp;quot;,\&amp;quot;tSuiteTimestampDir\&amp;quot;: \&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\VT.makeIndex\\\\20190528_111336\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;-999999999-01-01T00:00\&amp;quot;,\&amp;quot;length\&amp;quot;:0,\&amp;quot;tCaseResults\&amp;quot;: []}},{\&amp;quot;TSuiteResult\&amp;quot;:{\&amp;quot;tSuiteName\&amp;quot;:{\&amp;quot;id\&amp;quot;: \&amp;quot;_\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;_\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;_\&amp;quot;},\&amp;quot;tSuiteTimestamp\&amp;quot;: \&amp;quot;_\&amp;quot;,\&amp;quot;tSuiteTimestampDir\&amp;quot;: \&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\\\\_\\\\_\&amp;quot;,\&amp;quot;lastModified\&amp;quot;:\&amp;quot;-999999999-01-01T00:00\&amp;quot;,\&amp;quot;length\&amp;quot;:0,\&amp;quot;tCaseResults\&amp;quot;: []}}],\&amp;quot;baseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Materials\&amp;quot;,\&amp;quot;reportsDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Reports\&amp;quot;,}}}}\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689520</millis>
+  <sequence>28</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is \&amp;quot;{\&amp;quot;MaterialStorage\&amp;quot;:{\&amp;quot;baseDir\&amp;quot;:\&amp;quot;C:\\\\Users\\\\qcq0264\\\\katalon-workspace\\\\VisualTestingInKatalonStudio\\\\Storage\&amp;quot;}}\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689521</millis>
+  <sequence>30</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689522</millis>
+  <sequence>31</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689612</millis>
+  <sequence>32</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">15</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689613</millis>
+  <sequence>33</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689613</millis>
+  <sequence>34</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : assert mr != null</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">16</property>
+  <property name="stepIndex">2</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689616</millis>
+  <sequence>35</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : assert mr != null</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689616</millis>
+  <sequence>36</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : mr.scan()</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">18</property>
+  <property name="stepIndex">3</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689677</millis>
+  <sequence>37</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : mr.scan()</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:49</date>
+  <millis>1559009689678</millis>
+  <sequence>38</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : index = mr.makeIndex()</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">20</property>
+  <property name="stepIndex">4</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690519</millis>
+  <sequence>39</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : index = mr.makeIndex()</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690519</millis>
+  <sequence>40</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : comment(&amp;gt;&amp;gt;&amp;gt; $index.toString() is updated)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">22</property>
+  <property name="stepIndex">5</property>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690522</millis>
+  <sequence>41</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>&amp;gt;&amp;gt;&amp;gt; C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\index.html is updated</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690523</millis>
+  <sequence>42</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : comment(&amp;gt;&amp;gt;&amp;gt; $index.toString() is updated)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690523</millis>
+  <sequence>43</sequence>
+  <level>PASSED</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Test Cases/VT/makeIndex</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690524</millis>
+  <sequence>44</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endTest</method>
+  <thread>1</thread>
+  <message>End Test Case : Test Cases/VT/makeIndex</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690527</millis>
+  <sequence>45</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : exportKatalonReports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690706</millis>
+  <sequence>129</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Start generating HTML report folder at: C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\VT\\makeIndex\\20190528_111336...</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690745</millis>
+  <sequence>130</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>HTML report generated</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690746</millis>
+  <sequence>131</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Start generating CSV report folder at: C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\VT\\makeIndex\\20190528_111336...</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690770</millis>
+  <sequence>132</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>CSV report generated</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690771</millis>
+  <sequence>133</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Start generating JUnit report folder at: C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\VT\\makeIndex\\20190528_111336...</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690936</millis>
+  <sequence>134</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>JUnit report generated</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690936</millis>
+  <sequence>136</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : exportKatalonReports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-05-28T11:14:50</date>
+  <millis>1559009690975</millis>
+  <sequence>137</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endSuite</method>
+  <thread>1</thread>
+  <message>End Test Suite : Test Suites/VT/makeIndex</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+</log>

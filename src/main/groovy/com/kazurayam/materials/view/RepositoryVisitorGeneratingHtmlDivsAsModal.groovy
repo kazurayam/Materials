@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
@@ -45,6 +46,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     static final String classShortName = Helpers.getClassShortName(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
     
+    private ReportsAccessor reportsAccessor_
     private MarkupBuilder builder_
     private ComparisonResultBundle comparisonResultBundle_
     private PathResolutionLogBundleCache pathResolutionLogBundleCache_
@@ -53,6 +55,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         this.builder_ = builder
         this.comparisonResultBundle_ = null
         this.pathResolutionLogBundleCache_ = new PathResolutionLogBundleCache()
+    }
+    
+    void setReportsAccessor(ReportsAccessor reportsAccessor) {
+        this.reportsAccessor_ = reportsAccessor    
     }
     
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
@@ -355,7 +361,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     
     def anchorToReport = { Material mate ->
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
-        String reportHref = mate.getHrefToReport()
+        String reportHref = null
+        if (reportsAccessor_ != null) {
+            reportHref = reportsAccessor_.getHrefToReport(mate)
+        }
         //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
         //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
         if (reportHref != null) {

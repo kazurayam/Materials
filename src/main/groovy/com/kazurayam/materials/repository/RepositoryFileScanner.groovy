@@ -87,23 +87,15 @@ final class RepositoryFileScanner {
 
     private RepositoryRoot repoRoot_
 
-    RepositoryFileScanner(Path baseDir, Path reportsDir) {
+    RepositoryFileScanner(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
-        Objects.requireNonNull(reportsDir, "reportsDir must not be null")
         if (!Files.exists(baseDir)) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
         if (!Files.isDirectory(baseDir)) {
             throw new IllegalArgumentException("${baseDir} is not a directory")
         }
-        //if (!Files.exists(reportsDir)) {
-        //    throw new IllegalArgumentException("${reportsDir} does not exist")
-        //}
-        //if (!Files.isDirectory(reportsDir)) {
-        //    throw new IllegalArgumentException("${reportsDir} is not a directory")
-        //}
         repoRoot_ = new RepositoryRoot(baseDir)
-        repoRoot_.setReportsDir(reportsDir)
     }
 
     /**

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
@@ -27,6 +28,8 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
      
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
+     
+     private ReportsAccessor reportsAccessor_
      private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
      
      private int tSuiteResultCount
@@ -36,6 +39,10 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
      
      RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
          super(writer)
+     }
+     
+     void setReportsAccessor(ReportsAccessor reportsAccessor) {
+         this.reportsAccessor_ = reportsAccessor    
      }
      
      void setVisualTestingLogger(VisualTestingLogger vtLogger) {
@@ -76,19 +83,25 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
      @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {
          StringBuilder sb = new StringBuilder()
          sb.append(']')
-         if (tSuiteResult.getJUnitReportWrapper() != null) {
+         JUnitReportWrapper junitReportWrapper = null
+         ExecutionPropertiesWrapper executionPropertiesWrapper = null
+         if (reportsAccessor_ != null) {
+             junitReportWrapper = reportsAccessor_.getJUnitReportWrapper(tSuiteResult)
+             executionPropertiesWrapper = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResult)
+         }
+         if (junitReportWrapper != null) {
              sb.append(',')
              sb.append('"tags": ["')
              logger_.info("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
-             sb.append(tSuiteResult.getJUnitReportWrapper().getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
+             sb.append(junitReportWrapper.getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
              sb.append('"')
              sb.append(',')
              sb.append('"')
-             sb.append("${tSuiteResult.getExecutionPropertiesWrapper().getExecutionProfile()}")
+             sb.append("${executionPropertiesWrapper.getExecutionProfile()}")
              sb.append('"')
              sb.append(',')
              sb.append('"')
-             sb.append("${tSuiteResult.getExecutionPropertiesWrapper().getDriverName()}")
+             sb.append("${executionPropertiesWrapper.getDriverName()}")
              sb.append('"')
              sb.append(']')
          }
@@ -126,8 +139,12 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
      @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
          StringBuilder sb = new StringBuilder()
          sb.append(']')
-         if (tCaseResult.getParent() != null && tCaseResult.getParent().getJUnitReportWrapper() != null) {
-             def status = tCaseResult.getParent().getJUnitReportWrapper().getTestCaseStatus(tCaseResult.getTCaseName().getId())
+         JUnitReportWrapper junitReportWrapper = null
+         if (reportsAccessor_ != null) {
+             junitReportWrapper = reportsAccessor_.getJUnitReportWrapper(tCaseResult.getParent())
+         }
+         if (tCaseResult.getParent() != null && junitReportWrapper != null) {
+             def status = junitReportWrapper.getTestCaseStatus(tCaseResult.getTCaseName().getId())
              sb.append(',')
              sb.append('"tags": ["')
              sb.append(status)

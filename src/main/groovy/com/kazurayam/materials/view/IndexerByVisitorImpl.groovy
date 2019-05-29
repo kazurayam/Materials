@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -100,27 +102,30 @@ class IndexerByVisitorImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        String html = generate(repoRoot)
+        ReportsAccessor reportsAccessor = ReportsAccessorFactory.createInstance(reportsDir_)
+        String html = generate(repoRoot, reportsAccessor)
         output_.withWriter('utf-8') { writer ->
             writer.write(html)
         }
         logger_.info("generated ${output_.toString()}")
     }
 
-    String generate(RepositoryRoot repoRoot) throws IOException {
+    String generate(RepositoryRoot repoRoot, ReportsAccessor reportsAccessor) throws IOException {
         Objects.requireNonNull(repoRoot)
         def dir = repoRoot.getBaseDir().resolve('../..').normalize().toAbsolutePath()
         def title = dir.relativize(repoRoot.getBaseDir().normalize().toAbsolutePath()).toString()
         //
         StringWriter htmlFragments = new StringWriter()
         def htmlVisitor = new RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(htmlFragments)
+        htmlVisitor.setReportsAccessor(reportsAccessor)
         RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
         //
         StringWriter jsonSnippet = new StringWriter()
         def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+        jsonVisitor.setReportsAccessor(reportsAccessor)
         RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
         //
         StringBuilder sb = new StringBuilder()

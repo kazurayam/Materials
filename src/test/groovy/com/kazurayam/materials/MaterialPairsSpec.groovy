@@ -36,8 +36,7 @@ class MaterialPairsSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materialsDir = workdir_.resolve('Materials')
-        Path reportsDir   = workdir_.resolve('Reports')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir, reportsDir)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

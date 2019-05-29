@@ -15,6 +15,8 @@ import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 
@@ -76,14 +78,15 @@ class ImageDifferenceFilenameResolverDefaultImplSpec extends Specification {
         when:
         // verify the case of criteriaPercent is less than the actual diff magnitude -> file name should end with 'FAILED.png'
         double criteriaPercentF = 5.0
-        ImageDifferenceFilenameResolverDefaultImpl instanceF = new ImageDifferenceFilenameResolverDefaultImpl()
+        ReportsAccessor reportsAccessor = ReportsAccessorFactory.createInstance(reports)
+        ImageDifferenceFilenameResolverDefaultImpl instanceF = new ImageDifferenceFilenameResolverDefaultImpl(reportsAccessor)
         String fileNameF = instanceF.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentF)
         then:
         fileNameF == "CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72)FAILED.png"
         when:
         // verify the case of criteriaPercent is greater than the actual diff magnitude -> file name should end with '.png'
         Double criteriaPercentP = 10.0
-        ImageDifferenceFilenameResolverDefaultImpl instanceP = new ImageDifferenceFilenameResolverDefaultImpl()
+        ImageDifferenceFilenameResolverDefaultImpl instanceP = new ImageDifferenceFilenameResolverDefaultImpl(reportsAccessor)
         String fileNameP = instanceP.resolveImageDifferenceFilename(expMate, actMate, diff, criteriaPercentP)
         then:
         fileNameP == "CURA_Homepage.20181014_060500_product-20181014_060501_develop.(6.72).png"

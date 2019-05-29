@@ -28,7 +28,7 @@ class MaterialSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture")
     private static RepositoryRoot repoRoot_
     private static TCaseResult tcr_
-    private static Path reports
+
 
 
     // fixture methods
@@ -39,8 +39,7 @@ class MaterialSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        reports = workdir_.resolve('Reports')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials, reports)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -199,19 +198,6 @@ class MaterialSpec extends Specification {
         href != null
         href == 'main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         !href.contains('file:///')
-    }
-
-    def testGetHrefToReport() {
-        setup:
-            String timestamp = '20180805_081908'
-            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
-            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
-            Material mate1 = new MaterialImpl(tcr1, filePath).setParent(tcr1)
-        when:
-            String href = mate1.getHrefToReport()
-        then:
-            href.equals(Paths.get("../Reports/main/TS1/${timestamp}/${timestamp}.html").toString())
     }
 
     def testGetIdentifier_FileTypeOmmited() {
@@ -444,21 +430,6 @@ class MaterialSpec extends Specification {
         mate1.hashCode() != mate2.hashCode()
     }
 
-    
-    def testSetGetDescription() {
-        setup:
-            String timestamp = '20180805_081908'
-            TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance(timestamp))
-            TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
-            Path filePath = reports.resolve('main').resolve('TS1').resolve(timestamp).resolve('Report.html')
-            Material mate1 = new MaterialImpl(tcr1, filePath).setParent(tcr1)
-        when:
-            mate1.setDescription(timestamp)
-        then:
-            mate1.getDescription().equals(timestamp)
-            
-    }
-    
     def testSetGetLastModified_long() {
         setup:
         Material mate = new MaterialImpl(tcr_, '', new URL('http://demoaut.katalon.com/'),
