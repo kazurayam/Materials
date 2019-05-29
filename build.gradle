@@ -116,9 +116,10 @@ task pinpoint(type: Test) {
     //include "**/StatsEntrySpec.class"
     //include "**/StorageScannerSpec.class"
     //include "**/BaseIndexerSpec.class"
-    include "**/IndexerByVisitorImplSpec.class"
+    //include "**/IndexerByVisitorImplSpec.class"
     //include "**/JUnitReportWrapperSpec.class"
-    //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+    include "**/MaterialPairsSpec.class"
+    include "**/TSuiteResultSpec.class" 
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

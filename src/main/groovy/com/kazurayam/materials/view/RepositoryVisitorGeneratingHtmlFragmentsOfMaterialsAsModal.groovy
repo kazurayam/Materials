@@ -189,21 +189,26 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
     }
 
     String anchorToReport(Material mate) {
-        String reportHref = mate.getHrefToReport()
-        if (reportHref != null) {
-            Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
-            if (Files.exists(p)) {
-                StringBuilder sb = new StringBuilder()
-                sb.append('<a href="')
-                sb.append(reportHref)
-                sb.append('" class="btn btn-default" role="button" target="_blank">Report</a>')
-                return sb.toString()
+        if (reportsAccessor_ != null) {
+            String reportHref = reportsAccessor_.getHrefToReport(mate)
+            if (reportHref != null) {
+                Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
+                if (Files.exists(p)) {
+                    StringBuilder sb = new StringBuilder()
+                    sb.append('<a href="')
+                    sb.append(reportHref)
+                    sb.append('" class="btn btn-default" role="button" target="_blank">Report</a>')
+                    return sb.toString()
+                } else {
+                    logger_.debug("#anchorToReport ${p} does not exist")
+                    return null
+                }
             } else {
-                logger_.debug("#anchorToReport ${p} does not exist")
+                logger_.debug("#anchorToReport this.hrefToReport() returned null")
                 return null
             }
         } else {
-            logger_.debug("#anchorToReport this.hrefToReport() returned null")
+            logger_.warn("#anchorToReport reportsAccessor_ is null")
             return null
         }
     }
