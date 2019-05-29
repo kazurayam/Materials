@@ -32,6 +32,11 @@ class ReportsAccessorImpl implements ReportsAccessor {
     }
     
     @Override
+    Path getReportsDir() {
+        return this.reportsDir_
+    }
+    
+    @Override
     JUnitReportWrapper getJUnitReportWrapper(TSuiteResult tSuiteResult) {
         Objects.requireNonNull(tSuiteResult, "tSuiteResult must not be null")
         Path reportFilePath = reportsDir_.
