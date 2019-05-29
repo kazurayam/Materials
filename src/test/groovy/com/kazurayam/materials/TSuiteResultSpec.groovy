@@ -36,8 +36,7 @@ class TSuiteResultSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materialsDir = workdir_.resolve('Materials')
-        Path reportsDir   = workdir_.resolve('Reports')
-        mri_ = MaterialRepositoryImpl.newInstance(materialsDir, reportsDir)
+        mri_ = MaterialRepositoryImpl.newInstance(materialsDir)
         ms_  = MaterialStorageFactory.createInstance(workdir_.resolve('Storage'))
     }
     def setup() {}
@@ -240,47 +239,7 @@ class TSuiteResultSpec extends Specification {
         then:
         tsr.treeviewTitle().equals('main.TS1/20180530_130419')
     }
-    
-    /*
-    def testToBootstrapTreeviewData() {
-        setup:
-        TSuiteResult tsr = mri_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
-        when:
-        def s = tsr.toBootstrapTreeviewData()
-        logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")
-        then:
-        s.contains('text')
-        s.contains('nodes')
-    }
-    */
-
-    def testCreateJunitReportWrapper() {
-        setup:
-        TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180805_081908'))
-        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        when:
-        RepositoryRoot repoRoot = tsr.getRepositoryRoot()
-        Path reportsDir = repoRoot.getReportsDir()
-        JUnitReportWrapper instance = tsr.createJUnitReportWrapper(reportsDir)
-        then:
-        instance != null
-    }
-
-    def testCreateExecutionPropertiesWrapper() {
-        setup:
-        TSuiteResultId tsri = TSuiteResultId.newInstance(
-                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180805_081908'))
-        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        when:
-        RepositoryRoot repoRoot = tsr.getRepositoryRoot()
-        Path reportsDir = repoRoot.getReportsDir()
-        ExecutionPropertiesWrapper instance = tsr.createExecutionPropertiesWrapper(reportsDir)
-        then:
-        instance != null
-    }
-    
+        
     def test_TimestampFirstTSuiteResultComparator() {
         setup:
         List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))

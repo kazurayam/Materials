@@ -1,0 +1,49 @@
+{
+    "PathResolutionLogBundle": [
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_capture/20190528_111333/CURA.visitSite/home.png",
+                "TCaseName": "Test Cases/CURA/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "http://demoaut.katalon.com/"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_capture/20190528_111333/CURA.visitSite/profile.php%23login.png",
+                "TCaseName": "Test Cases/CURA/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "https://katalon-demo-cura.herokuapp.com/profile.php#login"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_capture/20190528_111333/CURA.visitSite/default%23appointment.png",
+                "TCaseName": "Test Cases/CURA/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "https://katalon-demo-cura.herokuapp.com/#appointment"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_capture/20190528_111333/CURA.visitSite/appointment.php%23summary.png",
+                "TCaseName": "Test Cases/CURA/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "https://katalon-demo-cura.herokuapp.com/appointment.php#summary"
+            }
+        },
+        {
+            "PathResolutionLog": {
+                "MaterialPath": "CURA.twins_capture/20190528_111333/CURA.visitSite/revisited.png",
+                "TCaseName": "Test Cases/CURA/visitSite",
+                "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+                "SubPath": "",
+                "URL": "https://katalon-demo-cura.herokuapp.com/"
+            }
+        }
+    ]
+}

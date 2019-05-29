@@ -97,7 +97,7 @@ final class IndexerRudimentaryImpl implements Indexer {
             logger_.error(msg)
             throw new IllegalStateException(msg)
         }
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         OutputStream os = output_.toFile().newOutputStream()

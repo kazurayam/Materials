@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
@@ -26,14 +27,24 @@ import groovy.xml.XmlUtil
  */
 class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+    
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal.class)
+    
+    private ReportsAccessor reportsAccessor_
     private VisualTestingLogger vtLogger_
+    
     RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal(Writer writer) {
         super(writer)
     }
+    
+    void setReportsAccessor(ReportsAccessor reportsAccessor) {
+        this.reportsAccessor_ = reportsAccessor    
+    }
+    
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
     }
+    
     @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {}
     @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {}
     @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {}
@@ -178,21 +189,26 @@ class RepositoryVisitorGeneratingHtmlFragmentsOfMaterialsAsModal
     }
 
     String anchorToReport(Material mate) {
-        String reportHref = mate.getHrefToReport()
-        if (reportHref != null) {
-            Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
-            if (Files.exists(p)) {
-                StringBuilder sb = new StringBuilder()
-                sb.append('<a href="')
-                sb.append(reportHref)
-                sb.append('" class="btn btn-default" role="button" target="_blank">Report</a>')
-                return sb.toString()
+        if (reportsAccessor_ != null) {
+            String reportHref = reportsAccessor_.getHrefToReport(mate)
+            if (reportHref != null) {
+                Path p = mate.getParent().getParent().getRepositoryRoot().getBaseDir().resolve(reportHref)
+                if (Files.exists(p)) {
+                    StringBuilder sb = new StringBuilder()
+                    sb.append('<a href="')
+                    sb.append(reportHref)
+                    sb.append('" class="btn btn-default" role="button" target="_blank">Report</a>')
+                    return sb.toString()
+                } else {
+                    logger_.debug("#anchorToReport ${p} does not exist")
+                    return null
+                }
             } else {
-                logger_.debug("#anchorToReport ${p} does not exist")
+                logger_.debug("#anchorToReport this.hrefToReport() returned null")
                 return null
             }
         } else {
-            logger_.debug("#anchorToReport this.hrefToReport() returned null")
+            logger_.warn("#anchorToReport reportsAccessor_ is null")
             return null
         }
     }

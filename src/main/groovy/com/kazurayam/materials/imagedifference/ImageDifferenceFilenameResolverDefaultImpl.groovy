@@ -4,6 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.ExecutionProfile
+import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.view.ExecutionProfileImpl
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.Material
@@ -17,6 +18,13 @@ import com.kazurayam.materials.TSuiteResult
 class ImageDifferenceFilenameResolverDefaultImpl implements ImageDifferenceFilenameResolver {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageDifferenceFilenameResolverDefaultImpl.class)
+    
+    private ReportsAccessor reportsAccessor_
+    
+    ImageDifferenceFilenameResolverDefaultImpl(ReportsAccessor reportsAccessor) {
+        Objects.requireNonNull(reportsAccessor, "reportsAccessor must not be null")
+        this.reportsAccessor_ = reportsAccessor
+    }
     
     /**
      * Given with the following arguments:
@@ -38,8 +46,8 @@ class ImageDifferenceFilenameResolverDefaultImpl implements ImageDifferenceFilen
         logger_.debug("#resolveImageDifferenceFilename tSuiteResultExpected=${tSuiteResultExpected}")
         logger_.debug("#resolveImageDifferenceFilename tSuiteResultActual  =${tSuiteResultActual}")
         
-        ExecutionPropertiesWrapper epwExpected = tSuiteResultExpected.getExecutionPropertiesWrapper()
-        ExecutionPropertiesWrapper epwActual   = tSuiteResultActual.getExecutionPropertiesWrapper()
+        ExecutionPropertiesWrapper epwExpected = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultExpected)
+        ExecutionPropertiesWrapper epwActual   = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultActual)
         logger_.debug("#resolveImageDifferenceFilename epwExpected=${epwExpected}")
         logger_.debug("#resolveImageDifferenceFilename epwActual  =${epwActual}")
         

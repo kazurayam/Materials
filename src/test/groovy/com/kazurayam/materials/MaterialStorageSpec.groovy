@@ -29,7 +29,6 @@ class MaterialStorageSpec extends Specification {
         Helpers.copyDirectory(fixture_, workdir_)
         //
         mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve("Materials"))
-        
     }
     def setup() {}
     def cleanup() {}

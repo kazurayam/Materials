@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="twins_exam" time="3" tests="0" failures="1" errors="0">
+    <testsuite name="twins_exam" tests="0" failures="1" errors="0" time="3" timestamp="2019-05-28 11:14:41" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/CURA/twins_exam">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\CURA\\twins_exam\\20190528_111335"/>
+            <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\CURA\\twins_exam\\20190528_111335\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+            <property name="hostAddress" value="172.19.71.132"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.1.5.3"/>
+        </properties>
+        <testcase name="Test Cases/CURA/ImageDiff_twins" classname="Test Cases/CURA/ImageDiff_twins" status="FAILED">
+            <failure type="FAILED" message="Test Cases/CURA/ImageDiff_twins FAILED.&#xA;Reason:&#xA;com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.&#xD;&#xA;&#x9;at com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)&#xD;&#xA;&#x9;at com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageDiffer.runTwins(ImageDiffer.groovy:71)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;&#xA;&#x9;at ImageDiff_twins.run(ImageDiff_twins:9)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:133)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:116)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:83)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;&#xA;&#x9;at TempTestSuite1559009615655.run(TempTestSuite1559009615655.groovy:35)&#xD;&#xA;"/>
+            <system-out>2019-05-28 11:14:43 - [TEST_CASE][FAILED] - Test Cases/CURA/ImageDiff_twins: Test Cases/CURA/ImageDiff_twins FAILED.
+Reason:
+com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)&#xD;
+	at com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.runTwins(ImageDiffer.groovy:71)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;
+	at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;
+	at ImageDiff_twins.run(ImageDiff_twins:9)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:133)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:116)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:83)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1559009615655.run(TempTestSuite1559009615655.groovy:35)&#xD;
+&#xD;
+&#xD;
+2019-05-28 11:14:43 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"}}"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"}}"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_ID is "Test Suites/CURA/twins_exam"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTSUITE_TIMESTAMP is "20190528_111335"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase CURRENT_TESTCASE_ID is "Test Cases/CURA/ImageDiff_twins"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_REPOSITORY is "{"MaterialRepository":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials","currentTsName":{"id": "Test Suites/CURA/twins_exam","abbreviatedId": "CURA/twins_exam","value": "CURA.twins_exam"},"currentTsTimestamp":{"TSuiteTimestamp":{"timestamp":"20190528_111335"}},"repoRoot":{"RepositoryRoot":{"tSuiteResults":[{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/CURA/twins_capture","abbreviatedId": "CURA/twins_capture","value": "CURA.twins_capture"},"tSuiteTimestamp": "20190528_111333","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333","lastModified":"2019-05-28T02:14:09.412","length":6130359,"tCaseResults": [{"TCaseResult":{"tCaseName":{"id": "Test Cases/CURA/visitSite","abbreviatedId": "CURA/visitSite","value": "CURA.visitSite"},"tCaseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite","lastModified":"2019-05-28T02:14:09.412","length":6130359,"materials":[{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite\\appointment.php%23summary.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111333/CURA.visitSite/appointment.php%23summary.png","lastModified":"2019-05-28T02:14:06.925","description":"20190528_111333"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite\\default%23appointment.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111333/CURA.visitSite/default%23appointment.png","lastModified":"2019-05-28T02:14:04.324","description":"20190528_111333"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite\\home.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111333/CURA.visitSite/home.png","lastModified":"2019-05-28T02:13:57.321","description":"20190528_111333"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite\\profile.php%23login.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111333/CURA.visitSite/profile.php%23login.png","lastModified":"2019-05-28T02:14:00.483","description":"20190528_111333"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111333\\CURA.visitSite\\revisited.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111333/CURA.visitSite/revisited.png","lastModified":"2019-05-28T02:14:09.412","description":"20190528_111333"}}]}}]}},{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/CURA/twins_capture","abbreviatedId": "CURA/twins_capture","value": "CURA.twins_capture"},"tSuiteTimestamp": "20190528_111334","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334","lastModified":"2019-05-28T02:14:38.013","length":5949570,"tCaseResults": [{"TCaseResult":{"tCaseName":{"id": "Test Cases/CURA/visitSite","abbreviatedId": "CURA/visitSite","value": "CURA.visitSite"},"tCaseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite","lastModified":"2019-05-28T02:14:38.013","length":5949570,"materials":[{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite\\appointment.php%23summary.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111334/CURA.visitSite/appointment.php%23summary.png","lastModified":"2019-05-28T02:14:35.547","description":"20190528_111334"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite\\default%23appointment.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111334/CURA.visitSite/default%23appointment.png","lastModified":"2019-05-28T02:14:32.915","description":"20190528_111334"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite\\home.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111334/CURA.visitSite/home.png","lastModified":"2019-05-28T02:14:25.806","description":"20190528_111334"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite\\profile.php%23login.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111334/CURA.visitSite/profile.php%23login.png","lastModified":"2019-05-28T02:14:29.121","description":"20190528_111334"}},{"Material":{"url":"null","suffix":"","fileType":{"FileType":{"extension":"png","mimeTypes":["image/png"]}},"path":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190528_111334\\CURA.visitSite\\revisited.png","hrefRelativeToRepositoryRoot":"CURA.twins_capture/20190528_111334/CURA.visitSite/revisited.png","lastModified":"2019-05-28T02:14:38.013","description":"20190528_111334"}}]}}]}},{"TSuiteResult":{"tSuiteName":{"id": "Test Suites/CURA/twins_exam","abbreviatedId": "CURA/twins_exam","value": "CURA.twins_exam"},"tSuiteTimestamp": "20190528_111335","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190528_111335","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}},{"TSuiteResult":{"tSuiteName":{"id": "_","abbreviatedId": "_","value": "_"},"tSuiteTimestamp": "_","tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\_\\_","lastModified":"-999999999-01-01T00:00","length":0,"tCaseResults": []}}],"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials","reportsDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports",}}}}"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase MATERIAL_STORAGE is "{"MaterialStorage":{"baseDir":"C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"}}"&#xD;
+&#xD;
+2019-05-28 11:14:43 - [TEST_STEP][PASSED] - TESTSUITE_ID = "CURA/twins_capture": null&#xD;
+&#xD;
+2019-05-28 11:14:43 - [TEST_STEP][PASSED] - criteriaPercentage = 1.0: null&#xD;
+&#xD;
+2019-05-28 11:14:43 - [TEST_STEP][FAILED] - com.kazurayam.visualtesting.ImageDiffer.runTwins(TESTSUITE_ID, criteriaPercentage): com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - &gt;&gt;&gt; diff image files will be saved into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_exam\20190528_111335&#xD;
+&#xD;
+2019-05-28 11:14:43 - [MESSAGE][INFO] - Similar CURA.twins_exam\20190528_111335\CURA.ImageDiff_twins\CURA.visitSite\appointment.php%23summary(0.00).png &#xD;
+&#xD;
+2019-05-28 11:14:44 - [MESSAGE][INFO] - Similar CURA.twins_exam\20190528_111335\CURA.ImageDiff_twins\CURA.visitSite\default%23appointment(0.00).png &#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][INFO] - Different CURA.twins_exam\20190528_111335\CURA.ImageDiff_twins\CURA.visitSite\home(47.87)FAILED.png &#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][INFO] - &gt;&gt;&gt; diffRatio(47.87) &gt; criteria(1.0) expected(CURA.twins_capture\20190528_111333\CURA.visitSite\home.png) actual(CURA.twins_capture\20190528_111334\CURA.visitSite\home.png)&#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][INFO] - Similar CURA.twins_exam\20190528_111335\CURA.ImageDiff_twins\CURA.visitSite\profile.php%23login(0.00).png &#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][INFO] - Similar CURA.twins_exam\20190528_111335\CURA.ImageDiff_twins\CURA.visitSite\revisited(0.00).png &#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][FAILED] - One or more pairs of screenshot are different.&#xD;
+&#xD;
+2019-05-28 11:14:45 - [MESSAGE][FAILED] - com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.</system-out>
+            <system-err>2019-05-28 11:14:43 - [TEST_CASE][FAILED] - Test Cases/CURA/ImageDiff_twins: Test Cases/CURA/ImageDiff_twins FAILED.
+Reason:
+com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)&#xD;
+	at com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.runTwins(ImageDiffer.groovy:71)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;
+	at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;
+	at ImageDiff_twins.run(ImageDiff_twins:9)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:133)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:116)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:83)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1559009615655.run(TempTestSuite1559009615655.groovy:35)</system-err>
+        </testcase>
+        <system-out>2019-05-28 11:14:41 - [TEST_SUITE][INCOMPLETE] - twins_exam: null</system-out>
+        <system-err>2019-05-28 11:14:41 - [TEST_SUITE][INCOMPLETE] - twins_exam: null</system-err>
+    </testsuite>
+</testsuites>

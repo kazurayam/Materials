@@ -25,7 +25,6 @@ final class RepositoryRoot {
     static Logger logger_ = LoggerFactory.getLogger(RepositoryRoot.class)
 
     private Path baseDir_
-    private Path reportsDir_ = null
     private List<TSuiteResult> tSuiteResults_
 
     RepositoryRoot(Path baseDir) {
@@ -35,15 +34,6 @@ final class RepositoryRoot {
         tSuiteResults_ = new ArrayList<TSuiteResult>()
     }
 
-    // ------------------ method for Reports directory ----------------------
-    void setReportsDir(Path reportsDir) {
-        this.reportsDir_ = reportsDir
-    }
-    
-    Path getReportsDir() {
-        return this.reportsDir_
-    }
-    
     // ------------------- getter -------------------------------------------
     Path getBaseDir() {
         return baseDir_
@@ -306,8 +296,7 @@ final class RepositoryRoot {
             sb.append(tsr.toJsonText())
         }
         sb.append('],')
-        sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
-        sb.append('"reportsDir":"' + Helpers.escapeAsJsonText(this.getReportsDir().toString()) + '",')
+        sb.append('"baseDir":"' + Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '"')
         sb.append('}}')
         return sb.toString()
     }

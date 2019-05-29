@@ -6,7 +6,6 @@ import java.nio.file.Paths
 import java.util.stream.Collectors
 
 import javax.imageio.ImageIO
-
 import org.apache.commons.io.FileUtils
 
 import com.kazurayam.materials.FileType
@@ -16,6 +15,8 @@ import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialPair
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.impl.MaterialCoreImpl
@@ -62,8 +63,9 @@ class ComparisonResultSpec extends Specification {
                 ImageIO.read(expected.getPath().toFile()),
                 ImageIO.read(actual.getPath().toFile())
                 )
-            double criteriaPercentage = 5.0    
-            ImageDifferenceFilenameResolver filenameResolver = new ImageDifferenceFilenameResolverDefaultImpl()
+            double criteriaPercentage = 5.0
+            ReportsAccessor reportsAccessor = ReportsAccessorFactory.createInstance(reports)
+            ImageDifferenceFilenameResolver filenameResolver = new ImageDifferenceFilenameResolverDefaultImpl(reportsAccessor)
             String fileName = filenameResolver.resolveImageDifferenceFilename(
                 expected,
                 actual,

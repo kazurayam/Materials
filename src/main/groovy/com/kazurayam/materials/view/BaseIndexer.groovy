@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
@@ -86,12 +88,13 @@ class BaseIndexer implements Indexer {
         vtLogger_.info(this.class.getSimpleName() + "#execute baseDir is ${baseDir_}")
         vtLogger_.info(this.class.getSimpleName() + "#execute reportsDir is ${reportsDir_}")
         vtLogger_.info(this.class.getSimpleName() + "#execute output is ${output_}")
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_, reportsDir_)
+        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+        ReportsAccessor reportsAccessor = ReportsAccessorFactory.createInstance(reportsDir_)
         Writer w = new OutputStreamWriter(new FileOutputStream(output_.toFile()), 'utf-8')
         MarkupBuilder mb = new MarkupBuilder(w)
-        generate(repoRoot, mb)
+        generate(repoRoot, reportsAccessor, mb)
         logger_.info("generated ${output_.toString()}")
     }
     
@@ -102,8 +105,9 @@ class BaseIndexer implements Indexer {
      * @param repoRoot
      * @param mb
      */
-    void generate(RepositoryRoot repoRoot, MarkupBuilder markupBuilder) {
+    void generate(RepositoryRoot repoRoot, ReportsAccessor reportsAccessor, MarkupBuilder markupBuilder) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
+        Objects.requireNonNull(reportsAccessor, "reportsAccessor must not be null")
         Objects.requireNonNull(markupBuilder, "markupBuilder must not be null")
         // title
         Path currDir = repoRoot.getBaseDir().getParent().getParent().
@@ -115,6 +119,7 @@ class BaseIndexer implements Indexer {
         def generateHtmlDivsAsModal = { RepositoryRoot rp ->
             // generate HTML <div> tags as Modal window
             def htmlVisitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
+            htmlVisitor.setReportsAccessor(reportsAccessor)
             if (vtLogger_ != null) {
                 htmlVisitor.setVisualTestingLogger(vtLogger_)
             }
@@ -127,6 +132,7 @@ class BaseIndexer implements Indexer {
             // generate the data for Bootstrap Treeview
             StringWriter jsonSnippet = new StringWriter()
             def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+            jsonVisitor.setReportsAccessor(reportsAccessor)
             if (vtLogger_ != null) {
                 jsonVisitor.setVisualTestingLogger(vtLogger_)
             }
