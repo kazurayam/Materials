@@ -10,6 +10,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
@@ -17,6 +18,7 @@ import com.kazurayam.materials.view.JUnitReportWrapper
 class ReportsAccessorImpl implements ReportsAccessor {
     
     static Logger logger_ = LoggerFactory.getLogger(ReportsAccessorImpl.class)
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private Path reportsDir_
     
@@ -29,6 +31,10 @@ class ReportsAccessorImpl implements ReportsAccessor {
         this.reportsDir_ = reportsDir
         
         // do more business
+    }
+    
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
     
     @Override
@@ -46,7 +52,9 @@ class ReportsAccessorImpl implements ReportsAccessor {
         if (Files.exists(reportFilePath)) {
             return new JUnitReportWrapper(reportFilePath)
         } else {
-            logger_.warn("#getJUnitReportWrapper ${reportFilePath} does not exist")
+            String msg = this.class.getSimpleName() + "#getJUnitReportWrapper ${reportFilePath} does not exist"
+            logger_.warn(msg)
+            vtLogger_.failed(msg)
             return null
         }
     }
@@ -61,7 +69,9 @@ class ReportsAccessorImpl implements ReportsAccessor {
         if (Files.exists(expropFilePath)) {
             return new ExecutionPropertiesWrapper(expropFilePath)
         } else {
-            logger_.warn("#getExecutionPropertiesWrapper ${expropFilePath} does not exist")
+            String msg = this.class.getSimpleName() + "#getExecutionPropertiesWrapper ${expropFilePath} does not exist"
+            logger_.warn(msg)
+            vtLogger_.failed(msg)
             return null
         }
     }
@@ -101,6 +111,7 @@ class ReportsAccessorImpl implements ReportsAccessor {
         // as of Katalon Studio v6.1.5, the name of HTML report is in the format of
         //     Reports/CURA/twins_exam/20190528_111335/20190528_111335.html
         //
+        Objects.requireNonNull(tSuiteTimestampPath, this.class.getSimpleName() + "#getHrefToReport tSuiteTimestampPath must not be null")
         Path htmlPath = tSuiteTimestampPath.resolve(tSuiteTimestampPath.getFileName().toString() + '.html').toAbsolutePath()
         
         // we want to relativize it; relative to the Materials dir
@@ -108,35 +119,15 @@ class ReportsAccessorImpl implements ReportsAccessor {
             Path relativeHtmlPath = materialsDir.relativize(htmlPath).normalize()
             return relativeHtmlPath.toString().replace(File.separator, '/')
         } else {
-            logger_.info("#getHrefToReport different root. htmlPath='${htmlPath}' materialsDir='${materialsDir}'")
-            return null
-        }
-    }
-    /*
-    String getHrefToReport() {
-        TCaseResult tCaseResult = this.getParent()
-        TSuiteResult tSuiteResult = tCaseResult.getParent()
-        RepositoryRoot repoRoot = tSuiteResult.getParent()
-        Path reportsDir = repoRoot.getReportsDir()
-        if (reportsDir != null) {
-            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport reportsDir=${reportsDir.toString()}")
-            //vtLogger_.info(this.class.getSimpleName() + "#getHrefToReport TSuiteName=${tSuiteResult.getTSuiteName().toString()}")
-            Path tsnPath = reportsDir.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
-            Path tstPath = tsnPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
-            Path htmlPath = tstPath.resolve(tstPath.getFileName().toString() + '.html').toAbsolutePath()
-            // we need to relativise it; relative to the Materials dir
-            Path baseDir = repoRoot.getBaseDir().toAbsolutePath()
-            if (htmlPath.getRoot() == baseDir.getRoot()) {
-                Path relativeHtmlPath = baseDir.relativize(htmlPath).normalize()
-                return relativeHtmlPath.toString()
-            } else {
-                vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport different root. htmlPath=${htmlPath} baseDir=${baseDir}")
-                return null
+            String msg = this.class.getSimpleName() + "#getHrefToReport different root of path." + 
+                " therefore unable to create relative href from the material to the report html." + 
+                " htmlPath=\'${htmlPath}\' materialsDir=\'${materialsDir}\'"
+            logger_.info(msg)
+            if (vtLogger_ != null) {
+                vtLogger_.info(msg)
             }
-        } else {
-            vtLogger_.failed(this.class.getSimpleName() + "#getHrefToReport reportsDir is null")
             return null
         }
     }
-     */
+    
 }

@@ -148,17 +148,17 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 logger_.info("#getOriginHref returning ${result}")
                 return result
             } else {
-                String msg = "#getOriginHref could not find a PathResolutionLog entry of " + 
+                String msg = this.class.getSimpleName() + "#getOriginHref could not find a PathResolutionLog entry of " + 
                             "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
                             " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
-                logger_.warn(msg)
-                vtLogger_.failed(msg)
+                logger_.info(msg)
+                vtLogger_.info(msg)
                 return null
             }
         } else {
-            String msg = "#getOriginHref ${path} does not exist"
+            String msg = this.class.getSimpleName() + "#getOriginHref ${path} does not exist"
             logger_.info(msg)
-            vtLogger_.failed(msg)
+            vtLogger_.info(msg)
             return null
         }
     }
@@ -362,9 +362,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     def anchorToReport = { Material mate ->
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = null
-        if (reportsAccessor_ != null) {
-            reportHref = reportsAccessor_.getHrefToReport(mate)
-        }
+        Objects.requireNonNull(reportsAccessor_ , this.class.getSimpleName() + "#anchorToReport reportsAccessor_ must not be null")
+        reportHref = reportsAccessor_.getHrefToReport(mate)
         //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
         //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
         if (reportHref != null) {
@@ -379,9 +378,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 return null
             }
         } else {
-            String msg = this.class.getSimpleName() + "#anchorToReport mate.getHrefToReport() returned null. mate is ${mate.toString()}"
-            logger_.warn(msg)
-            vtLogger_.failed(msg)
+            String msg = this.class.getSimpleName() + "#anchorToReport reportsAccessor_.getHrefToReport(mate) returned null. mate is ${mate.toString()}"
+            logger_.info(msg)
+            vtLogger_.info(msg)
             return null
         }
     }

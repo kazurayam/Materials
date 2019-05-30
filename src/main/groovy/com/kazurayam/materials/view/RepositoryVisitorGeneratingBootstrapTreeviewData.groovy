@@ -104,6 +104,8 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              sb.append("${executionPropertiesWrapper.getDriverName()}")
              sb.append('"')
              sb.append(']')
+         } else {
+             vtLogger_.info(this.class.getSimpleName() + "#postVisitTSuiteResult failed to instanciate JUnitReportWrapper object") 
          }
          sb.append('}')
          pw_.print(sb.toString())
