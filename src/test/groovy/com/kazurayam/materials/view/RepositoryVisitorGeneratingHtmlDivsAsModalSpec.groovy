@@ -13,6 +13,8 @@ import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.MaterialStorageFactory
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
@@ -51,6 +53,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             //
             Path materialsDir = caseOutputDir.resolve('Materials')
             Path storageDir = caseOutputDir.resolve('Storage')
+            Path reportsDir = caseOutputDir.resolve('Reports')
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
@@ -58,11 +61,13 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
                 TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_111956')),
                 TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_112053')),
             ])
+            ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
             Path output = caseOutputDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)
+            visitor.setReportsAccessor(ra)
         then:
             visitor != null
         when:
