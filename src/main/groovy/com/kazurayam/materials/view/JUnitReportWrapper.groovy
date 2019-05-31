@@ -29,13 +29,15 @@ final class JUnitReportWrapper {
     }
     private Document document_
     private XPath xpath_
-
+    private File file_
+    
     JUnitReportWrapper(Path path) {
         this(path.toFile())
     }
 
     JUnitReportWrapper(File file) {
         Objects.requireNonNull(file)
+        this.file_ = file
         DocumentBuilder db = dbFactory_.newDocumentBuilder()
         Document document = db.parse(file)
         init(document)
@@ -67,7 +69,7 @@ final class JUnitReportWrapper {
             sb.append("EXECUTED:${tests + failures + errors},FAILED:${failures},ERROR:${errors}")
             return sb.toString()
         } else {
-            logger_.debug("#getTestSuiteSummary testSuiteId='${testSuiteId}' is not found in the document")
+            logger_.warn("#getTestSuiteSummary testSuiteId='${testSuiteId}' is not found in the file ${file_}")
             return null
         }
     }
@@ -75,7 +77,7 @@ final class JUnitReportWrapper {
     /**
      *
      * @param testCaseId e.g, 'Test Cases/main/TC1'
-     * @return 'PASSED' or 'FAILED', returns '' if the Test Case not found
+     * @return 'PASSED' or 'FAILED'. will return '----' if the testCaseId is not found in the JUnit_Repoert.xml
      */
     String getTestCaseStatus(String testCaseId) {
         Objects.requireNonNull(testCaseId)
@@ -85,7 +87,9 @@ final class JUnitReportWrapper {
             String status = xpath_.evaluate("/testsuites/testsuite/testcase[@name='${testCaseId}']/@status", document_)
             return status
         } else {
-            logger_.debug("#getTestCaseStatus testCaseId='${testCaseId}' is not found in the document")
+            String msg = "#getTestCaseStatus testCaseId='${testCaseId}' is not found in the file ${file_}"
+            logger_.warn(msg)
+            return '----'
         }
     }
 }
