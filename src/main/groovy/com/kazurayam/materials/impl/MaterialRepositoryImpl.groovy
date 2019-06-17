@@ -638,6 +638,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
                 + " Don\'t get surprized. Just execute the chronos test suite again."
                 + " Possibly Chronos mode will work fine next time.")
+        } else {
+            vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
         }
         
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
@@ -646,7 +648,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one" 
         TSuiteResult actualTSR   = tSuiteResults[0]
         TSuiteResult expectedTSR = tSuiteResults[1]
-
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
+        
         // the result to be returned
         MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
         

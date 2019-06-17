@@ -84,7 +84,7 @@ final class JUnitReportWrapper {
         String location = "/testsuites/testsuite/testcase[@name='${testCaseId}']"
         Node testCaseNode = (Node)xpath_.evaluate(location, document_, XPathConstants.NODE)
         if (testCaseNode != null) {
-            String status = xpath_.evaluate("/testsuites/testsuite/testcase[@name='${testCaseId}']/@status", document_)
+            String status = xpath_.evaluate(location + "/@status", document_)
             return status
         } else {
             String msg = "#getTestCaseStatus testCaseId='${testCaseId}' is not found in the file ${file_}"

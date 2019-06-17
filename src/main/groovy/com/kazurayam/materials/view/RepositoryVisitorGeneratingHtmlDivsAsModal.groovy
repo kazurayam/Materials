@@ -378,7 +378,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                 return null
             }
         } else {
-            String msg = this.class.getSimpleName() + "#anchorToReport reportsAccessor_.getHrefToReport(mate) returned null. mate is ${mate.toString()}"
+            String msg = this.class.getSimpleName() + "#anchorToReport reportsAccessor_.getHrefToReport(mate) returned null. mate is ${mate.getPath()}"
             logger_.info(msg)
             vtLogger_.info(msg)
             return null
