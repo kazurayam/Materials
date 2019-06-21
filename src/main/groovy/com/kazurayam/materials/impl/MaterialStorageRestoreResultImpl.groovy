@@ -1,10 +1,13 @@
 package com.kazurayam.materials.impl
 
 import com.kazurayam.materials.MaterialStorageRestoreResult
+import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteTimestamp
 
 class MaterialStorageRestoreResultImpl implements MaterialStorageRestoreResult {
 	
+
 	private TSuiteResult tSuiteResult_
 	private int count_
 	

@@ -120,7 +120,8 @@ task pinpoint(type: Test) {
     //include "**/JUnitReportWrapperSpec.class"
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/MaterialStorageSpec.class"
-	include "**/MaterialStorageRestoreResultSpec.class"
+	include "**/MaterialStorageSpec.class"
+	include "**/RetrievalBySpec.class"
 	exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

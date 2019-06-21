@@ -9,11 +9,13 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
+import com.kazurayam.materials.MaterialStorageRestoreResult
 import com.kazurayam.materials.RetrievalBy
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.RetrievalBy.SearchContext
+import com.kazurayam.materials.impl.MaterialStorageRestoreResultImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 
 class MaterialStorageImpl implements MaterialStorage {
@@ -186,35 +188,6 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getTSuiteResultList()
     }
         
-    /**
-     *
-     */
-    @Override
-    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
-        Objects.requireNonNull(intoMR, "intoMR must not be null")
-        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        intoMR.putCurrentTestSuite(tSuiteResultId)
-        
-        if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
-            //throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
-            System.err.println("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
-            return 0
-        }
-        
-        Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
-        Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
-        boolean skipIfIdentical = true
-        
-        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
-        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
-        
-        // let the MaterialRepository to scan the disk to reflesh its internal data structure
-        if (scan) {
-            intoMR.scan()
-        }
-        // done
-        return count
-    }
     
     @Override
     void status(Writer output, Map<String, Object> options) {
@@ -295,20 +268,51 @@ class MaterialStorageImpl implements MaterialStorage {
     }
      */
     
+	/**
+	 *
+	 */
+	@Override
+	MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
+		Objects.requireNonNull(intoMR, "intoMR must not be null")
+		Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+		intoMR.putCurrentTestSuite(tSuiteResultId)
+		
+		if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
+			//throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
+			System.err.println("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
+			return MaterialStorageRestoreResult.NULL
+		}
+		
+		Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+		Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+		boolean skipIfIdentical = true
+		
+		logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
+		int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
+		
+		// let the MaterialRepository to scan the disk to reflesh its internal data structure
+		if (scan) {
+			intoMR.scan()
+		}
+		// done
+		return new MaterialStorageRestoreResultImpl(new TSuiteResultImpl(tSuiteResultId), count)
+	}
+	
     @Override
-    int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
+    List<MaterialStorageRestoreResult> restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
-        int count = 0
+        List<MaterialStorageRestoreResult> restoreResultList = new ArrayList<MaterialStorageRestoreResult>()
         for (TSuiteResultId tsri : tSuiteResultIdList) {
-            count += this.restore(intoMR, tsri, false)
+            MaterialStorageRestoreResult restoreResult = this.restore(intoMR, tsri, false)
+			restoreResultList.add(restoreResult)
         }
         componentMR_.scan()
-        return count
+        return restoreResultList
     }
     
     @Override
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+    MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
                                     RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
@@ -320,39 +324,39 @@ class MaterialStorageImpl implements MaterialStorage {
      *
      */
     @Override
-    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+    MaterialStorageRestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
                                     RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        int count = 0
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
         // copy the files
-        count += this.restore(intoMR, tSuiteResult.getId())
-        return count
+        MaterialStorageRestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
+        return restoreResult
     }
     
     /**
      * 
      */
     @Override
-    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
+    List<MaterialStorageRestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
                                     RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        int count = 0
+        List<MaterialStorageRestoreResult> restoreResultList = new ArrayList<MaterialStorageRestoreResult>()
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find some TSuiteResult objects
         List<TSuiteResult> list = by.findTSuiteResults(context)
         for (TSuiteResult tSuiteResult : list) {
             // copy the files
-            count += this.restore(intoMR, tSuiteResult.getId(), false)
+            MaterialStorageRestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId(), false)
+			restoreResultList.add(restoreResult)
         }
         componentMR_.scan()
-        return count
+        return restoreResultList
     }
     
     @Override

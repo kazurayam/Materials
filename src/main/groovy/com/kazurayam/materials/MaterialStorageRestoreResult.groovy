@@ -1,5 +1,9 @@
 package com.kazurayam.materials
 
+
+import com.kazurayam.materials.impl.MaterialStorageRestoreResultImpl
+import com.kazurayam.materials.impl.TSuiteResultImpl
+
 /**
  * An instance of MaterialStorageRestoreResult object is returned by 
  * MaterialStrage#restoreUnary(...) method.
@@ -10,6 +14,8 @@ package com.kazurayam.materials
  */
 interface MaterialStorageRestoreResult {
 
+	static MaterialStorageRestoreResult NULL = new MaterialStorageRestoreResultImpl(new TSuiteResultImpl(TSuiteName.NULL, TSuiteTimestamp.NULL), 0)
+	
 	TSuiteResult getTSuiteResult()
 	
 	int getCount()

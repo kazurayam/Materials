@@ -167,7 +167,7 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
+    MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
     
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
@@ -179,7 +179,7 @@ interface MaterialStorage {
      * @return number of Material files transfered
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
+    List<MaterialStorageRestoreResult> restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
     
     /**
      * Retrieve a single TSuiteResult out of the MaterialStorage by the retrievalBy, then
@@ -192,13 +192,13 @@ interface MaterialStorage {
      * @return
      * @throws IOException
      */
-    int restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+    MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    int restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+    MaterialStorageRestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    int restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
+    List<MaterialStorageRestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
 
     void scan()

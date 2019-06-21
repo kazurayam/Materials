@@ -34,6 +34,10 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     private long size_
 
     // ------------------ constructors & initializer -------------------------------
+	TSuiteResultImpl(TSuiteResultId tSuiteResultId) {
+		this(tSuiteResultId.getTSuiteName(), tSuiteResultId.getTSuiteTimestamp())
+	}
+	
     TSuiteResultImpl(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
         Objects.requireNonNull(testSuiteName)
         Objects.requireNonNull(testSuiteTimestamp)
