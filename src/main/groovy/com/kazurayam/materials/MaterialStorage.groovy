@@ -2,6 +2,7 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
+
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.
@@ -164,10 +165,10 @@ interface MaterialStorage {
      * @param intoMR
      * @param tSuiteResultId
      * @param scan wither to call scan() after restoring this TSuiteResultId
-     * @return number of Material files transfered
+     * @return RestoreResult containing a TSuiteResult and int count of copied files
      * @throws IOException
      */
-    MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
+    RestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
     
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
@@ -176,10 +177,10 @@ interface MaterialStorage {
      * @param intoMR
      * @param tSuiteName
      * @param retrievalBy
-     * @return number of Material files transfered
+     * @return RestoreResult containing a TSuiteResult and int count of Material files transfered
      * @throws IOException
      */
-    List<MaterialStorageRestoreResult> restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
+    List<RestoreResult> restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
     
     /**
      * Retrieve a single TSuiteResult out of the MaterialStorage by the retrievalBy, then
@@ -189,18 +190,21 @@ interface MaterialStorage {
      * 
      * @param intoMR
      * @param retrievalBy
-     * @return
+     * @return RestoreResult containing a TSuiteResult and int count of Material files transfered
      * @throws IOException
      */
-    MaterialStorageRestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
+    RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    MaterialStorageRestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+    RestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    List<MaterialStorageRestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
+    List<RestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
 
+    /**
+     * scan the Storage directory to reflesh memory so that it sync with the file system
+     */
     void scan()
     
     String toJsonText()

@@ -86,6 +86,7 @@ tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncodi
 test {
     include '**/materials/*Spec.class'
     include '**/materials/**/*Spec.class'
+    exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
@@ -120,9 +121,10 @@ task pinpoint(type: Test) {
     //include "**/JUnitReportWrapperSpec.class"
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/MaterialStorageSpec.class"
-	include "**/MaterialStorageSpec.class"
-	include "**/RetrievalBySpec.class"
-	exclude '**/stats/*Spec.class'
+    include "**/MaterialStorageSpec.class"
+    include "**/MaterialStorage_RestoreResultSpec.class"
+    include "**/RetrievalBySpec.class"
+    exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
 

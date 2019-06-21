@@ -331,69 +331,71 @@ class MaterialStorageSpec extends Specification {
         currentSize <= 20_000_000
         remainingBytes == currentSize
     }
-	/**
-	 * MaterialStorage#restore() method should be able to copy
-	 */
-	def testRestore_including_PathResolutionLogBundle_file() {
-		setup:
-			Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
-			Path materialsDir = caseOutputDir.resolve('Materials')
-			Path storageDir = caseOutputDir.resolve('Storage')
-			Path reportsDir = caseOutputDir.resolve("Reports")
-			Files.createDirectories(reportsDir)
+    
+    
+    /**
+    * MaterialStorage#restore() method should be able to copy
+    */
+    def testRestore_including_PathResolutionLogBundle_file() {
+        setup:
+        Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
+        Path materialsDir = caseOutputDir.resolve('Materials')
+        Path storageDir = caseOutputDir.resolve('Storage')
+        Path reportsDir = caseOutputDir.resolve("Reports")
+        Files.createDirectories(reportsDir)
 
-			Path fixtureSource = fixture_.resolve('Storage/47news.chronos_capture')
-			Path fixtureTarget = storageDir.resolve('47news.chronos_capture')
-			Helpers.deleteDirectoryContents(fixtureTarget)
-			Helpers.copyDirectory(fixtureSource, fixtureTarget)
-			MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
-			MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
-		when:
-			// test MaterialStorage#restore() method
-			// copy a set of files under Storage directory to Materials directory and make sure TCaseResult/path-resolution-long-bundle.json file is copied
-			TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName('47news/chronos_capture'), new TSuiteTimestamp('20190401_142150'))
-			MaterialStorageRestoreResult restoreResult = ms.restore(mr, tsri)
-		then:
-			restoreResult.getCount() >= 0
-		when:
-			Path tSuiteTimestampDir_inMR = mr.getTSuiteResult(tsri).getTSuiteTimestampDirectory()
-		then:
-			Files.exists(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME))
-		when:
-			// test backup() method
-			String clonedFileName = "__" + PathResolutionLogBundle.SERIALIZED_FILE_NAME
-			Files.copy(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME),
-						tSuiteTimestampDir_inMR.resolve(clonedFileName), StandardCopyOption.REPLACE_EXISTING)
-			int count = ms.backup(mr, tsri)
-		then:
-			count >= 0
-			Files.exists(ms.getTSuiteResult(tsri).getTSuiteTimestampDirectory().resolve(clonedFileName))
-	}
-	
-	def testRestore_specifyingTSuiteTimestamp() {
-		setup:
-		Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
-		Path msdir = stepWork.resolve("Storage")
-		Path restoredDir = stepWork.resolve("Materials")
-		Helpers.deleteDirectoryContents(msdir)
-		Path reportsDir = stepWork.resolve("Reports")
-		Files.createDirectories(reportsDir)
-		MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-		when:
-		TSuiteName tsn = new TSuiteName("Monitor47News")
-		TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-		TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
-		int num = ms.backup(mr_, tsri)
-		then:
-		num == 1
-		when:
-		Helpers.deleteDirectoryContents(restoredDir)
-		MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
-		MaterialStorageRestoreResult restoreResult = ms.restore(restored, tsri)
-		then:
-		restoreResult.getCount() == 1
-	}
-	
+        Path fixtureSource = fixture_.resolve('Storage/47news.chronos_capture')
+        Path fixtureTarget = storageDir.resolve('47news.chronos_capture')
+        Helpers.deleteDirectoryContents(fixtureTarget)
+        Helpers.copyDirectory(fixtureSource, fixtureTarget)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
+        when:
+        // test MaterialStorage#restore() method
+        // copy a set of files under Storage directory to Materials directory and make sure TCaseResult/path-resolution-long-bundle.json file is copied
+        TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName('47news/chronos_capture'), new TSuiteTimestamp('20190401_142150'))
+        RestoreResult restoreResult = ms.restore(mr, tsri)
+        then:
+        restoreResult.getCount() >= 0
+        when:
+        Path tSuiteTimestampDir_inMR = mr.getTSuiteResult(tsri).getTSuiteTimestampDirectory()
+        then:
+        Files.exists(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME))
+        when:
+        // test backup() method
+        String clonedFileName = "__" + PathResolutionLogBundle.SERIALIZED_FILE_NAME
+        Files.copy(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME),
+                    tSuiteTimestampDir_inMR.resolve(clonedFileName), StandardCopyOption.REPLACE_EXISTING)
+        int count = ms.backup(mr, tsri)
+        then:
+        count >= 0
+        Files.exists(ms.getTSuiteResult(tsri).getTSuiteTimestampDirectory().resolve(clonedFileName))
+    }
+
+    def testRestore_specifyingTSuiteTimestamp() {
+        setup:
+        Path stepWork = workdir_.resolve("testRestore_specifyingTSuiteTimestamp")
+        Path msdir = stepWork.resolve("Storage")
+        Path restoredDir = stepWork.resolve("Materials")
+        Helpers.deleteDirectoryContents(msdir)
+        Path reportsDir = stepWork.resolve("Reports")
+        Files.createDirectories(reportsDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+        when:
+        TSuiteName tsn = new TSuiteName("Monitor47News")
+        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        int num = ms.backup(mr_, tsri)
+        then:
+        num == 1
+        when:
+        Helpers.deleteDirectoryContents(restoredDir)
+        MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
+        RestoreResult restoreResult = ms.restore(restored, tsri)
+        then:
+        restoreResult.getCount() == 1
+    }
+
     def testRestore_RetrieveBy_before_LocalDateTime_restoreUnary() {
         setup:
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_LocalDateTime_restoreUnary")
@@ -414,8 +416,8 @@ class MaterialStorageSpec extends Specification {
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
         LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
-        MaterialStorageRestoreResult restoreResult = 
-			ms.restoreUnary(restored,
+        RestoreResult restoreResult = 
+            ms.restoreUnary(restored,
                                 tsn,
                                 RetrievalBy.before(baseD))
         then:
@@ -446,17 +448,17 @@ class MaterialStorageSpec extends Specification {
         Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(ms, tsn)
-        List<MaterialStorageRestoreResult> restoreResultList = 
-			ms.restoreCollective(restored,
+        List<RestoreResult> restoreResultList = 
+            ms.restoreCollective(restored,
                                     tsn,
                                     RetrievalBy.before(TSuiteTimestamp.newInstance("20180805_081908")))
         then:
         restoreResultList.size() == 3
-		restoreResultList.get(0).getTSuiteResult().getTSuiteName().abbreviatedId == 'main/TS1'
-		restoreResultList.get(0).getTSuiteResult().getTSuiteTimestamp().format() == '20180718_142832'
-		restoreResultList.get(0).getCount() == 2
-		restoreResultList.get(1).getCount() == 6
-		restoreResultList.get(2).getCount() == 2
+        restoreResultList.get(0).getTSuiteResult().getTSuiteName().abbreviatedId == 'main/TS1'
+        restoreResultList.get(0).getTSuiteResult().getTSuiteTimestamp().format() == '20180718_142832'
+        restoreResultList.get(0).getCount() == 2
+        restoreResultList.get(1).getCount() == 6
+        restoreResultList.get(2).getCount() == 2
         when:
         List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
         then:
