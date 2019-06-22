@@ -111,11 +111,17 @@ interface MaterialRepository {
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     
-    void putCurrentTestSuite(String testSuiteId)
-    void putCurrentTestSuite(TSuiteName tSuiteName)
-    void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
-    void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-    void putCurrentTestSuite(TSuiteResultId tSuiteResultId)
+    void markAsCurrent(String testSuiteId)
+    void markAsCurrent(TSuiteName tSuiteName)
+    void markAsCurrent(String testSuiteId, String testSuiteTimestamp)
+    void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    void markAsCurrent(TSuiteResultId tSuiteResultId)
+    
+    void ensureDirectoryOf(String testSuiteId)
+    void ensureDirectoryOf(TSuiteName tSuiteName)
+    void ensureDirectoryOf(String testSuiteId, String testSuiteTimestamp)
+    void ensureDirectoryOf(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    void ensureDirectoryOf(TSuiteResultId tSuiteResultId)
     
     /**
      * Returns a Path of a Material file.

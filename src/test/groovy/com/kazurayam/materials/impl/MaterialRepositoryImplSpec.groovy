@@ -14,7 +14,6 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -58,7 +57,8 @@ class MaterialRepositoryImplSpec extends Specification {
             Helpers.copyDirectory(fixture_, casedir)
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-            mri.putCurrentTestSuite('TS1', '20180530_130604')
+            mri.markAsCurrent(    'TS1', '20180530_130604')
+            mri.ensureDirectoryOf('TS1', '20180530_130604')
         when:
             Path p1 = mri.resolveScreenshotPath('TC1',
                 new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
@@ -124,7 +124,8 @@ class MaterialRepositoryImplSpec extends Specification {
             Helpers.copyDirectory(fixture_, casedir)
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-            mri.putCurrentTestSuite('TS1', '20180530_130604')
+            mri.markAsCurrent(    'TS1', '20180530_130604')
+            mri.ensureDirectoryOf('TS1', '20180530_130604')
         when:
             Path p = mri.resolveScreenshotPathByURLPathComponents('TC1',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
@@ -196,7 +197,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             Helpers.copyDirectory(fixture_, casedir)
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-            mri.putCurrentTestSuite('TS1', '20180530_130604')
+            mri.markAsCurrent(    'TS1', '20180530_130604')
+            mri.ensureDirectoryOf('TS1', '20180530_130604')
         when:
             String materialFileName = MaterialFileName.format(
                 new URL('http://demoaut.katalon.com/'),
@@ -220,7 +222,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.putCurrentTestSuite('TS1', '20180530_130604')
+        mri.markAsCurrent(    'TS1', '20180530_130604')
+        mri.ensureDirectoryOf('TS1', '20180530_130604')
         when:
         String materialFileName = MaterialFileName.format(
             new URL('http://demoaut.katalon.com/'),
@@ -240,7 +243,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.putCurrentTestSuite('TS3', '20180614_152000')
+        mri.markAsCurrent(    'TS3', '20180614_152000')
+        mri.ensureDirectoryOf('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
             Suffix.NULL,
@@ -260,7 +264,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.putCurrentTestSuite('TS3', '20180614_152000')
+        mri.markAsCurrent(    'TS3', '20180614_152000')
+        mri.ensureDirectoryOf('TS3', '20180614_152000')
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'),
             new Suffix(1),
@@ -280,7 +285,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        mri.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        mri.ensureDirectoryOf(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
         when:
         String materialFileName = MaterialFileName.format(new URL('http://demoaut.katalon.com/'), new Suffix(1), FileType.PNG)
         Path p = mri.resolveMaterialPath('TC1', materialFileName)
@@ -295,7 +301,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.putCurrentTestSuite('TS1')
+        mri.markAsCurrent('TS1')
+        mri.ensureDirectoryOf('TS1')
         when:
         def str = mri.toJsonText()
         then:

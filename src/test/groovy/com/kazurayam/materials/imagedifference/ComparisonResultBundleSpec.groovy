@@ -170,7 +170,9 @@ class ComparisonResultBundleSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
+            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
+            
         //when:
             // we use Java 8 Stream API to filter entries
             MaterialPairs materialPairs =

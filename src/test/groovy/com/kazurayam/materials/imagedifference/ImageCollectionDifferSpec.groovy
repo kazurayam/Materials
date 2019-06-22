@@ -1,9 +1,9 @@
 package com.kazurayam.materials.imagedifference
 
+import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.awt.image.BufferedImage
 
 import javax.imageio.ImageIO
 
@@ -26,7 +26,6 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class ImageCollectionDifferSpec extends Specification {
@@ -58,7 +57,9 @@ class ImageCollectionDifferSpec extends Specification {
         Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
+        mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
+        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
+
         MaterialPairs materialPairs =
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
 
@@ -88,7 +89,8 @@ class ImageCollectionDifferSpec extends Specification {
         Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
+        mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
+        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
         MaterialPairs materialPairs =
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
 
@@ -127,7 +129,8 @@ class ImageCollectionDifferSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
+            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
         when:
             // we use Java 8 Stream API to filter entries
             MaterialPairs materialPairs =
@@ -205,7 +208,8 @@ class ImageCollectionDifferSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
+            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
         when:
             MaterialPairs materialPairs =
                 mr.createMaterialPairs(tsn)
@@ -268,8 +272,8 @@ class ImageCollectionDifferSpec extends Specification {
         ms.restore(mr, tsr0)
         ms.restore(mr, tsr1)
         mr.scan()
-        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190512_154033')
-        
+        mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
+        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         TCaseResult tcr1 = mr.getTCaseResult(
@@ -324,8 +328,8 @@ class ImageCollectionDifferSpec extends Specification {
         ms.restore(mr, tsr0)
         ms.restore(mr, tsr1)
         mr.scan()
-        mr.putCurrentTestSuite('Test Suites/ImageDiff', '20190512_154033')
-        
+        mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
+        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         MaterialPairs materialPairs = mr.createMaterialPairs(tsn)

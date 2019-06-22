@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Indexer
-import com.kazurayam.materials.IndexerFactory
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
@@ -74,7 +72,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.scan()
         
         // set default Material path to the "./${baseDir name}/_/_" directory
-        this.putCurrentTestSuite(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -100,37 +98,37 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param testSuiteId
      */
     @Override
-    void putCurrentTestSuite(String testSuiteId) {
-        this.putCurrentTestSuite(
+    void markAsCurrent(String testSuiteId) {
+        this.markAsCurrent(
                 testSuiteId,
                 Helpers.now())
     }
 
     @Override
-    void putCurrentTestSuite(String testSuiteId, String testSuiteTimestampString) {
-        this.putCurrentTSuiteResult(
+    void markAsCurrent(String testSuiteId, String testSuiteTimestamp) {
+        this.markTSuiteResultAsCurrent(
                 new TSuiteName(testSuiteId),
-                TSuiteTimestamp.newInstance(testSuiteTimestampString))
+                TSuiteTimestamp.newInstance(testSuiteTimestamp))
     }
 
     @Override
-    void putCurrentTestSuite(TSuiteName tSuiteName) {
-        this.putCurrentTestSuite(
+    void markAsCurrent(TSuiteName tSuiteName) {
+        this.markAsCurrent(
                 tSuiteName,
                 TSuiteTimestamp.newInstance(Helpers.now())
         )
     }
 
     @Override
-    void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        this.putCurrentTSuiteResult(
+    void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        this.markTSuiteResultAsCurrent(
                 tSuiteName,
                 tSuiteTimestamp)
     }
     
     @Override
-    void putCurrentTestSuite(TSuiteResultId tSuiteResultId) {
-        this.putCurrentTSuiteResult(
+    void markAsCurrent(TSuiteResultId tSuiteResultId) {
+        this.markTSuiteResultAsCurrent(
             tSuiteResultId.getTSuiteName(),
             tSuiteResultId.getTSuiteTimestamp())
     }
@@ -140,19 +138,58 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tSuiteName
      * @param tSuiteTimestamp
      */
-    private void putCurrentTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    private void markTSuiteResultAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
-        // memorize the specified TestSuite
+        // memorize this specified TestSuite as the current one
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
-
+    }
+    
+    @Override
+    void ensureDirectoryOf(String testSuiteId) {
+        this.ensureDirectoryOf(
+            testSuiteId,
+            Helpers.now())
+    }
+    
+    @Override
+    void ensureDirectoryOf(TSuiteName tSuiteName) {
+        this.ensureDirectoryOfTSuiteResult(
+            tSuiteName,
+            TSuiteTimestamp.newInstance(Helpers.now()))
+    }
+    
+    @Override
+    void ensureDirectoryOf(String testSuiteId, String testSuiteTimestamp) {
+        this.ensureDirectoryOfTSuiteResult(
+            new TSuiteName(testSuiteId),
+            TSuiteTimestamp.newInstance(testSuiteTimestamp))
+    }
+    
+    @Override
+    void ensureDirectoryOf(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        this.ensureDirectoryOfTSuiteResult(tSuiteName, tSuiteTimestamp)
+    }
+    
+    @Override
+    void ensureDirectoryOf(TSuiteResultId tSuiteResultId) {
+        this.ensureDirectoryOfTSuiteResult(
+            tSuiteResultId.getTSuiteName(),
+            tSuiteResultId.getTSuiteTimestamp())
+    }
+    
+    
+    private void ensureDirectoryOfTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+        
         // add the specified TestSuite
         TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         
-        // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found,
+        // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found in the directory,
         // then create new one
         if (tsr == null) {
             tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)

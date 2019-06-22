@@ -95,8 +95,8 @@ test {
 task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
-    //include "**/MaterialRepositoryImplSpec.class"
-    //include "**/MaterialRepositorySpec.class"
+    include "**/MaterialRepositoryImplSpec.class"
+    include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/ReportsAccessorSpec.class"
@@ -122,8 +122,6 @@ task pinpoint(type: Test) {
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/MaterialStorageSpec.class"
     include "**/MaterialStorageSpec.class"
-    include "**/MaterialStorage_RestoreResultSpec.class"
-    include "**/RetrievalBySpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import java.util.stream.Collectors
 
 import javax.imageio.ImageIO
+
 import org.apache.commons.io.FileUtils
 
 import com.kazurayam.materials.FileType
@@ -51,7 +52,8 @@ class ComparisonResultSpec extends Specification {
             Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-            mr.putCurrentTestSuite('Test Suites/ImageDiff', '20181014_060501')
+            mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
+            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
             List<MaterialPair> materialPairs =
             // we use Java 8 Stream API to filter entries
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).getList().stream().filter { mp ->

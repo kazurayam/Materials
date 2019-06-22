@@ -62,7 +62,10 @@ class MaterialStorageImpl implements MaterialStorage {
     int backup(MaterialRepository fromMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        componentMR_.putCurrentTestSuite(tSuiteResultId)
+        
+        componentMR_.markAsCurrent(tSuiteResultId)
+        componentMR_.ensureDirectoryOf(tSuiteResultId)
+        
         if (fromMR.getTSuiteResult(tSuiteResultId) == null) {
             throw new IllegalArgumentException("${tSuiteResultId} is not found in ${fromMR.getBaseDir()}")
         }
@@ -254,15 +257,17 @@ class MaterialStorageImpl implements MaterialStorage {
     RestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        intoMR.putCurrentTestSuite(tSuiteResultId)
 
         if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
             //throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
             System.err.println("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
-            return MaterialStorage.RestoreResult.NULL
+            return RestoreResult.NULL
         }
-
         Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        
+        // Should not call: intoMR.markAsCurrent(tSuiteResultId)
+        intoMR.ensureDirectoryOf(tSuiteResultId)
+        
         Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         boolean skipIfIdentical = true
 
