@@ -28,6 +28,7 @@ import com.kazurayam.materials.resolution.PathResolutionLog
 import com.kazurayam.materials.resolution.PathResolutionLogBundle
 import com.kazurayam.materials.resolution.PathResolutionLogImpl
 
+import groovy.json.JsonOutput
 
 final class MaterialRepositoryImpl implements MaterialRepository {
 
@@ -148,40 +149,35 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    void ensureDirectoryOf(String testSuiteId) {
-        this.ensureDirectoryOf(
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteId) {
+        return this.ensureTSuiteResultPresent(
             testSuiteId,
             Helpers.now())
     }
     
     @Override
-    void ensureDirectoryOf(TSuiteName tSuiteName) {
-        this.ensureDirectoryOfTSuiteResult(
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName) {
+        return this.ensureTSuiteResultPresent(
             tSuiteName,
             TSuiteTimestamp.newInstance(Helpers.now()))
     }
     
     @Override
-    void ensureDirectoryOf(String testSuiteId, String testSuiteTimestamp) {
-        this.ensureDirectoryOfTSuiteResult(
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteId, String testSuiteTimestamp) {
+        return this.ensureTSuiteResultPresent(
             new TSuiteName(testSuiteId),
             TSuiteTimestamp.newInstance(testSuiteTimestamp))
     }
     
     @Override
-    void ensureDirectoryOf(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        this.ensureDirectoryOfTSuiteResult(tSuiteName, tSuiteTimestamp)
-    }
-    
-    @Override
-    void ensureDirectoryOf(TSuiteResultId tSuiteResultId) {
-        this.ensureDirectoryOfTSuiteResult(
+    TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId) {
+        return this.ensureTSuiteResultPresent(
             tSuiteResultId.getTSuiteName(),
             tSuiteResultId.getTSuiteTimestamp())
     }
     
-    
-    private void ensureDirectoryOfTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    @Override
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
@@ -219,6 +215,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             pathResolutionLogBundle_ = 
                 new PathResolutionLogBundle()
         }
+        
+        return tsr
     }
 
     @Override
@@ -464,7 +462,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
-            throw new IllegalStateException("tSuiteResult is null")
+            throw new IllegalStateException("getCurrentTSuiteResult() returned null")
         }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
         if (tCaseResult == null) {
@@ -780,6 +778,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             if (currentTSuiteTimestamp_ != null) {
                 TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
                 TSuiteResult tsr = this.getTSuiteResult(tsri)
+                if (tsr == null) {
+                    JsonOutput jo = new JsonOutput()
+                    throw new IllegalStateException(
+                        "MaterialRepositoryImpl#getCurrentTSuiteResult()" + 
+                        " this.getTSuiteResult(${tsri}) returned null when" +
+                        " currentTSuiteName_=${currentTSuiteName_.getAbbreviatedId()}" +
+                        " currentTSuiteTimestamp_=${currentTSuiteTimestamp_.format()}" +
+                        " with this=\n${jo.prettyPrint(this.toJsonText())}")
+                }
                 return tsr
             } else {
                 throw new IllegalStateException('currentTSuiteTimestamp is not set')

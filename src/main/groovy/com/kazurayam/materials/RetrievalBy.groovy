@@ -7,6 +7,8 @@ import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.MaterialStorageImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonOutput
+
 /**
  * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
  * Two strategies are implemented.
@@ -146,14 +148,24 @@ abstract class RetrievalBy {
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
             List<TSuiteResult> results = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            
+            // DEBUG
+            JsonOutput jo = new JsonOutput()
+            System.out.println "RetrievalBy#findTSuiteResult" + 
+                " rr=\n${jo.prettyPrint(rr.toJsonText())}\n"
+                " tsn=\n${tsn.toJsonText()}\n" +
+                " tSuiteTimestamp_=\n${tSuiteTimestamp_.format()}\n"
+            System.out.println "RetrievalBy#findTSuiteResult" +
+                " rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_).size()=${results.size()}"
+            //
+            
             if (results.size() > 0) {
                 return results[0]
             } else {
                 return TSuiteResult.NULL
             }
         }
-    }    
-    
+    }
     
     /**
      * 
@@ -185,6 +197,23 @@ abstract class RetrievalBy {
         
         TSuiteName getTSuiteName() {
             return tSuiteName_
+        }
+        
+        String toJsonText() {
+            StringBuilder sb = new StringBuilder()
+            sb.append("{")
+            sb.append("\"repositoryRoot\":")
+            sb.append(repositoryRoot_.toJsonText())
+            sb.append(",")
+            sb.append("\tSuiteName\":")
+            sb.append(tSuiteName_.toJsonText())
+            sb.append("}")
+            return sb.toString()
+        }
+        
+        @Override
+        String toString() {
+            return this.toJsonText()
         }
     }
 

@@ -207,5 +207,7 @@ interface MaterialStorage {
      */
     void scan()
     
+    void setVisualTestingLogger(VisualTestingLogger vtLogger)
+    
     String toJsonText()
 }

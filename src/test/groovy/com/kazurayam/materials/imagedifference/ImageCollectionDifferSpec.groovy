@@ -58,7 +58,7 @@ class ImageCollectionDifferSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
 
         MaterialPairs materialPairs =
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
@@ -90,7 +90,7 @@ class ImageCollectionDifferSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
         MaterialPairs materialPairs =
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
 
@@ -130,7 +130,7 @@ class ImageCollectionDifferSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
             mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
         when:
             // we use Java 8 Stream API to filter entries
             MaterialPairs materialPairs =
@@ -209,7 +209,7 @@ class ImageCollectionDifferSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
             mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
         when:
             MaterialPairs materialPairs =
                 mr.createMaterialPairs(tsn)
@@ -273,7 +273,7 @@ class ImageCollectionDifferSpec extends Specification {
         ms.restore(mr, tsr1)
         mr.scan()
         mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
-        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190512_154033')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         TCaseResult tcr1 = mr.getTCaseResult(
@@ -329,7 +329,7 @@ class ImageCollectionDifferSpec extends Specification {
         ms.restore(mr, tsr1)
         mr.scan()
         mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
-        mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190512_154033')
+        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         MaterialPairs materialPairs = mr.createMaterialPairs(tsn)

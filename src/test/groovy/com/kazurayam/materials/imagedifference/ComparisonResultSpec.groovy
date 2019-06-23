@@ -53,7 +53,7 @@ class ComparisonResultSpec extends Specification {
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20181014_060501')
+            def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
             List<MaterialPair> materialPairs =
             // we use Java 8 Stream API to filter entries
             mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).getList().stream().filter { mp ->

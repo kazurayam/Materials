@@ -34,7 +34,7 @@ class MaterialRepositoryFactorySpec extends Specification {
         Path materials = workdir_.resolve('Materials')
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         mr.markAsCurrent('Test Suites/TS1')
-        mr.ensureDirectoryOf('Test Suites/TS1')
+        mr.ensureTSuiteResultPresent('Test Suites/TS1')
         then:
         mr != null
         mr.toString().contains('TS1')

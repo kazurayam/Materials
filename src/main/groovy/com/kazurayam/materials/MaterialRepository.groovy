@@ -117,11 +117,11 @@ interface MaterialRepository {
     void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
     void markAsCurrent(TSuiteResultId tSuiteResultId)
     
-    void ensureDirectoryOf(String testSuiteId)
-    void ensureDirectoryOf(TSuiteName tSuiteName)
-    void ensureDirectoryOf(String testSuiteId, String testSuiteTimestamp)
-    void ensureDirectoryOf(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
-    void ensureDirectoryOf(TSuiteResultId tSuiteResultId)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteId)
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteId, String testSuiteTimestamp)
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
     
     /**
      * Returns a Path of a Material file.

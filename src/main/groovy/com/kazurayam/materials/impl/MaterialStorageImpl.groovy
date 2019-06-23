@@ -14,6 +14,7 @@ import com.kazurayam.materials.RetrievalBy
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.repository.RepositoryRoot
 
@@ -23,6 +24,8 @@ class MaterialStorageImpl implements MaterialStorage {
     
     private Path baseDir_
     private MaterialRepository componentMR_
+    
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     /**
      * constructor is hidden
@@ -64,7 +67,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
         
         componentMR_.markAsCurrent(tSuiteResultId)
-        componentMR_.ensureDirectoryOf(tSuiteResultId)
+        def toTSuiteResult = componentMR_.ensureTSuiteResultPresent(tSuiteResultId)
         
         if (fromMR.getTSuiteResult(tSuiteResultId) == null) {
             throw new IllegalArgumentException("${tSuiteResultId} is not found in ${fromMR.getBaseDir()}")
@@ -258,6 +261,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
 
+        // identify the input directory
         if (componentMR_.getTSuiteResult(tSuiteResultId) == null) {
             //throw new IllegalArgumentException("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
             System.err.println("${tSuiteResultId} is not found in ${componentMR_.getBaseDir()}")
@@ -265,21 +269,28 @@ class MaterialStorageImpl implements MaterialStorage {
         }
         Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         
-        // Should not call: intoMR.markAsCurrent(tSuiteResultId)
-        intoMR.ensureDirectoryOf(tSuiteResultId)
+        // make sure the output directory is there
+        intoMR.ensureTSuiteResultPresent(tSuiteResultId)
         
-        Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
-        boolean skipIfIdentical = true
-
-        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
-        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
-
-        // let the MaterialRepository to scan the disk to reflesh its internal data structure
-        if (scan) {
-            intoMR.scan()
+        if (intoMR.getTSuiteResult(tSuiteResultId) != null) {
+            Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        
+            // now copy files from the Storage dir into the Materials dir
+            boolean skipIfIdentical = true
+            logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
+            int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
+        
+            // let the MaterialRepository to scan the disk to recognize the copied files
+            if (scan) {
+                intoMR.scan()
+            }
+            // done
+            return new RestoreResultImpl(new TSuiteResultImpl(tSuiteResultId), count)
+            
+        } else {
+            System.err.println("${tSuiteResultId} is not found in ${intoMR}")
+            return RestoreResultImpl.NULL
         }
-        // done
-        return new RestoreResultImpl(new TSuiteResultImpl(tSuiteResultId), count)
     }
 
     @Override
@@ -316,9 +327,14 @@ class MaterialStorageImpl implements MaterialStorage {
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
-        // copy the files
-        RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
-        return restoreResult
+        if (tSuiteResult != TSuiteResult.NULL) {
+            // copy the files
+            RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
+            return restoreResult
+        } else {
+            vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
+            return RestoreResult.NULL
+        }
     }
     
     /**
@@ -348,6 +364,11 @@ class MaterialStorageImpl implements MaterialStorage {
         componentMR_.scan()
     }
 
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
+    
     // ---------------------- overriding Object properties --------------------
     @Override
     String toString() {
@@ -359,7 +380,9 @@ class MaterialStorageImpl implements MaterialStorage {
         StringBuilder sb = new StringBuilder()
         sb.append('{"MaterialStorage":{')
         sb.append('"baseDir":"' +
-            Helpers.escapeAsJsonText(baseDir_.toString()) + '"')
+            Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
+        sb.append('"componentMR":' +
+            componentMR_.toJsonText())
         sb.append('}}')
         return sb.toString()
     }

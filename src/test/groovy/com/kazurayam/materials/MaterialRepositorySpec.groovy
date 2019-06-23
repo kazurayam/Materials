@@ -43,7 +43,7 @@ class MaterialRepositorySpec extends Specification {
     def testPutCurrentTestSuite_oneStringArg() {
         when:
         mr_.markAsCurrent('oneStringArg')
-        mr_.ensureDirectoryOf('oneStringArg')
+        mr_.ensureTSuiteResultPresent('oneStringArg')
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -58,7 +58,7 @@ class MaterialRepositorySpec extends Specification {
     def test_ensureDirectoryOf_twoStringArg() {
         when:
         mr_.markAsCurrent('oneStringArg', '20180616_160000')
-        mr_.ensureDirectoryOf('oneStringArg', '20180616_160000')
+        mr_.ensureTSuiteResultPresent('oneStringArg', '20180616_160000')
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -71,7 +71,7 @@ class MaterialRepositorySpec extends Specification {
         def tSuiteName = new TSuiteName('oneStringArg')
         def tSuiteTimestamp = TSuiteTimestamp.newInstance('20180616_160000') 
         mr_.markAsCurrent(tSuiteName, tSuiteTimestamp)
-        mr_.ensureDirectoryOf(tSuiteName, tSuiteTimestamp)
+        mr_.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
         Path timestampdir = mr_.getCurrentTestSuiteDirectory()
         logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
         then:
@@ -94,7 +94,7 @@ class MaterialRepositorySpec extends Specification {
     def testToJsonText() {
         when:
         mr_.markAsCurrent('Test Suites/TS1')
-        mr_.ensureDirectoryOf('Test Suites/TS1')
+        mr_.ensureTSuiteResultPresent('Test Suites/TS1')
         def text = mr_.toJsonText()
         logger_.debug("#testToJsonText text=" + text)
         logger_.debug("#testToJsonText prettyPrint(text)=" + JsonOutput.prettyPrint(text))
@@ -105,7 +105,7 @@ class MaterialRepositorySpec extends Specification {
     def testConstructor_Path_tsn() {
         when:
         mr_.markAsCurrent('Test Suites/main/TS1')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1')
         String str = mr_.toString()
         then:
         str.contains('main.TS1')
@@ -115,7 +115,7 @@ class MaterialRepositorySpec extends Specification {
     def testGetCurrentTestSuiteDirectory() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path testSuiteDir = mr_.getCurrentTestSuiteDirectory()
         then:
         testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
@@ -142,7 +142,7 @@ class MaterialRepositorySpec extends Specification {
     def testGetTestCaseDirectory() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
         then:
         testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
@@ -162,7 +162,7 @@ class MaterialRepositorySpec extends Specification {
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
         mr_.markAsCurrent(tsri)
-        mr_.ensureDirectoryOf(tsri)
+        mr_.ensureTSuiteResultPresent(tsri)
         TSuiteResult tsr = mr_.getTSuiteResult(tsri)
         then:
         tsr != null
@@ -208,7 +208,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveMaterialPath() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'screenshot1.png')
         then:
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
@@ -218,7 +218,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveMaterialPathWithSubpath() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
         then:
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
@@ -227,7 +227,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveScreenshotPath() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveScreenshotPath('Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'))
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
@@ -237,7 +237,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveScreenshotPathByURLPathComponents_top() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
         then:
@@ -249,7 +249,7 @@ class MaterialRepositorySpec extends Specification {
     def testResolveScreenshotPathByURLPathComponents_login() {
         when:
         mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureDirectoryOf('Test Suites/main/TS1','20180530_130419')
+        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
         Path path = mr_.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
         then:
@@ -316,7 +316,7 @@ class MaterialRepositorySpec extends Specification {
         result == null
         when:
         mr.markAsCurrent(tsri)
-        mr.ensureDirectoryOf(tsri)
+        mr.ensureTSuiteResultPresent(tsri)
         Path tsnDir = mr.getCurrentTestSuiteDirectory()
         Path tstDir = tsnDir.resolve(tst.format())
         then:

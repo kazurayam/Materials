@@ -126,8 +126,8 @@ class BaseIndexerSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-            mr.ensureDirectoryOf('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent('Test Suites/ImageDiff', '20190216_210203')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
         when:
             MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
@@ -230,7 +230,7 @@ class BaseIndexerSpec extends Specification {
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
             mr.scan()
             mr.markAsCurrent('Test Suites/47news/ImageDiff', '20190401_142749')
-            mr.ensureDirectoryOf('Test Suites/47news/ImageDiff', '20190401_142749')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/47news/ImageDiff', '20190401_142749')
         when:
             MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
