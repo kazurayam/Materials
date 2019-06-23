@@ -5,8 +5,6 @@ import java.time.LocalDateTime
 
 import com.kazurayam.materials.impl.TSuiteResultImpl
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.view.ExecutionPropertiesWrapper
-import com.kazurayam.materials.view.JUnitReportWrapper
 
 /**
  *
@@ -34,6 +32,8 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract TSuiteTimestamp getTSuiteTimestamp()
     
     abstract Path getTSuiteTimestampDirectory()
+    
+    abstract Path createDirectories()
 
     abstract TSuiteResult setLastModified(LocalDateTime lastModified)
 

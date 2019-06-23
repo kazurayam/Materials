@@ -186,10 +186,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         
         // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found in the directory,
-        // then create new one
+        // then create new object and create a directory for it 
         if (tsr == null) {
             tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
+            tsr.createDirectories()
         }
         
         // prepare PathResolutionLogBundle instance

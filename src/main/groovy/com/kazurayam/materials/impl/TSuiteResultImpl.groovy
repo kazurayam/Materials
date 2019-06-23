@@ -16,8 +16,6 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.view.ExecutionPropertiesWrapper
-import com.kazurayam.materials.view.JUnitReportWrapper
 
 class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultImpl>{
     
@@ -94,6 +92,16 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     Path getTSuiteTimestampDirectory() {
         if (tSuiteTimestampDirectory_ != null) {
             return tSuiteTimestampDirectory_.normalize()
+        } else {
+            return null
+        }
+    }
+    
+    @Override
+    Path createDirectories() {
+        Path d = this.getTSuiteTimestampDirectory()
+        if (d != null) {
+            Files.createDirectories(d)
         } else {
             return null
         }
