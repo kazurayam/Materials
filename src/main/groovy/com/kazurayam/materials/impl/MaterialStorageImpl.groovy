@@ -302,7 +302,7 @@ class MaterialStorageImpl implements MaterialStorage {
             RestoreResult restoreResult = this.restore(intoMR, tsri, false)
             restoreResultList.add(restoreResult)
         }
-        componentMR_.scan()
+        //componentMR_.scan()
         return restoreResultList
     }
     
@@ -327,14 +327,14 @@ class MaterialStorageImpl implements MaterialStorage {
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
-        if (tSuiteResult != TSuiteResult.NULL) {
+        //if (tSuiteResult != TSuiteResult.NULL) {
             // copy the files
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
             return restoreResult
-        } else {
-            vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
-            return RestoreResult.NULL
-        }
+        //} else {
+        //    vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
+        //    return RestoreResult.NULL
+        //}
     }
     
     /**
@@ -355,7 +355,7 @@ class MaterialStorageImpl implements MaterialStorage {
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId(), false)
             restoreResultList.add(restoreResult)
         }
-        componentMR_.scan()
+        //componentMR_.scan()
         return restoreResultList
     }
     

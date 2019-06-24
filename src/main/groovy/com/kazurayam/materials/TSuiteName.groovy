@@ -25,6 +25,14 @@ final class TSuiteName implements Comparable<TSuiteName> {
     private String abbreviatedId_
     private String value_
 
+	/**
+	 * When testSuiteId is given as "Test Suites/main/TS1", then
+	 * getId()            returns "Test Suites/main/TS1" which is equal to the given arg
+	 * getAbbreviatedId() returns "main/TS1"
+	 * getValue()         returns "main.TS1"
+	 * 
+	 * @param testSuiteId for example "Test Suites/main/TS1"
+	 */
     TSuiteName(String testSuiteId) {
         Objects.requireNonNull(testSuiteId)
         id_ = testSuiteId

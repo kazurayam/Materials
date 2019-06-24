@@ -39,8 +39,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     private Path baseDir_
     
-    private TSuiteName currentTSuiteName_
-    private TSuiteTimestamp currentTSuiteTimestamp_
+    private TSuiteName currentTSuiteName_ = null
+    private TSuiteTimestamp currentTSuiteTimestamp_ = null
     
     private RepositoryRoot repoRoot_
     
@@ -73,7 +73,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.scan()
         
         // set default Material path to the "./${baseDir name}/_/_" directory
-        this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        //this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -790,10 +790,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 }
                 return tsr
             } else {
-                throw new IllegalStateException('currentTSuiteTimestamp is not set')
+                throw new IllegalStateException('The currentTSuiteTimestamp variable is not set. Use markAsCurrent() method')
             }
         } else {
-            throw new IllegalStateException('currentTSuiteName is not set')
+            throw new IllegalStateException('The currentTSuiteName variable is not set. Use markAsCurrent() method')
         }
     }
     
@@ -857,10 +857,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         sb.append('{"MaterialRepository":{')
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
-        sb.append('"currentTsName":' +
-            currentTSuiteName_.toJsonText() + ',')
-        sb.append('"currentTsTimestamp":' +
-            currentTSuiteTimestamp_.toJsonText() + ',')
+		if (currentTSuiteName_ != null) {
+			sb.append('"currentTsName":' + currentTSuiteName_.toJsonText() + ',')
+		} else {
+			sb.append('"currentTsName": null,')
+		}
+		if (currentTSuiteTimestamp_ != null) {
+			sb.append('"currentTsTimestamp":' + currentTSuiteTimestamp_.toJsonText() + ',')
+		} else {
+			sb.append('"currentTsTimestamp": null,')
+		}
         sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
         sb.append('}}')
         return sb.toString()

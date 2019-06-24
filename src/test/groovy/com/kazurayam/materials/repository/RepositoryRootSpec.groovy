@@ -16,6 +16,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
@@ -102,7 +103,7 @@ class RepositoryRootSpec extends Specification {
     }
 
 
-    def testGetTSuiteResults_byTSuiteName() {
+    def test_getTSuiteResults_byTSuiteName() {
         when:
         List<TSuiteResult> tsrList = repoRoot_.getTSuiteResults(new TSuiteName('TS1'))
         then:
@@ -114,17 +115,22 @@ class RepositoryRootSpec extends Specification {
         //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
     }
     
-    def testGetTSuiteResultsBeforeExclusive() {
+    def test_getTSuiteResultsBeforeExclusive() {
         when:
         TSuiteName tsn = new TSuiteName('main/TS1')
         TSuiteTimestamp tst = new TSuiteTimestamp('20180805_081908')
         List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
         then:
         tsrList.size() == 3
-        when:
-        TSuiteTimestamp expectedTst = new TSuiteTimestamp('20180718_142832')
+		when:
+        TSuiteTimestamp expected0Tst = new TSuiteTimestamp('20180718_142832')
+		TSuiteTimestamp expected1Tst = new TSuiteTimestamp('20180530_130604')
+		TSuiteTimestamp expected2Tst = new TSuiteTimestamp('20180530_130419')
         then:
-        tsrList[0].getId().getTSuiteTimestamp().equals(expectedTst)
+        tsrList[0].getId().getTSuiteTimestamp().equals(expected0Tst)
+		tsrList[1].getId().getTSuiteTimestamp().equals(expected1Tst)
+		tsrList[2].getId().getTSuiteTimestamp().equals(expected2Tst)
+		
     }
     
     def testGetTSuiteResultsBeforeExclusive_47News() {

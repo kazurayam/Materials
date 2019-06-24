@@ -93,13 +93,16 @@ test {
 
 
 task pinpoint(type: Test) {
+	//include "**/HelpersSpec.class"
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
-    include "**/MaterialRepositorySpec.class"
+    //include "**/MaterialRepositorySpec.class"
+	//include "**/MaterialRepositoryMoreSpec.class"
+	
     //include "**/MaterialSpec.class"
-    include "**/MaterialStorageSpec.class"
+    //include "**/MaterialStorageSpec.class"
     //include "**/ReportsAccessorSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/TCaseResultSpec.class"
@@ -110,7 +113,7 @@ task pinpoint(type: Test) {
     //include "**/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
     //include "**/RepositoryFileScannerSpec.class"
-    //include "**/RepositoryRootSpec.class"
+    include "**/RepositoryRootSpec.class"
     //include "**/RepositoryWalkerSpec.class"
     //include "**/PathResolutionLogBundleSpec.class"
     //include "**/ImageDeltaStatsSpec.class"

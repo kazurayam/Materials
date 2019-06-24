@@ -108,9 +108,11 @@ abstract class RetrievalBy {
     /**
      * Implementation of the RetrivalBy interface
      */
-    static class RetrievalByBefore extends RetrievalBy {    
+    static class RetrievalByBefore extends RetrievalBy {
+		  
         private TSuiteTimestamp tSuiteTimestamp_
-        /**
+        
+		/**
          * 
          * @param tSuiteTimestamp
          */
@@ -148,17 +150,24 @@ abstract class RetrievalBy {
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
             List<TSuiteResult> results = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
-            
-            // DEBUG
-            JsonOutput jo = new JsonOutput()
-            System.out.println "RetrievalBy#findTSuiteResult" + 
-                " rr=\n${jo.prettyPrint(rr.toJsonText())}\n"
-                " tsn=\n${tsn.toJsonText()}\n" +
-                " tSuiteTimestamp_=\n${tSuiteTimestamp_.format()}\n"
-            System.out.println "RetrievalBy#findTSuiteResult" +
-                " rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_).size()=${results.size()}"
-            //
-            
+			
+			// for DEBUG
+			/*
+			JsonOutput jo = new JsonOutput()
+			StringBuilder sb = new StringBuilder()
+			sb.append("RetrievalBy#findTSuiteResult" +
+				" rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_).size()=${results.size()}\n")
+			sb.append("RetrievalBy#findTSuiteResult" +
+				" results=\n${results}\n")
+			sb.append("RetrievalBy#findTSuiteResult" +
+				" results[0]=\n${results[0]}\n")
+			sb.append("RetrievalBy#findTSuiteResult" +
+				" rr=\n${jo.prettyPrint(rr.toJsonText())}\n" +
+				" tsn=\n${tsn.toJsonText()}\n" +
+				" tSuiteTimestamp_=\n${tSuiteTimestamp_.format()}\n")
+			throw new IllegalStateException(sb.toString())
+			*/
+			
             if (results.size() > 0) {
                 return results[0]
             } else {

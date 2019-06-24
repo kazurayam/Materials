@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.StopWatch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 /**
@@ -270,6 +271,7 @@ C:
         tree.get(11).endsWith('Helpers.groovy')
     }
 
+	
     // helper methods
     private boolean someHelper() {
         return true

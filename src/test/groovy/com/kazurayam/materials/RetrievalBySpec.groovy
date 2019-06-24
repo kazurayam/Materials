@@ -35,25 +35,29 @@ class RetrievalBySpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
     
+	
+	
+	
     // feature methods
     
-    def testBefore_TSuiteTimestamp_oneOrMoreFound() {
+    def test_before_TSuiteTimestamp_oneOrMoreFound() {
         setup:
         TSuiteName tsn = new TSuiteName("TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180810_140106")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20180810_140106")
         when:
         RetrievalBy by = RetrievalBy.before(tst)
         List<TSuiteResult> list = by.findTSuiteResults(context)
         then:
         list.size() == 1
+		list.get(0).getTSuiteTimestamp().format() == "20180810_140105"
     }
 
-    def testBefore_TSuiteTimestamp_noneFound() {
+    def test_before_TSuiteTimestamp_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20190123_153854")
         when:
         RetrievalBy by = RetrievalBy.before(tst)
         List<TSuiteResult> list = by.findTSuiteResults(context)
@@ -66,7 +70,7 @@ class RetrievalBySpec extends Specification {
      * 
      * @return
      */
-    def testBefore_findUnaryTSuiteResult() {
+    def test_before_findUnaryTSuiteResult() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -76,13 +80,13 @@ class RetrievalBySpec extends Specification {
         TSuiteResult tsr = by.findTSuiteResult(context)
         then:
         tsr.getId().getTSuiteName().equals(tsn)
-        tsr.getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
+        tsr.getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
     }
 
     /**
      * retrieving TSuiteResults before the specified day + time
      */
-    def testBefore_LocalDateTime_theDay() {
+    def test_before_LocalDateTime_theDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -93,14 +97,14 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 2
         list[0].getId().getTSuiteName().equals(tsn)
-        list[0].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
+        list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
    
     /**
      *  retrieving TSuiteResults before the day (1 day prior to the specified date) + time
      */
-    def testBefore_LocalDateTime_previousDay() {
+    def test_before_LocalDateTime_previousDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -118,14 +122,14 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 2
         list[0].getId().getTSuiteName().equals(tsn)
-        list[0].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
+        list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
     
     /**
      *  retrieving TSuiteResults before the last friday 17:29:59 (prior to the specified day) + time
      */
-    def testBefore_LocalDateTime_lastFriday() {
+    def test_before_LocalDateTime_lastFriday() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -143,15 +147,15 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 2
         list[0].getId().getTSuiteName().equals(tsn)
-        list[0].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
+        list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
     
     /**
      * test getting the last business day prior to the day given.
      * @return
      */
-    def testLastBusinessDay() {
+    def test_lastBusinessDay() {
         expect:
         RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,29,0,0,0)).equals(LocalDateTime.of(2018,1,28,0,0,0))
         RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,28,0,0,0)).equals(LocalDateTime.of(2018,1,25,0,0,0))
@@ -164,7 +168,7 @@ class RetrievalBySpec extends Specification {
         RetrievalBy.lastBusinessDay(LocalDateTime.of(2018,1,21,0,0,0)).equals(LocalDateTime.of(2018,1,18,0,0,0))
     }
     
-    def testBefore_LocalDateTime_lastBusinessDay() {
+    def test_before_LocalDateTime_lastBusinessDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -175,14 +179,14 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 2
         list[0].getId().getTSuiteName().equals(tsn)
-        list[0].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
+        list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
     
     /**
      * retrieving TSuiteResult befor 25th of the last month (prior to the specified day) + 18:00:00
      */
-    def testBefore_LocalDateTime_25lastMonth() {
+    def test_before_LocalDateTime_25lastMonth() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
         RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
@@ -200,10 +204,8 @@ class RetrievalBySpec extends Specification {
         then:
         list.size() == 2
         list[0].getId().getTSuiteName().equals(tsn)
-        list[0].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130604'))
-        list[1].getId().getTSuiteTimestamp().equals(TSuiteTimestamp.newInstance('20180530_130419'))
+        list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
+        list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
     
-   
-
 }

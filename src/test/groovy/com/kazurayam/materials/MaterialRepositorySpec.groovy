@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -16,68 +17,28 @@ class MaterialRepositorySpec extends Specification {
 
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositorySpec.class);
 
-    private static Path workdir_
-    private static Path fixture_ = Paths.get("./src/test/fixture")
+    private static Path specOutputDir_
+	private static Path fixture_ = Paths.get("./src/test/fixture")
     private static MaterialRepository mr_
 
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialRepositorySpec.class)}")
-        if (workdir_.toFile().exists()) {
-            Helpers.deleteDirectoryContents(workdir_)
+        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialRepositorySpec.class)}")
+        if (specOutputDir_.toFile().exists()) {
+            Helpers.deleteDirectoryContents(specOutputDir_)
         } else {
-            workdir_.toFile().mkdirs()
+            specOutputDir_.toFile().mkdirs()
         }
+		/*
         def ant = new AntBuilder()
-        ant.copy(todir:workdir_.toFile(), overwrite:'yes') {
+        ant.copy(todir:specOutputDir_.toFile(), overwrite:'yes') {
             fileset(dir:fixture_) {
                 exclude(name:'Materials/CURA.twins_capture/**')
                 exclude(name:'Materials/CURA.twins_exam/**')
             }
         }
+        */
     }
-
-    def setup() {
-        mr_ = MaterialRepositoryFactory.createInstance(workdir_.resolve('Materials'))
-    }
-
-    def testPutCurrentTestSuite_oneStringArg() {
-        when:
-        mr_.markAsCurrent('oneStringArg')
-        mr_.ensureTSuiteResultPresent('oneStringArg')
-        Path timestampdir = mr_.getCurrentTestSuiteDirectory()
-        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
-        then:
-        timestampdir.toString().contains('oneStringArg')
-        when:
-        String dirName = timestampdir.getFileName()
-        LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
-        then:
-        true
-    }
-
-    def test_ensureDirectoryOf_twoStringArg() {
-        when:
-        mr_.markAsCurrent('oneStringArg', '20180616_160000')
-        mr_.ensureTSuiteResultPresent('oneStringArg', '20180616_160000')
-        Path timestampdir = mr_.getCurrentTestSuiteDirectory()
-        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
-        then:
-        timestampdir.toString().contains('oneStringArg')
-        timestampdir.getFileName().toString().contains('20180616_160000')
-    }
-
-    def testPutCurrentTestSuite_tSuiteName_tSuiteTimestamp() {
-        when:
-        def tSuiteName = new TSuiteName('oneStringArg')
-        def tSuiteTimestamp = TSuiteTimestamp.newInstance('20180616_160000') 
-        mr_.markAsCurrent(tSuiteName, tSuiteTimestamp)
-        mr_.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
-        Path timestampdir = mr_.getCurrentTestSuiteDirectory()
-        logger_.debug("#testSetCurrentTestSuite_oneStringArg timestampdir=${timestampdir}")
-        then:
-        timestampdir.toString().contains('oneStringArg')
-        timestampdir.getFileName().toString().contains('20180616_160000')
-    }
+    def setup() {}
 
     def testJsonOutput() {
         setup:
@@ -91,11 +52,32 @@ class MaterialRepositorySpec extends Specification {
         jsonString == '["Your password was bad.","Your feet smell.","I am having a bad day."]'
     }
 
+	/**
+	 * private Helper method to prepare an instance of MaterialRepository for each test case method in the specOutputDir
+	 * this Helper is intended to shorten test case methods
+	 * 
+	 * @param methodName
+	 * @return
+	 */
+	private MaterialRepository prepareMR(String methodName, String tsn = 'Test Suites/TS1') {
+		Path caseDir = specOutputDir_.resolve(methodName)
+		TSuiteName tSuiteName = new TSuiteName(tsn)
+		Helpers.copyDirectory(fixture_.resolve('Materials').resolve(tSuiteName.getValue()), caseDir.resolve('Materials').resolve(tSuiteName.getValue()))
+		return MaterialRepositoryFactory.createInstance(caseDir.resolve('Materials'))
+	}
+	
+	private MaterialRepository prepareBulkyMR(String methodName) {
+		Path caseDir = specOutputDir_.resolve(methodName)
+		Helpers.copyDirectory(fixture_.resolve('Materials'), caseDir.resolve('Materials'))
+		return MaterialRepositoryFactory.createInstance(caseDir.resolve('Materials'))
+	}
+	
     def testToJsonText() {
-        when:
-        mr_.markAsCurrent('Test Suites/TS1')
-        mr_.ensureTSuiteResultPresent('Test Suites/TS1')
-        def text = mr_.toJsonText()
+		setup:
+		MaterialRepository mr = prepareMR('testToJsonText')
+		when:
+        mr.markAsCurrent('Test Suites/TS1')
+        def text = mr.toJsonText()
         logger_.debug("#testToJsonText text=" + text)
         logger_.debug("#testToJsonText prettyPrint(text)=" + JsonOutput.prettyPrint(text))
         then:
@@ -103,67 +85,77 @@ class MaterialRepositorySpec extends Specification {
     }
 
     def testConstructor_Path_tsn() {
+		setup:
+		MaterialRepository mr = prepareMR('testConstructor_Path_tsn')
         when:
-        mr_.markAsCurrent('Test Suites/main/TS1')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1')
-        String str = mr_.toString()
+        mr.markAsCurrent('Test Suites/TS1')
+        String str = mr.toString()
         then:
         str.contains('main.TS1')
     }
 
-
-    def testGetCurrentTestSuiteDirectory() {
+    def test_getCurrentTestSuiteDirectory() {
+		setup:
+		MaterialRepository mr = prepareMR('test_getCurrentTestSuiteDirectory')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path testSuiteDir = mr_.getCurrentTestSuiteDirectory()
+        mr.markAsCurrent('Test Suites/TS1','20180810_140106')
+        Path tSuiteDir = mr.getCurrentTestSuiteDirectory()
         then:
-        testSuiteDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').normalize()
+		tSuiteDir != null
+        tSuiteDir.getFileName().toString() == '20180810_140106'
     }
-    
-    def testGetSetOfMaterialPathRelativeToTSuiteTimestamp() {
+ 
+    def test_getSetOfMaterialPathRelativeToTSuiteTimestamp() {
+		setup:
+		MaterialRepository mr = prepareMR('test_getSetOfMaterialPathRelativeToTSuiteTimestamp')
         when:
-        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        Set<Path> paths = mr_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
-        logger_.debug( "#testGetSetOfMaterialPathRelativeToTSuiteTimestmp: " + paths)
+        TSuiteName tsn = new TSuiteName('Test Suites/TS1')
+        Set<Path> paths = mr.getSetOfMaterialPathRelativeToTSuiteTimestamp(tsn)
+        logger_.debug( "#test_getSetOfMaterialPathRelativeToTSuiteTimestamp: " + paths)
         then:
-        paths.size() == 16
+        paths.size() == 1
     }
 
-    def testGetTCaseResult() {
+	def test_getTCaseResult() {
+		setup:
+		MaterialRepository mr = prepareMR('test_getTCaseResult')
         when:
-        TCaseResult tCaseResult = mr_.getTCaseResult(new TSuiteName('Test Suites/main/TS1'),
-                                        new TSuiteTimestamp('20180530_130419'),
-                                        new TCaseName('Test Cases/main/TC1'))
+        TCaseResult tCaseResult = mr.getTCaseResult(new TSuiteName('Test Suites/TS1'),
+                                        new TSuiteTimestamp('20180810_140106'),
+                                        new TCaseName('Test Cases/TC1'))
         then:
         tCaseResult != null    
     }
     
-    def testGetTestCaseDirectory() {
+    def test_getTestCaseDirectory() {
+		setup:
+		MaterialRepository mr = prepareMR('test_getTestCaseDirectory', 'Test Suites/main/TS1')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path testCaseDir = mr_.getTestCaseDirectory('Test Cases/main/TC1')
+        mr.markAsCurrent('Test Suites/main/TS1', '20180530_130419')
+        Path testCaseDir = mr.getTestCaseDirectory('Test Cases/main/TC1')
         then:
-        testCaseDir == workdir_.resolve('Materials/main.TS1').resolve('20180530_130419').resolve('main.TC1').normalize()
+        testCaseDir.getFileName().toString() == 'main.TC1'
     }
     
-
-    def testGetTSuiteNameList() {
+    def test_getTSuiteNameList() {
+		setup:
+		Path caseDir = specOutputDir_.resolve('test_getTSuiteNameList')
+		Helpers.copyDirectory(fixture_.resolve('Materials'), caseDir.resolve('Materials'))
+		MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseDir.resolve('Materials'))
         when:
-        List<TSuiteName> tsnList = mr_.getTSuiteNameList()
+        List<TSuiteName> tsnList = mr.getTSuiteNameList()
         then:
-        tsnList.size() == 8
+        tsnList.size() == 10
     }
     
-    def testGetTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
+    def test_getTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
+        TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
-        mr_.markAsCurrent(tsri)
-        mr_.ensureTSuiteResultPresent(tsri)
-        TSuiteResult tsr = mr_.getTSuiteResult(tsri)
+		MaterialRepository mr = prepareMR('test_getTSuiteResult_withTSuiteNameAndTSuiteTimestamp', 'Test Suites/main/TS1')
+        mr.markAsCurrent(tsri)
+        TSuiteResult tsr = mr.getTSuiteResult(tsri)
         then:
         tsr != null
         tsr.getId().getTSuiteName().equals(tsn)
@@ -171,95 +163,112 @@ class MaterialRepositorySpec extends Specification {
         
     }
     
-    def testGetTSuiteResultList_withTSuiteName() {
-        when:
-        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
-        List<TSuiteResult> list = mr_.getTSuiteResultList(tsriList)
+	def testGetTSuiteResultList_withTSuiteName() {
+		setup:
+		MaterialRepository mr = prepareBulkyMR'test_getTSuiteNameList'()
+		when:
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
         then:
         list != null
         list.size() == 6
     }
     
-    def testGetTSuiteResultIdList_withTSuiteName() {
+	def test_getTSuiteResultIdList_withTSuiteName() {
+		setup:
+		MaterialRepository mr = prepareBulkyMR('test_getTSuiteNameList_withTSuiteName')
         when:
-        List<TSuiteResultId> list = mr_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResultId> list = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
         then:
         list != null
         list.size() == 6
     }
     
-    def testGetTSuiteResultIdList() {
+	def test_getTSuiteResultIdList() {
+    	setup:
+		MaterialRepository mr = prepareBulkyMR('test_getTSuiteIdList')
         when:
-        List<TSuiteResultId> list = mr_.getTSuiteResultIdList()
+        List<TSuiteResultId> list = mr.getTSuiteResultIdList()
         then:
         list != null
-        list.size()== 15
+        list.size()== 18
     }
     
-    def testGetTSuiteResultList_noArgs() {
+	def test_getTSuiteResultList_noArgs() {
+		setup:
+		MaterialRepository mr = prepareBulkyMR('test_getTSuiteResultList_noArgs')
         when:
-        List<TSuiteResult> list = mr_.getTSuiteResultList()
+        List<TSuiteResult> list = mr.getTSuiteResultList()
         then:
         list != null
-        list.size() == 15
+        list.size() == 18
     }
 
-
-    def testResolveMaterialPath() {
+	def test_resolveMaterialPath() {
+		setup:
+		MaterialRepository mr = prepareMR('test_resolveMaterialPath', 'Test Suites/main/TS1')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'screenshot1.png')
+		mr.markAsCurrent("Test Suites/main/TS1", "20180530_130419")
+		mr.ensureTSuiteResultPresent("Test Suites/main/TS1", "20180530_130419")
+		String fileName = "http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        Path path = mr.resolveMaterialPath('Test Cases/main/TC1', fileName)
         then:
-        path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
+        path.toString().replace('\\', '/').endsWith("Materials/main.TS1/20180530_130419/main.TC1/${fileName}")
     }
     
-
-    def testResolveMaterialPathWithSubpath() {
+	def test_resolveMaterialPath_withSubpath() {
+		setup:
+		MaterialRepository mr = prepareMR('test_resolveMaterialPath_withSubpath', 'Test Suites/main/TS1')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
+        mr.markAsCurrent('Test Suites/main/TS1','20180530_130419')
+        mr.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
+        Path path = mr.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
         then:
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
     }
     
-    def testResolveScreenshotPath() {
+	def test_resolveScreenshotPath() {
+		setup:
+		MaterialRepository mr = prepareMR('test_resolveScreenshotPath', 'Test Suites/main/TS1')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path path = mr_.resolveScreenshotPath('Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'))
+        mr.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
+        mr.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
+        Path path = mr.resolveScreenshotPath('Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'))
         then:
         path.getFileName().toString() == 'http%3A%2F%2Fdemoaut.katalon.com%2F(2).png'
     }
 
-
-    def testResolveScreenshotPathByURLPathComponents_top() {
-        when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path path = mr_.resolveScreenshotPathByURLPathComponents(
+	def test_resolveScreenshotPath_byURLPathComponents_top() {
+		setup:
+		MaterialRepository mr = prepareMR('test_resolveScreenshotPath_byURLPathComponents_top', 'Test Suites/main/TS1')
+		when:
+        mr.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
+        mr.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
+        Path path = mr.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
         then:
         path.getFileName().toString()== 'top.png'
             path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/top.png')
     }
 
-
-    def testResolveScreenshotPathByURLPathComponents_login() {
+	def test_resolveScreenshotPath_byURLPathComponents_login() {
+		setup:
+		MaterialRepository mr = prepareMR('test_resolveScreenshotPath_byURLPathComponents_login', 'Test Suites/main/TS1')
         when:
-        mr_.markAsCurrent(    'Test Suites/main/TS1','20180530_130419')
-        mr_.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
-        Path path = mr_.resolveScreenshotPathByURLPathComponents(
+        mr.markAsCurrent('Test Suites/main/TS1','20180530_130419')
+        mr.ensureTSuiteResultPresent('Test Suites/main/TS1','20180530_130419')
+        Path path = mr.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1', new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
         then:
         path.getFileName().toString()== 'profile.php%23login.png'
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/profile.php%23login.png')
     }
 
-    def testCreateMaterialPairs_TSuiteNameOnly() {
+	def test_createMaterialPairs_TSuiteNameOnly() {
+		setup:
+		MaterialRepository mr = prepareMR('test_createMaterialPairs_TSuiteNameOnly')
         when:
-        MaterialPairs mps = mr_.createMaterialPairs(new TSuiteName('TS1'))
+        MaterialPairs mps = mr.createMaterialPairs(new TSuiteName('TS1'))
         then:
         mps.size() == 1
         when:
@@ -278,16 +287,9 @@ class MaterialRepositorySpec extends Specification {
      *
      * @throws IOException
      */
-    def testDeleteBaseDirContents() throws IOException {
+	def test_deleteBaseDirContents() throws IOException {
         setup:
-        Path casedir = workdir_.resolve("testDeleteBaseDirContents")
-        if (!Files.exists(casedir)) {
-            Files.createDirectories(casedir)
-        }
-        Helpers.copyDirectory(fixture_, casedir)
-        //
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
-        //
+        MaterialRepository mr = prepareMR("test_deleteBaseDirContents")
         when:
         mr.deleteBaseDirContents()
         List<String> contents = mr.getBaseDir().toFile().list()
@@ -295,14 +297,9 @@ class MaterialRepositorySpec extends Specification {
         contents.size() == 0
     }
 
-    def testClear_withArgTSuiteTimestamp() {
+	def test_clear_withArgTSuiteTimestamp() {
         setup:
-        Path casedir = workdir_.resolve("testClear_withArgTSuiteTimestamp")
-        if (!Files.exists(casedir)) {
-            Files.createDirectories(casedir)
-        }
-        Helpers.copyDirectory(fixture_, casedir)
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        MaterialRepository mr = prepareBulkyMR("test_cClear_withArgTSuiteTimestamp")
         when:
         TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
@@ -323,14 +320,9 @@ class MaterialRepositorySpec extends Specification {
         ! Files.exists(tstDir)
     }
 
-    def testClear_withArgOnlyTSuiteName() {
+	def test_clear_withArgOnlyTSuiteName() {
         setup:
-        Path casedir = workdir_.resolve("testClear_withArgOnlyTSuiteName")
-        if (!Files.exists(casedir)) {
-            Files.createDirectories(casedir)
-        }
-        Helpers.copyDirectory(fixture_, casedir)
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(casedir.resolve('Materials'))
+        MaterialRepository mr = prepareBulkyMR("test_clear_withArgOnlyTSuiteName")
         when:
         TSuiteName tsn = new TSuiteName("Test Suites/main/TS1")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180530_130419")
@@ -348,5 +340,49 @@ class MaterialRepositorySpec extends Specification {
         ! Files.exists(tsnDir)
     }
 
+	@IgnoreRest
+	def test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg() {
+		setup:
+		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg')
+		when:
+		mr.markAsCurrent('oneStringArg')
+		mr.ensureTSuiteResultPresent('oneStringArg')
+		Path timestampdir = mr.getCurrentTestSuiteDirectory()
+		then:
+		timestampdir.toString().contains('oneStringArg')
+		when:
+		String dirName = timestampdir.getFileName()
+		LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
+		then:
+		true
+	}
+
+	@IgnoreRest
+	def test_markAsCurrent_ensureTSuiteResultPresent_twoStringArgs() {
+		setup:
+		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresent_twoSgringArgs')
+		when:
+		mr.markAsCurrent('twoStringArgs', '20180616_160000')
+		mr.ensureTSuiteResultPresent('twoStringArgs', '20180616_160000')
+		Path timestampdir = mr.getCurrentTestSuiteDirectory()
+		then:
+		timestampdir.toString().contains('twoStringArgs')
+		timestampdir.getFileName().toString().contains('20180616_160000')
+	}
+
+	@IgnoreRest
+	def test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs() {
+		setup:
+		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs')
+		when:
+		def tSuiteName = new TSuiteName('TSuiteNameAndTSuiteTimestampAsArgs')
+		def tSuiteTimestamp = new TSuiteTimestamp('20180616_160000')
+		mr.markAsCurrent(tSuiteName, tSuiteTimestamp)
+		mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
+		Path timestampdir = mr.getCurrentTestSuiteDirectory()
+		then:
+		timestampdir.toString().contains('TSuiteNameAndTSuiteTimestampAsArgs')
+		timestampdir.getFileName().toString().contains('20180616_160000')
+	}
 }
 
