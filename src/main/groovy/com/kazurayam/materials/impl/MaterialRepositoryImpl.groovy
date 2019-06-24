@@ -100,16 +100,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     void markAsCurrent(String testSuiteId) {
-        this.markAsCurrent(
-                testSuiteId,
-                Helpers.now())
+        String now = Helpers.now()
+        this.markAsCurrent(testSuiteId, now)
     }
 
     @Override
     void markAsCurrent(String testSuiteId, String testSuiteTimestamp) {
         this.markTSuiteResultAsCurrent(
                 new TSuiteName(testSuiteId),
-                TSuiteTimestamp.newInstance(testSuiteTimestamp))
+                new TSuiteTimestamp(testSuiteTimestamp))
     }
 
     @Override
@@ -182,7 +181,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // add the specified TestSuite
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tSuiteTimestamp)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         
         // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found in the directory,

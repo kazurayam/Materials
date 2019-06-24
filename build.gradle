@@ -15,6 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
@@ -74,7 +75,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
     testImplementation group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
-    
+
     // required by groovy.util.AntBuilder#copy() used in tests
     testImplementation("ant:ant:1.7.0")
 }
@@ -93,37 +94,36 @@ test {
 
 
 task pinpoint(type: Test) {
-	//include "**/HelpersSpec.class"
+    //include "**/HelpersSpec.class"
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
-	//include "**/MaterialRepositoryMoreSpec.class"
-	
+    //include "**/MaterialRepositoryMoreSpec.class"
     //include "**/MaterialSpec.class"
-    //include "**/MaterialStorageSpec.class"
+    include "**/MaterialStorageSpec.class"
     //include "**/ReportsAccessorSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/TCaseResultSpec.class"
-    //include "**/ComparisonResultBundleSpec.class"
+    include "**/ComparisonResultBundleSpec.class"
     //include "**/ComparisonResultSpec.class"
-    //include "**/ImageCollectionDifferSpec.class"
+    include "**/ImageCollectionDifferSpec.class"
     //include "**/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
     //include "**/RepositoryFileScannerSpec.class"
-    include "**/RepositoryRootSpec.class"
+    //include "**/RepositoryRootSpec.class"
     //include "**/RepositoryWalkerSpec.class"
     //include "**/PathResolutionLogBundleSpec.class"
     //include "**/ImageDeltaStatsSpec.class"
     //include "**/MaterialStatsSpec.class"
     //include "**/StatsEntrySpec.class"
     //include "**/StorageScannerSpec.class"
-    //include "**/BaseIndexerSpec.class"
+    include "**/BaseIndexerSpec.class"
     //include "**/IndexerByVisitorImplSpec.class"
     //include "**/JUnitReportWrapperSpec.class"
-    //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+    include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/MaterialStorageSpec.class"
     exclude '**/stats/*Spec.class'

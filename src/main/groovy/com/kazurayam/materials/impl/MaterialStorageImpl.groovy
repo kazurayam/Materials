@@ -270,27 +270,21 @@ class MaterialStorageImpl implements MaterialStorage {
         Path fromDir = componentMR_.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
         
         // make sure the output directory is there
-        intoMR.ensureTSuiteResultPresent(tSuiteResultId)
+        TSuiteResult tSuiteResultInMR = intoMR.ensureTSuiteResultPresent(tSuiteResultId)
+        Path toDir   = tSuiteResultInMR.getTSuiteTimestampDirectory()
         
-        if (intoMR.getTSuiteResult(tSuiteResultId) != null) {
-            Path toDir   = intoMR.getTSuiteResult(tSuiteResultId).getTSuiteTimestampDirectory()
+        // now copy files from the Storage dir into the Materials dir
+        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
+        boolean skipIfIdentical = false
+        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
         
-            // now copy files from the Storage dir into the Materials dir
-            boolean skipIfIdentical = true
-            logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
-            int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
-        
-            // let the MaterialRepository to scan the disk to recognize the copied files
-            if (scan) {
-                intoMR.scan()
-            }
-            // done
-            return new RestoreResultImpl(new TSuiteResultImpl(tSuiteResultId), count)
-            
-        } else {
-            System.err.println("${tSuiteResultId} is not found in ${intoMR}")
-            return RestoreResultImpl.NULL
+        // let the MaterialRepository to scan the disk to recognize the copied files
+        if (scan) {
+            intoMR.scan()
         }
+        
+        // done
+        return new RestoreResultImpl(new TSuiteResultImpl(tSuiteResultId), count)
     }
 
     @Override
@@ -327,14 +321,14 @@ class MaterialStorageImpl implements MaterialStorage {
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResult(context)
-        //if (tSuiteResult != TSuiteResult.NULL) {
+        if (tSuiteResult != TSuiteResult.NULL) {
             // copy the files
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
             return restoreResult
-        //} else {
-        //    vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
-        //    return RestoreResult.NULL
-        //}
+        } else {
+            vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
+            return RestoreResult.NULL
+        }
     }
     
     /**

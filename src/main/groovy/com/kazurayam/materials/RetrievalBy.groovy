@@ -7,8 +7,6 @@ import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.MaterialStorageImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 
-import groovy.json.JsonOutput
-
 /**
  * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
  * Two strategies are implemented.
@@ -153,7 +151,6 @@ abstract class RetrievalBy {
 			
 			// for DEBUG
 			/*
-			JsonOutput jo = new JsonOutput()
 			StringBuilder sb = new StringBuilder()
 			sb.append("RetrievalBy#findTSuiteResult" +
 				" rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_).size()=${results.size()}\n")
@@ -161,10 +158,6 @@ abstract class RetrievalBy {
 				" results=\n${results}\n")
 			sb.append("RetrievalBy#findTSuiteResult" +
 				" results[0]=\n${results[0]}\n")
-			sb.append("RetrievalBy#findTSuiteResult" +
-				" rr=\n${jo.prettyPrint(rr.toJsonText())}\n" +
-				" tsn=\n${tsn.toJsonText()}\n" +
-				" tSuiteTimestamp_=\n${tSuiteTimestamp_.format()}\n")
 			throw new IllegalStateException(sb.toString())
 			*/
 			

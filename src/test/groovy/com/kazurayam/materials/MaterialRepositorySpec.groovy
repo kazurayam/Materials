@@ -9,7 +9,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -85,13 +84,13 @@ class MaterialRepositorySpec extends Specification {
     }
 
     def testConstructor_Path_tsn() {
-		setup:
-		MaterialRepository mr = prepareMR('testConstructor_Path_tsn')
+        setup:
+        MaterialRepository mr = prepareMR('testConstructor_Path_tsn')
         when:
         mr.markAsCurrent('Test Suites/TS1')
         String str = mr.toString()
         then:
-        str.contains('main.TS1')
+        str.contains('TS1')
     }
 
     def test_getCurrentTestSuiteDirectory() {
@@ -163,10 +162,10 @@ class MaterialRepositorySpec extends Specification {
         
     }
     
-	def testGetTSuiteResultList_withTSuiteName() {
-		setup:
-		MaterialRepository mr = prepareBulkyMR'test_getTSuiteNameList'()
-		when:
+    def test_getTSuiteResultList_withTSuiteName() {
+        setup:
+        MaterialRepository mr = prepareBulkyMR('test_getTSuiteResultList_withTSuiteName')
+        when:
         List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
         List<TSuiteResult> list = mr.getTSuiteResultList(tsriList)
         then:
@@ -320,7 +319,7 @@ class MaterialRepositorySpec extends Specification {
         ! Files.exists(tstDir)
     }
 
-	def test_clear_withArgOnlyTSuiteName() {
+    def test_clear_withArgOnlyTSuiteName() {
         setup:
         MaterialRepository mr = prepareBulkyMR("test_clear_withArgOnlyTSuiteName")
         when:
@@ -340,7 +339,6 @@ class MaterialRepositorySpec extends Specification {
         ! Files.exists(tsnDir)
     }
 
-	@IgnoreRest
 	def test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg() {
 		setup:
 		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg')
@@ -357,7 +355,6 @@ class MaterialRepositorySpec extends Specification {
 		true
 	}
 
-	@IgnoreRest
 	def test_markAsCurrent_ensureTSuiteResultPresent_twoStringArgs() {
 		setup:
 		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresent_twoSgringArgs')
@@ -370,19 +367,26 @@ class MaterialRepositorySpec extends Specification {
 		timestampdir.getFileName().toString().contains('20180616_160000')
 	}
 
-	@IgnoreRest
-	def test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs() {
-		setup:
-		MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs')
-		when:
-		def tSuiteName = new TSuiteName('TSuiteNameAndTSuiteTimestampAsArgs')
-		def tSuiteTimestamp = new TSuiteTimestamp('20180616_160000')
-		mr.markAsCurrent(tSuiteName, tSuiteTimestamp)
-		mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
-		Path timestampdir = mr.getCurrentTestSuiteDirectory()
-		then:
-		timestampdir.toString().contains('TSuiteNameAndTSuiteTimestampAsArgs')
-		timestampdir.getFileName().toString().contains('20180616_160000')
-	}
+
+    def test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs() {
+        setup:
+        MaterialRepository mr = prepareMR('test_markAsCurrent_ensureTSuiteResultPresnt_TSuiteNameAndTSuiteTimestampAsArgs')
+        when:
+        def tSuiteName = new TSuiteName('TSuiteNameAndTSuiteTimestampAsArgs')
+        def tSuiteTimestamp1 = new TSuiteTimestamp('20180616_160000')
+        mr.markAsCurrent(tSuiteName, tSuiteTimestamp1)
+        TSuiteResult ensured1 = mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp1)
+        Path timestampdir = mr.getCurrentTestSuiteDirectory()
+        then:
+        timestampdir.toString().contains('TSuiteNameAndTSuiteTimestampAsArgs')
+        timestampdir.getFileName().toString().contains('20180616_160000')
+        
+        when:
+        def tSuiteTimestamp2 = new TSuiteTimestamp('20180505_000000')
+        TSuiteResult ensured2 = mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp2)
+        then:
+        ensured2.getTSuiteName() == tSuiteName
+        ensured2.getTSuiteTimestamp() == tSuiteTimestamp2
+    }
 }
 
