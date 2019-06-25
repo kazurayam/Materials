@@ -41,9 +41,16 @@ configurations {
     generateDocs
 }
 
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+}
+
 repositories {
     jcenter()
-    mavenLocal()
 }
 
 dependencies {
