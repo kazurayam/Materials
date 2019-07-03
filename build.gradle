@@ -105,7 +105,10 @@ task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
+<<<<<<< HEAD
     //include "**/MaterialRepositoryFactorySpec.class"
+=======
+>>>>>>> develop
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialRepositoryMoreSpec.class"
     //include "**/MaterialSpec.class"
@@ -130,9 +133,14 @@ task pinpoint(type: Test) {
     include "**/BaseIndexerSpec.class"
     //include "**/IndexerByVisitorImplSpec.class"
     //include "**/JUnitReportWrapperSpec.class"
+<<<<<<< HEAD
     include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/MaterialStorageSpec.class"
+=======
+    //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+	include "**/resolution/PathResolutionLogSpec.class"
+>>>>>>> develop
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }

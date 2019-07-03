@@ -69,7 +69,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
                                         )
         //
         if (jsonObject.PathResolutionLog['SubPath']) {
-            log.setSubPath(Paths.get(jsonObject.PathResolutionLog['SubPath']))
+            log.setSubPath(jsonObject.PathResolutionLog['SubPath'])
         }
         if (jsonObject.PathResolutionLog['URL']) {
             log.setUrl(new URL(jsonObject.PathResolutionLog['URL']))
