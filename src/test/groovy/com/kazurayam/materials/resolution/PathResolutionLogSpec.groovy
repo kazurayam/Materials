@@ -182,9 +182,8 @@ class PathResolutionLogSpec extends Specification {
 			tCaseName,
 			materialPath
 		)
-		resolution.setSubPath('')
-		URL url = new URL('https://www.47news.jp/')
-		resolution.setUrl(url)
+		resolution.setSubPath('dir1')   // Bomb!
+		resolution.setUrl(new URL('https://www.47news.jp/'))
 		//
 		Path serialized = tSuiteResultPath.resolve('path-resolution-log.json')
 		OutputStream os = new FileOutputStream(serialized.toFile())
