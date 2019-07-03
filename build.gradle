@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.71.2'
+version  = '0.71.3'
 
 
 sourceCompatibility = '1.8'
@@ -94,7 +94,7 @@ test {
 task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
-    include "**/MaterialRepositoryImplSpec.class"
+    //include "**/MaterialRepositoryImplSpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
@@ -119,6 +119,7 @@ task pinpoint(type: Test) {
     //include "**/IndexerByVisitorImplSpec.class"
     //include "**/JUnitReportWrapperSpec.class"
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+	include "**/resolution/PathResolutionLogSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
