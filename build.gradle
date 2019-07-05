@@ -105,20 +105,18 @@ task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
-<<<<<<< HEAD
     //include "**/MaterialRepositoryFactorySpec.class"
-=======
->>>>>>> develop
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialRepositoryMoreSpec.class"
     //include "**/MaterialSpec.class"
-    include "**/MaterialStorageSpec.class"
+    //include "**/MaterialStorageSpec.class"
     //include "**/ReportsAccessorSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/TCaseResultSpec.class"
-    include "**/ComparisonResultBundleSpec.class"
+    //include "**/ComparisonResultBundleSpec.class"
     //include "**/ComparisonResultSpec.class"
-    include "**/ImageCollectionDifferSpec.class"
+    include "**/EspionageSpec.class"
+    //include "**/ImageCollectionDifferSpec.class"
     //include "**/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/MaterialRepositoryImplSpec.class"
@@ -130,17 +128,14 @@ task pinpoint(type: Test) {
     //include "**/MaterialStatsSpec.class"
     //include "**/StatsEntrySpec.class"
     //include "**/StorageScannerSpec.class"
-    include "**/BaseIndexerSpec.class"
+    //include "**/BaseIndexerSpec.class"
     //include "**/IndexerByVisitorImplSpec.class"
     //include "**/JUnitReportWrapperSpec.class"
-<<<<<<< HEAD
-    include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
-    //include "**/MaterialStorageSpec.class"
-    //include "**/MaterialStorageSpec.class"
-=======
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
-	include "**/resolution/PathResolutionLogSpec.class"
->>>>>>> develop
+    //include "**/MaterialStorageSpec.class"
+    //include "**/MaterialStorageSpec.class"
+    //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+    //include "**/resolution/PathResolutionLogSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
