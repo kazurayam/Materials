@@ -92,12 +92,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * @param imageDeltaStats
      */
     @Override
-    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName tCaseName, ImageDeltaStats imageDeltaStats) {
+    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName callerTCaseName, ImageDeltaStats imageDeltaStats) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
-        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(callerTCaseName, "tCaseName must not be null")
         Objects.requireNonNull(imageDeltaStats, "imageDeltaStats must not be null")
         //
-        this.startImageCollection(tCaseName)
+        this.startImageCollection(callerTCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
             // make an orphan material paired
@@ -115,13 +115,13 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
                 double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
                 // compare 2 images and create a ComparisonResult object
-                ComparisonResult cr = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
+                ComparisonResult cr = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
                 // and put the ComparisonResult into buffer
                 this.endMaterialPair(cr)
             }
         }
         // 
-        this.endImageCollection(tCaseName)
+        this.endImageCollection(callerTCaseName)
         //
         return bundle_.allOfImagesAreSimilar()
     }
@@ -143,11 +143,11 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      *     the MaterialPair is evaluated FAILED
      */
     @Override
-    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName tCaseName, double criteriaPercentage) {
+    boolean makeImageCollectionDifferences(MaterialPairs materialPairs, TCaseName callerTCaseName, double criteriaPercentage) {
         Objects.requireNonNull(materialPairs, "materialPairs must not be null")
-        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        Objects.requireNonNull(callerTCaseName, "callerTCaseName must not be null")
         //
-        this.startImageCollection(tCaseName)
+        this.startImageCollection(callerTCaseName)
         // iterate over the list of Materials
         for (MaterialPair pair : materialPairs.getList()) {
             // make an orphan material paired
@@ -160,12 +160,13 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                 decorated.getExpected().getFileType() == FileType.PNG &&
                 decorated.getActual().getFileType() == FileType.PNG) {
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
-                ComparisonResult evalResult = this.startMaterialPair(tCaseName, decorated, criteriaPercentage)
-                // logging etc
+                ComparisonResult evalResult = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
+                
+				// put the evalResult into the bundle
                 this.endMaterialPair(evalResult)
             }
         }
-        this.endImageCollection(tCaseName)
+        this.endImageCollection(callerTCaseName)
         //
         return bundle_.allOfImagesAreSimilar()
     }

@@ -25,10 +25,37 @@ class EspionageSpec extends Specification {
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
-    
-    def test_ternaryOnImageDifference() {
+	
+	def test_ternaryOnImageDifference_truthyCase() {
+		setup:
+		Path caseOutputDir = specOutputDir.resolve("test_ternaryOnImageDifference_truthyCase")
+		Files.createDirectories(caseOutputDir)
+		Helpers.copyDirectory(specFixtureDir, caseOutputDir)
+		Path materialsDir = caseOutputDir.resolve('Materials')
+		File f1 = materialsDir.resolve('TS1/20190624_092807/TC1/date.png').toFile()
+		File f2 = materialsDir.resolve('TS1/20190625_130954/TC1/date.png').toFile()
+		BufferedImage img1 = ImageIO.read(f1)
+		BufferedImage img2 = ImageIO.read(f2)
+		when:
+		ImageDifference imgDiff = new ImageDifference(img1, img2)
+		Object result = Espionage.ternary(
+			imgDiff,
+			{
+				println "${f1} and ${f2} are identical";
+				return true
+			},
+			{
+				println "${f1} and ${f2} are different";
+				return false
+			}
+		)
+		then:
+		result == true
+	}
+	
+    def test_ternaryOnImageDifference_falsyCase() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testTernaryOnImageDifference")
+        Path caseOutputDir = specOutputDir.resolve("test_ternaryOnImageDifference_falsyCase")
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(specFixtureDir, caseOutputDir)
         Path materialsDir = caseOutputDir.resolve('Materials')
@@ -52,4 +79,32 @@ class EspionageSpec extends Specification {
         then:
         result == false
     }
+	
+	def test_ternaryOnComparisonResult_truthyCase() {
+		setup:
+		Path caseOutputDir = specOutputDir.resolve("test_ternaryOnComparisonResult_truthyCase")
+		Files.createDirectories(caseOutputDir)
+		Helpers.copyDirectory(specFixtureDir, caseOutputDir)
+		Path materialsDir = caseOutputDir.resolve('Materials')
+		File f1 = materialsDir.resolve('TS1/20190624_092807/TC1/date.png').toFile()
+		File f2 = materialsDir.resolve('TS1/20190625_130954/TC1/date.png').toFile()
+		BufferedImage img1 = ImageIO.read(f1)
+		BufferedImage img2 = ImageIO.read(f2)
+		when:
+		//TODO
+		ComparisonResult comparisonResult = null
+		Object result = Espionage.ternary(
+			comparisonResult,
+			{
+				println "${f1} and ${f2} are identical";
+				return true
+			},
+			{
+				println "${f1} and ${f2} are different";
+				return false
+			}
+		)
+		then:
+		result == true
+	}
 }
