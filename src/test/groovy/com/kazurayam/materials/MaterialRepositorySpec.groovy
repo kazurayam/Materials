@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import groovy.json.JsonOutput
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 //@Ignore
@@ -242,7 +243,16 @@ class MaterialRepositorySpec extends Specification {
         path.getFileName().toString()== 'profile.php%23login.png'
         path.toString().replace('\\', '/').endsWith('Materials/main.TS1/20180530_130419/main.TC1/profile.php%23login.png')
     }
-
+	
+	
+	def testMakeIndex() {
+		when:
+		mr_.putCurrentTestSuite('Test Suites/main/TS1','20180530_130419')
+		Path index = mr_.makeIndex()
+		then:
+		Files.exists(index)
+	}
+	
     def testCreateMaterialPairs_TSuiteNameOnly() {
         when:
         MaterialPairs mps = mr_.createMaterialPairs(new TSuiteName('TS1'))

@@ -110,8 +110,22 @@ interface MaterialRepository {
     List<TSuiteResultId> getTSuiteResultIdList()
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
+	
+	/**
+	 * Scan the <pre>[project dir]/Materials</pre> directory to create <pre>[project dir]/Materials/index.html</pre> file.
+	 * 
+	 * The makeIndex() method was once removed from the MaterialRepository interface at the Materials-0.71.0.jar.
+	 * See the diff at 
+	 * https://github.com/kazurayam/Materials/commit/4e42834b4889949b93a4282c4a6e2d94f56795a6#diff-c7b1f72fa3889f9e5ae3ae79ec4d95f5
+	 * 
+	 * But makeIndex() was added back at the Materials-0.71.4 in order to restore backward compatibility. See the related issue at
+	 * https://forum.katalon.com/t/logging-http-response-headers-and-bodies-of-web-service-materials-applied/13803/13 
+	 * 
+	 * @return the Path of index.html file
+	 */
+	Path makeIndex()
     
-    void putCurrentTestSuite(String testSuiteId)
+	void putCurrentTestSuite(String testSuiteId)
     void putCurrentTestSuite(TSuiteName tSuiteName)
     void putCurrentTestSuite(String testSuiteId, String testSuiteTimestamp)
     void putCurrentTestSuite(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
