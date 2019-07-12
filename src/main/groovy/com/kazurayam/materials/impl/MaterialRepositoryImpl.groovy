@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Indexer
+import com.kazurayam.materials.IndexerFactory
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
@@ -613,26 +615,29 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
 
     /**
-     * create index.html file in the current <test suite name>/<test suite timestamp>/ directory.
-     * returns the Path of the index.html
-     *
+     * Given the path of <pre>Materials</pre> directory = the base directory of the MaterialsRepository class instance, 
+     * create <pre>&lt;Materials directory&gt;/index.html</pre> file based on the current content of the Materials directory
+     * while naively assuming the <pre>&lt;Materials directory&gt;/../Reports</pre> is also available.
+     * 
+     * @returns the Path of the index.html
+     */
     @Override
     Path makeIndex() {
         Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(baseDir_)
-        indexer.setReportsDir(reportsDir_)
+        Path reportsDir = baseDir_.resolve('..').resolve('Reports')  // a naive assumption, may break 
+		indexer.setReportsDir(reportsDir)
         Path index = baseDir_.resolve('index.html')
         indexer.setOutput(index)
         if (vtLogger_ != null) {
             indexer.setVisualTestingLogger(vtLogger_)
         }
-        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex baseDir is ${baseDir_}")
-        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex reportsDir is ${reportsDir_}")
-        //vtLogger_.info(this.class.getSimpleName() + "#makeIndex index is ${index}")
+        vtLogger_.info(this.class.getSimpleName() + "#makeIndex baseDir is ${baseDir_}")
+        vtLogger_.info(this.class.getSimpleName() + "#makeIndex reportsDir is ${reportsDir}")
+        vtLogger_.info(this.class.getSimpleName() + "#makeIndex index is ${index}")
         indexer.execute()
         return index
     }
-     */
     
     
     /**

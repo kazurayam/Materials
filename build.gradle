@@ -108,6 +108,7 @@ task pinpoint(type: Test) {
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialRepositoryMoreSpec.class"
+    include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/ReportsAccessorSpec.class"
@@ -115,7 +116,7 @@ task pinpoint(type: Test) {
     //include "**/TCaseResultSpec.class"
     //include "**/ComparisonResultBundleSpec.class"
     //include "**/ComparisonResultSpec.class"
-    include "**/EspionageSpec.class"
+    //include "**/EspionageSpec.class"
     //include "**/ImageCollectionDifferSpec.class"
     //include "**/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/ImageDifferenceFilenameResolverDefaultImplSpec.class"
@@ -141,6 +142,7 @@ task pinpoint(type: Test) {
     //include "**/MaterialStorageSpec.class"
     //include "**/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/resolution/PathResolutionLogSpec.class"
+	//include "**/resolution/PathResolutionLogSpec.class"
     exclude '**/stats/*Spec.class'
     outputs.upToDateWhen {false}
 }
