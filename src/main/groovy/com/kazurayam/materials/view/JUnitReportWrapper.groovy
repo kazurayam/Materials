@@ -1,5 +1,8 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TSuiteResultId
+
+import java.nio.file.Files
 import java.nio.file.Path
 
 import javax.xml.parsers.DocumentBuilder
@@ -31,6 +34,31 @@ final class JUnitReportWrapper {
     private XPath xpath_
     private File file_
     
+	/**
+	 * Instanciate a JUnitReportWrapper object with a JUnit_Report.xml file as specified with the given arguments.
+	 * 
+	 * This factory method looks for a JUnit_Report.xml in 2 locations, for example:
+	 * - Reports/CURA/twins_exam/20190820_134959/JUnit_Report.xml  --- Katalon Studio v6.2.2 and prior
+	 * or
+	 * - Reports/20190820_134959/CURA/twins_exam/20190820_134959/JUnit_Report.xml --- as of Katalon Studio 6.3.0
+	 * 
+	 * @param reportsDir
+	 * @param TSuiteResult
+	 * @return may return null if appropriate JUnit_Report.xml file is not found for the tSuiteResult under the reportsDir directory
+	 */
+	static JUnitReportWrapper newInstance(Path reportsDir, TSuiteResultId tSuiteResultId) {
+		Path reportFilePathKS6_2_2_and_prior = reportsDir.
+				resolve(tSuiteResultId.getTSuiteName().getValue().replace('.', '/')).
+				resolve(tSuiteResultId.getTSuiteTimestamp().format()).
+				resolve('JUnit_Report.xml')
+		if (Files.exists(reportFilePathKS6_2_2_and_prior)) {
+			return new JUnitReportWrapper(reportFilePathKS6_2_2_and_prior)
+		} else {
+			logger_.warn("${reportFilePathKS6_2_2_and_prior} is not found")
+			return null
+		}
+	}
+	
     JUnitReportWrapper(Path path) {
         this(path.toFile())
     }

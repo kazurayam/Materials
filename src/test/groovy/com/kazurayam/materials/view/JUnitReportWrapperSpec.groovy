@@ -7,6 +7,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 
 import spock.lang.Specification
@@ -17,11 +21,10 @@ class JUnitReportWrapperSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(JUnitReportWrapperSpec.class);
 
     // fields
-    private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static MaterialRepositoryImpl mri_
-    private static JUnitReportWrapper instance_
-
+	private static Path workdir_
+    private static Path reportsDir_
+    
     // fixture methods
     def setupSpec() {
         workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(JUnitReportWrapperSpec.class)}")
@@ -29,44 +32,83 @@ class JUnitReportWrapperSpec extends Specification {
             workdir_.toFile().mkdirs()
         }
         Helpers.copyDirectory(fixture_, workdir_)
-        Path materialsDir = workdir_.resolve('Materials')
-        Path reportsDir   = workdir_.resolve('Reports')
-        mri_ = MaterialRepositoryImpl.newInstance(materialsDir)
+        reportsDir_   = workdir_.resolve('Reports')
     }
+	
     def setup() {
-        Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
-        instance_ = new JUnitReportWrapper(p)
     }
-    def cleanup() {}
+    
+	def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
     def testConstructor() {
-        expect:
-        instance_ != null
+		when:
+		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		JUnitReportWrapper instance = new JUnitReportWrapper(p)
+        then:
+        instance != null
     }
 
     def testGetTestSuiteSummary() {
-        when:
-        String summary = instance_.getTestSuiteSummary('Test Suites/main/TS1')
+        setup:
+		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		JUnitReportWrapper instance = new JUnitReportWrapper(p)
+		when:
+        String summary = instance.getTestSuiteSummary('Test Suites/main/TS1')
         then:
         summary == 'EXECUTED:2,FAILED:1,ERROR:0'
     }
 
     def testGetTestCaseStatus_PASSED() {
-        when:
-        String status = instance_.getTestCaseStatus('Test Cases/main/TC1')
+        setup:
+		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		JUnitReportWrapper instance = new JUnitReportWrapper(p)
+		when:
+        String status = instance.getTestCaseStatus('Test Cases/main/TC1')
         then:
         status == 'PASSED'
     }
 
     def testGetTestCaseStatus_FAILED() {
-        when:
-        String status = instance_.getTestCaseStatus('Test Cases/main/TC2')
+        setup:
+		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		JUnitReportWrapper instance = new JUnitReportWrapper(p)
+		when:
+        String status = instance.getTestCaseStatus('Test Cases/main/TC2')
         then:
         status == 'FAILED'
     }
 
+	/**
+	 * test createInstance((Path reportsDir, TSuiteResult tSuiteResult) method.
+	 * Katalon Studio version 6.2.2 and the prior versions generates a JUnit_Report.xml file at
+	 * - Reports/CURA/twins_exam/20190820_134959/JUnit_Report.xml
+	 * 
+	 * @return
+	 */
+	def testNewInstance_KS6_2_2() {
+		setup:
+		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(new TSuiteName('main/TS1'), new TSuiteTimestamp('20180805_081908'))
+		JUnitReportWrapper instance = JUnitReportWrapper.newInstance(reportsDir_, tSuiteResultId)
+		when:
+		String summary = instance.getTestSuiteSummary('Test Suites/main/TS1')
+		then:
+		summary == 'EXECUTED:2,FAILED:1,ERROR:0'
+	}
+	
+	/**
+	 * test createInstance((Path reportsDir, TSuiteResult tSuiteResult) method.
+	 * Katalon Studio version 6.2.2 and the prior versions generates a JUnit_Report.xml file at
+	 * - Reports/20190820_133032/CURA/twins_exam/20190820_133035/JUnit_Report.xml
+	 * 
+	 * @return
+	 */
+	def testNewInstance_KS6_3_0() {
+		expect:
+		false
+	}
 
     // helper methods
 }
