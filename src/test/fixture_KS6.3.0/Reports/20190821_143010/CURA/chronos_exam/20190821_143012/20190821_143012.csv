@@ -1,0 +1,8 @@
+Suite/Test/Step Name,Browser,Description,Tag,Start time,End time,Duration,Status
+chronos_exam,,,,2019-08-21 14:31:04,2019-08-21 14:31:09,4.418s,INCOMPLETE
+,,,,,,,
+Test Cases/CURA/ImageDiff_chronos,,,,2019-08-21 14:31:06,2019-08-21 14:31:09,3.156s,PASSED
+Start listener action : beforeTestCase,,,,2019-08-21 14:31:06,2019-08-21 14:31:06,0.164s,PASSED
+"TESTSUITE_ID = ""CURA/chronos_capture""",,,,2019-08-21 14:31:06,2019-08-21 14:31:06,0.000s,PASSED
+options = 0).build(),,,,2019-08-21 14:31:06,2019-08-21 14:31:06,0.014s,PASSED
+"com.kazurayam.visualtesting.ImageDiffer.runChronos(TESTSUITE_ID, options)",,,,2019-08-21 14:31:06,2019-08-21 14:31:09,2.858s,PASSED

@@ -14,6 +14,8 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 
 import spock.lang.Specification
+import spock.lang.Ignore
+import spock.lang.IgnoreRest
 
 //@Ignore
 class JUnitReportWrapperSpec extends Specification {
@@ -21,30 +23,36 @@ class JUnitReportWrapperSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(JUnitReportWrapperSpec.class);
 
     // fields
-    private static Path fixture_ = Paths.get("./src/test/fixture")
-	private static Path workdir_
-    private static Path reportsDir_
+    private static Path fixtureKS6_2_2 = Paths.get("./src/test/fixture")
+	private static Path fixtureKS6_3_0 = Paths.get("./src/test/fixture_KS6.3.0")
+    private static Path reportsDirKS6_2_2
+	private static Path reportsDirKS6_3_0
     
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(JUnitReportWrapperSpec.class)}")
-        if (!workdir_.toFile().exists()) {
-            workdir_.toFile().mkdirs()
+        Path workdir = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(JUnitReportWrapperSpec.class)}/KS6.2.2andOlder")
+        if (!workdir.toFile().exists()) {
+            workdir.toFile().mkdirs()
         }
-        Helpers.copyDirectory(fixture_, workdir_)
-        reportsDir_   = workdir_.resolve('Reports')
+        Helpers.copyDirectory(fixtureKS6_2_2, workdir)
+        reportsDirKS6_2_2   = workdir.resolve('Reports')
+		//
+		workdir = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(JUnitReportWrapperSpec.class)}/KS6.3.0andNewer")
+		if (!workdir.toFile().exists()) {
+			workdir.toFile().mkdirs()
+		}
+		Helpers.copyDirectory(fixtureKS6_3_0, workdir)
+		reportsDirKS6_3_0   = workdir.resolve('Reports')
     }
 	
-    def setup() {
-    }
-    
+    def setup() {}
 	def cleanup() {}
     def cleanupSpec() {}
 
     // feature methods
     def testConstructor() {
 		when:
-		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
 		JUnitReportWrapper instance = new JUnitReportWrapper(p)
         then:
         instance != null
@@ -52,7 +60,7 @@ class JUnitReportWrapperSpec extends Specification {
 
     def testGetTestSuiteSummary() {
         setup:
-		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
 		JUnitReportWrapper instance = new JUnitReportWrapper(p)
 		when:
         String summary = instance.getTestSuiteSummary('Test Suites/main/TS1')
@@ -62,7 +70,7 @@ class JUnitReportWrapperSpec extends Specification {
 
     def testGetTestCaseStatus_PASSED() {
         setup:
-		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
 		JUnitReportWrapper instance = new JUnitReportWrapper(p)
 		when:
         String status = instance.getTestCaseStatus('Test Cases/main/TC1')
@@ -72,7 +80,7 @@ class JUnitReportWrapperSpec extends Specification {
 
     def testGetTestCaseStatus_FAILED() {
         setup:
-		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
 		JUnitReportWrapper instance = new JUnitReportWrapper(p)
 		when:
         String status = instance.getTestCaseStatus('Test Cases/main/TC2')
@@ -82,16 +90,19 @@ class JUnitReportWrapperSpec extends Specification {
 
 	/**
 	 * test createInstance((Path reportsDir, TSuiteResult tSuiteResult) method.
-	 * Katalon Studio version 6.2.2 and the prior versions generates a JUnit_Report.xml file at
+	 * Katalon Studio version 6.2.2 and older versions generates a JUnit_Report.xml file at
 	 * - Reports/CURA/twins_exam/20190820_134959/JUnit_Report.xml
 	 * 
 	 * @return
 	 */
 	def testNewInstance_KS6_2_2() {
 		setup:
-		Path p = fixture_.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+		//Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
 		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(new TSuiteName('main/TS1'), new TSuiteTimestamp('20180805_081908'))
-		JUnitReportWrapper instance = JUnitReportWrapper.newInstance(reportsDir_, tSuiteResultId)
+		when:
+		JUnitReportWrapper instance = JUnitReportWrapper.newInstance(reportsDirKS6_2_2, tSuiteResultId)
+		then:
+		assert instance != null
 		when:
 		String summary = instance.getTestSuiteSummary('Test Suites/main/TS1')
 		then:
@@ -100,14 +111,23 @@ class JUnitReportWrapperSpec extends Specification {
 	
 	/**
 	 * test createInstance((Path reportsDir, TSuiteResult tSuiteResult) method.
-	 * Katalon Studio version 6.2.2 and the prior versions generates a JUnit_Report.xml file at
-	 * - Reports/20190820_133032/CURA/twins_exam/20190820_133035/JUnit_Report.xml
+	 * Katalon Studio version 6.3.0 and newer versions generates a JUnit_Report.xml file at
+	 * - Reports/20190821_143318/CURA/twins_exam/20190821_143321/JUnit_Report.xml
 	 * 
 	 * @return
 	 */
+	@IgnoreRest
 	def testNewInstance_KS6_3_0() {
-		expect:
-		false
+		setup:
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(new TSuiteName("Test Suites/CURA/twins_exam"), new TSuiteTimestamp('20190821_143321'))
+		when:
+		JUnitReportWrapper instance = JUnitReportWrapper.newInstance(reportsDirKS6_3_0, tSuiteResultId)
+		then:
+		assert instance != null
+		when:
+		String summary = instance.getTestSuiteSummary('Test Suites/CURA/twins_exam')
+		then:
+		summary == 'EXECUTED:1,FAILED:1,ERROR:0'
 	}
 
     // helper methods

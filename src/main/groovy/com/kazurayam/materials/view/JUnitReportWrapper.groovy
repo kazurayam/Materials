@@ -47,14 +47,42 @@ final class JUnitReportWrapper {
 	 * @return may return null if appropriate JUnit_Report.xml file is not found for the tSuiteResult under the reportsDir directory
 	 */
 	static JUnitReportWrapper newInstance(Path reportsDir, TSuiteResultId tSuiteResultId) {
-		Path reportFilePathKS6_2_2_and_prior = reportsDir.
-				resolve(tSuiteResultId.getTSuiteName().getValue().replace('.', '/')).
-				resolve(tSuiteResultId.getTSuiteTimestamp().format()).
-				resolve('JUnit_Report.xml')
-		if (Files.exists(reportFilePathKS6_2_2_and_prior)) {
+		Path reportFilePathKS6_2_2_and_prior = locateJUnitReportFile(reportsDir, tSuiteResultId)
+		if (reportFilePathKS6_2_2_and_prior != null && Files.exists(reportFilePathKS6_2_2_and_prior)) {
+			// JUnit_Report.xml is found at the location where Katalon Studio version 6.2.2 and older versions generate 
 			return new JUnitReportWrapper(reportFilePathKS6_2_2_and_prior)
 		} else {
-			logger_.warn("${reportFilePathKS6_2_2_and_prior} is not found")
+			Path found = null
+			Files.list(reportsDir).forEach({ Path entry ->
+				if (Files.isDirectory(entry)) {
+					Path reportFilePathKS6_3_0_and_newer = locateJUnitReportFile(entry, tSuiteResultId)
+					/*
+					System.out.println("entry=${entry},tSuiteResultId=${tSuiteResultId} => reportFilePathKS6_3_0_and_newer=${reportFilePathKS6_3_0_and_newer}")
+					if (reportFilePathKS6_3_0_and_newer != null) {
+						System.out.println("File exists=${Files.exists(reportFilePathKS6_3_0_and_newer)}")
+					}
+					*/
+					if (reportFilePathKS6_3_0_and_newer != null && Files.exists(reportFilePathKS6_3_0_and_newer)) {
+						found = reportFilePathKS6_3_0_and_newer
+					}
+				}
+			})
+			if (found != null) {
+				return new JUnitReportWrapper(found)
+			} else {
+				logger_.warn("JUnit_Report.xml file of TSuiteResultId ${tSuiteResultId} is not found under ${reportsDir}")
+				return null
+			}
+		}
+	}
+	
+	private static Path locateJUnitReportFile(Path dir, TSuiteResultId tSuiteResultId) {
+		Path report = dir.resolve(tSuiteResultId.getTSuiteName().getValue().replace('.', '/')).
+							resolve(tSuiteResultId.getTSuiteTimestamp().format()).
+							resolve('JUnit_Report.xml')
+		if (Files.exists(report)) {
+			return report
+		} else {
 			return null
 		}
 	}

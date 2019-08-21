@@ -1,0 +1,249 @@
+{
+    "ComparisonResultBundle": [
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143319\\CURA.visitSite\\appointment.php%23summary.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143319/CURA.visitSite/appointment.php%23summary.png",
+                        "lastModified": "2019-08-21T05:34:02.239",
+                        "description": "20190821_143319"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143320\\CURA.visitSite\\appointment.php%23summary.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143320/CURA.visitSite/appointment.php%23summary.png",
+                        "lastModified": "2019-08-21T05:34:44.370",
+                        "description": "20190821_143320"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190821_143321\\CURA.ImageDiff_twins\\CURA.visitSite\\appointment.php%23summary(0.00).png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary(0.00).png"
+                    }
+                },
+                "criteriaPercentage": 1.0,
+                "imagesAreSimilar": true,
+                "diffRatio": 0.0
+            }
+        },
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143319\\CURA.visitSite\\default%23appointment.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143319/CURA.visitSite/default%23appointment.png",
+                        "lastModified": "2019-08-21T05:33:58.047",
+                        "description": "20190821_143319"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143320\\CURA.visitSite\\default%23appointment.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143320/CURA.visitSite/default%23appointment.png",
+                        "lastModified": "2019-08-21T05:34:40.227",
+                        "description": "20190821_143320"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190821_143321\\CURA.ImageDiff_twins\\CURA.visitSite\\default%23appointment(0.00).png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/default%23appointment(0.00).png"
+                    }
+                },
+                "criteriaPercentage": 1.0,
+                "imagesAreSimilar": true,
+                "diffRatio": 0.0
+            }
+        },
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143319\\CURA.visitSite\\home.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143319/CURA.visitSite/home.png",
+                        "lastModified": "2019-08-21T05:33:47.414",
+                        "description": "20190821_143319"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143320\\CURA.visitSite\\home.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143320/CURA.visitSite/home.png",
+                        "lastModified": "2019-08-21T05:34:28.858",
+                        "description": "20190821_143320"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190821_143321\\CURA.ImageDiff_twins\\CURA.visitSite\\home(7.23)FAILED.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/home(7.23)FAILED.png"
+                    }
+                },
+                "criteriaPercentage": 1.0,
+                "imagesAreSimilar": false,
+                "diffRatio": 7.23
+            }
+        },
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143319\\CURA.visitSite\\profile.php%23login.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143319/CURA.visitSite/profile.php%23login.png",
+                        "lastModified": "2019-08-21T05:33:52.105",
+                        "description": "20190821_143319"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143320\\CURA.visitSite\\profile.php%23login.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143320/CURA.visitSite/profile.php%23login.png",
+                        "lastModified": "2019-08-21T05:34:33.792",
+                        "description": "20190821_143320"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190821_143321\\CURA.ImageDiff_twins\\CURA.visitSite\\profile.php%23login(0.00).png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/profile.php%23login(0.00).png"
+                    }
+                },
+                "criteriaPercentage": 1.0,
+                "imagesAreSimilar": true,
+                "diffRatio": 0.0
+            }
+        },
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143319\\CURA.visitSite\\revisited.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143319/CURA.visitSite/revisited.png",
+                        "lastModified": "2019-08-21T05:34:05.500",
+                        "description": "20190821_143319"
+                    }
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_capture\\20190821_143320\\CURA.visitSite\\revisited.png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_capture/20190821_143320/CURA.visitSite/revisited.png",
+                        "lastModified": "2019-08-21T05:34:47.730",
+                        "description": "20190821_143320"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.twins_exam\\20190821_143321\\CURA.ImageDiff_twins\\CURA.visitSite\\revisited(0.00).png",
+                        "hrefRelativeToRepositoryRoot": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/revisited(0.00).png"
+                    }
+                },
+                "criteriaPercentage": 1.0,
+                "imagesAreSimilar": true,
+                "diffRatio": 0.0
+            }
+        }
+    ]
+}

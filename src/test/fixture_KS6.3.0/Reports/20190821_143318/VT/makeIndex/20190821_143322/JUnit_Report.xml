@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="makeIndex" time="2" tests="1" failures="0" errors="0">
+    <testsuite name="makeIndex" tests="1" failures="0" errors="0" time="2" timestamp="2019-08-21 14:35:01" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/VT/makeIndex">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_143318\\VT\\makeIndex\\20190821_143322"/>
+            <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_143318\\VT\\makeIndex\\20190821_143322\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+            <property name="hostAddress" value="172.19.71.132"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.3.2.4"/>
+        </properties>
+        <testcase name="Test Cases/VT/makeIndex" classname="Test Cases/VT/makeIndex" status="PASSED">
+            <system-out>2019-08-21 14:35:02 - [TEST_CASE][PASSED] - Test Cases/VT/makeIndex: Test Cases/VT/makeIndex&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/VT/makeIndex"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_143322"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/VT/makeIndex"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - ra = internal.GlobalVariable[REPORTS_ACCESSOR.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - baseDir = mr.getBaseDir(): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - reportsDir = ra.getReportsDir(): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - index = baseDir.resolve("index.html"): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - indexer = IndexerFactory.newIndexer(): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - indexer.setBaseDir(baseDir): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - indexer.setReportsDir(reportsDir): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - indexer.setOutput(index): null&#xD;
+&#xD;
+2019-08-21 14:35:02 - [TEST_STEP][PASSED] - indexer.execute(): null</system-out>
+            <system-err></system-err>
+        </testcase>
+        <system-out>2019-08-21 14:35:01 - [TEST_SUITE][INCOMPLETE] - makeIndex: null</system-out>
+        <system-err>2019-08-21 14:35:01 - [TEST_SUITE][INCOMPLETE] - makeIndex: null</system-err>
+    </testsuite>
+</testsuites>

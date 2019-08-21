@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="chronos_exam" time="2" tests="0" failures="0" errors="1">
+    <testsuite name="chronos_exam" tests="0" failures="0" errors="1" time="2" timestamp="2019-08-21 14:28:44" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/CURA/chronos_exam">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_142743\\CURA\\chronos_exam\\20190821_142745"/>
+            <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_142743\\CURA\\chronos_exam\\20190821_142745\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+            <property name="hostAddress" value="172.19.71.132"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.3.2.4"/>
+        </properties>
+        <testcase name="Test Cases/CURA/ImageDiff_chronos" classname="Test Cases/CURA/ImageDiff_chronos" status="ERROR">
+            <error type="ERROR" message="Test Cases/CURA/ImageDiff_chronos FAILED.&#xA;Reason:&#xA;java.lang.IllegalStateException: Only 1 sub directory found under CURA.chronos_capture in C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials. Chronos mode requires 2 sub direstories under CURA.chronos_capture. Don't get surprized. Just execute the chronos test suite again. Possibly Chronos mode will work fine next time.&#xD;&#xA;&#x9;at com.kazurayam.materials.impl.MaterialRepositoryImpl.createMaterialPairs(MaterialRepositoryImpl.groovy:673)&#xD;&#xA;&#x9;at com.kazurayam.materials.MaterialRepository$createMaterialPairs$12.call(Unknown Source)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageCollectionDifferDriver.createMaterialPairs(ImageCollectionDifferDriver.groovy:153)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageCollectionDifferDriver.chronos(ImageCollectionDifferDriver.groovy:75)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageCollectionDifferDriver$chronos$0.call(Unknown Source)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:39)&#xD;&#xA;&#x9;at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;&#xA;&#x9;at ImageDiff_chronos.run(ImageDiff_chronos:13)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;&#xA;&#x9;at TempTestSuite1566365265483.run(TempTestSuite1566365265483.groovy:35)&#xD;&#xA;"/>
+            <system-out>2019-08-21 14:28:45 - [TEST_CASE][ERROR] - Test Cases/CURA/ImageDiff_chronos: Test Cases/CURA/ImageDiff_chronos FAILED.
+Reason:
+java.lang.IllegalStateException: Only 1 sub directory found under CURA.chronos_capture in C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials. Chronos mode requires 2 sub direstories under CURA.chronos_capture. Don't get surprized. Just execute the chronos test suite again. Possibly Chronos mode will work fine next time.&#xD;
+	at com.kazurayam.materials.impl.MaterialRepositoryImpl.createMaterialPairs(MaterialRepositoryImpl.groovy:673)&#xD;
+	at com.kazurayam.materials.MaterialRepository$createMaterialPairs$12.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver.createMaterialPairs(ImageCollectionDifferDriver.groovy:153)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver.chronos(ImageCollectionDifferDriver.groovy:75)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver$chronos$0.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:39)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;
+	at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;
+	at ImageDiff_chronos.run(ImageDiff_chronos:13)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365265483.run(TempTestSuite1566365265483.groovy:35)&#xD;
+&#xD;
+&#xD;
+2019-08-21 14:28:45 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/CURA/chronos_exam"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_142745"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/CURA/ImageDiff_chronos"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:45 - [TEST_STEP][PASSED] - TESTSUITE_ID = "CURA/chronos_capture": null&#xD;
+&#xD;
+2019-08-21 14:28:45 - [TEST_STEP][PASSED] - options = 0).build(): null&#xD;
+&#xD;
+2019-08-21 14:28:45 - [TEST_STEP][ERROR] - com.kazurayam.visualtesting.ImageDiffer.runChronos(TESTSUITE_ID, options): Only 1 sub directory found under CURA.chronos_capture in C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials. Chronos mode requires 2 sub direstories under CURA.chronos_capture. Don't get surprized. Just execute the chronos test suite again. Possibly Chronos mode will work fine next time.&#xD;
+&#xD;
+2019-08-21 14:28:45 - [MESSAGE][INFO] - #makeMaterialStats took 29 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"},CURA.visitSite\appointment.php%23summary.png&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][INFO] - #makeMaterialStats took 1 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"},CURA.visitSite\default%23appointment.png&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][INFO] - #makeMaterialStats took 0 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"},CURA.visitSite\home.png&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][INFO] - #makeMaterialStats took 1 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"},CURA.visitSite\profile.php%23login.png&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][INFO] - #makeMaterialStats took 1 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"},CURA.visitSite\revisited.png&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][INFO] - #makeStatsEntry took 75 milliseconds for {"id": "CURA/chronos_capture","abbreviatedId": "CURA/chronos_capture","value": "CURA.chronos_capture"}&#xD;
+&#xD;
+2019-08-21 14:28:46 - [MESSAGE][ERROR] - Only 1 sub directory found under CURA.chronos_capture in C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials. Chronos mode requires 2 sub direstories under CURA.chronos_capture. Don't get surprized. Just execute the chronos test suite again. Possibly Chronos mode will work fine next time.</system-out>
+            <system-err>2019-08-21 14:28:45 - [TEST_CASE][ERROR] - Test Cases/CURA/ImageDiff_chronos: Test Cases/CURA/ImageDiff_chronos FAILED.
+Reason:
+java.lang.IllegalStateException: Only 1 sub directory found under CURA.chronos_capture in C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials. Chronos mode requires 2 sub direstories under CURA.chronos_capture. Don't get surprized. Just execute the chronos test suite again. Possibly Chronos mode will work fine next time.&#xD;
+	at com.kazurayam.materials.impl.MaterialRepositoryImpl.createMaterialPairs(MaterialRepositoryImpl.groovy:673)&#xD;
+	at com.kazurayam.materials.MaterialRepository$createMaterialPairs$12.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver.createMaterialPairs(ImageCollectionDifferDriver.groovy:153)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver.chronos(ImageCollectionDifferDriver.groovy:75)&#xD;
+	at com.kazurayam.visualtesting.ImageCollectionDifferDriver$chronos$0.call(Unknown Source)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:39)&#xD;
+	at com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)&#xD;
+	at com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)&#xD;
+	at ImageDiff_chronos.run(ImageDiff_chronos:13)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365265483.run(TempTestSuite1566365265483.groovy:35)</system-err>
+        </testcase>
+        <system-out>2019-08-21 14:28:44 - [TEST_SUITE][INCOMPLETE] - chronos_exam: null</system-out>
+        <system-err>2019-08-21 14:28:44 - [TEST_SUITE][INCOMPLETE] - chronos_exam: null</system-err>
+    </testsuite>
+</testsuites>

@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="chronos_capture" time="43" tests="2" failures="1" errors="0">
+    <testsuite name="chronos_capture" tests="2" failures="1" errors="0" time="43" timestamp="2019-08-21 14:27:56" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/CURA/chronos_capture">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_142743\\CURA\\chronos_capture\\20190821_142744"/>
+            <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_142743\\CURA\\chronos_capture\\20190821_142744\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.3.2.4"/>
+            <property name="browser" value="Firefox 68.0"/>
+            <property name="hostAddress" value="172.19.71.132"/>
+            <property name="sessionId" value="ea94a12e-d052-4eb8-ae3c-9aaa3d31ee31"/>
+            <property name="seleniumVersion" value="3.141.59"/>
+            <property name="proxyInformation" value="ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}"/>
+            <property name="platform" value="Windows 10"/>
+        </properties>
+        <testcase name="Test Cases/CURA/restorePreviousScreenshots" classname="Test Cases/CURA/restorePreviousScreenshots" status="FAILED">
+            <failure type="FAILED" message="Test Cases/CURA/restorePreviousScreenshots FAILED.&#xA;Reason:&#xA;com.kms.katalon.core.exception.StepFailedException: Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' failed&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:63)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;&#xA;&#x9;at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;&#xA;&#x9;at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;&#xA;Caused by: com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of &#xA;{&#xA;    &quot;id&quot;: &quot;Test Suites/CURA/chronos_capture&quot;,&#xA;    &quot;abbreviatedId&quot;: &quot;CURA/chronos_capture&quot;,&#xA;    &quot;value&quot;: &quot;CURA.chronos_capture&quot;&#xA;}&#xA; before &#xA;{&#xA;    &quot;TSuiteTimestamp&quot;: {&#xA;        &quot;timestamp&quot;: &quot;20190821_142744&quot;&#xA;    }&#xA;}&#xA; from &#xA;{&#xA;    &quot;MaterialStorage&quot;: {&#xA;        &quot;baseDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage&quot;,&#xA;        &quot;componentMR&quot;: {&#xA;            &quot;MaterialRepository&quot;: {&#xA;                &quot;baseDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage&quot;,&#xA;                &quot;currentTsName&quot;: null,&#xA;                &quot;currentTsTimestamp&quot;: null,&#xA;                &quot;repoRoot&quot;: {&#xA;                    &quot;RepositoryRoot&quot;: {&#xA;                        &quot;tSuiteResults&quot;: [&#xA;                            &#xA;                        ],&#xA;                        &quot;baseDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage&quot;&#xA;                    }&#xA;                }&#xA;            }&#xA;        }&#xA;    }&#xA;}&#xA; into copy into &#xA;{&#xA;    &quot;MaterialRepository&quot;: {&#xA;        &quot;baseDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials&quot;,&#xA;        &quot;currentTsName&quot;: {&#xA;            &quot;id&quot;: &quot;Test Suites/CURA/chronos_capture&quot;,&#xA;            &quot;abbreviatedId&quot;: &quot;CURA/chronos_capture&quot;,&#xA;            &quot;value&quot;: &quot;CURA.chronos_capture&quot;&#xA;        },&#xA;        &quot;currentTsTimestamp&quot;: {&#xA;            &quot;TSuiteTimestamp&quot;: {&#xA;                &quot;timestamp&quot;: &quot;20190821_142744&quot;&#xA;            }&#xA;        },&#xA;        &quot;repoRoot&quot;: {&#xA;            &quot;RepositoryRoot&quot;: {&#xA;                &quot;tSuiteResults&quot;: [&#xA;                    {&#xA;                        &quot;TSuiteResult&quot;: {&#xA;                            &quot;tSuiteName&quot;: {&#xA;                                &quot;id&quot;: &quot;Test Suites/CURA/chronos_capture&quot;,&#xA;                                &quot;abbreviatedId&quot;: &quot;CURA/chronos_capture&quot;,&#xA;                                &quot;value&quot;: &quot;CURA.chronos_capture&quot;&#xA;                            },&#xA;                            &quot;tSuiteTimestamp&quot;: &quot;20190821_142744&quot;,&#xA;                            &quot;tSuiteTimestampDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744&quot;,&#xA;                            &quot;lastModified&quot;: &quot;-999999999-01-01T00:00&quot;,&#xA;                            &quot;length&quot;: 0,&#xA;                            &quot;tCaseResults&quot;: [&#xA;                                &#xA;                            ]&#xA;                        }&#xA;                    }&#xA;                ],&#xA;                &quot;baseDir&quot;: &quot;C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials&quot;&#xA;            }&#xA;        }&#xA;    }&#xA;}&#xD;&#xA;&#x9;at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;&#xA;&#x9;at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;&#xA;&#x9;at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;&#xA;&#x9;at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;&#xA;&#x9;... 20 more&#xD;&#xA;"/>
+            <system-out>2019-08-21 14:27:57 - [TEST_CASE][FAILED] - Test Cases/CURA/restorePreviousScreenshots: Test Cases/CURA/restorePreviousScreenshots FAILED.
+Reason:
+com.kms.katalon.core.exception.StepFailedException: Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' failed&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:63)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;
+	at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;
+	at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;
+Caused by: com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of 
+{
+    "id": "Test Suites/CURA/chronos_capture",
+    "abbreviatedId": "CURA/chronos_capture",
+    "value": "CURA.chronos_capture"
+}
+ before 
+{
+    "TSuiteTimestamp": {
+        "timestamp": "20190821_142744"
+    }
+}
+ from 
+{
+    "MaterialStorage": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+        "componentMR": {
+            "MaterialRepository": {
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+                "currentTsName": null,
+                "currentTsTimestamp": null,
+                "repoRoot": {
+                    "RepositoryRoot": {
+                        "tSuiteResults": [
+                            
+                        ],
+                        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"
+                    }
+                }
+            }
+        }
+    }
+}
+ into copy into 
+{
+    "MaterialRepository": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials",
+        "currentTsName": {
+            "id": "Test Suites/CURA/chronos_capture",
+            "abbreviatedId": "CURA/chronos_capture",
+            "value": "CURA.chronos_capture"
+        },
+        "currentTsTimestamp": {
+            "TSuiteTimestamp": {
+                "timestamp": "20190821_142744"
+            }
+        },
+        "repoRoot": {
+            "RepositoryRoot": {
+                "tSuiteResults": [
+                    {
+                        "TSuiteResult": {
+                            "tSuiteName": {
+                                "id": "Test Suites/CURA/chronos_capture",
+                                "abbreviatedId": "CURA/chronos_capture",
+                                "value": "CURA.chronos_capture"
+                            },
+                            "tSuiteTimestamp": "20190821_142744",
+                            "tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744",
+                            "lastModified": "-999999999-01-01T00:00",
+                            "length": 0,
+                            "tCaseResults": [
+                                
+                            ]
+                        }
+                    }
+                ],
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials"
+            }
+        }
+    }
+}&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;
+	at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;
+	... 20 more&#xD;
+&#xD;
+&#xD;
+2019-08-21 14:27:57 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:57 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/CURA/chronos_capture"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_142744"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/CURA/restorePreviousScreenshots"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][FAILED] - callTestCase(findTestCase("Test Cases/VT/restorePreviousTSuiteResult"), ["STRATEGY":"last"]): Unable to call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' (Root cause: com.kms.katalon.core.exception.StepFailedException: Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' failed&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:63)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;
+	at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;
+	at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;
+Caused by: com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of 
+{
+    "id": "Test Suites/CURA/chronos_capture",
+    "abbreviatedId": "CURA/chronos_capture",
+    "value": "CURA.chronos_capture"
+}
+ before 
+{
+    "TSuiteTimestamp": {
+        "timestamp": "20190821_142744"
+    }
+}
+ from 
+{
+    "MaterialStorage": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+        "componentMR": {
+            "MaterialRepository": {
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+                "currentTsName": null,
+                "currentTsTimestamp": null,
+                "repoRoot": {
+                    "RepositoryRoot": {
+                        "tSuiteResults": [
+                            
+                        ],
+                        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"
+                    }
+                }
+            }
+        }
+    }
+}
+ into copy into 
+{
+    "MaterialRepository": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials",
+        "currentTsName": {
+            "id": "Test Suites/CURA/chronos_capture",
+            "abbreviatedId": "CURA/chronos_capture",
+            "value": "CURA.chronos_capture"
+        },
+        "currentTsTimestamp": {
+            "TSuiteTimestamp": {
+                "timestamp": "20190821_142744"
+            }
+        },
+        "repoRoot": {
+            "RepositoryRoot": {
+                "tSuiteResults": [
+                    {
+                        "TSuiteResult": {
+                            "tSuiteName": {
+                                "id": "Test Suites/CURA/chronos_capture",
+                                "abbreviatedId": "CURA/chronos_capture",
+                                "value": "CURA.chronos_capture"
+                            },
+                            "tSuiteTimestamp": "20190821_142744",
+                            "tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744",
+                            "lastModified": "-999999999-01-01T00:00",
+                            "length": 0,
+                            "tCaseResults": [
+                                
+                            ]
+                        }
+                    }
+                ],
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials"
+            }
+        }
+    }
+}&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;
+	at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;
+	... 20 more&#xD;
+)&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_CASE][FAILED] - Test Cases/VT/restorePreviousTSuiteResult: Test Cases/VT/restorePreviousTSuiteResult FAILED.
+Reason:
+com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of 
+{
+    "id": "Test Suites/CURA/chronos_capture",
+    "abbreviatedId": "CURA/chronos_capture",
+    "value": "CURA.chronos_capture"
+}
+ before 
+{
+    "TSuiteTimestamp": {
+        "timestamp": "20190821_142744"
+    }
+}
+ from 
+{
+    "MaterialStorage": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+        "componentMR": {
+            "MaterialRepository": {
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+                "currentTsName": null,
+                "currentTsTimestamp": null,
+                "repoRoot": {
+                    "RepositoryRoot": {
+                        "tSuiteResults": [
+                            
+                        ],
+                        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"
+                    }
+                }
+            }
+        }
+    }
+}
+ into copy into 
+{
+    "MaterialRepository": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials",
+        "currentTsName": {
+            "id": "Test Suites/CURA/chronos_capture",
+            "abbreviatedId": "CURA/chronos_capture",
+            "value": "CURA.chronos_capture"
+        },
+        "currentTsTimestamp": {
+            "TSuiteTimestamp": {
+                "timestamp": "20190821_142744"
+            }
+        },
+        "repoRoot": {
+            "RepositoryRoot": {
+                "tSuiteResults": [
+                    {
+                        "TSuiteResult": {
+                            "tSuiteName": {
+                                "id": "Test Suites/CURA/chronos_capture",
+                                "abbreviatedId": "CURA/chronos_capture",
+                                "value": "CURA.chronos_capture"
+                            },
+                            "tSuiteTimestamp": "20190821_142744",
+                            "tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744",
+                            "lastModified": "-999999999-01-01T00:00",
+                            "length": 0,
+                            "tCaseResults": [
+                                
+                            ]
+                        }
+                    }
+                ],
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials"
+            }
+        }
+    }
+}&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;
+	at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;
+	at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;
+	at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;
+&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(MaterialRepository#getBaseDir()=$mr.getBaseDir()): MaterialRepository#getBaseDir()=C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - MaterialRepository#getBaseDir()=C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(currentTSuiteId is $mr.getCurrentTestSuiteId()): currentTSuiteId is Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - currentTSuiteId is Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(currentTSuiteTimestamp is $mr.getCurrentTestSuiteTimestamp()): currentTSuiteTimestamp is 20190821_142744&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - currentTSuiteTimestamp is 20190821_142744&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - tsn = new com.kazurayam.materials.TSuiteName(mr.getCurrentTestSuiteId()): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - tst = new com.kazurayam.materials.TSuiteTimestamp(mr.getCurrentTestSuiteTimestamp()): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - ms = internal.GlobalVariable[MATERIAL_STORAGE.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(MaterialStorage#getBaseDir()=$ms.getBaseDir()): MaterialStorage#getBaseDir()=C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - MaterialStorage#getBaseDir()=C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - restoreResult = null: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - try: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - switch (STRATEGY): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - case "last":: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - restoreResult = ms.restoreUnary(mr, tsn, RetrievalBy.before(tst)): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(STRATEGY:last tst=$tst): STRATEGY:last tst={"TSuiteTimestamp":{"timestamp":"20190821_142744"}}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - STRATEGY:last tst={"TSuiteTimestamp":{"timestamp":"20190821_142744"}}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(STRATEGY:last restoreResult.getTSuiteResult().getTSuiteName()=$restoreResult.getTSuiteResult().getTSuiteName()): STRATEGY:last restoreResult.getTSuiteResult().getTSuiteName()={"id": "","abbreviatedId": "","value": ""}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - STRATEGY:last restoreResult.getTSuiteResult().getTSuiteName()={"id": "","abbreviatedId": "","value": ""}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(STRATEGY:last restoreResult.getTSuiteResult().getTSuiteTimestamp()=$restoreResult.getTSuiteResult().getTSuiteTimestamp()): STRATEGY:last restoreResult.getTSuiteResult().getTSuiteTimestamp()={"TSuiteTimestamp":{"timestamp":"19990101_000000"}}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - STRATEGY:last restoreResult.getTSuiteResult().getTSuiteTimestamp()={"TSuiteTimestamp":{"timestamp":"19990101_000000"}}&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - comment(STRATEGY:last restoreResult.getCount()=$restoreResult.getCount()): STRATEGY:last restoreResult.getCount()=0&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - STRATEGY:last restoreResult.getCount()=0&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - break: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - if (restoreResult != NULL): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - else: null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - jo = new groovy.json.JsonOutput(): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - throw new java.lang.IllegalArgumentException(((((failed to retrieve a TSuiteResult +  of 
+$jo.prettyPrint(tsn.toJsonText())
+) +  before 
+$jo.prettyPrint(tst.toJsonText())
+) +  from 
+$jo.prettyPrint(ms.toJsonText())
+) +  into copy into 
+$jo.prettyPrint(mr.toJsonText()))): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - catch (Exception e): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - markFailedAndStop($e.getMessage()): null&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][FAILED] - Unable to call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' (Root cause: com.kms.katalon.core.exception.StepFailedException: Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' failed&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:63)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;
+	at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;
+	at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;
+Caused by: com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of 
+{
+    "id": "Test Suites/CURA/chronos_capture",
+    "abbreviatedId": "CURA/chronos_capture",
+    "value": "CURA.chronos_capture"
+}
+ before 
+{
+    "TSuiteTimestamp": {
+        "timestamp": "20190821_142744"
+    }
+}
+ from 
+{
+    "MaterialStorage": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+        "componentMR": {
+            "MaterialRepository": {
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+                "currentTsName": null,
+                "currentTsTimestamp": null,
+                "repoRoot": {
+                    "RepositoryRoot": {
+                        "tSuiteResults": [
+                            
+                        ],
+                        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"
+                    }
+                }
+            }
+        }
+    }
+}
+ into copy into 
+{
+    "MaterialRepository": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials",
+        "currentTsName": {
+            "id": "Test Suites/CURA/chronos_capture",
+            "abbreviatedId": "CURA/chronos_capture",
+            "value": "CURA.chronos_capture"
+        },
+        "currentTsTimestamp": {
+            "TSuiteTimestamp": {
+                "timestamp": "20190821_142744"
+            }
+        },
+        "repoRoot": {
+            "RepositoryRoot": {
+                "tSuiteResults": [
+                    {
+                        "TSuiteResult": {
+                            "tSuiteName": {
+                                "id": "Test Suites/CURA/chronos_capture",
+                                "abbreviatedId": "CURA/chronos_capture",
+                                "value": "CURA.chronos_capture"
+                            },
+                            "tSuiteTimestamp": "20190821_142744",
+                            "tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744",
+                            "lastModified": "-999999999-01-01T00:00",
+                            "length": 0,
+                            "tCaseResults": [
+                                
+                            ]
+                        }
+                    }
+                ],
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials"
+            }
+        }
+    }
+}&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;
+	at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;
+	... 20 more&#xD;
+)</system-out>
+            <system-err>2019-08-21 14:27:57 - [TEST_CASE][FAILED] - Test Cases/CURA/restorePreviousScreenshots: Test Cases/CURA/restorePreviousScreenshots FAILED.
+Reason:
+com.kms.katalon.core.exception.StepFailedException: Call Test Case 'Test Cases/VT/restorePreviousTSuiteResult' failed&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:63)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.call(CallTestCaseKeyword.groovy)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordMain.runKeyword(KeywordMain.groovy:68)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.callTestCase(CallTestCaseKeyword.groovy:81)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword.execute(CallTestCaseKeyword.groovy:44)&#xD;
+	at com.kms.katalon.core.keyword.internal.KeywordExecutor.executeKeywordForPlatform(KeywordExecutor.groovy:56)&#xD;
+	at com.kms.katalon.core.keyword.BuiltinKeywords.callTestCase(BuiltinKeywords.groovy:350)&#xD;
+	at restorePreviousScreenshots.run(restorePreviousScreenshots:11)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)&#xD;
+	at com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)&#xD;
+	at TempTestSuite1566365264144.run(TempTestSuite1566365264144.groovy:35)&#xD;
+Caused by: com.kms.katalon.core.exception.StepFailedException: failed to retrieve a TSuiteResult of 
+{
+    "id": "Test Suites/CURA/chronos_capture",
+    "abbreviatedId": "CURA/chronos_capture",
+    "value": "CURA.chronos_capture"
+}
+ before 
+{
+    "TSuiteTimestamp": {
+        "timestamp": "20190821_142744"
+    }
+}
+ from 
+{
+    "MaterialStorage": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+        "componentMR": {
+            "MaterialRepository": {
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage",
+                "currentTsName": null,
+                "currentTsTimestamp": null,
+                "repoRoot": {
+                    "RepositoryRoot": {
+                        "tSuiteResults": [
+                            
+                        ],
+                        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Storage"
+                    }
+                }
+            }
+        }
+    }
+}
+ into copy into 
+{
+    "MaterialRepository": {
+        "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials",
+        "currentTsName": {
+            "id": "Test Suites/CURA/chronos_capture",
+            "abbreviatedId": "CURA/chronos_capture",
+            "value": "CURA.chronos_capture"
+        },
+        "currentTsTimestamp": {
+            "TSuiteTimestamp": {
+                "timestamp": "20190821_142744"
+            }
+        },
+        "repoRoot": {
+            "RepositoryRoot": {
+                "tSuiteResults": [
+                    {
+                        "TSuiteResult": {
+                            "tSuiteName": {
+                                "id": "Test Suites/CURA/chronos_capture",
+                                "abbreviatedId": "CURA/chronos_capture",
+                                "value": "CURA.chronos_capture"
+                            },
+                            "tSuiteTimestamp": "20190821_142744",
+                            "tSuiteTimestampDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials\\CURA.chronos_capture\\20190821_142744",
+                            "lastModified": "-999999999-01-01T00:00",
+                            "length": 0,
+                            "tCaseResults": [
+                                
+                            ]
+                        }
+                    }
+                ],
+                "baseDir": "C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Materials"
+            }
+        }
+    }
+}&#xD;
+	at com.kms.katalon.core.util.KeywordUtil.markFailedAndStop(KeywordUtil.java:28)&#xD;
+	at restorePreviousTSuiteResult.run(restorePreviousTSuiteResult:137)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)&#xD;
+	at com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)&#xD;
+	at com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)&#xD;
+	at com.kms.katalon.core.main.TestCaseMain.runTestCase(TestCaseMain.java:114)&#xD;
+	at com.kms.katalon.core.keyword.builtin.CallTestCaseKeyword$_callTestCase_closure1.doCall(CallTestCaseKeyword.groovy:59)&#xD;
+	... 20 more</system-err>
+        </testcase>
+        <testcase name="Test Cases/CURA/visitSite" classname="Test Cases/CURA/visitSite" status="PASSED">
+            <system-out>2019-08-21 14:27:58 - [TEST_CASE][PASSED] - Test Cases/CURA/visitSite: Test Cases/CURA/visitSite&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/CURA/chronos_capture"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_142744"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/CURA/visitSite"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:27:58 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:27:59 - [TEST_STEP][PASSED] - comment(*** GlobalVariable[$MGV.CURRENT_TESTSUITE_ID.getName()]=$GlobalVariable[MGV.CURRENT_TESTSUITE_ID.getName()]): *** GlobalVariable[VT_CURRENT_TESTSUITE_ID]=Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:27:59 - [MESSAGE][INFO] - *** GlobalVariable[VT_CURRENT_TESTSUITE_ID]=Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:27:59 - [TEST_STEP][PASSED] - comment(*** GlobalVariable[$MGV.CURRENT_TESTSUITE_TIMESTAMP.getName()]=$GlobalVariable[MGV.CURRENT_TESTSUITE_TIMESTAMP.getName()]): *** GlobalVariable[VT_CURRENT_TESTSUITE_TIMESTAMP]=20190821_142744&#xD;
+&#xD;
+2019-08-21 14:27:59 - [MESSAGE][INFO] - *** GlobalVariable[VT_CURRENT_TESTSUITE_TIMESTAMP]=20190821_142744&#xD;
+&#xD;
+2019-08-21 14:27:59 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:27:59 - [TEST_STEP][PASSED] - assert mr != null: null&#xD;
+&#xD;
+2019-08-21 14:27:59 - [TEST_STEP][PASSED] - openBrowser(""): Browser is opened with url: ''&#xD;
+&#xD;
+2019-08-21 14:27:59 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-08-21 14:27:59 - [MESSAGE][INFO] - Action delay is set to 0 seconds&#xD;
+&#xD;
+2019-08-21 14:28:11 - [MESSAGE][PASSED] - Browser is opened with url: ''&#xD;
+&#xD;
+2019-08-21 14:28:11 - [TEST_STEP][PASSED] - setViewPortSize(1024, 768): Viewport is set to new size with width = 1024 and height = 768&#xD;
+&#xD;
+2019-08-21 14:28:11 - [MESSAGE][PASSED] - Viewport is set to new size with width = 1024 and height = 768&#xD;
+&#xD;
+2019-08-21 14:28:11 - [TEST_STEP][PASSED] - driver = getWebDriver(): null&#xD;
+&#xD;
+2019-08-21 14:28:11 - [TEST_STEP][PASSED] - assert Hostname != null: null&#xD;
+&#xD;
+2019-08-21 14:28:11 - [TEST_STEP][PASSED] - url = new java.net.URL(http://$GlobalVariable.Hostname/): null&#xD;
+&#xD;
+2019-08-21 14:28:11 - [TEST_STEP][PASSED] - navigateToUrl(url.toExternalForm()): Navigate to 'http://demoaut-mimic.kazurayam.com/' successfully&#xD;
+&#xD;
+2019-08-21 14:28:14 - [MESSAGE][PASSED] - Navigate to 'http://demoaut-mimic.kazurayam.com/' successfully&#xD;
+&#xD;
+2019-08-21 14:28:14 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Homepage/a_Make Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:14 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:14 - [TEST_STEP][PASSED] - delay(1): Delayed 1 second(s)&#xD;
+&#xD;
+2019-08-21 14:28:15 - [MESSAGE][PASSED] - Delayed 1 second(s)&#xD;
+&#xD;
+2019-08-21 14:28:15 - [TEST_STEP][PASSED] - png1 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], url, 0, "home"): null&#xD;
+&#xD;
+2019-08-21 14:28:15 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png1.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:18 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:18 - [TEST_STEP][PASSED] - comment(saved image into $png1): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\home.png&#xD;
+&#xD;
+2019-08-21 14:28:18 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\home.png&#xD;
+&#xD;
+2019-08-21 14:28:18 - [TEST_STEP][PASSED] - callTestCase(findTestCase("CURA/Login"), ["Username":Username, "Password":Password], STOP_ON_FAILURE): Call Test Case 'Test Cases/CURA/Login' successfully&#xD;
+&#xD;
+2019-08-21 14:28:18 - [TEST_CASE][PASSED] - Test Cases/CURA/Login: Test Cases/CURA/Login&#xD;
+&#xD;
+2019-08-21 14:28:19 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:28:19 - [TEST_STEP][PASSED] - assert mr != null: null&#xD;
+&#xD;
+2019-08-21 14:28:19 - [TEST_STEP][PASSED] - driver = getWebDriver(): null&#xD;
+&#xD;
+2019-08-21 14:28:19 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Homepage/a_Make Appointment")): Object: 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:20 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:20 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Login/button_Login"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Login/button_Login' is present&#xD;
+&#xD;
+2019-08-21 14:28:20 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Login/button_Login' is present&#xD;
+&#xD;
+2019-08-21 14:28:20 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Login/input_username"), Username): Text 'John Doe' is set on object 'Object Repository/CURA/Page_Login/input_username'&#xD;
+&#xD;
+2019-08-21 14:28:20 - [MESSAGE][PASSED] - Text 'John Doe' is set on object 'Object Repository/CURA/Page_Login/input_username'&#xD;
+&#xD;
+2019-08-21 14:28:20 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Login/input_password"), Password): Text 'ThisIsNotAPassword' is set on object 'Object Repository/CURA/Page_Login/input_password'&#xD;
+&#xD;
+2019-08-21 14:28:21 - [MESSAGE][PASSED] - Text 'ThisIsNotAPassword' is set on object 'Object Repository/CURA/Page_Login/input_password'&#xD;
+&#xD;
+2019-08-21 14:28:21 - [TEST_STEP][PASSED] - png2 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0, "top.png"): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/profile.php#login'&#xD;
+&#xD;
+2019-08-21 14:28:21 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/profile.php#login'&#xD;
+&#xD;
+2019-08-21 14:28:21 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png2.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:24 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:24 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Login/button_Login")): Object: 'Object Repository/CURA/Page_Login/button_Login' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:24 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Login/button_Login' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:24 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Appointment/button_Book Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:25 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:25 - [MESSAGE][PASSED] - Call Test Case 'Test Cases/CURA/Login' successfully&#xD;
+&#xD;
+2019-08-21 14:28:25 - [TEST_STEP][PASSED] - selectOptionByValue(findTestObject("CURA/Page_Appointment/select_Tokyo CURA Healthcare C"), "Hongkong CURA Healthcare Center", true): All options with value 'Hongkong CURA Healthcare Center' are selected in object 'Object Repository/CURA/Page_Appointment/select_Tokyo CURA Healthcare C'  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:25 - [MESSAGE][PASSED] - All options with value 'Hongkong CURA Healthcare Center' are selected in object 'Object Repository/CURA/Page_Appointment/select_Tokyo CURA Healthcare C'  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:25 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/input_hospital_readmission")): Object: 'Object Repository/CURA/Page_Appointment/input_hospital_readmission' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:25 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/input_hospital_readmission' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:25 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/input_programs")): Object: 'Object Repository/CURA/Page_Appointment/input_programs' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:26 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/input_programs' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - visitDate = now().plusWeeks(1): null&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - visitDateStr = ofPattern("dd/MM/yyyy").format(visitDate): null&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Appointment/input_visit_date"), visitDateStr): Text '28/08/2019' is set on object 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [MESSAGE][PASSED] - Text '28/08/2019' is set on object 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - sendKeys(findTestObject("CURA/Page_Appointment/input_visit_date"), Keys.chord(ENTER)): Keys 'ENTER + ' sent to object: 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [MESSAGE][PASSED] - Keys 'ENTER + ' sent to object: 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Appointment/textarea_comment"), "This is a comment"): Text 'This is a comment' is set on object 'Object Repository/CURA/Page_Appointment/textarea_comment'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [MESSAGE][PASSED] - Text 'This is a comment' is set on object 'Object Repository/CURA/Page_Appointment/textarea_comment'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - png3 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/#appointment'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/#appointment'&#xD;
+&#xD;
+2019-08-21 14:28:26 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png3.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:29 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:29 - [TEST_STEP][PASSED] - comment(saved image into $png3): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\default%23appointment.png&#xD;
+&#xD;
+2019-08-21 14:28:29 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\default%23appointment.png&#xD;
+&#xD;
+2019-08-21 14:28:29 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/button_Book Appointment")): Object: 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_AppointmentConfirmation/a_Go to Homepage"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is present&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is present&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - facility = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_facility")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_facility' is: 'Hongkong CURA Healthcare Center'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_facility' is: 'Hongkong CURA Healthcare Center'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyMatch(facility, "^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$", true): Actual text 'Hongkong CURA Healthcare Center' and expected text '^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual text 'Hongkong CURA Healthcare Center' and expected text '^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - readmission = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_hospital_readmission")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_hospital_readmission' is: 'Yes'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_hospital_readmission' is: 'Yes'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyMatch(readmission, "(Yes|No)", true): Actual text 'Yes' and expected text '(Yes|No)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual text 'Yes' and expected text '(Yes|No)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - program = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_program")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_program' is: 'Medicaid'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_program' is: 'Medicaid'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyMatch(program, "(Medicare|Medicaid|None)", true): Actual text 'Medicaid' and expected text '(Medicare|Medicaid|None)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual text 'Medicaid' and expected text '(Medicare|Medicaid|None)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - visitDateStr2 = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_visit_date")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_visit_date' is: '28/08/2019'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_visit_date' is: '28/08/2019'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyMatch(visitDateStr2, "[0-9]{2}/[0-9]{2}/[0-9]{4}", true, CONTINUE_ON_FAILURE): Actual text '28/08/2019' and expected text '[0-9]{2}/[0-9]{2}/[0-9]{4}' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual text '28/08/2019' and expected text '[0-9]{2}/[0-9]{2}/[0-9]{4}' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - parsed = ofPattern("dd/MM/uuuu").parse(visitDateStr2): null&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - visitDate2 = from(parsed).atStartOfDay(): null&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - isAfterNow = visitDate2.isAfter(LocalDateTime.now()): null&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyEqual(isAfterNow, true, CONTINUE_ON_FAILURE): Actual object 'true' and expected object 'true' are equal&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual object 'true' and expected object 'true' are equal&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - comment = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_comment")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_comment' is: 'This is a comment'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_comment' is: 'This is a comment'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - if (comment != null): Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - verifyLessThan(comment.length(), 400): Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - png4 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/appointment.php#summary'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/appointment.php#summary'&#xD;
+&#xD;
+2019-08-21 14:28:30 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png4.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:33 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:33 - [TEST_STEP][PASSED] - comment(saved image into $png4): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\appointment.php%23summary.png&#xD;
+&#xD;
+2019-08-21 14:28:33 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\appointment.php%23summary.png&#xD;
+&#xD;
+2019-08-21 14:28:33 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_AppointmentConfirmation/a_Go to Homepage")): Object: 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:34 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is clicked on&#xD;
+&#xD;
+2019-08-21 14:28:34 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Homepage/a_Make Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:34 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:28:34 - [TEST_STEP][PASSED] - png5 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0, "revisited"): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'&#xD;
+&#xD;
+2019-08-21 14:28:34 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'&#xD;
+&#xD;
+2019-08-21 14:28:34 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png5.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:36 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:28:36 - [TEST_STEP][PASSED] - comment(saved image into $png5): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\revisited.png&#xD;
+&#xD;
+2019-08-21 14:28:36 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.chronos_capture\20190821_142744\CURA.visitSite\revisited.png&#xD;
+&#xD;
+2019-08-21 14:28:36 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/VT/backupCurrentTSuiteResult" classname="Test Cases/VT/backupCurrentTSuiteResult" status="PASSED">
+            <system-out>2019-08-21 14:28:40 - [TEST_CASE][PASSED] - Test Cases/VT/backupCurrentTSuiteResult: Test Cases/VT/backupCurrentTSuiteResult&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/CURA/chronos_capture"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_142744"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/VT/backupCurrentTSuiteResult"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - ms = internal.GlobalVariable[MATERIAL_STORAGE.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - comment(mr.getCurrentTestSuiteId(): $mr.getCurrentTestSuiteId()): mr.getCurrentTestSuiteId(): Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - mr.getCurrentTestSuiteId(): Test Suites/CURA/chronos_capture&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - currentTSRI = TSuiteResultId.newInstance(new com.kazurayam.materials.TSuiteName(mr.getCurrentTestSuiteId()), TSuiteTimestamp.newInstance(mr.getCurrentTestSuiteTimestamp())): null&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - count = ms.backup(mr, currentTSRI): null&#xD;
+&#xD;
+2019-08-21 14:28:40 - [TEST_STEP][PASSED] - comment(copied $count files of $currentTSRI from $mr.getBaseDir().toString() to $ms.getBaseDir().toString()): copied 6 files of 'CURA.chronos_capture/20190821_142744' from C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage&#xD;
+&#xD;
+2019-08-21 14:28:40 - [MESSAGE][INFO] - copied 6 files of 'CURA.chronos_capture/20190821_142744' from C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials to C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage</system-out>
+            <system-err></system-err>
+        </testcase>
+        <system-out>2019-08-21 14:27:56 - [TEST_SUITE][INCOMPLETE] - chronos_capture: null</system-out>
+        <system-err>2019-08-21 14:27:56 - [TEST_SUITE][INCOMPLETE] - chronos_capture: null</system-err>
+    </testsuite>
+</testsuites>
