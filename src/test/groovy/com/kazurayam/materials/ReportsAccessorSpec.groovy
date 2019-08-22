@@ -18,20 +18,23 @@ class ReportsAccessorSpec extends Specification {
     static Logger logger_ = LoggerFactory.getLogger(ReportsAccessorSpec)
     
     private static Path specOutputDir_
-    private static Path fixtureDir_
+    private static Path fixtureKS622
+	private static Path fixtureKS630
     
     def setupSpec() {
         specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(ReportsAccessorSpec.class)}")
-        fixtureDir_ = Paths.get("./src/test/fixtures/com.kazurayam.materials.ReportsAccessorSpec")
+        fixtureKS622 = Paths.get("./src/test/fixtures/com.kazurayam.materials.ReportsAccessorSpec/KS6.2.2")
+		fixtureKS630 = Paths.get("./src/test/fixtures/com.kazurayam.materials.ReportsAccessorSpec/KS6.3.0")
+		
     }
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
     
-    def test_constructingWithFactory() {
+    def test_KS622_constructingWithFactory() {
         setup:
-        Path caseOutputDir = specOutputDir_.resolve("test_constructingWithFactory")
-        Helpers.copyDirectory(fixtureDir_, caseOutputDir)
+        Path caseOutputDir = specOutputDir_.resolve("test_KS622_constructingWithFactory")
+        Helpers.copyDirectory(fixtureKS622, caseOutputDir)
         Path materialsDir = caseOutputDir.resolve("Materials")
         Path reportsDir   = caseOutputDir.resolve("Reports")
         when:
@@ -40,10 +43,10 @@ class ReportsAccessorSpec extends Specification {
         ra != null
     }
     
-    def test_getJUnitReportWrapper() {
+    def test_KS622_getJUnitReportWrapper() {
         setup:
-        Path caseOutputDir = specOutputDir_.resolve("test_getJUnitReportWrapper")
-        Helpers.copyDirectory(fixtureDir_, caseOutputDir)
+        Path caseOutputDir = specOutputDir_.resolve("test_KS622_getJUnitReportWrapper")
+        Helpers.copyDirectory(fixtureKS622, caseOutputDir)
         Path materialsDir = caseOutputDir.resolve("Materials")
         Path reportsDir   = caseOutputDir.resolve("Reports")
         //
@@ -52,25 +55,24 @@ class ReportsAccessorSpec extends Specification {
         TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
         TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190528_111335")
         TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
-        TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
         when:
-        JUnitReportWrapper junitReportWrapper = ra.getJUnitReportWrapper(tSuiteResult)
+        JUnitReportWrapper junitReportWrapper = ra.getJUnitReportWrapper(tSuiteResultId)
         then:
         junitReportWrapper != null
         when:
         String testCaseStatus = junitReportWrapper.getTestCaseStatus("Test Cases/CURA/ImageDiff_twins")
         String testSuiteSummary = junitReportWrapper.getTestSuiteSummary("Test Suites/CURA/twins_exam")
-        println "#test_getJUnitReportWrapper testCaseStatus='${testCaseStatus}'"
-        println "#test_getJUnitReportWrapper testSuiteSummary='${testSuiteSummary}'"
+        println "#test_KS622_getJUnitReportWrapper testCaseStatus='${testCaseStatus}'"
+        println "#test_KS622_getJUnitReportWrapper testSuiteSummary='${testSuiteSummary}'"
         then:
         testCaseStatus.equals("FAILED")
         testSuiteSummary.equals("EXECUTED:1,FAILED:1,ERROR:0")
     }
     
-    def test_getExecutionPropertiesWrapper() {
+    def test_KS622_getExecutionPropertiesWrapper() {
         setup:
-        Path caseOutputDir = specOutputDir_.resolve("test_getExecutionPropertiesWrapper")
-        Helpers.copyDirectory(fixtureDir_, caseOutputDir)
+        Path caseOutputDir = specOutputDir_.resolve("test_KS622_getExecutionPropertiesWrapper")
+        Helpers.copyDirectory(fixtureKS622, caseOutputDir)
         Path materialsDir = caseOutputDir.resolve("Materials")
         Path reportsDir   = caseOutputDir.resolve("Reports")
         //
@@ -79,14 +81,13 @@ class ReportsAccessorSpec extends Specification {
         TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
         TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190528_111335")
         TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
-        TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
         when:
-        ExecutionPropertiesWrapper executionPropertiesWrapper = ra.getExecutionPropertiesWrapper(tSuiteResult)
+        ExecutionPropertiesWrapper executionPropertiesWrapper = ra.getExecutionPropertiesWrapper(tSuiteResultId)
         then:
         executionPropertiesWrapper != null
         when:
         String driverName = executionPropertiesWrapper.getDriverName()
-        println "#test_getExecutionPropertiesWrapper driverName='${driverName}'"
+        println "#test_KS622_getExecutionPropertiesWrapper driverName='${driverName}'"
         then:
         driverName.equals('Firefox')
         when:
@@ -95,15 +96,15 @@ class ReportsAccessorSpec extends Specification {
         executionProfile != null
         when:
         String name = executionProfile.getName()
-        println "#test_getExecutionPropertiesWrapper name='${name}'"
+        println "#test_KS622_getExecutionPropertiesWrapper name='${name}'"
         then:
         name.equals('CURA_DevelopmentEnv')
     }
     
-    def test_getHrefToReport() {
+    def test_KS622_getHrefToReport() {
         setup:
-        Path caseOutputDir = specOutputDir_.resolve("test_getHrefToReport")
-        Helpers.copyDirectory(fixtureDir_, caseOutputDir)
+        Path caseOutputDir = specOutputDir_.resolve("test_KS622_getHrefToReport")
+        Helpers.copyDirectory(fixtureKS622, caseOutputDir)
         Path materialsDir = caseOutputDir.resolve("Materials")
         Path reportsDir   = caseOutputDir.resolve("Reports")
         //
@@ -116,15 +117,101 @@ class ReportsAccessorSpec extends Specification {
         TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
         TCaseName tCaseName = new TCaseName("Test Cases/CURA/ImageDiff_twins")
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        Path subpathUnderTCaseResult = Paths.get('CURA.visitSite/home(47.87)FAILED.png')
-        Material material = tCaseResult.getMaterial(subpathUnderTCaseResult)
+        Material material = tCaseResult.getMaterial(Paths.get('CURA.visitSite/home(47.87)FAILED.png'))
         then:
         material != null
         when:
         String href = ra.getHrefToReport(material)
-        println "#getHrefToReport href='${href}'"
+        println "#test_KS622_getHrefToReport getHrefToReport href='${href}'"
         then:
         href != null
         href == '../Reports/CURA/twins_exam/20190528_111335/20190528_111335.html'
     }
+	
+	def test_KS630_getJUnitReportWrapper() {
+		setup:
+		Path caseOutputDir = specOutputDir_.resolve("test_KS630_getJUnitReportWrapper")
+		Helpers.copyDirectory(fixtureKS630, caseOutputDir)
+		Path materialsDir = caseOutputDir.resolve("Materials")
+		Path reportsDir   = caseOutputDir.resolve("Reports")
+		//
+		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
+		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
+		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		when:
+		JUnitReportWrapper junitReportWrapper = ra.getJUnitReportWrapper(tSuiteResultId)
+		then:
+		junitReportWrapper != null
+		when:
+		String testCaseStatus = junitReportWrapper.getTestCaseStatus("Test Cases/CURA/ImageDiff_twins")
+		String testSuiteSummary = junitReportWrapper.getTestSuiteSummary("Test Suites/CURA/twins_exam")
+		println "#test_KS630_getJUnitReportWrapper testCaseStatus='${testCaseStatus}'"
+		println "#test_KS630_getJUnitReportWrapper testSuiteSummary='${testSuiteSummary}'"
+		then:
+		testCaseStatus.equals("FAILED")
+		testSuiteSummary.equals("EXECUTED:1,FAILED:1,ERROR:0")
+	}
+	
+	def test_KS630_getExecutionPropertiesWrapper() {
+		setup:
+		Path caseOutputDir = specOutputDir_.resolve("test_KS630_getExecutionPropertiesWrapper")
+		Helpers.copyDirectory(fixtureKS630, caseOutputDir)
+		Path materialsDir = caseOutputDir.resolve("Materials")
+		Path reportsDir   = caseOutputDir.resolve("Reports")
+		//
+		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
+		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
+		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		when:
+		ExecutionPropertiesWrapper executionPropertiesWrapper = ra.getExecutionPropertiesWrapper(tSuiteResultId)
+		then:
+		executionPropertiesWrapper != null
+		when:
+		String driverName = executionPropertiesWrapper.getDriverName()
+		println "#test_KS630_getExecutionPropertiesWrapper driverName='${driverName}'"
+		then:
+		driverName.equals('Firefox')
+		when:
+		ExecutionProfile executionProfile = executionPropertiesWrapper.getExecutionProfile()
+		then:
+		executionProfile != null
+		when:
+		String name = executionProfile.getName()
+		println "#test_KS630_getExecutionPropertiesWrapper name='${name}'"
+		then:
+		name.equals('CURA_DevelopmentEnv')
+	}
+
+	def test_KS630_getHrefToReport() {
+		setup:
+		Path caseOutputDir = specOutputDir_.resolve("test_KS630_getHrefToReport")
+		Helpers.copyDirectory(fixtureKS630, caseOutputDir)
+		Path materialsDir = caseOutputDir.resolve("Materials")
+		Path reportsDir   = caseOutputDir.resolve("Reports")
+		//
+		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
+		when:
+		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
+		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
+		TCaseName tCaseName = new TCaseName("Test Cases/CURA/ImageDiff_twins")
+		TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
+		Material material = tCaseResult.getMaterial(Paths.get('CURA.visitSite/home(7.23)FAILED.png'))
+		then:
+		material != null
+		when:
+		String href = ra.getHrefToReport(material)
+		println "#test_KS630_getHrefToReport getHrefToReport href='${href}'"
+		then:
+		href != null
+		href == '../Reports/20190821_143318/CURA/twins_exam/20190821_143321/20190821_143321.html'
+		Files.exists(materialsDir.resolve(href))
+	}
+
 }

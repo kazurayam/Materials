@@ -17,7 +17,7 @@ interface ReportsAccessor {
      * @param tSuteResult
      * @return 
      */
-    JUnitReportWrapper getJUnitReportWrapper(TSuiteResult tSuiteResult)
+    JUnitReportWrapper getJUnitReportWrapper(TSuiteResultId tSuiteResultId)
     
     /**
      * Replacement of com.kazurayam.materials.TSuiteResultImpl#getExecutionProfileWrapper()
@@ -28,7 +28,7 @@ interface ReportsAccessor {
      * @param tSuiteResult
      * @return
      */
-    ExecutionPropertiesWrapper getExecutionPropertiesWrapper(TSuiteResult tSuiteResult)
+    ExecutionPropertiesWrapper getExecutionPropertiesWrapper(TSuiteResultId tSuiteResultId)
 
     /**
      * Replacement of com.kazurayam.materials.impl.MaterialImpl#getHrefReport()

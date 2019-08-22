@@ -34,60 +34,7 @@ final class JUnitReportWrapper {
     private XPath xpath_
     private File file_
     
-	/**
-	 * Instanciate a JUnitReportWrapper object with a JUnit_Report.xml file as specified with the given arguments.
-	 * 
-	 * This factory method looks for a JUnit_Report.xml in 2 locations, for example:
-	 * - Reports/CURA/twins_exam/20190820_134959/JUnit_Report.xml  --- Katalon Studio v6.2.2 and prior
-	 * or
-	 * - Reports/20190820_134959/CURA/twins_exam/20190820_134959/JUnit_Report.xml --- as of Katalon Studio 6.3.0
-	 * 
-	 * @param reportsDir
-	 * @param TSuiteResult
-	 * @return may return null if appropriate JUnit_Report.xml file is not found for the tSuiteResult under the reportsDir directory
-	 */
-	static JUnitReportWrapper newInstance(Path reportsDir, TSuiteResultId tSuiteResultId) {
-		Path reportFilePathKS6_2_2_and_prior = locateJUnitReportFile(reportsDir, tSuiteResultId)
-		if (reportFilePathKS6_2_2_and_prior != null && Files.exists(reportFilePathKS6_2_2_and_prior)) {
-			// JUnit_Report.xml is found at the location where Katalon Studio version 6.2.2 and older versions generate 
-			return new JUnitReportWrapper(reportFilePathKS6_2_2_and_prior)
-		} else {
-			Path found = null
-			Files.list(reportsDir).forEach({ Path entry ->
-				if (Files.isDirectory(entry)) {
-					Path reportFilePathKS6_3_0_and_newer = locateJUnitReportFile(entry, tSuiteResultId)
-					/*
-					System.out.println("entry=${entry},tSuiteResultId=${tSuiteResultId} => reportFilePathKS6_3_0_and_newer=${reportFilePathKS6_3_0_and_newer}")
-					if (reportFilePathKS6_3_0_and_newer != null) {
-						System.out.println("File exists=${Files.exists(reportFilePathKS6_3_0_and_newer)}")
-					}
-					*/
-					if (reportFilePathKS6_3_0_and_newer != null && Files.exists(reportFilePathKS6_3_0_and_newer)) {
-						found = reportFilePathKS6_3_0_and_newer
-					}
-				}
-			})
-			if (found != null) {
-				return new JUnitReportWrapper(found)
-			} else {
-				logger_.warn("JUnit_Report.xml file of TSuiteResultId ${tSuiteResultId} is not found under ${reportsDir}")
-				return null
-			}
-		}
-	}
-	
-	private static Path locateJUnitReportFile(Path dir, TSuiteResultId tSuiteResultId) {
-		Path report = dir.resolve(tSuiteResultId.getTSuiteName().getValue().replace('.', '/')).
-							resolve(tSuiteResultId.getTSuiteTimestamp().format()).
-							resolve('JUnit_Report.xml')
-		if (Files.exists(report)) {
-			return report
-		} else {
-			return null
-		}
-	}
-	
-    JUnitReportWrapper(Path path) {
+	JUnitReportWrapper(Path path) {
         this(path.toFile())
     }
 
