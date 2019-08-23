@@ -46,58 +46,32 @@ class ReportsAccessorImpl implements ReportsAccessor {
     @Override
     JUnitReportWrapper getJUnitReportWrapper(TSuiteResultId tSuiteResultId) {
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        Path reportFilePathKS622 = locateReportFile(reportsDir_, tSuiteResultId, 'JUnit_Report.xml')
-		if (reportFilePathKS622 != null && Files.exists(reportFilePathKS622)) {
-            return new JUnitReportWrapper(reportFilePathKS622)
+        Path reportFilePath = resolveReportFilePath(reportsDir_, tSuiteResultId, 'JUnit_Report.xml')
+		if (reportFilePath != null && Files.exists(reportFilePath)) {
+            return new JUnitReportWrapper(reportFilePath)
         } else {
-			Path found = null
-			Files.list(reportsDir_).forEach({ Path entry ->
-				if (Files.isDirectory(entry)) {
-					Path reportFilePathKS630 = locateReportFile(entry, tSuiteResultId, 'JUnit_Report.xml')
-					if (reportFilePathKS630 != null && Files.exists(reportFilePathKS630)) {
-						found = reportFilePathKS630
-					}
-				}
-			})
-			if (found != null) {
-				return new JUnitReportWrapper(found)
-			} else {
-				String msg = this.class.getSimpleName() + 
+			String msg = this.class.getSimpleName() + 
 					"#getJUnitReportWrapper JUnit_Report.xml file of " + 
 					"TSuiteResultId ${tSuiteResultId} is not found under ${reportsDir_}"
-				logger_.warn(msg)
-				vtLogger_.failed(msg)
-				return null
-			}
+			logger_.warn(msg)
+			vtLogger_.failed(msg)
+			return null
         }
     }
     
     @Override
     ExecutionPropertiesWrapper getExecutionPropertiesWrapper(TSuiteResultId tSuiteResultId) {
         Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        Path expropFilePath = locateReportFile(reportsDir_, tSuiteResultId, 'execution.properties')
+        Path expropFilePath = resolveReportFilePath(reportsDir_, tSuiteResultId, 'execution.properties')
         if (expropFilePath != null && Files.exists(expropFilePath)) {
             return new ExecutionPropertiesWrapper(expropFilePath)
         } else {
-			Path found = null
-			Files.list(reportsDir_).forEach({ Path entry ->
-				if (Files.isDirectory(entry)) {
-					Path reportFilePathKS630 = locateReportFile(entry, tSuiteResultId, 'execution.properties')
-					if (reportFilePathKS630 != null && Files.exists(reportFilePathKS630)) {
-						found = reportFilePathKS630
-					}
-				}
-			})
-			if (found != null) {
-				return new ExecutionPropertiesWrapper(found)
-			} else {
-				String msg = this.class.getSimpleName() + 
+			String msg = this.class.getSimpleName() + 
 				"#getExecutionPropertiesWrapper execution.properties file of " +
 				"TSuiteResultId ${tSuiteResultId} is not found under ${reportsDir_}"
-				logger_.warn(msg)
-				vtLogger_.failed(msg)
-				return null
-			}
+			logger_.warn(msg)
+			vtLogger_.failed(msg)
+			return null
         }
     }
 
@@ -145,42 +119,96 @@ class ReportsAccessorImpl implements ReportsAccessor {
         Path materialsDir = repoRoot.getBaseDir().toAbsolutePath()
         
 		// valid only for KS6.2.2, KS6.3.0 has different path format
-		Path tSuiteNameElementOfHTMLReportPath = reportsDir_.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
-        
-		Path tSuiteTimestampElementOfHTMLReportPath = tSuiteNameElementOfHTMLReportPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
+		//Path tSuiteNameElementOfHTMLReportPath = reportsDir_.resolve(tSuiteResult.getTSuiteName().getAbbreviatedId())
+		//Path tSuiteTimestampElementOfHTMLReportPath = tSuiteNameElementOfHTMLReportPath.resolve(tSuiteResult.getTSuiteTimestamp().format())
+		//System.out.println("#getHrefToReport tSuiteTimestampPath=${tSuiteTimestampElementOfHTMLReportPath}")
+        //Path htmlReportPath = tSuiteTimestampElementOfHTMLReportPath.resolve(tSuiteTimestampElementOfHTMLReportPath.getFileName().toString() + '.html').toAbsolutePath()
 		
-		System.out.println("#getHrefToReport tSuiteTimestampPath=${tSuiteTimestampElementOfHTMLReportPath}")
+		String htmlReportFileName = "${tSuiteResult.getTSuiteTimestamp().format()}.html"   // e.g. "20190821_143321.html"  
 		
-        Path htmlPath = tSuiteTimestampElementOfHTMLReportPath.resolve(tSuiteTimestampElementOfHTMLReportPath.getFileName().toString() + '.html').toAbsolutePath()
-        System.out.println("#getHrefToReport htmlPath=${htmlPath}")
-
-        // we want to relativize it; relative to the Materials dir
-		System.out.println("#getHrefToReport htmlPath.getRoot()=${htmlPath.getRoot()}")
-		System.out.println("#getHrefToReport materialsDir.getRoot()=${materialsDir.getRoot()}")
-        if (htmlPath.getRoot() == materialsDir.getRoot()) {
-            Path relativeHtmlPath = materialsDir.relativize(htmlPath).normalize()
-			System.out.println("#getHrefToReport relativeHtmlPath=${relativeHtmlPath}")
-            return relativeHtmlPath.toString().replace(File.separator, '/')
-        } else {
-            String msg = this.class.getSimpleName() + "#getHrefToReport different root of path." + 
-                " therefore unable to create relative href from the material to the report html." + 
-                " htmlPath=\'${htmlPath}\' materialsDir=\'${materialsDir}\'"
-            logger_.info(msg)
-            if (vtLogger_ != null) {
-                vtLogger_.info(msg)
-            }
-            return null
-        }
+		//System.out.println("#getHrefToReport htmlReportFileName=${htmlReportFileName}")      
+		//System.out.println("#getHrefToReport tSuiteResult.getId()=${tSuiteResult.getId()}")  // e.g. ""
+		
+		Path htmlReportPath = resolveReportFilePath(reportsDir_, tSuiteResult.getId(), htmlReportFileName)
+		//System.out.println("#getHrefToReport htmlReportPath=${htmlReportPath}")
+		
+		if (htmlReportPath != null) {
+			// we want to relativize it; relative to the Materials dir
+			//System.out.println("#getHrefToReport htmlReportPath.getRoot()=${htmlReportPath.getRoot()}")
+			//System.out.println("#getHrefToReport materialsDir.getRoot()=${materialsDir.getRoot()}")
+			if (htmlReportPath.getRoot() == materialsDir.getRoot()) {
+				Path relativeHtmlPath = materialsDir.relativize(htmlReportPath).normalize()
+				//System.out.println("#getHrefToReport relativeHtmlPath=${relativeHtmlPath}")
+				return relativeHtmlPath.toString().replace(File.separator, '/')
+			} else {
+				String msg = this.class.getSimpleName() + "#getHrefToReport different root of path." + 
+                	" therefore unable to create relative href from the material to the report html." + 
+					" htmlPath=\'${htmlReportPath}\' materialsDir=\'${materialsDir}\'"
+				logger_.info(msg)
+				if (vtLogger_ != null) {
+					vtLogger_.info(msg)
+				}
+				return null
+			}
+		} else {
+			String msg = this.class.getSimpleName() + "#getHrefToReport htmlReportPath is null." +
+				" Unable to find HTML Report file ${htmlReportFileName} of tSuiteResultId=${tSuiteResult.getId()}" +
+				" in the Reports dir ${reportsDir_}"
+			logger_.info(msg)
+			if (vtLogger_ != null) {
+				vtLogger_.info(msg)
+			}
+			return null
+		}
     }
     
+	/**
+	 * support 2 formats of Reports directory: v6.2.2 and prior, v6.3.0 and newer
+	 * 
+	 * @param reportsDir
+	 * @param tSuiteResultId
+	 * @param fileName
+	 * @return
+	 */
+	private Path resolveReportFilePath(Path reportsDir, TSuiteResultId tSuiteResultId, String fileName) {
+		Objects.requireNonNull(reportsDir, "reportsDir must not be null")
+		Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+		Objects.requireNonNull(fileName, "fileName must not be null")
+		Path fileKS622 = locateReportFile(reportsDir, tSuiteResultId, fileName)
+		if (fileKS622 != null) {
+			return fileKS622
+		} else {
+			Path found = null
+			Files.list(reportsDir).forEach({ Path entry ->
+				if (Files.isDirectory(entry)) {
+					Path fileKS630 = locateReportFile(entry, tSuiteResultId, fileName)
+					if (fileKS630 != null && Files.exists(fileKS630)) {
+						found = fileKS630
+					}
+				}
+			})
+			if (found != null) {
+				return found
+			} else {
+				return null
+			}
+		}
+	}
 	
-	private static Path locateReportFile(Path baseDir, TSuiteResultId tSuiteResultId, String fileName) {
+	/**
+	 * @param baseDir
+	 * @param tSuiteResultId
+	 * @param fileName
+	 * @return
+	 */
+	private Path locateReportFile(Path baseDir, TSuiteResultId tSuiteResultId, String fileName) {
 		Objects.requireNonNull(baseDir, "baseDir must not be null")
 		Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
 		Objects.requireNonNull(fileName, "fileName must not be null")
 		Path file = baseDir.resolve(tSuiteResultId.getTSuiteName().getValue().replace('.', '/')).
 							resolve(tSuiteResultId.getTSuiteTimestamp().format()).
-							resolve(fileName)
+							resolve(fileName).
+							toAbsolutePath()
 		if (Files.exists(file)) {
 			return file
 		} else {
