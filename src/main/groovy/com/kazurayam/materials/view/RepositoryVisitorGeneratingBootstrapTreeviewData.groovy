@@ -86,8 +86,8 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          JUnitReportWrapper junitReportWrapper = null
          ExecutionPropertiesWrapper executionPropertiesWrapper = null
          if (reportsAccessor_ != null) {
-             junitReportWrapper = reportsAccessor_.getJUnitReportWrapper(tSuiteResult)
-             executionPropertiesWrapper = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResult)
+             junitReportWrapper         = reportsAccessor_.getJUnitReportWrapper(tSuiteResult.getId())
+             executionPropertiesWrapper = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResult.getId())
          }
          if (junitReportWrapper != null) {
              sb.append(',')
@@ -143,7 +143,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          sb.append(']')
          JUnitReportWrapper junitReportWrapper = null
          if (reportsAccessor_ != null) {
-             junitReportWrapper = reportsAccessor_.getJUnitReportWrapper(tCaseResult.getParent())
+             junitReportWrapper = reportsAccessor_.getJUnitReportWrapper(tCaseResult.getParent().getId())
          }
          if (tCaseResult.getParent() != null && junitReportWrapper != null) {
              def status = junitReportWrapper.getTestCaseStatus(tCaseResult.getTCaseName().getId())

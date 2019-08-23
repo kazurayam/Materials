@@ -1,0 +1,15 @@
+Suite/Test/Step Name,Browser,Description,Tag,Start time,End time,Duration,Status
+makeIndex,,,,2019-08-21 14:28:50,2019-08-21 14:28:52,2.189s,INCOMPLETE
+,,,,,,,
+Test Cases/VT/makeIndex,,,,2019-08-21 14:28:51,2019-08-21 14:28:52,0.650s,PASSED
+Start listener action : beforeTestCase,,,,2019-08-21 14:28:51,2019-08-21 14:28:51,0.155s,PASSED
+mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()],,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.001s,PASSED
+ra = internal.GlobalVariable[REPORTS_ACCESSOR.getName()],,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.001s,PASSED
+baseDir = mr.getBaseDir(),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.001s,PASSED
+reportsDir = ra.getReportsDir(),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.000s,PASSED
+"index = baseDir.resolve(""index.html"")",,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.001s,PASSED
+indexer = IndexerFactory.newIndexer(),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.011s,PASSED
+indexer.setBaseDir(baseDir),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.003s,PASSED
+indexer.setReportsDir(reportsDir),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.002s,PASSED
+indexer.setOutput(index),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.004s,PASSED
+indexer.execute(),,,,2019-08-21 14:28:52,2019-08-21 14:28:52,0.358s,PASSED

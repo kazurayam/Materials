@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="twins_capture" time="38" tests="1" failures="0" errors="0">
+    <testsuite name="twins_capture" tests="1" failures="0" errors="0" time="38" timestamp="2019-08-21 14:34:12" hostname="qcq0264 - N19-D267.quick.local" id="Test Suites/CURA/twins_capture">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_143318\\CURA\\twins_capture\\20190821_143320"/>
+            <property name="logFiles" value="C:\\Users\\qcq0264\\katalon-workspace\\VisualTestingInKatalonStudio\\Reports\\20190821_143318\\CURA\\twins_capture\\20190821_143320\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="qcq0264 - N19-D267.quick.local"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.3.2.4"/>
+            <property name="browser" value="Firefox 68.0"/>
+            <property name="hostAddress" value="172.19.71.132"/>
+            <property name="sessionId" value="73146946-8ebd-40ba-b0db-d90e4e7581ea"/>
+            <property name="seleniumVersion" value="3.141.59"/>
+            <property name="proxyInformation" value="ProxyInformation{proxyOption=MANUAL_CONFIG, proxyServerType=HTTP, password=, proxyServerAddress=172.24.2.10, proxyServerPort=8080}"/>
+            <property name="platform" value="Windows 10"/>
+        </properties>
+        <testcase name="Test Cases/CURA/visitSite" classname="Test Cases/CURA/visitSite" status="PASSED">
+            <system-out>2019-08-21 14:34:13 - [TEST_CASE][PASSED] - Test Cases/CURA/visitSite: Test Cases/CURA/visitSite&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - Start listener action : beforeTestCase: VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - listener.beforeTestCase(testCaseContext): VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is "Test Suites/CURA/twins_capture"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is "20190821_143320"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is "Test Cases/CURA/visitSite"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Storage"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at "C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Reports"&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - comment(*** GlobalVariable[$MGV.CURRENT_TESTSUITE_ID.getName()]=$GlobalVariable[MGV.CURRENT_TESTSUITE_ID.getName()]): *** GlobalVariable[VT_CURRENT_TESTSUITE_ID]=Test Suites/CURA/twins_capture&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - *** GlobalVariable[VT_CURRENT_TESTSUITE_ID]=Test Suites/CURA/twins_capture&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - comment(*** GlobalVariable[$MGV.CURRENT_TESTSUITE_TIMESTAMP.getName()]=$GlobalVariable[MGV.CURRENT_TESTSUITE_TIMESTAMP.getName()]): *** GlobalVariable[VT_CURRENT_TESTSUITE_TIMESTAMP]=20190821_143320&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - *** GlobalVariable[VT_CURRENT_TESTSUITE_TIMESTAMP]=20190821_143320&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - assert mr != null: null&#xD;
+&#xD;
+2019-08-21 14:34:13 - [TEST_STEP][PASSED] - openBrowser(""): Browser is opened with url: ''&#xD;
+&#xD;
+2019-08-21 14:34:13 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-08-21 14:34:14 - [MESSAGE][INFO] - Action delay is set to 0 seconds&#xD;
+&#xD;
+2019-08-21 14:34:21 - [MESSAGE][PASSED] - Browser is opened with url: ''&#xD;
+&#xD;
+2019-08-21 14:34:21 - [TEST_STEP][PASSED] - setViewPortSize(1024, 768): Viewport is set to new size with width = 1024 and height = 768&#xD;
+&#xD;
+2019-08-21 14:34:21 - [MESSAGE][PASSED] - Viewport is set to new size with width = 1024 and height = 768&#xD;
+&#xD;
+2019-08-21 14:34:21 - [TEST_STEP][PASSED] - driver = getWebDriver(): null&#xD;
+&#xD;
+2019-08-21 14:34:21 - [TEST_STEP][PASSED] - assert Hostname != null: null&#xD;
+&#xD;
+2019-08-21 14:34:21 - [TEST_STEP][PASSED] - url = new java.net.URL(http://$GlobalVariable.Hostname/): null&#xD;
+&#xD;
+2019-08-21 14:34:21 - [TEST_STEP][PASSED] - navigateToUrl(url.toExternalForm()): Navigate to 'http://demoaut-mimic.kazurayam.com/' successfully&#xD;
+&#xD;
+2019-08-21 14:34:24 - [MESSAGE][PASSED] - Navigate to 'http://demoaut-mimic.kazurayam.com/' successfully&#xD;
+&#xD;
+2019-08-21 14:34:24 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Homepage/a_Make Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:24 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:24 - [TEST_STEP][PASSED] - delay(1): Delayed 1 second(s)&#xD;
+&#xD;
+2019-08-21 14:34:25 - [MESSAGE][PASSED] - Delayed 1 second(s)&#xD;
+&#xD;
+2019-08-21 14:34:25 - [TEST_STEP][PASSED] - png1 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], url, 0, "home"): null&#xD;
+&#xD;
+2019-08-21 14:34:26 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png1.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:28 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:28 - [TEST_STEP][PASSED] - comment(saved image into $png1): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\home.png&#xD;
+&#xD;
+2019-08-21 14:34:28 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\home.png&#xD;
+&#xD;
+2019-08-21 14:34:28 - [TEST_STEP][PASSED] - callTestCase(findTestCase("CURA/Login"), ["Username":Username, "Password":Password], STOP_ON_FAILURE): Call Test Case 'Test Cases/CURA/Login' successfully&#xD;
+&#xD;
+2019-08-21 14:34:28 - [TEST_CASE][PASSED] - Test Cases/CURA/Login: Test Cases/CURA/Login&#xD;
+&#xD;
+2019-08-21 14:34:29 - [TEST_STEP][PASSED] - mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]: null&#xD;
+&#xD;
+2019-08-21 14:34:29 - [TEST_STEP][PASSED] - assert mr != null: null&#xD;
+&#xD;
+2019-08-21 14:34:29 - [TEST_STEP][PASSED] - driver = getWebDriver(): null&#xD;
+&#xD;
+2019-08-21 14:34:29 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Homepage/a_Make Appointment")): Object: 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:30 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:30 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Login/button_Login"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Login/button_Login' is present&#xD;
+&#xD;
+2019-08-21 14:34:30 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Login/button_Login' is present&#xD;
+&#xD;
+2019-08-21 14:34:30 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Login/input_username"), Username): Text 'John Doe' is set on object 'Object Repository/CURA/Page_Login/input_username'&#xD;
+&#xD;
+2019-08-21 14:34:30 - [MESSAGE][PASSED] - Text 'John Doe' is set on object 'Object Repository/CURA/Page_Login/input_username'&#xD;
+&#xD;
+2019-08-21 14:34:30 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Login/input_password"), Password): Text 'ThisIsNotAPassword' is set on object 'Object Repository/CURA/Page_Login/input_password'&#xD;
+&#xD;
+2019-08-21 14:34:31 - [MESSAGE][PASSED] - Text 'ThisIsNotAPassword' is set on object 'Object Repository/CURA/Page_Login/input_password'&#xD;
+&#xD;
+2019-08-21 14:34:31 - [TEST_STEP][PASSED] - png2 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0, "top.png"): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/profile.php#login'&#xD;
+&#xD;
+2019-08-21 14:34:31 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/profile.php#login'&#xD;
+&#xD;
+2019-08-21 14:34:31 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png2.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:33 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:33 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Login/button_Login")): Object: 'Object Repository/CURA/Page_Login/button_Login' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:34 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Login/button_Login' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:34 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Appointment/button_Book Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:34 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:34 - [MESSAGE][PASSED] - Call Test Case 'Test Cases/CURA/Login' successfully&#xD;
+&#xD;
+2019-08-21 14:34:34 - [TEST_STEP][PASSED] - selectOptionByValue(findTestObject("CURA/Page_Appointment/select_Tokyo CURA Healthcare C"), "Hongkong CURA Healthcare Center", true): All options with value 'Hongkong CURA Healthcare Center' are selected in object 'Object Repository/CURA/Page_Appointment/select_Tokyo CURA Healthcare C'  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:35 - [MESSAGE][PASSED] - All options with value 'Hongkong CURA Healthcare Center' are selected in object 'Object Repository/CURA/Page_Appointment/select_Tokyo CURA Healthcare C'  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:35 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/input_hospital_readmission")): Object: 'Object Repository/CURA/Page_Appointment/input_hospital_readmission' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:35 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/input_hospital_readmission' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:35 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/input_programs")): Object: 'Object Repository/CURA/Page_Appointment/input_programs' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:36 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/input_programs' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:36 - [TEST_STEP][PASSED] - visitDate = now().plusWeeks(1): null&#xD;
+&#xD;
+2019-08-21 14:34:36 - [TEST_STEP][PASSED] - visitDateStr = ofPattern("dd/MM/yyyy").format(visitDate): null&#xD;
+&#xD;
+2019-08-21 14:34:36 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Appointment/input_visit_date"), visitDateStr): Text '28/08/2019' is set on object 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:34:36 - [MESSAGE][PASSED] - Text '28/08/2019' is set on object 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:34:36 - [TEST_STEP][PASSED] - sendKeys(findTestObject("CURA/Page_Appointment/input_visit_date"), Keys.chord(ENTER)): Keys 'ENTER + ' sent to object: 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:34:36 - [MESSAGE][PASSED] - Keys 'ENTER + ' sent to object: 'Object Repository/CURA/Page_Appointment/input_visit_date'&#xD;
+&#xD;
+2019-08-21 14:34:36 - [TEST_STEP][PASSED] - setText(findTestObject("CURA/Page_Appointment/textarea_comment"), "This is a comment"): Text 'This is a comment' is set on object 'Object Repository/CURA/Page_Appointment/textarea_comment'&#xD;
+&#xD;
+2019-08-21 14:34:37 - [MESSAGE][PASSED] - Text 'This is a comment' is set on object 'Object Repository/CURA/Page_Appointment/textarea_comment'&#xD;
+&#xD;
+2019-08-21 14:34:37 - [TEST_STEP][PASSED] - png3 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/#appointment'&#xD;
+&#xD;
+2019-08-21 14:34:37 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/#appointment'&#xD;
+&#xD;
+2019-08-21 14:34:37 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png3.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - comment(saved image into $png3): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\default%23appointment.png&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\default%23appointment.png&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_Appointment/button_Book Appointment")): Object: 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_Appointment/button_Book Appointment' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_AppointmentConfirmation/a_Go to Homepage"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is present&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is present&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - facility = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_facility")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_facility' is: 'Hongkong CURA Healthcare Center'&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_facility' is: 'Hongkong CURA Healthcare Center'&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - verifyMatch(facility, "^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$", true): Actual text 'Hongkong CURA Healthcare Center' and expected text '^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:40 - [MESSAGE][PASSED] - Actual text 'Hongkong CURA Healthcare Center' and expected text '^(Tokyo|Hongkong|Seoul) CURA Healthcare Center$' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:40 - [TEST_STEP][PASSED] - readmission = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_hospital_readmission")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_hospital_readmission' is: 'Yes'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_hospital_readmission' is: 'Yes'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - verifyMatch(readmission, "(Yes|No)", true): Actual text 'Yes' and expected text '(Yes|No)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Actual text 'Yes' and expected text '(Yes|No)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - program = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_program")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_program' is: 'Medicaid'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_program' is: 'Medicaid'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - verifyMatch(program, "(Medicare|Medicaid|None)", true): Actual text 'Medicaid' and expected text '(Medicare|Medicaid|None)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Actual text 'Medicaid' and expected text '(Medicare|Medicaid|None)' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - visitDateStr2 = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_visit_date")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_visit_date' is: '28/08/2019'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_visit_date' is: '28/08/2019'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - verifyMatch(visitDateStr2, "[0-9]{2}/[0-9]{2}/[0-9]{4}", true, CONTINUE_ON_FAILURE): Actual text '28/08/2019' and expected text '[0-9]{2}/[0-9]{2}/[0-9]{4}' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Actual text '28/08/2019' and expected text '[0-9]{2}/[0-9]{2}/[0-9]{4}' are matched  using regular expression&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - parsed = ofPattern("dd/MM/uuuu").parse(visitDateStr2): null&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - visitDate2 = from(parsed).atStartOfDay(): null&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - isAfterNow = visitDate2.isAfter(LocalDateTime.now()): null&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - verifyEqual(isAfterNow, true, CONTINUE_ON_FAILURE): Actual object 'true' and expected object 'true' are equal&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Actual object 'true' and expected object 'true' are equal&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - comment = getText(findTestObject("CURA/Page_AppointmentConfirmation/p_comment")): Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_comment' is: 'This is a comment'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Text of object 'Object Repository/CURA/Page_AppointmentConfirmation/p_comment' is: 'This is a comment'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - if (comment != null): Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - verifyLessThan(comment.length(), 400): Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Actual number '17' is less than expected number '400'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - png4 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/appointment.php#summary'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/appointment.php#summary'&#xD;
+&#xD;
+2019-08-21 14:34:41 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png4.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:44 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:44 - [TEST_STEP][PASSED] - comment(saved image into $png4): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\appointment.php%23summary.png&#xD;
+&#xD;
+2019-08-21 14:34:44 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\appointment.php%23summary.png&#xD;
+&#xD;
+2019-08-21 14:34:44 - [TEST_STEP][PASSED] - click(findTestObject("CURA/Page_AppointmentConfirmation/a_Go to Homepage")): Object: 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:44 - [MESSAGE][PASSED] - Object: 'Object Repository/CURA/Page_AppointmentConfirmation/a_Go to Homepage' is clicked on&#xD;
+&#xD;
+2019-08-21 14:34:44 - [TEST_STEP][PASSED] - verifyElementPresent(findTestObject("CURA/Page_Homepage/a_Make Appointment"), 10, STOP_ON_FAILURE): Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:44 - [MESSAGE][PASSED] - Object 'Object Repository/CURA/Page_Homepage/a_Make Appointment' is present&#xD;
+&#xD;
+2019-08-21 14:34:44 - [TEST_STEP][PASSED] - png5 = mr.resolveScreenshotPathByURLPathComponents(internal.GlobalVariable[CURRENT_TESTCASE_ID.getName()], new java.net.URL(com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords.getUrl()), 0, "revisited"): Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'&#xD;
+&#xD;
+2019-08-21 14:34:44 - [MESSAGE][PASSED] - Current window's url is: 'https://katalon-demo-cura.herokuapp.com/'&#xD;
+&#xD;
+2019-08-21 14:34:44 - [TEST_STEP][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage(driver, png5.toFile(), 500): com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:47 - [MESSAGE][PASSED] - com.kazurayam.ksbackyard.ScreenshotDriver.takeEntirePage is PASSED&#xD;
+&#xD;
+2019-08-21 14:34:47 - [TEST_STEP][PASSED] - comment(saved image into $png5): saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\revisited.png&#xD;
+&#xD;
+2019-08-21 14:34:47 - [MESSAGE][INFO] - saved image into C:\Users\qcq0264\katalon-workspace\VisualTestingInKatalonStudio\Materials\CURA.twins_capture\20190821_143320\CURA.visitSite\revisited.png&#xD;
+&#xD;
+2019-08-21 14:34:47 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-08-21 14:34:50 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <system-out>2019-08-21 14:34:12 - [TEST_SUITE][INCOMPLETE] - twins_capture: null</system-out>
+        <system-err>2019-08-21 14:34:12 - [TEST_SUITE][INCOMPLETE] - twins_capture: null</system-err>
+    </testsuite>
+</testsuites>

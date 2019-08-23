@@ -46,8 +46,8 @@ class ImageDifferenceFilenameResolverDefaultImpl implements ImageDifferenceFilen
         logger_.debug("#resolveImageDifferenceFilename tSuiteResultExpected=${tSuiteResultExpected}")
         logger_.debug("#resolveImageDifferenceFilename tSuiteResultActual  =${tSuiteResultActual}")
         
-        ExecutionPropertiesWrapper epwExpected = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultExpected)
-        ExecutionPropertiesWrapper epwActual   = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultActual)
+        ExecutionPropertiesWrapper epwExpected = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultExpected.getId())
+        ExecutionPropertiesWrapper epwActual   = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResultActual.getId())
         logger_.debug("#resolveImageDifferenceFilename epwExpected=${epwExpected}")
         logger_.debug("#resolveImageDifferenceFilename epwActual  =${epwActual}")
         

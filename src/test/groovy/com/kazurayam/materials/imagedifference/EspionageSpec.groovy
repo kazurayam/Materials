@@ -9,6 +9,7 @@ import javax.imageio.ImageIO
 
 import com.kazurayam.materials.Helpers
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class EspionageSpec extends Specification {
@@ -80,6 +81,8 @@ class EspionageSpec extends Specification {
         result == false
     }
 	
+	// TODO
+	@Ignore
 	def test_ternaryOnComparisonResult_truthyCase() {
 		setup:
 		Path caseOutputDir = specOutputDir.resolve("test_ternaryOnComparisonResult_truthyCase")
@@ -91,8 +94,9 @@ class EspionageSpec extends Specification {
 		BufferedImage img1 = ImageIO.read(f1)
 		BufferedImage img2 = ImageIO.read(f2)
 		when:
-		//TODO
-		ComparisonResult comparisonResult = null
+		
+		ComparisonResult comparisonResult = null // TODO
+		
 		Object result = Espionage.ternary(
 			comparisonResult,
 			{

@@ -1,0 +1,8 @@
+Suite/Test/Step Name,Browser,Description,Tag,Start time,End time,Duration,Status
+twins_exam,,,,2019-08-21 14:34:54,2019-08-21 14:34:58,3.598s,INCOMPLETE
+,,,,,,,
+Test Cases/CURA/ImageDiff_twins,,,,2019-08-21 14:34:55,2019-08-21 14:34:58,2.394s,FAILED
+Start listener action : beforeTestCase,,,,2019-08-21 14:34:55,2019-08-21 14:34:55,0.138s,PASSED
+"TESTSUITE_ID = ""CURA/twins_capture""",,,,2019-08-21 14:34:55,2019-08-21 14:34:55,0.002s,PASSED
+criteriaPercentage = 1.0,,,,2019-08-21 14:34:55,2019-08-21 14:34:55,0.002s,PASSED
+"com.kazurayam.visualtesting.ImageDiffer.runTwins(TESTSUITE_ID, criteriaPercentage)",,,,2019-08-21 14:34:55,2019-08-21 14:34:58,2.185s,FAILED

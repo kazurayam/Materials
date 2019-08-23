@@ -1,5 +1,8 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TSuiteResultId
+
+import java.nio.file.Files
 import java.nio.file.Path
 
 import javax.xml.parsers.DocumentBuilder
@@ -31,7 +34,7 @@ final class JUnitReportWrapper {
     private XPath xpath_
     private File file_
     
-    JUnitReportWrapper(Path path) {
+	JUnitReportWrapper(Path path) {
         this(path.toFile())
     }
 
