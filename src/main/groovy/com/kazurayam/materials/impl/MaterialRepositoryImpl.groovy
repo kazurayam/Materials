@@ -75,7 +75,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.scan()
         
         // set default Material path to the "./${baseDir name}/_/_" directory
-        //this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
+        this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
