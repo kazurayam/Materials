@@ -778,26 +778,19 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     // ----------------------------- getters ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {
-        if (currentTSuiteName_ != null) {
-            if (currentTSuiteTimestamp_ != null) {
-                TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
-                TSuiteResult tsr = this.getTSuiteResult(tsri)
-                if (tsr == null) {
-                    JsonOutput jo = new JsonOutput()
-                    throw new IllegalStateException(
-                        "MaterialRepositoryImpl#getCurrentTSuiteResult()" + 
-                        " this.getTSuiteResult(${tsri}) returned null when" +
-                        " currentTSuiteName_=${currentTSuiteName_.getAbbreviatedId()}" +
-                        " currentTSuiteTimestamp_=${currentTSuiteTimestamp_.format()}" +
-                        " with this=\n${jo.prettyPrint(this.toJsonText())}")
-                }
-                return tsr
-            } else {
-                throw new IllegalStateException('The currentTSuiteTimestamp variable is not set. Use markAsCurrent() method')
-            }
-        } else {
-            throw new IllegalStateException('The currentTSuiteName variable is not set. Use markAsCurrent() method')
+		TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResult tsr = this.getTSuiteResult(tsri)
+        if (tsr == null) {
+			JsonOutput jo = new JsonOutput()
+            throw new IllegalStateException(
+				"MaterialRepositoryImpl#getCurrentTSuiteResult()" + 
+                " this.getTSuiteResult(${tsri}) returned null when" +
+                " currentTSuiteName_=${currentTSuiteName_.getAbbreviatedId()}" +
+                " currentTSuiteTimestamp_=${currentTSuiteTimestamp_.format()}" +
+                " with this=\n${jo.prettyPrint(this.toJsonText())}")
         }
+        return tsr
+        
     }
     
     @Override
@@ -860,17 +853,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         sb.append('{"MaterialRepository":{')
         sb.append('"baseDir":"' +
             Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
-		if (currentTSuiteName_ != null) {
-			sb.append('"currentTsName":' + currentTSuiteName_.toJsonText() + ',')
-		} else {
-			sb.append('"currentTsName": null,')
-		}
-		if (currentTSuiteTimestamp_ != null) {
-			sb.append('"currentTsTimestamp":' + currentTSuiteTimestamp_.toJsonText() + ',')
-		} else {
-			sb.append('"currentTsTimestamp": null,')
-		}
-        sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
+		sb.append('"currentTsName":' + currentTSuiteName_.toJsonText() + ',')
+		sb.append('"currentTsTimestamp":' + currentTSuiteTimestamp_.toJsonText() + ',')
+		sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
         sb.append('}}')
         return sb.toString()
     }
