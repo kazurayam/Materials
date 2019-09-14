@@ -44,6 +44,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 	// set default Material path to the "./${baseDir name}/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
+	private boolean alreadyMarked_ = false
     
 	
     private RepositoryRoot repoRoot_
@@ -147,8 +148,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // memorize this specified TestSuite as the current one
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
+		
+		alreadyMarked_ = true
     }
     
+	boolean isAlreadyMarked() {
+		return alreadyMarked_	
+	}
+	
     @Override
     TSuiteResult ensureTSuiteResultPresent(String testSuiteId) {
         return this.ensureTSuiteResultPresent(
@@ -387,7 +394,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(url, "url must not be null")
-
+		if ( !this.isAlreadyMarked() ) {
+			// in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
+			this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
+			this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
+		}
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -569,6 +580,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(fileName, "fileName must not be null")
+		if ( !this.isAlreadyMarked() ) {
+			// in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
+			this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
+			this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
+		}
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -780,15 +796,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     TSuiteResult getCurrentTSuiteResult() {
 		TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
-        if (tsr == null) {
-			JsonOutput jo = new JsonOutput()
-            throw new IllegalStateException(
-				"MaterialRepositoryImpl#getCurrentTSuiteResult()" + 
-                " this.getTSuiteResult(${tsri}) returned null when" +
-                " currentTSuiteName_=${currentTSuiteName_.getAbbreviatedId()}" +
-                " currentTSuiteTimestamp_=${currentTSuiteTimestamp_.format()}" +
-                " with this=\n${jo.prettyPrint(this.toJsonText())}")
-        }
         return tsr
         
     }

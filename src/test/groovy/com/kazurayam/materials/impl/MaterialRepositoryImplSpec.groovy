@@ -239,7 +239,8 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         when:
             Path resolutionLog = mri.getPathResolutionLogBundleAt()
         then:
-            resolutionLog == null
+			// the file is created when mri.resolveMaterialPath() was invoked
+            resolutionLog != null
     }
     
     def testResolveMaterialPath_withSuffix() {
