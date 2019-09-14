@@ -215,6 +215,33 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             Files.exists(resolutionLog)
     }
 
+    def testResolveMaterialPath_whenCurrentTestSuiteNotMarked() {
+        setup:
+            def methodName = 'testResolveMaterialPath_whenCurrentTestSuiteNotMarked'
+            Path casedir = workdir_.resolve(methodName)
+            Helpers.copyDirectory(fixture_, casedir)
+            Path materialsDir = casedir.resolve('Materials')
+            MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
+            
+            // --- intentionally leave the variable mri not marked with the current Test Suite
+            //mri.markAsCurrent('TS1', '20180530_130604')
+            //TSuiteResult r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+        when:
+            String materialFileName = MaterialFileName.format(
+                new URL('http://demoaut.katalon.com/'),
+                Suffix.NULL,
+                FileType.PNG)
+            Path p = mri.resolveMaterialPath('TC1', materialFileName)
+        then:
+            p != null
+            p.toString().replace('\\', '/') ==
+                "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+        when:
+            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+        then:
+            resolutionLog == null
+    }
+    
     def testResolveMaterialPath_withSuffix() {
         setup:
         def methodName = 'testResolveMaterialPath_withSuffix'

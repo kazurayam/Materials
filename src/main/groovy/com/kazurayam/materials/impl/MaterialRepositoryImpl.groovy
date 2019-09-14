@@ -41,13 +41,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     private Path baseDir_
     
-    private TSuiteName currentTSuiteName_ = null
-    private TSuiteTimestamp currentTSuiteTimestamp_ = null
+	// set default Material path to the "./${baseDir name}/_/_" directory
+    private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
+    private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
     
+	
     private RepositoryRoot repoRoot_
     
-    private Path pathResolutionLogBundleAt_
-    private PathResolutionLogBundle pathResolutionLogBundle_
+    private Path pathResolutionLogBundleAt_ = null
+    private PathResolutionLogBundle pathResolutionLogBundle_ = null
 
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
@@ -74,8 +76,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // load data from the local disk
         this.scan()
         
-        // set default Material path to the "./${baseDir name}/_/_" directory
-        //this.markAsCurrent(TSuiteName.SUITELESS, TSuiteTimestamp.TIMELESS)
     }
 
     /**
@@ -355,15 +355,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     // ------------------ methods to resolve Material Paths  ------------------
 
     private void addPathResolutionLog(PathResolutionLog resolutionLog) {
-        Objects.requireNonNull(pathResolutionLogBundleAt_,
-                                "pathResolutionLogBundleAt_ must not be null")
-        Objects.requireNonNull(pathResolutionLogBundle_,
-            "pathResolutionLogBundle_ must not be null")
-        pathResolutionLogBundle_.add(resolutionLog)
-        OutputStream os = new FileOutputStream(pathResolutionLogBundleAt_.toFile())
-        Writer writer = new OutputStreamWriter(os, "UTF-8")
-        pathResolutionLogBundle_.serialize(writer)
-        writer.close()
+        if (pathResolutionLogBundleAt_ != null && 
+				pathResolutionLogBundle_ != null) {
+			pathResolutionLogBundle_.add(resolutionLog)
+			OutputStream os = new FileOutputStream(pathResolutionLogBundleAt_.toFile())
+			Writer writer = new OutputStreamWriter(os, "UTF-8")
+			pathResolutionLogBundle_.serialize(writer)
+			writer.close()
+		}
     }
     
     /**
