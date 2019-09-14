@@ -1,6 +1,14 @@
 Revision History of materials
 =============================
 
+## Changes made at 0.72.2 -> 0.72.3
+
+Date: 14,Sept 2019
+Changes: https://github.com/kazurayam/Materials/compare/0.72.1...0.72.2
+Subjects:
+1. Fixed a problem of MaterialRepository class: Exception was raised when mr.resolveMaterialPath() was called 
+without calling mr.markAsCurrent(TSuiteName, TSuiteTimestamp).
+
 ## Changes made at 0.28 -> 0.30
 
 Date: 15,Feb 2019

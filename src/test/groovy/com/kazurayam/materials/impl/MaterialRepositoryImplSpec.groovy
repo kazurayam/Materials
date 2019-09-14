@@ -223,10 +223,9 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
             
-            // intentinally leave the mri not marked
-            // mri.markAsCurrent('TS1', '20180530_130604')
-            
-            //def r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+            // --- intentionally leave the variable mri not marked with the current Test Suite
+            //mri.markAsCurrent('TS1', '20180530_130604')
+            //TSuiteResult r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
         when:
             String materialFileName = MaterialFileName.format(
                 new URL('http://demoaut.katalon.com/'),
@@ -240,8 +239,7 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         when:
             Path resolutionLog = mri.getPathResolutionLogBundleAt()
         then:
-            Files.exists(resolutionLog)
-            
+            resolutionLog == null
     }
     
     def testResolveMaterialPath_withSuffix() {
