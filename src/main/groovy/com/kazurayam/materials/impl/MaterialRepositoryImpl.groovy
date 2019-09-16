@@ -797,7 +797,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 		TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         return tsr
-        
     }
     
     @Override
