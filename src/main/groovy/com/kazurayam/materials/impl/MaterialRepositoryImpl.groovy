@@ -148,14 +148,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // memorize this specified TestSuite as the current one
         currentTSuiteName_ = tSuiteName
         currentTSuiteTimestamp_ = tSuiteTimestamp
-		
-		alreadyMarked_ = true
+
+        // ensure a directory forthe TSuiteResult
+        ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
+        
+        // make the status easily looked up
+        alreadyMarked_ = true
     }
     
-	boolean isAlreadyMarked() {
-		return alreadyMarked_	
-	}
-	
+    
+    @Override
+    boolean isAlreadyMarked() {
+        return alreadyMarked_
+    }
+
     @Override
     TSuiteResult ensureTSuiteResultPresent(String testSuiteId) {
         return this.ensureTSuiteResultPresent(
