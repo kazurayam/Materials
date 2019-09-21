@@ -147,7 +147,7 @@ task pinpoint(type: Test) {
     include "**/view/BaseIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}
