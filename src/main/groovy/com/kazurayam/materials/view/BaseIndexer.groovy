@@ -19,6 +19,11 @@ import com.kazurayam.materials.repository.RepositoryWalker
 import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
 
+/**
+ * 
+ * @author kazurayam
+ *
+ */
 class BaseIndexer implements Indexer {
     
     static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)

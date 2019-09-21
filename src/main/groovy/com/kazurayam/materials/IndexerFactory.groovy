@@ -7,8 +7,6 @@ final class IndexerFactory {
     private IndexerFactory() {}
     
     static Indexer newIndexer() {
-        //return new IndexerRudimentaryImpl()
-        //return new IndexerByVisitorImpl()     // commented out at 2019/03/19        
         return new BaseIndexer()
     }
 

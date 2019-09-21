@@ -7,8 +7,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.view.BaseIndexer
-import com.kazurayam.materials.view.IndexerByVisitorImpl
-import com.kazurayam.materials.view.IndexerRudimentaryImpl
 
 import spock.lang.Specification
 
@@ -34,14 +32,6 @@ class IndexerFactorySpec extends Specification {
         then:
         indexer != null
         indexer.getClass().getName() == BaseIndexer.class.getName()
-    }
-
-    def testNewIndexerWithArg() {
-        when:
-        Indexer indexer = IndexerFactory.newIndexer('com.kazurayam.materials.view.IndexerRudimentaryImpl')
-        then:
-        indexer != null
-        indexer.getClass().getName() == IndexerRudimentaryImpl.class.getName()
     }
 
     def testNewIndexerWithArg_throwsClassNotFoundException() {
