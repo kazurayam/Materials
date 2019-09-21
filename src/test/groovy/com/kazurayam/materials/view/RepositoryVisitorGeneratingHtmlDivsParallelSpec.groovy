@@ -33,11 +33,13 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
 
     // fields
     private static Path specOutputDir_
-    private static Path fixture_ = Paths.get("./src/test/fixture_origin")    // Please note this special fixture
+    private static Path fixture_ = Paths.get(
+        "./src/test/fixtures/com.kazurayam.materials.view.RepositoryVisitorGeneratingHtmlDivsParallelSpec")    // Please note this special fixture
 
     // fixture methods
     def setupSpec() {
-        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsParallelSpec.class)}")
+        specOutputDir_ = Paths.get(
+            "./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsParallelSpec.class)}")
         Files.createDirectories(specOutputDir_)
     }
     def setup() {}
@@ -58,12 +60,12 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
             ms.restore(mr, [
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_111956')),
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_112053')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190921_173011')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190921_173559')),
             ])
             ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
-            Path output = caseOutputDir.resolve('testSmoke.html')
+            Path output = materialsDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)
@@ -73,12 +75,12 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
         when:
             mr.scan()   // refresh MaterialRepository's internal data structure with the updated file tree on disk
             TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
-                                    new TSuiteName('Test Suites/47news/chronos_capture'),
-                                    new TSuiteTimestamp('20190404_111956')))
+                                    new TSuiteName('Test Suites/47News/chronos_capture'),
+                                    new TSuiteTimestamp('20190921_173559')))
         then:
             tsr != null
         when:
-            TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/47news/visitSite'))
+            TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/47News/visitSite'))
         then:
             tcr != null
         when:

@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020110</millis>
+  <sequence>0</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startSuite</method>
+  <thread>1</thread>
+  <message>Start Test Suite : Test Suites/47News/chronos_exam</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="name">chronos_exam</property>
+  <property name="description"></property>
+  <property name="id">Test Suites/47News/chronos_exam</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020142</millis>
+  <sequence>1</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostName = urayamakazuaki - 10.0.1.9</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostName">urayamakazuaki - 10.0.1.9</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020144</millis>
+  <sequence>2</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>os = Mac OS X 64bit</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="os">Mac OS X 64bit</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020147</millis>
+  <sequence>3</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostAddress = 10.0.1.9</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostAddress">10.0.1.9</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020150</millis>
+  <sequence>4</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>katalonVersion = 6.3.2.4</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="katalonVersion">6.3.2.4</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020200</millis>
+  <sequence>5</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() Execution Profile &amp;apos;default&amp;apos; is applied</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020308</millis>
+  <sequence>6</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#resolveProjectDir() AUXILIARY_VT_PROJECTS_DIR is not defined in vt-config.json. Materials and Storage dir will be located in /Users/urayamakazuaki/katalon-workspace/VT_47News</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020310</millis>
+  <sequence>7</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#resolveProjectDir() AUXILIARY_VT_PROJECTS_DIR is not defined in vt-config.json. Materials and Storage dir will be located in /Users/urayamakazuaki/katalon-workspace/VT_47News</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020312</millis>
+  <sequence>8</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() materialsDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020313</millis>
+  <sequence>9</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() storageDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020315</millis>
+  <sequence>10</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() reportFolder=/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports/20190921_173551/47News/chronos_exam/20190921_173603</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020372</millis>
+  <sequence>11</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() reportsDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020379</millis>
+  <sequence>12</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020394</millis>
+  <sequence>14</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">19</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020672</millis>
+  <sequence>15</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestSuite testSuiteId=Test Suites/47News/chronos_exam</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:00</date>
+  <millis>1569055020675</millis>
+  <sequence>16</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestSuite testSuiteTimestamp=20190921_173603</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022036</millis>
+  <sequence>18</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022036</millis>
+  <sequence>19</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022445</millis>
+  <sequence>20</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startTest</method>
+  <thread>1</thread>
+  <message>Start Test Case : Test Cases/47News/ImageDiff_chronos</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="name">Test Cases/47News/ImageDiff_chronos</property>
+  <property name="description"></property>
+  <property name="id">Test Cases/47News/ImageDiff_chronos</property>
+  <property name="source">\\Users\\urayamakazuaki\\katalon-workspace\\VT_47News\\Test Cases\\47News\\ImageDiff_chronos.tc</property>
+  <property name="tag"></property>
+  <property name="isOptional">false</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022487</millis>
+  <sequence>22</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022488</millis>
+  <sequence>24</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">25</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022661</millis>
+  <sequence>25</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is \&amp;quot;Test Suites/47News/chronos_exam\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022673</millis>
+  <sequence>26</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is \&amp;quot;20190921_173603\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022682</millis>
+  <sequence>27</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is \&amp;quot;Test Cases/47News/ImageDiff_chronos\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022690</millis>
+  <sequence>28</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022705</millis>
+  <sequence>29</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022718</millis>
+  <sequence>30</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022720</millis>
+  <sequence>32</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022722</millis>
+  <sequence>33</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022936</millis>
+  <sequence>34</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : TESTSUITE_ID = \&amp;quot;47News/chronos_capture\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">7</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022943</millis>
+  <sequence>35</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : TESTSUITE_ID = \&amp;quot;47News/chronos_capture\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:02</date>
+  <millis>1569055022947</millis>
+  <sequence>36</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : options = 0).build()</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">8</property>
+  <property name="stepIndex">2</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:03</date>
+  <millis>1569055023023</millis>
+  <sequence>37</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : options = 0).build()</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:03</date>
+  <millis>1569055023034</millis>
+  <sequence>38</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : com.kazurayam.visualtesting.ImageDiffer.runChronos(TESTSUITE_ID, options)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">13</property>
+  <property name="stepIndex">3</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:08</date>
+  <millis>1569055028272</millis>
+  <sequence>39</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#makeImageDelta took 4295 milliseconds for (47News.chronos_capture/20190921_173559/47News.visitSite/TOP.png, 47News.chronos_capture/20190921_173011/47News.visitSite/TOP.png)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:10</date>
+  <millis>1569055030217</millis>
+  <sequence>40</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#makeImageDelta took 1940 milliseconds for (47News.chronos_capture/20190921_173011/47News.visitSite/TOP.png, 47News.chronos_capture/20190921_172705/47News.visitSite/TOP.png)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:10</date>
+  <millis>1569055030239</millis>
+  <sequence>41</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#makeMaterialStats took 6300 milliseconds for {\&amp;quot;id\&amp;quot;: \&amp;quot;47News/chronos_capture\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;47News/chronos_capture\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;47News.chronos_capture\&amp;quot;},47News.visitSite/TOP.png</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:10</date>
+  <millis>1569055030241</millis>
+  <sequence>42</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#makeStatsEntry took 6330 milliseconds for {\&amp;quot;id\&amp;quot;: \&amp;quot;47News/chronos_capture\&amp;quot;,\&amp;quot;abbreviatedId\&amp;quot;: \&amp;quot;47News/chronos_capture\&amp;quot;,\&amp;quot;value\&amp;quot;: \&amp;quot;47News.chronos_capture\&amp;quot;}</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036659</millis>
+  <sequence>43</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Different 47News.chronos_exam/20190921_173603/47News.ImageDiff_chronos/47News.visitSite/TOP(24.14)FAILED.png </message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036672</millis>
+  <sequence>44</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>&amp;gt;&amp;gt;&amp;gt; diffRatio(24.14) &amp;gt; criteria(12.2) expected(47News.chronos_capture/20190921_173011/47News.visitSite/TOP.png) actual(47News.chronos_capture/20190921_173559/47News.visitSite/TOP.png)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036707</millis>
+  <sequence>45</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>comparison-result-bundle.json files will be saved into /Users/urayamakazuaki/katalon-workspace/VT_47News/Materials/47News.chronos_exam/20190921_173603/47News.ImageDiff_chronos/comparison-result-bundle.json</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036725</millis>
+  <sequence>46</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>copied into /Users/urayamakazuaki/katalon-workspace/VT_47News/Materials/47News.chronos_exam/20190921_173603/47News.ImageDiff_chronos/comparison-result-bundle.json</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036728</millis>
+  <sequence>47</sequence>
+  <level>FAILED</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>One or more pairs of screenshot are different.</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036742</millis>
+  <sequence>48</sequence>
+  <level>FAILED</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.</message>
+  <exception>
+    <message>com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.</message>
+    <frame>
+      <class>com.kms.katalon.core.util.KeywordUtil</class>
+      <method>markFailed</method>
+      <line>19</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.util.KeywordUtil$markFailed$0</class>
+      <method>call</method>
+    </frame>
+    <frame>
+      <class>com.kazurayam.visualtesting.ImageDiffer</class>
+      <method>runChronos</method>
+      <line>42</line>
+    </frame>
+    <frame>
+      <class>com.kazurayam.visualtesting.ImageDiffer</class>
+      <method>invokeMethod</method>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass</class>
+      <method>invokeStaticMethod</method>
+      <line>50</line>
+    </frame>
+    <frame>
+      <class>ImageDiff_chronos</class>
+      <method>run</method>
+      <line>13</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.ScriptEngine</class>
+      <method>run</method>
+      <line>194</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.ScriptEngine</class>
+      <method>runScriptAsRawText</method>
+      <line>119</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>runScript</method>
+      <line>337</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>doExecute</method>
+      <line>328</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>processExecutionPhase</method>
+      <line>307</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>accessMainPhase</method>
+      <line>299</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>execute</method>
+      <line>233</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>accessTestCaseMainPhase</method>
+      <line>169</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>accessTestSuiteMainPhase</method>
+      <line>142</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>execute</method>
+      <line>91</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseMain</class>
+      <method>startTestSuite</method>
+      <line>157</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseMain$startTestSuite$0</class>
+      <method>call</method>
+    </frame>
+    <frame>
+      <class>TempTestSuite1569054963176</class>
+      <method>run</method>
+      <line>35</line>
+    </frame>
+  </exception>
+  <nestedLevel>0</nestedLevel>
+  <property name="failed.exception.stacktrace">com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.\n\tat com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)\n\tat com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)\n\tat com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:42)\n\tat com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)\n\tat com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)\n\tat ImageDiff_chronos.run(ImageDiff_chronos:13)\n\tat com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)\n\tat com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)\n\tat com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)\n\tat com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)\n\tat com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)\n\tat com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)\n\tat com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)\n\tat com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)\n\tat com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)\n\tat TempTestSuite1569054963176.run(TempTestSuite1569054963176.groovy:35)\n</property>
+  <property name="failed.exception.class">com.kms.katalon.core.exception.StepFailedException</property>
+  <property name="failed.exception.message">One or more pairs of screenshot are different.</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036751</millis>
+  <sequence>50</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : com.kazurayam.visualtesting.ImageDiffer.runChronos(TESTSUITE_ID, options)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036753</millis>
+  <sequence>52</sequence>
+  <level>FAILED</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Test Cases/47News/ImageDiff_chronos FAILED.\nReason:\ncom.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.\n\tat com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)\n\tat com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)\n\tat com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:42)\n\tat com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)\n\tat com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)\n\tat ImageDiff_chronos.run(ImageDiff_chronos:13)\n\tat com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)\n\tat com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)\n\tat com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)\n\tat com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)\n\tat com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)\n\tat com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)\n\tat com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)\n\tat com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)\n\tat com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)\n\tat TempTestSuite1569054963176.run(TempTestSuite1569054963176.groovy:35)\n</message>
+  <exception>
+    <message>com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.</message>
+    <frame>
+      <class>com.kms.katalon.core.util.KeywordUtil</class>
+      <method>markFailed</method>
+      <line>19</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.util.KeywordUtil$markFailed$0</class>
+      <method>call</method>
+    </frame>
+    <frame>
+      <class>com.kazurayam.visualtesting.ImageDiffer</class>
+      <method>runChronos</method>
+      <line>42</line>
+    </frame>
+    <frame>
+      <class>com.kazurayam.visualtesting.ImageDiffer</class>
+      <method>invokeMethod</method>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass</class>
+      <method>invokeStaticMethod</method>
+      <line>50</line>
+    </frame>
+    <frame>
+      <class>ImageDiff_chronos</class>
+      <method>run</method>
+      <line>13</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.ScriptEngine</class>
+      <method>run</method>
+      <line>194</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.ScriptEngine</class>
+      <method>runScriptAsRawText</method>
+      <line>119</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>runScript</method>
+      <line>337</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>doExecute</method>
+      <line>328</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>processExecutionPhase</method>
+      <line>307</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>accessMainPhase</method>
+      <line>299</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseExecutor</class>
+      <method>execute</method>
+      <line>233</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>accessTestCaseMainPhase</method>
+      <line>169</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>accessTestSuiteMainPhase</method>
+      <line>142</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestSuiteExecutor</class>
+      <method>execute</method>
+      <line>91</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseMain</class>
+      <method>startTestSuite</method>
+      <line>157</line>
+    </frame>
+    <frame>
+      <class>com.kms.katalon.core.main.TestCaseMain$startTestSuite$0</class>
+      <method>call</method>
+    </frame>
+    <frame>
+      <class>TempTestSuite1569054963176</class>
+      <method>run</method>
+      <line>35</line>
+    </frame>
+  </exception>
+  <nestedLevel>0</nestedLevel>
+  <property name="failed.exception.stacktrace">com.kms.katalon.core.exception.StepFailedException: One or more pairs of screenshot are different.\n\tat com.kms.katalon.core.util.KeywordUtil.markFailed(KeywordUtil.java:19)\n\tat com.kms.katalon.core.util.KeywordUtil$markFailed$0.call(Unknown Source)\n\tat com.kazurayam.visualtesting.ImageDiffer.runChronos(ImageDiffer.groovy:42)\n\tat com.kazurayam.visualtesting.ImageDiffer.invokeMethod(ImageDiffer.groovy)\n\tat com.kms.katalon.core.main.CustomKeywordDelegatingMetaClass.invokeStaticMethod(CustomKeywordDelegatingMetaClass.java:50)\n\tat ImageDiff_chronos.run(ImageDiff_chronos:13)\n\tat com.kms.katalon.core.main.ScriptEngine.run(ScriptEngine.java:194)\n\tat com.kms.katalon.core.main.ScriptEngine.runScriptAsRawText(ScriptEngine.java:119)\n\tat com.kms.katalon.core.main.TestCaseExecutor.runScript(TestCaseExecutor.java:337)\n\tat com.kms.katalon.core.main.TestCaseExecutor.doExecute(TestCaseExecutor.java:328)\n\tat com.kms.katalon.core.main.TestCaseExecutor.processExecutionPhase(TestCaseExecutor.java:307)\n\tat com.kms.katalon.core.main.TestCaseExecutor.accessMainPhase(TestCaseExecutor.java:299)\n\tat com.kms.katalon.core.main.TestCaseExecutor.execute(TestCaseExecutor.java:233)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestCaseMainPhase(TestSuiteExecutor.java:169)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.accessTestSuiteMainPhase(TestSuiteExecutor.java:142)\n\tat com.kms.katalon.core.main.TestSuiteExecutor.execute(TestSuiteExecutor.java:91)\n\tat com.kms.katalon.core.main.TestCaseMain.startTestSuite(TestCaseMain.java:157)\n\tat com.kms.katalon.core.main.TestCaseMain$startTestSuite$0.call(Unknown Source)\n\tat TempTestSuite1569054963176.run(TempTestSuite1569054963176.groovy:35)\n</property>
+  <property name="failed.exception.class">com.kms.katalon.core.exception.StepFailedException</property>
+  <property name="failed.exception.message">One or more pairs of screenshot are different.</property>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036758</millis>
+  <sequence>54</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endTest</method>
+  <thread>1</thread>
+  <message>End Test Case : Test Cases/47News/ImageDiff_chronos</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:37:16</date>
+  <millis>1569055036891</millis>
+  <sequence>55</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endSuite</method>
+  <thread>1</thread>
+  <message>End Test Suite : Test Suites/47News/chronos_exam</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+</log>

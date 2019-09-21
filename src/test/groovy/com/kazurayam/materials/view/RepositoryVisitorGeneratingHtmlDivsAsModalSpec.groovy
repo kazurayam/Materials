@@ -63,7 +63,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             ])
             ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
-            Path output = caseOutputDir.resolve('testSmoke.html')
+            Path output = materialsDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)

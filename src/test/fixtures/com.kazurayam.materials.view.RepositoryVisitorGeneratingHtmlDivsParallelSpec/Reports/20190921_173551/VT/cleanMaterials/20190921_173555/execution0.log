@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972519</millis>
+  <sequence>0</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startSuite</method>
+  <thread>1</thread>
+  <message>Start Test Suite : Test Suites/VT/cleanMaterials</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="name">cleanMaterials</property>
+  <property name="description"></property>
+  <property name="id">Test Suites/VT/cleanMaterials</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972552</millis>
+  <sequence>1</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostName = urayamakazuaki - 10.0.1.9</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostName">urayamakazuaki - 10.0.1.9</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972553</millis>
+  <sequence>2</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>os = Mac OS X 64bit</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="os">Mac OS X 64bit</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972555</millis>
+  <sequence>3</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>hostAddress = 10.0.1.9</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="hostAddress">10.0.1.9</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972557</millis>
+  <sequence>4</sequence>
+  <level>RUN_DATA</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>katalonVersion = 6.3.2.4</message>
+  <nestedLevel>0</nestedLevel>
+  <property name="katalonVersion">6.3.2.4</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972616</millis>
+  <sequence>5</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() Execution Profile &amp;apos;default&amp;apos; is applied</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972779</millis>
+  <sequence>6</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#resolveProjectDir() AUXILIARY_VT_PROJECTS_DIR is not defined in vt-config.json. Materials and Storage dir will be located in /Users/urayamakazuaki/katalon-workspace/VT_47News</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972782</millis>
+  <sequence>7</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#resolveProjectDir() AUXILIARY_VT_PROJECTS_DIR is not defined in vt-config.json. Materials and Storage dir will be located in /Users/urayamakazuaki/katalon-workspace/VT_47News</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972783</millis>
+  <sequence>8</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() materialsDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972784</millis>
+  <sequence>9</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() storageDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972787</millis>
+  <sequence>10</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() reportFolder=/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports/20190921_173551/VT/cleanMaterials/20190921_173555</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972820</millis>
+  <sequence>11</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>#VisualTestingListenerImpl() reportsDir=/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972826</millis>
+  <sequence>12</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:12</date>
+  <millis>1569054972850</millis>
+  <sequence>14</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">19</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:13</date>
+  <millis>1569054973273</millis>
+  <sequence>15</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestSuite testSuiteId=Test Suites/VT/cleanMaterials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:13</date>
+  <millis>1569054973274</millis>
+  <sequence>16</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestSuite testSuiteTimestamp=20190921_173555</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:14</date>
+  <millis>1569054974594</millis>
+  <sequence>18</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestSuite(testSuiteContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:14</date>
+  <millis>1569054974595</millis>
+  <sequence>19</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestSuite</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975232</millis>
+  <sequence>20</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startTest</method>
+  <thread>1</thread>
+  <message>Start Test Case : Test Cases/VT/cleanMaterials</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="name">Test Cases/VT/cleanMaterials</property>
+  <property name="description"></property>
+  <property name="id">Test Cases/VT/cleanMaterials</property>
+  <property name="source">\\Users\\urayamakazuaki\\katalon-workspace\\VT_47News\\Test Cases\\VT\\cleanMaterials.tc</property>
+  <property name="tag"></property>
+  <property name="isOptional">false</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975294</millis>
+  <sequence>22</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975296</millis>
+  <sequence>24</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">25</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975557</millis>
+  <sequence>25</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_ID is \&amp;quot;Test Suites/VT/cleanMaterials\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975589</millis>
+  <sequence>26</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTSUITE_TIMESTAMP is \&amp;quot;20190921_173555\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975600</millis>
+  <sequence>27</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_CURRENT_TESTCASE_ID is \&amp;quot;Test Cases/VT/cleanMaterials\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975609</millis>
+  <sequence>28</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_REPOSITORY is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975619</millis>
+  <sequence>29</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_MATERIAL_STORAGE is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975642</millis>
+  <sequence>30</sequence>
+  <level>INFO</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>VisualTestingListenerImpl#beforeTestCase GlobalVariable.VT_REPORTS_ACCESSOR is located at \&amp;quot;/Users/urayamakazuaki/katalon-workspace/VT_47News/Reports\&amp;quot;</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975643</millis>
+  <sequence>32</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : listener.beforeTestCase(testCaseContext)</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975643</millis>
+  <sequence>33</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End listener action : beforeTestCase</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975846</millis>
+  <sequence>34</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">10</property>
+  <property name="stepIndex">1</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975849</millis>
+  <sequence>35</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : mr = internal.GlobalVariable[MATERIAL_REPOSITORY.getName()]</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975849</millis>
+  <sequence>36</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : assert mr != null</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">11</property>
+  <property name="stepIndex">2</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975859</millis>
+  <sequence>37</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : assert mr != null</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975859</millis>
+  <sequence>38</sequence>
+  <level>START</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>startKeyword</method>
+  <thread>1</thread>
+  <message>Start action : Helpers.deleteDirectoryContents(mr.getBaseDir())</message>
+  <nestedLevel>1</nestedLevel>
+  <property name="startLine">13</property>
+  <property name="stepIndex">3</property>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975998</millis>
+  <sequence>39</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endKeyword</method>
+  <thread>1</thread>
+  <message>End action : Helpers.deleteDirectoryContents(mr.getBaseDir())</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:15</date>
+  <millis>1569054975999</millis>
+  <sequence>40</sequence>
+  <level>PASSED</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>logMessage</method>
+  <thread>1</thread>
+  <message>Test Cases/VT/cleanMaterials</message>
+  <nestedLevel>1</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:16</date>
+  <millis>1569054976000</millis>
+  <sequence>41</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endTest</method>
+  <thread>1</thread>
+  <message>End Test Case : Test Cases/VT/cleanMaterials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+<record>
+  <date>2019-09-21T17:36:16</date>
+  <millis>1569054976139</millis>
+  <sequence>42</sequence>
+  <level>END</level>
+  <class>com.kms.katalon.core.logging.XmlKeywordLogger</class>
+  <method>endSuite</method>
+  <thread>1</thread>
+  <message>End Test Suite : Test Suites/VT/cleanMaterials</message>
+  <nestedLevel>0</nestedLevel>
+</record>
+</log>
