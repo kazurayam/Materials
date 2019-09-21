@@ -14,6 +14,7 @@ import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryWalker
 
 import groovy.json.JsonOutput
@@ -32,6 +33,9 @@ class BaseIndexer implements Indexer {
     private Path baseDir_
     private Path reportsDir_
     private Path output_
+    
+    // The design of Modal Dialog to be genereted in the format of
+    private ModalDesign modalDesign = ModalDesign.CAROUSEL   // or ModalDesign.PARALLEL
     
     @Override
     Path getOutput() {
@@ -123,12 +127,19 @@ class BaseIndexer implements Indexer {
         
         def generateHtmlDivsAsModal = { RepositoryRoot rp ->
             // generate HTML <div> tags as Modal window
-            def htmlVisitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
-            htmlVisitor.setReportsAccessor(reportsAccessor)
-            if (vtLogger_ != null) {
-                htmlVisitor.setVisualTestingLogger(vtLogger_)
+            def visitor
+            if (modalDesign == ModalDesign.CAROUSEL) {
+                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
+            } else if (modalDesign == ModalDesign.PARALLEL) {
+                visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(delegate)
+            } else {
+                throw new IllegalStateException("unexpected value of modalDesign ${modalDesign}")
             }
-            RepositoryWalker.walkRepository(repoRoot, htmlVisitor)
+            visitor.setReportsAccessor(reportsAccessor)
+            if (vtLogger_ != null) {
+                visitor.setVisualTestingLogger(vtLogger_)
+            }
+            RepositoryWalker.walkRepository(repoRoot, visitor)
         }
         generateHtmlDivsAsModal.delegate = markupBuilder
         
@@ -136,12 +147,12 @@ class BaseIndexer implements Indexer {
         def generateJsAsBootstrapTreeviewData = { RepositoryRoot rp ->
             // generate the data for Bootstrap Treeview
             StringWriter jsonSnippet = new StringWriter()
-            def jsonVisitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
-            jsonVisitor.setReportsAccessor(reportsAccessor)
+            def visitor = new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+            visitor.setReportsAccessor(reportsAccessor)
             if (vtLogger_ != null) {
-                jsonVisitor.setVisualTestingLogger(vtLogger_)
+                visitor.setVisualTestingLogger(vtLogger_)
             }
-            RepositoryWalker.walkRepository(repoRoot, jsonVisitor)
+            RepositoryWalker.walkRepository(repoRoot, visitor)
             //
             delegate.script(['type':'text/javascript']) {
                 delegate.mkp.yieldUnescaped('''
@@ -257,5 +268,12 @@ modalize();
                 generateJsAsBootstrapTreeviewData(repoRoot)
             }
         }
+    }
+    
+    
+    
+    enum ModalDesign {
+        CAROUSEL,
+        PARALLEL
     }
 }

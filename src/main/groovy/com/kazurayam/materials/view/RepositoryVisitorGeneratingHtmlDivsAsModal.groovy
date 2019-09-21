@@ -39,6 +39,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                        
     protected MarkupBuilder mkbuilder
     protected ReportsAccessor reportsAccessor
+    protected ComparisonResultBundle comparisonResultBundle_
     
     protected static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
@@ -48,7 +49,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     protected String classShortName = Helpers.getClassShortName(
                             RepositoryVisitorGeneratingHtmlDivsAsModal.class)
     
-    private ComparisonResultBundle comparisonResultBundle_
     private PathResolutionLogBundleCache pathResolutionLogBundleCache_
     
     /*
@@ -204,7 +204,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     }
 
     /**
-     * This method is supposed to be overridden for various presentations of image differences
+     * generate HTML <div>s which presents 3 images in Carousel format
      */
     protected void generateImgTags(Material mate) {
         if (this.comparisonResultBundle_ != null &&
