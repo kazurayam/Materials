@@ -288,6 +288,17 @@ modalize();
                 script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'], '')
                 //
                 generateJsAsBootstrapTreeviewData(repoRoot)
+                
+                // scroll div.modal-body to the elected element
+                // TODO a lot yet
+                script(['type':'text/javascript'],'''
+                    $(function() {
+                        $("#-46441868").on('shown.bs.modal', function (e) {
+                            // console.log("shown.bs.modal event was fired for -46441868");
+                            $(this).find("div.modal-body").scrollTop(400);
+                        });
+                    });
+                    ''');
             }
         }
     }
