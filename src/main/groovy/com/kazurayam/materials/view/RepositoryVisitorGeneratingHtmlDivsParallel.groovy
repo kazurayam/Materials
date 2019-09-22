@@ -23,6 +23,11 @@ class RepositoryVisitorGeneratingHtmlDivsParallel
 
     String bootstrapModalSize = 'modal-xl'
     
+    /**
+     * Constructor
+     * 
+     * @param mkbuilder
+     */
     RepositoryVisitorGeneratingHtmlDivsParallel(MarkupBuilder mkbuilder) {
         super(mkbuilder)
     }

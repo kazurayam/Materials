@@ -55,7 +55,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * class name which determins the width of Bootstrap Modal window
      */
     protected String bootstrapModalSize = 'modal-lg'  // 'modal-sm', '', 'modal-lg', 'modal-xl'
-    
+    /**
+     * Constructor
+     * 
+     * @param mkbuilder
+     */
     RepositoryVisitorGeneratingHtmlDivsAsModal(MarkupBuilder mkbuilder) {
         Objects.requireNonNull(mkbuilder, "mkbuilder must not be null")
         this.mkbuilder = mkbuilder
@@ -122,7 +126,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     }
     
 
-    private void visitMaterialAction(Material material) {
+    def visitMaterialAction = { Material material ->
         Objects.requireNonNull(material, "material must not be null")
         mkbuilder.div(['id': material.hashCode(), 'class':'modal fade']) {
             mkbuilder.div(['class':"modal-dialog ${bootstrapModalSize}", 'role':'document']) {
@@ -139,7 +143,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
                         // Close button
                         mkbuilder.button(['type':'button', 'class':'btn btn-primary',
                             'data-dismiss':'modal'], 'Close')
-                        anchorToReport(material)
+                        this.anchorToReport(material)
                     }
                 }
             }
@@ -150,7 +154,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * 
      * @param mate
      */
-    private void markupInModalWindowAction(Material mate) {
+    def markupInModalWindowAction = { Material mate ->
         switch (mate.getFileType()) {
             case FileType.BMP:
             case FileType.GIF:
@@ -273,7 +277,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * @param builder
      * @param material
      */
-    private void generateAnchorsToOrigins(MarkupBuilder builder, Material material) {
+    protected void generateAnchorsToOrigins(MarkupBuilder builder, Material material) {
         String originHref = this.getOriginHref(material)
         if (originHref != null) {
             builder.a([
@@ -303,7 +307,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         } else {
             String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
             logger_.warn(msg)
-            //vtLogger_.info(msg)
+            vtLogger_.info(msg)
         }
     }
 
@@ -312,7 +316,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * @param material
      * @return
      */
-    private String getOriginHref(Material material) {
+    protected String getOriginHref(Material material) {
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
@@ -425,7 +429,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         }
     }
     
-    private void anchorToReport(Material mate) {
+    protected void anchorToReport(Material mate) {
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = null
         Objects.requireNonNull(reportsAccessor , this.class.getSimpleName() + "#anchorToReport reportsAccessor_ must not be null")
@@ -448,10 +452,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
             vtLogger_.info(msg)
         }
     }
-    
 
-     
-    
     /**
      * This is a cache of PathResolutionLogBundle object keyed with the path of bundleFile.
      * 

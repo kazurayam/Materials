@@ -68,7 +68,8 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             Path output = materialsDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-            RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)
+            //
+            RepositoryVisitorGeneratingHtmlDivsParallel visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null
@@ -95,11 +96,12 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             writer.flush()
         then:
             Files.exists(output)
+        /*
         when:
             String html = output.toFile().text
         then:
             html.contains('Origin')
-
+         */
         /* In order to see "Back origin" and "Forth origin", visitor.visitMaterial(mate) is not enough
          * we need to visit the "Materials" directory as a whole.
         when:

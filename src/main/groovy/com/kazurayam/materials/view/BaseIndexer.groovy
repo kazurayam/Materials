@@ -27,15 +27,15 @@ import groovy.xml.MarkupBuilder
  */
 class BaseIndexer implements Indexer {
     
-    static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)
-    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
+    protected static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)
+    protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private Path baseDir_
     private Path reportsDir_
     private Path output_
     
     // The design of Modal Dialog to be genereted in the format of
-    private ModalDesign modalDesign = ModalDesign.CAROUSEL   // or ModalDesign.PARALLEL
+    protected ModalDesign modalDesign = ModalDesign.CAROUSEL   // or ModalDesign.PARALLEL
     
     @Override
     Path getOutput() {
@@ -125,13 +125,13 @@ class BaseIndexer implements Indexer {
                         repoRoot.getBaseDir().normalize().toAbsolutePath()).
                             toString()
         
-        def generateHtmlDivsAsModal = { RepositoryRoot rp ->
+        def generateHtmlDivs = { RepositoryRoot rp ->
             // generate HTML <div> tags as Modal window
             def visitor
             if (modalDesign == ModalDesign.CAROUSEL) {
-                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(delegate)
+                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)   // was (delegate). was it correct? I doubt it.
             } else if (modalDesign == ModalDesign.PARALLEL) {
-                visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(delegate)
+                visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(markupBuilder)
             } else {
                 throw new IllegalStateException("unexpected value of modalDesign ${modalDesign}")
             }
@@ -141,7 +141,7 @@ class BaseIndexer implements Indexer {
             }
             RepositoryWalker.walkRepository(repoRoot, visitor)
         }
-        generateHtmlDivsAsModal.delegate = markupBuilder
+        generateHtmlDivs.delegate = markupBuilder
         
         // closure which generates javascript code for utilizing Bootstrap Treeview
         def generateJsAsBootstrapTreeviewData = { RepositoryRoot rp ->
@@ -250,7 +250,7 @@ modalize();
                     div(['id':'tree'], '')
                     div(['id':'footer'], '')
                     div(['id':'modal-windows']) {
-                        generateHtmlDivsAsModal()
+                        generateHtmlDivs()
                     }
                 }
                 mkp.comment('SCRIPTS')
@@ -272,7 +272,7 @@ modalize();
     
     
     
-    enum ModalDesign {
+    protected enum ModalDesign {
         CAROUSEL,
         PARALLEL
     }
