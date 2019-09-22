@@ -106,7 +106,7 @@ task pinpoint(type: Test) {
     //include "**/HelpersSpec.class"
     //include "**/imagedifference/ComparisonResultBundleSpec.class"
     //include "**/imagedifference/ComparisonResultSpec.class"
-    include "**/imagedifference/imagedifference/EspionageSpec.class"
+    //include "**/imagedifference/imagedifference/EspionageSpec.class"
     //include "**/imagedifference/ImageCollectionDifferSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
@@ -149,7 +149,7 @@ task pinpoint(type: Test) {
     //include "**/view/JUnitReportWrapperSpec.class"
     include "**/view/ParallelIndexerSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsParallelSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsParallelSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}

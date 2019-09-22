@@ -94,7 +94,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {}
     
     /**
-     * Check if comarison-result-bundle.json file is there in the TCaseResult directory.
+     * Check if comparison-result-bundle.json file is there in the TCaseResult directory.
      * If found, instanciate a ComparisonResultBundle object of the TestCase from the file.
      */
     @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
@@ -129,7 +129,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
     def visitMaterialAction = { Material material ->
         Objects.requireNonNull(material, "material must not be null")
         mkbuilder.div(['id': material.hashCode(), 'class':'modal fade']) {
-            mkbuilder.div(['class':"modal-dialog ${bootstrapModalSize}", 'role':'document']) {
+            mkbuilder.div(['class':"modal-dialog ${bootstrapModalSize} modal-dialog-scrollable", 'role':'document']) {
                 mkbuilder.div(['class':'modal-content']) {
                     mkbuilder.div(['class':'modal-header']) {
                         mkbuilder.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())

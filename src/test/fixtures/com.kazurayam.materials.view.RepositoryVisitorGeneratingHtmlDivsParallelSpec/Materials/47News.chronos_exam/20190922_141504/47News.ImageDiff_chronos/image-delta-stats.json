@@ -1,0 +1,45 @@
+{
+    "storageScannerOptions": {
+        "shiftCriteriaPercentageBy": 0.0,
+        "filterDataLessThan": 0.0,
+        "maximumNumberOfImageDeltas": 10,
+        "onlySince": "19990101_000000",
+        "onlySinceInclusive": true,
+        "probability": 0.95,
+        "projectDirectory": "",
+        "previousImageDeltaStats": "/Users/urayamakazuaki/katalon-workspace/VT_47News"
+    },
+    "imageDeltaStatsEntries": [
+        {
+            "TSuiteName": "47News.chronos_capture",
+            "materialStatsList": [
+                {
+                    "path": "47News.visitSite/TOP.png",
+                    "degree": 1,
+                    "sum": 42.14,
+                    "mean": 42.14,
+                    "variance": 0.0,
+                    "standardDeviation": 0.0,
+                    "tDistribution": 0.0,
+                    "confidenceInterval": {
+                        "lowerBound": 42.14,
+                        "uppderBound": 42.14,
+                        "confidenceLevel": 0.95
+                    },
+                    "criteriaPercentage": 42.15,
+                    "data": [
+                        42.14
+                    ],
+                    "imageDeltaList": [
+                        {
+                            "a": "20190922_141500",
+                            "b": "20190921_173559",
+                            "d": 42.14,
+                            "cached": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

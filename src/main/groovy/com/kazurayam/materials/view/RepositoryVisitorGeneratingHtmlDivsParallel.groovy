@@ -41,6 +41,25 @@ class RepositoryVisitorGeneratingHtmlDivsParallel
             // This material is a diff image, so render it in Carousel format of Back > Diff > Forth
             ComparisonResult cr = comparisonResultBundle_.get(mate.getPath())
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
+            mkbuilder.div(['class':'container-fluid']) {
+                mkbuilder.div(['class':'row']) {
+                    mkbuilder.div(['class':'col']) {
+                        mkbuilder.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
+                        mkbuilder.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                            'class': 'img-fluid d-block w-100',
+                            'style': 'border: 1px solid #ddd',
+                            'alt' : "Back"])
+                    }
+                    mkbuilder.div(['class':'col']) {
+                        mkbuilder.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
+                        mkbuilder.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                            'class': 'img-fluid d-block w-100',
+                            'style': 'border: 1px solid #ddd',
+                            'alt' : "Forth"])
+                    }
+                }
+            }
+            /*
             mkbuilder.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 mkbuilder.div(['class':'carousel-inner']) {
                     mkbuilder.div(['class':'carousel-item']) {
@@ -90,6 +109,7 @@ class RepositoryVisitorGeneratingHtmlDivsParallel
                     }
                 }
             }
+             */
         } else {
             mkbuilder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
                 'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])

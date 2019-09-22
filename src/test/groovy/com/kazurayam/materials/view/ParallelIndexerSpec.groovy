@@ -44,7 +44,8 @@ class ParallelIndexerSpec extends Specification {
         //if (specOutputDir.toFile().exists()) {
         //    Helpers.deleteDirectoryContents(specOutputDir)
         //}
-        fixtureDir = projectDir.resolve('src').resolve('test').resolve('fixture')
+        fixtureDir = Paths.get(
+            "./src/test/fixtures/com.kazurayam.materials.view.RepositoryVisitorGeneratingHtmlDivsParallelSpec")
     }
     def setup() {}
     def cleanup() {}
@@ -82,7 +83,7 @@ class ParallelIndexerSpec extends Specification {
         html.contains('<div id="modal-windows"')
         html.contains('class="modal fade"')
         //html.contains('<div class="modal-dialog modal-lg"')
-        html.contains('<div class="modal-dialog modal-xl"')
+        html.contains('<div class="modal-dialog modal-xl')
         html.contains('<div class="modal-content"')
         html.contains('<div class="modal-header"')
         html.contains('<p class="modal-title"')
