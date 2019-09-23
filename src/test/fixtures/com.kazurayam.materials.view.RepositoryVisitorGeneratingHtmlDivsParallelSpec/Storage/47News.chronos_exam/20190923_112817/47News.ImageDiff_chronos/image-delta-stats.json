@@ -1,0 +1,108 @@
+{
+    "storageScannerOptions": {
+        "shiftCriteriaPercentageBy": 0.0,
+        "filterDataLessThan": 0.0,
+        "maximumNumberOfImageDeltas": 10,
+        "onlySince": "19990101_000000",
+        "onlySinceInclusive": true,
+        "probability": 0.95,
+        "projectDirectory": "",
+        "previousImageDeltaStats": "/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage/47News.chronos_exam/20190923_112139/47News.ImageDiff_chronos/image-delta-stats.json"
+    },
+    "imageDeltaStatsEntries": [
+        {
+            "TSuiteName": "47News.chronos_capture",
+            "materialStatsList": [
+                {
+                    "path": "47News.visitSite/TOP.highlight",
+                    "degree": 0,
+                    "sum": 0.0,
+                    "mean": 0.0,
+                    "variance": 0.0,
+                    "standardDeviation": 0.0,
+                    "tDistribution": 0.0,
+                    "confidenceInterval": {
+                        "lowerBound": 0.0,
+                        "uppderBound": 0.0,
+                        "confidenceLevel": 0.0
+                    },
+                    "criteriaPercentage": 0.00,
+                    "data": [
+                        
+                    ],
+                    "imageDeltaList": [
+                        
+                    ]
+                },
+                {
+                    "path": "47News.visitSite/TOP.png",
+                    "degree": 7,
+                    "sum": 187.57,
+                    "mean": 26.795714285714286,
+                    "variance": 3.223144571195521,
+                    "standardDeviation": 1.7953118311857472,
+                    "tDistribution": 1.9431802805661913,
+                    "confidenceInterval": {
+                        "lowerBound": 25.477141926612408,
+                        "uppderBound": 28.114286644816165,
+                        "confidenceLevel": 0.95
+                    },
+                    "criteriaPercentage": 28.12,
+                    "data": [
+                        7.07,
+                        23.28,
+                        10.6,
+                        33.25,
+                        31.48,
+                        39.75,
+                        42.14
+                    ],
+                    "imageDeltaList": [
+                        {
+                            "a": "20190923_112816",
+                            "b": "20190923_112138",
+                            "d": 7.07,
+                            "cached": false
+                        },
+                        {
+                            "a": "20190923_112138",
+                            "b": "20190923_110215",
+                            "d": 23.28,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_110215",
+                            "b": "20190923_105919",
+                            "d": 10.60,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_105919",
+                            "b": "20190923_104122",
+                            "d": 33.25,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_104122",
+                            "b": "20190923_093332",
+                            "d": 31.48,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_093332",
+                            "b": "20190922_141500",
+                            "d": 39.75,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190922_141500",
+                            "b": "20190921_173559",
+                            "d": 42.14,
+                            "cached": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

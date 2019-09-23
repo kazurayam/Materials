@@ -1,0 +1,62 @@
+{
+    "ComparisonResultBundle": [
+        {
+            "ComparisonResult": {
+                "expectedMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials/47News.chronos_capture/20190923_112138/47News.visitSite/TOP.png",
+                        "hrefRelativeToRepositoryRoot": "47News.chronos_capture/20190923_112138/47News.visitSite/TOP.png",
+                        "lastModified": "2019-09-23T02:22:27",
+                        "description": "20190923_112138"
+                    },
+                    "highlight": [
+                        {
+                            "id": "ranking",
+                            "x": 16,
+                            "y": 4087,
+                            "width": 468,
+                            "height": 85
+                        }
+                    ]
+                },
+                "actualMaterial": {
+                    "Material": {
+                        "url": "null",
+                        "suffix": "",
+                        "fileType": {
+                            "FileType": {
+                                "extension": "png",
+                                "mimeTypes": [
+                                    "image/png"
+                                ]
+                            }
+                        },
+                        "path": "/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials/47News.chronos_capture/20190923_112816/47News.visitSite/TOP.png",
+                        "hrefRelativeToRepositoryRoot": "47News.chronos_capture/20190923_112816/47News.visitSite/TOP.png",
+                        "lastModified": "2019-09-23T02:29",
+                        "description": "20190923_112816"
+                    }
+                },
+                "diffMaterial": {
+                    "Material": {
+                        "path": "/Users/urayamakazuaki/katalon-workspace/VT_47News/Materials/47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png",
+                        "hrefRelativeToRepositoryRoot": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png"
+                    }
+                },
+                "criteriaPercentage": 28.12,
+                "imagesAreSimilar": true,
+                "diffRatio": 7.07
+            }
+        }
+    ]
+}

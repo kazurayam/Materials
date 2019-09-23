@@ -188,6 +188,26 @@ modalize();
         }
         generateJsAsBootstrapTreeviewData.delegate = markupBuilder  // important!
         
+        
+        // closure which generates javascript code which are Bootstrap4 Modal Event Handler
+        // to scroll the modal-body to the highlighted web element
+        def generateJsAsModalEventHandler = { RepositoryRoot rp ->
+            StringWriter sw = new StringWriter()
+            def visitor = new RepositoryVisitorGeneratingModalEventHandler(sw)
+            visitor.setReportsAccessor(reportsAccessor)
+            if (vtLogger_ != null) {
+                visitor.setVisualTestingLogger(vtLogger_)
+            }
+            RepositoryWalker.walkRepository(repoRoot, visitor)
+            delegate.script(['type':'text/javascript'],
+                    //$("#-46441868").on('shown.bs.modal', function (e) {
+                    //    $(this).find("div.modal-body").scrollTop(4087);
+                    //});
+                    // ...
+                    sw.toString());
+        }
+        generateJsAsModalEventHandler.delegate = markupBuilder
+        
         // now drive the MarkeupBuilder
         markupBuilder.doubleQuotes = true   // use "value" rather than 'value'
         markupBuilder.html {
@@ -197,7 +217,7 @@ modalize();
                 meta(['charset':'utf-8'])
                 meta(['name':'descrition', 'content':''])
                 meta(['name':'author', 'content':''])
-                meta(['name':'viewport', 'content':'width=device-width, iniital-scale=1, shrink-to-fit=no'])
+                meta(['name':'viewport', 'content':'width=device-width, initial-scale=1, shrink-to-fit=no'])
                 link(['rel':'stylesheet', 'href':''])
                 mkp.comment(''' [if lt IE 9]
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -289,16 +309,8 @@ modalize();
                 //
                 generateJsAsBootstrapTreeviewData(repoRoot)
                 
-                // scroll div.modal-body to the elected element
-                // TODO a lot yet
-                script(['type':'text/javascript'],'''
-                    $(function() {
-                        $("#-46441868").on('shown.bs.modal', function (e) {
-                            // console.log("shown.bs.modal event was fired for -46441868");
-                            $(this).find("div.modal-body").scrollTop(400);
-                        });
-                    });
-                    ''');
+                // JavaScript on Bootstrap4 Modal on shown to scroll div.modal-body to the elected element
+                generateJsAsModalEventHandler(repoRoot)
             }
         }
     }

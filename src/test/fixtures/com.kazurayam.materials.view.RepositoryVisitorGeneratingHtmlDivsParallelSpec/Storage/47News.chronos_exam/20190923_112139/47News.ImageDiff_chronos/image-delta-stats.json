@@ -1,0 +1,80 @@
+{
+    "storageScannerOptions": {
+        "shiftCriteriaPercentageBy": 0.0,
+        "filterDataLessThan": 0.0,
+        "maximumNumberOfImageDeltas": 10,
+        "onlySince": "19990101_000000",
+        "onlySinceInclusive": true,
+        "probability": 0.95,
+        "projectDirectory": "",
+        "previousImageDeltaStats": "/Users/urayamakazuaki/katalon-workspace/VT_47News/Storage/47News.chronos_exam/20190923_110216/47News.ImageDiff_chronos/image-delta-stats.json"
+    },
+    "imageDeltaStatsEntries": [
+        {
+            "TSuiteName": "47News.chronos_capture",
+            "materialStatsList": [
+                {
+                    "path": "47News.visitSite/TOP.png",
+                    "degree": 6,
+                    "sum": 180.5,
+                    "mean": 30.083333333333332,
+                    "variance": 2.760838325530802,
+                    "standardDeviation": 1.661577059763044,
+                    "tDistribution": 2.0150483736252975,
+                    "confidenceInterval": {
+                        "lowerBound": 28.716453491605822,
+                        "uppderBound": 31.450213175060842,
+                        "confidenceLevel": 0.95
+                    },
+                    "criteriaPercentage": 31.46,
+                    "data": [
+                        23.28,
+                        10.6,
+                        33.25,
+                        31.48,
+                        39.75,
+                        42.14
+                    ],
+                    "imageDeltaList": [
+                        {
+                            "a": "20190923_112138",
+                            "b": "20190923_110215",
+                            "d": 23.28,
+                            "cached": false
+                        },
+                        {
+                            "a": "20190923_110215",
+                            "b": "20190923_105919",
+                            "d": 10.60,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_105919",
+                            "b": "20190923_104122",
+                            "d": 33.25,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_104122",
+                            "b": "20190923_093332",
+                            "d": 31.48,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190923_093332",
+                            "b": "20190922_141500",
+                            "d": 39.75,
+                            "cached": true
+                        },
+                        {
+                            "a": "20190922_141500",
+                            "b": "20190921_173559",
+                            "d": 42.14,
+                            "cached": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
