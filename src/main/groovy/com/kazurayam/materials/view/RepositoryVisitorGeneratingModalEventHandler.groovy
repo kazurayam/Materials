@@ -19,7 +19,7 @@ import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
 
 class RepositoryVisitorGeneratingModalEventHandler 
-        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtended {
             
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingModalEventHandler.class)
     
@@ -30,14 +30,20 @@ class RepositoryVisitorGeneratingModalEventHandler
         super(writer)
     }
     
+	
+	// implementing RepositoryVisitorExtended ------------------------------------
+	@Override
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
         this.reportsAccessor_ = reportsAccessor
     }
     
+	@Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
     }
     
+	// implementing RepositoryVisitor -------------------------------------------
+	
     @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
         pw_.print("\n")
         pw_.println('        $(function() {')

@@ -35,7 +35,7 @@ import groovy.xml.XmlUtil
  * @author kazurayam
  */
 class RepositoryVisitorGeneratingHtmlDivsAsModal 
-                    implements RepositoryVisitor {
+                    implements RepositoryVisitor, RepositoryVisitorExtended {
                        
     protected MarkupBuilder mkbuilder
     protected ReportsAccessor reportsAccessor
@@ -67,18 +67,20 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
         this.pathResolutionLogBundleCache_ = new PathResolutionLogBundleCache()
     }
     
+	// implements RepositoryVisitorExtended -----------------------------------
+	@Override
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
         this.reportsAccessor = reportsAccessor    
     }
     
+	@Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
         this.pathResolutionLogBundleCache_.setVisualTestingLogger(vtLogger_)
     }
     
-    /*
-     * implementing methods required by RepositoryVisitor
-     */
+    // implementing methods required by RepositoryVisitor ---------------------
+	
     @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
         mkbuilder.mkp.comment "here is inserted the output of ${classShortName}"
         return RepositoryVisitResult.SUCCESS

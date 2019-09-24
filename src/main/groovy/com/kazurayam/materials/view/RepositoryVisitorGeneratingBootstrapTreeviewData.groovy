@@ -25,7 +25,7 @@ import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
  *
  */
 class RepositoryVisitorGeneratingBootstrapTreeviewData
-        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor {
+        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtended {
      
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
      
@@ -41,14 +41,19 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          super(writer)
      }
      
+	 // implements RepositoryVisitorExtended ----------------------------
+	 @Override
      void setReportsAccessor(ReportsAccessor reportsAccessor) {
          this.reportsAccessor_ = reportsAccessor    
      }
      
+	 @Override
      void setVisualTestingLogger(VisualTestingLogger vtLogger) {
          this.vtLogger_ = vtLogger
      }
      
+	 // implements RepositoryVisitor -----------------------------------
+	 
      @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
          tSuiteResultCount = 0
          pw_.print('[')
