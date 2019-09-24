@@ -109,7 +109,14 @@ abstract class AbstractIndexer implements Indexer {
 					RepositoryRoot repositoryRoot,
 					ReportsAccessor reportsAccessor,
 					MarkupBuilder markupBuilder) {
-			
+		Objects.requireNonNull(repositoryRoot, "repositoryRoot must not be null")
+		Objects.requireNonNull(reportsAccessor, "reportsAccessor must not be null")
+		Objects.requireNonNull(markupBuilder, "markupBuilder must not be null")
+		
+		// HTML title
+		Path currDir = repositoryRoot.getBaseDir().getParent().getParent().normalize().toAbsolutePath()
+		String titleStr = currDir.relativize(repositoryRoot.getBaseDir().normalize().toAbsolutePath()).toString()
+		
 		def closureHD = htmlDivsGenerator(repositoryRoot, reportsAccessor)
 		closureHD.delegate = markupBuilder
 		
@@ -123,7 +130,117 @@ abstract class AbstractIndexer implements Indexer {
 		def closureJSMEH = jsAsModalEventHandlerGenerator(repositoryRoot, reportsAccessor)
 		closureJSMEH.delegate = markupBuilder
 		
-		
+		// now we drive the MarkupBuilder to generate HTML
+		markupBuilder.doubleQuotes = true	// use "value" rather than 'value'
+		markupBuilder.html {
+			head {
+				meta(['http-equiv':'X-UA-Compatible', 'content': 'IE=edge'])
+				title "${titleStr}"
+				meta(['charset':'utf-8'])
+				meta(['name':'descrition', 'content':''])
+				meta(['name':'author', 'content':''])
+				meta(['name':'viewport', 'content':'width=device-width, initial-scale=1, shrink-to-fit=no'])
+				link(['rel':'stylesheet', 'href':''])
+				mkp.comment(''' [if lt IE 9]
+<script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif] ''')
+				link(['rel':'shortcut icon', 'href':''])
+				
+				/* Bootstrap 4.1.1 -> 4.3.1
+				link(['href':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',
+					'rel':'stylesheet',
+					'integrity':'sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB',
+					'crossorigin':'anonymous'
+					])
+				 */
+				link(['rel':'stylesheet',
+					'href':'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
+					'integrity':'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
+					'crossorigin':'anonymous'
+					])
+				
+				link(['href':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css',
+					'rel':'stylesheet'
+					])
+				style {
+					mkp.yieldUnescaped('''
+.list-group-item > .badge {
+    float: right;
+}
+''')
+				}
+				// style for Carousel
+				style {
+					mkp.yieldUnescaped('''
+     .carousel-item img {
+         margin-top: 30px;
+     }
+     .carousel-control-next, .carousel-control-prev {
+         align-items: flex-start;
+     }
+     .carousel-control-next-icon, .carousel-control-prev-icon {
+         background-color: #666;
+     }
+     .carousel-caption {
+         position: absolute;
+         top: -28px;
+         bottom: initial;
+         padding-top: 0px;
+         padding-bottom: 0px;
+     }
+     .carousel-caption p {
+         color: #999;
+     }
+''')
+				}
+			}
+			body {
+				div(['class':'container']) {
+					h3 "${titleStr}"
+					div(['id':'tree'], '')
+					div(['id':'footer'], '')
+					div(['id':'modal-windows']) {
+						
+						// generate <div> elements as Modal for each materials
+						closureHD.call()
+						
+					}
+				}
+				mkp.comment('SCRIPTS')
+				script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+						'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
+						'crossorigin':'anonymous'], '')
+				script(['src':'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
+						'integrity':'sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49',
+						'crossorigin':'anonymous'], '')
+				script(['src':'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
+						'integrity':'sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
+						'crossorigin':'anonymous'], '')
+				
+				/* once tried to use the js of Bootstrap 4.3.1 but it did not worked. The js of 4.1.1 worked. Strange!
+				script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+						'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
+						'crossorigin':'anonymous'], '')
+				script(['src':'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',
+						'integrity':'sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1',
+						'crossorigin':'anonymous'], '')
+				script(['src':'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',
+						'integrity':'sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM',
+						'crossorigin':'anonymous'], '')
+				 */
+				
+				script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'], '')
+				
+				// generate <script type="text/javascript"> that 
+				// drives Bootstrap Treeview 
+				closureJSTD.call()
+				
+				// generate <script type="text/javascript"> that
+				// registers event handlers for Bootstrap4 Modal on shown events
+				closureJSMEH.call()
+			}
+		}
 	}
 	
 	/**
