@@ -60,8 +60,8 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
             ms.restore(mr, [
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190921_173011')),
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190921_173559')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190923_112138')),
+                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190923_112816')),
             ])
             ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
@@ -77,7 +77,7 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             mr.scan()   // refresh MaterialRepository's internal data structure with the updated file tree on disk
             TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
                                     new TSuiteName('Test Suites/47News/chronos_capture'),
-                                    new TSuiteTimestamp('20190921_173559')))
+                                    new TSuiteTimestamp('20190923_112816')))
         then:
             tsr != null
         when:

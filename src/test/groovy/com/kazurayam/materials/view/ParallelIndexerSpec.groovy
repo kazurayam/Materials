@@ -82,7 +82,7 @@ class ParallelIndexerSpec extends Specification {
         // div tags as Modal
         html.contains('<div id="modal-windows"')
         html.contains('class="modal fade"')
-        //html.contains('<div class="modal-dialog modal-lg"')
+        //html.contains('<div class="modal-dialog modal-lg')
         html.contains('<div class="modal-dialog modal-xl')
         html.contains('<div class="modal-content"')
         html.contains('<div class="modal-header"')
