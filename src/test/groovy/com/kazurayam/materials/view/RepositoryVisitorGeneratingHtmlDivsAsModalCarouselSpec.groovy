@@ -27,9 +27,9 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
+class RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class)
 
     // fields
     private static Path specOutputDir_
@@ -37,7 +37,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class)}")
+        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class)}")
         Files.createDirectories(specOutputDir_)
     }
     def setup() {}
@@ -66,7 +66,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalSpec extends Specification {
             Path output = materialsDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-            RepositoryVisitorGeneratingHtmlDivsAsModal visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null

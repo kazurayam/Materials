@@ -1,13 +1,13 @@
 package com.kazurayam.materials
 
-import com.kazurayam.materials.view.BaseIndexer
+import com.kazurayam.materials.view.CarouselIndexer
 
 final class IndexerFactory {
 
     private IndexerFactory() {}
     
     static Indexer newIndexer() {
-        return new BaseIndexer()
+        return new CarouselIndexer()
     }
 
     

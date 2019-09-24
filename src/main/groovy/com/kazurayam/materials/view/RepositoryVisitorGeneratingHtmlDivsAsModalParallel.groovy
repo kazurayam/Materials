@@ -12,14 +12,14 @@ import groovy.xml.MarkupBuilder
 
 import java.nio.file.Path
 
-class RepositoryVisitorGeneratingHtmlDivsParallel 
-    extends RepositoryVisitorGeneratingHtmlDivsAsModal {
+class RepositoryVisitorGeneratingHtmlDivsAsModalParallel 
+    extends RepositoryVisitorGeneratingHtmlDivsAsModalCarousel {
     
     static Logger logger_ = LoggerFactory.getLogger(
-                            RepositoryVisitorGeneratingHtmlDivsParallel.class)
+                            RepositoryVisitorGeneratingHtmlDivsAsModalParallel.class)
 
     String classShortName = Helpers.getClassShortName(
-        RepositoryVisitorGeneratingHtmlDivsParallel.class)
+        RepositoryVisitorGeneratingHtmlDivsAsModalParallel.class)
 
     String bootstrapModalSize = 'modal-xl'
     
@@ -28,7 +28,7 @@ class RepositoryVisitorGeneratingHtmlDivsParallel
      * 
      * @param mkbuilder
      */
-    RepositoryVisitorGeneratingHtmlDivsParallel(MarkupBuilder mkbuilder) {
+    RepositoryVisitorGeneratingHtmlDivsAsModalParallel(MarkupBuilder mkbuilder) {
         super(mkbuilder)
     }
     

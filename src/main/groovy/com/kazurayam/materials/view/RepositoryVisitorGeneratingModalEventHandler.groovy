@@ -19,7 +19,7 @@ import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
 
 class RepositoryVisitorGeneratingModalEventHandler 
-        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtended {
+        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtention {
             
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingModalEventHandler.class)
     

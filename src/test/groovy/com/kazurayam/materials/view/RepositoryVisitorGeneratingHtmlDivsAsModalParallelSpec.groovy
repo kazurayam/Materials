@@ -27,9 +27,9 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
+class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsParallelSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class)
 
     // fields
     private static Path specOutputDir_
@@ -39,7 +39,7 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
     // fixture methods
     def setupSpec() {
         specOutputDir_ = Paths.get(
-            "./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsParallelSpec.class)}")
+            "./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class)}")
         Files.createDirectories(specOutputDir_)
     }
     def setup() {}
@@ -69,7 +69,7 @@ class RepositoryVisitorGeneratingHtmlDivsParallelSpec extends Specification {
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             //
-            RepositoryVisitorGeneratingHtmlDivsParallel visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalParallel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null

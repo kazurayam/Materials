@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Indexer
 
 class ParallelIndexer 
-        extends BaseIndexer
+        extends CarouselIndexer
         implements Indexer {
     
     static Logger logger_ = LoggerFactory.getLogger(ParallelIndexer.class)
             
-    BaseIndexer.ModalDesign modalDesign = BaseIndexer.ModalDesign.PARALLEL
+    CarouselIndexer.ModalDesign modalDesign = CarouselIndexer.ModalDesign.PARALLEL
     
 }

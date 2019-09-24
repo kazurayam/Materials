@@ -34,20 +34,20 @@ import groovy.xml.XmlUtil
  * 
  * @author kazurayam
  */
-class RepositoryVisitorGeneratingHtmlDivsAsModal 
-                    implements RepositoryVisitor, RepositoryVisitorExtended {
+class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel 
+                    implements RepositoryVisitor, RepositoryVisitorExtention {
                        
     protected MarkupBuilder mkbuilder
     protected ReportsAccessor reportsAccessor
     protected ComparisonResultBundle comparisonResultBundle_
     
     protected static Logger logger_ = LoggerFactory.getLogger(
-                            RepositoryVisitorGeneratingHtmlDivsAsModal.class)
+                            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
     
     protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     protected String classShortName = Helpers.getClassShortName(
-                            RepositoryVisitorGeneratingHtmlDivsAsModal.class)
+                            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
     
     private PathResolutionLogBundleCache pathResolutionLogBundleCache_
     
@@ -60,7 +60,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModal
      * 
      * @param mkbuilder
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModal(MarkupBuilder mkbuilder) {
+    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(MarkupBuilder mkbuilder) {
         Objects.requireNonNull(mkbuilder, "mkbuilder must not be null")
         this.mkbuilder = mkbuilder
         this.comparisonResultBundle_ = null

@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory
 
 import groovy.xml.MarkupBuilder
 
-class ConciseIndexer extends AbstractIndexer {
+class ConciseIndexer extends IndexerBase {
 	
 	static Logger logger_ = LoggerFactory.getLogger(ConciseIndexer.class)
 
 	@Override
-	RepositoryVisitorExtended createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb) {
-		return new RepositoryVisitorGeneratingHtmlDivsParallel(mb)
+	RepositoryVisitorExtention createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb) {
+		return new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(mb)
 	}
 
 }

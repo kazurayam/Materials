@@ -27,9 +27,9 @@ import groovy.xml.MarkupBuilder
  * 
  * @author kazurayam
  */
-abstract class AbstractIndexer implements Indexer {
+abstract class IndexerBase implements Indexer {
 	
-	protected static Logger logger_ = LoggerFactory.getLogger(AbstractIndexer.class)
+	protected static Logger logger_ = LoggerFactory.getLogger(IndexerBase.class)
 	protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
 	
 	private Path baseDir_
@@ -255,7 +255,7 @@ abstract class AbstractIndexer implements Indexer {
 					RepositoryRoot repositoryRoot,
 					ReportsAccessor reportsAccessor) {
 		{ ->
-			RepositoryVisitorExtended visitor = 
+			RepositoryVisitorExtention visitor = 
 					createRepositoryVisitorGeneratingHtmlDivs(delegate)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
@@ -269,7 +269,7 @@ abstract class AbstractIndexer implements Indexer {
 	 * @param mb
 	 * @return
 	 */
-	abstract protected RepositoryVisitorExtended createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb)
+	abstract protected RepositoryVisitorExtention createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb)
 	
 	
 	/**
@@ -283,7 +283,7 @@ abstract class AbstractIndexer implements Indexer {
 					ReportsAccessor reportsAccessor) {
 		{ ->
 			StringWriter jsonSnippet = new StringWriter()
-			RepositoryVisitorExtended visitor =
+			RepositoryVisitorExtention visitor =
 				new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
@@ -337,7 +337,7 @@ modalize();
 					ReportsAccessor reportsAccessor) {
 		{ ->
 			StringWriter sw = new StringWriter()
-			RepositoryVisitorExtended visitor = new RepositoryVisitorGeneratingModalEventHandler(sw)
+			RepositoryVisitorExtention visitor = new RepositoryVisitorGeneratingModalEventHandler(sw)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
 			RepositoryWalker.walkRepository(repositoryRoot, visitor)

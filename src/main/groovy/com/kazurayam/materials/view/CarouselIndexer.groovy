@@ -25,9 +25,9 @@ import groovy.xml.MarkupBuilder
  * @author kazurayam
  *
  */
-class BaseIndexer implements Indexer {
+class CarouselIndexer implements Indexer {
     
-    protected static Logger logger_ = LoggerFactory.getLogger(BaseIndexer.class)
+    protected static Logger logger_ = LoggerFactory.getLogger(CarouselIndexer.class)
     protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     private Path baseDir_
@@ -129,9 +129,9 @@ class BaseIndexer implements Indexer {
             // generate HTML <div> tags as Modal window
             def visitor
             if (modalDesign == ModalDesign.CAROUSEL) {
-                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModal(markupBuilder)   // was (delegate). was it correct? I doubt it.
+                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(markupBuilder)   // was (delegate). was it correct? I doubt it.
             } else if (modalDesign == ModalDesign.PARALLEL) {
-                visitor = new RepositoryVisitorGeneratingHtmlDivsParallel(markupBuilder)
+                visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(markupBuilder)
             } else {
                 throw new IllegalStateException("unexpected value of modalDesign ${modalDesign}")
             }

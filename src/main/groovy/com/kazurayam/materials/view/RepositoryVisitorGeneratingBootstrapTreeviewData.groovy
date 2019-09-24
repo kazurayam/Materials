@@ -25,7 +25,7 @@ import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
  *
  */
 class RepositoryVisitorGeneratingBootstrapTreeviewData
-        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtended {
+        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtention {
      
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
      
