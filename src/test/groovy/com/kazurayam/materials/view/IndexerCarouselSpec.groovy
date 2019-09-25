@@ -28,9 +28,9 @@ import com.kazurayam.materials.stats.StorageScanner
 
 import spock.lang.Specification
 
-class CarouselIndexerSpec extends Specification {
+class IndexerCarouselSpec extends Specification {
     
-    static Logger logger_ = LoggerFactory.getLogger(CarouselIndexerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerCarouselSpec.class)
     
     // fields
     static Path specOutputDir
@@ -40,7 +40,7 @@ class CarouselIndexerSpec extends Specification {
     def setupSpec() {
         Path projectDir = Paths.get('.')
         Path testOutputDir = projectDir.resolve('./build/tmp/testOutput')
-        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(CarouselIndexerSpec.class)}")
+        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(IndexerCarouselSpec.class)}")
         //if (specOutputDir.toFile().exists()) {
         //    Helpers.deleteDirectoryContents(specOutputDir)
         //}
@@ -325,7 +325,7 @@ class CarouselIndexerSpec extends Specification {
     private Indexer makeIndexer(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
-        Indexer indexer = new CarouselIndexer()
+        Indexer indexer = new IndexerCarousel()
         indexer.setBaseDir(materialsDir)
         indexer.setReportsDir(reportsDir)
         Path index = materialsDir.resolve('index.html')

@@ -13,6 +13,7 @@ import com.kazurayam.materials.Material
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
@@ -31,188 +32,34 @@ import groovy.xml.XmlUtil
 /**
  * @author kazurayam
  */
-class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel 
-                    implements RepositoryVisitor, RepositoryVisitorExtention {
+class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
+    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase
+    implements RepositoryVisitor, VTLoggerEnabled {
                        
-    protected MarkupBuilder mkbuilder_
-    protected ReportsAccessor reportsAccessor_
-    protected ComparisonResultBundle comparisonResultBundle_
-    
     protected static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
     
-    protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
-    
     protected String classShortName_ = Helpers.getClassShortName(
                             RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
-    
-    private PathResolutionLogBundleCache pathResolutionLogBundleCache_
-    
-    /*
-     * class name which determins the width of Bootstrap Modal window
-     */
-    String bootstrapModalSize = 'modal-lg'  // 'modal-sm', '', 'modal-lg', 'modal-xl'
-    
-    
-    
+
     /**
      * Constructor
      * 
      * @param mkbuilder
      */
     RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(MarkupBuilder mkbuilder) {
-        Objects.requireNonNull(mkbuilder, "mkbuilder must not be null")
-        this.mkbuilder_ = mkbuilder
-        this.comparisonResultBundle_ = null
-        this.pathResolutionLogBundleCache_ = new PathResolutionLogBundleCache()
+        super(mkbuilder)
     }
     
-	// implements RepositoryVisitorExtended -----------------------------------
-	@Override
-    void setReportsAccessor(ReportsAccessor reportsAccessor) {
-        this.reportsAccessor_ = reportsAccessor    
+    @Override String getBootstrapModalSize() {
+        return 'modal-lg'
     }
     
-	@Override
-    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-        this.vtLogger_ = vtLogger
-        this.pathResolutionLogBundleCache_.setVisualTestingLogger(vtLogger_)
-    }
-    
-    // implementing methods required by RepositoryVisitor ---------------------
-	
-    @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
-        mkbuilder_.mkp.comment "here is inserted the output of ${classShortName_}"
-        return RepositoryVisitResult.SUCCESS
-    }
-    
-    @Override RepositoryVisitResult postVisitRepositoryRoot(RepositoryRoot repoRoot) {
-        mkbuilder_.mkp.comment "end of the output of ${classShortName_}"
-        return RepositoryVisitResult.SUCCESS
-    }
-    
-    @Override RepositoryVisitResult preVisitTSuiteResult(TSuiteResult tSuiteResult) {}
-    
-    @Override RepositoryVisitResult postVisitTSuiteResult(TSuiteResult tSuiteResult) {}
-    
-    /**
-     * Check if comparison-result-bundle.json file is there in the TCaseResult directory.
-     * If found, instanciate a ComparisonResultBundle object of the TestCase from the file.
-     */
-    @Override RepositoryVisitResult preVisitTCaseResult(TCaseResult tCaseResult) {
-        Material mate =
-            tCaseResult.getMaterial(Paths.get(ComparisonResultBundle.SERIALIZED_FILE_NAME))
-        if (mate != null) {
-            Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
-            String jsonText = mate.getPath().toFile().text
-            this.comparisonResultBundle_ = new ComparisonResultBundle(baseDir, jsonText)
-            logger_.debug("#preVisitTCaseResult comparisonResultBundle_ is set to be ${comparisonResultBundle_}")
-        }
-        return RepositoryVisitResult.SUCCESS
-    }
-
-    @Override RepositoryVisitResult postVisitTCaseResult(TCaseResult tCaseResult) {
-        this.comparisonResultBundle_ = null
-        logger_.info("#postVisitTCaseResult comparisonResultBundle_ is set to be null")
-        return RepositoryVisitResult.SUCCESS
-    }
-    
-    @Override RepositoryVisitResult visitMaterial(Material material) {
-        // Here we do the business!
-        visitMaterialAction(material)
-        return RepositoryVisitResult.SUCCESS
-    }
-    
-    @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
-        throw new UnsupportedOperationException("failed visiting " + material.toString())
-    }
-    
-
-    def visitMaterialAction = { Material material ->
-        Objects.requireNonNull(material, "material must not be null")
-        mkbuilder_.div(['id': material.hashCode(), 'class':'modal fade']) {
-            mkbuilder_.div(['class':"modal-dialog ${bootstrapModalSize} modal-dialog-scrollable", 'role':'document']) {
-                mkbuilder_.div(['class':'modal-content']) {
-                    mkbuilder_.div(['class':'modal-header']) {
-                        mkbuilder_.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
-                    }
-                    mkbuilder_.div(['class':'modal-body']) {
-                        this.markupInModalWindowAction(material)
-                    }
-                    mkbuilder_.div(['class':'modal-footer']) {
-                        // link to "Origin"
-                        this.generateAnchorsToOrigins(mkbuilder_, material)
-                        // Close button
-                        mkbuilder_.button(['type':'button', 'class':'btn btn-primary',
-                            'data-dismiss':'modal'], 'Close')
-                        this.anchorToReport(material)
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * 
-     * @param mate
-     */
-    def markupInModalWindowAction = { Material mate ->
-        switch (mate.getFileType()) {
-            case FileType.BMP:
-            case FileType.GIF:
-            case FileType.JPG:
-            case FileType.JPEG:
-            case FileType.PNG:
-                generateImgTags(mate)
-                break
-            case FileType.CSV:
-                mkbuilder_.pre(['class':'pre-scrollable'], mate.getPath().toFile().getText('UTF-8'))
-                break
-            case FileType.TXT:
-                mkbuilder_.div(['style':'height:350px;overflow:auto;']) {
-                    File file = mate.getPath().toFile()
-                    file.readLines('UTF-8').each { line ->
-                        mkbuilder_.p line
-                    }
-                }
-                break
-            case FileType.JSON:
-                def content = mate.getPath().toFile().getText('UTF-8')
-                def pp = JsonOutput.prettyPrint(content)
-                mkbuilder_.pre(['class':'pre-scrollable'], pp)
-                break
-            case FileType.XML:
-                def content = mate.getPath().toFile().getText('UTF-8')
-                content = XmlUtil.serialize(content)
-                mkbuilder_.pre(['class':'pre-scrollable'], content)
-                break
-            case FileType.PDF:
-                mkbuilder_.div(['class':'embed-responsive embed-responsive-16by9', 'style':'padding-bottom:150%']) {
-                    mkbuilder_.object(['class':'embed-responsive-item', 'data':mate.getEncodedHrefRelativeToRepositoryRoot(),
-                                    'type':'application/pdf', 'width':'100%', 'height':'100%'],'')
-                    mkbuilder_.div {
-                        mkbuilder_.a(['href': mate.getEncodedHrefRelativeToRepositoryRoot() ],
-                            mate.getPathRelativeToRepositoryRoot())
-                    }
-                }
-                break
-            case FileType.XLS:
-            case FileType.XLSM:
-            case FileType.XLSX:
-                mkbuilder_.a(['class':'btn btn-primary btn-g', 'target':'_blank',
-                            'href': mate.getEncodedHrefRelativeToRepositoryRoot()], 'Download')
-                break
-            default:
-                def msg = "this.getFileType()='${mate.getFileType()}' is unexpected"
-                logger_.info('markupInModalWindow' + msg)
-                mkbuilder_.p msg
-        }
-    }
-
     /**
      * generate HTML <div>s which presents 3 images in Carousel format
      */
-    protected void generateImgTags(Material mate) {
+    @Override
+    void generateImgTags(Material mate) {
         if (this.comparisonResultBundle_ != null &&
             this.comparisonResultBundle_.containsImageDiff(mate.getPath())) {
             // This material is a diff image, so render it in Carousel format of Back > Diff > Forth
@@ -270,232 +117,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
         } else {
             mkbuilder_.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
                 'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
-        }
-    }
-
-
-    /**
-     * 
-     * @param builder
-     * @param material
-     */
-    protected void generateAnchorsToOrigins(MarkupBuilder builder, Material material) {
-        String originHref = this.getOriginHref(material)
-        if (originHref != null) {
-            builder.a([
-                'href': originHref,
-                'class':'btn btn-link', 'role':'button', 'target': '_blank'],
-                'Origin')
-        }
-        //
-        if (this.comparisonResultBundle_ != null) {
-            ComparisonResult cr = this.comparisonResultBundle_.getByDiffMaterial(material.getHrefRelativeToRepositoryRoot())
-            if (cr != null) {
-                String expectedMaterialHref = this.getExpectedMaterialOriginHref(material.getBaseDir(), cr)
-                if (expectedMaterialHref != null) {
-                    builder.a([
-                        'href': expectedMaterialHref,
-                        'class':'btn btn-link', 'role':'button', 'target': '_blank'],
-                        'Back')
-                }
-                String actualMaterialHref = this.getActualMaterialOriginHref(material.getBaseDir(), cr)
-                if (actualMaterialHref != null) {
-                    builder.a([
-                        'href': actualMaterialHref,
-                        'class':'btn btn-link', 'role':'button', 'target': '_blank'],
-                        'Forth')
-                }
-            }
-        } else {
-            String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
-            logger_.warn(msg)
-            vtLogger_.info(msg)
-        }
-    }
-
-    /**
-     * 
-     * @param material
-     * @return
-     */
-    protected String getOriginHref(Material material) {
-        TCaseResult tcr = material.getParent()
-        TSuiteResult tsr = tcr.getParent()
-        Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
-        if (Files.exists(path)) {
-            PathResolutionLogBundle bundle = pathResolutionLogBundleCache_.get(path)
-            if (bundle == null) {
-                // failed loading path-resolution-log-bundle.json of this material
-                return null
-            }
-            PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
-            if (resolution != null) {
-                String result = resolution.getUrl()   // getUrl() may return null
-                logger_.info("#getOriginHref returning ${result}")
-                return result
-            } else {
-                String msg = this.class.getSimpleName() + "#getOriginHref could not find a PathResolutionLog entry of " + 
-                            "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
-                            " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
-                logger_.info(msg)
-                vtLogger_.info(msg)
-                return null
-            }
-        } else {
-            String msg = this.class.getSimpleName() + "#getOriginHref ${path} does not exist"
-            logger_.info(msg)
-            vtLogger_.info(msg)
-            return null
-        }
-    }
-    
-    
-    
-    /**
-     * 
-     */
-    /* A example of ComparisonResult instance is as follows:
-{
- "ComparisonResult": {
-     "expectedMaterial": {
-         "Material": {
-             ...
-             "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
-             ...
-         }
-     },
-     "actualMaterial": {
-         "Material": {
-             ...
-             "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
-             ...
-         }
-     },
-     "diffMaterial": {
-         "Material": {
-             "hrefRelativeToRepositoryRoot": "47news.chronos_exam/20190404_112054/47news.ImageDiff/47news.visitSite/top.20190404_111956_default-20190404_112053_default.(16.99).png"
-         }
-     },
-     ...
- }
-}
-      */
-    String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
-        def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
-        return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
-    }
-    
-    String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
-        def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
-        return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
-    }
-    
-    String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
-        String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', '20190404_111956', '47news.visitSite', 'top.png' ]
-        if (components.length > 2) {
-            Path pathResolutionLogBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
-            if (Files.exists(pathResolutionLogBundlePath)) {
-                PathResolutionLogBundle prlb = PathResolutionLogBundle.deserialize(pathResolutionLogBundlePath)
-                PathResolutionLog prl = prlb.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
-                /*
-                * An instance of PathResolutionLog is, for example:
-                * <PRE>
-                * {
-                *   "PathResolutionLogBundle": [
-                *     {
-                *       "PathResolutionLog": {
-                *         "MaterialPath": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
-                *         "TCaseName": "Test Cases/47news/visitSite",
-                *         "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
-                *         "SubPath": "",
-                *         "URL": "https://www.47news.jp/"
-                *       }
-                *     }
-                *   ]
-                * }
-                * </PRE>
-                * but, remember, InvokeMethodName can also be resolveMaterialPath, and in that case
-                * there would not be URL property.
-                */
-                if (prl != null && prl.getUrl() != null) {
-                    return prl.getUrl().toExternalForm()
-                } else {
-                    return null
-                }
-            } else {
-                String msg = "#getXMaterialOriginHref pathResolutionLogBundlePath(${pathResolutionLogBundlePath}) does ot exist"
-                logger_.warn(msg)
-                vtLogger_.failed(msg)
-                return null
-            }
-        }
-    }
-    
-    protected void anchorToReport(Material mate) {
-        Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
-        String reportHref = null
-        Objects.requireNonNull(reportsAccessor_ , this.class.getSimpleName() + "#anchorToReport reportsAccessor_ must not be null")
-        reportHref = reportsAccessor_.getHrefToReport(mate)
-        //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport baseDir=${baseDir.toString()}")
-        //vtLogger_.info(this.class.getSimpleName() + "#anchorToReport reportHref=${reportHref}")
-        if (reportHref != null) {
-            Path p = baseDir.resolve(reportHref)
-            if (Files.exists(p)) {
-                mkbuilder_.a(['href':reportHref, 'class':'btn btn-default', 'role':'button',
-                            'target':'_blank'], 'Report')
-            } else {
-                String msg = this.class.getSimpleName() + "#anchorToReport file not found: ${p}"
-                logger_.warn(msg)
-                vtLogger_.failed(msg)
-            }
-        } else {
-            String msg = this.class.getSimpleName() + "#anchorToReport reportsAccessor_.getHrefToReport(mate) returned null. mate is ${mate.getPath()}"
-            logger_.info(msg)
-            vtLogger_.info(msg)
-        }
-    }
-
-    /**
-     * This is a cache of PathResolutionLogBundle object keyed with the path of bundleFile.
-     * 
-     * @author kazurayam
-     *
-     */
-    private static class PathResolutionLogBundleCache {
-        
-        static Logger logger_ = LoggerFactory.getLogger(
-            PathResolutionLogBundleCache.class)
-
-        static final String classShortName = Helpers.getClassShortName(
-            PathResolutionLogBundleCache.class)
-        
-        private Map<Path, PathResolutionLogBundle> cache_
-        private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
-        
-        PathResolutionLogBundleCache() {
-            cache_ = new HashMap<Path, PathResolutionLogBundle>()
-        }
-        
-        void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-            this.vtLogger_ = vtLogger
-        }
-        
-        PathResolutionLogBundle get(Path bundleFile) {
-            if (cache_.containsKey(bundleFile)) {
-                return cache_.get(bundleFile)
-            } else {
-                PathResolutionLogBundle bundle
-                try {
-                    bundle = PathResolutionLogBundle.deserialize(bundleFile)
-                    cache_.put(bundleFile, bundle)
-                } catch (Exception e) {
-                    String msg = this.class.getSimpleName() + "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
-                    logger_.warn(msg)
-                    //vtLogger_.failed(msg)
-                    return null
-                }
-                return bundle
-            }
         }
     }
 }

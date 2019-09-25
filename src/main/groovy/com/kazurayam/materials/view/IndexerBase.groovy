@@ -10,6 +10,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.ReportsAccessorFactory
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
@@ -251,7 +252,7 @@ abstract class IndexerBase implements Indexer {
 					RepositoryRoot repositoryRoot,
 					ReportsAccessor reportsAccessor) {
 		{ ->
-			RepositoryVisitorExtention visitor = 
+			VTLoggerEnabled visitor = 
 					createRepositoryVisitorGeneratingHtmlDivs(delegate)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
@@ -265,7 +266,7 @@ abstract class IndexerBase implements Indexer {
 	 * @param mb
 	 * @return
 	 */
-	abstract protected RepositoryVisitorExtention createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb)
+	abstract protected RepositoryVisitor createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb)
 	
 	
 	/**
@@ -279,7 +280,7 @@ abstract class IndexerBase implements Indexer {
 					ReportsAccessor reportsAccessor) {
 		{ ->
 			StringWriter jsonSnippet = new StringWriter()
-			RepositoryVisitorExtention visitor =
+			VTLoggerEnabled visitor =
 				new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
@@ -333,7 +334,7 @@ modalize();
 					ReportsAccessor reportsAccessor) {
 		{ ->
 			StringWriter sw = new StringWriter()
-			RepositoryVisitorExtention visitor = new RepositoryVisitorGeneratingModalEventHandler(sw)
+			VTLoggerEnabled visitor = new RepositoryVisitorGeneratingModalEventHandler(sw)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
 			RepositoryWalker.walkRepository(repositoryRoot, visitor)

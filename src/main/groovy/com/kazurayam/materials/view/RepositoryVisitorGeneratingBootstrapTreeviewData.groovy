@@ -12,6 +12,7 @@ import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -25,7 +26,7 @@ import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
  *
  */
 class RepositoryVisitorGeneratingBootstrapTreeviewData
-        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, RepositoryVisitorExtention {
+        extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, VTLoggerEnabled {
      
      static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
      
@@ -41,11 +42,11 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          super(writer)
      }
      
-	 // implements RepositoryVisitorExtended ----------------------------
-	 @Override
      void setReportsAccessor(ReportsAccessor reportsAccessor) {
-         this.reportsAccessor_ = reportsAccessor    
+         this.reportsAccessor_ = reportsAccessor
      }
+     
+	 // implements RepositoryVisitorExtended ----------------------------
      
 	 @Override
      void setVisualTestingLogger(VisualTestingLogger vtLogger) {

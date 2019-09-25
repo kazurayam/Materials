@@ -12,7 +12,7 @@ import com.kazurayam.materials.Indexer
 
 import spock.lang.Specification
 
-class ConciseIndexerSpec extends Specification {
+class IndexerConciseSpec extends Specification {
 	
 	//static Logger logger_ = LoggerFactory.getLogger(ConciselIndexerSpec.class)
 	
@@ -24,7 +24,7 @@ class ConciseIndexerSpec extends Specification {
 	def setupSpec() {
 		Path projectDir = Paths.get('.')
 		Path testOutputDir = projectDir.resolve('./build/tmp/testOutput')
-		specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(ConciseIndexerSpec.class)}")
+		specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(IndexerConciseSpec.class)}")
 		//if (specOutputDir.toFile().exists()) {
 		//    Helpers.deleteDirectoryContents(specOutputDir)
 		//}
@@ -99,7 +99,7 @@ class ConciseIndexerSpec extends Specification {
 	private Indexer makeIndexer(Path caseOutputDir) {
 		Path materialsDir = caseOutputDir.resolve('Materials')
 		Path reportsDir   = caseOutputDir.resolve('Reports')
-		Indexer indexer = new ParallelIndexer()
+		Indexer indexer = new IndexerParallel()
 		indexer.setBaseDir(materialsDir)
 		indexer.setReportsDir(reportsDir)
 		Path index = materialsDir.resolve('index.html')

@@ -6,7 +6,7 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.view.CarouselIndexer
+import com.kazurayam.materials.view.IndexerCarousel
 
 import spock.lang.Specification
 
@@ -31,7 +31,7 @@ class IndexerFactorySpec extends Specification {
         Indexer indexer = IndexerFactory.newIndexer()
         then:
         indexer != null
-        indexer.getClass().getName() == CarouselIndexer.class.getName()
+        indexer.getClass().getName() == IndexerCarousel.class.getName()
     }
 
     def testNewIndexerWithArg_throwsClassNotFoundException() {

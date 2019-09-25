@@ -28,9 +28,9 @@ import com.kazurayam.materials.stats.StorageScanner
 
 import spock.lang.Specification
 
-class ParallelIndexerSpec extends Specification {
+class IndexerParallelSpec extends Specification {
     
-    static Logger logger_ = LoggerFactory.getLogger(ParallelIndexerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(IndexerParallelSpec.class)
     
     // fields
     static Path specOutputDir
@@ -40,7 +40,7 @@ class ParallelIndexerSpec extends Specification {
     def setupSpec() {
         Path projectDir = Paths.get('.')
         Path testOutputDir = projectDir.resolve('./build/tmp/testOutput')
-        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(ParallelIndexerSpec.class)}")
+        specOutputDir = testOutputDir.resolve("${Helpers.getClassShortName(IndexerParallelSpec.class)}")
         //if (specOutputDir.toFile().exists()) {
         //    Helpers.deleteDirectoryContents(specOutputDir)
         //}
@@ -115,7 +115,7 @@ class ParallelIndexerSpec extends Specification {
     private Indexer makeIndexer(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
-        Indexer indexer = new ParallelIndexer()
+        Indexer indexer = new IndexerParallel()
         indexer.setBaseDir(materialsDir)
         indexer.setReportsDir(reportsDir)
         Path index = materialsDir.resolve('index.html')

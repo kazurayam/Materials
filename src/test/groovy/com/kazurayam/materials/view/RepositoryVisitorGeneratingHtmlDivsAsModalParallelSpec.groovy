@@ -126,4 +126,5 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
     // helper methods
     def void anything() {}
 
+    
 }
