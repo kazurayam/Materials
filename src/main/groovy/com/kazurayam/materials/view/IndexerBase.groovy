@@ -120,12 +120,8 @@ abstract class IndexerBase implements Indexer {
 		def closureHD = htmlDivsGenerator(repositoryRoot, reportsAccessor)
 		closureHD.delegate = markupBuilder
 		
-		//closureHD.call()
-		
 		def closureJSTD = jsAsBootstrapTreeviewDataGenerator(repositoryRoot, reportsAccessor)
 		closureJSTD.delegate = markupBuilder
-		
-		//closureJSTD.call()
 		
 		def closureJSMEH = jsAsModalEventHandlerGenerator(repositoryRoot, reportsAccessor)
 		closureJSMEH.delegate = markupBuilder

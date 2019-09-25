@@ -19,7 +19,7 @@ class ConciseIndexerSpec extends Specification {
 	// fields
 	static Path specOutputDir
 	static Path fixtureDir
-	
+
 	// fixture methods
 	def setupSpec() {
 		Path projectDir = Paths.get('.')
@@ -34,7 +34,7 @@ class ConciseIndexerSpec extends Specification {
 	def setup() {}
 	def cleanup() {}
 	def cleanupSpec() {}
-	
+
 	// feature methods
 	def testSmoke() {
 		setup:

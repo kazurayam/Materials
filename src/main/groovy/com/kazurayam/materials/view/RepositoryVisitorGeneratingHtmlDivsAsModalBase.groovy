@@ -14,9 +14,9 @@ import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VisualTestingLogger
+import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
-import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
@@ -29,58 +29,65 @@ import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
 
 /**
+ * 
  * @author kazurayam
+ *
  */
-class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel 
-                    implements RepositoryVisitor, RepositoryVisitorExtention {
-                       
+abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase 
+        implements RepositoryVisitor, RepositoryVisitorExtention {
+    
     protected MarkupBuilder mkbuilder_
     protected ReportsAccessor reportsAccessor_
     protected ComparisonResultBundle comparisonResultBundle_
     
     protected static Logger logger_ = LoggerFactory.getLogger(
-                            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
+        RepositoryVisitorGeneratingHtmlDivsAsModalBase.class)
     
     protected VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     protected String classShortName_ = Helpers.getClassShortName(
-                            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)
+        RepositoryVisitorGeneratingHtmlDivsAsModalBase.class)
     
     private PathResolutionLogBundleCache pathResolutionLogBundleCache_
     
-    /*
-     * class name which determins the width of Bootstrap Modal window
+    /**
+     * HTML class attribute to determine the width of
+     * Bootstrap Modal window.
+     * - 'modal-sm': small
+     * - '': standard width
+     * - 'modal-lg': large
+     * - 'modal-xl': extra large
      */
-    String bootstrapModalSize = 'modal-lg'  // 'modal-sm', '', 'modal-lg', 'modal-xl'
+    abstract String getBootstrapModalSize()
     
     
     
     /**
-     * Constructor
-     * 
-     * @param mkbuilder
+     * constructor
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(MarkupBuilder mkbuilder) {
+    RepositoryVisitorGeneratingHtmlDivsAsModalBase(MarkupBuilder mkbuilder) {
         Objects.requireNonNull(mkbuilder, "mkbuilder must not be null")
+        Objects.requireNonNull(bootstrapModalSize, "bootstrapModalSize must not be null")
         this.mkbuilder_ = mkbuilder
         this.comparisonResultBundle_ = null
         this.pathResolutionLogBundleCache_ = new PathResolutionLogBundleCache()
     }
     
-	// implements RepositoryVisitorExtended -----------------------------------
-	@Override
+    
+    // implementing RepositoryVisitorExtended interface -----------------------
+    @Override
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
-        this.reportsAccessor_ = reportsAccessor    
+        this.reportsAccessor_ = reportsAccessor
     }
     
-	@Override
+    @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
         this.pathResolutionLogBundleCache_.setVisualTestingLogger(vtLogger_)
     }
     
-    // implementing methods required by RepositoryVisitor ---------------------
-	
+    
+    // implementing RepositoryVisitor interface -------------------------------
     @Override RepositoryVisitResult preVisitRepositoryRoot(RepositoryRoot repoRoot) {
         mkbuilder_.mkp.comment "here is inserted the output of ${classShortName_}"
         return RepositoryVisitResult.SUCCESS
@@ -126,12 +133,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
     @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
         throw new UnsupportedOperationException("failed visiting " + material.toString())
     }
-    
 
-    def visitMaterialAction = { Material material ->
+    private def visitMaterialAction = { Material material ->
         Objects.requireNonNull(material, "material must not be null")
         mkbuilder_.div(['id': material.hashCode(), 'class':'modal fade']) {
-            mkbuilder_.div(['class':"modal-dialog ${bootstrapModalSize} modal-dialog-scrollable", 'role':'document']) {
+            mkbuilder_.div(['class':"modal-dialog ${this.getBootstrapModalSize()} modal-dialog-scrollable", 'role':'document']) {
                 mkbuilder_.div(['class':'modal-content']) {
                     mkbuilder_.div(['class':'modal-header']) {
                         mkbuilder_.p(['class':'modal-title', 'id': material.hashCode() + 'title'], material.getIdentifier())
@@ -152,8 +158,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
         }
     }
     
+    
     /**
-     * 
+     *
      * @param mate
      */
     def markupInModalWindowAction = { Material mate ->
@@ -210,72 +217,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
     }
 
     /**
-     * generate HTML <div>s which presents 3 images in Carousel format
-     */
-    protected void generateImgTags(Material mate) {
-        if (this.comparisonResultBundle_ != null &&
-            this.comparisonResultBundle_.containsImageDiff(mate.getPath())) {
-            // This material is a diff image, so render it in Carousel format of Back > Diff > Forth
-            ComparisonResult cr = comparisonResultBundle_.get(mate.getPath())
-            Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
-            mkbuilder_.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
-                mkbuilder_.div(['class':'carousel-inner']) {
-                    mkbuilder_.div(['class':'carousel-item']) {
-                        mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
-                            mkbuilder_.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
-                        }
-                        mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                    'class': 'img-fluid d-block w-100',
-                                    'style': 'border: 1px solid #ddd',
-                                    'alt' : "Back"])
-                    }
-                    mkbuilder_.div(['class':'carousel-item active']) {
-                        mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
-                            String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
-                            String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
-                            mkbuilder_.p "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
-                        }
-                        mkbuilder_.img(['src': "${cr.getDiffMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                    'class': 'img-fluid d-block w-100',
-                                    'style': 'border: 1px solid #ddd',
-                                    'alt' : "Diff"])
-                    }
-                    mkbuilder_.div(['class':'carousel-item']) {
-                        mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
-                            mkbuilder_.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
-                        }
-                        mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                    'class': 'img-fluid d-block w-100',
-                                    'style': 'border: 1px solid #ddd',
-                                    'alt' : "Forth"])
-                    }
-                    mkbuilder_.a(['class':'carousel-control-prev',
-                                'href':"#${mate.hashCode()}carousel",
-                                'role':'button',
-                                'data-slide':'prev']) {
-                        mkbuilder_.span(['class':'carousel-control-prev-icon',
-                                        'area-hidden':'true'], '')
-                        mkbuilder_.span(['class':'sr-only'], 'Back')
-                    }
-                    mkbuilder_.a(['class':'carousel-control-next',
-                                'href':"#${mate.hashCode()}carousel",
-                                'role':'button',
-                                'data-slide':'next']) {
-                        mkbuilder_.span(['class':'carousel-control-next-icon',
-                                        'area-hidden':'true'], '')
-                        mkbuilder_.span(['class':'sr-only'], 'Forth')
-                    }
-                }
-            }
-        } else {
-            mkbuilder_.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
-                'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
-        }
-    }
-
-
-    /**
      * 
+     * @param mate
+     */
+    abstract void generateImgTags(Material mate)
+    
+    
+    /**
+     *
      * @param builder
      * @param material
      */
@@ -314,11 +263,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
     }
 
     /**
-     * 
+     *
      * @param material
      * @return
      */
-    protected String getOriginHref(Material material) {
+    private String getOriginHref(Material material) {
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
@@ -334,7 +283,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
                 logger_.info("#getOriginHref returning ${result}")
                 return result
             } else {
-                String msg = this.class.getSimpleName() + "#getOriginHref could not find a PathResolutionLog entry of " + 
+                String msg = this.class.getSimpleName() + "#getOriginHref could not find a PathResolutionLog entry of " +
                             "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
                             " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
                 logger_.info(msg)
@@ -348,11 +297,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
             return null
         }
     }
-    
-    
+ 
     
     /**
-     * 
+     *
      */
     /* A example of ComparisonResult instance is as follows:
 {
@@ -380,17 +328,17 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
  }
 }
       */
-    String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+    private String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
         def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
         return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
-    String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+    private String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
         def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
         return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
-    String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
+    private String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
         String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', '20190404_111956', '47news.visitSite', 'top.png' ]
         if (components.length > 2) {
             Path pathResolutionLogBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
@@ -430,7 +378,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
             }
         }
     }
-    
+
+
     protected void anchorToReport(Material mate) {
         Path baseDir = mate.getParent().getParent().getRepositoryRoot().getBaseDir()
         String reportHref = null
@@ -456,7 +405,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
     }
 
     /**
-     * This is a cache of PathResolutionLogBundle object keyed with the path of bundleFile.
+     * This is a cache of PathResolutionLogBundle instances 
+     * keyed by the path of bundle file.
+     * The cache is used just for performance improvement.
      * 
      * @author kazurayam
      *

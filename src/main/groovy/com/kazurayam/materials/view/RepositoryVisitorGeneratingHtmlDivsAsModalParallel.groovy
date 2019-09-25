@@ -13,7 +13,7 @@ import groovy.xml.MarkupBuilder
 import java.nio.file.Path
 
 class RepositoryVisitorGeneratingHtmlDivsAsModalParallel 
-    extends RepositoryVisitorGeneratingHtmlDivsAsModalCarousel {
+    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase {
     
     static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModalParallel.class)
@@ -21,8 +21,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
     String classShortName = Helpers.getClassShortName(
         RepositoryVisitorGeneratingHtmlDivsAsModalParallel.class)
 
-    String bootstrapModalSize = 'modal-xl'
-    
     /**
      * Constructor
      * 
@@ -31,28 +29,33 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
     RepositoryVisitorGeneratingHtmlDivsAsModalParallel(MarkupBuilder mkbuilder) {
         super(mkbuilder)
     }
+
+    @Override String getBootstrapModalSize() {
+        return 'modal-xl'
+    }
     
     /**
      * generate HTML <div>s which presents 2 images (Back and Forth) in parallel format
      */
-    protected void generateImgTags(Material mate) {
+    @Override
+    void generateImgTags(Material mate) {
         if (this.comparisonResultBundle_ != null &&
             this.comparisonResultBundle_.containsImageDiff(mate.getPath())) {
             // This material is a diff image, so render it in Carousel format of Back > Diff > Forth
             ComparisonResult cr = comparisonResultBundle_.get(mate.getPath())
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
-            mkbuilder.div(['class':'container-fluid']) {
-                mkbuilder.div(['class':'row']) {
-                    mkbuilder.div(['class':'col']) {
-                        mkbuilder.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
-                        mkbuilder.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+            mkbuilder_.div(['class':'container-fluid']) {
+                mkbuilder_.div(['class':'row']) {
+                    mkbuilder_.div(['class':'col']) {
+                        mkbuilder_.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
+                        mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block w-100',
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Back"])
                     }
-                    mkbuilder.div(['class':'col']) {
-                        mkbuilder.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
-                        mkbuilder.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                    mkbuilder_.div(['class':'col']) {
+                        mkbuilder_.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
+                        mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block w-100',
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Forth"])
@@ -111,7 +114,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
             }
              */
         } else {
-            mkbuilder.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
+            mkbuilder_.img(['src': mate.getEncodedHrefRelativeToRepositoryRoot(),
                 'class':'img-fluid', 'style':'border: 1px solid #ddd', 'alt':'material'])
         }
     }
