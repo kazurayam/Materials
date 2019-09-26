@@ -148,9 +148,10 @@ task pinpoint(type: Test) {
     include "**/view/ConciseIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
-    include "**/view/ParallelIndexerSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsParallelSpec.class"
+    //include "**/view/ParallelIndexerSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}

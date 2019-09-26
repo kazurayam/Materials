@@ -27,9 +27,9 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specification {
+class RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class)
 
     // fields
     private static Path specOutputDir_
@@ -39,7 +39,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
     // fixture methods
     def setupSpec() {
         specOutputDir_ = Paths.get(
-            "./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class)}")
+            "./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class)}")
         Files.createDirectories(specOutputDir_)
     }
     def setup() {}
@@ -69,7 +69,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             //
-            RepositoryVisitorGeneratingHtmlDivsAsModalParallel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalConcise visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalConcise(markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null
@@ -128,3 +128,4 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
 
     
 }
+
