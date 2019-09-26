@@ -151,7 +151,7 @@ task pinpoint(type: Test) {
     //include "**/view/ParallelIndexerSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
     include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}
