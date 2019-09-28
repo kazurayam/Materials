@@ -60,7 +60,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Diff"])
                     }
-                    mkbuilder_.div(['class':'carousel-item']) {
+                    mkbuilder_.div(['class':'carousel-item active']) {
                         mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
                             mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}" +
                                         " / " +
