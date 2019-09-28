@@ -29,7 +29,7 @@ class IndexerConciseSpec extends Specification {
 		//    Helpers.deleteDirectoryContents(specOutputDir)
 		//}
 		fixtureDir = Paths.get(
-			"./src/test/fixtures/com.kazurayam.materials.view.RepositoryVisitorGeneratingHtmlDivsParallelSpec")
+			"./src/test/fixtures/com.kazurayam.materials.view.RepositoryVisitorGeneratingHtmlDivsXXXXSpec")
 	}
 	def setup() {}
 	def cleanup() {}
