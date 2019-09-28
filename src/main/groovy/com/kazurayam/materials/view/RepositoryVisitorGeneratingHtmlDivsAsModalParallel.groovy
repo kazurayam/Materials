@@ -15,8 +15,7 @@ import groovy.xml.MarkupBuilder
 import java.nio.file.Path
 
 class RepositoryVisitorGeneratingHtmlDivsAsModalParallel 
-    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase
-    implements RepositoryVisitor, VTLoggerEnabled {
+    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase {
     
     static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModalParallel.class)
@@ -42,6 +41,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
      */
     @Override
     void generateImgTags(Material mate) {
+        println "${this.getClass().getName()}#generateImgTags(${mate}) was invoked"
         if (this.comparisonResultBundle_ != null &&
             this.comparisonResultBundle_.containsImageDiff(mate.getPath())) {
             // This material is a diff image, so render it in Carousel format of Back > Diff > Forth
@@ -50,18 +50,18 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
             mkbuilder_.div(['class':'container-fluid']) {
                 mkbuilder_.div(['class':'row']) {
                     mkbuilder_.div(['class':'col']) {
-                        mkbuilder_.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
+                        mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}"
                         mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block w-100',
                             'style': 'border: 1px solid #ddd',
-                            'alt' : "Back"])
+                            'alt' : "Expected"])
                     }
                     mkbuilder_.div(['class':'col']) {
-                        mkbuilder_.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"
+                        mkbuilder_.p "Actual: ${cr.getActualMaterial().getDescription() ?: ''}"
                         mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block w-100',
                             'style': 'border: 1px solid #ddd',
-                            'alt' : "Forth"])
+                            'alt' : "Actual"])
                     }
                 }
             }

@@ -33,8 +33,7 @@ import groovy.xml.XmlUtil
  * @author kazurayam
  */
 class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
-    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase
-    implements RepositoryVisitor, VTLoggerEnabled {
+    extends RepositoryVisitorGeneratingHtmlDivsAsModalBase {
                        
     protected static Logger logger_ = LoggerFactory.getLogger(
                             RepositoryVisitorGeneratingHtmlDivsAsModalCarousel.class)

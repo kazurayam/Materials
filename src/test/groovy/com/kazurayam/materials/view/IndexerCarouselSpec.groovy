@@ -56,7 +56,7 @@ class IndexerCarouselSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir, true)  // 3rd arg means 'skipIfIdentical'
-        Indexer indexer = makeIndexer(caseOutputDir)
+        Indexer indexer = makeIndexerCarousel(caseOutputDir)
         when:
         indexer.execute()
         Path index = indexer.getOutput()
@@ -159,7 +159,7 @@ class IndexerCarouselSpec extends Specification {
         then:
         mateList.size() == 2          // diffImage + comparison-result-bundle.json
         when:
-            Indexer indexer = makeIndexer(caseOutputDir)
+            Indexer indexer = makeIndexerCarousel(caseOutputDir)
             indexer.execute()
             Path index = indexer.getOutput()
             logger_.debug("#testSmoke index=${index.toString()}")
@@ -262,7 +262,7 @@ class IndexerCarouselSpec extends Specification {
         then:
             mateList.size() == 13          // diffImage + comparison-result-bundle.json
         when:
-            Indexer indexer = makeIndexer(caseOutputDir)
+            Indexer indexer = makeIndexerCarousel(caseOutputDir)
             indexer.execute()
             Path index = indexer.getOutput()
             logger_.debug("#testSmoke index=${index.toString()}")
@@ -305,7 +305,7 @@ class IndexerCarouselSpec extends Specification {
             Files.createDirectories(reports)
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-            Indexer indexer = makeIndexer(caseOutputDir)
+            Indexer indexer = makeIndexerCarousel(caseOutputDir)
             indexer.execute()
             Path index = indexer.getOutput()
         then:
@@ -322,7 +322,7 @@ class IndexerCarouselSpec extends Specification {
      * @param caseOutputDir
      * @return a CarouselIndexer object
      */
-    private Indexer makeIndexer(Path caseOutputDir) {
+    private Indexer makeIndexerCarousel(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
         Indexer indexer = new IndexerCarousel()

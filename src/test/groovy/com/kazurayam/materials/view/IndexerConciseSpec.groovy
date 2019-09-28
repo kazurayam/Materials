@@ -41,7 +41,7 @@ class IndexerConciseSpec extends Specification {
 		Path caseOutputDir = specOutputDir.resolve('testSmoke')
 		Files.createDirectories(caseOutputDir)
 		Helpers.copyDirectory(fixtureDir, caseOutputDir, true)  // 3rd arg means 'skipIfIdentical'
-		Indexer indexer = makeIndexer(caseOutputDir)
+		Indexer indexer = makeIndexerConcise(caseOutputDir)
 		when:
 		indexer.execute()
 		Path index = indexer.getOutput()
@@ -92,14 +92,14 @@ class IndexerConciseSpec extends Specification {
 	}
 		
 	/**
-	 * helper to make a ParallelIndexer object
+	 * helper to make a IndexerConcise object
 	 * @param caseOutputDir
 	 * @return a ParallelIndexer object
 	 */
-	private Indexer makeIndexer(Path caseOutputDir) {
+	private Indexer makeIndexerConcise(Path caseOutputDir) {
 		Path materialsDir = caseOutputDir.resolve('Materials')
 		Path reportsDir   = caseOutputDir.resolve('Reports')
-		Indexer indexer = new IndexerParallel()
+		Indexer indexer = new IndexerConcise()
 		indexer.setBaseDir(materialsDir)
 		indexer.setReportsDir(reportsDir)
 		Path index = materialsDir.resolve('index.html')

@@ -57,7 +57,7 @@ class IndexerParallelSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve('testSmoke')
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir, true)  // 3rd arg means 'skipIfIdentical'
-        Indexer indexer = makeIndexer(caseOutputDir)
+        Indexer indexer = makeIndexerParallel(caseOutputDir)
         when:
         indexer.execute()
         Path index = indexer.getOutput()
@@ -112,7 +112,7 @@ class IndexerParallelSpec extends Specification {
      * @param caseOutputDir
      * @return a ParallelIndexer object
      */
-    private Indexer makeIndexer(Path caseOutputDir) {
+    private Indexer makeIndexerParallel(Path caseOutputDir) {
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path reportsDir   = caseOutputDir.resolve('Reports')
         Indexer indexer = new IndexerParallel()
