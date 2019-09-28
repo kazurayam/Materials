@@ -52,14 +52,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
                     mkbuilder_.div(['class':'col']) {
                         mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}"
                         mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                            'class': 'img-fluid d-block w-100',
+                            'class': 'img-fluid d-block mx-auto',
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Expected"])
                     }
                     mkbuilder_.div(['class':'col']) {
                         mkbuilder_.p "Actual: ${cr.getActualMaterial().getDescription() ?: ''}"
                         mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                            'class': 'img-fluid d-block w-100',
+                            'class': 'img-fluid d-block mx-auto',
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Actual"])
                     }
