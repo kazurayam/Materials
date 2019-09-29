@@ -35,7 +35,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     @Override String getBootstrapModalSize() {
         return 'modal-xl'
     }
-    
+
     /**
     * generate HTML <div>s which presents 2 images (Back and Forth) in parallel format
     */
@@ -49,8 +49,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
             mkbuilder_.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 mkbuilder_.div(['class':'carousel-inner']) {
-                    mkbuilder_.div(['class':'carousel-item']) {
-                        mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
+                    mkbuilder_.div(['class':'carousel-item active']) {
+                        mkbuilder_.div(['class':'carousel-caption d-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
                             String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
                             mkbuilder_.p "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
@@ -60,30 +60,33 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                             'style': 'border: 1px solid #ddd',
                             'alt' : "Diff"])
                     }
-                    mkbuilder_.div(['class':'carousel-item active']) {
-                        mkbuilder_.div(['class':'carousel-caption d-none d-md-block']) {
+                    mkbuilder_.div(['class':'carousel-item']) {
+                        mkbuilder_.div(['class':'carousel-caption d-block']) {
                             mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}" +
                                         " / " +
                                         "Actual: ${cr.getActualMaterial().getDescription() ?: ''}"
-                            mkbuilder_.div(['class':'container-fluid']) {
-                                mkbuilder_.div(['class':'row']) {
-                                    mkbuilder_.div(['class':'col']) {
-                                        mkbuilder_.p "Expected ${cr.getExpectedMaterial().getDescription() ?: ''}"
-                                        mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                            'class': 'img-fluid d-block mx-auto',
-                                            'style': 'border: 1px solid #ddd',
-                                            'alt' : "Expected"])
-                                    }
-                                    mkbuilder_.div(['class':'col']) {
-                                        mkbuilder_.p "Actual ${cr.getActualMaterial().getDescription() ?: ''}"
-                                        mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                            'class': 'img-fluid d-block mx-auto',
-                                            'style': 'border: 1px solid #ddd',
-                                            'alt' : "Actual"])
-                                    }
+                        }
+                        mkbuilder_.div(['class':'container-fluid']) {
+                            mkbuilder_.div(['class':'row']) {
+                                mkbuilder_.div(['class':'col']) {
+                                    mkbuilder_.p(['class':'text-right'],
+                                        "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}")
+                                    mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                                        'class': 'img-fluid d-block mx-auto',
+                                        'style': 'border: 1px solid #ddd',
+                                        'alt' : "Expected"])
+                                }
+                                mkbuilder_.div(['class':'col']) {
+                                    mkbuilder_.p(['class':'text-left'],
+                                        "Actual: ${cr.getActualMaterial().getDescription() ?: ''}")
+                                    mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                                        'class': 'img-fluid d-block mx-auto',
+                                        'style': 'border: 1px solid #ddd',
+                                        'alt' : "Actual"])
                                 }
                             }
                         }
+                        
                     }
                     mkbuilder_.a(['class':'carousel-control-prev',
                             'href':"#${mate.hashCode()}carousel",

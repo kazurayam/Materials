@@ -205,6 +205,7 @@ abstract class IndexerBase implements Indexer {
 					}
 				}
 				mkp.comment('SCRIPTS')
+                
 				script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
 						'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
 						'crossorigin':'anonymous'], '')
@@ -215,7 +216,9 @@ abstract class IndexerBase implements Indexer {
 						'integrity':'sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T',
 						'crossorigin':'anonymous'], '')
 				
-				/* once tried to use the js of Bootstrap 4.3.1 but it did not worked. The js of 4.1.1 worked. Strange!
+				/* once tried to use the js of Bootstrap 4.3.1 but it did not worked. 
+				 * When I clciked <a> to open a Modal, the Modal did not show up.
+				 * The js of 4.1.1 worked. Strange! 
 				script(['src':'https://code.jquery.com/jquery-3.3.1.slim.min.js',
 						'integrity':'sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo',
 						'crossorigin':'anonymous'], '')
@@ -225,7 +228,7 @@ abstract class IndexerBase implements Indexer {
 				script(['src':'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',
 						'integrity':'sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM',
 						'crossorigin':'anonymous'], '')
-				 */
+				*/
 				
 				script(['src':'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js'], '')
 				
@@ -233,9 +236,11 @@ abstract class IndexerBase implements Indexer {
 				// drives Bootstrap Treeview 
 				closureJSTD.call()
 				
-				// generate <script type="text/javascript"> that
-				// registers event handlers for Bootstrap4 Modal on shown events
-				closureJSMEH.call()
+                // generate <script type="text/javascript"> that
+                // registers event handlers for Bootstrap4 Modal on shown events
+                /* FIXME
+                closureJSMEH.call()
+                */
 			}
 		}
 	}
