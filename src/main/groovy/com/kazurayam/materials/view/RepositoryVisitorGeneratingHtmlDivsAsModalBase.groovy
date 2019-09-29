@@ -54,7 +54,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     /**
      * HTML class attribute to determine the width of
      * Bootstrap Modal window.
-     * - 'modal-sm': small
+     * - 'modal-sm':    small
      * - '': standard width
      * - 'modal-lg': large
      * - 'modal-xl': extra large

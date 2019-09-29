@@ -181,7 +181,7 @@ abstract class IndexerBase implements Indexer {
      }
      .carousel-caption {
          position: absolute;
-         top: -28px;
+         top: 0px;
          bottom: initial;
          padding-top: 0px;
          padding-bottom: 0px;
