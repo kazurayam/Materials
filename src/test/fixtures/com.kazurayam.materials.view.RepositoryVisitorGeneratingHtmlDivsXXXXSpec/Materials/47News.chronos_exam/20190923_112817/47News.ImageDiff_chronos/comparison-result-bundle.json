@@ -53,8 +53,8 @@
                         "hrefRelativeToRepositoryRoot": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png"
                     }
                 },
-                "criteriaPercentage": 28.12,
-                "imagesAreSimilar": true,
+                "criteriaPercentage": 1.00,
+                "imagesAreSimilar": false,
                 "diffRatio": 7.07
             }
         }

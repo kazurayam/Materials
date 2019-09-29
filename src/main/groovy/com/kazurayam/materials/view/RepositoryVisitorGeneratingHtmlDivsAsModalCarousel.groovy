@@ -80,7 +80,12 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
                             String rel = (cr.getDiffRatio() <= cr.getCriteriaPercentage()) ? '<=' : '>'
-                            mkbuilder_.p "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
+                            String diag = "${eval} diffRatio(${cr.getDiffRatio()}) ${rel} criteria(${cr.getCriteriaPercentage()})"
+                            if (cr.imagesAreSimilar()) {
+                                mkbuilder_.p diag
+                            } else {
+                                mkbuilder_.p(['style':'color:red;'], diag)
+                            }
                         }
                         mkbuilder_.img(['src': "${cr.getDiffMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                     'class': 'img-fluid d-block mx-auto',
