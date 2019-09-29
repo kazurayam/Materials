@@ -2,6 +2,7 @@ package com.kazurayam.materials.view
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.regex.Pattern
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,6 +38,12 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
      private int tCaseResultCount
      private int materialsCount
      private def comparisonResultBundle
+     
+     private static List<String> fileNamesToIgnore = [
+         'comparison-result-bundle.json',
+         'image-delta-stats.json',
+         '.highlight.json'
+         ]
      
      RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
          super(writer)
@@ -180,28 +187,53 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          return RepositoryVisitResult.SUCCESS
      }
      @Override RepositoryVisitResult visitMaterial(Material material) {
-         StringBuilder sb = new StringBuilder()
-         if (materialsCount > 0) {
-             sb.append(',')
-         }
-         materialsCount += 1
+         if (toList(material)) {
+             StringBuilder sb = new StringBuilder()
+             if (materialsCount > 0) {
+                 sb.append(',')
+             }
+             materialsCount += 1
          
-         // TODO Carousel based on the info of the comparisonResultBundle
+             // TODO Carousel based on the info of the comparisonResultBundle
          
-         sb.append('{')
-         sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
-         sb.append('"selectable":true,')
-         if (material.getPath().getFileName().toString().endsWith('FAILED.png')) {
-             sb.append('"backColor": "#9F86FF",')
+             sb.append('{')
+             sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
+             sb.append('"selectable":true,')
+             if (material.getPath().getFileName().toString().endsWith('FAILED.png')) {
+                 sb.append('"backColor": "#9F86FF",')
+             }
+             sb.append('"href":"#' + material.hashCode() + '"')
+             sb.append('}')
+             pw_.print(sb.toString())
+             pw_.flush()
          }
-         sb.append('"href":"#' + material.hashCode() + '"')
-         sb.append('}')
-         pw_.print(sb.toString())
-         pw_.flush()
          return RepositoryVisitResult.SUCCESS
      }
      @Override RepositoryVisitResult visitMaterialFailed(Material material, IOException ex) {
          throw new UnsupportedOperationException("failed visiting " + material.toString())
+     }
+     
+     /**
+      * The material file should be listed in the tree view if
+      * toList() returns true.
+      * 
+      * If the material file is one of 
+      * - comparison-result-bundle.json
+      * - image-delta-stats.json
+      * - *.highlight.json
+      * then return false. Otherwise return true.
+      * 
+      * @param material
+      * @return
+      */
+     private boolean toList(Material material) {
+         boolean result = true
+         for (String toIgnore in fileNamesToIgnore) {
+             if (material.getFileName().endsWith(toIgnore)) {
+                 result = false
+             }
+         }
+         return result
      }
 }
 
