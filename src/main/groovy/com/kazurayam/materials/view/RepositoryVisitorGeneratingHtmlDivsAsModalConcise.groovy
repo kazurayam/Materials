@@ -35,6 +35,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     @Override String getBootstrapModalSize() {
         return 'modal-xl'
     }
+    
+    String getImgWidth() {
+        return '502px'
+    }
 
     /**
     * generate HTML <div>s which presents 2 images (Back and Forth) in parallel format
@@ -62,7 +66,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                         }
                         mkbuilder_.img(['src': "${cr.getDiffMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block mx-auto',
-                            'style': 'border: 1px solid #ddd',
+                            'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
                             'alt' : "Diff"])
                     }
                     mkbuilder_.div(['class':'carousel-item']) {
@@ -76,13 +80,13 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                                 mkbuilder_.div(['class':'col']) {
                                     mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                         'class': 'img-fluid d-block mx-auto',
-                                        'style': 'border: 1px solid #ddd',
+                                        'style': "border: 1px solid #ddd; width: ${this.getImgWidth();}",
                                         'alt' : "Expected"])
                                 }
                                 mkbuilder_.div(['class':'col']) {
                                     mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                                         'class': 'img-fluid d-block mx-auto',
-                                        'style': 'border: 1px solid #ddd',
+                                        'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
                                         'alt' : "Actual"])
                                 }
                             }
