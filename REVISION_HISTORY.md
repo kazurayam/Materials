@@ -1,12 +1,19 @@
 Revision History of materials
 =============================
 
+## Changes made at 0.73.0 -> 0.73.1
+
+Date: 02,Dec 2019
+Changes: https://github.com/kazurayam/Materials/compare/0.73.0...0.73.1
+Subjects:
+1. In 0.73.0 found that the Materials/index.html failed to show image diff files named with Japanese characters (e.g, トップ(0.0).png). This problem has been fixed. 
+
 ## Changes made at 0.72.2 -> 0.72.3
 
 Date: 14,Sept 2019
 Changes: https://github.com/kazurayam/Materials/compare/0.72.1...0.72.2
 Subjects:
-1. Fixed a problem of MaterialRepository class: Exception was raised when mr.resolveMaterialPath() was called 
+1. Fixed a problem of MaterialRepository class: Exception was raised when mr.resolveMaterialPath() was called
 without calling mr.markAsCurrent(TSuiteName, TSuiteTimestamp).
 
 ## Changes made at 0.28 -> 0.30
