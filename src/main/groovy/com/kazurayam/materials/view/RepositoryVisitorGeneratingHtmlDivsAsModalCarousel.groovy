@@ -66,6 +66,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
             mkbuilder_.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 mkbuilder_.div(['class':'carousel-inner']) {
+					// Back
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             mkbuilder_.p "Back ${cr.getExpectedMaterial().getDescription() ?: ''}"
@@ -76,6 +77,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
                                     'alt' : "Back"])
                         
                     }
+					// Diff
                     mkbuilder_.div(['class':'carousel-item active']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
@@ -93,6 +95,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
                                     'alt' : "Diff"])
                         
                     }
+					// Forth
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             mkbuilder_.p "Forth ${cr.getActualMaterial().getDescription() ?: ''}"

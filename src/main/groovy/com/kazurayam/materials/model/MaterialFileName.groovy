@@ -93,7 +93,9 @@ final class MaterialFileName {
 
 
     /**
-     * Determines the file name of a Material. The file name is in the format:
+     * Based on the given URL string, determines the file name of a Material.
+     * 
+     * The file name is in the format:
      *
      * <pre>&lt;encoded URL string&gt;.&lt;file extension&gt;</pre>
      *

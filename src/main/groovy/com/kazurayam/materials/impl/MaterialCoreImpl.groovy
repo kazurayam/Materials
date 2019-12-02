@@ -109,18 +109,18 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
         return p
     }
     
-    @Override
-    String getEncodedHrefRelativeToRepositoryRoot() {
-        String[] arr = this.getHrefRelativeToRepositoryRoot().split('/')
-        StringBuilder sb = new StringBuilder()
-        for (String s : arr) {
-            if (sb.size() > 0) {
-                sb.append('/')
-            }
-            sb.append(URLEncoder.encode(s, "UTF-8"))
-        }
-        return sb.toString()
-    }
+	@Override
+	String getEncodedHrefRelativeToRepositoryRoot() {
+		String baseUri = this.baseDir_.toUri()
+		if ( ! baseUri.endsWith('/')) {
+			baseUri += '/'
+		}
+		String mateUri = this.path_.toUri()
+		//println "MaterialCoreImpl#getEncodedHrefRelativeToRepositoryRoot baseUri=${baseUri}"
+		//println "MaterialCoreImpl#getEncodedHrefRelativeToRepositoryRoot mateUri=${mateUri}"
+		String result = mateUri.substring(baseUri.length())
+		return result
+	}
     
     @Override
     String getHrefRelativeToRepositoryRoot() {

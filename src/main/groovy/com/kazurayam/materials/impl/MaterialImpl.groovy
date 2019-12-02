@@ -322,10 +322,12 @@ class MaterialImpl implements Material, Comparable<Material> {
         Path rootDir = this.getParent().getParent().getParent().getBaseDir().normalize()
         return this.getEncodedHrefRelativeTo(rootDir)
     }
-    String getEncodedHrefRelativeTo(Path base) {
+    private String getEncodedHrefRelativeTo(Path base) {
         Objects.requireNonNull(base)
         String baseUri = base.toUri()
         String mateUri = this.getPath().toUri()
+		//System.out.println("baseUri=${baseUri}")
+		//System.out.println("mateUri=${mateUri}")
         String result = mateUri.substring(baseUri.length())
         logger_.debug("#getEncodedHrefRelativeTo baseUri=${baseUri} mateUri=${mateUri} result={result}")
         return result

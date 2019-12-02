@@ -20,7 +20,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.73.0'
+version  = '0.73.1'
 
 
 sourceCompatibility = '1.8'
@@ -104,7 +104,7 @@ task pinpoint(type: Test) {
     //include "**/ExecutionProfileSpec.class"
     //include "**/FileTypeSpec.class"
     //include "**/HelpersSpec.class"
-    include "**/ImageMetricsSpec.class"
+    //include "**/ImageMetricsSpec.class"
     //include "**/imagedifference/ComparisonResultBundleSpec.class"
     //include "**/imagedifference/ComparisonResultSpec.class"
     //include "**/imagedifference/imagedifference/EspionageSpec.class"
@@ -113,7 +113,8 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
     //include "**/impl/MaterialCoreImplSpec.class"
-    //include "**/impl/MaterialRepositoryImplSpec.class"
+	//include "**/impl/MaterialImplSpec.class"
+	//include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
     //include "**/IndexerSpec.class"
@@ -147,7 +148,7 @@ task pinpoint(type: Test) {
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/CarouselIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
-    //include "**/view/IndexerCarouselSpec.class"
+    include "**/view/IndexerCarouselSpec.class"
     //include "**/view/IndexerConciseSpec.class"
     //include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"

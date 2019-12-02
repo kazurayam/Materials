@@ -26,6 +26,7 @@ import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.stats.ImageDeltaStats
 import com.kazurayam.materials.stats.StorageScanner
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class IndexerCarouselSpec extends Specification {
@@ -276,6 +277,8 @@ class IndexerCarouselSpec extends Specification {
             html.contains('Origin')
     }
 
+	
+	
     /**
      * The src attribute of img element contains a relative URL to the PNG file as a ImageDiff. 
      * The PNG file name may contain some special characters that require URL-encoding.
@@ -289,7 +292,6 @@ class IndexerCarouselSpec extends Specification {
      *
      * @return
      */
-
     def testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding() {
         setup:
             Path caseOutputDir = specOutputDir.resolve('testAnchorsToURLsThatContainsSpecialCharactersWhichRequireURLEncoding')
@@ -313,7 +315,7 @@ class IndexerCarouselSpec extends Specification {
         when:
             String html = index.toFile().text
         then:
-            html.contains('CURA.twins_exam/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.%280.00%29.png')
+            html.contains('CURA.twins_exam/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.(0.00).png')
             //                                                                                    ^^^                                                                           ^^^    ^^^
     }
     
