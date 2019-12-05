@@ -108,22 +108,22 @@ final class RepositoryRoot {
     
     
     /**
-     * List of TSuiteResult which has the given TSuiteName, the Timestamp before the given 2nd arg.
-     * Excluding the timestamp of {before`
-     * The entries returned are sorted in descending order or the timestamp. Therefore the latest
-     * entry before the given timestamp will come at [0].
+     * returns a List of TSuiteResult which has the given TSuiteName, the Timestamp before the given 2nd arg.
+     * The TSuiteResult with a timestamp exactly equal to 'before' will be excluded.
+     * The entries returned are sorted in descending order of the timestamp.
+     * Therefore the latest entry comes at [0].
      * 
      * @param tSuiteName
-     * @param before
+     * @param timestamp
      * @return
      */
-    List<TSuiteResult> getTSuiteResultsBeforeExclusive(TSuiteName tSuiteName, TSuiteTimestamp before) {
+    List<TSuiteResult> getTSuiteResultsBeforeExclusive(TSuiteName tSuiteName, TSuiteTimestamp timestamp) {
         Objects.requireNonNull(tSuiteName, "argument \'tSuiteName\' must not be null")
-        Objects.requireNonNull(before, "argument \'before\' must not be null")
+        Objects.requireNonNull(timestamp, "argument \'timestamp\' must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
             if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
-                if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, before)) > 0) {
+                if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, timestamp)) > 0) {
                     // use < to select entries exclusively
                     result.add(tsr)
                 }
@@ -132,6 +132,30 @@ final class RepositoryRoot {
         Collections.sort(result, TSuiteResultComparator_)
         return Collections.unmodifiableList(result)
     }
+	
+	/**
+	 * returns a List of TSuiteResult which has the given 1st argument, and the Timestamp exactly at or before the 2nd argument.
+	 * The TSuiteResult with a timestamp which is exactly equal to 'timestamp' will be included.
+	 * 
+	 * @param tSuiteName
+	 * @param before
+	 * @return
+	 */
+	List<TSuiteResult> getTSuiteResultsBeforeInclusive(TSuiteName tSuiteName, TSuiteTimestamp timestamp) {
+		Objects.requireNonNull(tSuiteName, "argument \'tSuteName\' must not be null")
+		Objects.requireNonNull(timestamp, "argument \'before\' must not be null")
+		List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+		for (TSuiteResult tsr : tSuiteResults_) {
+			if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
+				if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, timestamp)) >= 0) {
+					//                                                                        Inclusive!  ^^^^
+					result.add(tsr)
+				}
+			}
+		}
+		Collections.sort(result, TSuiteResultComparator_)
+		return Collections.unmodifiableList(result)
+	}
     
     
     

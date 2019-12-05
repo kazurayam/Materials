@@ -115,6 +115,7 @@ class RepositoryRootSpec extends Specification {
         //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
     }
     
+	@IgnoreRest
     def test_getTSuiteResultsBeforeExclusive() {
         when:
         TSuiteName tsn = new TSuiteName('main/TS1')
@@ -130,8 +131,27 @@ class RepositoryRootSpec extends Specification {
         tsrList[0].getId().getTSuiteTimestamp().equals(expected0Tst)
 		tsrList[1].getId().getTSuiteTimestamp().equals(expected1Tst)
 		tsrList[2].getId().getTSuiteTimestamp().equals(expected2Tst)
-		
     }
+	
+	@IgnoreRest
+	def test_getTSuiteResultsBeforeInclusive() {
+		when:
+		TSuiteName tsn = new TSuiteName('main/TS1')
+		TSuiteTimestamp tst = new TSuiteTimestamp('20180805_081908')
+		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeInclusive(tsn, tst)
+		then:
+		tsrList.size() == 4
+		when:
+		TSuiteTimestamp expected0Tst = new TSuiteTimestamp('20180805_081908')
+		TSuiteTimestamp expected1Tst = new TSuiteTimestamp('20180718_142832')
+		TSuiteTimestamp expected2Tst = new TSuiteTimestamp('20180530_130604')
+		TSuiteTimestamp expected3Tst = new TSuiteTimestamp('20180530_130419')
+		then:
+		tsrList[0].getId().getTSuiteTimestamp().equals(expected0Tst)
+		tsrList[1].getId().getTSuiteTimestamp().equals(expected1Tst)
+		tsrList[2].getId().getTSuiteTimestamp().equals(expected2Tst)
+		tsrList[3].getId().getTSuiteTimestamp().equals(expected3Tst)
+	}
     
     def testGetTSuiteResultsBeforeExclusive_47News() {
         when:
