@@ -134,6 +134,16 @@ class RepositoryRootSpec extends Specification {
     }
 	
 	@IgnoreRest
+	def testGetTSuiteResultsBeforeExclusive_47News() {
+		when:
+		TSuiteName tsn = new TSuiteName('Montor47News')
+		TSuiteTimestamp tst = new TSuiteTimestamp('20190123_153854')
+		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
+		then:
+		tsrList.size() == 0
+	}
+	
+	@IgnoreRest
 	def test_getTSuiteResultsBeforeInclusive() {
 		when:
 		TSuiteName tsn = new TSuiteName('main/TS1')
@@ -153,14 +163,6 @@ class RepositoryRootSpec extends Specification {
 		tsrList[3].getId().getTSuiteTimestamp().equals(expected3Tst)
 	}
     
-    def testGetTSuiteResultsBeforeExclusive_47News() {
-        when:
-        TSuiteName tsn = new TSuiteName('Montor47News')
-        TSuiteTimestamp tst = new TSuiteTimestamp('20190123_153854')
-        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
-        then:
-        tsrList.size() == 0
-    }
     
     
     def testGetSortedTSuiteResults() {

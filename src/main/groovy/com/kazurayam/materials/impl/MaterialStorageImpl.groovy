@@ -320,7 +320,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(by, "by must not be null")
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
-        TSuiteResult tSuiteResult = by.findTSuiteResult(context)
+        TSuiteResult tSuiteResult = by.findTSuiteResultBeforeExclusive(context)
         if (tSuiteResult != TSuiteResult.NULL) {
             // copy the files
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
@@ -343,7 +343,7 @@ class MaterialStorageImpl implements MaterialStorage {
         List<RestoreResult> restoreResultList = new ArrayList<RestoreResult>()
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find some TSuiteResult objects
-        List<TSuiteResult> list = by.findTSuiteResults(context)
+        List<TSuiteResult> list = by.findTSuiteResultsBeforeExclusive(context)
         for (TSuiteResult tSuiteResult : list) {
             // copy the files
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId(), false)

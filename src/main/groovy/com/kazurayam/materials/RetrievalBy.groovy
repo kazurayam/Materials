@@ -27,55 +27,18 @@ import com.kazurayam.materials.repository.RepositoryRoot
  */
 abstract class RetrievalBy {
     
-    /**
-     * identify TSuiteResult object(s) before the given tSuiteTimestamp.
-     * 
-     * @param tSuiteTimestamp
-     * @return
-     */
-    static RetrievalBy before(TSuiteTimestamp tSuiteTimestamp) {
-        return new RetrievalByBefore(tSuiteTimestamp)
+    static RetrievalBy by(TSuiteTimestamp tSuiteTimestamp) {
+        return new RetrievalByImpl(tSuiteTimestamp)
     }
 
-    /**
-     * Criteria to retrieve a set of TSuiteResults before the given day + 
-     * @param base
-     * @param days
-     * @return
-     */
-    static RetrievalBy before(LocalDateTime base, int hour, int minute, int second) {
-        return new RetrievalByBefore(base, hour, minute, second)    
+    static RetrievalBy by(LocalDateTime base, int hour, int minute, int second) {
+        return new RetrievalByImpl(base, hour, minute, second)    
     }
     
-    /**
-     * 
-     * @param base
-     * @return
-     */
-    static RetrievalBy before(LocalDateTime base) {
-        return new RetrievalByBefore(base, base.getHour(), base.getMinute(), base.getSecond())
+    static RetrievalBy by(LocalDateTime base) {
+        return new RetrievalByImpl(base, base.getHour(), base.getMinute(), base.getSecond())
     }
 
-    /**
-     * Criteria to retrieve a set of TSuiteResults before the last business day + hour + minute + second. 
-     * select exclusively.
-     * The last business day means MONDAY, TUESDAY, WEDNSDAY, THURSDAY and FRIDAY before today.
-     * Today means now.
-     * 
-     * @param hour
-     * @param minute
-     * @param second
-     * @return
-     */
-    static RetrievalBy beforeLastBusinessDay(int hour, int minute, int second) {
-        return beforeLastBusinessDay(LocalDateTime.now(), hour, minute, second)
-    }
-    
-    static RetrievalBy beforeLastBusinessDay(LocalDateTime d, int hour, int minute, int second) {
-        LocalDateTime shifted = lastBusinessDay(d)
-        return new RetrievalByBefore(shifted, hour, minute, second)
-    }
-    
     static LocalDateTime lastBusinessDay(LocalDateTime d) {
         LocalDateTime prev = d.minusDays(1)
         if (d.getDayOfWeek() == DayOfWeek.SUNDAY ||
@@ -86,27 +49,43 @@ abstract class RetrievalBy {
         }
     }
     
+    
     /**
      *
      * @param mr
      * @return
      */
-    abstract List<TSuiteResult> findTSuiteResults(SearchContext context)
-
-    /**
-     *
-     * @param mr
-     * @return
-     */
-    abstract TSuiteResult findTSuiteResult(SearchContext context)
+    abstract TSuiteResult findTSuiteResultBeforeExclusive(SearchContext context)
 
     
-    
-    
+	/**
+	 *
+	 * @param mr
+	 * @return
+	 */
+	abstract List<TSuiteResult> findTSuiteResultsBeforeExclusive(SearchContext context)
+
+	
+	/**
+	 *
+	 * @param mr
+	 * @return
+	 */
+	abstract TSuiteResult findTSuiteResultBeforeInclusive(SearchContext context)
+
+	
+	/**
+	 *
+	 * @param mr
+	 * @return
+	 */
+	abstract List<TSuiteResult> findTSuiteResultsBeforeInclusive(SearchContext context)
+	
+	
     /**
      * Implementation of the RetrivalBy interface
      */
-    static class RetrievalByBefore extends RetrievalBy {
+    static class RetrievalByImpl extends RetrievalBy {
 		  
         private TSuiteTimestamp tSuiteTimestamp_
         
@@ -114,12 +93,12 @@ abstract class RetrievalBy {
          * 
          * @param tSuiteTimestamp
          */
-        RetrievalByBefore(TSuiteTimestamp tSuiteTimestamp) {
+        RetrievalByImpl(TSuiteTimestamp tSuiteTimestamp) {
             Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
             this.tSuiteTimestamp_ = tSuiteTimestamp
         }
         
-        RetrievalByBefore(LocalDateTime base, int hour, int minute, int second) {
+        RetrievalByImpl(LocalDateTime base, int hour, int minute, int second) {
             Objects.requireNonNull(base, "base must not be null")
             if (hour < 0 || 23 < hour) {
                 throw new IllegalArgumentException("hour(${hour}) must be in the range of 0..23")
@@ -135,7 +114,7 @@ abstract class RetrievalBy {
         }
         
         @Override
-        List<TSuiteResult> findTSuiteResults(SearchContext context) {
+        List<TSuiteResult> findTSuiteResultsBeforeExclusive(SearchContext context) {
             Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
@@ -143,7 +122,7 @@ abstract class RetrievalBy {
         }
         
         @Override
-        TSuiteResult findTSuiteResult(SearchContext context) {
+        TSuiteResult findTSuiteResultBeforeExclusive(SearchContext context) {
             Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
@@ -167,8 +146,32 @@ abstract class RetrievalBy {
                 return TSuiteResult.NULL
             }
         }
+		
+		@Override
+		List<TSuiteResult> findTSuiteResultsBeforeInclusive(SearchContext context) {
+			Objects.requireNonNull(context, "context must not be null")
+			RepositoryRoot rr = context.getRepositoryRoot()
+			TSuiteName tsn = context.getTSuiteName()
+			return rr.getTSuiteResultsBeforeInclusive(tsn, tSuiteTimestamp_)
+		}
+		
+		@Override
+		TSuiteResult findTSuiteResultBeforeInclusive(SearchContext context) {
+			Objects.requireNonNull(context, "context must not be null")
+			RepositoryRoot rr = context.getRepositoryRoot()
+			TSuiteName tsn = context.getTSuiteName()
+			List<TSuiteResult> results = rr.getTSuiteResultsBeforeInclusive(tsn, tSuiteTimestamp_)
+			if (results.size() > 0) {
+				return results[0]
+			} else {
+				return TSuiteResult.NULL
+			}
+		}
     }
     
+	
+	
+	
     /**
      * 
      */

@@ -396,7 +396,7 @@ class MaterialStorageSpec extends Specification {
         restoreResult.getCount() == 1
     }
 
-    def testRestore_RetrieveBy_before_LocalDateTime_restoreUnary() {
+    def testRestore_RetrieveBy_LocalDateTime_restoreUnary() {
         setup:
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_LocalDateTime_restoreUnary")
         Path msdir = stepWork.resolve("Storage")
@@ -419,7 +419,7 @@ class MaterialStorageSpec extends Specification {
         RestoreResult restoreResult = 
             ms.restoreUnary(restored,
                                 tsn,
-                                RetrievalBy.before(baseD))
+                                RetrievalBy.by(baseD))
         then:
         restoreResult.getCount() == 2
         when:
@@ -429,7 +429,7 @@ class MaterialStorageSpec extends Specification {
         tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180718_142832")))
     }
 
-    def testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective() {
+    def testRestore_RetrieveBy_TSuiteTimestamp_restoreCollective() {
         setup:
         Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective")
         Path msdir = stepWork.resolve("Storage")
@@ -451,7 +451,7 @@ class MaterialStorageSpec extends Specification {
         List<RestoreResult> restoreResultList = 
             ms.restoreCollective(restored,
                                     tsn,
-                                    RetrievalBy.before(TSuiteTimestamp.newInstance("20180805_081908")))
+                                    RetrievalBy.by(TSuiteTimestamp.newInstance("20180805_081908")))
         then:
         restoreResultList.size() == 3
         restoreResultList.get(0).getTSuiteResult().getTSuiteName().abbreviatedId == 'main/TS1'
