@@ -169,7 +169,7 @@ interface MaterialStorage {
      * @throws IOException
      */
     RestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
-    
+	
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
      * from this Material Storage into the project's Materials folder (intoMR).
@@ -196,12 +196,28 @@ interface MaterialStorage {
     RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    RestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+	/**
+	 * 
+	 * @param intoMR
+	 * @param tSuiteName
+	 * @param retrievalBy
+	 * @return
+	 * @throws IOException
+	 */
+    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
                                 RetrievalBy retrievalBy) throws IOException
     
-    List<RestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                RetrievalBy retrievalBy) throws IOException
-
+	/**
+	 * 
+	 * @param intoMR
+	 * @param tSuiteName
+	 * @param retrievalBy
+	 * @return
+	 * @throws IOException
+	 */
+	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
+								RetrievalBy retrievalBy) throws IOException
+	
     /**
      * scan the Storage directory to reflesh memory so that it sync with the file system
      */

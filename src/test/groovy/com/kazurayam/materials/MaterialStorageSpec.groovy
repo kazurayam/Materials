@@ -331,11 +331,10 @@ class MaterialStorageSpec extends Specification {
         currentSize <= 20_000_000
         remainingBytes == currentSize
     }
-    
-    
+    	
     /**
-    * MaterialStorage#restore() method should be able to copy
-    */
+     * MaterialStorage#restore() method should be able to copy
+     */
     def testRestore_including_PathResolutionLogBundle_file() {
         setup:
         Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
@@ -396,9 +395,9 @@ class MaterialStorageSpec extends Specification {
         restoreResult.getCount() == 1
     }
 
-    def testRestore_RetrieveBy_LocalDateTime_restoreUnary() {
+    def test_retrievingRestoreUnaryExclusive() {
         setup:
-        Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_LocalDateTime_restoreUnary")
+        Path stepWork = workdir_.resolve("test_retrievingRestoreUnaryExclusive")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
         Path reportsDir = stepWork.resolve("Reports")
@@ -417,7 +416,7 @@ class MaterialStorageSpec extends Specification {
         RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
         LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
         RestoreResult restoreResult = 
-            ms.restoreUnary(restored,
+            ms.retrievingRestoreUnaryExclusive(restored,
                                 tsn,
                                 RetrievalBy.by(baseD))
         then:
@@ -428,42 +427,38 @@ class MaterialStorageSpec extends Specification {
         tsriListRestored.size()== 1
         tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180718_142832")))
     }
-
-    def testRestore_RetrieveBy_TSuiteTimestamp_restoreCollective() {
-        setup:
-        Path stepWork = workdir_.resolve("testRestore_RetrieveBy_before_TSuiteTimestamp_restoreCollective")
-        Path msdir = stepWork.resolve("Storage")
-        Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        when:
-        TSuiteName tsn = new TSuiteName("main/TS1")
-        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
-        int num = ms.backup(mr_, tsriList)
-        then:
-        num == 22
-        when:
-        Path restoredDir = stepWork.resolve("Materials")
-        Helpers.deleteDirectoryContents(restoredDir)
-        MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(ms, tsn)
-        List<RestoreResult> restoreResultList = 
-            ms.restoreCollective(restored,
-                                    tsn,
-                                    RetrievalBy.by(TSuiteTimestamp.newInstance("20180805_081908")))
-        then:
-        restoreResultList.size() == 3
-        restoreResultList.get(0).getTSuiteResult().getTSuiteName().abbreviatedId == 'main/TS1'
-        restoreResultList.get(0).getTSuiteResult().getTSuiteTimestamp().format() == '20180718_142832'
-        restoreResultList.get(0).getCount() == 2
-        restoreResultList.get(1).getCount() == 6
-        restoreResultList.get(2).getCount() == 2
-        when:
-        List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
-        then:
-        tsriListRestored.size()== 3
-        tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180718_142832")))
-    }
+	
+	def test_retrievingRestoreUnaryInclusive() {
+		setup:
+		Path stepWork = workdir_.resolve("test_retrievingRestoreUnaryInclusive")
+		Path msdir = stepWork.resolve("Storage")
+		Helpers.deleteDirectoryContents(msdir)
+		Path reportsDir = stepWork.resolve("Reports")
+		Files.createDirectories(reportsDir)
+		MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
+		when:
+		TSuiteName tsn = new TSuiteName("main/TS1")
+		List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+		int num = ms.backup(mr_, tsriList)
+		then:
+		num == 22
+		when:
+		Path restoredDir = stepWork.resolve("Materials")
+		Helpers.deleteDirectoryContents(restoredDir)
+		MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
+		RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
+		LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
+		RestoreResult restoreResult =
+			ms.retrievingRestoreUnaryInclusive(restored,
+								tsn,
+								RetrievalBy.by(baseD))
+		then:
+		restoreResult.getCount() == 2
+		when:
+		List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
+		then:
+		tsriListRestored.size()== 1
+		tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180805_081908")))
+	}
 
 }

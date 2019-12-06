@@ -306,14 +306,14 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        return this.restoreUnary(intoMR, tSuiteName, by)
+        return this.restoreUnaryExclusive(intoMR, tSuiteName, by)
     }
     
     /**
      *
      */
     @Override
-    RestoreResult restoreUnary(MaterialRepository intoMR, TSuiteName tSuiteName,
+    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
                                     RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
@@ -321,6 +321,7 @@ class MaterialStorageImpl implements MaterialStorage {
         RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResultBeforeExclusive(context)
+		//                                                   ^^ exclusive!
         if (tSuiteResult != TSuiteResult.NULL) {
             // copy the files
             RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
@@ -331,28 +332,29 @@ class MaterialStorageImpl implements MaterialStorage {
         }
     }
     
-    /**
-     * 
-     */
-    @Override
-    List<RestoreResult> restoreCollective(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                    RetrievalBy by) throws IOException {
-        Objects.requireNonNull(intoMR, "intoMR must not be null")
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(by, "by must not be null")
-        List<RestoreResult> restoreResultList = new ArrayList<RestoreResult>()
-        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
-        // find some TSuiteResult objects
-        List<TSuiteResult> list = by.findTSuiteResultsBeforeExclusive(context)
-        for (TSuiteResult tSuiteResult : list) {
-            // copy the files
-            RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId(), false)
-            restoreResultList.add(restoreResult)
-        }
-        //componentMR_.scan()
-        return restoreResultList
-    }
-    
+	/**
+	 *
+	 */
+	@Override
+	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
+									RetrievalBy by) throws IOException {
+		Objects.requireNonNull(intoMR, "intoMR must not be null")
+		Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+		Objects.requireNonNull(by, "by must not be null")
+		RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
+		// find one TSuiteResult object
+		TSuiteResult tSuiteResult = by.findTSuiteResultBeforeInclusive(context)
+		//                                                   ^^ inclusive!
+		if (tSuiteResult != TSuiteResult.NULL) {
+			// copy the files
+			RestoreResult restoreResult = this.restore(intoMR, tSuiteResult.getId())
+			return restoreResult
+		} else {
+			vtLogger_.info("MaterialStorageImpl#restoreUnary by.findTSuiteResult() returned TSuiteResult.NULL")
+			return RestoreResult.NULL
+		}
+	}
+	    
     @Override
     void scan() {
         componentMR_.scan()
