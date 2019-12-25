@@ -89,7 +89,7 @@ class MaterialImplSpec extends Specification {
 		String s = mi.getEncodedHrefRelativeToRepositoryRoot()
 		then:
 		assert s.equals(
-			'CURA.twins_capture/20190412_161621/CURA.visitSite/トップ.png')
+			'CURA.twins_capture/20190412_161621/CURA.visitSite/%E3%83%88%E3%83%83%E3%83%95%E3%82%9A.png')
 	}
 	
 }
