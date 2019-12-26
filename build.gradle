@@ -20,7 +20,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.73.2'
+version  = '0.73.3'
 
 
 sourceCompatibility = '1.8'
@@ -94,6 +94,9 @@ tasks.withType(GroovyCompile).each   { it.groovyOptions.encoding = defaultEncodi
 test {
     include '**/materials/*Spec.class'
     include '**/materials/**/*Spec.class'
+    
+    exclude '**/ComparisonResultBundleSpec.class'   // takes 145 sec
+    exclude '**/ImageCollectionDifferSpec.class'    // takes 110 sec
     exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
@@ -112,9 +115,9 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
-    //include "**/impl/MaterialCoreImplSpec.class"
-	//include "**/impl/MaterialImplSpec.class"
-	//include "**/impl/MaterialRepositoryImplSpec.class"
+    include "**/impl/MaterialCoreImplSpec.class"
+    include "**/impl/MaterialImplSpec.class"
+    //include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
     //include "**/IndexerSpec.class"
@@ -123,7 +126,7 @@ task pinpoint(type: Test) {
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
-    include "**/MaterialStorageSpec.class"
+    //include "**/MaterialStorageSpec.class"
     //include "**/MiscSpec.class"
     //include "**/model/MaterialFileNameSpec.class"
     //include "**/PathSpec.class"
