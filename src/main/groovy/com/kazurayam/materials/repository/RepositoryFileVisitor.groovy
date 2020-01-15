@@ -73,12 +73,17 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     Objects.requireNonNull(tSuiteName_, "tSuiteName_ must not be null")
                     Objects.requireNonNull(tSuiteTimestamp_, "tSuiteTimestamp_ must not be null")
                     tSuiteResult_ = TSuiteResult.newInstance(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
+                    if (tSuiteResult_ == null) {
+                        throw new IllegalStateException("tSuiteResult_ is null when " 
+                            + "tSuiteNmae=\"${tSuiteName_}\", tSuiteTimestamp=\"${tSuiteTimestamp_}\", " 
+                            + "repoRoot=\"${repoRoot_}\"")
+                    }
                     repoRoot_.addTSuiteResult(tSuiteResult_)
+                    directoryTransition_.push(Layer.TIMESTAMP)
                 } else {
                     logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                             " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                 }
-                directoryTransition_.push(Layer.TIMESTAMP)
                 break
             case Layer.TIMESTAMP :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")

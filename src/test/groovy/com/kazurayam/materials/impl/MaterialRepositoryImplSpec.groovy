@@ -24,7 +24,6 @@ class MaterialRepositoryImplSpec extends Specification {
 
     private static Path workdir_
     private static Path fixture_ = Paths.get("./src/test/fixture")
-    private static Path materials_ = fixture_.resolve('Materials')
     private static String classShortName_ = Helpers.getClassShortName(MaterialRepositoryImplSpec.class)
 
     // fixture methods
