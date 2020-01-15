@@ -1,5 +1,6 @@
 package com.kazurayam.materials.repository
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -160,7 +161,7 @@ class RepositoryFileScannerSpec extends Specification {
     }
 
     /**
-     * execuite RepositoryScanner.scan() then check the result
+     * execute RepositoryScanner.scan() then check the result
      * if a TSuiteResult object has a lastModified property with appropriate value which
      * must be equal to the maximum value of contained TCaseResults.
      *
@@ -168,7 +169,6 @@ class RepositoryFileScannerSpec extends Specification {
     def testScan_lastModifiedOfTSuiteResult() {
         setup:
         Path casedir = workdir_.resolve("testScan_lastModifiedOfTCaseResult")
-        Helpers.copyDirectory(fixture_, casedir)
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
@@ -188,6 +188,43 @@ class RepositoryFileScannerSpec extends Specification {
         }
         then:
         lastModifiedOfTSuiteResult == lastModifiedOfTCaseResults
+    }
+    
+    /**
+     * Reproduce a problem https://github.com/kazurayam/Materials/issues/5 to fix it.
+     * 
+     * execute RepositoryFileScanner.scan() over a directory with irregular tree.
+     *     ```
+     *     Materials
+     *       |
+     *       +--testsuite
+     *            |
+     *            +--irregular_name_not_in_yyyyMMdd_hhmmss
+     *                 |
+     *                 +--hello.txt
+     *     ```
+     *  
+     *  RepositoryFileVisitor naively assumed that the directory under the Layer.TESTSUITE to be
+     *  in the format of yyyyMMdd_hhmmss, and when the directory has irregular name, NPE was thrown.
+     *  
+     *  How to fix this NPE?
+     *  
+     *  RepositoryFileVisitor should check the format of directory name at the Layer.TIMESTAMP 
+     *  to be in the format of yyyyMMDD_hhmmss, and if not the direcotry and its contents should be
+     *  silengtly ignored.
+     */
+    def testScan_irregularTIMESTAMP() {
+        setup:
+        Path caseDir = workdir_.resolve("testScan_irregularTIMESTAMP")
+        Path materialsDir = caseDir.resolve('Materials')
+        Path hello = materialsDir.resolve("testsuite/irregular_name_not_in_yyyyMMdd_hhmmss/hello.txt")
+        Files.createDirectories(hello.getParent())
+        hello.toFile().text = "hello"
+        when:
+        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
+        scanner.scan()
+        then:
+        final NullPointerException exception = notThrown()
     }
 
     def testScan_lengthOfTCaseResult() {
