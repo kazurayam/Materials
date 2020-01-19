@@ -2,6 +2,7 @@ package com.kazurayam.materials.impl
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -13,6 +14,7 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
@@ -38,7 +40,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     private LocalDateTime lastModified_
     private long length_
     
-    // folloing properties are optional
+    // following properties are optional
     private String description_ = null
     
     // -------- constructors --------------------------------------------------
@@ -67,20 +69,48 @@ class MaterialImpl implements Material, Comparable<Material> {
     }
     
     /**
-     * construct a Material object with argument of an instance of MaterialCore
+     * construct a Material object with an instance of MaterialCore.
+     * MaterialRepository is also required as the base of the Material.
      * 
      * @param materialCore
      */
-    MaterialImpl(MaterialCore materialCore) {
+    MaterialImpl(MaterialRepository materialRepository, MaterialCore materialCore) {
+        Objects.requireNonNull(materialRepository, "materialRepository must not be null")
         Objects.requireNonNull(materialCore, "materialCore must not be null")
+        if (!Files.exists(materialRepository.getBaseDir())) {
+            throw new IllegalArgumentException("${materialRepository.getBaseDir()} does not exists")
+        }
+        if (!Files.exists(materialCore.getPath())) {
+            throw new IllegalArgumentException("${materialCore.getPath()} does not exist")
+        }
+        if (Files.isDirectory(materialCore.getPath())) {
+            throw new IllegalArgumentException("${materialCore.getPath()} is a directory, not a file")
+        }
         Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
-        Path tSuiteNamePath = relativePath.subpath(0,1)
-        Path tSuiteTimestampPath = relativePath.subpath(1, 2)
-        Path tCaseNamePath = relativePath.subpath(2, 3)
-        // System.out.println "relativePath: ${relativePath}"
-        // System.out.println "tSuiteNamePath: ${tSuiteNamePath}"
-        // System.out.println "tSuiteTimestampPath: ${tSuiteTimestampPath}"
-        // System.out.println "tCaseNamePath: ${tCaseNamePath}"
+        if (relativePath.getNameCount() < 4) {
+            // <test suite name>/<timestamp>/<test case name>/<file name> or 
+            // <test suite name>/<timestamp>/<test case name>/<subpath>.../<file name>
+            throw new IllegalArgumentException("materialCore.getPathRelativeToRepositoryRoot() returned ${relativePath}, which is too short")
+        }
+        Path tSuiteName = relativePath.subpath(0,1)
+        Path tSuiteTimestamp = relativePath.subpath(1, 2)
+        LocalDateTime ldt = TSuiteTimestamp.parse(tSuiteTimestamp.toString())
+        if (ldt == null) {
+            throw new IllegalArgumentException("${tSuiteTimestamp.toString()} is not in the ${TSuiteTimestamp.DATE_TIME_PATTERN} format")
+        }
+        Path tCaseName = relativePath.subpath(2, 3)
+        Path subpath = Paths.get('')
+        if (relativePath.getNameCount() >= 5) {
+            subpath = relativePath.subpath(3, relativePath.getNameCount())
+        }
+        Path fileName = relativePath.getFileName()
+        
+        logger_.info("relativePath: ${relativePath}")
+        logger_.info("tSuiteName: ${tSuiteName}")
+        logger_.info("tSuiteTimestamp: ${tSuiteTimestamp}")
+        logger_.info("tCaseName: ${tCaseName}")
+        logger_.info("subpath: ${subpath}")
+        logger_.info("fileName: ${fileName}")
         
         throw new RuntimeException("YET TO DO A LOT")
         

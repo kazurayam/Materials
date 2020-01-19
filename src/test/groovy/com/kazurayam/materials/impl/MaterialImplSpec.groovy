@@ -107,8 +107,8 @@ class MaterialImplSpec extends Specification {
         String jsonText = '''
 {
     "Material": {
-        "path": "build/tmp/testOutput/MaterialImplSpec/test_constructWithInstanceofMaterialCore/Materials/47News_chronos_capture/20190404_111956/47news.visitSite/top.png",
-        "hrefRelativeToRepositoryRoot": "47News_chronos_capture/20190404_111956/47news.visitSite/top.png",
+        "path": "build/tmp/testOutput/MaterialImplSpec/test_constructWithInstanceofMaterialCore/Materials/47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
+        "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
         "description": "Hello, world!"
      }
 }
@@ -117,7 +117,8 @@ class MaterialImplSpec extends Specification {
         then:
         matec != null
         when:
-        Material mate = new MaterialImpl(matec)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+        Material mate = new MaterialImpl(mr, matec)
         then:
         mate != null
         mate.getBaseDir().equals(materials)
