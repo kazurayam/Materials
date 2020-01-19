@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
@@ -61,6 +64,26 @@ class MaterialImpl implements Material, Comparable<Material> {
         parentTCR_ = parent
         subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize()).toString()
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
+    }
+    
+    /**
+     * construct a Material object with argument of an instance of MaterialCore
+     * 
+     * @param materialCore
+     */
+    MaterialImpl(MaterialCore materialCore) {
+        Objects.requireNonNull(materialCore, "materialCore must not be null")
+        Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
+        Path tSuiteNamePath = relativePath.subpath(0,1)
+        Path tSuiteTimestampPath = relativePath.subpath(1, 2)
+        Path tCaseNamePath = relativePath.subpath(2, 3)
+        // System.out.println "relativePath: ${relativePath}"
+        // System.out.println "tSuiteNamePath: ${tSuiteNamePath}"
+        // System.out.println "tSuiteTimestampPath: ${tSuiteTimestampPath}"
+        // System.out.println "tCaseNamePath: ${tCaseNamePath}"
+        
+        throw new RuntimeException("YET TO DO A LOT")
+        
     }
     
     // ------- implematation of MaterialCore interface ------------------------

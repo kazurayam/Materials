@@ -53,7 +53,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
             mkbuilder_.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 mkbuilder_.div(['class':'carousel-inner']) {
-					// Diff
+                    // Diff
                     mkbuilder_.div(['class':'carousel-item active']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
@@ -70,12 +70,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                             'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
                             'alt' : "Diff"])
                     }
-					// Expected + Actual
+                    // Expected + Actual
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
-                            mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}" +
+                            mkbuilder_.p "Expected: ${this.getExecutionProfileName(cr.getExpectedMaterial())}" +
+                                        " ${cr.getExpectedMaterial().getDescription() ?: ''}" +
                                         " / " +
-                                        "Actual: ${cr.getActualMaterial().getDescription() ?: ''}"
+                                        "Actual: ${this.getExecutionProfileName(cr.getActualMaterial())}" +
+                                        " ${cr.getActualMaterial().getDescription() ?: ''}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
                             mkbuilder_.div(['class':'row']) {

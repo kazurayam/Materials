@@ -82,6 +82,9 @@ interface MaterialRepository {
     void deleteBaseDirContents() throws IOException
 
     
+    void setExecutionProfileName(String executionProfileName)
+    String getExecutionProfileName()
+    
     Path getBaseDir()
     
     Path getCurrentTestSuiteDirectory()

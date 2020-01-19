@@ -41,6 +41,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     private Path baseDir_
     
+    private String executionProfileName_
+    
 	// set default Material path to the "./${baseDir name}/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
@@ -94,6 +96,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
+    }
+    
+    @Override
+    void setExecutionProfileName(String profileName) {
+        executionProfileName_ = profileName
+    }
+    
+    @Override
+    String getExecutionProfileName() {
+        return executionProfileName_
     }
     
     /**
@@ -435,6 +447,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     material.getHrefRelativeToRepositoryRoot())
         metadata.setSubPath(subpath)
         metadata.setUrl(url)
+        metadata.setExecutionProfileName(this.executionProfileName_)
         this.addMaterialMetadata(metadata)
         
         return material.getPath().normalize()
@@ -502,8 +515,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     material.getHrefRelativeToRepositoryRoot())
         metadata.setSubPath(subpath)
         metadata.setUrl(url)
+        metadata.setExecutionProfileName(this.executionProfileName_)
         this.addMaterialMetadata(metadata)
-        
         return material.getPath().normalize()
     }
     
@@ -585,11 +598,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(fileName, "fileName must not be null")
-		if ( !this.isAlreadyMarked() ) {
-			// in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
-			this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
-			this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
-		}
+        if ( !this.isAlreadyMarked() ) {
+            // in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
+            this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
+            this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
+        }
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -622,6 +635,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     material.getHrefRelativeToRepositoryRoot())
         metadata.setSubPath(subpath)
         metadata.setFileName(fileName)
+        metadata.setExecutionProfileName(this.executionProfileName_)
         this.addMaterialMetadata(metadata)
         //
         return material.getPath().normalize()

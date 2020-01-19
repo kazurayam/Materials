@@ -6,7 +6,8 @@
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "URL": "https://www.47news.jp/"
+                "URL": "https://www.47news.jp/",
+                "ExecutionProfileName": "develop"
             }
         }
     ]

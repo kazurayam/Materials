@@ -29,11 +29,6 @@ class MaterialCoreImpl implements MaterialCore, Comparable<MaterialCore> {
      * 
      * @param baseDir Path of the 'Materials' directory
      * @param jsonText <PRE>
-{
-    "MaterialCore": {
-        "path": "build/tmp/testOutput/ComparisonResultBundleSpec/test_deserializeToJsonObject/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png"
-     }
-}
      * </PRE>
      */
     MaterialCoreImpl(Path baseDir, String jsonText) {

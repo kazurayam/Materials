@@ -41,5 +41,8 @@ interface MaterialMetadata {
     
     void setFileName(String fileName)
     String getFileName()
+    
+    void setExecutionProfileName(String profileName)
+    String getExecutionProfileName()
 
 }

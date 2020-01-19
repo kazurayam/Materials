@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
@@ -17,6 +18,8 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.impl.MaterialImpl
+import com.kazurayam.materials.impl.MaterialCoreImpl
 
 
 import spock.lang.Specification
@@ -27,6 +30,7 @@ class MaterialImplSpec extends Specification {
 	static Logger logger_ = LoggerFactory.getLogger(MaterialImplSpec.class)
 
 	private static Path fixtureDir
+    private static Path fixture_origin
 	private static Path specOutputDir
 	
 
@@ -34,6 +38,7 @@ class MaterialImplSpec extends Specification {
 	def setupSpec() {
 		Path projectDir = Paths.get(".")
 		fixtureDir = projectDir.resolve("src/test/fixture")
+        fixture_origin = projectDir.resolve("src/test/fixture_origin")
 		Path testOutputDir = projectDir.resolve("build/tmp/testOutput")
 		specOutputDir = testOutputDir.resolve(Helpers.getClassShortName(MaterialImplSpec.class))
 	}
@@ -91,5 +96,30 @@ class MaterialImplSpec extends Specification {
 		assert s.equals(
 			'CURA.twins_capture/20190412_161621/CURA.visitSite/%E3%83%88%E3%83%83%E3%83%95%E3%82%9A.png')
 	}
-	
+
+    def test_constructWithInstanceofMaterialCore() {
+        setup:
+        Path caseOutputDir = specOutputDir.resolve("test_constructWithInstanceofMaterialCore")
+        Path materials = caseOutputDir.resolve("Materials")
+        Files.createDirectories(materials)
+        Helpers.copyDirectory(fixture_origin.resolve('Materials'), materials)
+        when:
+        String jsonText = '''
+{
+    "Material": {
+        "path": "build/tmp/testOutput/MaterialImplSpec/test_constructWithInstanceofMaterialCore/Materials/47News_chronos_capture/20190404_111956/47news.visitSite/top.png",
+        "hrefRelativeToRepositoryRoot": "47News_chronos_capture/20190404_111956/47news.visitSite/top.png",
+        "description": "Hello, world!"
+     }
+}
+'''
+        MaterialCore matec = new MaterialCoreImpl(materials, jsonText)
+        then:
+        matec != null
+        when:
+        Material mate = new MaterialImpl(matec)
+        then:
+        mate != null
+        mate.getBaseDir().equals(materials)
+    }
 }
