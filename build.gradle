@@ -20,7 +20,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 // artifact = 'Materials'
-version  = '0.73.4'
+version  = '0.74.0'
 
 
 sourceCompatibility = '1.8'
@@ -118,8 +118,8 @@ task pinpoint(type: Test) {
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
     //include "**/impl/MaterialRepositoryImplSpec.class"
-    include "**/impl/MaterialStorageImplSpec.class"
-	//include "**/impl/TSuiteResultImplSpec.class"
+    //include "**/impl/MaterialStorageImplSpec.class"
+    //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
     //include "**/IndexerSpec.class"
     //include "**/MaterialPairSpec.class"
@@ -127,17 +127,17 @@ task pinpoint(type: Test) {
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
-    //include "**/MaterialStorageSpec.class"
+    include "**/MaterialStorageSpec.class"
     //include "**/MiscSpec.class"
     //include "**/model/MaterialFileNameSpec.class"
     //include "**/PathSpec.class"
     //include "**/ReportsAccessorSpec.class"
-    include "**/repository/RepositoryFileScannerSpec.class"
+    //include "**/repository/RepositoryFileScannerSpec.class"
     //include "**/repository/RepositoryRootSpec.class"
     //include "**/repository/RepositoryWalkerSpec.class"
-    //include "**/resolution/InvokedMethodNameSpec.class"
-    //include "**/resolution/PathResolutionLogBundleSpec.class"
-    //include "**/resolution/PathResolutionLogSpec.class"
+    include "**/metadata/InvokedMethodNameSpec.class"
+    include "**/metadata/MaterialMetadataBundleSpec.class"
+    include "**/metadata/MaterialMetadataSpec.class"
     //include "**/RestoreResultSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/stats/ImageDeltaSpec.class"
@@ -152,11 +152,11 @@ task pinpoint(type: Test) {
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/CarouselIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
-    //include "**/view/IndexerCarouselSpec.class"
+    include "**/view/IndexerCarouselSpec.class"
     //include "**/view/IndexerConciseSpec.class"
     //include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
     //include "**/view/SuffixSpec.class"

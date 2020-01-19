@@ -22,13 +22,13 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
+import com.kazurayam.materials.metadata.InvokedMethodName
+import com.kazurayam.materials.metadata.MaterialMetadata
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
+import com.kazurayam.materials.metadata.MaterialMetadataImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.resolution.InvokedMethodName
-import com.kazurayam.materials.resolution.PathResolutionLog
-import com.kazurayam.materials.resolution.PathResolutionLogBundle
-import com.kazurayam.materials.resolution.PathResolutionLogImpl
 
 import groovy.json.JsonOutput
 
@@ -49,8 +49,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 	
     private RepositoryRoot repoRoot_
     
-    private Path pathResolutionLogBundleAt_ = null
-    private PathResolutionLogBundle pathResolutionLogBundle_ = null
+    private Path materialMetadataBundleAt_ = null
+    private MaterialMetadataBundle materialMetadataBundle_ = null
 
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
@@ -208,27 +208,27 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         
         // prepare PathResolutionLogBundle instance
-        pathResolutionLogBundleAt_ = 
+        materialMetadataBundleAt_ = 
             tsr.getTSuiteTimestampDirectory().resolve(
-                PathResolutionLogBundle.SERIALIZED_FILE_NAME)
+                MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         
         //logger_.debug("#putCurrentTSuiteResult pathResolutionLogBundleAt_ is ${pathResolutionLogBundleAt_.toString()}")
         //logger_.debug("#putCurrentTSuiteResult Files.exists(pathResolutionLogBundleAt_) returned ${Files.exists(pathResolutionLogBundleAt_)}")
         
-        if (Files.exists(pathResolutionLogBundleAt_)) {
+        if (Files.exists(materialMetadataBundleAt_)) {
             // create instance from JSON file
             try {
-                pathResolutionLogBundle_ = 
-                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_)
+                materialMetadataBundle_ = 
+                    MaterialMetadataBundle.deserialize(materialMetadataBundleAt_)
             } catch (Exception e) {
-                logger_.warn("failed to deserialize ${pathResolutionLogBundleAt_.toString()}, will create new one")
-                pathResolutionLogBundle_ =
-                    new PathResolutionLogBundle()
+                logger_.warn("failed to deserialize ${materialMetadataBundleAt_.toString()}, will create new one")
+                materialMetadataBundle_ =
+                    new MaterialMetadataBundle()
             }
         } else {
             // JSON file is not there, so create new one
-            pathResolutionLogBundle_ = 
-                new PathResolutionLogBundle()
+            materialMetadataBundle_ = 
+                new MaterialMetadataBundle()
         }
         
         return tsr
@@ -367,15 +367,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ------------------ methods to resolve Material Paths  ------------------
 
-    private void addPathResolutionLog(PathResolutionLog resolutionLog) {
-        if (pathResolutionLogBundleAt_ != null && 
-				pathResolutionLogBundle_ != null) {
-			pathResolutionLogBundle_.add(resolutionLog)
-			OutputStream os = new FileOutputStream(pathResolutionLogBundleAt_.toFile())
-			Writer writer = new OutputStreamWriter(os, "UTF-8")
-			pathResolutionLogBundle_.serialize(writer)
-			writer.close()
-		}
+    private void addMaterialMetadata(MaterialMetadata materialMetadata) {
+        if (materialMetadataBundleAt_ != null && materialMetadataBundle_ != null) {
+            materialMetadataBundle_.add(materialMetadata)
+            OutputStream os = new FileOutputStream(materialMetadataBundleAt_.toFile())
+            Writer writer = new OutputStreamWriter(os, "UTF-8")
+            materialMetadataBundle_.serialize(writer)
+            writer.close()
+        }
     }
     
     /**
@@ -429,14 +428,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(material.getPath().getParent())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setUrl(url)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setUrl(url)
+        this.addMaterialMetadata(metadata)
         
         return material.getPath().normalize()
     }
@@ -496,14 +495,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         //Helpers.touch(material.getPath())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setUrl(url)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setUrl(url)
+        this.addMaterialMetadata(metadata)
         
         return material.getPath().normalize()
     }
@@ -616,14 +615,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         //Helpers.touch(material.getPath())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_MATERIAL_PATH,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setFileName(fileName)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setFileName(fileName)
+        this.addMaterialMetadata(metadata)
         //
         return material.getPath().normalize()
     }
@@ -789,8 +788,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return count
     }
 
-    Path getPathResolutionLogBundleAt() {
-        return this.pathResolutionLogBundleAt_
+    Path getMaterialMetadataBundleAt() {
+        return this.materialMetadataBundleAt_
     }
 
     RepositoryRoot getRepositoryRoot() {

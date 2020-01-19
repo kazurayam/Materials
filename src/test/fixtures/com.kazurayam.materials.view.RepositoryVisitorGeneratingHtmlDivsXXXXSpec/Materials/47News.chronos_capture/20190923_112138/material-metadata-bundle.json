@@ -1,7 +1,7 @@
 {
-    "PathResolutionLogBundle": [
+    "MaterialMetadataBundle": [
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47News.chronos_capture/20190923_112816/47News.visitSite/TOP.png",
                 "TCaseName": "Test Cases/47News/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",

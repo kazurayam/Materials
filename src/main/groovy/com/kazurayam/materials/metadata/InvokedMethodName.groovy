@@ -1,4 +1,4 @@
-package com.kazurayam.materials.resolution
+package com.kazurayam.materials.metadata
 
 enum InvokedMethodName {
     

@@ -16,13 +16,13 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
+import com.kazurayam.materials.metadata.MaterialMetadata
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
-import com.kazurayam.materials.resolution.PathResolutionLog
-import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -269,16 +269,16 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     private String getOriginHref(Material material) {
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
-        Path path = tsr.getTSuiteTimestampDirectory().resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
+        Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-            PathResolutionLogBundle bundle = pathResolutionLogBundleCache_.get(path)
+            MaterialMetadataBundle bundle = pathResolutionLogBundleCache_.get(path)
             if (bundle == null) {
                 // failed loading path-resolution-log-bundle.json of this material
                 return null
             }
-            PathResolutionLog resolution = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
-            if (resolution != null) {
-                String result = resolution.getUrl()   // getUrl() may return null
+            MaterialMetadata metadata = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
+            if (metadata != null) {
+                String result = metadata.getUrl()   // getUrl() may return null
                 logger_.info("#getOriginHref returning ${result}")
                 return result
             } else {
@@ -340,10 +340,10 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     private String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
         String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', '20190404_111956', '47news.visitSite', 'top.png' ]
         if (components.length > 2) {
-            Path pathResolutionLogBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME)
-            if (Files.exists(pathResolutionLogBundlePath)) {
-                PathResolutionLogBundle prlb = PathResolutionLogBundle.deserialize(pathResolutionLogBundlePath)
-                PathResolutionLog prl = prlb.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
+            Path metadataBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
+            if (Files.exists(metadataBundlePath)) {
+                MaterialMetadataBundle metadataBundle = MaterialMetadataBundle.deserialize(metadataBundlePath)
+                MaterialMetadata metadata = metadataBundle.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
                 /*
                 * An instance of PathResolutionLog is, for example:
                 * <PRE>
@@ -364,13 +364,13 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
                 * but, remember, InvokeMethodName can also be resolveMaterialPath, and in that case
                 * there would not be URL property.
                 */
-                if (prl != null && prl.getUrl() != null) {
-                    return prl.getUrl().toExternalForm()
+                if (metadata != null && metadata.getUrl() != null) {
+                    return metadata.getUrl().toExternalForm()
                 } else {
                     return null
                 }
             } else {
-                String msg = "#getXMaterialOriginHref pathResolutionLogBundlePath(${pathResolutionLogBundlePath}) does ot exist"
+                String msg = "#getXMaterialOriginHref ${metadataBundlePath} does ot exist"
                 logger_.warn(msg)
                 vtLogger_.failed(msg)
                 return null
@@ -419,24 +419,24 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         static final String classShortName = Helpers.getClassShortName(
             PathResolutionLogBundleCache.class)
         
-        private Map<Path, PathResolutionLogBundle> cache_
+        private Map<Path, MaterialMetadataBundle> cache_
         private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
         
         PathResolutionLogBundleCache() {
-            cache_ = new HashMap<Path, PathResolutionLogBundle>()
+            cache_ = new HashMap<Path, MaterialMetadataBundle>()
         }
         
         void setVisualTestingLogger(VisualTestingLogger vtLogger) {
             this.vtLogger_ = vtLogger
         }
         
-        PathResolutionLogBundle get(Path bundleFile) {
+        MaterialMetadataBundle get(Path bundleFile) {
             if (cache_.containsKey(bundleFile)) {
                 return cache_.get(bundleFile)
             } else {
-                PathResolutionLogBundle bundle
+                MaterialMetadataBundle bundle
                 try {
-                    bundle = PathResolutionLogBundle.deserialize(bundleFile)
+                    bundle = MaterialMetadataBundle.deserialize(bundleFile)
                     cache_.put(bundleFile, bundle)
                 } catch (Exception e) {
                     String msg = this.class.getSimpleName() + "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"

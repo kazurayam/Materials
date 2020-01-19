@@ -69,9 +69,9 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
             p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'
         when:
-            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.getMaterialMetadataBundleAt()
         then:
-            Files.exists(resolutionLogs)
+            Files.exists(metadataBundle)
     }
     
     
@@ -156,9 +156,9 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
             google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
         when:
-            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.getMaterialMetadataBundleAt()
         then:
-            Files.exists(resolutionLogs)
+            Files.exists(metadataBundle)
     }
     
 
@@ -209,9 +209,9 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             p.toString().replace('\\', '/') ==
                 "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         when:
-            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.getMaterialMetadataBundleAt()
         then:
-            Files.exists(resolutionLog)
+            Files.exists(metadataBundle)
     }
 
     def testResolveMaterialPath_whenCurrentTestSuiteNotMarked() {
@@ -236,10 +236,10 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             p.toString().replace('\\', '/') ==
                 "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         when:
-            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.getMaterialMetadataBundleAt()
         then:
             // the file is created when mri.resolveMaterialPath() was invoked
-            resolutionLog != null
+            metadataBundle != null
     }
     
     def testResolveMaterialPath_withSuffix() {

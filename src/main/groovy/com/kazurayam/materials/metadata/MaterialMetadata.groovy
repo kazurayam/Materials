@@ -1,4 +1,4 @@
-package com.kazurayam.materials.resolution
+package com.kazurayam.materials.metadata
 
 import java.nio.file.Path
 
@@ -9,10 +9,10 @@ import com.kazurayam.materials.TCaseName
  * <pre>com.kazurayam.materials.impl.MaterialRepositoryImpl</pre> class creates 
  * <pre>tSuiteName/tSuiteTimestamp/path-resolution-log.json</pre> file, which contains 
  * information how the method call resolved and returned a Path based on the given parameters. 
- * The following spnippet shows an example.
+ * The following snippet shows an example.
  * <pre>
  * {
- *   "PathResolutionLog": {
+ *   "MaterialMetadata": {
  *     "MaterialPath": "build\\tmp\\testOutput\\PathResolutionLogSpec\\testSerializeAndDeserializeWithSubPath\\Materials\\Monitor47News\\20190123_153854\\main.TC1\\dir1\\47NEWS_TOP.png",
  *     "TCaseName": "Test Cases/main/TC1",
  *     "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -22,7 +22,7 @@ import com.kazurayam.materials.TCaseName
  * }
  * </pre>
  */
-interface PathResolutionLog {
+interface MaterialMetadata {
     
     String toJsonText()
     void serialize(Writer writer)
