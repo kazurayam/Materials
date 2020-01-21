@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest
 import spock.lang.Specification
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.impl.MaterialCoreImpl
 
 //@Ignore
 class MaterialRepositorySpec extends Specification {
@@ -294,6 +297,25 @@ class MaterialRepositorySpec extends Specification {
         actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
     
+	@IgnoreRest
+	def test_findMaterial() {
+		setup:
+		MaterialRepository mr = prepareMR("test_findMaterial")
+		String jsonText = '''
+{
+    "Material": {
+        "path": "build/tmp/testOutput/MaterialCoreImplSpec/testSmoke/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png",
+        "hrefRelativeToRepositoryRoot": "47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png",
+        "description": "20190322_130000"
+     }
+}
+'''
+		MaterialCore mateCore = new MaterialCoreImpl(mr.getBaseDir(), jsonText)
+		when:
+		Material mate = mr.findMaterial(mateCore)
+		then:
+		mate != null
+	}
 
     /**
      * This will test deleteBaseDirContents() method.

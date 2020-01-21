@@ -21,7 +21,7 @@ import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.impl.MaterialCoreImpl
 
-
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialImplSpec extends Specification {
@@ -94,33 +94,7 @@ class MaterialImplSpec extends Specification {
 		String s = mi.getEncodedHrefRelativeToRepositoryRoot()
 		then:
 		assert s.equals(
-			'CURA.twins_capture/20190412_161621/CURA.visitSite/%E3%83%88%E3%83%83%E3%83%95%E3%82%9A.png')
+			'CURA.twins_capture/20190412_161621/CURA.visitSite/トップ.png')
 	}
 
-    def test_constructWithInstanceofMaterialCore() {
-        setup:
-        Path caseOutputDir = specOutputDir.resolve("test_constructWithInstanceofMaterialCore")
-        Path materials = caseOutputDir.resolve("Materials")
-        Files.createDirectories(materials)
-        Helpers.copyDirectory(fixture_origin.resolve('Materials'), materials)
-        when:
-        String jsonText = '''
-{
-    "Material": {
-        "path": "build/tmp/testOutput/MaterialImplSpec/test_constructWithInstanceofMaterialCore/Materials/47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
-        "hrefRelativeToRepositoryRoot": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
-        "description": "Hello, world!"
-     }
-}
-'''
-        MaterialCore matec = new MaterialCoreImpl(materials, jsonText)
-        then:
-        matec != null
-        when:
-        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        Material mate = new MaterialImpl(mr, matec)
-        then:
-        mate != null
-        mate.getBaseDir().equals(materials)
-    }
 }

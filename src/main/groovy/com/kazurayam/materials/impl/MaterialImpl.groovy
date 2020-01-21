@@ -25,6 +25,8 @@ import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonOutput
+
 /**
  * A Material has a Path <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/<subpath>/<MaterialFileName>
  */
@@ -63,58 +65,15 @@ class MaterialImpl implements Material, Comparable<Material> {
     MaterialImpl(TCaseResult parent, Path filePath) {
         Objects.requireNonNull(parent, "parent must not be null")
         Objects.requireNonNull(filePath, "filePath must not be null")
+		init(parent, filePath)
+    }
+	
+	private void init(TCaseResult parent, Path filePath) {
         parentTCR_ = parent
         subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize()).toString()
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
     }
     
-    /**
-     * construct a Material object with an instance of MaterialCore.
-     * MaterialRepository is also required as the base of the Material.
-     * 
-     * @param materialCore
-     */
-    MaterialImpl(MaterialRepository materialRepository, MaterialCore materialCore) {
-        Objects.requireNonNull(materialRepository, "materialRepository must not be null")
-        Objects.requireNonNull(materialCore, "materialCore must not be null")
-        if (!Files.exists(materialRepository.getBaseDir())) {
-            throw new IllegalArgumentException("${materialRepository.getBaseDir()} does not exists")
-        }
-        if (!Files.exists(materialCore.getPath())) {
-            throw new IllegalArgumentException("${materialCore.getPath()} does not exist")
-        }
-        if (Files.isDirectory(materialCore.getPath())) {
-            throw new IllegalArgumentException("${materialCore.getPath()} is a directory, not a file")
-        }
-        Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
-        if (relativePath.getNameCount() < 4) {
-            // <test suite name>/<timestamp>/<test case name>/<file name> or 
-            // <test suite name>/<timestamp>/<test case name>/<subpath>.../<file name>
-            throw new IllegalArgumentException("materialCore.getPathRelativeToRepositoryRoot() returned ${relativePath}, which is too short")
-        }
-        Path tSuiteName = relativePath.subpath(0,1)
-        Path tSuiteTimestamp = relativePath.subpath(1, 2)
-        LocalDateTime ldt = TSuiteTimestamp.parse(tSuiteTimestamp.toString())
-        if (ldt == null) {
-            throw new IllegalArgumentException("${tSuiteTimestamp.toString()} is not in the ${TSuiteTimestamp.DATE_TIME_PATTERN} format")
-        }
-        Path tCaseName = relativePath.subpath(2, 3)
-        Path subpath = Paths.get('')
-        if (relativePath.getNameCount() >= 5) {
-            subpath = relativePath.subpath(3, relativePath.getNameCount())
-        }
-        Path fileName = relativePath.getFileName()
-        
-        logger_.info("relativePath: ${relativePath}")
-        logger_.info("tSuiteName: ${tSuiteName}")
-        logger_.info("tSuiteTimestamp: ${tSuiteTimestamp}")
-        logger_.info("tCaseName: ${tCaseName}")
-        logger_.info("subpath: ${subpath}")
-        logger_.info("fileName: ${fileName}")
-        
-        throw new RuntimeException("YET TO DO A LOT")
-        
-    }
     
     // ------- implematation of MaterialCore interface ------------------------
     

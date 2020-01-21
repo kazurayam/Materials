@@ -136,12 +136,19 @@ interface MaterialRepository {
     */
     Path makeIndex()
 
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName)
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName)
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId, String testSuiteTimestamp)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp)
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
     
+	/**
+	 * 
+	 * @param materialCore
+	 * @return
+	 */
+	Material findMaterial(MaterialCore materialCore)
+	
     /**
      * Returns a Path of a Material file.
      * 
