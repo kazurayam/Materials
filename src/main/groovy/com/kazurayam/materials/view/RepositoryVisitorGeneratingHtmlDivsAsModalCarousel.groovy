@@ -46,8 +46,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
      * 
      * @param mkbuilder
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(MarkupBuilder mkbuilder) {
-        super(mkbuilder)
+    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        super(repoRoot, mkbuilder)
     }
     
     @Override String getBootstrapModalSize() {

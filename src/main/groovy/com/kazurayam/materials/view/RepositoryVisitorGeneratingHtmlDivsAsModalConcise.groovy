@@ -8,6 +8,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.imagedifference.ComparisonResult
+import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitor
 
 import groovy.xml.MarkupBuilder
@@ -28,8 +29,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     *
     * @param mkbuilder
     */
-    RepositoryVisitorGeneratingHtmlDivsAsModalConcise(MarkupBuilder mkbuilder) {
-        super(mkbuilder)
+    RepositoryVisitorGeneratingHtmlDivsAsModalConcise(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        super(repoRoot, mkbuilder)
     }
 
     @Override String getBootstrapModalSize() {
@@ -73,11 +74,13 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                     // Expected + Actual
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
-                            mkbuilder_.p "Expected: ${this.getExecutionProfileName(cr.getExpectedMaterial())}" +
-                                        " ${cr.getExpectedMaterial().getDescription() ?: ''}" +
+                            mkbuilder_.p "Expected:" +
+                                        " ${this.getExecutionProfileName(repoRoot_, cr.getExpectedMaterial())}" +
+                                        " ${this.getTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
                                         " / " +
-                                        "Actual: ${this.getExecutionProfileName(cr.getActualMaterial())}" +
-                                        " ${cr.getActualMaterial().getDescription() ?: ''}"
+                                        "Actual:" +
+                                        " ${this.getExecutionProfileName(repoRoot_, cr.getActualMaterial())}" +
+                                        " ${this.getTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: ''}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
                             mkbuilder_.div(['class':'row']) {

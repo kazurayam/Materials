@@ -39,6 +39,7 @@ import groovy.xml.XmlUtil
 abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase 
         implements RepositoryVisitor, VTLoggerEnabled {
     
+    protected RepositoryRoot repoRoot_
     protected MarkupBuilder mkbuilder_
     protected ReportsAccessor reportsAccessor_
     protected ComparisonResultBundle comparisonResultBundle_
@@ -68,14 +69,17 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     /**
      * constructor
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModalBase(MarkupBuilder mkbuilder) {
+    RepositoryVisitorGeneratingHtmlDivsAsModalBase(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
         Objects.requireNonNull(mkbuilder, "mkbuilder must not be null")
         Objects.requireNonNull(bootstrapModalSize, "bootstrapModalSize must not be null")
+        this.repoRoot_ = repoRoot
         this.mkbuilder_ = mkbuilder
         this.comparisonResultBundle_ = null
         this.materialMetadataBundleCache_ = new MaterialMetadataBundleCache()
     }
     
+    @Override
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
         this.reportsAccessor_ = reportsAccessor
     }
@@ -300,13 +304,21 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         }
     }
     
+    
+    protected String getTestSuiteTimestamp(RepositoryRoot repoRoot, MaterialCore materialCore) {
+        Material material = repoRoot.getMaterial(materialCore)
+        TCaseResult tcr = material.getParent()
+        TSuiteResult tsr = tcr.getParent()
+        return tsr.getTSuiteTimestamp().format()
+    }
+    
     /**
      * 
      * @param material
      * @return
      */
-    protected String getExecutionProfileName(MaterialRepository mr, MaterialCore materialCore) {
-        Material material = mr.findMaterial(materialCore)
+    protected String getExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
+        Material material = repoRoot.getMaterial(materialCore)
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)

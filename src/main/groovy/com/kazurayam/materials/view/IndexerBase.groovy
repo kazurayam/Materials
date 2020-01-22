@@ -36,6 +36,8 @@ abstract class IndexerBase implements Indexer {
 	private Path baseDir_
 	private Path reportsDir_
 	private Path output_
+    
+    private RepositoryRoot repoRoot_
 	
 	// implementing com.kazurayam.materials.Indexer interface
 	@Override
@@ -49,7 +51,7 @@ abstract class IndexerBase implements Indexer {
 		//
 		RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
 		scanner.scan()
-		RepositoryRoot repoRoot = scanner.getRepositoryRoot()
+		repoRoot_ = scanner.getRepositoryRoot()
 		//
 		ReportsAccessor reportsAccessor = ReportsAccessorFactory.createInstance(reportsDir_)
 		//
@@ -57,7 +59,7 @@ abstract class IndexerBase implements Indexer {
 			new FileOutputStream(output_.toFile()), 'utf-8')
 		MarkupBuilder mb = new MarkupBuilder(w)
 		//
-		generate(repoRoot, reportsAccessor, mb)
+		generate(repoRoot_, reportsAccessor, mb)
 		logger_.info("generated ${output_.toString()}")
 	}
 	
@@ -246,22 +248,22 @@ abstract class IndexerBase implements Indexer {
 	}
 	
 	/**
-	 * returns a Closure that generates HTML <div> elements as Bootstrap Modal
-	 * for each Materials. Child classes are supposed to implement detail by
-	 * overriding the createRepositoryVisitorGenerationgHtmlDivs(MarkupBuilder) method.
+	 * returns a Closure that generates HTML <div> elements as Bootstrap Modal for each Materials.
+	 * Classes that extend IndexerBase are supposed to implement its details by overriding
+	 * createRepositoryVisitorGeneratigHtmlDivs(RepositoryRoot, MarkupBuilder) method.
 	 * 
 	 * @param mb
 	 * @return a Groovy closure
 	 */
 	private def htmlDivsGenerator(
-					RepositoryRoot repositoryRoot,
+					RepositoryRoot repoRoot,
 					ReportsAccessor reportsAccessor) {
 		{ ->
-			VTLoggerEnabled visitor = 
+			RepositoryVisitor visitor = 
 					createRepositoryVisitorGeneratingHtmlDivs(delegate)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
-			RepositoryWalker.walkRepository(repositoryRoot, visitor)
+			RepositoryWalker.walkRepository(repoRoot, visitor)
 		}
 	}
 	
@@ -271,7 +273,7 @@ abstract class IndexerBase implements Indexer {
 	 * @param mb
 	 * @return
 	 */
-	abstract protected RepositoryVisitor createRepositoryVisitorGeneratingHtmlDivs(MarkupBuilder mb)
+	abstract protected RepositoryVisitor createRepositoryVisitorGeneratingHtmlDivs(RepositoryRoot repoRoot, MarkupBuilder mb)
 	
 	
 	/**
