@@ -325,7 +325,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         if (Files.exists(path)) {
             MaterialMetadataBundle bundle = materialMetadataBundleCache_.get(path)
             if (bundle == null) {
-                // failed to load material-metadata-bundle.json of this material
+                logger_.warn("#getExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
                 return null
             }
             MaterialMetadata metadata = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())

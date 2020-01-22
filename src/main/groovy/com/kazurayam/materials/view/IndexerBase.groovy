@@ -260,7 +260,7 @@ abstract class IndexerBase implements Indexer {
 					ReportsAccessor reportsAccessor) {
 		{ ->
 			RepositoryVisitor visitor = 
-					createRepositoryVisitorGeneratingHtmlDivs(delegate)
+					createRepositoryVisitorGeneratingHtmlDivs(repoRoot, delegate)
 			visitor.setReportsAccessor(reportsAccessor)
 			visitor.setVisualTestingLogger(vtLogger_)
 			RepositoryWalker.walkRepository(repoRoot, visitor)

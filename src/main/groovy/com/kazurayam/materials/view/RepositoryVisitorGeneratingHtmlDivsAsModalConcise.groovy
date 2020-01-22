@@ -75,11 +75,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             mkbuilder_.p "Expected:" +
-                                        " ${this.getExecutionProfileName(repoRoot_, cr.getExpectedMaterial())}" +
+                                        " ${this.getExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
                                         " ${this.getTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
                                         " / " +
                                         "Actual:" +
-                                        " ${this.getExecutionProfileName(repoRoot_, cr.getActualMaterial())}" +
+                                        " ${this.getExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: ''}" +
                                         " ${this.getTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: ''}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
