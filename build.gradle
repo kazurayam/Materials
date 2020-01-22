@@ -116,7 +116,7 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
     //include "**/impl/MaterialCoreImplSpec.class"
-    include "**/impl/MaterialImplSpec.class"
+    //include "**/impl/MaterialImplSpec.class"
     //include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"

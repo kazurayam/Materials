@@ -142,13 +142,13 @@ interface MaterialRepository {
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
     
-	/**
-	 * 
-	 * @param materialCore
-	 * @return
-	 */
-	Material findMaterial(MaterialCore materialCore)
-	
+    /**
+    * 
+    * @param materialCore
+    * @return
+    */
+    Material findMaterial(MaterialCore materialCore)
+    
     /**
      * Returns a Path of a Material file.
      * 
