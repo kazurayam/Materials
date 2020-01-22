@@ -17,7 +17,8 @@ import com.kazurayam.materials.TCaseName
  *     "TCaseName": "Test Cases/main/TC1",
  *     "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
  *     "SubPath": "dir1",
- *     "URL": "https://www.47news.jp/"
+ *     "URL": "https://www.47news.jp/",
+ *     "ExecutionProfileName": "develop"
  *   }
  * }
  * </pre>

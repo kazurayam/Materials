@@ -139,13 +139,23 @@ class MaterialMetadataSpec extends Specification {
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/')
         metadata.setUrl(url)
+        metadata.setExecutionProfileName('develop')
         //
-        Path serialized = tSuiteResultPath.resolve('path-resolution-log.json')
+        Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         OutputStream os = new FileOutputStream(serialized.toFile())
         Writer writer = new OutputStreamWriter(os, "UTF-8")
         metadata.serialize(writer)
         then:
         Files.exists(serialized)
+        when:
+        JsonSlurper slurper = new JsonSlurper()
+        def json = slurper.parseText(serialized.toFile().text)
+        then:
+        json.MaterialMetadata.TCaseName == "Test Cases/main/TC1"
+        json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
+        json.MaterialMetadata.SubPath == ""
+        json.MaterialMetadata.URL == "https://www.47news.jp/"
+        json.MaterialMetadata.ExecutionProfileName == 'develop'
     }
 
     def testSerializeAndDeserializeWithSubPath() {
@@ -189,8 +199,9 @@ class MaterialMetadataSpec extends Specification {
                 materialPath)
         metadata.setSubPath('dir1')   // Bomb!
         metadata.setUrl(new URL('https://www.47news.jp/'))
+        metadata.setExecutionProfileName('develop')
         //
-        Path serialized = tSuiteResultPath.resolve('path-resolution-log.json')
+        Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         OutputStream os = new FileOutputStream(serialized.toFile())
         Writer writer = new OutputStreamWriter(os, "UTF-8")
         metadata.serialize(writer)
@@ -204,6 +215,7 @@ class MaterialMetadataSpec extends Specification {
         json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
         json.MaterialMetadata.SubPath == "dir1"
         json.MaterialMetadata.URL == "https://www.47news.jp/"
+        json.MaterialMetadata.ExecutionProfileName == 'develop'
 	}
     
     @Ignore
