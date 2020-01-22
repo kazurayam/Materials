@@ -297,30 +297,8 @@ class MaterialRepositorySpec extends Specification {
         actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
     
-    @IgnoreRest
-    def test_findMaterial() {
-        setup:
-        MaterialRepository mr = prepareMR("test_findMaterial")
-        String jsonText = '''
-{
-    "Material": {
-        "path": "build/tmp/testOutput/MaterialRepositorySpec/test_findMaterial/Materials/TS1/20180810_140105/TC1/CURA_Healthcare_Service.png",
-        "hrefRelativeToRepositoryRoot": "TS1/20180810_140105/TC1/CURA_Healthcare_Service.png",
-        "description": "20180810_140105"
-     }
-}
-'''
-        MaterialCore mateCore = new MaterialCoreImpl(mr.getBaseDir(), jsonText)
-        when:
-        Material mate = mr.findMaterial(mateCore)
-        then:
-        mate != null
-        mate.getFileName() == 'CURA_Healthcare_Service.png'
-        mate.getParent().getTCaseName().getValue() == 'TC1'
-        mate.getParent().getParent().getTSuiteName().getValue() == 'TS1'
-        mate.getParent().getParent().getTSuiteTimestamp().format() == '20180810_140105'
-    }
-
+    
+    
     /**
      * This will test deleteBaseDirContents() method.
      * This will create a fixture for its own.

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
@@ -303,7 +305,8 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
      * @param material
      * @return
      */
-    protected String getExecutionProfileName(Material material) {
+    protected String getExecutionProfileName(MaterialRepository mr, MaterialCore materialCore) {
+        Material material = mr.findMaterial(materialCore)
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)

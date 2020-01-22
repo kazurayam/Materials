@@ -642,48 +642,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return material.getPath().normalize()
     }
 
-    /**
-     * Provided with an instance of MaterialCore which wraps the path info of material file,
-     * find an instance of Material with the same path in the MaterialRepository.
-     * If found, return it.　Otherwise return null.
-     * 
-     * This method is just used by the com.kazurayam.materials.viw.RepositoryVisitorGeneratingHtmlDivsAsModalConcise class.
-     * The class uses the method for look up the name of Execution Profile which was used when a screenshot was taken.
-     * The name of Execution Profile is found in the <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/material-metadata-bundle.json file.
-     */
-    @Override
-    Material findMaterial(MaterialCore materialCore) {
-        //println "materialCore:${JsonOutput.prettyPrint(materialCore.toString())}"
-        Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
-        if (relativePath.getNameCount() < 4) {
-            throw new IllegalArgumentException("${relativePath} has nameCount smaller than 4")
-        }
-        Path testSuiteName = relativePath.subpath(0,1)
-        Path testSuiteTimestamp = relativePath.subpath(1,2)
-        Path testCaseName = relativePath.subpath(2,3)
-        Path subpathAndFilename = relativePath.subpath(3, relativePath.getNameCount())
-        /*
-        println "relativePath:       ${relativePath}"
-        println "testSuiteName:      ${testSuiteName}"
-        println "testSuiteTimestamp: ${testSuiteTimestamp}"
-        println "testCaseName:       ${testCaseName}"
-        println "subpathAndFilename: ${subpathAndFilename}"
-        */
-        TSuiteResult tSuiteResult =
-            this.ensureTSuiteResultPresent(
-                testSuiteName.toString(), testSuiteTimestamp.toString())
-        if (tSuiteResult == null) {
-            throw new IllegalArgumentException(
-                "The path of ${testSuiteName}/${testSuiteTimestamp} is not found in the Material directory")
-        }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName(testCaseName.toString()))
-        if (tCaseResult == null) {
-            throw new IllegalArgumentException(
-                "The path of ${testSuiteName}/${testSuiteTimestamp}/${testCaseName} is not found in the Material directory")
-        }
-        Material mate = tCaseResult.getMaterial(subpathAndFilename)
-        return mate
-    }
 
     @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
