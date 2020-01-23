@@ -20,11 +20,12 @@ final class MaterialMetadataBundleCache {
 	static final String classShortName = Helpers.getClassShortName(
 		MaterialMetadataBundleCache.class)
 	
-	private Map<Path, MaterialMetadataBundle> cache_
+	private Map<String, MaterialMetadataBundle> cache_
+	
 	private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
 	
 	MaterialMetadataBundleCache() {
-		cache_ = new HashMap<Path, MaterialMetadataBundle>()
+		cache_ = new HashMap<String, MaterialMetadataBundle>()
 	}
 	
 	void setVisualTestingLogger(VisualTestingLogger vtLogger) {
@@ -32,20 +33,44 @@ final class MaterialMetadataBundleCache {
 	}
 	
 	MaterialMetadataBundle get(Path bundleFile) {
-		if (cache_.containsKey(bundleFile)) {
-			return cache_.get(bundleFile)
-		} else {
-			MaterialMetadataBundle bundle
+		String pathStr = bundleFile.toString()
+		if (!cache_.containsKey(pathStr)) {
 			try {
-				bundle = MaterialMetadataBundle.deserialize(bundleFile)
-				cache_.put(bundleFile, bundle)
+				cache_.put(pathStr, MaterialMetadataBundle.deserialize(bundleFile))
 			} catch (Exception e) {
 				String msg = this.class.getSimpleName() + "#get failed to deserialize an instance of MaterialMetadataBundle from ${bundleFile}"
 				logger_.warn(msg)
 				//vtLogger_.failed(msg)
 				return null
 			}
-			return bundle
 		}
+		return cache_.get(pathStr)
+	}
+	
+	String toJsonText() {
+		StringBuilder sb = new StringBuilder()
+		sb.append("{")
+		sb.append("\"MaterialMetadataBundleCache\":{")
+		int count = 0
+		cache_.each { key, value ->
+			if (count > 0) {
+				sb.append(",")
+			}
+			sb.append('\"' + key + '\":')
+			if (value != null) {
+				sb.append(value.toJsonText())
+			} else {
+				sb.append('null')
+			}
+			count += 1
+		}
+		sb.append("}")
+		sb.append("}")
+		return sb.toString()
+	}
+	
+	@Override
+	String toString() {
+		return this.toJsonText()
 	}
 }

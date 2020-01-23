@@ -17,6 +17,8 @@ import com.kazurayam.materials.impl.MaterialCoreImpl
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
+import groovy.json.JsonOutput
+
 import spock.lang.Specification
 
 class MaterialMetadataBundleCacheSpec extends Specification {
@@ -57,7 +59,8 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		then:
 		mmb111956 != null
 		when:
-		MaterialMetadata meta111956 = mmb111956.findLastByMaterialPath("47news.chronos_capture/20190404_111956/47news.visitSite/top.png")
+		String matepath111956 = "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
+		MaterialMetadata meta111956 = mmb111956.findLastByMaterialPath(matepath111956)
 		then:
 		meta111956 != null
 		meta111956.getExecutionProfileName() == "product"
@@ -82,9 +85,11 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		then:
 		mmb111956 != null
 		when:
-		meta111956 = mmb111956.findLastByMaterialPath("47news.chronos_capture/20190404_111956/47news.visitSite/top.png")
+		println "cache=${JsonOutput.prettyPrint(cache.toJsonText())}"
+		println "mmb111956=${JsonOutput.prettyPrint(mmb111956.toJsonText())}"
+		meta111956 = mmb111956.findLastByMaterialPath(matepath111956)
 		then:
-		meta111956 != null
+		meta111956 != null	// once upon a time, this statement failed
 		meta111956.getExecutionProfileName() == "product"
 		
 	}
