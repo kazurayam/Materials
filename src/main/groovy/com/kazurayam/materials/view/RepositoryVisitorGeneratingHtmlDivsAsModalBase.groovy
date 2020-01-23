@@ -278,7 +278,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-            MaterialMetadataBundle bundle = materialMetadataBundleCache_.get(path)
+            MaterialMetadataBundle bundle = materialMetadataBundleCache_.retrieve(path)
             if (bundle == null) {
                 // failed loading material-metadata-bundle.json of this material
                 return null
@@ -324,7 +324,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-            MaterialMetadataBundle bundle = materialMetadataBundleCache_.get(path)
+            MaterialMetadataBundle bundle = materialMetadataBundleCache_.retrieve(path)
             //logger_.info("#findExecutionProfileName path=${path}")
 			//logger_.info("#findExecutionProfileName bundle=${bundle}")
 			if (bundle == null) {

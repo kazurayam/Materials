@@ -60,7 +60,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
         List<Material> mlist111956 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
         assert mlist111956.size() == 1
         Path p111956 = materials_.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
-        MaterialMetadataBundle mmb111956 = cache.get(p111956)
+        MaterialMetadataBundle mmb111956 = cache.retrieve(p111956)
         println "#test_toJsonText added 111956 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
         then:
         cache.toJsonText().contains("111956")
@@ -69,12 +69,12 @@ class MaterialMetadataBundleCacheSpec extends Specification {
         List<Material> mlist112053 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
         assert mlist111956.size() == 1
         Path p112053 = materials_.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
-        MaterialMetadataBundle mmb112053 = cache.get(p112053)
+        MaterialMetadataBundle mmb112053 = cache.retrieve(p112053)
         println "#test_toJsonText added 1120536 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
         then:
         cache.toJsonText().contains("112053")
         // reproducing the problem
-        cache.get(p111956).get(0).getMaterialPath() == "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
+        cache.retrieve(p111956).get(0).getMaterialPath() == "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
         
     }
     
@@ -87,7 +87,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		List<Material> mlist111956 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
 		assert mlist111956.size() == 1
 		Path p111956 = materials_.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
-		MaterialMetadataBundle mmb111956 = cache.get(p111956)
+		MaterialMetadataBundle mmb111956 = cache.retrieve(p111956)
 		then:
 		mmb111956 != null
 		when:
@@ -102,7 +102,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		List<Material> mlist112053 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
 		assert mlist111956.size() == 1
 		Path p112053 = materials_.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
-		MaterialMetadataBundle mmb112053 = cache.get(p112053)
+		MaterialMetadataBundle mmb112053 = cache.retrieve(p112053)
 		then:
 		mmb112053 != null
 		when:
@@ -113,7 +113,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		
 		// check the case of 20190404_111956 once again; cache should work
 		when:
-		mmb111956 = cache.get(p111956)
+		mmb111956 = cache.retrieve(p111956)
 		then:
 		mmb111956 != null
 		when:
