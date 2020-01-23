@@ -137,8 +137,9 @@ task pinpoint(type: Test) {
     //include "**/repository/RepositoryRootSpec2.class"
     //include "**/repository/RepositoryWalkerSpec.class"
     //include "**/metadata/InvokedMethodNameSpec.class"
+	include "**/metadata/MaterialMetadataBundleCacheSpec.class"
     //include "**/metadata/MaterialMetadataBundleSpec.class"
-    include "**/metadata/MaterialMetadataSpec.class"
+    //include "**/metadata/MaterialMetadataSpec.class"
     //include "**/RestoreResultSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/stats/ImageDeltaSpec.class"
@@ -154,8 +155,10 @@ task pinpoint(type: Test) {
     //include "**/view/CarouselIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/IndexerCarouselSpec.class"
-    //include "**/view/IndexerConciseSpec.class"
-    //include "**/view/IndexerParallelSpec.class"
+    
+	include "**/view/IndexerConciseSpec.class"
+    
+	//include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"

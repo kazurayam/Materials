@@ -20,6 +20,7 @@ import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
+import com.kazurayam.materials.metadata.MaterialMetadataBundleCache
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -305,7 +306,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     }
     
     
-    protected String getTestSuiteTimestamp(RepositoryRoot repoRoot, MaterialCore materialCore) {
+    protected String findTestSuiteTimestamp(RepositoryRoot repoRoot, MaterialCore materialCore) {
         Material material = repoRoot.getMaterial(materialCore)
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
@@ -317,7 +318,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
      * @param material
      * @return
      */
-    protected String getExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
+    protected String findExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
         Material material = repoRoot.getMaterial(materialCore)
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
@@ -325,26 +326,26 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         if (Files.exists(path)) {
             MaterialMetadataBundle bundle = materialMetadataBundleCache_.get(path)
             if (bundle == null) {
-                logger_.warn("#getExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
+                logger_.warn("#findExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
                 return null
             }
             MaterialMetadata metadata = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
             if (metadata != null) {
                 String result = metadata.getExecutionProfileName()   // getExecutionProfileName() may return null
-                logger_.info("#getExecutionProfileName returning ${result}")
+                logger_.info("#findExecutionProfileName returning ${result}")
                 return result
             } else {
                 String msg = this.class.getSimpleName() +
-                            "#getExecutionProfileName could not find a MaterialMetadata entry of " +
+                            "#findExecutionProfileName could not find a MaterialMetadata entry of " +
                             "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
                             " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
-                logger_.info(msg)
+                logger_.warn(msg)
                 vtLogger_.info(msg)
                 return null
             }
         } else {
-            String msg = this.class.getSimpleName() + "#getExecutionProfileName ${path} does not exist"
-            logger_.info(msg)
+            String msg = this.class.getSimpleName() + "#findExecutionProfileName ${path} does not exist"
+            logger_.warn(msg)
             vtLogger_.info(msg)
             return null
         }
@@ -458,49 +459,4 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         }
     }
 
-    /**
-     * This is a cache of PathResolutionLogBundle instances 
-     * keyed by the path of bundle file.
-     * The cache is used just for performance improvement.
-     * 
-     * @author kazurayam
-     *
-     */
-    private static class MaterialMetadataBundleCache {
-        
-        static Logger logger_ = LoggerFactory.getLogger(
-            MaterialMetadataBundleCache.class)
-
-        static final String classShortName = Helpers.getClassShortName(
-            MaterialMetadataBundleCache.class)
-        
-        private Map<Path, MaterialMetadataBundle> cache_
-        private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
-        
-        MaterialMetadataBundleCache() {
-            cache_ = new HashMap<Path, MaterialMetadataBundle>()
-        }
-        
-        void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-            this.vtLogger_ = vtLogger
-        }
-        
-        MaterialMetadataBundle get(Path bundleFile) {
-            if (cache_.containsKey(bundleFile)) {
-                return cache_.get(bundleFile)
-            } else {
-                MaterialMetadataBundle bundle
-                try {
-                    bundle = MaterialMetadataBundle.deserialize(bundleFile)
-                    cache_.put(bundleFile, bundle)
-                } catch (Exception e) {
-                    String msg = this.class.getSimpleName() + "#get failed to deserialize PathResolutionLogBundle instance from ${bundleFile}"
-                    logger_.warn(msg)
-                    //vtLogger_.failed(msg)
-                    return null
-                }
-                return bundle
-            }
-        }
-    }
 }

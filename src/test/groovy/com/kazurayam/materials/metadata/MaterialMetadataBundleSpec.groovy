@@ -48,7 +48,7 @@ class MaterialMetadataBundleSpec extends Specification {
     // feature methods
     def testSmoke() {
         setup:
-        Path caseOutputDir = specOutputDir_.resolve('testConstructor')
+        Path caseOutputDir = specOutputDir_.resolve('testSmoke')
         Path materials = caseOutputDir.resolve('Materials')
         Path monitor47NewsDir = materials.resolve('Monitor47News')
         Files.createDirectories(monitor47NewsDir)
