@@ -320,12 +320,14 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
      */
     protected String findExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
         Material material = repoRoot.getMaterial(materialCore)
-        TCaseResult tcr = material.getParent()
+		TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
             MaterialMetadataBundle bundle = materialMetadataBundleCache_.get(path)
-            if (bundle == null) {
+            //logger_.info("#findExecutionProfileName path=${path}")
+			//logger_.info("#findExecutionProfileName bundle=${bundle}")
+			if (bundle == null) {
                 logger_.warn("#findExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
                 return null
             }

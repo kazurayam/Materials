@@ -74,6 +74,18 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		MaterialMetadata meta112053 = mmb112053.findLastByMaterialPath("47news.chronos_capture/20190404_112053/47news.visitSite/top.png")
 		then:
 		meta112053 != null
-		meta112053.getExecutionProfileName() == "develop"	
+		meta112053.getExecutionProfileName() == "develop"
+		
+		// check the case of 20190404_111956 once again; cache should work
+		when:
+		mmb111956 = cache.get(p111956)
+		then:
+		mmb111956 != null
+		when:
+		meta111956 = mmb111956.findLastByMaterialPath("47news.chronos_capture/20190404_111956/47news.visitSite/top.png")
+		then:
+		meta111956 != null
+		meta111956.getExecutionProfileName() == "product"
+		
 	}
 }
