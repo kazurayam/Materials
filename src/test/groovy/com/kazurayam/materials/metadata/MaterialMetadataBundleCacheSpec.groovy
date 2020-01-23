@@ -18,7 +18,9 @@ import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class MaterialMetadataBundleCacheSpec extends Specification {
@@ -28,33 +30,64 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 	// fields
 	private static Path fixtureDir_ = Paths.get("./src/test/fixture_origin")
 	private static Path specOutputDir_
+    private static Path materials_
+    private static RepositoryRoot repoRoot_
 	
 	// fixture methods
-	def setupSpec() {
-		specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialMetadataBundleCacheSpec.class)}")
-		Files.createDirectories(specOutputDir_)
-	}
+    def setupSpec() {
+        specOutputDir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(MaterialMetadataBundleCacheSpec.class)}")
+        Files.createDirectories(specOutputDir_)
+        Helpers.copyDirectory(fixtureDir_, specOutputDir_)
+        materials_ = specOutputDir_.resolve("Materials")
+        RepositoryFileScanner rfs = new RepositoryFileScanner(materials_)
+        rfs.scan()
+        repoRoot_ = rfs.getRepositoryRoot()
+    }
 	def setup() {}
 	def cleanup() {}
 	def cleanupSpec() {}
 	
 	// feature methods
+    @IgnoreRest
+    def test_toJsonText() {
+        setup:
+        MaterialMetadataBundleCache cache = new MaterialMetadataBundleCache()
+        when:
+        println "#test_toJsonText just constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        then:
+        cache.toJsonText().contains("MaterialMetadataBundleCache")
+        //
+        when:
+        List<Material> mlist111956 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
+        assert mlist111956.size() == 1
+        Path p111956 = materials_.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
+        MaterialMetadataBundle mmb111956 = cache.get(p111956)
+        println "#test_toJsonText added 111956 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        then:
+        cache.toJsonText().contains("111956")
+        //
+        when:
+        List<Material> mlist112053 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
+        assert mlist111956.size() == 1
+        Path p112053 = materials_.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
+        MaterialMetadataBundle mmb112053 = cache.get(p112053)
+        println "#test_toJsonText added 1120536 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        then:
+        cache.toJsonText().contains("112053")
+        // reproducing the problem
+        cache.get(p111956).get(0).getMaterialPath() == "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
+        
+    }
+    
 	def testSmoke() {
 		setup:
-		Path caseOutputDir = specOutputDir_.resolve("testSmoke")
-		Helpers.copyDirectory(fixtureDir_, caseOutputDir)
-		Path materials = caseOutputDir.resolve("Materials")
-		RepositoryFileScanner rfs = new RepositoryFileScanner(materials)
-		rfs.scan()
-		RepositoryRoot repoRoot = rfs.getRepositoryRoot()
-		//
 		MaterialMetadataBundleCache cache = new MaterialMetadataBundleCache()
 		
 		// check the case of 20190404_111956
 		when:
-		List<Material> mlist111956 = repoRoot.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
+		List<Material> mlist111956 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
 		assert mlist111956.size() == 1
-		Path p111956 = materials.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
+		Path p111956 = materials_.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
 		MaterialMetadataBundle mmb111956 = cache.get(p111956)
 		then:
 		mmb111956 != null
@@ -67,9 +100,9 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		
 		// check the case of 20190404_112053
 		when:
-		List<Material> mlist112053 = repoRoot.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
+		List<Material> mlist112053 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
 		assert mlist111956.size() == 1
-		Path p112053 = materials.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
+		Path p112053 = materials_.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
 		MaterialMetadataBundle mmb112053 = cache.get(p112053)
 		then:
 		mmb112053 != null
