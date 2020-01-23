@@ -48,7 +48,6 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 	def cleanupSpec() {}
 	
 	// feature methods
-    @IgnoreRest
     def test_toJsonText() {
         setup:
         MaterialMetadataBundleCache cache = new MaterialMetadataBundleCache()
