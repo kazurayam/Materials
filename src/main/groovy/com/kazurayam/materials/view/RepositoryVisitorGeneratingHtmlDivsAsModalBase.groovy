@@ -20,7 +20,6 @@ import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
-import com.kazurayam.materials.metadata.MaterialMetadataBundleCache
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -53,7 +52,6 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     protected String classShortName_ = Helpers.getClassShortName(
         RepositoryVisitorGeneratingHtmlDivsAsModalBase.class)
     
-    private MaterialMetadataBundleCache materialMetadataBundleCache_
     
     /**
      * HTML class attribute to determine the width of
@@ -77,7 +75,6 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         this.repoRoot_ = repoRoot
         this.mkbuilder_ = mkbuilder
         this.comparisonResultBundle_ = null
-        this.materialMetadataBundleCache_ = new MaterialMetadataBundleCache()
     }
     
     @Override
@@ -89,7 +86,6 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
-        this.materialMetadataBundleCache_.setVisualTestingLogger(vtLogger_)
     }
     
     
@@ -278,8 +274,8 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-            MaterialMetadataBundle bundle = materialMetadataBundleCache_.retrieve(path)
-            if (bundle == null) {
+			MaterialMetadataBundle bundle = MaterialMetadataBundle.deserialize(path)
+			if (bundle == null) {
                 // failed loading material-metadata-bundle.json of this material
                 return null
             }
@@ -324,8 +320,8 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
-            MaterialMetadataBundle bundle = materialMetadataBundleCache_.retrieve(path)
-            //logger_.info("#findExecutionProfileName path=${path}")
+			MaterialMetadataBundle bundle = MaterialMetadataBundle.deserialize(path)
+			//logger_.info("#findExecutionProfileName path=${path}")
 			//logger_.info("#findExecutionProfileName bundle=${bundle}")
 			if (bundle == null) {
                 logger_.warn("#findExecutionProfileName failed to load material-metadata-bundle.json at ${path}")

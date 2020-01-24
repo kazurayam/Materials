@@ -2,6 +2,8 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
+import com.kazurayam.materials.repository.RepositoryRoot
+
 /**
  * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.
@@ -94,6 +96,8 @@ interface MaterialRepository {
     long getSize()
     
     Path getMaterialMetadataBundleAt()
+	
+	RepositoryRoot getRepositoryRoot()
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)

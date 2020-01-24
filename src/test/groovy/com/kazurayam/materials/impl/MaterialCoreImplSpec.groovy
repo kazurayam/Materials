@@ -132,7 +132,7 @@ class MaterialCoreImplSpec extends Specification {
 		String enc = mc.getEncodedHrefRelativeToRepositoryRoot()
 	then:
 		enc != null
-		enc == 'CURA.twins_exam/20190412_161621/CURA.ImageDiff_twins/CURA.visitSite/%E3%83%88%E3%83%83%E3%83%95%E3%82%9A.png'
+		enc == 'CURA.twins_exam/20190412_161621/CURA.ImageDiff_twins/CURA.visitSite/トップ.png'
 	}
 	
 }

@@ -807,6 +807,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return this.materialMetadataBundleAt_
     }
 
+	@Override
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_
     }

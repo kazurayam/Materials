@@ -21,6 +21,7 @@ import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.xml.MarkupBuilder
 
@@ -65,8 +66,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec extends Specificati
         when:
             Path output = materialsDir.resolve('testSmoke.html')
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
-            MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(markupBuilder)
+			MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(mr.getRepositoryRoot(), markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null
