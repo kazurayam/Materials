@@ -48,36 +48,42 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 	def cleanupSpec() {}
 	
 	// feature methods
+	@IgnoreRest
     def test_toJsonText() {
         setup:
         MaterialMetadataBundleCache cache = new MaterialMetadataBundleCache()
         when:
-        println "#test_toJsonText just constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        println "#test_toJsonText just constructed: " + JsonOutput.prettyPrint(cache.toJsonText())
         then:
-        cache.toJsonText().contains("MaterialMetadataBundleCache")
-        //
+		cache.toJsonText().contains("MaterialMetadataBundleCache")
+        cache.size() == 0
+		//
         when:
         List<Material> mlist111956 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_111956"))
         assert mlist111956.size() == 1
         Path p111956 = materials_.resolve("47news.chronos_capture/20190404_111956/material-metadata-bundle.json")
         MaterialMetadataBundle mmb111956 = cache.retrieve(p111956)
-        println "#test_toJsonText added 111956 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        println "#test_toJsonText added 111956 constructed: " + JsonOutput.prettyPrint(cache.toJsonText())
         then:
         cache.toJsonText().contains("111956")
-        //
+        cache.size() == 1
+		//
         when:
         List<Material> mlist112053 = repoRoot_.getMaterials(new TSuiteName("47news.chronos_capture"), new TSuiteTimestamp("20190404_112053"))
         assert mlist111956.size() == 1
         Path p112053 = materials_.resolve("47news.chronos_capture/20190404_112053/material-metadata-bundle.json")
         MaterialMetadataBundle mmb112053 = cache.retrieve(p112053)
-        println "#test_toJsonText added 1120536 constructed: ${JsonOutput.prettyPrint(cache.toJsonText())}"
+        println "#test_toJsonText added 1120536 constructed: " + JsonOutput.prettyPrint(cache.toJsonText())
         then:
         cache.toJsonText().contains("112053")
+		cache.size() == 2
         // reproducing the problem
         cache.retrieve(p111956).get(0).getMaterialPath() == "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
-        
     }
     
+	
+	
+	
 	def testSmoke() {
 		setup:
 		MaterialMetadataBundleCache cache = new MaterialMetadataBundleCache()
@@ -90,6 +96,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		MaterialMetadataBundle mmb111956 = cache.retrieve(p111956)
 		then:
 		mmb111956 != null
+		cache.size() == 1
 		when:
 		String matepath111956 = "47news.chronos_capture/20190404_111956/47news.visitSite/top.png"
 		MaterialMetadata meta111956 = mmb111956.findLastByMaterialPath(matepath111956)
@@ -105,6 +112,7 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		MaterialMetadataBundle mmb112053 = cache.retrieve(p112053)
 		then:
 		mmb112053 != null
+		cache.size() == 2
 		when:
 		MaterialMetadata meta112053 = mmb112053.findLastByMaterialPath("47news.chronos_capture/20190404_112053/47news.visitSite/top.png")
 		then:
@@ -116,9 +124,10 @@ class MaterialMetadataBundleCacheSpec extends Specification {
 		mmb111956 = cache.retrieve(p111956)
 		then:
 		mmb111956 != null
+		cache.size() == 2
+		println "cache=" + cache.toJsonText()
+		println "mmb111956=" + mmb111956.toJsonText()
 		when:
-		println "cache=${JsonOutput.prettyPrint(cache.toJsonText())}"
-		println "mmb111956=${JsonOutput.prettyPrint(mmb111956.toJsonText())}"
 		meta111956 = mmb111956.findLastByMaterialPath(matepath111956)
 		then:
 		meta111956 != null	// once upon a time, this statement failed

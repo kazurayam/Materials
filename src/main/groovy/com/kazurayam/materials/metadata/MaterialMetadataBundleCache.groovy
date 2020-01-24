@@ -35,8 +35,8 @@ final class MaterialMetadataBundleCache {
     }
     
     MaterialMetadataBundle put(Path bundleFile) {
-        MaterialMetadataBundle value = MaterialMetadataBundle.deserialize(bundleFile)
-        return cache_.put(bundleFile, value)
+		MaterialMetadataBundle value = MaterialMetadataBundle.deserialize(bundleFile)
+		return cache_.put(bundleFile, value)
     }
     
     MaterialMetadataBundle remove(Path bundleFile) {
@@ -46,6 +46,11 @@ final class MaterialMetadataBundleCache {
     MaterialMetadataBundle get(Path bundleFile) {
         return cache_.get(bundleFile)
     }
+	
+	int size() {
+		return cache_.size()	
+	}
+	
     /**
      * If the MaterialMetadataBundle of the bundleFile is already on the cache, return its value.
      * If the MaterialMetadataBundle of the bundleFile is not yet on the cache, put it on the cache and then return its value.
@@ -54,7 +59,7 @@ final class MaterialMetadataBundleCache {
      * @return
      */
     MaterialMetadataBundle retrieve(Path bundleFile) {
-        if (!this.containsKey(bundleFile)) {
+		if (!this.containsKey(bundleFile)) {
             this.put(bundleFile)
         }
         return this.get(bundleFile)
@@ -69,7 +74,7 @@ final class MaterialMetadataBundleCache {
             if (count > 0) {
                 sb.append(",")
             }
-            sb.append('\"' + key.toString() + '\":')
+            sb.append('\"' + Helpers.escapeAsJsonText(key.toString()) + '\":')
             if (value != null) {
                 sb.append(value.toJsonText())
             } else {

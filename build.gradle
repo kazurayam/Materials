@@ -156,7 +156,7 @@ task pinpoint(type: Test) {
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/IndexerCarouselSpec.class"
     
-	include "**/view/IndexerConciseSpec.class"
+	//include "**/view/IndexerConciseSpec.class"
     
 	//include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
