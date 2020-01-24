@@ -53,6 +53,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     private RepositoryRoot repoRoot_
     
     private Path materialMetadataBundleAt_ = null
+	
     private MaterialMetadataBundle materialMetadataBundle_ = null
 
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
