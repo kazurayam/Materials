@@ -95,7 +95,7 @@ interface MaterialRepository {
     
     long getSize()
     
-    Path getMaterialMetadataBundleAt()
+    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
 	
 	RepositoryRoot getRepositoryRoot()
     

@@ -44,18 +44,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     private String executionProfileName_
     
-	// set default Material path to the "./${baseDir name}/_/_" directory
+    // set default Material path to the "./${baseDir name}/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
-	private boolean alreadyMarked_ = false
-    
-	
+    private boolean alreadyMarked_ = false
+
     private RepositoryRoot repoRoot_
     
-    private Path materialMetadataBundleAt_ = null
-	
-    private MaterialMetadataBundle materialMetadataBundle_ = null
-
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     // ---------------------- constructors & initializer ----------------------
@@ -220,30 +215,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             this.addTSuiteResult(tsr)
             tsr.createDirectories()
         }
-        
-        // prepare PathResolutionLogBundle instance
-        materialMetadataBundleAt_ = 
-            tsr.getTSuiteTimestampDirectory().resolve(
-                MaterialMetadataBundle.SERIALIZED_FILE_NAME)
-        
         //logger_.debug("#putCurrentTSuiteResult pathResolutionLogBundleAt_ is ${pathResolutionLogBundleAt_.toString()}")
         //logger_.debug("#putCurrentTSuiteResult Files.exists(pathResolutionLogBundleAt_) returned ${Files.exists(pathResolutionLogBundleAt_)}")
-        
-        if (Files.exists(materialMetadataBundleAt_)) {
-            // create instance from JSON file
-            try {
-                materialMetadataBundle_ = 
-                    MaterialMetadataBundle.deserialize(materialMetadataBundleAt_)
-            } catch (Exception e) {
-                logger_.warn("failed to deserialize ${materialMetadataBundleAt_.toString()}, will create new one")
-                materialMetadataBundle_ =
-                    new MaterialMetadataBundle()
-            }
-        } else {
-            // JSON file is not there, so create new one
-            materialMetadataBundle_ = 
-                new MaterialMetadataBundle()
-        }
         
         return tsr
     }
@@ -381,14 +354,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ------------------ methods to resolve Material Paths  ------------------
 
-    private void addMaterialMetadata(MaterialMetadata materialMetadata) {
-        if (materialMetadataBundleAt_ != null && materialMetadataBundle_ != null) {
-            materialMetadataBundle_.add(materialMetadata)
-            OutputStream os = new FileOutputStream(materialMetadataBundleAt_.toFile())
-            Writer writer = new OutputStreamWriter(os, "UTF-8")
-            materialMetadataBundle_.serialize(writer)
-            writer.close()
+    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult, MaterialMetadata materialMetadata) {
+        Path bundleFile = this.locateMaterialMetadataBundle(tSuiteResult)
+        MaterialMetadataBundle mmBundle = new MaterialMetadataBundle()
+        if (Files.exists(bundleFile)) {
+            mmBundle = MaterialMetadataBundle.deserialize(bundleFile)
         }
+        mmBundle.add(materialMetadata)
+        //
+        OutputStream os = new FileOutputStream(bundleFile.toFile())
+        Writer writer = new OutputStreamWriter(os, "UTF-8")
+        mmBundle.serialize(writer)
+        writer.close()
+        
+        return mmBundle
     }
     
     /**
@@ -450,7 +429,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setSubPath(subpath)
         metadata.setUrl(url)
         metadata.setExecutionProfileName(this.executionProfileName_)
-        this.addMaterialMetadata(metadata)
+        
+        //
+        this.recordMaterialMetadata(tSuiteResult, metadata)
         
         return material.getPath().normalize()
     }
@@ -518,7 +499,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setSubPath(subpath)
         metadata.setUrl(url)
         metadata.setExecutionProfileName(this.executionProfileName_)
-        this.addMaterialMetadata(metadata)
+        
+        //
+        this.recordMaterialMetadata(tSuiteResult, metadata)
+        
         return material.getPath().normalize()
     }
     
@@ -638,7 +622,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setSubPath(subpath)
         metadata.setFileName(fileName)
         metadata.setExecutionProfileName(this.executionProfileName_)
-        this.addMaterialMetadata(metadata)
+        
+        
+        this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
     }
@@ -804,8 +790,12 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return count
     }
 
-    Path getMaterialMetadataBundleAt() {
-        return this.materialMetadataBundleAt_
+    /**
+     * @return Path of material-metadata-bundl.json file under the directory of the TSuiteResult
+     */
+    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult) {
+        return tSuiteResult.getTSuiteTimestampDirectory().resolve(
+                MaterialMetadataBundle.SERIALIZED_FILE_NAME)
     }
 
 	@Override
