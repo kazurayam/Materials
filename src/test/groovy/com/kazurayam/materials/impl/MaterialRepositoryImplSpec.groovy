@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
@@ -57,7 +58,7 @@ class MaterialRepositoryImplSpec extends Specification {
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
             mri.markAsCurrent('TS1', '20180530_130604')
-            def r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+            TSuiteResult tsr = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
         when:
             Path p1 = mri.resolveScreenshotPath('TC1',
                 new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
@@ -69,9 +70,9 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
             p2.getFileName().toString() == 'https%3A%2F%2Ffoo%3Abar%40dev.home.net%2Fgnc%2FissueList.html%3Fcorp%3Dabcd.png'
         when:
-            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.locateMaterialMetadataBundle(tsr)
         then:
-            Files.exists(resolutionLogs)
+            Files.exists(metadataBundle)
     }
     
     
@@ -124,7 +125,7 @@ class MaterialRepositoryImplSpec extends Specification {
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
             mri.markAsCurrent(    'TS1', '20180530_130604')
-            def r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+            TSuiteResult tsr = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
         when:
             Path p = mri.resolveScreenshotPathByURLPathComponents('TC1',
                         new URL('https://my.home.net/gn/issueList.html?corp=abcd'))
@@ -156,9 +157,9 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
             google.getFileName().toString() == 'https%3A%2F%2Fwww.google.com.png'
         when:
-            Path resolutionLogs = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.locateMaterialMetadataBundle(tsr)
         then:
-            Files.exists(resolutionLogs)
+            Files.exists(metadataBundle)
     }
     
 
@@ -197,7 +198,7 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             Path materialsDir = casedir.resolve('Materials')
             MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
             mri.markAsCurrent('TS1', '20180530_130604')
-            def r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+            TSuiteResult tsr = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
         when:
             String materialFileName = MaterialFileName.format(
                 new URL('http://demoaut.katalon.com/'),
@@ -209,9 +210,9 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             p.toString().replace('\\', '/') ==
                 "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/TS1/20180530_130604/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         when:
-            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.locateMaterialMetadataBundle(tsr)
         then:
-            Files.exists(resolutionLog)
+            Files.exists(metadataBundle)
     }
 
     def testResolveMaterialPath_whenCurrentTestSuiteNotMarked() {
@@ -224,7 +225,7 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             
             // --- intentionally leave the variable mri not marked with the current Test Suite
             //mri.markAsCurrent('TS1', '20180530_130604')
-            //TSuiteResult r = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
+            TSuiteResult tsr = mri.ensureTSuiteResultPresent('TS1', '20180530_130604')
         when:
             String materialFileName = MaterialFileName.format(
                 new URL('http://demoaut.katalon.com/'),
@@ -236,10 +237,10 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
             p.toString().replace('\\', '/') ==
                 "build/tmp/testOutput/${classShortName_}/${methodName}/Materials/_/_/TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
         when:
-            Path resolutionLog = mri.getPathResolutionLogBundleAt()
+            Path metadataBundle = mri.locateMaterialMetadataBundle(tsr)
         then:
             // the file is created when mri.resolveMaterialPath() was invoked
-            resolutionLog != null
+            metadataBundle != null
     }
     
     def testResolveMaterialPath_withSuffix() {

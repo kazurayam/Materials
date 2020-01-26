@@ -69,7 +69,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec extends Specificatio
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             //
-            RepositoryVisitorGeneratingHtmlDivsAsModalConcise visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalConcise(markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalConcise visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalConcise(mr.getRepositoryRoot(), markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null

@@ -10,7 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.RetrievalBy.SearchContext
-import com.kazurayam.materials.resolution.PathResolutionLogBundle
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
 
 import spock.lang.Specification
 
@@ -335,9 +335,9 @@ class MaterialStorageSpec extends Specification {
     /**
      * MaterialStorage#restore() method should be able to copy
      */
-    def testRestore_including_PathResolutionLogBundle_file() {
+    def testRestore_including_MaterialMetadataBundle_file() {
         setup:
-        Path caseOutputDir = workdir_.resolve('testRestore_including_PathResolutionLogBundle_file')
+        Path caseOutputDir = workdir_.resolve('testRestore_including_MaterialMetadataBundle_file')
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path storageDir = caseOutputDir.resolve('Storage')
         Path reportsDir = caseOutputDir.resolve("Reports")
@@ -359,11 +359,11 @@ class MaterialStorageSpec extends Specification {
         when:
         Path tSuiteTimestampDir_inMR = mr.getTSuiteResult(tsri).getTSuiteTimestampDirectory()
         then:
-        Files.exists(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME))
+        Files.exists(tSuiteTimestampDir_inMR.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME))
         when:
         // test backup() method
-        String clonedFileName = "__" + PathResolutionLogBundle.SERIALIZED_FILE_NAME
-        Files.copy(tSuiteTimestampDir_inMR.resolve(PathResolutionLogBundle.SERIALIZED_FILE_NAME),
+        String clonedFileName = "__" + MaterialMetadataBundle.SERIALIZED_FILE_NAME
+        Files.copy(tSuiteTimestampDir_inMR.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME),
                     tSuiteTimestampDir_inMR.resolve(clonedFileName), StandardCopyOption.REPLACE_EXISTING)
         int count = ms.backup(mr, tsri)
         then:

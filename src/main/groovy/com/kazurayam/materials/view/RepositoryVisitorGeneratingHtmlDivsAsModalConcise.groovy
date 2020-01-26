@@ -8,6 +8,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.imagedifference.ComparisonResult
+import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitor
 
 import groovy.xml.MarkupBuilder
@@ -28,8 +29,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     *
     * @param mkbuilder
     */
-    RepositoryVisitorGeneratingHtmlDivsAsModalConcise(MarkupBuilder mkbuilder) {
-        super(mkbuilder)
+    RepositoryVisitorGeneratingHtmlDivsAsModalConcise(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        super(repoRoot, mkbuilder)
     }
 
     @Override String getBootstrapModalSize() {
@@ -53,7 +54,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
             Path repoRoot = mate.getParent().getParent().getParent().getBaseDir()
             mkbuilder_.div(['class':'carousel slide', 'data-ride':'carousel', 'id': "${mate.hashCode()}carousel"]) {
                 mkbuilder_.div(['class':'carousel-inner']) {
-					// Diff
+                    // Diff
                     mkbuilder_.div(['class':'carousel-item active']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
                             String eval = (cr.imagesAreSimilar()) ? "Images are similar." : "Images are different."
@@ -70,12 +71,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                             'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
                             'alt' : "Diff"])
                     }
-					// Expected + Actual
+                    // Expected + Actual
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
-                            mkbuilder_.p "Expected: ${cr.getExpectedMaterial().getDescription() ?: ''}" +
-                                        " / " +
-                                        "Actual: ${cr.getActualMaterial().getDescription() ?: ''}"
+                            mkbuilder_.p "${this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
+                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
+                                        " | " +
+                                        " ${this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: ''}" +
+                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: ''}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
                             mkbuilder_.div(['class':'row']) {

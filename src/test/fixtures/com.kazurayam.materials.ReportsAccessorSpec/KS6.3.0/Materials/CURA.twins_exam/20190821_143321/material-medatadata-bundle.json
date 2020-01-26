@@ -1,8 +1,8 @@
 {
-    "PathResolutionLogBundle": [
+    "MaterialMetadataBundle": [
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/comparison-result-bundle.json",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "",
@@ -10,8 +10,8 @@
             }
         },
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary(0.00).png",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%23summary(0.00).png",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "CURA.visitSite",
@@ -19,8 +19,8 @@
             }
         },
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/default%23appointment(0.00).png",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/default%23appointment(0.00).png",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "CURA.visitSite",
@@ -28,17 +28,17 @@
             }
         },
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/home(47.87)FAILED.png",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/home(7.23)FAILED.png",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "CURA.visitSite",
-                "FileName": "home(47.87)FAILED.png"
+                "FileName": "home(7.23)FAILED.png"
             }
         },
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/profile.php%23login(0.00).png",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/profile.php%23login(0.00).png",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "CURA.visitSite",
@@ -46,8 +46,8 @@
             }
         },
         {
-            "PathResolutionLog": {
-                "MaterialPath": "CURA.twins_exam/20190528_111335/CURA.ImageDiff_twins/CURA.visitSite/revisited(0.00).png",
+            "MaterialMetadata": {
+                "MaterialPath": "CURA.twins_exam/20190821_143321/CURA.ImageDiff_twins/CURA.visitSite/revisited(0.00).png",
                 "TCaseName": "Test Cases/CURA/ImageDiff_twins",
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "CURA.visitSite",

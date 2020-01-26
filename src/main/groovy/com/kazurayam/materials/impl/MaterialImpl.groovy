@@ -2,6 +2,7 @@ package com.kazurayam.materials.impl
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -12,13 +13,19 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
+
+import groovy.json.JsonOutput
 
 /**
  * A Material has a Path <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/<subpath>/<MaterialFileName>
@@ -35,7 +42,7 @@ class MaterialImpl implements Material, Comparable<Material> {
     private LocalDateTime lastModified_
     private long length_
     
-    // folloing properties are optional
+    // following properties are optional
     private String description_ = null
     
     // -------- constructors --------------------------------------------------
@@ -58,10 +65,15 @@ class MaterialImpl implements Material, Comparable<Material> {
     MaterialImpl(TCaseResult parent, Path filePath) {
         Objects.requireNonNull(parent, "parent must not be null")
         Objects.requireNonNull(filePath, "filePath must not be null")
+		init(parent, filePath)
+    }
+	
+	private void init(TCaseResult parent, Path filePath) {
         parentTCR_ = parent
         subpath_ = parent.getTCaseDirectory().normalize().relativize(filePath.getParent().normalize()).toString()
         materialFileName_ = new MaterialFileName(filePath.getFileName().toString())
     }
+    
     
     // ------- implematation of MaterialCore interface ------------------------
     
