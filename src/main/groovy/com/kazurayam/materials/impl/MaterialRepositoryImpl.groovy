@@ -431,7 +431,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setExecutionProfileName(this.executionProfileName_)
         
         //
-        this.recordMaterialMetadata(tSuiteResult, metadata)
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
         return material.getPath().normalize()
     }
@@ -501,7 +501,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setExecutionProfileName(this.executionProfileName_)
         
         //
-        this.recordMaterialMetadata(tSuiteResult, metadata)
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
         return material.getPath().normalize()
     }
@@ -623,8 +623,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         metadata.setFileName(fileName)
         metadata.setExecutionProfileName(this.executionProfileName_)
         
-        
-        this.recordMaterialMetadata(tSuiteResult, metadata)
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
     }
