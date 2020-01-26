@@ -1,4 +1,4 @@
-package com.kazurayam.materials.resolution
+package com.kazurayam.materials.metadata
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -12,9 +12,9 @@ import com.kazurayam.materials.TCaseName
 
 import groovy.json.JsonOutput
 
-class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
+class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
 
-    static Logger logger_ = LoggerFactory.getLogger(PathResolutionLogImpl.class)
+    static Logger logger_ = LoggerFactory.getLogger(MaterialMetadataImpl.class)
     
     // mandatory properties
     private InvokedMethodName invokedMethodName_
@@ -25,6 +25,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     private String subPath_
     private URL url_
     private String fileName_
+    private String executionProfileName_
     
 	/**
 	 * 
@@ -32,18 +33,18 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
 	 * @param tCaseName
 	 * @param materialPath Path of a Material file relative to the baseDir of MaterialRepository = the 'Materials' directory
 	 */
-    PathResolutionLogImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, String materialPath) {
+    MaterialMetadataImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, String materialPath) {
         this.invokedMethodName_ = invokedMethodName
         this.tCaseName_ = tCaseName
         this.materialPath_ = materialPath
     }
 
-    static PathResolutionLog deserialize(Map jsonObject) {
+    static MaterialMetadata deserialize(Map jsonObject) {
         Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         String pp = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
-        String imn = jsonObject.PathResolutionLog['InvokedMethodName']
-        String tcn = jsonObject.PathResolutionLog['TCaseName']
-        String mp  = jsonObject.PathResolutionLog['MaterialPath']
+        String imn = jsonObject.MaterialMetadata['InvokedMethodName']
+        String tcn = jsonObject.MaterialMetadata['TCaseName']
+        String mp  = jsonObject.MaterialMetadata['MaterialPath']
         if (imn == null) {
             throw new IllegalArgumentException(
                 "No \'InvokedMethodName\' is found in ${pp}")
@@ -56,29 +57,33 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
             throw new IllegalArgumentException(
                 "No \'MaterialPath\' is found in ${pp}")
         }
-        TCaseName tCaseName = new TCaseName(jsonObject.PathResolutionLog['TCaseName'])
+        TCaseName tCaseName = new TCaseName(jsonObject.MaterialMetadata['TCaseName'])
         String materialPath = mp
 
         logger_.debug("#deserialize mp                 =${mp}")
         logger_.debug("#deserialize materialPath       =${materialPath}")
 
-        PathResolutionLog log = new PathResolutionLogImpl(
+        MaterialMetadata metadata = new MaterialMetadataImpl(
                                         InvokedMethodName.get(imn),
                                         tCaseName,
                                         materialPath
                                         )
         //
-        if (jsonObject.PathResolutionLog['SubPath']) {
-            log.setSubPath(jsonObject.PathResolutionLog['SubPath'])
+        if (jsonObject.MaterialMetadata['SubPath']) {
+            metadata.setSubPath(jsonObject.MaterialMetadata['SubPath'])
         }
-        if (jsonObject.PathResolutionLog['URL']) {
-            log.setUrl(new URL(jsonObject.PathResolutionLog['URL']))
+        if (jsonObject.MaterialMetadata['URL']) {
+            metadata.setUrl(new URL(jsonObject.MaterialMetadata['URL']))
         }
-        if (jsonObject.PathResolutionLog['FileName']) {
-            log.setFileName(jsonObject.PathResolutionLog['FileName'])
+        if (jsonObject.MaterialMetadata['FileName']) {
+            metadata.setFileName(jsonObject.MaterialMetadata['FileName'])
         }
+        if (jsonObject.MaterialMetadata['ExecutionProfileName']) {
+            metadata.setExecutionProfileName(jsonObject.MaterialMetadata['ExecutionProfileName'])
+        }
+        
         //
-        return log
+        return metadata
     }
 
     @Override
@@ -133,11 +138,21 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     }
     
     @Override
+    void setExecutionProfileName(String profileName) {
+        this.executionProfileName_ = profileName
+    }
+    
+    @Override
+    String getExecutionProfileName() {
+        return this.executionProfileName_
+    }
+    
+    @Override
     boolean equals(Object obj) {
-        if (! obj instanceof PathResolutionLog) {
+        if (! obj instanceof MaterialMetadata) {
             return false
         }
-        PathResolutionLog other = (PathResolutionLog)obj
+        MaterialMetadata other = (MaterialMetadata)obj
         return this.getMaterialPath() == other.getMaterialPath() &&
                 this.getInvokedMethodName() == other.getInvokedMethodName() &&
                 this.getTCaseName() == other.getTCaseName()
@@ -152,7 +167,7 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append('\"PathResolutionLog\":{')
+        sb.append('\"MaterialMetadata\":{')
         sb.append('\"MaterialPath\":\"')
         sb.append(Helpers.escapeAsJsonText(this.getMaterialPath()))
         sb.append('\",')
@@ -177,6 +192,11 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
             sb.append(Helpers.escapeAsJsonText(this.getFileName()))
             sb.append('\"')
         }
+        if (this.getExecutionProfileName() != null) {
+            sb.append(',\"ExecutionProfileName\":\"')
+            sb.append(Helpers.escapeAsJsonText(this.getExecutionProfileName()))
+            sb.append('\"')
+        }
         sb.append('}')
         sb.append('}')
         
@@ -190,10 +210,10 @@ class PathResolutionLogImpl implements PathResolutionLog, Comparable<Object> {
     
     @Override
     int compareTo(Object object) {
-        if (! object instanceof PathResolutionLog) {
-            throw new IllegalArgumentException("object is not instance of PathResolutionLog")
+        if (! object instanceof MaterialMetadata) {
+            throw new IllegalArgumentException("object is not instance of MaterialMedata")
         }
-        PathResolutionLog other = (PathResolutionLog)object
+        MaterialMetadata other = (MaterialMetadata)object
         return this.getMaterialPath().compareTo(other.getMaterialPath())
     }
 }

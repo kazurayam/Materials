@@ -7,6 +7,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.imagedifference.ComparisonResult
+import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitor
 
 
@@ -28,8 +29,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallel
      * 
      * @param mkbuilder
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModalParallel(MarkupBuilder mkbuilder) {
-        super(mkbuilder)
+    RepositoryVisitorGeneratingHtmlDivsAsModalParallel(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        super(repoRoot, mkbuilder)
     }
 
     @Override String getBootstrapModalSize() {

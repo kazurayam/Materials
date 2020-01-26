@@ -1,7 +1,7 @@
 {
-    "PathResolutionLogBundle": [
+    "MaterialMetadataBundle": [
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/47reporters.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -10,7 +10,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/culture.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -19,7 +19,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/economics.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -28,7 +28,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/localnews.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -37,7 +37,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/national.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -46,7 +46,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/news.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -55,7 +55,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/photo.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -64,7 +64,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/politics.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -73,7 +73,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/ranking.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -82,7 +82,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/sports.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -91,7 +91,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/top.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
@@ -100,7 +100,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190401_142748/47news.visitSite/world.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",

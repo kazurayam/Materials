@@ -13,6 +13,7 @@ import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Indexer
 import com.kazurayam.materials.IndexerFactory
 import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.TCaseName
@@ -22,13 +23,13 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
+import com.kazurayam.materials.metadata.InvokedMethodName
+import com.kazurayam.materials.metadata.MaterialMetadata
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
+import com.kazurayam.materials.metadata.MaterialMetadataImpl
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryFileScanner
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.resolution.InvokedMethodName
-import com.kazurayam.materials.resolution.PathResolutionLog
-import com.kazurayam.materials.resolution.PathResolutionLogBundle
-import com.kazurayam.materials.resolution.PathResolutionLogImpl
 
 import groovy.json.JsonOutput
 
@@ -41,17 +42,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     private Path baseDir_
     
-	// set default Material path to the "./${baseDir name}/_/_" directory
+    private String executionProfileName_
+    
+    // set default Material path to the "./${baseDir name}/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
-	private boolean alreadyMarked_ = false
-    
-	
+    private boolean alreadyMarked_ = false
+
     private RepositoryRoot repoRoot_
     
-    private Path pathResolutionLogBundleAt_ = null
-    private PathResolutionLogBundle pathResolutionLogBundle_ = null
-
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
     
     // ---------------------- constructors & initializer ----------------------
@@ -94,6 +93,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
+    }
+    
+    @Override
+    void setExecutionProfileName(String profileName) {
+        executionProfileName_ = profileName
+    }
+    
+    @Override
+    String getExecutionProfileName() {
+        return executionProfileName_
     }
     
     /**
@@ -163,9 +172,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId) {
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName) {
         return this.ensureTSuiteResultPresent(
-            testSuiteId,
+            testSuiteName,
             Helpers.now())
     }
     
@@ -177,9 +186,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId, String testSuiteTimestamp) {
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp) {
         return this.ensureTSuiteResultPresent(
-            new TSuiteName(testSuiteId),
+            new TSuiteName(testSuiteName),
             TSuiteTimestamp.newInstance(testSuiteTimestamp))
     }
     
@@ -206,30 +215,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             this.addTSuiteResult(tsr)
             tsr.createDirectories()
         }
-        
-        // prepare PathResolutionLogBundle instance
-        pathResolutionLogBundleAt_ = 
-            tsr.getTSuiteTimestampDirectory().resolve(
-                PathResolutionLogBundle.SERIALIZED_FILE_NAME)
-        
         //logger_.debug("#putCurrentTSuiteResult pathResolutionLogBundleAt_ is ${pathResolutionLogBundleAt_.toString()}")
         //logger_.debug("#putCurrentTSuiteResult Files.exists(pathResolutionLogBundleAt_) returned ${Files.exists(pathResolutionLogBundleAt_)}")
-        
-        if (Files.exists(pathResolutionLogBundleAt_)) {
-            // create instance from JSON file
-            try {
-                pathResolutionLogBundle_ = 
-                    PathResolutionLogBundle.deserialize(pathResolutionLogBundleAt_)
-            } catch (Exception e) {
-                logger_.warn("failed to deserialize ${pathResolutionLogBundleAt_.toString()}, will create new one")
-                pathResolutionLogBundle_ =
-                    new PathResolutionLogBundle()
-            }
-        } else {
-            // JSON file is not there, so create new one
-            pathResolutionLogBundle_ = 
-                new PathResolutionLogBundle()
-        }
         
         return tsr
     }
@@ -367,15 +354,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ------------------ methods to resolve Material Paths  ------------------
 
-    private void addPathResolutionLog(PathResolutionLog resolutionLog) {
-        if (pathResolutionLogBundleAt_ != null && 
-				pathResolutionLogBundle_ != null) {
-			pathResolutionLogBundle_.add(resolutionLog)
-			OutputStream os = new FileOutputStream(pathResolutionLogBundleAt_.toFile())
-			Writer writer = new OutputStreamWriter(os, "UTF-8")
-			pathResolutionLogBundle_.serialize(writer)
-			writer.close()
-		}
+    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult, MaterialMetadata materialMetadata) {
+        Path bundleFile = this.locateMaterialMetadataBundle(tSuiteResult)
+        MaterialMetadataBundle mmBundle = new MaterialMetadataBundle()
+        if (Files.exists(bundleFile)) {
+            mmBundle = MaterialMetadataBundle.deserialize(bundleFile)
+        }
+        mmBundle.add(materialMetadata)
+        //
+        OutputStream os = new FileOutputStream(bundleFile.toFile())
+        Writer writer = new OutputStreamWriter(os, "UTF-8")
+        mmBundle.serialize(writer)
+        writer.close()
+        
+        return mmBundle
     }
     
     /**
@@ -429,14 +421,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Helpers.ensureDirs(material.getPath().getParent())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setUrl(url)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setUrl(url)
+        metadata.setExecutionProfileName(this.executionProfileName_)
+        
+        //
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
         return material.getPath().normalize()
     }
@@ -496,14 +491,17 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         //Helpers.touch(material.getPath())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setUrl(url)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setUrl(url)
+        metadata.setExecutionProfileName(this.executionProfileName_)
+        
+        //
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
         return material.getPath().normalize()
     }
@@ -586,11 +584,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(subpath, "subpath must not be null")
         Objects.requireNonNull(fileName, "fileName must not be null")
-		if ( !this.isAlreadyMarked() ) {
-			// in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
-			this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
-			this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
-		}
+        if ( !this.isAlreadyMarked() ) {
+            // in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
+            this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
+            this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
+        }
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
@@ -616,14 +614,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         //Helpers.touch(material.getPath())
         
         // log resolution of a Material path
-        PathResolutionLog resolution =
-            new PathResolutionLogImpl(
+        MaterialMetadata metadata =
+            new MaterialMetadataImpl(
                     InvokedMethodName.RESOLVE_MATERIAL_PATH,
                     tCaseName,
                     material.getHrefRelativeToRepositoryRoot())
-        resolution.setSubPath(subpath)
-        resolution.setFileName(fileName)
-        this.addPathResolutionLog(resolution)
+        metadata.setSubPath(subpath)
+        metadata.setFileName(fileName)
+        metadata.setExecutionProfileName(this.executionProfileName_)
+        
+        MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
     }
@@ -647,7 +647,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Indexer indexer = IndexerFactory.newIndexer()
         indexer.setBaseDir(baseDir_)
         Path reportsDir = baseDir_.resolve('..').resolve('Reports')  // a naive assumption, may break 
-		indexer.setReportsDir(reportsDir)
+        indexer.setReportsDir(reportsDir)
         Path index = baseDir_.resolve('index.html')
         indexer.setOutput(index)
         if (vtLogger_ != null) {
@@ -789,10 +789,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return count
     }
 
-    Path getPathResolutionLogBundleAt() {
-        return this.pathResolutionLogBundleAt_
+    /**
+     * @return Path of material-metadata-bundl.json file under the directory of the TSuiteResult
+     */
+    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult) {
+        return tSuiteResult.getTSuiteTimestampDirectory().resolve(
+                MaterialMetadataBundle.SERIALIZED_FILE_NAME)
     }
 
+	@Override
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_
     }

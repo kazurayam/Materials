@@ -69,7 +69,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
             Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
             MarkupBuilder markupBuilder = new MarkupBuilder(writer)
             //
-            RepositoryVisitorGeneratingHtmlDivsAsModalParallel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalParallel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalParallel(mr.getRepositoryRoot(), markupBuilder)
             visitor.setReportsAccessor(ra)
         then:
             visitor != null

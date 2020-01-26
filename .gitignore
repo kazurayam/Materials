@@ -33,3 +33,7 @@ gradle-app.setting
 
 # http://gyamin.hatenablog.com/entry/2017/04/02/103049
 gradle.properties
+
+
+# Mac osx
+.DS_Store

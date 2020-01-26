@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory
 import groovy.json.JsonOutput
 import spock.lang.IgnoreRest
 import spock.lang.Specification
+import com.kazurayam.materials.Material
+import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.impl.MaterialCoreImpl
 
 //@Ignore
 class MaterialRepositorySpec extends Specification {
@@ -294,7 +297,8 @@ class MaterialRepositorySpec extends Specification {
         actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
     }
     
-
+    
+    
     /**
      * This will test deleteBaseDirContents() method.
      * This will create a fixture for its own.

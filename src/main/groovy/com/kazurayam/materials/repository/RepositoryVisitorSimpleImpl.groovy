@@ -1,5 +1,7 @@
 package com.kazurayam.materials.repository
 
+import com.kazurayam.materials.ReportsAccessor
+import com.kazurayam.materials.VisualTestingLogger
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -77,4 +79,13 @@ class RepositoryVisitorSimpleImpl implements RepositoryVisitor {
         return RepositoryVisitResult.FAILURE
     }
 
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger logger) {
+        pw_.println("#setVisualTestingLogger was invoked")
+    }
+
+    @Override
+    void setReportsAccessor(ReportsAccessor reportsAccessor) {
+        pw_.println("#setReportsAccessor was invoked")
+    }
 }
