@@ -18,11 +18,11 @@ import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.imagedifference.ComparisonResultBundle
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
+import com.kazurayam.materials.metadata.MaterialMetadata
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
-import com.kazurayam.materials.resolution.PathResolutionLog
-import com.kazurayam.materials.resolution.PathResolutionLogBundle
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -46,8 +46,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarousel
      * 
      * @param mkbuilder
      */
-    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(MarkupBuilder mkbuilder) {
-        super(mkbuilder)
+    RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(RepositoryRoot repoRoot, MarkupBuilder mkbuilder) {
+        super(repoRoot, mkbuilder)
     }
     
     @Override String getBootstrapModalSize() {

@@ -1,6 +1,7 @@
-package com.kazurayam.materials.resolution
+package com.kazurayam.materials.metadata
 
-import com.kazurayam.materials.resolution.InvokedMethodNameSpec
+import com.kazurayam.materials.metadata.InvokedMethodName
+import com.kazurayam.materials.metadata.InvokedMethodNameSpec
 
 import spock.lang.Specification
 

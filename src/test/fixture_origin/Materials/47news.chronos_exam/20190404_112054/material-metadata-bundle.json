@@ -1,7 +1,7 @@
 {
-    "PathResolutionLogBundle": [
+    "MaterialMetadataBundle": [
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/image-delta-stats.json",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "InvokedMethodName": "resolveMaterialPath",
@@ -10,7 +10,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "InvokedMethodName": "resolveMaterialPath",
@@ -19,7 +19,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/47news.visitSite/top.20190404_111956_default-20190404_112053_default.(16.99).png",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "InvokedMethodName": "resolveMaterialPath",
@@ -28,7 +28,7 @@
             }
         },
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "InvokedMethodName": "resolveMaterialPath",

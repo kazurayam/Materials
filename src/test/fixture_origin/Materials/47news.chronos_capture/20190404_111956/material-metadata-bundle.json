@@ -1,12 +1,13 @@
 {
-    "PathResolutionLogBundle": [
+    "MaterialMetadataBundle": [
         {
-            "PathResolutionLog": {
+            "MaterialMetadata": {
                 "MaterialPath": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "URL": "https://www.47news.jp/"
+                "URL": "https://www.47news.jp/",
+                "ExecutionProfileName": "product"
             }
         }
     ]

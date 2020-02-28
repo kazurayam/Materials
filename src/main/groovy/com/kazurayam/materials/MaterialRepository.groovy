@@ -2,6 +2,8 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
+import com.kazurayam.materials.repository.RepositoryRoot
+
 /**
  * MaterialRepository#resolveMaterial() method resolves Path to save your 'Material'
  * obtained during a run of WebDriver-based testing.
@@ -82,6 +84,9 @@ interface MaterialRepository {
     void deleteBaseDirContents() throws IOException
 
     
+    void setExecutionProfileName(String executionProfileName)
+    String getExecutionProfileName()
+    
     Path getBaseDir()
     
     Path getCurrentTestSuiteDirectory()
@@ -90,7 +95,9 @@ interface MaterialRepository {
     
     long getSize()
     
-    Path getPathResolutionLogBundleAt()
+    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
+	
+	RepositoryRoot getRepositoryRoot()
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
     Path getTestCaseDirectory(String testCaseId)
@@ -133,11 +140,12 @@ interface MaterialRepository {
     */
     Path makeIndex()
 
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName)
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName)
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteId, String testSuiteTimestamp)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp)
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
+    
     
     /**
      * Returns a Path of a Material file.
