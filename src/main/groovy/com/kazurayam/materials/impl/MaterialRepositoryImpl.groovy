@@ -812,6 +812,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     /**
      * @return Path of material-metadata-bundl.json file under the directory of the TSuiteResult
      */
+    @Override
     Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult) {
         return tSuiteResult.getTSuiteTimestampDirectory().resolve(
                 MaterialMetadataBundle.SERIALIZED_FILE_NAME)
