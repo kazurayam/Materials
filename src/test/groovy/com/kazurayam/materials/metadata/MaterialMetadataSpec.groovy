@@ -1,23 +1,22 @@
 package com.kazurayam.materials.metadata
 
-import java.nio.file.StandardCopyOption
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.metadata.InvokedMethodName
 import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataImpl
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Ignore
 import spock.lang.Specification
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 class MaterialMetadataSpec extends Specification {
     
@@ -53,11 +52,13 @@ class MaterialMetadataSpec extends Specification {
                 .resolve(tCaseName.getValue())
                 .resolve('http%3A%2F%2Fdemoaut.katalon.com%2F.png')
                 .normalize().toString()
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata = 
             new MaterialMetadataImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-                tCaseName,
-                materialPath)
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                    tCaseName,
+                    materialPath,
+                    description)
         then:
         metadata != null
         metadata.getInvokedMethodName() == InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS
@@ -82,11 +83,13 @@ class MaterialMetadataSpec extends Specification {
                 .resolve(tCaseName.getValue())
                 .resolve('47NEWS_TOP.png')
                 .normalize().toString()
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata =
             new MaterialMetadataImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-                tCaseName,
-                materialPath)
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                    tCaseName,
+                    materialPath,
+                    description)
         //
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/')
@@ -131,11 +134,13 @@ class MaterialMetadataSpec extends Specification {
                 .resolve(tCaseName.getValue())
                 .resolve('47NEWS_TOP.png')
                 .normalize().toString()
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata =
             new MaterialMetadataImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-                tCaseName,
-                materialPath)
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                    tCaseName,
+                    materialPath,
+                    description)
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/')
         metadata.setUrl(url)
@@ -192,11 +197,13 @@ class MaterialMetadataSpec extends Specification {
                 .resolve('dir1')
                 .resolve('47NEWS_TOP.png')
                 .normalize().toString()
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata = 
             new MaterialMetadataImpl(
-                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-                tCaseName,
-                materialPath)
+                    InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                    tCaseName,
+                    materialPath,
+                    description)
         metadata.setSubPath('dir1')   // Bomb!
         metadata.setUrl(new URL('https://www.47news.jp/'))
         metadata.setExecutionProfileName('develop')

@@ -1,16 +1,11 @@
 package com.kazurayam.materials.metadata
 
-import java.nio.file.Path
-import java.nio.file.Paths
-
+import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.MaterialDescription
+import com.kazurayam.materials.TCaseName
+import groovy.json.JsonOutput
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.TCaseName
-
-import groovy.json.JsonOutput
 
 class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
 
@@ -20,23 +15,28 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
     private InvokedMethodName invokedMethodName_
     private TCaseName tCaseName_
     private String materialPath_
-    
+    private MaterialDescription description_
+
     // optional properties
     private String subPath_
     private URL url_
     private String fileName_
     private String executionProfileName_
-    
+
 	/**
 	 * 
 	 * @param invokedMethodName
 	 * @param tCaseName
 	 * @param materialPath Path of a Material file relative to the baseDir of MaterialRepository = the 'Materials' directory
 	 */
-    MaterialMetadataImpl(InvokedMethodName invokedMethodName, TCaseName tCaseName, String materialPath) {
+    MaterialMetadataImpl(InvokedMethodName invokedMethodName,
+                         TCaseName tCaseName,
+                         String materialPath,
+                         MaterialDescription description) {
         this.invokedMethodName_ = invokedMethodName
         this.tCaseName_ = tCaseName
         this.materialPath_ = materialPath
+        this.description_ = description
     }
 
     static MaterialMetadata deserialize(Map jsonObject) {
@@ -45,6 +45,7 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
         String imn = jsonObject.MaterialMetadata['InvokedMethodName']
         String tcn = jsonObject.MaterialMetadata['TCaseName']
         String mp  = jsonObject.MaterialMetadata['MaterialPath']
+        def desc   = jsonObject.MaterialMetadata['MaterialDescription']
         if (imn == null) {
             throw new IllegalArgumentException(
                 "No \'InvokedMethodName\' is found in ${pp}")
@@ -57,8 +58,13 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
             throw new IllegalArgumentException(
                 "No \'MaterialPath\' is found in ${pp}")
         }
+        if (desc == null) {
+            throw new IllegalArgumentException(
+                    "No \'MaterialDescription\' is found in ${pp}")
+        }
         TCaseName tCaseName = new TCaseName(jsonObject.MaterialMetadata['TCaseName'])
         String materialPath = mp
+        MaterialDescription description = MaterialDescription.newInstance(desc)
 
         logger_.debug("#deserialize mp                 =${mp}")
         logger_.debug("#deserialize materialPath       =${materialPath}")
@@ -66,8 +72,8 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
         MaterialMetadata metadata = new MaterialMetadataImpl(
                                         InvokedMethodName.get(imn),
                                         tCaseName,
-                                        materialPath
-                                        )
+                                        materialPath,
+                                        description)
         //
         if (jsonObject.MaterialMetadata['SubPath']) {
             metadata.setSubPath(jsonObject.MaterialMetadata['SubPath'])
@@ -106,7 +112,12 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
     String getMaterialPath() {
         return this.materialPath_
     }
-    
+
+    @Override
+    MaterialDescription getMaterialDescription() {
+        return this.description_
+    }
+
     @Override
     void setSubPath(String subPath) {
         this.subPath_ = subPath
@@ -174,6 +185,11 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
         sb.append('\"TCaseName\":\"')
         sb.append(Helpers.escapeAsJsonText(this.getTCaseName().getId()))
         sb.append('\",')
+
+        sb.append('\"MaterialDescription\":')
+        sb.append(this.getMaterialDescription().toJsonText())
+        sb.append(',')
+
         sb.append('\"InvokedMethodName\":\"')
         sb.append(Helpers.escapeAsJsonText(this.getInvokedMethodName().toString()))
         sb.append('\"')

@@ -162,10 +162,14 @@ interface MaterialRepository {
      * </PRE>
      */
     Path resolveScreenshotPath(String testCaseId, URL url)
-    Path resolveScreenshotPath(String testCaseId, String subpath, URL url)
+    Path resolveScreenshotPath(String testCaseId, URL url, MaterialDescription description)
+    Path resolveScreenshotPath(String testCaseId, String subPath, URL url)
+    Path resolveScreenshotPath(String testCaseId, String subPath, URL url, MaterialDescription description)
     Path resolveScreenshotPath(TCaseName tCaseName, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, String subpath, URL url)
-    
+    Path resolveScreenshotPath(TCaseName tCaseName, URL url, MaterialDescription description)
+    Path resolveScreenshotPath(TCaseName tCaseName, String subPath, URL url)
+    Path resolveScreenshotPath(TCaseName tCaseName, String subPath, URL url, MaterialDescription description)
+
     /**
      * Returns a Path of a Material file.
      * 
@@ -194,26 +198,15 @@ interface MaterialRepository {
      * 
      */
     Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
-    /**
-     * Returns a Path of a Material file.
-     *
-     * Examples:
-     * <PRE>
-     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
-     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
-     * Path path = mr.resolveScreenshotPathByURLPathComponents(
-     *                 'Test Cases/main/TC1',
-     *                 'aaa/bbb',
-     *                 new URL('https://katalon-demo-cura.herokuapp.com/'),
-     *                 0,
-     *                 'top')
-     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/top.png')
-     * </PRE>
-     */
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subpath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName, MaterialDescription description)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath, URL url, int startingDepth, String defaultName, MaterialDescription description)
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subpath, URL url, int startingDepth, String defaultName)
-    
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName, MaterialDescription description)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath, URL url, int startingDepth, String defaultName)
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath, URL url, int startingDepth, String defaultName, MaterialDescription description)
+
+
     /**
      * Returns a Path of a Material file.
      * 
@@ -226,22 +219,15 @@ interface MaterialRepository {
      * </PRE>
      */
     Path resolveMaterialPath(String testCaseId, String fileName)
-    
-    /**
-     * Returns a Path of a Material file.
-     *
-     * Example:
-     * <PRE>
-     * MaterialRepository mr = MaterialRepositoryFactory.createInstance(Path.get('./Materials'))
-     * mr.putCurrentTestSuite('Test Suites/main/TS1', '20180530_130419')
-     * Path path = mr_.resolveMaterialPath('Test Cases/main/TC1', 'aaa/bbb', 'screenshot1.png')
-     * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/aaa/bbb/screenshot1.png')
-     * </PRE>
-     */
-    Path resolveMaterialPath(String testCaseId, String subpath, String fileName)
+    Path resolveMaterialPath(String testCaseId, String fileName, MaterialDescription description)
+    Path resolveMaterialPath(String testCaseId, String subPath, String fileName)
+    Path resolveMaterialPath(String testCaseId, String subPath, String fileName, MaterialDescription description)
     Path resolveMaterialPath(TCaseName testCaseName, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, String subpath, String fileName)
-    
+    Path resolveMaterialPath(TCaseName testCaseName, String fileName, MaterialDescription description)
+    Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName)
+    Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName, MaterialDescription description)
+
+
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
     
     /**

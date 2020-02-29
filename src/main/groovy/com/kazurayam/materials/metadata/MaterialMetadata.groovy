@@ -1,9 +1,7 @@
 package com.kazurayam.materials.metadata
 
-import java.nio.file.Path
-
+import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
-
 /**
  * The <pre>resolveMatherialPath(TCaseName tCaseName, String subpath, String fileName)</pre> method of 
  * <pre>com.kazurayam.materials.impl.MaterialRepositoryImpl</pre> class creates 
@@ -32,7 +30,8 @@ interface MaterialMetadata {
     String getMaterialPath()
     TCaseName getTCaseName()
     InvokedMethodName getInvokedMethodName()
-    
+    MaterialDescription getMaterialDescription()
+
     // accessors for optional properties
     void setSubPath(String subpath)
     String getSubPath()
