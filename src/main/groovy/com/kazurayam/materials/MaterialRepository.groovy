@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
+
 import java.nio.file.Path
 
 import com.kazurayam.materials.repository.RepositoryRoot
@@ -232,6 +234,8 @@ interface MaterialRepository {
      * @return the path of <TSuiteResult>/material-metadata-bundle.json file
      */
     Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
+
+    MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
 
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
     
