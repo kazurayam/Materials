@@ -4,6 +4,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "47News.chronos_capture/20190923_112138/47News.visitSite/TOP.png",
                 "TCaseName": "Test Cases/47News/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "https://www.47news.jp/",
