@@ -230,6 +230,17 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
             throw new IllegalArgumentException("object is not instance of MaterialMedata")
         }
         MaterialMetadata other = (MaterialMetadata)object
-        return this.getMaterialPath().compareTo(other.getMaterialPath())
+		int categoryComparison = this.getMaterialDescription().getCategory().compareTo(other.getMaterialDescription().getCategory())
+		if (categoryComparison == 0) {
+			int descriptionComparison = this.getMaterialDescription().getDescription().compareTo(other.getMaterialDescription().getDescription())
+			if (descriptionComparison == 0) {
+				int pathComparison = this.getMaterialPath().compareTo(other.getMaterialPath())
+				return pathComparison
+			} else {
+				return descriptionComparison
+			}
+		} else {
+			return categoryComparison
+		}
     }
 }

@@ -406,7 +406,6 @@ class MaterialRepositorySpec extends Specification {
         ensured2.getTSuiteTimestamp() == tSuiteTimestamp2
     }
 
-    @IgnoreRest
     def test_findMaterialMetadataBundleOfCurrentTSuite() {
         setup:
         MaterialRepository mr = prepareMR('test_findMaterialMetadataBundleOfCurrentTSuite')
@@ -417,6 +416,8 @@ class MaterialRepositorySpec extends Specification {
         mr.resolveScreenshotPath('TC1', new URL('http://demo-auto.katalon.com/'),
                 new MaterialDescription("category text", "description text"))
         MaterialMetadataBundle mmb = mr.findMaterialMetadataBundleOfCurrentTSuite()
+		then:
+		mmb != null
     }
 }
 
