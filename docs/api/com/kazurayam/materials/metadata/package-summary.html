@@ -22,16 +22,16 @@
 <html>
 <head>
 
-<title>com.kazurayam.imagedifference (Materials 0.74.0 API)</title>
-<meta name="keywords" content="com.kazurayam.imagedifference package">
+<title>com.kazurayam.materials.metadata (Materials 0.74.0 API)</title>
+<meta name="keywords" content="com.kazurayam.materials.metadata package">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" title="Style">
-<link href="../../../groovy.ico" type="image/x-icon" rel="shortcut icon">
-<link href="../../../groovy.ico" type="image/x-icon" rel="icon">
+<link rel ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" title="Style">
+<link href="../../../../groovy.ico" type="image/x-icon" rel="shortcut icon">
+<link href="../../../../groovy.ico" type="image/x-icon" rel="icon">
 <script type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="com.kazurayam.imagedifference (Materials 0.74.0 API)";
+    parent.document.title="com.kazurayam.materials.metadata (Materials 0.74.0 API)";
 }
 </script>
 <noscript>
@@ -49,18 +49,18 @@ function windowTitle()
 </a>
 <a name="navbar_top_firstrow"><!-- --></a>
 <ul class="navList" title="Navigation">
-    <li><a href="../../../overview-summary.html">Overview</a></li>
+    <li><a href="../../../../overview-summary.html">Overview</a></li>
     <li class="navBarCell1Rev">Package</li>
     <li>Class</li>
-    <li><a href="../../../deprecated-list.html">Deprecated</a></li>
-    <li><a href="../../../index-all.html">Index</a></li>
-    <li><a href="../../../help-doc.html">Help</a></li>
+    <li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+    <li><a href="../../../../index-all.html">Index</a></li>
+    <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
 </div>
 
 <div class="subNav">
     <ul class="navList">
-        <li><a href="../../../index.html?com/kazurayam/imagedifference/package-summary.html" target="_top">Frames</a></li>
+        <li><a href="../../../../index.html?com/kazurayam/materials/metadata/package-summary.html" target="_top">Frames</a></li>
         <li><a href="package-summary.html" target="_top">No Frames</a></li>
     </ul>
 </div>
@@ -68,23 +68,43 @@ function windowTitle()
 <!-- ========= END OF TOP NAVBAR ========= -->
 
 <div class="header">
-    <h1 class="title">Package com.kazurayam.imagedifference</h1>
+    <h1 class="title">Package com.kazurayam.materials.metadata</h1>
 </div>
 
-
-<h2 title="Package com.kazurayam.imagedifference Description" class="title">Package com.kazurayam.imagedifference Description</h2>
-<div class="header">/*
- This package is here for backward compatibility for older version of "Visual Testing in Katalon Studio" project.
- 
- The com.kazurayam.imagedifference.ImageDifference class is an alias to 
- the com.kazurayam.materials.imagedifference.ImageDifference class.
- 
-/
-</div>
 
 
 <div class="contentContainer">
 
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Interface Summary">
+                    <caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Interface</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MaterialMetadata.html" title="class in com/kazurayam/materials/metadata">
+                                    MaterialMetadata
+                                </a></strong>
+                            </td>
+                            <td>The <pre>resolveMatherialPath(TCaseName tCaseName, String subpath, String fileName)</pre> method of 
+ <pre>com.kazurayam.materials.impl.MaterialRepositoryImpl</pre> class creates 
+ <pre>tSuiteName/tSuiteTimestamp/path-resolution-log.json</pre> file, which contains 
+ information how the method call resolved and returned a Path based on the given parameters. 
+ </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
 
 
 
@@ -100,20 +120,19 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="ImageDifference.html" title="class in com/kazurayam/imagedifference">
-                                    ImageDifference
+                                <strong><a href="MaterialMetadataBundle.html" title="class in com/kazurayam/materials/metadata">
+                                    MaterialMetadataBundle
                                 </a></strong>
                             </td>
                             <td></td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="ImageDifferenceSerializer.html" title="class in com/kazurayam/imagedifference">
-                                    ImageDifferenceSerializer
+                                <strong><a href="MaterialMetadataImpl.html" title="class in com/kazurayam/materials/metadata">
+                                    MaterialMetadataImpl
                                 </a></strong>
                             </td>
-                            <td>encloses 3 Path objects; the expected image, the actual image, and the diff image.
- </td>
+                            <td></td>
                         </tr>
 
                     </tbody>
@@ -123,6 +142,32 @@ function windowTitle()
         </div>
     
 
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Enum Summary">
+                    <caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Enum</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="InvokedMethodName.html" title="class in com/kazurayam/materials/metadata">
+                                    InvokedMethodName
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
 
 
 

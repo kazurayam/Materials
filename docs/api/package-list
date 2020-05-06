@@ -2,8 +2,8 @@ com.kazurayam.imagedifference
 com.kazurayam.materials
 com.kazurayam.materials.imagedifference
 com.kazurayam.materials.impl
+com.kazurayam.materials.metadata
 com.kazurayam.materials.model
 com.kazurayam.materials.repository
-com.kazurayam.materials.resolution
 com.kazurayam.materials.stats
 com.kazurayam.materials.view
