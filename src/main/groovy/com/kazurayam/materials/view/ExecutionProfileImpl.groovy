@@ -21,6 +21,47 @@ final class ExecutionProfileImpl implements ExecutionProfile {
     String getName() {
         return profileName_
     }
+
+    @Override
+    String getNameInPathSafeChars() {
+        StringBuilder sb = new StringBuilder()
+        char[] chars = this.getName().toCharArray()
+        for (int i = 0; i < chars.length; i++) {
+            switch (chars[i]) {
+                case '\\' :
+                    sb.append('￥')
+                    break
+                case '/' :
+                    sb.append('／')
+                    break
+                case ':' :
+                    sb.append('：')
+                    break
+                case '*' :
+                    sb.append('＊')
+                    break
+                case '?' :
+                    sb.append('？')
+                    break
+                case '\"' :
+                    sb.append('”')
+                    break
+                case '<' :
+                    sb.append('＜')
+                    break
+                case '>' :
+                    sb.append('＞')
+                    break
+                case '|' :
+                    sb.append('｜')
+                    break
+                default:
+                    sb.append(chars[i])
+                    break
+            }
+        }
+        return sb.toString()
+    }
     
     // ---------------- overriding Object properties --------------------------
     @Override

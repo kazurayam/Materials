@@ -1,12 +1,11 @@
 package com.kazurayam.materials
 
-import static java.nio.file.FileVisitResult.*
-import static java.nio.file.StandardCopyOption.*
+import groovy.json.StringEscapeUtils
+import org.apache.commons.io.FileUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import java.awt.Color
-import java.awt.Font
-import java.awt.Graphics2D
-import java.awt.RenderingHints
+import java.awt.*
 import java.awt.font.FontRenderContext
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
@@ -19,13 +18,12 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.List
 import java.util.stream.Collectors
 
-import org.apache.commons.io.FileUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import groovy.json.StringEscapeUtils
+import static java.nio.file.FileVisitResult.CONTINUE
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 final class Helpers {
 
