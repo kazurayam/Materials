@@ -76,7 +76,7 @@ import groovy.json.JsonOutput
  *               http%3A%2F%2Fdemoaut.katalon.com%2F.png
  * </pre>
  *
- * It makes a List of TSuiteResult which containes TCaseResult and  Material
+ * It makes a List of TSuiteResult which contains TCaseResult and  Material
  * as found in the baseDir.
  *
  * @author kazurayam
