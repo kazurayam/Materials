@@ -36,7 +36,7 @@ class ExecutionPropertiesWrapperSpec extends Specification {
         Path p = workdir_.resolve('Reports/main/TS1/20180805_081908/execution.properties')
         ExecutionPropertiesWrapper epw = new ExecutionPropertiesWrapper(p)
         when:
-        def executionProfile = epw.getExecutionProfile()
+        def executionProfile = epw.getTExecutionProfile()
         then:
         executionProfile.toString() == 'default'
     }

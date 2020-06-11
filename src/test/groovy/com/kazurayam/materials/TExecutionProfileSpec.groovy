@@ -2,14 +2,11 @@ package com.kazurayam.materials
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.view.ExecutionProfileImpl
-
 import spock.lang.Specification
 
-class ExecutionProfileSpec extends Specification {
+class TExecutionProfileSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(ExecutionProfileSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TExecutionProfileSpec.class)
 
     // fields
     //private static Path workdir_
@@ -30,11 +27,21 @@ class ExecutionProfileSpec extends Specification {
     // feature methods
     def testGetName() {
         setup:
-        ExecutionProfile ep = ExecutionProfileImpl.newInstance('develop')
+        TExecutionProfile ep = new TExecutionProfile('develop')
         when:
         String name = ep.getName()
         then:
         name == 'develop'
     }
 
+    def test_getNameInPathSafeChars() {
+        setup:
+        String unsafeChars = "\\/:*?\"<>|aB愛"
+        String expected = "￥／：＊？”＜＞｜aB愛"
+        TExecutionProfile instance = new TExecutionProfile(unsafeChars)
+        when:
+        String actual = instance.getNameInPathSafeChars()
+        then:
+        assert expected == actual
+    }
 }

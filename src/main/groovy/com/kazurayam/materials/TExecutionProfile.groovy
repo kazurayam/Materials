@@ -1,28 +1,30 @@
-package com.kazurayam.materials.view
+package com.kazurayam.materials
 
-import com.kazurayam.materials.ExecutionProfile
+final class TExecutionProfile implements Comparable<TExecutionProfile> {
 
-final class ExecutionProfileImpl implements ExecutionProfile {
-    
-    public static final ExecutionProfile BLANK = ExecutionProfileImpl.newInstance('')
-    
+    static final TExecutionProfile BLANK = TExecutionProfile.newInstance('')
+
     private String profileName_
-    
-    private ExecutionProfileImpl(String profileName) {
+
+    TExecutionProfile(String profileName) {
+        Objects.requireNonNull(profileName, "profileName must not be null")
         profileName_ = profileName
     }
-    
-    static ExecutionProfile newInstance(String profileName) {
-        Objects.requireNonNull(profileName)
-        return new ExecutionProfileImpl(profileName)
-    }
-    
-    @Override
+
     String getName() {
         return profileName_
     }
 
-    @Override
+    /**
+     * Windowsのファイルシステムでファイル名ないしディレクトリ名として
+     * 使ってはいけないcharすなわち
+     *
+     * \ / : * ? " < > |
+     *
+     * を安全な別のcharに置換してnameを返す。
+     *
+     * @return
+     */
     String getNameInPathSafeChars() {
         StringBuilder sb = new StringBuilder()
         char[] chars = this.getName().toCharArray()
@@ -62,32 +64,30 @@ final class ExecutionProfileImpl implements ExecutionProfile {
         }
         return sb.toString()
     }
-    
-    // ---------------- overriding Object properties --------------------------
+
     @Override
     String toString() {
         return profileName_
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         //if (this == obj)
         //    return true
-        if (!(obj instanceof ExecutionProfile))
+        if (!(obj instanceof TExecutionProfile))
             return false
-        ExecutionProfile other = (ExecutionProfile)obj
-        return this.getName().equals(other.getName())
+        TExecutionProfile other = (TExecutionProfile)obj
+        return this.getName() == other.getName()
     }
-    
+
     @Override
     public int hashCode() {
         return this.getName().hashCode()
     }
-    
+
     @Override
-    int compareTo(ExecutionProfile other) {
-        return this.getName().compareTo(other.getName())
+    int compareTo(TExecutionProfile other) {
+        return this.getName() <=> other.getName()
     }
-    
+
 }
-    

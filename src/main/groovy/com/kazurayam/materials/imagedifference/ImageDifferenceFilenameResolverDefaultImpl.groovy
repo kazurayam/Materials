@@ -1,11 +1,12 @@
 package com.kazurayam.materials.imagedifference
 
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.ExecutionProfile
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.ReportsAccessor
-import com.kazurayam.materials.view.ExecutionProfileImpl
+
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TSuiteResult
@@ -51,8 +52,8 @@ class ImageDifferenceFilenameResolverDefaultImpl implements ImageDifferenceFilen
         logger_.debug("#resolveImageDifferenceFilename epwExpected=${epwExpected}")
         logger_.debug("#resolveImageDifferenceFilename epwActual  =${epwActual}")
         
-        ExecutionProfile profileExpected = (epwExpected != null) ? epwExpected.getExecutionProfile() : ExecutionProfileImpl.BLANK
-        ExecutionProfile profileActual   = (epwActual   != null) ? epwActual.getExecutionProfile()   : ExecutionProfileImpl.BLANK
+        TExecutionProfile profileExpected = (epwExpected != null) ? epwExpected.getTExecutionProfile() : TExecutionProfile.BLANK
+        TExecutionProfile profileActual   = (epwActual   != null) ? epwActual.getTExecutionProfile()   : TExecutionProfile.BLANK
         logger_.debug("#resolveImageDifferenceFilename profileExpected=${profileExpected}")
         logger_.debug("#resolveImageDifferenceFilename profileActual  =${profileActual}")
         

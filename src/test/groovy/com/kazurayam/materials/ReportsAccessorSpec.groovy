@@ -91,7 +91,7 @@ class ReportsAccessorSpec extends Specification {
         then:
         driverName.equals('Firefox')
         when:
-        ExecutionProfile executionProfile = executionPropertiesWrapper.getExecutionProfile()
+        TExecutionProfile executionProfile = executionPropertiesWrapper.getTExecutionProfile()
         then:
         executionProfile != null
         when:
@@ -176,7 +176,7 @@ class ReportsAccessorSpec extends Specification {
 		then:
 		driverName.equals('Firefox')
 		when:
-		ExecutionProfile executionProfile = executionPropertiesWrapper.getExecutionProfile()
+		TExecutionProfile executionProfile = executionPropertiesWrapper.getTExecutionProfile()
 		then:
 		executionProfile != null
 		when:

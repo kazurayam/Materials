@@ -2,7 +2,6 @@ package com.kazurayam.materials.view
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.regex.Pattern
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -110,7 +109,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              sb.append('"')
              sb.append(',')
              sb.append('"')
-             sb.append("${executionPropertiesWrapper.getExecutionProfile()}")
+             sb.append("${executionPropertiesWrapper.getTExecutionProfile()}")
              sb.append('"')
              sb.append(',')
              sb.append('"')

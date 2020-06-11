@@ -1,42 +1,44 @@
 package com.kazurayam.materials.view
 
+
 import java.nio.file.Path
 
-import com.kazurayam.materials.ExecutionProfile
+import com.kazurayam.materials.TExecutionProfile
 
 import groovy.json.JsonSlurper
 
 /**
- * This class wrapps the JSON file
+ * This class wraps a JSON file
  * <project>/Reports/<test suite subdirs>/<test suite timestamp>/execution.properties
  *
- * Why we need this file? --- I want to find out which executionProperties were applied
- * to each Test Suite exection; default, demo, product. I want to display the value in
+ * Why we need this file? --- I want to find out which Execution Profile was applied
+ * to each Test Suite execution; default, demo, product. I want to display the value in
  * the ./Materials/index.html
  */
 final class ExecutionPropertiesWrapper {
 
     private def jsonObject
-    private static slurper = new JsonSlurper()
 
     /**
      * 
-     * @param path Path to the 'executin.properties' file of the TSuiteResult
+     * @param path Path to a 'execution.properties' file of a TSuiteResult
      */
     ExecutionPropertiesWrapper(Path path) {
         this(path.toFile())
     }
+
     ExecutionPropertiesWrapper(File file) {
         Objects.requireNonNull(file)
-        jsonObject = slurper.parse(file)
-    }
-    ExecutionPropertiesWrapper(String text) {
-        Objects.requireNonNull(text)
-        jsonObject = slurper.parseText(text)
+        jsonObject = new JsonSlurper().parse(file)
     }
 
-    ExecutionProfile getExecutionProfile() {
-        return ExecutionProfileImpl.newInstance(jsonObject.execution.general.executionProfile)
+    ExecutionPropertiesWrapper(String text) {
+        Objects.requireNonNull(text)
+        jsonObject = new JsonSlurper().parseText(text)
+    }
+
+    TExecutionProfile getTExecutionProfile() {
+        return new TExecutionProfile(jsonObject.execution.general.executionProfile)
     }
     
     String getDriverName() {
