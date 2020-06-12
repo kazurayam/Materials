@@ -1,21 +1,16 @@
 package com.kazurayam.materials
 
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.time.LocalDateTime
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.impl.MaterialRepositoryImpl
 import com.kazurayam.materials.impl.TSuiteResultIdImpl
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.view.ExecutionPropertiesWrapper
-import com.kazurayam.materials.view.JUnitReportWrapper
-
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
+
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.time.LocalDateTime
 
 //@Ignore
 class TSuiteResultSpec extends Specification {
@@ -48,8 +43,9 @@ class TSuiteResultSpec extends Specification {
         when:
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
         TSuiteName tsn = new TSuiteName('TS3')
+        TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance(LocalDateTime.now())
-        TSuiteResult tsr = TSuiteResult.newInstance(tsn, tst)
+        TSuiteResult tsr = TSuiteResult.newInstance(tsn, tep, tst)
         TSuiteResult modified = tsr.setParent(repoRoot)
         then:
         modified.getParent() == repoRoot
@@ -58,7 +54,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTSuiteName() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
         tsr.getTSuiteName() == new TSuiteName('Test Suites/main/TS1')
@@ -67,7 +65,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTSuiteTimestamp() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+            new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
         tsr.getTSuiteTimestamp() == TSuiteTimestamp.newInstance('20180530_130419')
@@ -76,8 +76,9 @@ class TSuiteResultSpec extends Specification {
     def testGetId() {
         setup:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
         when:
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
@@ -87,8 +88,9 @@ class TSuiteResultSpec extends Specification {
     def testGetMaterialList_all() {
         setup:
         TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+        TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20190215_222146')
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
         when:
         TSuiteResult tsr = ms_.getTSuiteResult(tsri)
         List<Material> materialList = tsr.getMaterialList()
@@ -98,9 +100,10 @@ class TSuiteResultSpec extends Specification {
     
     def testGetMaterialList_withParam() {
         setup:
-        TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-        TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20190215_222146')
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(
+                new TSuiteName('47News_chronos_capture'),
+                new TExecutionProfile("default"),
+                TSuiteTimestamp.newInstance('20190215_222146'))
         when:
         TSuiteResult tsr = ms_.getTSuiteResult(tsri)
         List<Material> materialListAll = tsr.getMaterialList()
@@ -116,7 +119,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTCaseResult() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         then:
@@ -128,7 +133,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTCaseResultList() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
         then:
@@ -139,7 +146,9 @@ class TSuiteResultSpec extends Specification {
     def testAddTCaseResult() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         TCaseResult tcr = TCaseResult.newInstance(new TCaseName('TSX')).setParent(tsr)
         tsr.addTCaseResult(tcr)
@@ -152,7 +161,9 @@ class TSuiteResultSpec extends Specification {
     def testAddTCaseResult_parentIsNotSet() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         //TCaseResult tcr = new TCaseResult(new TCaseName('TSX')).setParent(tsr)
         TCaseResult tcr = TCaseResult.newInstance(new TCaseName('TSX'))
@@ -164,7 +175,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTSuiteNameDirectory() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         Path dir = tsr.getTSuiteNameDirectory()
         then:
@@ -174,7 +187,9 @@ class TSuiteResultSpec extends Specification {
     def testGetTSuiteTimestampDirectory() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         Path dir = tsr.getTSuiteTimestampDirectory()
         then:
@@ -185,13 +200,17 @@ class TSuiteResultSpec extends Specification {
         when:
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
-        TSuiteResult tsr = repoRoot.getTSuiteResult(tsn, tst)
-        TSuiteResult other = TSuiteResult.newInstance(tsn, tst).setParent(repoRoot)
+        TSuiteResult tsr = repoRoot.getTSuiteResult(tsn, tep, tst)
+        TSuiteResult other = TSuiteResult.newInstance(tsn, tep, tst).setParent(repoRoot)
         then:
         tsr == other
         when:
-        TSuiteResult more = TSuiteResult.newInstance(new TSuiteName('Test Suites/main/TS2') , tst).setParent(repoRoot)
+        TSuiteResult more = TSuiteResult.newInstance(
+                new TSuiteName('Test Suites/main/TS2') ,
+                new TExecutionProfile("CURA_ProductionEnv"),
+                tst).setParent(repoRoot)
         then:
         tsr != more
     }
@@ -200,10 +219,11 @@ class TSuiteResultSpec extends Specification {
         when:
         RepositoryRoot repoRoot = mri_.getRepositoryRoot()
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance('20180530_130419')
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        TSuiteResult other = TSuiteResult.newInstance(tsn, tst).setParent(repoRoot)
+        TSuiteResult other = TSuiteResult.newInstance(tsn, tep, tst).setParent(repoRoot)
         then:
         tsr.hashCode() == other.hashCode()
     }
@@ -211,7 +231,9 @@ class TSuiteResultSpec extends Specification {
     def testToString() {
         setup:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         when:
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
@@ -231,18 +253,22 @@ class TSuiteResultSpec extends Specification {
     def testTreeviewTitle() {
         setup:
         String tsnStr = 'Test Suites/main/TS1'
+        String tepStr = 'CURA_ProductionEnv'
         String tstStr = '20180530_130419'
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-            new TSuiteName(tsnStr), TSuiteTimestamp.newInstance(tstStr))
+                new TSuiteName(tsnStr),
+                new TExecutionProfile(tepStr),
+                TSuiteTimestamp.newInstance(tstStr))
         when:
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         then:
-        tsr.treeviewTitle().equals('main.TS1/20180530_130419')
+        tsr.treeviewTitle().equals('main.TS1/CURA_ProductionEnv/20180530_130419')
     }
         
     def test_TimestampFirstTSuiteResultComparator() {
         setup:
-        List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(new TSuiteName('Test Suites/main/TS1'))
+        List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(
+                new TSuiteName('Test Suites/main/TS1'))
         List<TSuiteResult> tSuiteResultList = mri_.getTSuiteResultList(tSuiteResultIdList)
         when:
         Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())

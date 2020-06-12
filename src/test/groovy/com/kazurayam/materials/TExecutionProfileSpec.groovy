@@ -57,4 +57,17 @@ class TExecutionProfileSpec extends Specification {
         assert obj != null
         assert obj.getName() == "\\/:*?\"<>|aB愛"
     }
+
+    def test_compareTo() {
+        when:
+        TExecutionProfile prof1 = new TExecutionProfile("another")
+        TExecutionProfile prof2 = new TExecutionProfile("default")
+        TExecutionProfile prof3 = new TExecutionProfile("default")
+        TExecutionProfile prof4 = new TExecutionProfile("extra")
+        then:
+        assert prof1.compareTo(prof2) < 0
+        assert prof2.compareTo(prof3) == 0
+        assert prof3.compareTo(prof4) < 0
+        assert prof4.compareTo(prof1) > 0
+    }
 }

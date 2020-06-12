@@ -1,5 +1,7 @@
 package com.kazurayam.materials.repository
 
+import com.kazurayam.materials.TExecutionProfile
+
 import static java.nio.file.FileVisitResult.*
 
 import java.nio.file.FileSystemLoopException
@@ -30,6 +32,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     private RepositoryRoot repoRoot_
 
     private TSuiteName tSuiteName_
+    private TExecutionProfile tExecutionProfile_
     private TSuiteTimestamp tSuiteTimestamp_
     private TSuiteResult tSuiteResult_
     private TCaseName tCaseName_
@@ -37,7 +40,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     private Material material_
 
     private static enum Layer {
-        INIT, ROOT, TESTSUITE, TIMESTAMP, TESTCASE, SUBDIR
+        INIT, ROOT, TESTSUITE, EXECPROFILE, TIMESTAMP, TESTCASE, SUBDIR
     }
     private int subdirDepth_ = 0
     private Stack<Layer> directoryTransition_
@@ -60,31 +63,44 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
                 directoryTransition_.push(Layer.ROOT)
                 break
+
             case Layer.ROOT :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                 tSuiteName_ = new TSuiteName(dir)
                 directoryTransition_.push(Layer.TESTSUITE)
                 break
+
             case Layer.TESTSUITE:
+                logger_.debug("#preVisitDirectory visiting ${dir} as EXECPROFILE")
+                tExecutionProfile_ = new TExecutionProfile(dir)
+                directoryTransition_.push(Layer.EXECPROFILE)
+                break
+
+            case Layer.EXECPROFILE :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
                     tSuiteTimestamp_ = new TSuiteTimestamp(ldt)
                     Objects.requireNonNull(tSuiteName_, "tSuiteName_ must not be null")
+                    Objects.requireNonNull(tExecutionProfile_, "tExecutionProfile_ must not be null")
                     Objects.requireNonNull(tSuiteTimestamp_, "tSuiteTimestamp_ must not be null")
-                    tSuiteResult_ = TSuiteResult.newInstance(tSuiteName_, tSuiteTimestamp_).setParent(repoRoot_)
+                    tSuiteResult_ = TSuiteResult.newInstance(tSuiteName_, tExecutionProfile_, tSuiteTimestamp_)
+                    tSuiteResult_ = tSuiteResult_.setParent(repoRoot_)
                     if (tSuiteResult_ == null) {
-                        throw new IllegalStateException("tSuiteResult_ is null when " 
-                            + "tSuiteNmae=\"${tSuiteName_}\", tSuiteTimestamp=\"${tSuiteTimestamp_}\", " 
-                            + "repoRoot=\"${repoRoot_}\"")
+                        throw new IllegalStateException("tSuiteResult_ is null when "
+                                + "tSuiteName=\"${tSuiteName_}\""
+                                + ", tExecutionProfile=\"${tExecutionProfile_}\""
+                                + ", tSuiteTimestamp=\"${tSuiteTimestamp_}\""
+                                + ", repoRoot=\"${repoRoot_}\"")
                     }
                     repoRoot_.addTSuiteResult(tSuiteResult_)
-                    directoryTransition_.push(Layer.TIMESTAMP)
                 } else {
                     logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
                             " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                 }
+                directoryTransition_.push(Layer.TIMESTAMP)
                 break
+
             case Layer.TIMESTAMP :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                 tCaseName_ = new TCaseName(dir)
@@ -95,12 +111,14 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 }
                 directoryTransition_.push(Layer.TESTCASE)
                 break
+
             case Layer.TESTCASE :
                 logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 //
                 subdirDepth_ += 1
                 directoryTransition_.push(Layer.SUBDIR)
                 break
+
             case Layer.SUBDIR :
                 logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 subdirDepth_ += 1
@@ -123,6 +141,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     directoryTransition_.pop()
                 }
                 break
+
             case Layer.TESTCASE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTCASE")
                 // resolve the lastModified property of the TCaseResult
@@ -135,6 +154,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 //
                 directoryTransition_.pop()
                 break
+
             case Layer.TIMESTAMP :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
                 // resolve the lastModified property of the TSuiteResult
@@ -148,10 +168,17 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 //
                 directoryTransition_.pop()
                 break
+
+            case Layer.EXECPROFILE :
+                logger_.debug("#postVisitDirectory leaving ${dir} as EXECPROFILE")
+                directoryTransition_.pop()
+                break
+
             case Layer.TESTSUITE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
                 directoryTransition_.pop()
                 break
+
             case Layer.ROOT :
                 logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
                 directoryTransition_.pop()
@@ -171,6 +198,9 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 break
             case Layer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
+                break
+            case Layer.TESTSUITE :
+                logger_.debug("#visitFile ${file} in EXECPROFILE; this file is ignored")
                 break
             case Layer.TIMESTAMP :
                 logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
@@ -217,9 +247,10 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      * @param a instance of TCaseResult
      * @return LocalDateTime for TCaseResult's lastModified property
      */
-    private LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tcr) {
+    private LocalDateTime resolveLastModifiedOfTCaseResult(TCaseResult tCaseResult) {
+        Objects.requireNonNull(tCaseResult, "tCaseResult must not be null")
         LocalDateTime lastModified = LocalDateTime.MIN
-        List<Material> materials = tcr.getMaterialList()
+        List<Material> materials = tCaseResult.getMaterialList()
         for (Material mate : materials) {
             if (mate.getLastModified() > lastModified) {
                 lastModified = mate.getLastModified()
@@ -233,9 +264,10 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      * @param an instance of TSuiteResult
      * @return LocalDateTime for TSuiteResult's lastModified property
      */
-    private LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tsr) {
+    private LocalDateTime resolveLastModifiedOfTSuiteResult(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult, "tSuiteResult must not be null")
         LocalDateTime lastModified = LocalDateTime.MIN
-        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
+        List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResultList()
         for (TCaseResult tcr : tCaseResults) {
             if (tcr.getLastModified() > lastModified) {
                 lastModified = tcr.getLastModified()
@@ -246,12 +278,13 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     
     
     /**
-     * @param tcr an instance of TCaseResult
+     * @param tCaseResult an instance of TCaseResult
      * @return sum of length of Materials contained in the TCaseResult
      */
-    private long resolveLengthOfTCaseResult(TCaseResult tcr) {
+    private long resolveLengthOfTCaseResult(TCaseResult tCaseResult) {
+        Objects.requireNonNull(tCaseResult, "tCaseResult must not be null")
         long length = 0
-        List<Material> materials = tcr.getMaterialList()
+        List<Material> materials = tCaseResult.getMaterialList()
         for (Material mate : materials) {
             length += mate.getLength()
         }
@@ -259,12 +292,13 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     }
     
     /**
-     * @param tsr an instance of TSuiteResult
+     * @param tSuiteResult an instance of TSuiteResult
      * @return sum of length of Materials contained in the TSuiteResult
      */
-    private long resolveLengthOfTSuiteResult(TSuiteResult tsr) {
+    private long resolveLengthOfTSuiteResult(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult, "tSuiteResult must not be null")
         long length = 0
-        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
+        List<TCaseResult> tCaseResults = tSuiteResult.getTCaseResultList()
         for (TCaseResult tcr :  tCaseResults) {
             length += tcr.getSize()
         }
