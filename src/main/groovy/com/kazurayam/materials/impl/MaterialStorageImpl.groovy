@@ -1,5 +1,7 @@
 package com.kazurayam.materials.impl
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Path
 
 import org.slf4j.Logger
@@ -156,8 +158,9 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName) {
-        return componentMR_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName)
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName,
+                                                       TExecutionProfile tExecutionProfile) {
+        return componentMR_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName, tExecutionProfile)
     }
     
     /**

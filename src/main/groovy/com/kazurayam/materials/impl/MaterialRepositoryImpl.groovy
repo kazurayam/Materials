@@ -24,11 +24,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * path of the Materials directory
      */
     private Path baseDir_
-    
-    private String executionProfileName_
-    
-    // set default Material path to the "./${baseDir name}/_/_" directory
+
+    // set default Material path to the "./${baseDir name}/_/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
+    private TExecutionProfile currentTExecutionProfile_ = TExecutionProfile.UNUSED
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
     private boolean alreadyMarked_ = false
 
@@ -38,12 +37,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ---------------------- constructors & initializer ----------------------
 
-    /**
-     *
-     * @param baseDir required
-     * @param tsName required
-     * @param tsTimestamp required
-     */
     private MaterialRepositoryImpl(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         //
@@ -61,11 +54,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         
     }
 
-    /**
-     * 
-     * @param baseDir
-     * @return
-     */
     static MaterialRepositoryImpl newInstance(Path baseDir) {
         return new MaterialRepositoryImpl(baseDir)    
     }
@@ -77,55 +65,34 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
-    
-    @Override
-    void setExecutionProfileName(String profileName) {
-        executionProfileName_ = profileName
-    }
-    
-    @Override
-    String getExecutionProfileName() {
-        return executionProfileName_
-    }
-    
-    /**
-     * The current time now is assumed
-     *
-     * @param testSuiteId
-     */
-    @Override
-    void markAsCurrent(String testSuiteId) {
-        String now = Helpers.now()
-        this.markAsCurrent(testSuiteId, now)
-    }
 
     @Override
-    void markAsCurrent(String testSuiteId, String testSuiteTimestamp) {
+    void markAsCurrent(String testSuiteId,
+                       String executionProfile,
+                       String testSuiteTimestamp) {
         this.markTSuiteResultAsCurrent(
                 new TSuiteName(testSuiteId),
+                new TExecutionProfile(executionProfile),
                 new TSuiteTimestamp(testSuiteTimestamp))
     }
 
     @Override
-    void markAsCurrent(TSuiteName tSuiteName) {
-        this.markAsCurrent(
-                tSuiteName,
-                TSuiteTimestamp.newInstance(Helpers.now())
-        )
-    }
-
-    @Override
-    void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    void markAsCurrent(TSuiteName tSuiteName,
+                       TExecutionProfile tExecutionProfile,
+                       TSuiteTimestamp tSuiteTimestamp) {
         this.markTSuiteResultAsCurrent(
                 tSuiteName,
+                tExecutionProfile,
                 tSuiteTimestamp)
     }
     
     @Override
     void markAsCurrent(TSuiteResultId tSuiteResultId) {
         this.markTSuiteResultAsCurrent(
-            tSuiteResultId.getTSuiteName(),
-            tSuiteResultId.getTSuiteTimestamp())
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp()
+        )
     }
 
     /**
@@ -133,16 +100,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tSuiteName
      * @param tSuiteTimestamp
      */
-    private void markTSuiteResultAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    private void markTSuiteResultAsCurrent(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile,
+                                           TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // memorize this specified TestSuite as the current one
         currentTSuiteName_ = tSuiteName
+        currentTExecutionProfile_ = tExecutionProfile
         currentTSuiteTimestamp_ = tSuiteTimestamp
 
-        // ensure a directory forthe TSuiteResult
-        ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
+        // ensure a directory for the TSuiteResult
+        ensureTSuiteResultPresent(tSuiteName, tExecutionProfile, tSuiteTimestamp)
         
         // make the status easily looked up
         alreadyMarked_ = true
@@ -154,47 +125,41 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return alreadyMarked_
     }
 
+
     @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName) {
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName,
+                                           String executionProfile,
+                                           String testSuiteTimestamp) {
         return this.ensureTSuiteResultPresent(
-            testSuiteName,
-            Helpers.now())
-    }
-    
-    @Override
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName) {
-        return this.ensureTSuiteResultPresent(
-            tSuiteName,
-            TSuiteTimestamp.newInstance(Helpers.now()))
-    }
-    
-    @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp) {
-        return this.ensureTSuiteResultPresent(
-            new TSuiteName(testSuiteName),
-            TSuiteTimestamp.newInstance(testSuiteTimestamp))
+                new TSuiteName(testSuiteName),
+                new TExecutionProfile(executionProfile),
+                TSuiteTimestamp.newInstance(testSuiteTimestamp))
     }
     
     @Override
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId) {
         return this.ensureTSuiteResultPresent(
-            tSuiteResultId.getTSuiteName(),
-            tSuiteResultId.getTSuiteTimestamp())
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp())
     }
     
     @Override
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile,
+                                           TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // add the specified TestSuite
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tSuiteTimestamp)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tExecutionProfile, tSuiteTimestamp)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         
-        // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found in the directory,
+        // if a TSuiteResult of tSuiteName/tExecutionProfile/tSuiteTimestamp is NOT found in the directory,
         // then create new object and create a directory for it 
         if (tsr == null) {
-            tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
+            tsr = TSuiteResult.newInstance(tSuiteName, tExecutionProfile, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
             tsr.createDirectories()
         }
@@ -206,7 +171,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path getCurrentTestSuiteDirectory() {
-        TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResultId tsri =
+                TSuiteResultId.newInstance(
+                        currentTSuiteName_,
+                        currentTExecutionProfile_,
+                        currentTSuiteTimestamp_)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         if (tsr != null) {
             return tsr.getTSuiteTimestampDirectory()
@@ -223,6 +192,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     String getCurrentTestSuiteId() {
         return currentTSuiteName_.getId()
+    }
+
+    @Override
+    String getCurrentExecutionProfile() {
+        return currentTExecutionProfile_.getName()
     }
 
     @Override
@@ -291,8 +265,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName) {
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
         for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
             if (subject.getId().getTSuiteName().equals(tSuiteName)) {
@@ -336,8 +312,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-			new TSuiteName(this.getCurrentTestSuiteId()),
-			new TSuiteTimestamp(this.getCurrentTestSuiteTimestamp()))
+                new TSuiteName(this.getCurrentTestSuiteId()),
+                new TExecutionProfile(this.getCurrentExecutionProfile()),
+			    new TSuiteTimestamp(this.getCurrentTestSuiteTimestamp()))
         
 		TSuiteResult currentTsr = this.getTSuiteResult(tsri)
 		Path mmbPath = this.locateMaterialMetadataBundle(currentTsr)
@@ -380,7 +357,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ------------------ methods to resolve Material Paths  ------------------
 
-    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult, MaterialMetadata materialMetadata) {
+    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult,
+                                                          MaterialMetadata materialMetadata) {
         Path bundleFile = this.locateMaterialMetadataBundle(tSuiteResult)
         MaterialMetadataBundle mmBundle = new MaterialMetadataBundle()
         if (Files.exists(bundleFile)) {
@@ -462,8 +440,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setUrl(url)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         //
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
@@ -548,8 +525,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setUrl(url)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         //
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
@@ -684,8 +660,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setFileName(fileName)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
@@ -886,9 +861,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName,
+                                                            TExecutionProfile tExecutionProfile) {
         Set<Path> set = new TreeSet<Path>()
-        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName)
+        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
         for (TSuiteResultId id: idList) {
             TSuiteResult tSuiteResult = this.getTSuiteResult(id)
             List<Material> materialList = tSuiteResult.getMaterialList()
@@ -914,14 +890,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     /**
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @param tCaseName
-     * @return a TCaseResult object with tCaseName inside the tSuiteName + tSuiteTimestamp directory. Returns null if not found.@return 
+     * @return a TCaseResult object with tCaseName inside
+     * the tSuiteName + tSuiteTimestamp directory.
+     * Returns null if not found.@return
      */
     @Override
-    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
-        return repoRoot_.getTCaseResult(tSuiteName, tSuiteTimestamp, tCaseName)
+    TCaseResult getTCaseResult(TSuiteName tSuiteName,
+                               TExecutionProfile tExecutionProfile,
+                               TSuiteTimestamp tSuiteTimestamp,
+                               TCaseName tCaseName) {
+        return repoRoot_.getTCaseResult(tSuiteName, tExecutionProfile, tSuiteTimestamp, tCaseName)
     }
 
     // ---------------------- overriding Object properties --------------------

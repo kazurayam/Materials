@@ -45,7 +45,9 @@ class MaterialSpec extends Specification {
     }
     def setup() {
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
     }
 
@@ -102,7 +104,7 @@ class MaterialSpec extends Specification {
     
     def testConstructorWithTCaseResultAndFilePath() {
         setup:
-        Path filePath = repoRoot_.getBaseDir().resolve('main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls')
+        Path filePath = repoRoot_.getBaseDir().resolve('main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/foo/bar/fixture.xls')
         when:
         Material mate = new MaterialImpl(tcr_, filePath)
         then:
@@ -112,7 +114,7 @@ class MaterialSpec extends Specification {
         mate.getSuffix() == Suffix.NULL
         mate.getFileType() == FileType.XLS
         mate.getSubpath().replace(File.separator, '/') == 'foo/bar'
-        mate.getPath().toString().contains('main.TS1/20180530_130419/main.TC1/foo/bar/fixture.xls'.replace('/', File.separator))
+        mate.getPath().toString().contains('main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/foo/bar/fixture.xls'.replace('/', File.separator))
     }
 
     def testEquals() {
@@ -170,14 +172,16 @@ class MaterialSpec extends Specification {
         String href = mate.getEncodedHrefRelativeToRepositoryRoot()
         then:
         href != null
-        href == 'main.TS1/20180530_130419/main.TC1/http%253A%252F%252Fdemoaut.katalon.com%252F(1).png'
+        href == 'main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/http%253A%252F%252Fdemoaut.katalon.com%252F(1).png'
         !href.contains('file:///')
     }
 
     def testGetFileName() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180718_142832"))
+        List<Material> materials = repoRoot_.getMaterials(
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance("20180718_142832"))
         then:
         materials.size() > 0
         when:
@@ -196,14 +200,16 @@ class MaterialSpec extends Specification {
         String href = mate.getHrefRelativeToRepositoryRoot()
         then:
         href != null
-        href == 'main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
+        href == 'main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         !href.contains('file:///')
     }
 
     def testGetIdentifier_FileTypeOmmited() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS3'), TSuiteTimestamp.newInstance('20180627_140853'))
+                new TSuiteName('Test Suites/main/TS3'),
+                new TExecutionProfile('default'),
+                TSuiteTimestamp.newInstance('20180627_140853'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC3'))
         when:
         Material mate = tcr.getMaterial('', new URL('http://files.shareholder.com/downloads/AAPL/6323171818x0xS320193-17-70/320193/filing.pdf'),
@@ -243,7 +249,9 @@ class MaterialSpec extends Specification {
     def testGetIdentifier_ExcelFile() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
+                new TSuiteName('Test Suites/main/TS4'),
+                new TExecutionProfile('default'),
+                TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         Material mate = tcr.getMaterial(Paths.get('smilechart.xls'))
@@ -262,7 +270,9 @@ class MaterialSpec extends Specification {
     def testGetParentDirectoryPathRelativeToTSuiteResult() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial('foo', new URL('http://demoaut.katalon.com/'),
                                             Suffix.NULL, FileType.PNG)
@@ -283,7 +293,7 @@ class MaterialSpec extends Specification {
         logger_.debug("#testGetPath path=${path.toString()}")
         then:
         path.toString().contains(
-            'main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
+            'main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
         !path.toString().contains('..')   // should be normalized
         mate.fileExists()
     }
@@ -291,7 +301,9 @@ class MaterialSpec extends Specification {
     def testGetPath_Excel() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS4'), TSuiteTimestamp.newInstance('20180712_142755'))
+                new TSuiteName('Test Suites/main/TS4'),
+                new TExecutionProfile('default'),
+                TSuiteTimestamp.newInstance('20180712_142755'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterialList()
@@ -307,13 +319,15 @@ class MaterialSpec extends Specification {
     def testGetPath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material png = tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         then:
         png != null
         png.getPath().toString().contains(
-                'main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
+                'main.TS1/CURA_ProductionEnv/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png'.replace('/', File.separator))
         png.fileExists()
     }
     
@@ -350,8 +364,10 @@ class MaterialSpec extends Specification {
 
     def testGetSubpath_withoutSubpath() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180530_130419"))
+        List<Material> materials = repoRoot_.getMaterials(
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance("20180530_130419"))
         then:
         materials.size() > 0
         when:
@@ -363,7 +379,9 @@ class MaterialSpec extends Specification {
     def testGetSubpath_withSubpath() {
         when:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         Material mate = tcr.getMaterial('foo', new URL('http://demoaut.katalon.com/'),
                                             Suffix.NULL, FileType.PNG)
@@ -375,8 +393,10 @@ class MaterialSpec extends Specification {
     
     def testGetSubpath_withSubpath_onceMore() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180718_142832"))
+        List<Material> materials = repoRoot_.getMaterials(
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance("20180718_142832"))
         then:
         materials.size() > 0
         when:
@@ -387,8 +407,10 @@ class MaterialSpec extends Specification {
 
     def testGetTCaseName() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(new TSuiteName("Test Suites/main/TS1"),
-            TSuiteTimestamp.newInstance("20180718_142832"))
+        List<Material> materials = repoRoot_.getMaterials(
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance("20180718_142832"))
         then:
         materials.size() > 0
         when:
@@ -414,8 +436,14 @@ class MaterialSpec extends Specification {
 
     def testHashCodeWithAncestors() {
         setup:
-        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130419'))
-        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(new TSuiteName('Test Suites/main/TS2'), TSuiteTimestamp.newInstance('20180612_111256'))
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS2'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180612_111256'))
         TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:

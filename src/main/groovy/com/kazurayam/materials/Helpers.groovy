@@ -199,7 +199,7 @@ final class Helpers {
             throw new IllegalArgumentException('source is null')
         }
         if (!Files.exists(source)) {
-            throw new IllegalArgumentException("${source.normalize().toAbsolutePath()} does not exist")
+            throw new FileNotFoundException("${source.normalize().toAbsolutePath()} does not exist")
         }
         if (!Files.isDirectory(source)) {
             throw new IllegalArgumentException("${source.normalize().toAbsolutePath()} is not a directory")

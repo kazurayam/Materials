@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -163,12 +165,14 @@ class StorageScanner {
      * @param tSuiteName
      * @return a StatsEntry object
      */
-    StatsEntry makeStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry makeStatsEntry(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
         Set<Path> set = 
-            materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
+            materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName, tExecutionProfile)
         for (Path path : set) {
             MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)

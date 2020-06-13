@@ -95,7 +95,8 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName)
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName,
+                                                       TExecutionProfile tExecutionProfile)
     
     /**
      * 

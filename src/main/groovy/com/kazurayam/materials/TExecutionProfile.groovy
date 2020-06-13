@@ -5,6 +5,7 @@ import java.nio.file.Path
 final class TExecutionProfile implements Comparable<TExecutionProfile> {
 
     static final TExecutionProfile BLANK = TExecutionProfile.newInstance('')
+    static final TExecutionProfile UNUSED = TExecutionProfile.newInstance('_')
 
     private String profileName_
 
