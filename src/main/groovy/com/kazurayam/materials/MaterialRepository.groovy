@@ -121,14 +121,14 @@ interface MaterialRepository {
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     
-    //void markAsCurrent(String testSuiteId)
-    //void markAsCurrent(TSuiteName tSuiteName)
     void markAsCurrent(String testSuiteId,
                        String executionProfile,
                        String testSuiteTimestamp)
+
     void markAsCurrent(TSuiteName tSuiteName,
                        TExecutionProfile tExecutionProfile,
                        TSuiteTimestamp tSuiteTimestamp)
+
     void markAsCurrent(TSuiteResultId tSuiteResultId)
     
     boolean isAlreadyMarked()
@@ -150,9 +150,11 @@ interface MaterialRepository {
     TSuiteResult ensureTSuiteResultPresent(String testSuiteName,
                                            String executionProfile,
                                            String testSuiteTimestamp)
+
     TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName,
                                            TExecutionProfile tExecutionProfile,
                                            TSuiteTimestamp tSuiteTimestamp)
+
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
     
     

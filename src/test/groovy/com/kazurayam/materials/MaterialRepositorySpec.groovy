@@ -1,18 +1,15 @@
 package com.kazurayam.materials
 
-import com.kazurayam.materials.Material
+
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import groovy.json.JsonOutput
-import org.junit.Ignore
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.LocalDateTime
 
 //@Ignore
 class MaterialRepositorySpec extends Specification {
@@ -418,57 +415,49 @@ class MaterialRepositorySpec extends Specification {
         ! Files.exists(tsnDir)
     }
 
-	def test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg() {
+
+    /**
+     *
+     * @return
+     */
+	def test_markAsCurrent_ensureTSuiteResultPresent_withStringArgs() {
 		setup:
-        String method = 'test_markAsCurrent_ensureTSuiteResultPresent_oneStringArg'
+        String method = 'test_markAsCurrent_ensureTSuiteResultPresent_withStringArgs'
 
-        MaterialRepository mr = prepareMR(method)
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
 		when:
-		Path timestampdir = mr.getCurrentTestSuiteDirectory()
+		mr.ensureTSuiteResultPresent('withStringArgs',
+                'default', '20180616_160000')
+        mr.markAsCurrent('withStringArgs',
+                'default', '20180616_160000')
+		Path timestampDir = mr.getCurrentTestSuiteDirectory()
 		then:
-		timestampdir.toString().contains('oneStringArg')
-		when:
-		String dirName = timestampdir.getFileName()
-		LocalDateTime ldt = TSuiteTimestamp.parse(dirName)
-		then:
-		true
-	}
-
-	def test_markAsCurrent_ensureTSuiteResultPresent_twoStringArgs() {
-		setup:
-        String method = 'test_markAsCurrent_ensureTSuiteResultPresent_twoStringArgs'
-
-        MaterialRepository mr = prepareMR(method)
-		when:
-		mr.markAsCurrent('twoStringArgs', '20180616_160000')
-		mr.ensureTSuiteResultPresent('twoStringArgs', '20180616_160000')
-		Path timestampdir = mr.getCurrentTestSuiteDirectory()
-		then:
-		timestampdir.toString().contains('twoStringArgs')
-		timestampdir.getFileName().toString().contains('20180616_160000')
+		timestampDir.toString().contains('withStringArgs')
+		timestampDir.getFileName().toString().contains('20180616_160000')
 	}
 
 
-    def test_markAsCurrent_ensureTSuiteResultPresent_TSuiteNameAndTSuiteTimestampAsArgs() {
+    def test_markAsCurrent_ensureTSuiteResultPresent_withPOJOArgs() {
         setup:
-        String method = 'test_markAsCurrent_ensureTSuiteResultPresent_TSuiteNameAndTSuiteTimestampAsArgs'
+        String method = 'test_markAsCurrent_ensureTSuiteResultPresent_withPOJOArgs'
 
-        MaterialRepository mr = prepareMR(method)
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
         when:
-        def tSuiteName = new TSuiteName('TSuiteNameAndTSuiteTimestampAsArgs')
-        def tSuiteTimestamp1 = new TSuiteTimestamp('20180616_160000')
-        mr.markAsCurrent(tSuiteName, tSuiteTimestamp1)
-        TSuiteResult ensured1 = mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp1)
+        def tsn = new TSuiteName('withPOJOArgs')
+        def tep = new TExecutionProfile('default')
+        def tst = new TSuiteTimestamp('20180616_160000')
+        TSuiteResult ensured1 = mr.ensureTSuiteResultPresent(tsn, tep, tst)
+        mr.markAsCurrent(tsn, tep, tst)
         Path timestampDir = mr.getCurrentTestSuiteDirectory()
         then:
-        timestampDir.toString().contains('TSuiteNameAndTSuiteTimestampAsArgs')
+        timestampDir.toString().contains('withPOJOArgs')
         timestampDir.getFileName().toString().contains('20180616_160000')
         
         when:
         def tSuiteTimestamp2 = new TSuiteTimestamp('20180505_000000')
-        TSuiteResult ensured2 = mr.ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp2)
+        TSuiteResult ensured2 = mr.ensureTSuiteResultPresent(tsn, tep, tSuiteTimestamp2)
         then:
-        ensured2.getTSuiteName() == tSuiteName
+        ensured2.getTSuiteName() == tsn
         ensured2.getTSuiteTimestamp() == tSuiteTimestamp2
     }
 
@@ -476,11 +465,10 @@ class MaterialRepositorySpec extends Specification {
         setup:
         String method = 'test_findMaterialMetadataBundleOfCurrentTSuite'
 
-        MaterialRepository mr = prepareMR(method)
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
         when:
         def tSuiteName = new TSuiteName('TS1')
         def tSuiteTimestamp = new TSuiteTimestamp('20180810_140105')
-        mr.markAsCurrent(tSuiteName, tSuiteTimestamp)
         mr.resolveScreenshotPath('TC1', new URL('http://demo-auto.katalon.com/'),
                 new MaterialDescription("category text", "description text"))
         MaterialMetadataBundle mmb = mr.findMaterialMetadataBundleOfCurrentTSuite()
