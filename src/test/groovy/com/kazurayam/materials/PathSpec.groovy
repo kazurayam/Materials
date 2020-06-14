@@ -117,7 +117,7 @@ class PathSpec extends Specification {
 
     def testToRealPath_whenFileExists() {
         when:
-        Path path = Paths.get('src/test/fixture/Materials/main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png')
+        Path path = Paths.get('src/test/fixture/Materials/main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F(1).png')
         path = path.toRealPath()
         logger_.debug("#testToRealPath toString: ${path.toString()}")
         then:
