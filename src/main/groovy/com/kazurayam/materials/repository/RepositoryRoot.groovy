@@ -145,7 +145,15 @@ final class RepositoryRoot {
         Objects.requireNonNull(tExecutionProfile, "argument \'tExecutionProfile\' must not be null")
         Objects.requireNonNull(timestamp, "argument \'timestamp\' must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+
+        //println("RepositoryRoot#getTSuiteResultsBeforeIncludes() was invoked")
+
         for (TSuiteResult tsr : tSuiteResults_) {
+
+            //println("tsr=${tsr}")
+            //println("tSuiteName=${tSuiteName}, tsr.getId().getTSuiteName()=${tsr.getId().getTSuiteName()}")
+            //println("tExecutionProfile=${tExecutionProfile}, tsr.getId().getTExecutionProfile()=${tsr.getId().getTExecutionProfile()}")
+
             if (tSuiteName.equals(tsr.getId().getTSuiteName()) &&
                     tExecutionProfile.equals(tsr.getId().getTExecutionProfile())) {
                 if (TSuiteResultComparator_.compare(tsr,
