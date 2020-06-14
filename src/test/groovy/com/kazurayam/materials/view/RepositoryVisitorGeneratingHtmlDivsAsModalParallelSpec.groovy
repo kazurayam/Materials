@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -60,8 +62,14 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
             ms.restore(mr, [
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190923_112138')),
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47News/chronos_capture'), new TSuiteTimestamp('20190923_112816')),
+                TSuiteResultId.newInstance(
+                        new TSuiteName('Test Suites/47News/chronos_capture'),
+                        new TExecutionProfile('default'),
+                        new TSuiteTimestamp('20190923_112138')),
+                TSuiteResultId.newInstance(
+                        new TSuiteName('Test Suites/47News/chronos_capture'),
+                        new TExecutionProfile('default'),
+                        new TSuiteTimestamp('20190923_112816')),
             ])
             ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
@@ -76,8 +84,9 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec extends Specificati
         when:
             mr.scan()   // refresh MaterialRepository's internal data structure with the updated file tree on disk
             TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
-                                    new TSuiteName('Test Suites/47News/chronos_capture'),
-                                    new TSuiteTimestamp('20190923_112816')))
+                    new TSuiteName('Test Suites/47News/chronos_capture'),
+                    new TExecutionProfile('default'),
+                    new TSuiteTimestamp('20190923_112816')))
         then:
             tsr != null
         when:
