@@ -268,7 +268,8 @@ class TSuiteResultSpec extends Specification {
     def test_TimestampFirstTSuiteResultComparator() {
         setup:
         List<TSuiteResultId> tSuiteResultIdList = mri_.getTSuiteResultIdList(
-                new TSuiteName('Test Suites/main/TS1'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"))
         List<TSuiteResult> tSuiteResultList = mri_.getTSuiteResultList(tSuiteResultIdList)
         when:
         Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
