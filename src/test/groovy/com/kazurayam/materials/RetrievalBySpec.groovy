@@ -36,30 +36,28 @@ class RetrievalBySpec extends Specification {
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
-    
-	
-	
 	
     // feature methods
-	
 	def test_findTSuiteResultsBeforeInclusive_TSuiteTimestamp_oneOrMoreFound() {
 		setup:
 		TSuiteName tsn = new TSuiteName("TS1")
-		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_DevelopmentEnv")
+		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
 		TSuiteTimestamp tst = new TSuiteTimestamp("20180810_140106")
 		when:
 		RetrievalBy by = RetrievalBy.by(tst)
 		List<TSuiteResult> list = by.findTSuiteResultsBeforeInclusive(context)
 		//                                                  ^^
 		then:
-		list.size() == 2
+		list.size() == 1
 		list.get(0).getTSuiteTimestamp().format() == "20180810_140106"
 	}
     
     def test_findTSuiteResultsBeforeExclusive_TSuiteTimestamp_oneOrMoreFound() {
         setup:
         TSuiteName tsn = new TSuiteName("TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_DevelopmentEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         TSuiteTimestamp tst = new TSuiteTimestamp("20180810_140106")
         when:
         RetrievalBy by = RetrievalBy.by(tst)
@@ -72,7 +70,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultsBeforeExclusive_TSuiteTimestamp_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("default")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         TSuiteTimestamp tst = new TSuiteTimestamp("20190123_153854")
         when:
         RetrievalBy by = RetrievalBy.by(tst)

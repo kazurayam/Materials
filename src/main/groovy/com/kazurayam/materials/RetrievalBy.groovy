@@ -124,7 +124,8 @@ abstract class RetrievalBy {
             Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
-            return rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            TExecutionProfile tep = context.getTExecutionProfile()
+            return rr.getTSuiteResultsBeforeExclusive(tsn, tep, tSuiteTimestamp_)
         }
         
         @Override
