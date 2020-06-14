@@ -116,8 +116,10 @@ interface MaterialRepository {
     
     List<TSuiteName> getTSuiteNameList()
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
     List<TSuiteResultId> getTSuiteResultIdList()
+
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     

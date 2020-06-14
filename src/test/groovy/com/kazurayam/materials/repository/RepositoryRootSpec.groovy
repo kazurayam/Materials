@@ -1,5 +1,7 @@
 package com.kazurayam.materials.repository
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
@@ -58,10 +60,11 @@ class RepositoryRootSpec extends Specification {
     def testAddGetTSuiteResults() {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
-        TSuiteResult tsr = TSuiteResult.newInstance(tsn, tst)
+        TSuiteResult tsr = TSuiteResult.newInstance(tsn, tep, tst)
         repoRoot_.addTSuiteResult(tsr)
-        TSuiteResult returned = repoRoot_.getTSuiteResult(tsn, tst)
+        TSuiteResult returned = repoRoot_.getTSuiteResult(tsn, tep, tst)
         then:
         tsr == returned
     }
@@ -76,19 +79,20 @@ class RepositoryRootSpec extends Specification {
     def testGetMaterials_withArgs() {
         when:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
-        List<Material> mates = repoRoot_.getMaterials(tsn, tst)
+        List<Material> mates = repoRoot_.getMaterials(tsn, tep, tst)
         then:
         mates.size() == 2
     }
 
-
     def testGetTCaseResult() {
         when:
         TSuiteName tsn      = new TSuiteName('Test Suites/main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
         TCaseName tcn       = new TCaseName('Test Cases/main/TC1')
-        TCaseResult tCaseResult = repoRoot_.getTCaseResult(tsn, tst, tcn)
+        TCaseResult tCaseResult = repoRoot_.getTCaseResult(tsn, tep, tst, tcn)
         then:
         tCaseResult != null    
     }
@@ -96,7 +100,9 @@ class RepositoryRootSpec extends Specification {
     def testGetTSuiteResults() {
         when:
         TSuiteResult tsr = TSuiteResult.newInstance(
-                new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
         then:
@@ -117,12 +123,12 @@ class RepositoryRootSpec extends Specification {
         //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
     }
     
-	@IgnoreRest
-    def test_getTSuiteResultsBeforeExclusive() {
+	def test_getTSuiteResultsBeforeExclusive() {
         when:
         TSuiteName tsn = new TSuiteName('main/TS1')
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
         TSuiteTimestamp tst = new TSuiteTimestamp('20180805_081908')
-        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
+        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tep, tst)
         then:
         tsrList.size() == 3
 		when:
@@ -135,22 +141,22 @@ class RepositoryRootSpec extends Specification {
 		tsrList[2].getId().getTSuiteTimestamp().equals(expected2Tst)
     }
 	
-	@IgnoreRest
 	def testGetTSuiteResultsBeforeExclusive_47News() {
 		when:
 		TSuiteName tsn = new TSuiteName('Montor47News')
-		TSuiteTimestamp tst = new TSuiteTimestamp('20190123_153854')
-		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tst)
+        TExecutionProfile tep = new TExecutionProfile("default")
+        TSuiteTimestamp tst = new TSuiteTimestamp('20190123_153854')
+		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeExclusive(tsn, tep, tst)
 		then:
 		tsrList.size() == 0
 	}
-	
-	@IgnoreRest
+
 	def test_getTSuiteResultsBeforeInclusive() {
 		when:
 		TSuiteName tsn = new TSuiteName('main/TS1')
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
 		TSuiteTimestamp tst = new TSuiteTimestamp('20180805_081908')
-		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeInclusive(tsn, tst)
+		List<TSuiteResult> tsrList = repoRoot_.getTSuiteResultsBeforeInclusive(tsn, tep, tst)
 		then:
 		tsrList.size() == 4
 		when:
@@ -206,12 +212,16 @@ class RepositoryRootSpec extends Specification {
         when:
         RepositoryRoot thisRoot = new RepositoryRoot(workdir_)
         TSuiteResult tsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         thisRoot.addTSuiteResult(tsr)
         //
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
         TSuiteResult otherTsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         thisRoot == otherRoot
@@ -220,11 +230,15 @@ class RepositoryRootSpec extends Specification {
     def testHashCode() {
         when:
         TSuiteResult tsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         RepositoryRoot otherRoot = new RepositoryRoot(workdir_)
         TSuiteResult otherTsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         otherRoot.addTSuiteResult(otherTsr)
         then:
         repoRoot_.hashCode() == otherRoot.hashCode()
@@ -233,7 +247,9 @@ class RepositoryRootSpec extends Specification {
     def testToJsonText() {
         when:
         TSuiteResult tsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToJson ${JsonOutput.prettyPrint(repoRoot_.toJsonText())}")
         then:
@@ -243,39 +259,13 @@ class RepositoryRootSpec extends Specification {
     def testToString() {
         when:
         TSuiteResult tsr = TSuiteResult.newInstance(
-            new TSuiteName('Test Suites/main/TS1'), new TSuiteTimestamp('20180530_130419'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         logger_.debug("#testToString ${JsonOutput.prettyPrint(repoRoot_.toString())}")
         then:
         true
     }
-    
-
-    /*
-    def testToBootstrapTreeviewData() {
-        when:
-        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
-        scanner.scan()
-        RepositoryRoot rr = scanner.getRepositoryRoot()
-        def s = rr.toBootstrapTreeviewData()
-        logger_.debug("#testToBootstrapTreeviewData ${JsonOutput.prettyPrint(s)}")
-        then:
-        s.contains('text')
-        s.contains('nodes')
-    }
-    */
-
-    /*
-    def testHtmlFragmensOfMaterialsAsModal() {
-        when:
-        RepositoryFileScanner scanner = new RepositoryFileScanner(workdir_)
-        scanner.scan()
-        RepositoryRoot rr = scanner.getRepositoryRoot()
-        def html = rr.htmlFragmensOfMaterialsAsModal()
-        logger_.debug("#testHtmlFragmentsOfMaterialsAsModal html=\n${html}")
-        then:
-        html.contains('<div')
-    }
-    */
 
 }

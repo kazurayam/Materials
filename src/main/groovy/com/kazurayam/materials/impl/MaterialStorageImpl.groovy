@@ -1,24 +1,22 @@
 package com.kazurayam.materials.impl
 
-import com.kazurayam.materials.TExecutionProfile
-
-import java.nio.file.Path
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
 import com.kazurayam.materials.MaterialStorage
 import com.kazurayam.materials.RestoreResult
 import com.kazurayam.materials.RetrievalBy
+import com.kazurayam.materials.RetrievalBy.SearchContext
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.VisualTestingLogger
-import com.kazurayam.materials.RetrievalBy.SearchContext
 import com.kazurayam.materials.repository.RepositoryRoot
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import java.nio.file.Path
 
 class MaterialStorageImpl implements MaterialStorage {
     
@@ -177,8 +175,9 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
     @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName) {
-        return componentMR_.getTSuiteResultIdList(tSuiteName)
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        return componentMR_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
     }
     
     @Override
@@ -195,8 +194,7 @@ class MaterialStorageImpl implements MaterialStorage {
     List<TSuiteResult> getTSuiteResultList() {
         return componentMR_.getTSuiteResultList()
     }
-        
-    
+
     @Override
     void status(Writer output, Map<String, Object> options) {
         TSuiteName pTSuiteName = null
@@ -279,7 +277,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // now copy files from the Storage dir into the Materials dir
         logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
         boolean skipIfIdentical = false
-        int count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
+        Integer count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
         
         // let the MaterialRepository to scan the disk to recognize the copied files
         if (scan) {
@@ -316,12 +314,15 @@ class MaterialStorageImpl implements MaterialStorage {
      *
      */
     @Override
-    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                    RetrievalBy by) throws IOException {
+    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy by) throws IOException {
         Objects.requireNonNull(intoMR, "intoMR must not be null")
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
+        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResultBeforeExclusive(context)
 		//                                                   ^^ exclusive!
@@ -339,12 +340,15 @@ class MaterialStorageImpl implements MaterialStorage {
 	 *
 	 */
 	@Override
-	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-									RetrievalBy by) throws IOException {
+	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy by) throws IOException {
 		Objects.requireNonNull(intoMR, "intoMR must not be null")
 		Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
 		Objects.requireNonNull(by, "by must not be null")
-		RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName)
+		RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
 		// find one TSuiteResult object
 		TSuiteResult tSuiteResult = by.findTSuiteResultBeforeInclusive(context)
 		//                                                   ^^ inclusive!

@@ -44,8 +44,10 @@ class MaterialStorageSpec extends Specification {
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
-        TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName("Monitor47News"),
-                                            TSuiteTimestamp.newInstance("20190123_153854"))
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName("Monitor47News"),
+                new TExecutionProfile("default"),
+                TSuiteTimestamp.newInstance("20190123_153854"))
         then:
         tsri instanceof TSuiteResultId
         
@@ -54,8 +56,6 @@ class MaterialStorageSpec extends Specification {
         then:
         num == 1
     }
-    
-    
     
     def testBackup_all() {
         setup:
@@ -82,8 +82,9 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
+        TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 1
@@ -103,9 +104,10 @@ class MaterialStorageSpec extends Specification {
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         TSuiteName tsn = new TSuiteName("Monitor47News")
+        TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
         when:
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 1
@@ -126,8 +128,9 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
+        TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 1
@@ -137,11 +140,7 @@ class MaterialStorageSpec extends Specification {
         then:
         tSuiteResults.size() == 0
     }
-    
-    /**
-     * 
-     */
-    
+
     def testGetSetOfMaterialPathRelativeToTSuiteName() {
         setup:
         Path stepWork = workdir_.resolve("testGetSetOfMaterialPathRelativeToTSuiteName")
@@ -151,10 +150,11 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
-        Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteName(tsn)
+        Set<Path> set = ms.getSetOfMaterialPathRelativeToTSuiteName(tsn, tep)
         logger_.debug("#testGetSetOfMaterialPathRelativeToTSuiteName " + set)
         then:
         set.size() == 2
@@ -170,8 +170,9 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 2
@@ -193,13 +194,14 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 2
         when:
-        List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn)
+        List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn, tep)
         then:
         list != null
         list.size() == 1
@@ -215,13 +217,14 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 2
         when:
-        List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn)
+        List<TSuiteResultId> list = ms.getTSuiteResultIdList(tsn, tep)
         then:
         list != null
         list.size() == 1
@@ -237,8 +240,9 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20180805_081908")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 2
@@ -259,7 +263,8 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+        TExecutionProfile tep =  new TExecutionProfile('CURA_ProductionEnv')
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn, tep)
         int num = ms.backup(mr_, tsriList)
         then:
         num == 22
@@ -351,8 +356,12 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
         when:
         // test MaterialStorage#restore() method
-        // copy a set of files under Storage directory to Materials directory and make sure TCaseResult/path-resolution-long-bundle.json file is copied
-        TSuiteResultId tsri = TSuiteResultId.newInstance(new TSuiteName('47news/chronos_capture'), new TSuiteTimestamp('20190401_142150'))
+        // copy a set of files under Storage directory to Materials directory
+        // and make sure TCaseResult/material-metadata-bundle.json file is copied
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName('47news/chronos_capture'),
+                new TExecutionProfile('default'),
+                new TSuiteTimestamp('20190401_142150'))
         RestoreResult restoreResult = ms.restore(mr, tsri)
         then:
         restoreResult.getCount() >= 0
@@ -382,8 +391,9 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
+        TExecutionProfile tep = new TExecutionProfile('default')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190123_153854")
-        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tst)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
         int num = ms.backup(mr_, tsri)
         then:
         num == 1
@@ -405,7 +415,8 @@ class MaterialStorageSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
+        List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn, tep)
         int num = ms.backup(mr_, tsriList)
         then:
         num == 22
@@ -413,19 +424,18 @@ class MaterialStorageSpec extends Specification {
         Path restoredDir = stepWork.resolve("Materials")
         Helpers.deleteDirectoryContents(restoredDir)
         MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
-        RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
         LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
         RestoreResult restoreResult = 
-            ms.retrievingRestoreUnaryExclusive(restored,
-                                tsn,
-                                RetrievalBy.by(baseD))
+            ms.retrievingRestoreUnaryExclusive(restored, tsn, tep, RetrievalBy.by(baseD))
         then:
         restoreResult.getCount() == 2
         when:
-        List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
+        List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn, tep)
         then:
         tsriListRestored.size()== 1
-        tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180718_142832")))
+        tsriListRestored.contains(
+                TSuiteResultId.newInstance(tsn, tep,
+                        TSuiteTimestamp.newInstance("20180718_142832")))
     }
 	
 	def test_retrievingRestoreUnaryInclusive() {
@@ -438,7 +448,8 @@ class MaterialStorageSpec extends Specification {
 		MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
 		when:
 		TSuiteName tsn = new TSuiteName("main/TS1")
-		List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn)
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
+		List<TSuiteResultId> tsriList = mr_.getTSuiteResultIdList(tsn, tep)
 		int num = ms.backup(mr_, tsriList)
 		then:
 		num == 22
@@ -446,19 +457,17 @@ class MaterialStorageSpec extends Specification {
 		Path restoredDir = stepWork.resolve("Materials")
 		Helpers.deleteDirectoryContents(restoredDir)
 		MaterialRepository restored = MaterialRepositoryFactory.createInstance(restoredDir)
-		RetrievalBy.SearchContext context = new SearchContext(ms, tsn)
 		LocalDateTime baseD = LocalDateTime.of(2018, 8, 5, 8, 19, 8)
 		RestoreResult restoreResult =
-			ms.retrievingRestoreUnaryInclusive(restored,
-								tsn,
-								RetrievalBy.by(baseD))
+			ms.retrievingRestoreUnaryInclusive(restored, tsn, tep, RetrievalBy.by(baseD))
 		then:
 		restoreResult.getCount() == 2
 		when:
-		List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn)
+		List<TSuiteResultId> tsriListRestored = restored.getTSuiteResultIdList(tsn, tep)
 		then:
 		tsriListRestored.size()== 1
-		tsriListRestored.contains(TSuiteResultId.newInstance(tsn, TSuiteTimestamp.newInstance("20180805_081908")))
+		tsriListRestored.contains(TSuiteResultId.newInstance(tsn, tep,
+                TSuiteTimestamp.newInstance("20180805_081908")))
 	}
 
 }

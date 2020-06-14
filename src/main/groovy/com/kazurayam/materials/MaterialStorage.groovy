@@ -118,7 +118,7 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
     
     /**
      * 
@@ -145,7 +145,7 @@ interface MaterialStorage {
      * @param options
      * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
      */
-    void status(Writer output, Map options)
+    void status(Writer output, Map<String, Object> options)
     
     /**
      * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
@@ -205,8 +205,10 @@ interface MaterialStorage {
 	 * @return
 	 * @throws IOException
 	 */
-    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                RetrievalBy retrievalBy) throws IOException
+    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy retrievalBy) throws IOException
     
 	/**
 	 * 
@@ -216,8 +218,10 @@ interface MaterialStorage {
 	 * @return
 	 * @throws IOException
 	 */
-	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-								RetrievalBy retrievalBy) throws IOException
+	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy retrievalBy) throws IOException
 	
     /**
      * scan the Storage directory to reflesh memory so that it sync with the file system

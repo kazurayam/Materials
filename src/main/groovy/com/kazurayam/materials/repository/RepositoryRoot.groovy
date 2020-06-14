@@ -67,7 +67,7 @@ final class RepositoryRoot {
     }
 
     /**
-     * 
+     *
      * @param tSuiteName
      * @return unmodifiable List<TSuiteResult> 
      */
@@ -83,10 +83,10 @@ final class RepositoryRoot {
         }
         return Collections.unmodifiableList(result)
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @return List of all TSuiteResult in the Repository, the List is unmodifiable
      */
     List<TSuiteResult> getTSuiteResults() {
@@ -96,14 +96,14 @@ final class RepositoryRoot {
         }
         return Collections.unmodifiableList(result)
     }
-    
-    
+
+
     /**
      * returns a List of TSuiteResult which has the given TSuiteName, the Timestamp before the given 2nd arg.
      * The TSuiteResult with a timestamp exactly equal to 'before' will be excluded.
      * The entries returned are sorted in descending order of the timestamp.
      * Therefore the latest entry comes at [0].
-     * 
+     *
      * @param tSuiteName
      * @param timestamp
      * @return
@@ -117,8 +117,9 @@ final class RepositoryRoot {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
             if (tSuiteName.equals(tsr.getId().getTSuiteName()) &&
-                    tExecutionProfile.quals(tsr.getId().getTExecutionProfile() )) {
-                if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, timestamp))
+                    tExecutionProfile.equals(tsr.getId().getTExecutionProfile())) {
+                if (TSuiteResultComparator_.compare(tsr,
+                        TSuiteResult.newInstance(tSuiteName, tExecutionProfile, timestamp))
                         > 0) {
                     // use > to select entries exclusively
                     result.add(tsr)
@@ -128,38 +129,38 @@ final class RepositoryRoot {
         Collections.sort(result, TSuiteResultComparator_)
         return Collections.unmodifiableList(result)
     }
-	
-	/**
-	 * returns a List of TSuiteResult which has the given 1st argument, and the Timestamp exactly at or before the 2nd argument.
-	 * The TSuiteResult with a timestamp which is exactly equal to 'timestamp' will be included.
-	 * 
-	 * @param tSuiteName
-	 * @param before
-	 * @return
-	 */
-	List<TSuiteResult> getTSuiteResultsBeforeInclusive(TSuiteName tSuiteName,
+
+    /**
+     * returns a List of TSuiteResult which has the given 1st argument, and the Timestamp exactly at or before the 2nd argument.
+     * The TSuiteResult with a timestamp which is exactly equal to 'timestamp' will be included.
+     *
+     * @param tSuiteName
+     * @param before
+     * @return
+     */
+    List<TSuiteResult> getTSuiteResultsBeforeInclusive(TSuiteName tSuiteName,
                                                        TExecutionProfile tExecutionProfile,
                                                        TSuiteTimestamp timestamp) {
-		Objects.requireNonNull(tSuiteName, "argument \'tSuiteName\' must not be null")
+        Objects.requireNonNull(tSuiteName, "argument \'tSuiteName\' must not be null")
         Objects.requireNonNull(tExecutionProfile, "argument \'tExecutionProfile\' must not be null")
         Objects.requireNonNull(timestamp, "argument \'timestamp\' must not be null")
-		List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-		for (TSuiteResult tsr : tSuiteResults_) {
-			if (tSuiteName.equals(tsr.getId().getTSuiteName()) &&
-                    tExecutionProfile.equals(tsr.getId().getTExecutionProfile()) ) {
-				if (TSuiteResultComparator_.compare(tsr, TSuiteResult.newInstance(tSuiteName, timestamp))
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : tSuiteResults_) {
+            if (tSuiteName.equals(tsr.getId().getTSuiteName()) &&
+                    tExecutionProfile.equals(tsr.getId().getTExecutionProfile())) {
+                if (TSuiteResultComparator_.compare(tsr,
+                        TSuiteResult.newInstance(tSuiteName, tExecutionProfile, timestamp))
                         >= 0) {
-					//  ^^^^ we are inclusive!
-					result.add(tsr)
-				}
-			}
-		}
-		Collections.sort(result, TSuiteResultComparator_)
-		return Collections.unmodifiableList(result)
-	}
-    
-    
-    
+                    //  ^^^^ we are inclusive!
+                    result.add(tsr)
+                }
+            }
+        }
+        Collections.sort(result, TSuiteResultComparator_)
+        return Collections.unmodifiableList(result)
+    }
+
+
     /**
      * returns the sorted list of TSuiteResults ordered by
      * (1) TSuiteName in natural order
@@ -178,32 +179,32 @@ final class RepositoryRoot {
      * Comparator for TSuiteResult in the natural order :
      *      ascending order of TSuiteName + TExecutionProfile + TSuiteTimestamp
      */
-    private static Comparator<TSuiteResult> TSuiteResultComparator_ = 
-        new Comparator<TSuiteResult>() {
-            @Override
-            public int compare(TSuiteResult o1, TSuiteResult o2) {
-                int v = o1.getId().getTSuiteName().compareTo(o2.getId().getTSuiteName())
-                if (v < 0) {
-                    return v // natural order of TSuiteName
-                } else if (v == 0) {
-                    v = o1.getId().getTExecutionProfile().compareTo(o1.getId().getTExecutionProfile())
+    private static Comparator<TSuiteResult> TSuiteResultComparator_ =
+            new Comparator<TSuiteResult>() {
+                @Override
+                public int compare(TSuiteResult o1, TSuiteResult o2) {
+                    int v = o1.getId().getTSuiteName().compareTo(o2.getId().getTSuiteName())
                     if (v < 0) {
-                        return v
+                        return v // natural order of TSuiteName
                     } else if (v == 0) {
-                        LocalDateTime ldt1 = o1.getId().getTSuiteTimestamp().getValue()
-                        LocalDateTime ldt2 = o2.getId().getTSuiteTimestamp().getValue()
-                        return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
+                        v = o1.getId().getTExecutionProfile().compareTo(o1.getId().getTExecutionProfile())
+                        if (v < 0) {
+                            return v
+                        } else if (v == 0) {
+                            LocalDateTime ldt1 = o1.getId().getTSuiteTimestamp().getValue()
+                            LocalDateTime ldt2 = o2.getId().getTSuiteTimestamp().getValue()
+                            return ldt1.compareTo(ldt2) * -1  // reverse order of TSuiteTimestamp
+                        } else {
+                            return v
+                        }
                     } else {
-                        return v
+                        return v  // natural order of TSuiteName
                     }
-                } else {
-                    return v  // natural order of TSuiteName
                 }
             }
-        }
 
     /**
-     * 
+     *
      * @return
      */
     TSuiteResult getLatestModifiedTSuiteResult() {
@@ -237,7 +238,7 @@ final class RepositoryRoot {
     }
 
     /**
-     * 
+     *
      * @return
      */
     List<Material> getMaterials() {
@@ -259,9 +260,9 @@ final class RepositoryRoot {
      */
     List<Material> getMaterials(TSuiteName tSuiteName) {
         List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
+        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
             if (tsr.getId().getTSuiteName().equals(tSuiteName)) {
-                List<Material> mates =  tsr.getMaterialList()
+                List<Material> mates = tsr.getMaterialList()
                 for (Material mate : mates) {
                     list.add(mate)
                 }
@@ -272,7 +273,7 @@ final class RepositoryRoot {
 
 
     /**
-     * 
+     *
      * @param tSuiteName
      * @param tSuiteTimestamp
      * @return
@@ -284,15 +285,15 @@ final class RepositoryRoot {
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr: this.getSortedTSuiteResults()) {
+        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
             if (tsr.getId().getTSuiteName().equals(tSuiteName) &&
                     tsr.getId().getTExecutionProfile().equals(tExecutionProfile) &&
                     tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)
             ) {
-                    List<Material> mates =  tsr.getMaterialList()
-                    for (Material mate : mates) {
-                        list.add(mate)
-                    }
+                List<Material> mates = tsr.getMaterialList()
+                for (Material mate : mates) {
+                    list.add(mate)
+                }
             }
         }
         return Collections.unmodifiableList(list)
@@ -318,7 +319,7 @@ final class RepositoryRoot {
             return null
         }
     }
-    
+
     /**
      * Provided with an instance of MaterialCore which wraps the path info of material file,
      * find an instance of Material with the same path in the MaterialRepository.
@@ -334,10 +335,10 @@ final class RepositoryRoot {
         if (relativePath.getNameCount() < 4) {
             throw new IllegalArgumentException("${relativePath} has nameCount smaller than 4")
         }
-        Path tSuiteNamePath = relativePath.subpath(0,1)
-        Path tExecutionProfilePath = relativePath.subpath(1,2)
-        Path tSuiteTimestampPath = relativePath.subpath(2,3)
-        Path tCaseNamePath = relativePath.subpath(3,4)
+        Path tSuiteNamePath = relativePath.subpath(0, 1)
+        Path tExecutionProfilePath = relativePath.subpath(1, 2)
+        Path tSuiteTimestampPath = relativePath.subpath(2, 3)
+        Path tCaseNamePath = relativePath.subpath(3, 4)
         Path subpathAndFilename = relativePath.subpath(4, relativePath.getNameCount())
         /*
         println "relativePath:          ${relativePath}"
@@ -353,30 +354,32 @@ final class RepositoryRoot {
                 new TSuiteTimestamp(tSuiteTimestampPath.toString()))
         if (tSuiteResult == null) {
             throw new IllegalArgumentException(
-                "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath} is not found in the Material directory")
+                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath} is not found in the Material directory")
         }
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName(tCaseNamePath.toString()))
         if (tCaseResult == null) {
             throw new IllegalArgumentException(
-                "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath}/${tCaseNamePath} is not found in the Material directory")
+                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath}/${tCaseNamePath} is not found in the Material directory")
         }
         Material mate = tCaseResult.getMaterial(subpathAndFilename)
         return mate
     }
 
-    
+
     // -------------- overriding java.lang.Object methods ---------------------
     @Override
     boolean equals(Object obj) {
-        if (!(obj instanceof RepositoryRoot)) { return false }
-        RepositoryRoot other = (RepositoryRoot)obj
+        if (!(obj instanceof RepositoryRoot)) {
+            return false
+        }
+        RepositoryRoot other = (RepositoryRoot) obj
         List<TSuiteResult> ownList = this.getTSuiteResults()
         List<TSuiteResult> otherList = other.getTSuiteResults()
         logger_.debug("ownList=${ownList.toString()}")
         logger_.debug("otherList=${otherList.toString()}")
         if (ownList.size() == otherList.size()) {
             for (int i; i < ownList.size(); i++) {
-                if ( ! ownList.get(i).equals(otherList.get(i)) ) {
+                if (!ownList.get(i).equals(otherList.get(i))) {
                     return false
                 }
             }
@@ -402,7 +405,9 @@ final class RepositoryRoot {
         sb.append('"tSuiteResults":[')
         def count = 0
         for (TSuiteResult tsr : tSuiteResults_) {
-            if (count > 0) { sb.append(',') }
+            if (count > 0) {
+                sb.append(',')
+            }
             count += 1
             sb.append(tsr.toJsonText())
         }
@@ -412,5 +417,5 @@ final class RepositoryRoot {
         return sb.toString()
     }
 
-    
+
 }
