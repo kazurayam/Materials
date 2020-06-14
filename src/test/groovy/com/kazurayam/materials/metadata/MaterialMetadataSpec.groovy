@@ -3,6 +3,7 @@ package com.kazurayam.materials.metadata
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.metadata.InvokedMethodName
 import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataImpl
@@ -128,6 +129,7 @@ class MaterialMetadataSpec extends Specification {
         TCaseName tCaseName = new TCaseName('Test Cases/main/TC1')
         Path tSuiteResultPath = 
             materials.resolve('Monitor47News')
+                .resolve('default')
                 .resolve('20190123_153854')
         String materialPath =
             tSuiteResultPath
@@ -144,7 +146,7 @@ class MaterialMetadataSpec extends Specification {
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/')
         metadata.setUrl(url)
-        metadata.setExecutionProfileName('develop')
+        metadata.setTExecutionProfile(new TExecutionProfile('develop'))
         //
         Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         OutputStream os = new FileOutputStream(serialized.toFile())
@@ -160,7 +162,7 @@ class MaterialMetadataSpec extends Specification {
         json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
         json.MaterialMetadata.SubPath == ""
         json.MaterialMetadata.URL == "https://www.47news.jp/"
-        json.MaterialMetadata.ExecutionProfileName == 'develop'
+        json.MaterialMetadata.ExecutionProfile == 'develop'
     }
 
     def testSerializeAndDeserializeWithSubPath() {
@@ -180,8 +182,8 @@ class MaterialMetadataSpec extends Specification {
         // Change it to:
         //    testOutput/MaterialMetadataSpec/testSerializeAndDeserializeWithSubPath/Materials/Monitor47News/20190123_153854/main.visit47NEWS/dir1/47NEWS_TOP.png
         //    testOutput/MaterialMetadataSpec/testSerializeAndDeserializeWithSubPath/Materials/Monitor47News/20190123_162053/main.visit47NEWS/dir1/47NEWS_TOP.png
-        Path dir153854 = monitor47NewsDir.resolve('20190123_153854/main.visit47NEWS')
-        Path dir162053 = monitor47NewsDir.resolve('20190123_162053/main.visit47NEWS')
+        Path dir153854 = monitor47NewsDir.resolve('default/20190123_153854/main.visit47NEWS')
+        Path dir162053 = monitor47NewsDir.resolve('default/20190123_162053/main.visit47NEWS')
         Path dir153854dir1 = dir153854.resolve('dir1')
         Path dir162053dir1 = dir162053.resolve('dir1')
         Files.createDirectories(dir153854dir1)
@@ -206,7 +208,7 @@ class MaterialMetadataSpec extends Specification {
                     description)
         metadata.setSubPath('dir1')   // Bomb!
         metadata.setUrl(new URL('https://www.47news.jp/'))
-        metadata.setExecutionProfileName('develop')
+        metadata.setTExecutionProfile(new TExecutionProfile('develop'))
         //
         Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         OutputStream os = new FileOutputStream(serialized.toFile())
@@ -222,7 +224,7 @@ class MaterialMetadataSpec extends Specification {
         json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
         json.MaterialMetadata.SubPath == "dir1"
         json.MaterialMetadata.URL == "https://www.47news.jp/"
-        json.MaterialMetadata.ExecutionProfileName == 'develop'
+        json.MaterialMetadata.ExecutionProfile == 'develop'
 	}
     
     @Ignore
