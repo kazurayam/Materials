@@ -52,9 +52,10 @@ class ReportsAccessorSpec extends Specification {
         //
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
         ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
-        TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190528_111335")
-        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+        TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20190528_111335")
+        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
         when:
         JUnitReportWrapper junitReportWrapper = ra.getJUnitReportWrapper(tSuiteResultId)
         then:
@@ -78,9 +79,10 @@ class ReportsAccessorSpec extends Specification {
         //
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
         ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
-        TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190528_111335")
-        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+        TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20190528_111335")
+        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
         when:
         ExecutionPropertiesWrapper executionPropertiesWrapper = ra.getExecutionPropertiesWrapper(tSuiteResultId)
         then:
@@ -111,9 +113,10 @@ class ReportsAccessorSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
         ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
-        TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-        TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190528_111335")
-        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+        TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+        TSuiteTimestamp tst = new TSuiteTimestamp("20190528_111335")
+        TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
         TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
         TCaseName tCaseName = new TCaseName("Test Cases/CURA/ImageDiff_twins")
         TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
@@ -137,9 +140,10 @@ class ReportsAccessorSpec extends Specification {
 		//
 		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
 		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
-		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
-		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+		TSuiteTimestamp tst = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
 		when:
 		JUnitReportWrapper junitReportWrapper = ra.getJUnitReportWrapper(tSuiteResultId)
 		then:
@@ -163,9 +167,10 @@ class ReportsAccessorSpec extends Specification {
 		//
 		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
 		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
-		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
-		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+		TSuiteTimestamp tst = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
 		when:
 		ExecutionPropertiesWrapper executionPropertiesWrapper = ra.getExecutionPropertiesWrapper(tSuiteResultId)
 		then:
@@ -196,9 +201,10 @@ class ReportsAccessorSpec extends Specification {
 		MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
 		ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
 		when:
-		TSuiteName tSuiteName = new TSuiteName("Test Suites/CURA/twins_exam")
-		TSuiteTimestamp tSuiteTimestamp = new TSuiteTimestamp("20190821_143321")
-		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tSuiteName, tSuiteTimestamp)
+		TSuiteName tsn = new TSuiteName("Test Suites/CURA/twins_exam")
+		TExecutionProfile tep = new TExecutionProfile("default")
+		TSuiteTimestamp tst = new TSuiteTimestamp("20190821_143321")
+		TSuiteResultId tSuiteResultId = TSuiteResultId.newInstance(tsn, tep, tst)
 		TSuiteResult tSuiteResult = mr.getTSuiteResult(tSuiteResultId)
 		TCaseName tCaseName = new TCaseName("Test Cases/CURA/ImageDiff_twins")
 		TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
