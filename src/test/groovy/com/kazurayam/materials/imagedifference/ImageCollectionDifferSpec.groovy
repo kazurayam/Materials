@@ -1,5 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -137,8 +139,12 @@ class ImageCollectionDifferSpec extends Specification {
                 mr.createMaterialPairs(tsn)
             //
             TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    tSuiteNameExam,
+                    tExecutionProfile,
+                    tCaseNameExam)
             //
             StorageScanner.Options options = new StorageScanner.Options.Builder().
                                                 previousImageDeltaStats(previousIDS).
@@ -201,8 +207,12 @@ class ImageCollectionDifferSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
             //
             TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    tSuiteNameExam,
+                    tExecutionProfile,
+                    tCaseNameExam)
             //
             TSuiteName tsn = new TSuiteName('47News_chronos_capture')
             ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))

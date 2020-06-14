@@ -1,5 +1,8 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
+import javax.swing.text.TabExpander
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -55,8 +58,12 @@ class StorageScannerSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
             //
             TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    tSuiteNameExam,
+                    tExecutionProfile,
+                    tCaseNameExam)
             StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
@@ -93,8 +100,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
@@ -147,8 +158,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)        
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         StorageScanner.Options options = new Options.Builder().
@@ -176,8 +191,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
         StorageScanner.Options options = new Options.Builder().
@@ -206,8 +225,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
@@ -237,8 +260,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
@@ -268,8 +295,12 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         TSuiteName tsn = new TSuiteName("47News_chronos_capture")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190216_064149")
@@ -325,9 +356,13 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam           = new TSuiteName("Test Suites/47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190216_064149")
         TCaseName tCaseNameExam             = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
@@ -369,10 +404,15 @@ class StorageScannerSpec extends Specification {
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseOutputDir.resolve('Materials'))
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+
         TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190216_064149")
         TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         when:
         StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
@@ -430,9 +470,13 @@ class StorageScannerSpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
         TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp("20190216_064149")
         TCaseName tCaseNameExam = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         //
         StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).

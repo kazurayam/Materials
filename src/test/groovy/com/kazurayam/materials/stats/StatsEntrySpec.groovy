@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -36,8 +38,12 @@ class StatsEntrySpec extends Specification {
         MaterialStorage ms = MaterialStorageFactory.createInstance(storagedir)
         //
         TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
         StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
