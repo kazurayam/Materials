@@ -157,15 +157,16 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
 
             case Layer.TIMESTAMP :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
-                // resolve the lastModified property of the TSuiteResult
-                LocalDateTime lastModified = resolveLastModifiedOfTSuiteResult(tSuiteResult_)
-                tSuiteResult_.setLastModified(lastModified)
-                logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
-                    " ${tSuiteResult_.getId().getTSuiteName()}/${tSuiteResult_.getId().getTSuiteTimestamp().format()}")
-                // resolve the length property of the TSuiteResult
-                long length = resolveLengthOfTSuiteResult(tSuiteResult_)
-                tSuiteResult_.setSize(length)
-                //
+                if (tSuiteResult_ != null) {
+                    // resolve the lastModified property of the TSuiteResult
+                    LocalDateTime lastModified = resolveLastModifiedOfTSuiteResult(tSuiteResult_)
+                    tSuiteResult_.setLastModified(lastModified)
+                    logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
+                            " ${tSuiteResult_.getId().getTSuiteName()}/${tSuiteResult_.getId().getTSuiteTimestamp().format()}")
+                    // resolve the length property of the TSuiteResult
+                    long length = resolveLengthOfTSuiteResult(tSuiteResult_)
+                    tSuiteResult_.setSize(length)
+                }
                 directoryTransition_.pop()
                 break
 
