@@ -37,10 +37,7 @@ class StorageScanner {
     private MaterialStorage materialStorage_
     private Options options_
 
-    private BufferedImageBuffer biBuffer_
-    
     private ImageDeltaStats previousImageDeltaStats_
-    
     
     public StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
@@ -171,10 +168,6 @@ class StorageScanner {
         Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
 
         for (Path path : set) {
-
-            // initialize BufferedImageBuffer for this particular (tSuiteName, path) pair
-            this.biBuffer_ = new BufferedImageBuffer()
-
             MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)
         }
@@ -238,7 +231,10 @@ class StorageScanner {
                                 Path pathRelativeToTSuiteTimestampDir) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        
+
+        // initialize BufferedImageBuffer for this particular (tSuiteName, path) pair
+        BufferedImageBuffer biBuffer = new BufferedImageBuffer()
+
         // At first, look up materials of FileType.PNG 
         //     within the TSuiteName across multiple TSuiteTimestamps
         // This list is sorted by descending order of TSuiteTimestamp
@@ -279,12 +275,12 @@ class StorageScanner {
                         //println "#makeMaterialStats materials.get(i)..TSuiteTimestamp=${materials.get(i).getParent().getParent().getTSuiteTimestamp()}"
                         //println "#makeMaterialStats materials.get(i+1)..TSuiteTimestamp=${materials.get(i+1).getParent().getParent().getTSuiteTimestamp()}"
                         //println ""
-                        imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                        imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1), biBuffer)
                     }
                 } else {
                     // the following 1 line causes many ImageIO and significant amount of calcuration,
                     // will require many seconds of processing
-                    imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1))
+                    imageDelta = this.makeImageDelta(materials.get(i), materials.get(i + 1), biBuffer)
                 }
                 //
                 imageDeltaList.add(imageDelta)
@@ -375,7 +371,7 @@ class StorageScanner {
      * @param b
      * @return a ImageDelta object
      */
-    ImageDelta makeImageDelta(Material a, Material b) {
+    ImageDelta makeImageDelta(Material a, Material b, BufferedImageBuffer biBuffer) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         Objects.requireNonNull(a, "Material a must not be null")
@@ -391,8 +387,8 @@ class StorageScanner {
         TSuiteTimestamp tSuiteTimestampB = b.getParent().getParent().getTSuiteTimestamp()
         // read PNG files and
         // create ImageDifference of the 2 given images to calculate the diff ratio
-        BufferedImage biA = biBuffer_.read(a)
-        BufferedImage biB = biBuffer_.read(b)
+        BufferedImage biA = biBuffer.read(a)
+        BufferedImage biB = biBuffer.read(b)
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
 
@@ -400,7 +396,7 @@ class StorageScanner {
         boolean cached = false
         ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB,
                                                 diff.getRatio(), cached)
-        biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
+        biBuffer.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()
         String msg = "#makeImageDelta took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for " + 
