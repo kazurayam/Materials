@@ -16,7 +16,7 @@ import ru.yandex.qatools.ashot.comparison.ImageDiffer
 
 /**
  * accepts 2 BufferedImages as input, compare them, make a difference image,
- * and calcurate the ratio of difference of the 2 input images.
+ * and calculate the ratio of difference of the 2 input images.
  */
 class ImageDifference {
     
