@@ -77,7 +77,8 @@ interface MaterialRepository {
      *
      * @return List<MaterialPair>
      */
-    MaterialPairs createMaterialPairs(TSuiteName tSuiteName)
+    MaterialPairs createMaterialPairs(TSuiteName capturingTSuiteName)
+    MaterialPairs createMaterialPairs(TSuiteName capturingTSuiteName, TExecutionProfile capturingTExecutionProfile)
 
     /**
      *

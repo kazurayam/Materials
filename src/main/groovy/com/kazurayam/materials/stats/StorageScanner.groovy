@@ -443,9 +443,13 @@ class StorageScanner {
      *
      */
     Path persist(ImageDeltaStats imageDeltaStats,
-            TSuiteName tSuiteNameExam, TSuiteTimestamp tSuiteTimestampExam, TCaseName tCaseNameExam) {
+                 TSuiteName tSuiteNameExam,
+                 TExecutionProfile tExecutionProfile,
+                 TSuiteTimestamp tSuiteTimestampExam,
+                 TCaseName tCaseNameExam) {
         Path inStorage = materialStorage_.getBaseDir().
                                 resolve(tSuiteNameExam.getValue()).
+                                resolve(tExecutionProfile.getNameInPathSafeChars()).
                                 resolve(tSuiteTimestampExam.format()).
                                 resolve(tCaseNameExam.getValue()).
                                 resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)

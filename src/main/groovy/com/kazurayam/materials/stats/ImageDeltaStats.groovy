@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -144,11 +146,15 @@ abstract class ImageDeltaStats {
     
     abstract void write(Writer writer)
     
-    static Path resolvePath(TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
+    static Path resolvePath(TSuiteName imageDiffTSuiteName,
+                            TExecutionProfile tExecutionProfile,
+                            TSuiteTimestamp tSuiteTimestamp,
+                            TCaseName tCaseName) {
         Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
-                        resolve(tSuiteTimestamp.format()).
-                        resolve(tCaseName.getValue()).
-                        resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+                            resolve(tExecutionProfile.getNameInPathSafeChars()).
+                            resolve(tSuiteTimestamp.format()).
+                            resolve(tCaseName.getValue()).
+                            resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
         return jsonPath
     }
     

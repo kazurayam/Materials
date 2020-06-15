@@ -4,8 +4,10 @@ import java.nio.file.Path
 
 final class TExecutionProfile implements Comparable<TExecutionProfile> {
 
+    static final String UNUSED_DIRNAME = '_'
+    static final TExecutionProfile UNUSED = TExecutionProfile.newInstance(UNUSED_DIRNAME)
+
     static final TExecutionProfile BLANK = TExecutionProfile.newInstance('')
-    static final TExecutionProfile UNUSED = TExecutionProfile.newInstance('_')
 
     private String profileName_
 

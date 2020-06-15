@@ -150,7 +150,7 @@ class IndexerCarouselSpec extends Specification {
             StorageScanner storageScanner = new StorageScanner(ms, options)
             ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
             //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
