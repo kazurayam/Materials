@@ -38,6 +38,7 @@ class StorageScanner {
     
     private MaterialStorage materialStorage_
     private Options options_
+
     private BufferedImageBuffer biBuffer_
     
     private ImageDeltaStats previousImageDeltaStats_
@@ -54,7 +55,7 @@ class StorageScanner {
         this.materialStorage_.scan()
         //
         this.options_ = options
-        this.biBuffer_ = new BufferedImageBuffer()
+
         // speed up ImageIO!
         ImageIO.setUseCache(false)
         //
@@ -171,12 +172,18 @@ class StorageScanner {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
-        Set<Path> set = 
-            materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName, tExecutionProfile)
+
+        Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
+
         for (Path path : set) {
-            MaterialStats materialStats = this.makeMaterialStats(tSuiteName, tExecutionProfile, path)
+
+            // initialize BufferedImageBuffer for this particular (tSuiteName, path) pair
+            this.biBuffer_ = new BufferedImageBuffer()
+
+            MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
             statsEntry.addMaterialStats(materialStats)
         }
+
         stopWatch.stop()
         String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
         logger_.debug(msg)
@@ -397,9 +404,11 @@ class StorageScanner {
         BufferedImage biB = biBuffer_.read(b)
         // Here we use our greatest magic!
         ImageDifference diff = new ImageDifference(biA, biB)
+
         // make the delta
         boolean cached = false
-        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB, diff.getRatio(), cached)
+        ImageDelta imageDelta = new ImageDelta(tSuiteTimestampA, tSuiteTimestampB,
+                                                diff.getRatio(), cached)
         biBuffer_.remove(a)    // a will be no longer used, b will be reused once again
         
         stopWatch.stop()
@@ -517,7 +526,7 @@ class StorageScanner {
     }
 
     /**
-     * This class mainteins a buffer of BufferedImage to make I/O to PNG files efficient.
+     * This class maintains a buffer of BufferedImage to make I/O to PNG files efficient.
      */
     static class BufferedImageBuffer {
         private Map<Material, BufferedImage> buffer
