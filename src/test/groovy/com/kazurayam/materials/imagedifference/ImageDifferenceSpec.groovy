@@ -52,5 +52,15 @@ class ImageDifferenceSpec extends Specification {
         difference.imagesAreDifferent(criteria)
         ! difference.imagesAreSimilar(criteria)
     }
-    
+
+    def test_flush() {
+        setup:
+        BufferedImage bi1 = ImageIO.read(image1_)
+        BufferedImage bi6 = ImageIO.read(image6_)
+        when:
+        ImageDifference difference = new ImageDifference(bi1, bi6)
+        difference.flush()  // flush() frees the memory but .getRatio() should return a meaningful value
+        then:
+        difference.getRatio() > 15.0
+    }
 }

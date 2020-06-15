@@ -255,8 +255,15 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         }
         
         // create ImageDifference of the 2 given images
-        ImageDifference diff = new ImageDifference(expectedBI, actualBI)
-        
+        ImageDifference diff = new ImageDifference(
+                ImageDifference.copyImage(expectedBI),
+                ImageDifference.copyImage(actualBI)
+        )
+
+        // free the memory occupied by the BufferedImage
+        expectedBI.flush()
+        actualBI.flush()
+
         // resolve the name of output file to save the ImageDiff
         String fileName = this.filenameResolver_.resolveImageDifferenceFilename(
                                         expectedMaterial,
@@ -282,6 +289,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                                                             similarity,
                                                             diff.getRatio()
                                                             )
+
+        // free the memory occupied by the internal BufferedImage in the ImageDiff object
+        diff.flush()
+
         if (vtLogger_ != null) {
             String eval = (similarity) ? 'Similar' : 'Different'
             vtLogger_.info("${eval} ${diffMaterial.getPathRelativeToRepositoryRoot().toString()} ")

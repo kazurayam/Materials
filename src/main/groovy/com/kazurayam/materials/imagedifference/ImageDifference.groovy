@@ -1,5 +1,6 @@
 package com.kazurayam.materials.imagedifference
 
+import java.awt.Graphics
 import java.awt.image.BufferedImage
 import java.nio.file.Path
 
@@ -89,7 +90,7 @@ class ImageDifference {
         }
         int diffSize = diff.getDiffSize()
         int area = diff.getMarkedImage().getWidth() * diff.getMarkedImage().getHeight()
-        Double diffRatio = diff.getDiffSize() / area * 100
+        Double diffRatio = diffSize / area * 100
         BigDecimal bd = new BigDecimal(diffRatio)
         BigDecimal bdUP = bd.setScale(2, BigDecimal.ROUND_UP);  // 0.001 -> 0.01
         return bdUP.doubleValue()
@@ -114,6 +115,29 @@ class ImageDifference {
      */
     Boolean imagesAreSimilar(double criteria) {
         return (ratio_ <= criteria)
+    }
+
+    /**
+     * free the memory occupied by the BufferedImages
+     */
+    void flush() {
+        if (expectedImage_ != null) expectedImage_.flush()
+        if (actualImage_ != null) actualImage_.flush()
+        if (diffImage_ != null) diffImage_.flush()
+    }
+
+    /**
+     * deep copy the source BufferedImage to create a new one
+     *
+     * @param source
+     * @return
+     */
+    static BufferedImage copyImage(BufferedImage source) {
+        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType())
+        Graphics g = b.getGraphics()
+        g.drawImage(source, 0, 0, null)
+        g.dispose()
+        return b
     }
         
 }
