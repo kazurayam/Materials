@@ -333,7 +333,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     
     
-    
+    @Override
+    MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
+        TSuiteResultId tsri = TSuiteResultId.newInstance(this.getCurrentTestSuiteId(), this.getCurrentTestSuiteTimestamp())
+        TSuiteResult currentTsr = this.getTSuiteResult(tsri)
+        MaterialMetadataBundle mmb = this.locateMaterialMetadataBundle(currentTsr)
+        return mmb
+    }
     
     // ------------------ methods to resolve Material Paths  ------------------
 
