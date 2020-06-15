@@ -1,6 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
 import java.awt.Graphics
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.nio.file.Path
 
@@ -134,7 +135,7 @@ class ImageDifference {
      */
     static BufferedImage copyImage(BufferedImage source) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType())
-        Graphics g = b.getGraphics()
+        Graphics2D g = b.getGraphics()
         g.drawImage(source, 0, 0, null)
         g.dispose()
         return b
