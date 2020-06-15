@@ -109,7 +109,7 @@ test {
     
     exclude '**/ComparisonResultBundleSpec.class'   // takes 145 sec
     exclude '**/ImageCollectionDifferSpec.class'    // takes 110 sec
-    exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
+    //exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
