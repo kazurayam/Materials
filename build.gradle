@@ -41,7 +41,20 @@ configurations {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/kazurayam/Materials")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PERSONAL_ACCESS_TOKEN")
+            }
+        }
+    }
     publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
         mavenJava(MavenPublication) {
             from components.java
         }
@@ -116,7 +129,7 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ImageDifferenceSpec.class"
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
-    include "**/impl/MaterialRepositoryImplSpec.class"
+    //include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
@@ -125,7 +138,7 @@ task pinpoint(type: Test) {
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialPairsSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
-    include "**/MaterialRepositorySpec.class"
+    //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/MiscSpec.class"
@@ -137,8 +150,8 @@ task pinpoint(type: Test) {
     //include "**/repository/RepositoryRootSpec2.class"
     //include "**/repository/RepositoryWalkerSpec.class"
     //include "**/metadata/InvokedMethodNameSpec.class"
-    include "**/metadata/MaterialMetadataBundleSpec.class"
-    include "**/metadata/MaterialMetadataSpec.class"
+    //include "**/metadata/MaterialMetadataBundleSpec.class"
+    //include "**/metadata/MaterialMetadataSpec.class"
     //include "**/RestoreResultSpec.class"
     //include "**/RetrievalBySpec.class"
     //include "**/stats/ImageDeltaSpec.class"
@@ -153,13 +166,13 @@ task pinpoint(type: Test) {
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/CarouselIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
-    //include "**/view/IndexerCarouselSpec.class"
-	//include "**/view/IndexerConciseSpec.class"
-	//include "**/view/IndexerParallelSpec.class"
+    include "**/view/IndexerCarouselSpec.class"
+	include "**/view/IndexerConciseSpec.class"
+	include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
-    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
+    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}

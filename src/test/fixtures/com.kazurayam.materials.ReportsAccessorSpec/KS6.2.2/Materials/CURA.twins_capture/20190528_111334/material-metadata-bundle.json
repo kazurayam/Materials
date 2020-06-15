@@ -4,6 +4,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "CURA.twins_capture/20190528_111334/CURA.visitSite/home.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "http://demoaut-mimic.kazurayam.com/"
@@ -13,6 +17,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "CURA.twins_capture/20190528_111334/CURA.visitSite/profile.php%23login.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "https://katalon-demo-cura.herokuapp.com/profile.php#login"
@@ -22,6 +30,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "CURA.twins_capture/20190528_111334/CURA.visitSite/default%23appointment.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "https://katalon-demo-cura.herokuapp.com/#appointment"
@@ -31,6 +43,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "CURA.twins_capture/20190528_111334/CURA.visitSite/appointment.php%23summary.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "https://katalon-demo-cura.herokuapp.com/appointment.php#summary"
@@ -40,6 +56,10 @@
             "MaterialMetadata": {
                 "MaterialPath": "CURA.twins_capture/20190528_111334/CURA.visitSite/revisited.png",
                 "TCaseName": "Test Cases/CURA/visitSite",
+                "MaterialDescription": {
+                    "category": "category text",
+                    "description": "description text"
+                },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
                 "URL": "https://katalon-demo-cura.herokuapp.com/"
