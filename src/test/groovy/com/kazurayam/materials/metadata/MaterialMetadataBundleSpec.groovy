@@ -1,30 +1,18 @@
 package com.kazurayam.materials.metadata
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.MaterialRepositoryFactory
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TCaseResult
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.*
 import com.kazurayam.materials.metadata.InvokedMethodName
 import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import com.kazurayam.materials.metadata.MaterialMetadataImpl
-
 import groovy.json.JsonSlurper
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 class MaterialMetadataBundleSpec extends Specification {
     
@@ -63,10 +51,12 @@ class MaterialMetadataBundleSpec extends Specification {
                     .resolve(tCaseName.getValue())
                         .resolve('47NEWS_TOP.png')
                             .normalize().toString()
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata = new MaterialMetadataImpl(
-            InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-            tCaseName,
-            materialPath)
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                tCaseName,
+                materialPath,
+                description)
         //
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
@@ -110,11 +100,12 @@ class MaterialMetadataBundleSpec extends Specification {
         assert tcr != null
         assert tcr.getMaterialList().size() > 0
         Material mate = tcr.getMaterialList().get(0)
+        MaterialDescription description = new MaterialDescription("category text", "description text")
         MaterialMetadata metadata = new MaterialMetadataImpl(
-            InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
-                    tcr.getTCaseName(),
-                    mate.getHrefRelativeToRepositoryRoot()
-                )
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                tcr.getTCaseName(),
+                mate.getHrefRelativeToRepositoryRoot(),
+                description)
         //
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
