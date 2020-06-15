@@ -18,8 +18,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
-// artifact = 'Materials'
-version  = '0.74.1'
+archivesBaseName = 'Materials'
+version  = '0.75.1'
 
 
 sourceCompatibility = '1.8'
