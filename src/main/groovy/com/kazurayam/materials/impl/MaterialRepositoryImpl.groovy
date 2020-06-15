@@ -335,11 +335,48 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     @Override
     MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
-        TSuiteResultId tsri = TSuiteResultId.newInstance(this.getCurrentTestSuiteId(), this.getCurrentTestSuiteTimestamp())
-        TSuiteResult currentTsr = this.getTSuiteResult(tsri)
-        MaterialMetadataBundle mmb = this.locateMaterialMetadataBundle(currentTsr)
-        return mmb
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+			new TSuiteName(this.getCurrentTestSuiteId()),
+			new TSuiteTimestamp(this.getCurrentTestSuiteTimestamp()))
+        
+		TSuiteResult currentTsr = this.getTSuiteResult(tsri)
+		Path mmbPath = this.locateMaterialMetadataBundle(currentTsr)
+		if (Files.exists(mmbPath)) {
+			return MaterialMetadataBundle.deserialize(mmbPath)
+		} else {
+			return null
+		}
     }
+	
+	@Override
+	boolean hasMaterialMetadataBundleOfCurrentTSuite() {
+		MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
+		return (mmb != null)
+	}
+	
+	@Override
+	boolean printVisitedURLsAsMarkdown(Writer writer) {
+		if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
+			MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
+			mmb.serializeAsMarkdown(writer)
+			return true
+		} else {
+			logger_.info("no MaterialMetadataBundle of the current TSuite")
+			return false
+		}
+	}
+	
+	@Override
+	boolean printVisitedURLsAsTSV(Writer writer) {
+		if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
+			MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
+			mmb.serializeAsTSV(writer)
+			return true
+		} else {
+			logger_.info("no MaterialMetadataBundle of the current TSuite")
+			return false
+		}
+	}
     
     // ------------------ methods to resolve Material Paths  ------------------
 
@@ -824,6 +861,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 MaterialMetadataBundle.SERIALIZED_FILE_NAME)
     }
 
+	
+	
 	@Override
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_

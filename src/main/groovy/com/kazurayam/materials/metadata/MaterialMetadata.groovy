@@ -21,7 +21,7 @@ import com.kazurayam.materials.TCaseName
  * }
  * </pre>
  */
-interface MaterialMetadata {
+interface MaterialMetadata extends Comparable {
     
     String toJsonText()
     void serialize(Writer writer)

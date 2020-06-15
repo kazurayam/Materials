@@ -1,6 +1,9 @@
 package com.kazurayam.materials.metadata
 
+import java.nio.file.Files
 import java.nio.file.Path
+
+import com.kazurayam.materials.MaterialDescription
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,18 +21,27 @@ class MaterialMetadataBundle {
 
     static final String TOP_PROPERTY_NAME = 'MaterialMetadataBundle'
     
-    private static List<MaterialMetadata> metadataBundle_
+    private static List<MaterialMetadata> materialMetadataList_
     
     MaterialMetadataBundle() {
-        metadataBundle_ = new ArrayList<MaterialMetadata>()
+        materialMetadataList_ = new ArrayList<MaterialMetadata>()
     }
 
-    static MaterialMetadataBundle deserialize(Path jsonPath) {
-        return deserialize(jsonPath.toFile().text)
+	/**
+	 * 
+	 * @param jsonPath
+	 * @return may return null if jsonPath does not exists
+	 */
+    static MaterialMetadataBundle deserialize(Path jsonPath){
+		if (Files.exists(jsonPath)) {
+			return deserialize(jsonPath.toFile().text)
+		} else {
+			return null
+		}
     }
     
     static MaterialMetadataBundle deserialize(String jsonText) {
-        def jsonObject = new JsonSlurper().parseText(jsonText)
+		def jsonObject = new JsonSlurper().parseText(jsonText)
         if (jsonObject[TOP_PROPERTY_NAME]) {
             return deserialize((Map)jsonObject)
         } else {
@@ -66,13 +78,13 @@ class MaterialMetadataBundle {
      * @param writer
      */
     void serializeAsMarkdown(Writer writer) {
-        List<String> categories = this.findCategories(this.metadataBundle_)
+        List<String> categories = this.findCategories(this.materialMetadataList_)
         PrintWriter pw = new PrintWriter(writer)
-        for (String category in categories) {
+        for (String category in categories.toSorted()) {
             pw.println("### ${category}")
             pw.println("| description | URL | material path |")
             pw.println("|:---|:---|:---|")
-            for (MaterialMetadata mm in this.metadataBundle_) {
+			for (MaterialMetadata mm in this.materialMetadataList_.toSorted()) {
                 if (mm.getMaterialDescription().getCategory() == category) {
                     StringBuilder sb = new StringBuilder()
                     sb.append("| ")
@@ -97,11 +109,11 @@ class MaterialMetadataBundle {
      * @param writer
      */
     void serializeAsTSV(Writer writer) {
-        List<String> categories = this.findCategories(this.metadataBundle_)
+        List<String> categories = this.findCategories(this.materialMetadataList_)
         PrintWriter pw = new PrintWriter(writer)
-        for (String category in categories) {
+        for (String category in categories.sort()) {
             pw.println("### ${category}")
-            for (MaterialMetadata mm in this.metadataBundle_) {
+            for (MaterialMetadata mm in this.materialMetadataList_.toSorted()) {
                 if (mm.getMaterialDescription().getCategory() == category) {
                     StringBuilder sb = new StringBuilder()
                     sb.append(mm.getMaterialDescription().getDescription())
@@ -134,20 +146,20 @@ class MaterialMetadataBundle {
     }
 
     void add(MaterialMetadata pathResolutionLog) {
-        this.metadataBundle_.add(pathResolutionLog)
+        this.materialMetadataList_.add(pathResolutionLog)
     }
     
     int size() {
-        return this.metadataBundle_.size()
+        return this.materialMetadataList_.size()
     }
     
     MaterialMetadata get(int index) {
-        return this.metadataBundle_.get(index)
+        return this.materialMetadataList_.get(index)
     }
     
     List<MaterialMetadata> findByMaterialPath(String materialPath) {
         List<MaterialMetadata> list = new ArrayList<MaterialMetadata>()
-        for (MaterialMetadata entry : metadataBundle_) {
+        for (MaterialMetadata entry : materialMetadataList_) {
             if (entry.getMaterialPath() == materialPath) {
                 list.add(entry)
             }
@@ -175,7 +187,7 @@ class MaterialMetadataBundle {
         sb.append('{')
         sb.append("\"${TOP_PROPERTY_NAME}\":[")
         int count = 0
-        for (MaterialMetadata resolution: this.metadataBundle_) {
+        for (MaterialMetadata resolution: this.materialMetadataList_) {
             if (count > 0) {
                 sb.append(',')
             }

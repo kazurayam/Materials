@@ -234,8 +234,12 @@ interface MaterialRepository {
      * @return the path of <TSuiteResult>/material-metadata-bundle.json file
      */
     Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
-
-    MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
+	
+	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
+	boolean hasMaterialMetadataBundleOfCurrentTSuite()
+	
+	boolean printVisitedURLsAsMarkdown(Writer writer)
+	boolean printVisitedURLsAsTSV(Writer writer)
 
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
     
