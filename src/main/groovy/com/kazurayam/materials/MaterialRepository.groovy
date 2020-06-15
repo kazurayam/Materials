@@ -95,8 +95,7 @@ interface MaterialRepository {
     
     long getSize()
     
-    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
-	
+
 	RepositoryRoot getRepositoryRoot()
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
@@ -227,6 +226,12 @@ interface MaterialRepository {
     Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName, MaterialDescription description)
 
+    /**
+     *
+     * @param tSuiteResult
+     * @return the path of <TSuiteResult>/material-metadata-bundle.json file
+     */
+    Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
 
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
     

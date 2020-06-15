@@ -141,4 +141,79 @@ class MaterialMetadataBundleSpec extends Specification {
         // should rather be "Monitor47News\\20190123_153854\\main.TC1\\47NEWS_TOP.png"
         materialPath.startsWith('Monitor47News')
     }
+
+    private Tuple2<MaterialRepository, MaterialMetadataBundle> setupCaseOutput(Path caseOutputDir) {
+        Path reports = caseOutputDir.resolve('Reports')
+        Files.createDirectories(reports)
+        Path materials = caseOutputDir.resolve('Materials')
+        Path monitor47NewsDir = materials.resolve('Monitor47News')
+        Files.createDirectories(monitor47NewsDir)
+        Helpers.copyDirectory(
+                fixtureDir_.resolve('Materials').resolve('Monitor47News'),
+                monitor47NewsDir)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+        TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
+                new TSuiteName('Monitor47News'),
+                new TSuiteTimestamp('20190123_153854')))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/visit47NEWS'))
+        assert tcr != null
+        assert tcr.getMaterialList().size() > 0
+        Material mate = tcr.getMaterialList().get(0)
+        MaterialDescription description = new MaterialDescription("category text", "description text")
+        MaterialMetadata metadata = new MaterialMetadataImpl(
+                InvokedMethodName.RESOLVE_SCREENSHOT_PATH_BY_URL_PATH_COMPONENTS,
+                tcr.getTCaseName(),
+                mate.getHrefRelativeToRepositoryRoot(),
+                description)
+        //
+        metadata.setSubPath('')
+        URL url = new URL('https://www.47news.jp/47NEWS_TOP.png')
+        metadata.setUrl(url)
+        //
+        MaterialMetadataBundle mmb = new MaterialMetadataBundle()
+        mmb.add(metadata)
+
+        return new Tuple2(mr, mmb)
+    }
+
+    def test_serializeAsMarkdown() {
+        setup:
+        Path caseOutputDir = specOutputDir_.resolve('test_serializeAsMarkdown')
+        Tuple2<MaterialRepository, MaterialMetadataBundle> tuple = this.setupCaseOutput(caseOutputDir)
+        MaterialRepository mr = tuple[0]
+        MaterialMetadataBundle mmb = tuple[1]
+        when:
+        File markdown = mr.getBaseDir().resolve(MaterialMetadataBundle.URLS_MARKDOWN_FILE_NAME).toFile()
+        OutputStream os = new FileOutputStream(markdown)
+        Writer writer = new OutputStreamWriter(os, "UTF-8")
+        mmb.serializeAsMarkdown(writer)
+        then:
+        markdown.exists()
+        when:
+        String content = markdown.text
+        then:
+        content.contains("### category text")
+        content.contains("| description text |")
+    }
+
+    def test_serializeAsTSV() {
+        setup:
+        Path caseOutputDir = specOutputDir_.resolve('test_serializeAsTSV')
+        Tuple2<MaterialRepository, MaterialMetadataBundle> tuple = this.setupCaseOutput(caseOutputDir)
+        MaterialRepository mr = tuple[0]
+        MaterialMetadataBundle mmb = tuple[1]
+        when:
+        File tsv = mr.getBaseDir().resolve(MaterialMetadataBundle.URLS_TSV_FILE_NAME).toFile()
+        OutputStream os = new FileOutputStream(tsv)
+        Writer writer = new OutputStreamWriter(os, "UTF-8")
+        mmb.serializeAsTSV(writer)
+        then:
+        tsv.exists()
+        when:
+        String content = tsv.text
+        then:
+        content.contains("### category text")
+        content.contains("description text\t")
+    }
+
 }
