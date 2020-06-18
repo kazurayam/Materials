@@ -2,7 +2,6 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
-
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.
@@ -44,7 +43,7 @@ interface MaterialStorage {
      * @return number of files transfered 
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR) throws IOException
+    //int backup(MaterialRepository fromMR) throws IOException
     
     /**
      * delete all of subdirectories and material files which belogns to 
@@ -194,8 +193,7 @@ interface MaterialStorage {
      * @return RestoreResult containing a TSuiteResult and int count of Material files transfered
      * @throws IOException
      */
-    RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                RetrievalBy retrievalBy) throws IOException
+    //RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
     
 	/**
 	 * 

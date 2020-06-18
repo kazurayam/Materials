@@ -95,8 +95,9 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     }
                     repoRoot_.addTSuiteResult(tSuiteResult_)
                 } else {
-                    logger_.warn("#preVisitDirectory ${dir} is ignored, as it's fileName '${dir.getFileName()}' is not compliant to" +
-                            " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
+                    logger_.warn("#preVisitDirectory ${dir} is ignored,"
+                            + " as it's fileName '${dir.getFileName()}' is not compliant to"
+                            + " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                 }
                 directoryTransition_.push(Layer.TIMESTAMP)
                 break

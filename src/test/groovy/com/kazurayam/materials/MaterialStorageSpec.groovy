@@ -39,8 +39,6 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testBackup_specifyingTSuiteTimestamp")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -61,23 +59,23 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testBackup_all")
         Path storageDir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(storageDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
         when:
-        int num = ms.backup(mr_)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName("main/TS1"),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419')
+        )
+        int numberOfMaterialsCopied = ms.backup(mr_, tsri)
         then:
-        num > 1
+        numberOfMaterialsCopied > 1
     }
-    
 
     def testClear_withTSuiteNameAndTSuiteTimestamp() {
         setup:
         Path stepWork = workdir_.resolve("testClear")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -99,8 +97,6 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testClear_withOnlyTSuiteName")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -122,8 +118,6 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testEmpty")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         Helpers.deleteDirectoryContents(msdir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
@@ -145,8 +139,6 @@ class MaterialStorageSpec extends Specification {
         setup:
         Path stepWork = workdir_.resolve("testGetSetOfMaterialPathRelativeToTSuiteName")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -165,8 +157,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -189,8 +179,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -212,8 +200,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList_withTSuiteName")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -235,8 +221,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResultIdList")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -258,8 +242,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("testGetTSuiteResult_noArgs")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -275,56 +257,17 @@ class MaterialStorageSpec extends Specification {
         list.size() == 6
     }
     
-    
-    def testStatus_all() {
-        setup:
-        Path stepWork = workdir_.resolve("testList_all")
-        Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        int numberOfMaterialsCopied = ms.backup(mr_)
-        when:
-        StringWriter sw = new StringWriter()
-        Map options = new HashMap()
-        ms.status(sw, options)
-        String output = sw.toString()
-        println output
-        then:
-        output.contains('TS1')
-        output.contains('20180810_140105')
-        output.contains('1,924,038')
-    }
-    
-    def testStatus_one() {
-        setup:
-        Path stepWork = workdir_.resolve("testList_one")
-        Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
-        MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        int numberOfMaterialsCopied = ms.backup(mr_)
-        when:
-        StringWriter sw = new StringWriter()
-        Map<String, Object> options = new HashMap()
-        options.put('TSuiteName', new TSuiteName('Monitor47News'))
-        ms.status(sw, options)
-        String output = sw.toString()
-        println output
-        then:
-        output.contains('Monitor47News')
-        output.contains('20190123_153854')
-        output.contains('2,631,409')
-    }
-    
     def testReduce() {
         setup:
-        Path stepWork = workdir_.resolve("testList_one")
+        Path stepWork = workdir_.resolve("testReduce")
         Path msdir = stepWork.resolve("Storage")
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
-        int numberOfMaterialsCopied = ms.backup(mr_)
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName("main/TS1"),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_130419')
+        )
+        int numberOfMaterialsCopied = ms.backup(mr_, tsri)
         when:
         long remainingBytes =ms.reduce(20_000_000)   // make the Storage usage less than 20MB
         then:
@@ -336,7 +279,7 @@ class MaterialStorageSpec extends Specification {
         currentSize <= 20_000_000
         remainingBytes == currentSize
     }
-    	
+
     /**
      * MaterialStorage#restore() method should be able to copy
      */
@@ -345,8 +288,6 @@ class MaterialStorageSpec extends Specification {
         Path caseOutputDir = workdir_.resolve('testRestore_including_MaterialMetadataBundle_file')
         Path materialsDir = caseOutputDir.resolve('Materials')
         Path storageDir = caseOutputDir.resolve('Storage')
-        Path reportsDir = caseOutputDir.resolve("Reports")
-        Files.createDirectories(reportsDir)
 
         Path fixtureSource = fixture_.resolve('Storage/47news.chronos_capture')
         Path fixtureTarget = storageDir.resolve('47news.chronos_capture')
@@ -386,8 +327,6 @@ class MaterialStorageSpec extends Specification {
         Path msdir = stepWork.resolve("Storage")
         Path restoredDir = stepWork.resolve("Materials")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("Monitor47News")
@@ -410,8 +349,6 @@ class MaterialStorageSpec extends Specification {
         Path stepWork = workdir_.resolve("test_retrievingRestoreUnaryExclusive")
         Path msdir = stepWork.resolve("Storage")
         Helpers.deleteDirectoryContents(msdir)
-        Path reportsDir = stepWork.resolve("Reports")
-        Files.createDirectories(reportsDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
         when:
         TSuiteName tsn = new TSuiteName("main/TS1")
@@ -443,8 +380,6 @@ class MaterialStorageSpec extends Specification {
 		Path stepWork = workdir_.resolve("test_retrievingRestoreUnaryInclusive")
 		Path msdir = stepWork.resolve("Storage")
 		Helpers.deleteDirectoryContents(msdir)
-		Path reportsDir = stepWork.resolve("Reports")
-		Files.createDirectories(reportsDir)
 		MaterialStorage ms = MaterialStorageFactory.createInstance(msdir)
 		when:
 		TSuiteName tsn = new TSuiteName("main/TS1")

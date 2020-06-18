@@ -1,5 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -47,7 +49,8 @@ class ImageDifferenceFilenameResolverCompactImplSpec extends Specification {
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         TSuiteName tsn = new TSuiteName('main/TS1')
-        MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+        TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
+        MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
         then:
         materialPairs.size() > 0
         when:

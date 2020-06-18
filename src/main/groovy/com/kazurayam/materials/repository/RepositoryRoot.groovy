@@ -66,6 +66,21 @@ final class RepositoryRoot {
         return null
     }
 
+    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName,
+                                        TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : tSuiteResults_) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
+                result.add(tsr)
+            }
+        }
+        return result
+    }
+
+
     /**
      *
      * @param tSuiteName

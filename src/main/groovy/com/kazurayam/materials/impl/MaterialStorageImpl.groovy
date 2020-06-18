@@ -11,6 +11,7 @@ import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import org.slf4j.Logger
@@ -98,7 +99,8 @@ class MaterialStorageImpl implements MaterialStorage {
         componentMR_.scan()
         return count
     }
-    
+
+    /*
     @Override
     int backup(MaterialRepository fromMR) throws IOException {
         Objects.requireNonNull(fromMR, "fromMR must not be null")
@@ -111,6 +113,7 @@ class MaterialStorageImpl implements MaterialStorage {
         componentMR_.scan()
         return count
     }
+     */
     
     @Override
     int clear(TSuiteResultId tSuiteResultId) throws IOException {
@@ -300,7 +303,8 @@ class MaterialStorageImpl implements MaterialStorage {
         //componentMR_.scan()
         return restoreResultList
     }
-    
+
+    /*
     @Override
     RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
                                     RetrievalBy by) throws IOException {
@@ -309,6 +313,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(by, "by must not be null")
         return this.restoreUnaryExclusive(intoMR, tSuiteName, by)
     }
+     */
     
     /**
      *
