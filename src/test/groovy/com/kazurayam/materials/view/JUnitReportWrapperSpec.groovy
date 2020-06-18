@@ -1,21 +1,12 @@
 package com.kazurayam.materials.view
 
-import java.nio.file.Path
-import java.nio.file.Paths
-
+import com.kazurayam.materials.Helpers
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.impl.MaterialRepositoryImpl
-
 import spock.lang.Specification
-import spock.lang.Ignore
-import spock.lang.IgnoreRest
+
+import java.nio.file.Path
+import java.nio.file.Paths
 
 //@Ignore
 class JUnitReportWrapperSpec extends Specification {
@@ -78,6 +69,16 @@ class JUnitReportWrapperSpec extends Specification {
         String status = instance.getTestCaseStatus('Test Cases/main/TC2')
         then:
         status == 'FAILED'
+    }
+
+    def testGetTestSuiteTime() {
+        setup:
+        Path p = fixtureKS6_2_2.resolve('Reports/main/TS1/20180805_081908/JUnit_Report.xml')
+        JUnitReportWrapper instance = new JUnitReportWrapper(p)
+        when:
+        String time = instance.getTestSuiteTime('Test Suites/main/TS1')
+        then:
+        time == '49'
     }
 
     // helper methods

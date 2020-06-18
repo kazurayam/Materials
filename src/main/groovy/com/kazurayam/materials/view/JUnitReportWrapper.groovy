@@ -79,6 +79,22 @@ final class JUnitReportWrapper {
 
     /**
      *
+     * @param testSuiteId
+     * @return time taken the Test Suite run e.g, '49' seconds
+     */
+    String getTestSuiteTime(String testSuiteId) {
+        Objects.requireNonNull(testSuiteId)
+        String location = "/testsuites/testsuite[@id='${testSuiteId}']"
+        Node testSuiteNode = (Node)xpath_.evaluate(location, document_, XPathConstants.NODE)
+        if (testSuiteNode != null) {
+            return xpath_.evaluate("/testsuites/testsuite[@id='${testSuiteId}']/@time", document_)
+        } else {
+            return null
+        }
+    }
+
+    /**
+     *
      * @param testCaseId e.g, 'Test Cases/main/TC1'
      * @return 'PASSED' or 'FAILED'. will return '----' if the testCaseId is not found in the JUnit_Repoert.xml
      */

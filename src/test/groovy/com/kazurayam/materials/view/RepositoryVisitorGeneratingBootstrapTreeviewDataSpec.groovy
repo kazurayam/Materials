@@ -94,7 +94,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewDataSpec extends Specification
 
         // 47news.chronos_capture/20190404_112053
         json[0].tags[0] == "EXECUTED:3,FAILED:0,ERROR:0"
-        json[0].tags[1] == "TIME:43"
+        json[0].tags[1] == "TIME:15"
         json[0].tags[2] == "default"
         json[0].tags[3] == "Firefox"
         json[0].tags[4] == "screenshots:6"

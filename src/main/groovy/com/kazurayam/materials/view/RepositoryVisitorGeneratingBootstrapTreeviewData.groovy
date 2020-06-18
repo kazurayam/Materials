@@ -109,6 +109,12 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              sb.append(junitReportWrapper.getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
              sb.append('"')
              sb.append(',')
+
+             sb.append('"')
+             sb.append("TIME:${junitReportWrapper.getTestSuiteTime(tSuiteResult.getId().getTSuiteName().getId())}")
+             sb.append('"')
+             sb.append(',')
+
              sb.append('"')
              sb.append("${executionPropertiesWrapper.getExecutionProfile()}")
              sb.append('"')
