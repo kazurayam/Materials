@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.75.1'
+version  = '0.75.2'
 
 
 sourceCompatibility = '1.8'
@@ -109,7 +109,7 @@ test {
     
     exclude '**/ComparisonResultBundleSpec.class'   // takes 145 sec
     exclude '**/ImageCollectionDifferSpec.class'    // takes 110 sec
-    //exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
+    exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
@@ -166,13 +166,14 @@ task pinpoint(type: Test) {
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/CarouselIndexerSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
-    include "**/view/IndexerCarouselSpec.class"
-	include "**/view/IndexerConciseSpec.class"
-	include "**/view/IndexerParallelSpec.class"
+    //include "**/view/IndexerCarouselSpec.class"
+	//include "**/view/IndexerConciseSpec.class"
+	//include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
-    include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
+    include "**/view/RepositoryVisitorGeneratingBootstrapTreeviewDataSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
+    //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
     //include "**/view/SuffixSpec.class"
     //include "**/VisualTestingLoggerSpec.class"
     outputs.upToDateWhen {false}

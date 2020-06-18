@@ -59,15 +59,24 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec extends Specificati
             MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
             // copy files from the Storage directory to the Materials directory
             ms.restore(mr, [
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_111956')),
-                TSuiteResultId.newInstance(new TSuiteName('Test Suites/47news/chronos_capture'), new TSuiteTimestamp('20190404_112053')),
+                TSuiteResultId.newInstance(
+                        new TSuiteName('Test Suites/47news/chronos_capture'),
+                        new TSuiteTimestamp('20190404_111956')),
+                TSuiteResultId.newInstance(
+                        new TSuiteName('Test Suites/47news/chronos_capture'),
+                        new TSuiteTimestamp('20190404_112053')),
             ])
             ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
         when:
             Path output = materialsDir.resolve('testSmoke.html')
-            Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()), 'utf-8')
+            Writer writer = new OutputStreamWriter(new FileOutputStream(output.toFile()),
+                    'utf-8')
 			MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel visitor = new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(mr.getRepositoryRoot(), markupBuilder)
+            RepositoryVisitorGeneratingHtmlDivsAsModalCarousel visitor =
+                    new RepositoryVisitorGeneratingHtmlDivsAsModalCarousel(
+                            mr.getRepositoryRoot(),
+                            markupBuilder
+                    )
             visitor.setReportsAccessor(ra)
         then:
             visitor != null
@@ -79,7 +88,8 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec extends Specificati
         then:
             tsr != null
         when:
-            TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/47news/visitSite'))
+            TCaseResult tcr = tsr.getTCaseResult(
+                    new TCaseName('Test Cases/47news/visitSite'))
         then:
             tcr != null
         when:
