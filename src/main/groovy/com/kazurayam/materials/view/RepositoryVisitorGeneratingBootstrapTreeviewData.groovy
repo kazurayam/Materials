@@ -2,11 +2,11 @@ package com.kazurayam.materials.view
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.regex.Pattern
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.ReportsAccessor
@@ -20,6 +20,7 @@ import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
+import java.util.stream.Collectors;
 
 /**
  *
@@ -103,25 +104,42 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              executionPropertiesWrapper = reportsAccessor_.getExecutionPropertiesWrapper(tSuiteResult.getId())
          }
          if (junitReportWrapper != null) {
+
+             // number of Tests
              sb.append(',')
              sb.append('"tags": ["')
              logger_.info("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
              sb.append(junitReportWrapper.getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
              sb.append('"')
-             sb.append(',')
 
-             sb.append('"')
-             sb.append("TIME:${junitReportWrapper.getTestSuiteTime(tSuiteResult.getId().getTSuiteName().getId())}")
-             sb.append('"')
+             // execution time in seconds while rounding down to integer. E.g,   47.341 -> 47 seconds
              sb.append(',')
+             sb.append('"')
+             String secondsScale3 = junitReportWrapper.getTestSuiteTime(tSuiteResult.getId().getTSuiteName().getId())
+             int seconds = Double.parseDouble(secondsScale3).intValue()
+             sb.append("TIME:${seconds}")
+             sb.append('"')
 
+             sb.append(',')
+             sb.append('"')
+             // screenshots:
+             def numOfPNGFiles = tSuiteResult.getMaterialList().stream().filter { material ->
+                 material.getFileType() == FileType.PNG }.collect(Collectors.toList()).size()
+             sb.append("PNG:${numOfPNGFiles}")
+             sb.append('"')
+
+             // ExecutionProfile name
+             sb.append(',')
              sb.append('"')
              sb.append("${executionPropertiesWrapper.getExecutionProfile()}")
              sb.append('"')
+
+             // Browser name
              sb.append(',')
              sb.append('"')
              sb.append("${executionPropertiesWrapper.getDriverName()}")
              sb.append('"')
+
              sb.append(']')
          } else {
              vtLogger_.info(this.class.getSimpleName() + "#postVisitTSuiteResult failed to instanciate JUnitReportWrapper object") 

@@ -315,7 +315,12 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
      * @return
      */
     protected String findExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
+        Objects.requireNonNull(materialCore, "materialCore must not be null")
         Material material = repoRoot.getMaterial(materialCore)
+        if (material == null) {
+            throw new IllegalStateException("repoRoot.getMaterial(materialCore) returned null where reporoot=${repoRoot}, materialCore=${materialCore}")
+        }
 		TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
