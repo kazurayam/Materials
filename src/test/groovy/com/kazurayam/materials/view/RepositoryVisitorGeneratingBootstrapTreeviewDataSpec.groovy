@@ -94,18 +94,25 @@ class RepositoryVisitorGeneratingBootstrapTreeviewDataSpec extends Specification
 
         // 47news.chronos_capture/20190404_112053
         json[0].tags[0] == "EXECUTED:3,FAILED:0,ERROR:0"
-        json[0].tags[1] == "default"
-        json[0].tags[2] == "Firefox"
+        json[0].tags[1] == "TIME:43"
+        json[0].tags[2] == "default"
+        json[0].tags[3] == "Firefox"
+        json[0].tags[4] == "screenshots:6"
 
         // 47news.chronos_capture/20190404_111956
         json[1].tags[0] == "EXECUTED:3,FAILED:0,ERROR:0"
-        json[1].tags[1] == "default"
-        json[1].tags[2] == "Firefox"
+        json[1].tags[1] == "TIME:43"
+        json[1].tags[2] == "default"
+        json[1].tags[3] == "Firefox"
+        json[1].tags[4] == "screenshots:6"
 
         // 47news.chronos_exam/20190404_112054
         json[2].tags[0] == "EXECUTED:1,FAILED:0,ERROR:0"
-        json[2].tags[1] == "default"
-        json[2].tags[2] == "Firefox"
+        json[2].tags[1] == "TIME:43"
+        json[2].tags[2] == "default"
+        json[2].tags[3] == "Firefox"
+        json[2].tags[4] == "screenshots:0"
+
     }
 
 
