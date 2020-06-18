@@ -142,9 +142,6 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 tSuiteResult_.setLastModified(lastModified)
                 logger_.debug("#postVisitDirectory set lastModified=${lastModified} to" +
                     " ${tSuiteResult_.getId().getTSuiteName()}/${tSuiteResult_.getId().getTSuiteTimestamp().format()}")
-                // resolve the length property of the TSuiteResult
-                long length = resolveLengthOfTSuiteResult(tSuiteResult_)
-                tSuiteResult_.setSize(length)
                 //
                 directoryTransition_.pop()
                 break
@@ -263,12 +260,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
      * @return sum of length of Materials contained in the TSuiteResult
      */
     private long resolveLengthOfTSuiteResult(TSuiteResult tsr) {
-        long length = 0
-        List<TCaseResult> tCaseResults = tsr.getTCaseResultList()
-        for (TCaseResult tcr :  tCaseResults) {
-            length += tcr.getSize()
-        }
-        return length
+        return tsr.getSize()
     }
 
 }

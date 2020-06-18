@@ -116,7 +116,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              sb.append(',')
              sb.append('"')
              String secondsScale3 = junitReportWrapper.getTestSuiteTime(tSuiteResult.getId().getTSuiteName().getId())
-             int seconds = Double.parseDouble(secondsScale3).intValue()
+             int seconds = Double.parseDouble(secondsScale3 ?: "0").intValue()
              sb.append("TIME:${seconds}")
              sb.append('"')
 

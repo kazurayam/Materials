@@ -38,9 +38,12 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract TSuiteResult setLastModified(LocalDateTime lastModified)
 
     abstract LocalDateTime getLastModified()
-    
-    abstract TSuiteResult setSize(long size)
-    
+
+    /**
+     * get the sum of length of files belonging to this TSuiteResult
+     *
+     * @return
+     */
     abstract long getSize()
 
     abstract boolean isLatestModified()

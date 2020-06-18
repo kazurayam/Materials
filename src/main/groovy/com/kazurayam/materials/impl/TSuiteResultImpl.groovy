@@ -119,14 +119,13 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     }
 
     @Override
-    TSuiteResult setSize(long length) {
-        size_ = length
-        return this
-    }
-    
-    @Override
     long getSize() {
-        return size_
+        long length = 0
+        List<TCaseResult> tCaseResults = this.getTCaseResultList()
+        for (TCaseResult tcr :  tCaseResults) {
+            length += tcr.getSize()
+        }
+        return length
     }
     
     @Override
