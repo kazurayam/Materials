@@ -80,12 +80,12 @@ class StorageScannerSpec extends Specification {
         StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteNameChronos)
         then:
         statsEntry != null
-        statsEntry.getTSuiteName().equals(tSuiteNameChronos)
+        statsEntry.getTSuiteName() == tSuiteNameChronos
         when:
-        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+        MaterialStats mStats = statsEntry.getMaterialStatsList()[0]
         then:
         stats != null
-        mstats.getPath() == Paths.get("47news.visitSite/47reporters.png")
+        mStats.getPath() == Paths.get("47news.visitSite/47reporters.png")
         when:
         println messageBuffer.toString()
         then:
