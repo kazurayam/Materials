@@ -170,10 +170,12 @@ class StorageScanner {
         stopWatch.start()
         StatsEntry statsEntry = new StatsEntry(tSuiteName)
 
-        Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
+        Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(
+                tSuiteName, tExecutionProfile)
 
         for (Path path : set) {
-            MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
+            MaterialStats materialStats =
+                    this.makeMaterialStats(tSuiteName, tExecutionProfile, path)
             statsEntry.addMaterialStats(materialStats)
         }
 
@@ -445,7 +447,10 @@ class StorageScanner {
     }
     
     /**
-     *
+     * Write the imageDeltaStats (image-delta-stats.json) file
+     * into the Storage directory, into the subdirectory of Exam
+     * at the path specified by
+     * tSuiteName + tExecutionProfile + tSuiteTimestamp + tCaseName.
      */
     Path persist(ImageDeltaStats imageDeltaStats,
                  TSuiteName tSuiteNameExam,

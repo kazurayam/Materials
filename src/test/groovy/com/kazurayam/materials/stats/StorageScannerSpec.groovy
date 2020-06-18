@@ -2,7 +2,6 @@ package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TExecutionProfile
 
-import javax.swing.text.TabExpander
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -52,44 +51,45 @@ class StorageScannerSpec extends Specification {
     
     def testScan_47News() {
         setup:
-            Path caseOutputDir = specOutputDir.resolve("testScan_47News")
-            Files.createDirectories(caseOutputDir)
-            Helpers.copyDirectory(fixtureDir, caseOutputDir)
-            MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
-            //
-            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-            TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
-            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+        Path caseOutputDir = specOutputDir.resolve("testScan_47News")
+        Files.createDirectories(caseOutputDir)
+        Helpers.copyDirectory(fixtureDir, caseOutputDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
+        //
+        TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
                     tSuiteNameExam,
                     tExecutionProfile,
                     tCaseNameExam)
-            StorageScanner.Options options = new Options.Builder().
+        StorageScanner.Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
-            StorageScanner scanner = new StorageScanner(ms, options)
-            StringWriter messageBuffer = new StringWriter()
-            VisualTestingLogger listener = new VisualTestingListenerCustomImpl(messageBuffer)
-            scanner.setVisualTestingLogger(listener)
+        StorageScanner scanner = new StorageScanner(ms, options)
+        StringWriter messageBuffer = new StringWriter()
+        VisualTestingLogger listener = new VisualTestingListenerCustomImpl(messageBuffer)
+        scanner.setVisualTestingLogger(listener)
         when:
-            TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
-            ImageDeltaStats stats = scanner.scan(tSuiteName)
-            //
-            scanner.persist(stats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-            //
-            StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        TSuiteName tSuiteNameChronos = new TSuiteName("47news.chronos_capture")
+        // Here we go!
+        ImageDeltaStats stats = scanner.scan(tSuiteNameChronos, tExecutionProfile)
+        scanner.persist(stats,
+                tSuiteNameExam, tExecutionProfile, new TSuiteTimestamp(/* now */), tCaseNameExam)
+        //
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteNameChronos)
         then:
-            statsEntry != null
-            statsEntry.getTSuiteName().equals(tSuiteName)
+        statsEntry != null
+        statsEntry.getTSuiteName().equals(tSuiteNameChronos)
         when:
-            MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
+        MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
-            mstats != null
-            mstats.getPath().equals(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
+        stats != null
+        mstats.getPath() == Paths.get("47news.visitSite/47reporters.png")
         when:
-            println messageBuffer.toString()
+        println messageBuffer.toString()
         then:
-            true
+        true
     }
     
     def testBufferedImageBuffer() {
