@@ -49,9 +49,9 @@ class StorageScannerSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
     
-    def testScan_47News() {
+    def test_scan_47News() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testScan_47News")
+        Path caseOutputDir = specOutputDir.resolve("test_scan_47News")
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
@@ -92,16 +92,16 @@ class StorageScannerSpec extends Specification {
         true
     }
     
-    def testBufferedImageBuffer() {
+    def test_BufferedImageBuffer() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testBufferedImageBuffer")
+        Path caseOutputDir = specOutputDir.resolve("test_BufferedImageBuffer")
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))
         //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
         TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
                 tSuiteNameExam,
                 tExecutionProfile,
@@ -110,20 +110,30 @@ class StorageScannerSpec extends Specification {
                                             previousImageDeltaStats(previousIDS).
                                             build()
         StorageScanner scanner = new StorageScanner(ms, options)
-        when:
-        TSuiteName tSuiteName = new TSuiteName("47News_chronos_capture")
-        ImageDeltaStats stats = scanner.scan(tSuiteName)
+        TSuiteName tSuiteName = new TSuiteName("47news.chronos_capture")
+        ImageDeltaStats stats = scanner.scan(tSuiteName, tExecutionProfile)
         //
-        scanner.persist(stats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+        scanner.persist(stats,
+                tSuiteNameExam,
+                tExecutionProfile,
+                new TSuiteTimestamp(/* now */),
+                tCaseNameExam)
         //
         StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         TSuiteName tsn = statsEntry.getTSuiteName()
-        Path path = Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png")
-        List<Material> materials = scanner.getMaterialsOfARelativePathInATSuiteName(tsn, path)
+        Path path = Paths.get("47news.visitSite/top.png")
+
+        when:
+        List<Material> materials =
+                scanner.getMaterialsOfARelativePathInATSuiteName(
+                        tsn,
+                        new TExecutionProfile("default"),
+                        path)
         BufferedImageBuffer biBuffer = new BufferedImageBuffer()
         then:
-        materials.size() == 7
+        materials.size() == 2
+
         when:
         BufferedImage bi0 = biBuffer.read(materials.get(0))
         BufferedImage bi1 = biBuffer.read(materials.get(1))
@@ -131,18 +141,19 @@ class StorageScannerSpec extends Specification {
         bi0 != null
         bi1 != null
         biBuffer.size() == 2
+
         when:
         bi0 = biBuffer.remove(materials.get(0))
-        //
         bi1 = biBuffer.read(materials.get(1))
-        BufferedImage bi2 = biBuffer.read(materials.get(2))
+        BufferedImage bi2 = biBuffer.read(materials.get(1))
         then:
         bi2 != null
-        biBuffer.size() == 2   // must not be 3!
+        biBuffer.size() == 1
+
         when:
         bi1 = biBuffer.remove(materials.get(1))
         then:
-        biBuffer.size() == 1
+        biBuffer.size() == 0
     }
     
     /**
@@ -150,9 +161,9 @@ class StorageScannerSpec extends Specification {
      * 3 ImageDelta objects in a MatrialStats object.
      * @return
      */
-    def testSpecifyingOption_maximumNumberOfDelta() {
+    def test_specifyingOption_maximumNumberOfDelta() {
         setup:
-        Path caseOutputDir = specOutputDir.resolve("testSpecifyingOption_maximumNumberOfDelta")
+        Path caseOutputDir = specOutputDir.resolve("test_specifyingOption_maximumNumberOfDelta")
         Files.createDirectories(caseOutputDir)
         Helpers.copyDirectory(fixtureDir, caseOutputDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(caseOutputDir.resolve('Storage'))

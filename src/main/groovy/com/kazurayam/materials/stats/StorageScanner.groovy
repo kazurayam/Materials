@@ -41,11 +41,11 @@ class StorageScanner {
 
     private ImageDeltaStats previousImageDeltaStats_
     
-    public StorageScanner(MaterialStorage materialStorage) {
+    StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
     }
     
-    public StorageScanner(MaterialStorage materialStorage, Options options) {
+    StorageScanner(MaterialStorage materialStorage, Options options) {
         this.materialStorage_ = materialStorage
         // reflesh it.
         // this may heavy. i am not very sure if it is a good idea to call MaterialRepository.scan() here.
