@@ -329,25 +329,18 @@ class MaterialRepositorySpec extends Specification {
 		Files.exists(index)
 	}
 
-	def test_createMaterialPairs_TSuiteNameOnly() {
+	def test_createMaterialPairs() {
 		setup:
-        String method = 'test_createMaterialPairs_TSuiteNameOnly'
+        String method = 'test_createMaterialPairs'
 
-        TSuiteName tSuiteName = new TSuiteName("Test Suites/TS1")
+        TSuiteName tSuiteName = new TSuiteName("Test Suites/main/TS1")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('CURA_ProductionEnv')
         MaterialRepository mr = prepareMR(method, tSuiteName)
         when:
-        MaterialPairs mps = mr.createMaterialPairs(new TSuiteName('TS1'))
+        MaterialPairs mps = mr.createMaterialPairs(tSuiteName, tExecutionProfile)
         then:
-        mps.size() == 1
-        when:
-        MaterialPair mp = mps.get(Paths.get('TC1/CURA_Healthcare_Service.png'))
-        Material expected = mp.getExpected()
-        Material actual = mp.getActual()
-        then:
-        expected.getPathRelativeToTSuiteTimestamp() == Paths.get('TC1/CURA_Healthcare_Service.png')
-        actual.getPathRelativeToTSuiteTimestamp()   == Paths.get('TC1/CURA_Healthcare_Service.png')
+        mps.size() == 5
     }
-    
     
     
     /**

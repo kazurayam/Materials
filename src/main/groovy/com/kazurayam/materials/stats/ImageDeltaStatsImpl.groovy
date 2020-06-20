@@ -53,10 +53,10 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    double getCriteriaPercentage(TSuiteName tSuiteName,
-                                 TExecutionProfile tExecutionProfile,
+    double getCriteriaPercentage(TSuiteName tSuiteNameCapture,
+                                 TExecutionProfile tExecutionProfileCapture,
                                  Path pathRelativeToTSuiteTimestamp) {
-        StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
+        StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteNameCapture, tExecutionProfileCapture)
         if (statsEntry != StatsEntry.NULL) {
             MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
             if (materialStats != null) {
@@ -67,7 +67,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
             }
             
         } else {
-            throw new IllegalArgumentException("TSuiteName \"${tSuiteName}\" is not " + 
+            throw new IllegalArgumentException("TSuiteName \"${tSuiteNameCapture}\" is not " +
                 "found in this ImageDeltaStats")
         }
     }
@@ -83,11 +83,11 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName,
-                                       TExecutionProfile tExecutionProfile) {
+    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteNameCapture,
+                                       TExecutionProfile tExecutionProfileCapture) {
         for (StatsEntry entry: imageDeltaStatsEntries) {
-            if (entry.getTSuiteName() == tSuiteName &&
-                entry.getTExecutionProfile() == tExecutionProfile) {
+            if (entry.getTSuiteName() == tSuiteNameCapture &&
+                entry.getTExecutionProfile() == tExecutionProfileCapture) {
                 return entry
             }
         }
@@ -95,13 +95,16 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    boolean hasImageDelta(TSuiteName tSuiteName,
-                          TExecutionProfile tExecutionProfile,
+    boolean hasImageDelta(TSuiteName tSuiteNameCapture,
+                          TExecutionProfile tExecutionProfileCapture,
                           Path relativeToTSuiteTimestampDir,
                           TSuiteTimestamp a, TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName() == tSuiteName &&
-                se.getTExecutionProfile() == tExecutionProfile) {
+            if (se.getTSuiteName() == tSuiteNameCapture &&
+                se.getTExecutionProfile() == tExecutionProfileCapture) {
+
+                logger_.debug("se.hasImageDelta: ${se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)}")
+
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return true
                 }
@@ -111,16 +114,16 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    ImageDelta getImageDelta(TSuiteName tSuiteName,
-                             TExecutionProfile tExecutionProfile,
+    ImageDelta getImageDelta(TSuiteName tSuiteNameCapture,
+                             TExecutionProfile tExecutionProfileCapture,
                              Path relativeToTSuiteTimestampDir,
                              TSuiteTimestamp a,
                              TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName() == tSuiteName &&
-                se.getTExecutionProfile() == tExecutionProfile) {
+            if (se.getTSuiteName() == tSuiteNameCapture &&
+                se.getTExecutionProfile() == tExecutionProfileCapture) {
 
-                // logger_.debug("se.hasImageDelta: ${se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)}")
+                logger_.debug("se.hasImageDelta: ${se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)}")
 
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return se.getImageDelta(relativeToTSuiteTimestampDir, a, b)

@@ -211,6 +211,7 @@ class MaterialMetadataSpec extends Specification {
         metadata.setTExecutionProfile(new TExecutionProfile('develop'))
         //
         Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
+        Files.createDirectories(serialized.getParent())
         OutputStream os = new FileOutputStream(serialized.toFile())
         Writer writer = new OutputStreamWriter(os, "UTF-8")
         metadata.serialize(writer)

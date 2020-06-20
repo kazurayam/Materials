@@ -327,19 +327,20 @@ class ImageDeltaStatsSpec extends Specification {
                 new TSuiteName("47news.chronos_capture"),
                 new TExecutionProfile('default'))
 
-        scanner.persist(stats,
+        Path file = scanner.persist(stats,
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 new TSuiteTimestamp(),
                 tCaseNameExam)
+        assert Files.exists(file)
 
         when:
-        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.ImageDiff')
-        TSuiteTimestamp a = new TSuiteTimestamp('20190401_142151')
-        TSuiteTimestamp b = new TSuiteTimestamp('20190401_142749')
+        TSuiteTimestamp a = new TSuiteTimestamp('20190401_142748')
+        TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
+        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite')
         then:
         stats.hasImageDelta(
-                new TSuiteName("47news.chronos_exam"),
+                new TSuiteName("47news.chronos_capture"),
                 new TExecutionProfile('default'),
                 pathRelativeToTSuiteTimestampDir, a, b)
         when:
@@ -352,6 +353,7 @@ class ImageDeltaStatsSpec extends Specification {
     def testGetImageDelta() {
         setup:
         MaterialStorage ms = prepareMS("testGetImageDelta")
+        //
         TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
         TExecutionProfile tExecutionProfileExam = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
@@ -376,20 +378,21 @@ class ImageDeltaStatsSpec extends Specification {
         assert Files.exists(file)
 
         when:
-        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.ImageDiff')
-        TSuiteTimestamp a = new TSuiteTimestamp('20190401_142151')
-        TSuiteTimestamp b = new TSuiteTimestamp('20190401_142749')
+        TSuiteTimestamp a = new TSuiteTimestamp('20190401_142748')
+        TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
+        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite')
         ImageDelta id1 = stats.getImageDelta(
                 new TSuiteName("47news.chronos_capture"),
                 new TExecutionProfile('default'),
                 pathRelativeToTSuiteTimestampDir, a, b)
         then:
         id1 != null
+
         when:
         TSuiteTimestamp another = new TSuiteTimestamp('20190401_150000')
         ImageDelta id2 = stats.getImageDelta(
-                tSuiteNameExam,
-                tExecutionProfileExam,
+                new TSuiteName("47news.chronos_capture"),
+                new TExecutionProfile('default'),
                 pathRelativeToTSuiteTimestampDir,
                 another, b)
         then:

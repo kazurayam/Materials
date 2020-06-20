@@ -72,12 +72,13 @@ class StorageScannerSpec extends Specification {
         scanner.setVisualTestingLogger(listener)
         when:
         TSuiteName tSuiteNameChronos = new TSuiteName("47news.chronos_capture")
+        TExecutionProfile tExecutionProfileChronos = new TExecutionProfile("default")
         // Here we go!
         ImageDeltaStats stats = scanner.scan(tSuiteNameChronos, tExecutionProfile)
         scanner.persist(stats,
                 tSuiteNameExam, tExecutionProfile, new TSuiteTimestamp(/* now */), tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteNameChronos)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteNameChronos, tExecutionProfileChronos)
         then:
         statsEntry != null
         statsEntry.getTSuiteName() == tSuiteNameChronos
@@ -119,7 +120,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(/* now */),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         TSuiteName tsn = statsEntry.getTSuiteName()
         Path path = Paths.get("47news.visitSite/top.png")
@@ -190,7 +191,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
         scanner.getOptions().getMaximumNumberOfImageDeltas() == 3
@@ -227,7 +228,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         //println "#testSpecifyingOptions_onlySince mstats:${mstats.toJsonText()}"
         then:

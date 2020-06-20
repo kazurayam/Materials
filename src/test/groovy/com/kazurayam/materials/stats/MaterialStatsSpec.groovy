@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -40,10 +42,12 @@ class MaterialStatsSpec extends Specification {
         storagedir_ = workdir_.resolve("Storage")
         ms_ = MaterialStorageFactory.createInstance(storagedir_)
         StorageScanner scanner = new StorageScanner(ms_)
-        ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'))
+        ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'),
+                            new TExecutionProfile('default'))
     }
     def setup() {
-        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'),
+                                                    new TExecutionProfile('default'))
         materialStats_ = se.getMaterialStats(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
     }
     def cleanup() {}
@@ -192,15 +196,26 @@ class MaterialStatsSpec extends Specification {
         Path storageDir = caseOutputDir.resolve('Storage')
         Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(reports)
-        Path fixtureSourceDir = fixture_.resolve('Storage').resolve('47News_chronos_capture').resolve('20190216_204329')
-        Path fixtureTargetDir = storageDir.resolve('47News_chronos_capture').resolve('20190216_204329')
+        Path fixtureSourceDir = fixture_.resolve('Storage')
+                .resolve('47News_chronos_capture')
+                .resolve('default')
+                .resolve('20190216_204329')
+        Path fixtureTargetDir = storageDir
+                .resolve('47News_chronos_capture')
+                .resolve('default')
+                .resolve('20190216_204329')
         Files.createDirectories(fixtureTargetDir)
         Helpers.copyDirectory(fixtureSourceDir, fixtureTargetDir)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
         StorageScanner scanner = new StorageScanner(ms)
-        ImageDeltaStats ids = scanner.scan(new TSuiteName('47News_chronos_capture'))
-        StatsEntry se = ids.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
-        MaterialStats materialStats = se.getMaterialStats(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
+        ImageDeltaStats ids = scanner.scan(
+                new TSuiteName('47News_chronos_capture'),
+                new TExecutionProfile('default'))
+        StatsEntry se = ids.getImageDeltaStatsEntry(
+                new TSuiteName('47News_chronos_capture'),
+                new TExecutionProfile('default'))
+        MaterialStats materialStats = se.getMaterialStats(
+                Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
         when:
         double[] data = materialStats.data()
         then:

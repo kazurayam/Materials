@@ -126,23 +126,23 @@ class StorageScanner {
      * @param materialStorage
      * @return a ImageDeltaStats object
      */
-    ImageDeltaStats scan(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+    ImageDeltaStats scan(TSuiteName tSuiteNameCapture, TExecutionProfile tExecutionProfileCapture) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         
         ImageDeltaStatsImpl.Builder builder = 
             new ImageDeltaStatsImpl.Builder().storageScannerOptions(options_)
         //
-        if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
-            StatsEntry se = this.makeStatsEntry(tSuiteName, tExecutionProfile)
+        if (materialStorage_.getTSuiteNameList().contains(tSuiteNameCapture)) {
+            StatsEntry se = this.makeStatsEntry(tSuiteNameCapture, tExecutionProfileCapture)
             builder.addImageDeltaStatsEntry(se)
         } else {
-            logger_.warn("No ${tSuiteName} is found in ${materialStorage_}")
+            logger_.warn("No ${tSuiteNameCapture} is found in ${materialStorage_}")
         }
         ImageDeltaStats ids = builder.build()
         
         stopWatch.stop()
-        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteNameCapture}"
         logger_.debug(msg)
         return ids
     }
@@ -160,27 +160,27 @@ class StorageScanner {
      * </PRE>
      * 
      * @param ms
-     * @param tSuiteName
+     * @param tSuiteNameCapture
      * @return a StatsEntry object
      */
-    StatsEntry makeStatsEntry(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+    StatsEntry makeStatsEntry(TSuiteName tSuiteNameCapture, TExecutionProfile tExecutionProfileCapture) {
+        Objects.requireNonNull(tSuiteNameCapture, "tSuiteNameCapture must not be null")
+        Objects.requireNonNull(tExecutionProfileCapture, "tExecutionProfileCapture must not be null")
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        StatsEntry statsEntry = new StatsEntry(tSuiteName, tExecutionProfile)
+        StatsEntry statsEntry = new StatsEntry(tSuiteNameCapture, tExecutionProfileCapture)
 
         Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(
-                tSuiteName, tExecutionProfile)
+                tSuiteNameCapture, tExecutionProfileCapture)
 
         for (Path path : set) {
             MaterialStats materialStats =
-                    this.makeMaterialStats(tSuiteName, tExecutionProfile, path)
+                    this.makeMaterialStats(tSuiteNameCapture, tExecutionProfileCapture, path)
             statsEntry.addMaterialStats(materialStats)
         }
 
         stopWatch.stop()
-        String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteNameCapture}"
         logger_.debug(msg)
         if (vtLogger_ != null) {
             vtLogger_.info(msg)

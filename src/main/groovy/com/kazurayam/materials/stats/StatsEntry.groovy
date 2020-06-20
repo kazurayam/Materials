@@ -17,26 +17,26 @@ class StatsEntry {
     
     static final StatsEntry NULL = new StatsEntry(TSuiteName.NULL, TExecutionProfile.BLANK)
 
-    private TSuiteName tSuiteName
+    private TSuiteName tSuiteNameCapture
 
-    private TExecutionProfile tExecutionProfile
+    private TExecutionProfile tExecutionProfileCapture
     
     private List<MaterialStats> materialStatsList
     
-    StatsEntry(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        this.tSuiteName = tSuiteName
-        this.tExecutionProfile = tExecutionProfile
+    StatsEntry(TSuiteName tSuiteNameCapture, TExecutionProfile tExecutionProfileCapture) {
+        Objects.requireNonNull(tSuiteNameCapture, "tSuiteNameCapture must not be null")
+        Objects.requireNonNull(tExecutionProfileCapture, "tExecutionProfileCapture must not be null")
+        this.tSuiteNameCapture = tSuiteNameCapture
+        this.tExecutionProfileCapture = tExecutionProfileCapture
         this.materialStatsList = new ArrayList<MaterialStats>() 
     }
 
     TSuiteName getTSuiteName() {
-        return tSuiteName
+        return tSuiteNameCapture
     }
 
     TExecutionProfile getTExecutionProfile() {
-        return tExecutionProfile
+        return tExecutionProfileCapture
     }
     
     void addMaterialStats(MaterialStats materialStats) {
@@ -90,9 +90,9 @@ class StatsEntry {
         StringBuilder sb = new StringBuilder()
         sb.append("{")
         sb.append("\"TSuiteName\":")
-        sb.append("\"${Helpers.escapeAsJsonText(tSuiteName.getValue())}\",")
+        sb.append("\"${Helpers.escapeAsJsonText(tSuiteNameCapture.getValue())}\",")
         sb.append("\"TExecutionProfile\":")
-        sb.append("\"${tExecutionProfile.getName()}\",")
+        sb.append("\"${tExecutionProfileCapture.getName()}\",")
         sb.append("\"materialStatsList\":")
         int count = 0
         sb.append("[")

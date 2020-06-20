@@ -108,7 +108,7 @@ class IndexerCarouselSpec extends Specification {
         html.contains('modalize();')
     }
 
-    @IgnoreRest
+
     def testCarousel() {
         setup:
             Path caseOutputDir = specOutputDir.resolve('testCarousel')
@@ -142,7 +142,7 @@ class IndexerCarouselSpec extends Specification {
             def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
                     'default', '20190216_210203')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+            MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
@@ -153,6 +153,7 @@ class IndexerCarouselSpec extends Specification {
             storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
                             new TSuiteName("47News_chronos_capture"),
+                            new TExecutionProfile('default'),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
             30.0 < ccp && ccp < 31.0
@@ -245,24 +246,33 @@ class IndexerCarouselSpec extends Specification {
                     tCaseNameExam)
             //
             TSuiteName tsn = new TSuiteName('Test Suites/47news/chronos_capture')
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142150')))
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
+            TExecutionProfile tep = new TExecutionProfile('default')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190401_142150')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190401_142748')))
             mr.scan()
-            mr.markAsCurrent('Test Suites/47news/ImageDiff', '20190401_142749')
-            def r = mr.ensureTSuiteResultPresent('Test Suites/47news/ImageDiff', '20190401_142749')
+            mr.markAsCurrent('Test Suites/47news/ImageDiff',
+                    'default',
+                    '20190401_142749')
+            def r = mr.ensureTSuiteResultPresent(
+                    'Test Suites/47news/ImageDiff',
+                    'default',
+                    '20190401_142749')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
-            StorageScanner.Options options = new StorageScanner.Options.Builder().
-            previousImageDeltaStats(previousIDS).
-                shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
-                build()
+            MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
+            StorageScanner.Options options = new StorageScanner.Options.Builder()
+                    .previousImageDeltaStats(previousIDS)
+                    .shiftCriteriaPercentageBy(15.0)    // THIS IS THE POINT
+                    .build()
             StorageScanner storageScanner = new StorageScanner(ms, options)
-            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
             //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                                                new TSuiteName("47news/chronos_capture"),
-                                                Paths.get('47news.visitSite').resolve('top.png'))
+                    new TSuiteName("47news/chronos_capture"),
+                    new TExecutionProfile('default'),
+                    Paths.get('47news.visitSite').resolve('top.png'))
         then:
             27.0 < ccp && ccp < 28.0
         when:
@@ -272,7 +282,9 @@ class IndexerCarouselSpec extends Specification {
                 new TCaseName('Test Cases/47news/ImageDiff'),
                 imageDeltaStats)
             mr.scan()
-            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/47news/ImageDiff'))
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(
+                    new TSuiteName('Test Suites/47news/ImageDiff'),
+                    new TExecutionProfile('default'))
             assert tsriList.size() == 1
             TSuiteResultId tsri = tsriList.get(0)
             TSuiteResult tsr = mr.getTSuiteResult(tsri)
@@ -333,7 +345,7 @@ class IndexerCarouselSpec extends Specification {
         when:
             String html = index.toFile().text
         then:
-            html.contains('CURA.twins_exam/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.(0.00).png')
+            html.contains('CURA.twins_exam/default/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.(0.00).png')
             //                                                                                    ^^^                                                                           ^^^    ^^^
     }
 

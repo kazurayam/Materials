@@ -17,7 +17,7 @@ import com.kazurayam.materials.stats.StorageScanner.Options
 import groovy.json.JsonSlurper
 
 /**
- * ImageDeletaStats object:
+ * ImageDeltaStats object:
  * 
 <PRE>
 {
@@ -33,6 +33,7 @@ import groovy.json.JsonSlurper
     "imageDeltaStatsEntries": [
         {
             "TSuiteName": "47News_chronos_capture",
+            "TExecutionProfile": "default",
             "materialStatsList": [
                 {
                     "path": "main.TC_47News.visitSite/47NEWS_TOP.png",
@@ -119,32 +120,32 @@ abstract class ImageDeltaStats {
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
     abstract double getCriteriaPercentage(
-            TSuiteName tSuiteName,
-            TExecutionProfile tExecutionProfile,
+            TSuiteName tSuiteNameCapture,
+            TExecutionProfile tExecutionProfileCapture,
             Path pathRelativeToTSuiteTimestamp)
     
     abstract StatsEntry getImageDeltaStatsEntry(
-            TSuiteName tSuiteName,
-            TExecutionProfile tExecutionProfile)
+            TSuiteName tSuiteNameCapture,
+            TExecutionProfile tExecutionProfileCapture)
     
     /**
      * 
-     * @param tSuiteName
+     * @param tSuiteNameCapture
      * @param relativeToTSuiteTimestampDir
      * @param a
      * @param b
      * @return
      */
-    abstract boolean hasImageDelta(TSuiteName tSuiteName,
-                                   TExecutionProfile tExecutionProfile,
+    abstract boolean hasImageDelta(TSuiteName tSuiteNameCapture,
+                                   TExecutionProfile tExecutionProfileCapture,
                                    Path relativeToTSuiteTimestampDir,
                                    TSuiteTimestamp a,
                                    TSuiteTimestamp b)
     
     /**
      */
-    abstract ImageDelta getImageDelta(TSuiteName tSuiteName,
-                                      TExecutionProfile tExecutionProfile,
+    abstract ImageDelta getImageDelta(TSuiteName tSuiteNameCapture,
+                                      TExecutionProfile tExecutionProfileCapture,
                                       Path relativeToTSuiteTimestampDir,
                                       TSuiteTimestamp a,
                                       TSuiteTimestamp b)
