@@ -1,6 +1,7 @@
 package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TExecutionProfile
+import spock.lang.IgnoreRest
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -63,10 +64,10 @@ class ImageDeltaStatsSpec extends Specification {
                 tCaseNameExam)
         when:
         double value = 0.10
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
-                                            previousImageDeltaStats(previousImageDeltaStats).
-                                            shiftCriteriaPercentageBy(value).
-                                            build()
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousImageDeltaStats)
+                .shiftCriteriaPercentageBy(value)
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
         ImageDeltaStats ids = scanner.scan(
                 new TSuiteName("47news.chronos_capture"),
@@ -76,7 +77,6 @@ class ImageDeltaStatsSpec extends Specification {
                 tExecutionProfileExam,
                 new TSuiteTimestamp(),
                 tCaseNameExam)
-
         then:
         ids.getStorageScannerOptions().getShiftCriteriaPercentageBy() == value
     }
@@ -96,10 +96,10 @@ class ImageDeltaStatsSpec extends Specification {
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
-                                            previousImageDeltaStats(previousIDS).
-                                            filterDataLessThan(0.0).  // LOOK HERE
-                                            build()
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousIDS)
+                .filterDataLessThan(0.0)  // LOOK HERE
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
 
         when:
@@ -136,7 +136,7 @@ class ImageDeltaStatsSpec extends Specification {
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+        Options options = new Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 probability(0.75).  // LOOK HERE
                 build()
@@ -169,9 +169,9 @@ class ImageDeltaStatsSpec extends Specification {
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 tCaseNameExam)
-        StorageScanner.Options options = new Options.Builder().
-                                            previousImageDeltaStats(previousIDS).
-                                            build()
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousIDS)
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
         ImageDeltaStats ids = scanner.scan(
                 new TSuiteName("47news.chronos_capture"),
@@ -207,11 +207,11 @@ class ImageDeltaStatsSpec extends Specification {
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
-            previousImageDeltaStats(previousIDS).
-            shiftCriteriaPercentageBy(25.0).
-            probability(0.75).  // LOOK HERE
-            build()
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousIDS)
+                .shiftCriteriaPercentageBy(25.0)
+                .probability(0.75)  // LOOK HERE
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
         when:
         TSuiteName tsn = new TSuiteName("47news.chronos_capture")
@@ -277,10 +277,9 @@ class ImageDeltaStatsSpec extends Specification {
                 tSuiteNameExam,
                 tExecutionProfileExam,
                 tCaseNameExam)
-        StorageScanner.Options options =
-                new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
-                        previousImageDeltaStats(previousIDS).
-                        build()
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousIDS)
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
         when:
         ImageDeltaStats imageDeltaStats = scanner.scan(
@@ -311,16 +310,16 @@ class ImageDeltaStatsSpec extends Specification {
         setup:
         MaterialStorage ms = prepareMS("testHasImageDelta")
         //
-        TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
-        TExecutionProfile tExecutionProfileExam = new TExecutionProfile('default')
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
+        TSuiteName examiningTSuiteName = new TSuiteName("47news.chronos_exam")
+        TExecutionProfile examiningTExecutionProfile = new TExecutionProfile('default')
+        TCaseName  examiningTCaseName  = new TCaseName("Test Cases/47news/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
-                tSuiteNameExam,
-                tExecutionProfileExam,
-                tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
-            previousImageDeltaStats(previousIDS).
-            build()
+                examiningTSuiteName,
+                examiningTExecutionProfile,
+                examiningTCaseName)
+        Options options = new Options.Builder()
+                .previousImageDeltaStats(previousIDS)
+                .build()
         StorageScanner scanner = new StorageScanner(ms, options)
         //
         ImageDeltaStats stats= scanner.scan(
@@ -328,40 +327,36 @@ class ImageDeltaStatsSpec extends Specification {
                 new TExecutionProfile('default'))
 
         Path file = scanner.persist(stats,
-                tSuiteNameExam,
-                tExecutionProfileExam,
+                examiningTSuiteName,
+                examiningTExecutionProfile,
                 new TSuiteTimestamp(),
-                tCaseNameExam)
+                examiningTCaseName)
         assert Files.exists(file)
 
         when:
         TSuiteTimestamp a = new TSuiteTimestamp('20190401_142748')
         TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
-        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite')
+        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite/47reporters.png')
         then:
         stats.hasImageDelta(
                 new TSuiteName("47news.chronos_capture"),
                 new TExecutionProfile('default'),
                 pathRelativeToTSuiteTimestampDir, a, b)
-        when:
-        TSuiteTimestamp another = new TSuiteTimestamp('20190301_065500')
-        then:
-        ! stats.hasImageDelta(tsn, tep, pathRelativeToTSuiteTimestampDir, another, b)
     }
     
-    
+
     def testGetImageDelta() {
         setup:
         MaterialStorage ms = prepareMS("testGetImageDelta")
         //
-        TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
-        TExecutionProfile tExecutionProfileExam = new TExecutionProfile('default')
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
+        TSuiteName examiningTSuiteName = new TSuiteName("47news.chronos_exam")
+        TExecutionProfile examiningTExecutionProfile = new TExecutionProfile('default')
+        TCaseName  examiningTCaseName  = new TCaseName("Test Cases/47news/ImageDiff")
         Path previousImageDeltaStats = StorageScanner.findLatestImageDeltaStats(ms,
-                tSuiteNameExam,
-                tExecutionProfileExam,
-                tCaseNameExam)
-        StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder()
+                examiningTSuiteName,
+                examiningTExecutionProfile,
+                examiningTCaseName)
+        Options options = new Options.Builder()
                 .previousImageDeltaStats(previousImageDeltaStats)
                 .build()
         StorageScanner scanner = new StorageScanner(ms, options)
@@ -371,16 +366,16 @@ class ImageDeltaStatsSpec extends Specification {
                 new TExecutionProfile('default'))
         //
         Path file = scanner.persist(stats,
-                tSuiteNameExam,
-                tExecutionProfileExam,
+                examiningTSuiteName,
+                examiningTExecutionProfile,
                 new TSuiteTimestamp(),
-                tCaseNameExam)
+                examiningTCaseName)
         assert Files.exists(file)
 
         when:
         TSuiteTimestamp a = new TSuiteTimestamp('20190401_142748')
         TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
-        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite')
+        Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite/47reporters.png')
         ImageDelta id1 = stats.getImageDelta(
                 new TSuiteName("47news.chronos_capture"),
                 new TExecutionProfile('default'),

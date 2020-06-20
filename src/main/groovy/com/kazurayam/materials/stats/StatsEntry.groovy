@@ -61,11 +61,13 @@ class StatsEntry {
     
     boolean hasImageDelta(Path pathRelativeToTSuiteTimestamp, TSuiteTimestamp a, TSuiteTimestamp b) {
         for (MaterialStats ms: materialStatsList) {
-            //logger_.info("ms.getPath(): ${ms.getPath()}"
+
+            //logger_.debug("ms.getPath()<${ms.getPath()}>"
             //        + " ${(ms.getPath()==pathRelativeToTSuiteTimestamp) ? '==' : '!='}"
-            //        + " pathRelativeToTSuiteTimestamp: ${pathRelativeToTSuiteTimestamp} && ms.hasImageDelta(${a},${b}): ${ms.hasImageDelta(a,b)}")
-            if (ms.getPath() == pathRelativeToTSuiteTimestamp &&
-                    ms.hasImageDelta(a, b)) {
+            //        + " pathRelativeToTSuiteTimestamp<${pathRelativeToTSuiteTimestamp}>")
+            //logger_.debug("ms.hasImageDelta(${a},${b}): ${ms.hasImageDelta(a,b)}")
+
+            if (ms.getPath() == pathRelativeToTSuiteTimestamp && ms.hasImageDelta(a, b)) {
                 return true
             }
         }
