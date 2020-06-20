@@ -152,9 +152,8 @@ class IndexerCarouselSpec extends Specification {
             //
             storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                            new TSuiteName("47News_chronos_capture"),
-                            new TExecutionProfile('default'),
-                            Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
+                    Paths.get('main.TC_47News.visitSite')
+                            .resolve('47NEWS_TOP.png'))
         then:
             30.0 < ccp && ccp < 31.0
         when:
@@ -270,9 +269,8 @@ class IndexerCarouselSpec extends Specification {
             //
             storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                    new TSuiteName("47news/chronos_capture"),
-                    new TExecutionProfile('default'),
-                    Paths.get('47news.visitSite').resolve('top.png'))
+                    Paths.get('47news.visitSite')
+                            .resolve('top.png'))
         then:
             27.0 < ccp && ccp < 28.0
         when:

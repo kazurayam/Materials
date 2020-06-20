@@ -63,7 +63,7 @@ class StorageScannerSpec extends Specification {
                     tSuiteNameExam,
                     tExecutionProfile,
                     tCaseNameExam)
-        StorageScanner.Options options = new Options.Builder().
+        Options options = new Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
         StorageScanner scanner = new StorageScanner(ms, options)
@@ -78,7 +78,7 @@ class StorageScannerSpec extends Specification {
         scanner.persist(stats,
                 tSuiteNameExam, tExecutionProfile, new TSuiteTimestamp(/* now */), tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteNameChronos, tExecutionProfileChronos)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry()
         then:
         statsEntry != null
         statsEntry.getTSuiteName() == tSuiteNameChronos
@@ -120,7 +120,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(/* now */),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry()
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         TSuiteName tsn = statsEntry.getTSuiteName()
         Path path = Paths.get("47news.visitSite/top.png")
@@ -191,7 +191,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry()
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         then:
         scanner.getOptions().getMaximumNumberOfImageDeltas() == 3
@@ -228,7 +228,7 @@ class StorageScannerSpec extends Specification {
                 new TSuiteTimestamp(),
                 tCaseNameExam)
         //
-        StatsEntry statsEntry = stats.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
+        StatsEntry statsEntry = stats.getImageDeltaStatsEntry()
         MaterialStats mstats = statsEntry.getMaterialStatsList()[0]
         //println "#testSpecifyingOptions_onlySince mstats:${mstats.toJsonText()}"
         then:
@@ -256,7 +256,7 @@ class StorageScannerSpec extends Specification {
         TExecutionProfile tep = new TExecutionProfile("default")
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190401_142150")
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
-        StorageScanner.Options options = 
+        Options options =
             new Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 onlySince(tst).  // onlySinceInclude default: true
@@ -292,7 +292,7 @@ class StorageScannerSpec extends Specification {
         TExecutionProfile tep = new TExecutionProfile('default')
         TSuiteTimestamp tst = TSuiteTimestamp.newInstance("20190401_142150")
         TSuiteResultId tsri = TSuiteResultId.newInstance(tsn, tep, tst)
-        StorageScanner.Options options =
+        Options options =
             new Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 onlySince(tst, false).   // onlySinceInclusive: false
@@ -603,6 +603,7 @@ class StorageScannerSpec extends Specification {
      *
      * this test case may take longer seconds than 20
      */
+    @Ignore
     def test_PerformanceImprovementByPreviousImageDeltaStats() {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_PerformanceImprovementByPreviousImageDeltaStats")

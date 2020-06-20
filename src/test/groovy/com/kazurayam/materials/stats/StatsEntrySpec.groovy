@@ -92,9 +92,7 @@ class StatsEntrySpec extends Specification {
      */
     def testGetMaterialStats() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(
-                new TSuiteName('47news.chronos_capture'),
-                new TExecutionProfile('default'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
         when:
         MaterialStats mStats1 = se.getMaterialStats(
                 Paths.get("47news.visitSite").resolve("47reporters.png"))
@@ -143,9 +141,7 @@ class StatsEntrySpec extends Specification {
      */
     def testHasImageDelta() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(
-                new TSuiteName('47news.chronos_capture'),
-                new TExecutionProfile('default'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
         Path pathRelativeToTSuiteTimestampDir =
                 Paths.get("47news.visitSite").resolve("47reporters.png")
         when:
@@ -161,9 +157,7 @@ class StatsEntrySpec extends Specification {
     
     def testGetImageDelta() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(
-                new TSuiteName('47news.chronos_capture'),
-                new TExecutionProfile('default'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
         Path pathRelativeToTSuiteTimestampDir =
                 Paths.get("47news.visitSite").resolve("47reporters.png")
         when:

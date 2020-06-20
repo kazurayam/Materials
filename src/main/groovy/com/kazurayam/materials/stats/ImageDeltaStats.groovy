@@ -1,6 +1,7 @@
 package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TExecutionProfile
+import com.kazurayam.materials.TSuiteName
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -9,8 +10,6 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.stats.StorageScanner.Options
 
@@ -120,13 +119,9 @@ abstract class ImageDeltaStats {
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
     abstract double getCriteriaPercentage(
-            TSuiteName capturingTSuiteName,
-            TExecutionProfile capturingTExecutionProfile,
             Path pathRelativeToTSuiteTimestamp)
     
-    abstract StatsEntry getImageDeltaStatsEntry(
-            TSuiteName capturingTSuiteName,
-            TExecutionProfile capturingTExecutionProfile)
+    abstract StatsEntry getImageDeltaStatsEntry()
     
     /**
      * 
@@ -136,17 +131,13 @@ abstract class ImageDeltaStats {
      * @param b
      * @return
      */
-    abstract boolean hasImageDelta(TSuiteName capturingTSuiteName,
-                                   TExecutionProfile capturingTExecutionProfile,
-                                   Path relativeToTSuiteTimestampDir,
+    abstract boolean hasImageDelta(Path relativeToTSuiteTimestampDir,
                                    TSuiteTimestamp a,
                                    TSuiteTimestamp b)
     
     /**
      */
-    abstract ImageDelta getImageDelta(TSuiteName capturingTSuiteName,
-                                      TExecutionProfile capturingTExecutionProfile,
-                                      Path relativeToTSuiteTimestampDir,
+    abstract ImageDelta getImageDelta(Path relativeToTSuiteTimestampDir,
                                       TSuiteTimestamp a,
                                       TSuiteTimestamp b)
     
@@ -157,19 +148,8 @@ abstract class ImageDeltaStats {
     abstract void write(Path output)
     
     abstract void write(Writer writer)
-    
-    static Path resolvePath(TSuiteName imageDiffTSuiteName,
-                            TExecutionProfile tExecutionProfile,
-                            TSuiteTimestamp tSuiteTimestamp,
-                            TCaseName tCaseName) {
-        Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
-                            resolve(tExecutionProfile.getNameInPathSafeChars()).
-                            resolve(tSuiteTimestamp.format()).
-                            resolve(tCaseName.getValue()).
-                            resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
-        return jsonPath
-    }
-    
+
+
     abstract toJsonText()
     
     /**
@@ -185,16 +165,7 @@ abstract class ImageDeltaStats {
             throw new FileNotFoundException("${jsonFilePath} is not found")
         }
     }
-    
-    static ImageDeltaStats fromJsonFile(File jsonFile) {
-        if (jsonFile.exists()) {
-            String jsonText = jsonFile.text
-            return ImageDeltaStats.fromJsonText(jsonText)
-        } else {
-            throw new FileNotFoundException("${jsonFile} is not found")
-        }
-    }
-    
+
     static ImageDeltaStats fromJsonText(String jsonText) {
         JsonSlurper slurper = new JsonSlurper()
         def jsonObject = slurper.parseText(jsonText)
@@ -205,8 +176,8 @@ abstract class ImageDeltaStats {
         Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         if (jsonObject instanceof Map) {
             Map json = (Map)jsonObject
-            StorageScanner.Options ssOptions =
-                new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+            Options ssOptions =
+                new Options.Builder().
                     shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
                     filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
                     maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).

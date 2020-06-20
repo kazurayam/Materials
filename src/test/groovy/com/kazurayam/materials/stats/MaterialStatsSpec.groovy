@@ -46,8 +46,7 @@ class MaterialStatsSpec extends Specification {
                             new TExecutionProfile('default'))
     }
     def setup() {
-        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'),
-                                                    new TExecutionProfile('default'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
         materialStats_ = se.getMaterialStats(Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
     }
     def cleanup() {}
@@ -211,9 +210,7 @@ class MaterialStatsSpec extends Specification {
         ImageDeltaStats ids = scanner.scan(
                 new TSuiteName('47News_chronos_capture'),
                 new TExecutionProfile('default'))
-        StatsEntry se = ids.getImageDeltaStatsEntry(
-                new TSuiteName('47News_chronos_capture'),
-                new TExecutionProfile('default'))
+        StatsEntry se = ids.getImageDeltaStatsEntry()
         MaterialStats materialStats = se.getMaterialStats(
                 Paths.get("main.TC_47News.visitSite/47NEWS_TOP.png"))
         when:

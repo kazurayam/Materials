@@ -18,20 +18,37 @@ import java.nio.file.Path
 class ImageDeltaStatsImpl extends ImageDeltaStats {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageDeltaStatsImpl.class)
-    
+
+    private TSuiteName capturingTSuiteName
+    private TExecutionProfile capturingTExecutionProfile
     private Options options
-    
     private List<StatsEntry> imageDeltaStatsEntries
     
     /**
      *
      */
     static class Builder {
+        private TSuiteName capturingTSuiteName
+        private TExecutionProfile capturingTExecutionProfile
         private Options options
         private List<StatsEntry> statsEntries
         Builder() {
-            options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().build()
+            capturingTSuiteName = TSuiteName.NULL
+            capturingTExecutionProfile = TExecutionProfile.BLANK
+            options = new Options.Builder().build()
             statsEntries = new ArrayList<StatsEntry>()
+        }
+        Builder capturingTSuiteName(TSuiteName capturingTSuiteName) {
+            Objects.requireNonNull(capturingTSuiteName,
+                    "capturingTSuiteName must not be null")
+            this.capturingTSuiteName = capturingTSuiteName
+            return this
+        }
+        Builder capturingTExecutionProfile(TExecutionProfile capturingTExecutionProfile) {
+            Objects.requireNonNull(capturingTExecutionProfile,
+                    "capturingTExecutionProfile must not be null")
+            this.capturingTExecutionProfile = capturingTExecutionProfile
+            return this
         }
         Builder storageScannerOptions(Options value) {
             Objects.requireNonNull(options, "options must not be null")
@@ -42,21 +59,28 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
             statsEntries.add(entry)
             return this
         }
+
         ImageDeltaStatsImpl build() {
+            if (this.capturingTSuiteName == null) {
+                throw new IllegalStateException("this.capturingTSuiteName is required")
+            }
+            if (this.capturingTExecutionProfile == null) {
+                throw new IllegalStateException("this.capturingTExecutionProfile is required")
+            }
             return new ImageDeltaStatsImpl(this)
         }
     }
     
     private ImageDeltaStatsImpl(Builder builder) {
+        this.capturingTSuiteName = builder.capturingTSuiteName
+        this.capturingTExecutionProfile = builder.capturingTExecutionProfile
         this.options = builder.options
         this.imageDeltaStatsEntries = builder.statsEntries
     }
     
     @Override
-    double getCriteriaPercentage(TSuiteName capturingTSuiteName,
-                                 TExecutionProfile capturingTExecutionProfile,
-                                 Path pathRelativeToTSuiteTimestamp) {
-        StatsEntry statsEntry = this.getImageDeltaStatsEntry(capturingTSuiteName, capturingTExecutionProfile)
+    double getCriteriaPercentage(Path pathRelativeToTSuiteTimestamp) {
+        StatsEntry statsEntry = this.getImageDeltaStatsEntry()
         if (statsEntry != StatsEntry.NULL) {
             MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
             if (materialStats != null) {
@@ -83,8 +107,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    StatsEntry getImageDeltaStatsEntry(TSuiteName capturingTSuiteName,
-                                       TExecutionProfile capturingTExecutionProfile) {
+    StatsEntry getImageDeltaStatsEntry() {
         for (StatsEntry entry: imageDeltaStatsEntries) {
             if (entry.getTSuiteName() == capturingTSuiteName &&
                 entry.getTExecutionProfile() == capturingTExecutionProfile) {
@@ -95,9 +118,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    boolean hasImageDelta(TSuiteName capturingTSuiteName,
-                          TExecutionProfile capturingTExecutionProfile,
-                          Path relativeToTSuiteTimestampDir,
+    boolean hasImageDelta(Path relativeToTSuiteTimestampDir,
                           TSuiteTimestamp a,
                           TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
@@ -115,9 +136,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    ImageDelta getImageDelta(TSuiteName capturingTSuiteName,
-                             TExecutionProfile capturingTExecutionProfile,
-                             Path relativeToTSuiteTimestampDir,
+    ImageDelta getImageDelta(Path relativeToTSuiteTimestampDir,
                              TSuiteTimestamp a,
                              TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {

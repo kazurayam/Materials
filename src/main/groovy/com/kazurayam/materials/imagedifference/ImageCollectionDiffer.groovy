@@ -116,7 +116,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                 TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
                 TExecutionProfile tep = expected.getParent().getParent().getTExecutionProfile()
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
-                double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, tep, path)
+                double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(path)
                 // compare 2 images and create a ComparisonResult object
                 ComparisonResult cr = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
                 // and put the ComparisonResult into buffer

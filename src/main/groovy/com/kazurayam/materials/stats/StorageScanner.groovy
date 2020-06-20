@@ -126,23 +126,27 @@ class StorageScanner {
      * @param materialStorage
      * @return a ImageDeltaStats object
      */
-    ImageDeltaStats scan(TSuiteName tSuiteNameCapture, TExecutionProfile tExecutionProfileCapture) {
+    ImageDeltaStats scan(TSuiteName capturingTSuiteName,
+                         TExecutionProfile capturingTExecutionProfile) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         
         ImageDeltaStatsImpl.Builder builder = 
-            new ImageDeltaStatsImpl.Builder().storageScannerOptions(options_)
+            new ImageDeltaStatsImpl.Builder()
+                    .capturingTSuiteName(capturingTSuiteName)
+                    .capturingTExecutionProfile(capturingTExecutionProfile)
+                    .storageScannerOptions(options_)
         //
-        if (materialStorage_.getTSuiteNameList().contains(tSuiteNameCapture)) {
-            StatsEntry se = this.makeStatsEntry(tSuiteNameCapture, tExecutionProfileCapture)
+        if (materialStorage_.getTSuiteNameList().contains(capturingTSuiteName)) {
+            StatsEntry se = this.makeStatsEntry(capturingTSuiteName, capturingTExecutionProfile)
             builder.addImageDeltaStatsEntry(se)
         } else {
-            logger_.warn("No ${tSuiteNameCapture} is found in ${materialStorage_}")
+            logger_.warn("No ${capturingTSuiteName} is found in ${materialStorage_}")
         }
         ImageDeltaStats ids = builder.build()
         
         stopWatch.stop()
-        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteNameCapture}"
+        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${capturingTSuiteName}"
         logger_.debug(msg)
         return ids
     }
@@ -263,19 +267,19 @@ class StorageScanner {
                 ImageDelta imageDelta
                 //println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
                 if (previousImageDeltaStats_ != null) {
-                    boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
-                                                    tExecutionProfile,
-                                                    pathRelativeToTSuiteTimestampDir,
-                                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                    boolean condition = previousImageDeltaStats_
+                            .hasImageDelta(
+                                    pathRelativeToTSuiteTimestampDir,
+                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                     
                     //println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
                     if (condition) {
-                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName,
-                                                tExecutionProfile,
-                                                pathRelativeToTSuiteTimestampDir,
-                                                materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                                                materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                        imageDelta = previousImageDeltaStats_
+                                .getImageDelta(
+                                        pathRelativeToTSuiteTimestampDir,
+                                        materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                        materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                         // turn this imageDelta marked isCached
                         imageDelta.setCached(true)
                     
@@ -436,7 +440,9 @@ class StorageScanner {
             TCaseResult tcr = material.getParent()
             TSuiteResult tsr = tcr.getParent()
             TSuiteTimestamp tst = tsr.getTSuiteTimestamp()
-            logger_.debug("#isInRangeOfTSuiteTimestamp onlySinceInclusive=${onlySinceInclusive}, tst=${tst.toString()}, onlySince=${onlySince.toString()}")
+
+            // logger_.debug("#isInRangeOfTSuiteTimestamp onlySinceInclusive=${onlySinceInclusive}, tst=${tst.toString()}, onlySince=${onlySince.toString()}")
+
             if (onlySinceInclusive) {
                 return tst >= onlySince    
             } else {

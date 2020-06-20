@@ -1,7 +1,6 @@
 package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TExecutionProfile
-import spock.lang.IgnoreRest
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -30,7 +29,19 @@ class ImageDeltaStatsSpec extends Specification {
     // fields
     private static Path fixtureDir
     private static Path specOutputDir
-    
+
+    static Path resolvePath(TSuiteName imageDiffTSuiteName,
+                            TExecutionProfile tExecutionProfile,
+                            TSuiteTimestamp tSuiteTimestamp,
+                            TCaseName tCaseName) {
+        Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
+                            resolve(tExecutionProfile.getNameInPathSafeChars()).
+                            resolve(tSuiteTimestamp.format()).
+                            resolve(tCaseName.getValue()).
+                            resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
+        return jsonPath
+    }
+
     // fixture methods
     def setupSpec() {
         Path projectDir = Paths.get(".")
@@ -112,8 +123,6 @@ class ImageDeltaStatsSpec extends Specification {
                 new TSuiteTimestamp(),
                 tCaseNameExam)
         double criteriaPercentage = ids.getCriteriaPercentage(
-                tsn,
-                tep,
                 Paths.get('47news.visitSite/top.png'))
         then:
         // criteriaPercentage == 12.767696022300328 
@@ -151,8 +160,7 @@ class ImageDeltaStatsSpec extends Specification {
                 tExecutionProfileExam,
                 new TSuiteTimestamp(),
                 tCaseNameExam)
-        double criteriaPercentage = ids.getCriteriaPercentage(tsn,
-                tep,
+        double criteriaPercentage = ids.getCriteriaPercentage(
                 Paths.get('47news.visitSite/top.png'))
         then:
             criteriaPercentage == 12.04
@@ -254,7 +262,7 @@ class ImageDeltaStatsSpec extends Specification {
         TExecutionProfile tExecutionProfileExam = new TExecutionProfile('default')
         TSuiteTimestamp tSuiteTimestampExam = new TSuiteTimestamp()
         TCaseName tCaseNameExam = new TCaseName('Test Cases/47news/ImageDiff')
-        Path jsonPath = ImageDeltaStats.resolvePath(tSuiteNameExam,
+        Path jsonPath = resolvePath(tSuiteNameExam,
                 tExecutionProfileExam,
                 tSuiteTimestampExam,
                 tCaseNameExam)
@@ -338,10 +346,7 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
         Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite/47reporters.png')
         then:
-        stats.hasImageDelta(
-                new TSuiteName("47news.chronos_capture"),
-                new TExecutionProfile('default'),
-                pathRelativeToTSuiteTimestampDir, a, b)
+        stats.hasImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
     }
     
 
@@ -376,20 +381,13 @@ class ImageDeltaStatsSpec extends Specification {
         TSuiteTimestamp a = new TSuiteTimestamp('20190401_142748')
         TSuiteTimestamp b = new TSuiteTimestamp('20190401_142150')
         Path pathRelativeToTSuiteTimestampDir = Paths.get('47news.visitSite/47reporters.png')
-        ImageDelta id1 = stats.getImageDelta(
-                new TSuiteName("47news.chronos_capture"),
-                new TExecutionProfile('default'),
-                pathRelativeToTSuiteTimestampDir, a, b)
+        ImageDelta id1 = stats.getImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
         then:
         id1 != null
 
         when:
         TSuiteTimestamp another = new TSuiteTimestamp('20190401_150000')
-        ImageDelta id2 = stats.getImageDelta(
-                new TSuiteName("47news.chronos_capture"),
-                new TExecutionProfile('default'),
-                pathRelativeToTSuiteTimestampDir,
-                another, b)
+        ImageDelta id2 = stats.getImageDelta(pathRelativeToTSuiteTimestampDir, another, b)
         then:
         id2 == null
     }
