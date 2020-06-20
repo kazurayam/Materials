@@ -168,7 +168,7 @@ class StorageScanner {
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        StatsEntry statsEntry = new StatsEntry(tSuiteName)
+        StatsEntry statsEntry = new StatsEntry(tSuiteName, tExecutionProfile)
 
         Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(
                 tSuiteName, tExecutionProfile)
@@ -264,13 +264,15 @@ class StorageScanner {
                 //println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
                 if (previousImageDeltaStats_ != null) {
                     boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
+                                                    tExecutionProfile,
                                                     pathRelativeToTSuiteTimestampDir,
                                                     materials.get(i).getParent().getParent().getTSuiteTimestamp(),
                                                     materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                     
                     //println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
                     if (condition) {
-                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, 
+                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName,
+                                                tExecutionProfile,
                                                 pathRelativeToTSuiteTimestampDir,
                                                 materials.get(i).getParent().getParent().getTSuiteTimestamp(),
                                                 materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())

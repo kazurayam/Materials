@@ -1,25 +1,15 @@
 package com.kazurayam.materials.stats
 
-import java.nio.file.Files
-import java.nio.file.Path
-
+import com.kazurayam.materials.TExecutionProfile
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.stats.StorageScanner.Options
+import groovy.json.JsonOutput
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialRepository
-import com.kazurayam.materials.MaterialStorage
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TCaseResult
-import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
-
-import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.stats.StorageScanner.Options
-import com.kazurayam.materials.stats.StorageScanner.Options.Builder
-
-import groovy.json.JsonOutput
+import java.nio.file.Files
+import java.nio.file.Path
 
 /**
  * 
@@ -38,10 +28,10 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
      */
     static class Builder {
         private Options options
-        private List<StatsEntry> imageDeltaStatsEntries
+        private List<StatsEntry> statsEntries
         Builder() {
             options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().build()
-            imageDeltaStatsEntries = new ArrayList<StatsEntry>()
+            statsEntries = new ArrayList<StatsEntry>()
         }
         Builder storageScannerOptions(Options value) {
             Objects.requireNonNull(options, "options must not be null")
@@ -49,7 +39,7 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
             return this
         }
         Builder addImageDeltaStatsEntry(StatsEntry entry) {
-            imageDeltaStatsEntries.add(entry)
+            statsEntries.add(entry)
             return this
         }
         ImageDeltaStatsImpl build() {
@@ -59,12 +49,14 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     
     private ImageDeltaStatsImpl(Builder builder) {
         this.options = builder.options
-        this.imageDeltaStatsEntries = builder.imageDeltaStatsEntries
+        this.imageDeltaStatsEntries = builder.statsEntries
     }
     
     @Override
-    double getCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp) {
-        StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteName)
+    double getCriteriaPercentage(TSuiteName tSuiteName,
+                                 TExecutionProfile tExecutionProfile,
+                                 Path pathRelativeToTSuiteTimestamp) {
+        StatsEntry statsEntry = this.getImageDeltaStatsEntry(tSuiteName, tExecutionProfile)
         if (statsEntry != StatsEntry.NULL) {
             MaterialStats materialStats = statsEntry.getMaterialStats(pathRelativeToTSuiteTimestamp)
             if (materialStats != null) {
@@ -91,9 +83,11 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName,
+                                       TExecutionProfile tExecutionProfile) {
         for (StatsEntry entry: imageDeltaStatsEntries) {
-            if (entry.getTSuiteName().equals(tSuiteName)) {
+            if (entry.getTSuiteName() == tSuiteName &&
+                entry.getTExecutionProfile() == tExecutionProfile) {
                 return entry
             }
         }
@@ -101,10 +95,13 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                            TSuiteTimestamp a, TSuiteTimestamp b) {
+    boolean hasImageDelta(TSuiteName tSuiteName,
+                          TExecutionProfile tExecutionProfile,
+                          Path relativeToTSuiteTimestampDir,
+                          TSuiteTimestamp a, TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName().equals(tSuiteName)) {
+            if (se.getTSuiteName() == tSuiteName &&
+                se.getTExecutionProfile() == tExecutionProfile) {
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return true
                 }
@@ -114,10 +111,17 @@ class ImageDeltaStatsImpl extends ImageDeltaStats {
     }
     
     @Override
-    ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                            TSuiteTimestamp a, TSuiteTimestamp b) {
+    ImageDelta getImageDelta(TSuiteName tSuiteName,
+                             TExecutionProfile tExecutionProfile,
+                             Path relativeToTSuiteTimestampDir,
+                             TSuiteTimestamp a,
+                             TSuiteTimestamp b) {
         for (StatsEntry se: imageDeltaStatsEntries) {
-            if (se.getTSuiteName().equals(tSuiteName)) {
+            if (se.getTSuiteName() == tSuiteName &&
+                se.getTExecutionProfile() == tExecutionProfile) {
+
+                // logger_.debug("se.hasImageDelta: ${se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)}")
+
                 if (se.hasImageDelta(relativeToTSuiteTimestampDir, a, b)) {
                     return se.getImageDelta(relativeToTSuiteTimestampDir, a, b)
                 }

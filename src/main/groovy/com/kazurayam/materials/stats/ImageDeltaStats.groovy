@@ -118,9 +118,14 @@ abstract class ImageDeltaStats {
     
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
-    abstract double getCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
+    abstract double getCriteriaPercentage(
+            TSuiteName tSuiteName,
+            TExecutionProfile tExecutionProfile,
+            Path pathRelativeToTSuiteTimestamp)
     
-    abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
+    abstract StatsEntry getImageDeltaStatsEntry(
+            TSuiteName tSuiteName,
+            TExecutionProfile tExecutionProfile)
     
     /**
      * 
@@ -130,13 +135,19 @@ abstract class ImageDeltaStats {
      * @param b
      * @return
      */
-    abstract boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    abstract boolean hasImageDelta(TSuiteName tSuiteName,
+                                   TExecutionProfile tExecutionProfile,
+                                   Path relativeToTSuiteTimestampDir,
+                                   TSuiteTimestamp a,
+                                   TSuiteTimestamp b)
     
     /**
      */
-    abstract ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    abstract ImageDelta getImageDelta(TSuiteName tSuiteName,
+                                      TExecutionProfile tExecutionProfile,
+                                      Path relativeToTSuiteTimestampDir,
+                                      TSuiteTimestamp a,
+                                      TSuiteTimestamp b)
     
     /**
      * 

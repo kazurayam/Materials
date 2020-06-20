@@ -7,11 +7,12 @@
         "onlySinceInclusive": true,
         "probability": 0.95,
         "projectDirectory": "",
-        "previousImageDeltaStats": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage\\47news.chronos_exam\\20190401_142151\\47news.ImageDiff\\image-delta-stats.json"
+        "previousImageDeltaStats": "C:\\Users\\qcq0264\\katalon-workspace\\ChronologicalVisualTestingInKatalonStudio\\Storage\\47news.chronos_exam\\default\\20190401_142151\\47news.ImageDiff\\image-delta-stats.json"
     },
     "imageDeltaStatsEntries": [
         {
             "TSuiteName": "47news.chronos_capture",
+            "TExecutionProfile": "default",
             "materialStatsList": [
                 {
                     "path": "47news.visitSite/47reporters.png",
