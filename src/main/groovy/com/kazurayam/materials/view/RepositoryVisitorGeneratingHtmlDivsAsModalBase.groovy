@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -321,20 +323,25 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         if (Files.exists(path)) {
 			MaterialMetadataBundle bundle = MaterialMetadataBundle.deserialize(path)
-			//logger_.info("#findExecutionProfileName path=${path}")
-			//logger_.info("#findExecutionProfileName bundle=${bundle}")
-			if (bundle == null) {
+
+            logger_.info("#findExecutionProfileName path=${path}")
+			logger_.info("#findExecutionProfileName bundle=${bundle}")
+
+            if (bundle == null) {
                 logger_.warn("#findExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
                 return null
             }
             MaterialMetadata metadata = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
             if (metadata != null) {
-                String result = metadata.getExecutionProfileName()   // getExecutionProfileName() may return null
-                logger_.info("#findExecutionProfileName returning ${result}")
-                return result
+                TExecutionProfile tep = metadata.getTExecutionProfile()
+                logger_.info("#findTExecutionProfile returned ${tep}")
+                if (tep != null) {
+                    return tep.getName()
+                } else
+                    return null
             } else {
                 String msg = this.class.getSimpleName() +
-                            "#findExecutionProfileName could not find a MaterialMetadata entry of " +
+                            "#findLastByMaterialPath()) could not find a MaterialMetadata entry of " +
                             "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
                             " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
                 logger_.warn(msg)
