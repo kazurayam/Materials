@@ -60,7 +60,7 @@ class ComparisonResultSpec extends Specification {
                     'default', '20181014_060501')
             List<MaterialPair> materialPairs =
             // we use Java 8 Stream API to filter entries
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'),
+            mr.createMaterialPairsForChronosMode(new TSuiteName('Test Suites/main/TS1'),
                                     new TExecutionProfile('CURA_ProductionEnv'))
                     .getList().stream().filter { mp ->
                     mp.getLeft().getFileType() == FileType.PNG

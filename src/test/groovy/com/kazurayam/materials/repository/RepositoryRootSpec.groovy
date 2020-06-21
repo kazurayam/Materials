@@ -105,24 +105,14 @@ class RepositoryRootSpec extends Specification {
                 new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
+        logger_.debug("#testGetTSuiteResults tSuiteResults=${tSuiteResults}")
         then:
         tSuiteResults != null
-        tSuiteResults.size() > 0
+        tSuiteResults.size() == 15
     }
 
 
-    def test_getTSuiteResults_byTSuiteName() {
-        when:
-        List<TSuiteResult> tsrList = repoRoot_.getTSuiteResults(new TSuiteName('TS1'))
-        then:
-        tsrList.size() == 2
-        // tsList is not sorted
-        //tsrList[0].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[0].getTSuiteTimestamp() == new TSuiteTimestamp('20180810_140105')
-        //tsrList[1].getTSuiteName() == new TSuiteName('TS1')
-        //tsrList[1].getTSuiteTimestamp() == new TSuiteTimestamp.newInstance('20180810_140106')
-    }
-    
+
 	def test_getTSuiteResultsBeforeExclusive() {
         when:
         TSuiteName tsn = new TSuiteName('main/TS1')

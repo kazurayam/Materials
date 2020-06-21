@@ -66,6 +66,12 @@ final class RepositoryRoot {
         return null
     }
 
+    /**
+     *
+     * @param tSuiteName
+     * @param tExecutionProfile
+     * @return
+     */
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName,
                                         TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
@@ -80,23 +86,21 @@ final class RepositoryRoot {
         return result
     }
 
-
     /**
      *
      * @param tSuiteName
-     * @return unmodifiable List<TSuiteResult> 
+     * @param tExecutionProfile
+     * @return
      */
     List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-        logger_.debug("#getTSuiteResults tSuiteResults_.size()=${tSuiteResults_.size()}")
         for (TSuiteResult tsr : tSuiteResults_) {
-            logger_.debug("#getTSuiteResults tsr.getTSuiteName()=${tsr.getId().getTSuiteName()}")
-            if (tSuiteName.equals(tsr.getId().getTSuiteName())) {
+            if (tsr.getId().getTSuiteName() == tSuiteName) {
                 result.add(tsr)
             }
         }
-        return Collections.unmodifiableList(result)
+        return result
     }
 
 
@@ -114,7 +118,9 @@ final class RepositoryRoot {
 
 
     /**
-     * returns a List of TSuiteResult which has the given TSuiteName, the Timestamp before the given 2nd arg.
+     * returns a List of TSuiteResult which has the given TSuiteName and
+     * the given TExecutionProfile,
+     * the Timestamp before the given 2nd arg.
      * The TSuiteResult with a timestamp exactly equal to 'before' will be excluded.
      * The entries returned are sorted in descending order of the timestamp.
      * Therefore the latest entry comes at [0].

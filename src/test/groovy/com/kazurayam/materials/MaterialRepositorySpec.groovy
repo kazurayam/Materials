@@ -329,20 +329,32 @@ class MaterialRepositorySpec extends Specification {
 		Files.exists(index)
 	}
 
-	def test_createMaterialPairs() {
+	def test_createMaterialPairsForChronosMode() {
 		setup:
-        String method = 'test_createMaterialPairs'
+        String method = 'test_createMaterialPairsForChronosMode'
 
         TSuiteName tSuiteName = new TSuiteName("Test Suites/main/TS1")
         TExecutionProfile tExecutionProfile = new TExecutionProfile('CURA_ProductionEnv')
         MaterialRepository mr = prepareMR(method, tSuiteName)
         when:
-        MaterialPairs mps = mr.createMaterialPairs(tSuiteName, tExecutionProfile)
+        MaterialPairs mps = mr.createMaterialPairsForChronosMode(tSuiteName, tExecutionProfile)
         then:
         mps.size() == 5
     }
-    
-    
+
+    def test_createMaterialPairsForTwinsMode() {
+        setup:
+        String method = 'test_createMaterialPairsForTwinsMode'
+
+        TSuiteName tSuiteName = new TSuiteName("Test Suites/main/TS1")
+        TExecutionProfile tExecutionProfile = new TExecutionProfile('CURA_ProductionEnv')
+        MaterialRepository mr = prepareMR(method, tSuiteName)
+        when:
+        MaterialPairs mps = mr.createMaterialPairsForTwinsMode(tSuiteName)
+        then:
+        mps.size() == 5
+    }
+
     /**
      * This will test deleteBaseDirContents() method.
      * This will create a fixture for its own.

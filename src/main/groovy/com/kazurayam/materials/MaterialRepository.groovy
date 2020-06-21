@@ -61,23 +61,50 @@ interface MaterialRepository {
      * @throws IOException
      */
     int clear(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
-    
+
 
     /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Twins mode.
      *
      * This method perform the following search under the Materials directory
      * in order to identify which Material object to be included.
      *
-     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
-     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
-     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path
+     * 1. selects all ./Materials/<tSuiteName>/<ExecutionProfile>/yyyyMMdd_hhmmss directories
+     *    with specified tSuiteName. Twins-mode disregards the Execution Profile.
+     * 2. among them, select the directory with the 1st latest timestamp.
+     *    This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp.
+     *    This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects.
+     *    Two files which have the same path
      *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
      *
      * @return List<MaterialPair>
      */
-    MaterialPairs createMaterialPairs(TSuiteName capturingTSuiteName,
+    MaterialPairs createMaterialPairsForTwinsMode(TSuiteName capturingTSuiteName)
+
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Chronos mode
+     *
+     * This method perform the following search under the Materials directory
+     * in order to identify which Material object to be included.
+     *
+     * 1. selects all ./Materials/<tSuiteName>/<ExecutionProfile>/yyyyMMdd_hhmmss directories
+     *    with specified tSuiteName and Execution Profile. For the Chronos mode,
+     *    the applied Execution Profile matters.
+     * 2. among them, select the directory with the 1st latest timestamp.
+     *    This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp.
+     *    This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects.
+     *    Two files which have the same path under the yyyyMMdd_hhmmss directory
+     *    will be packaged as a pair to form a MaterialPair object.
+     *
+     * @return List<MaterialPair>
+     */
+    MaterialPairs createMaterialPairsForChronosMode(TSuiteName capturingTSuiteName,
                                       TExecutionProfile capturingTExecutionProfile)
 
     /**

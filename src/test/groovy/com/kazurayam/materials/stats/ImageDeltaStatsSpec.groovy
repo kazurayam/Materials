@@ -244,12 +244,14 @@ class ImageDeltaStatsSpec extends Specification {
         then:
         json.storageScannerOptions.shiftCriteriaPercentageBy == 25.0
         json.storageScannerOptions.filterDataLessThan == 1.0
-        json.storageScannerOptions.maximumNumberOfImageDeltas == 10
+        json.storageScannerOptions.maximumNumberOfImageDeltas == 5
         json.storageScannerOptions.onlySince == '19990101_000000'
         json.storageScannerOptions.onlySinceInclusive == true
         json.storageScannerOptions.probability == 0.75
+
         json.imageDeltaStatsEntries.size() == 1
         json.imageDeltaStatsEntries[0].TSuiteName == '47news.chronos_capture'
+        json.imageDeltaStatsEntries[0].TExecutionProfile == 'default'
         json.imageDeltaStatsEntries[0].materialStatsList.size()== 12
         json.imageDeltaStatsEntries[0].materialStatsList[0].path == "47news.visitSite/47reporters.png"
         json.imageDeltaStatsEntries[0].materialStatsList[0].imageDeltaList.size() > 0

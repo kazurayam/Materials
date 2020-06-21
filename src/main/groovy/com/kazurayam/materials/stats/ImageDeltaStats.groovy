@@ -1,8 +1,5 @@
 package com.kazurayam.materials.stats
 
-import com.kazurayam.materials.TExecutionProfile
-import com.kazurayam.materials.TSuiteName
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths

@@ -142,7 +142,7 @@ class IndexerCarouselSpec extends Specification {
             def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
                     'default', '20190216_210203')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
+            MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
@@ -259,7 +259,7 @@ class IndexerCarouselSpec extends Specification {
                     'default',
                     '20190401_142749')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
+            MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
             StorageScanner.Options options = new StorageScanner.Options.Builder()
                     .previousImageDeltaStats(previousIDS)
                     .shiftCriteriaPercentageBy(15.0)    // THIS IS THE POINT

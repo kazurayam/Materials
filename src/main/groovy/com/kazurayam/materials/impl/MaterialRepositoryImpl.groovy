@@ -707,29 +707,64 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         indexer.execute()
         return index
     }
-    
-    
+
+
     /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
-     *
-     * This method perform the following search under the &lt;projectDir&gt;/Materials directory
-     * in order to identify which Material objects are to be included.
-     *
-     * 1. selects all &lt;projectDir&gt;/Materials/&lt;Test Suite Name&gt;/&lt;Execution Profile&gt;/&lt;yyyyMMdd_hhmmss&gt; directories
-     *    with the name equals to the Test Suite Name specified as argument tSuiteName and tExecutionProfile
-     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
-     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. please note that we do not check the browser type used for each Test Suite run.
-     * 5. Scan the 2 directories selected and create a List of Material objects. 
-     *    5.1 Two files which have the same path under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
-     *    5.2 The orphan file found in the ActualTSuiteResult will be silently ignored.
-     *    5.3 The orphan file found in the ExpectedTSuiteResult will also be silently ignored.
-     * 6. A List&lt;MaterialPair&gt; is created, fulfilled and returned as the result
-     *
-     * @return List<MaterialPair>
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Twins mode.
      */
     @Override
-    MaterialPairs createMaterialPairs(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+    MaterialPairs createMaterialPairsForTwinsMode(TSuiteName tSuiteName) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+
+        // before sorting, we create a copy of the list which is unmodifiable
+        List<TSuiteResult> tSuiteResults = new ArrayList<>(
+                repoRoot_.getTSuiteResults(tSuiteName))
+
+        // we expect 2 or more TSuiteResult objects with the given tSuiteName
+        if (tSuiteResults.size() == 0) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 0")
+            throw new IllegalStateException("No sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}.")
+        } else if (tSuiteResults.size() == 1) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 1")
+            throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}."
+                    + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
+                    + " Don\'t get surprised. Just execute the Chronos test suite again."
+                    + " Possibly Chronos mode will work fine next time.")
+        } else {
+            vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
+        }
+
+        // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
+        Collections.sort(tSuiteResults, Comparator.reverseOrder())
+
+        // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one"
+        TSuiteResult actualTSR   = tSuiteResults[0]
+        TSuiteResult expectedTSR = tSuiteResults[1]
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
+
+        // the result to be returned
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
+
+        // fill in entries into the MaterialPairs object
+        for (Material expectedMaterial : expectedTSR.getMaterialList()) {
+            mps.putExpectedMaterial(expectedMaterial)
+        }
+        for (Material actualMaterial : actualTSR.getMaterialList()) {
+            mps.putActualMaterial(actualMaterial)
+        }
+        return mps
+    }
+
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Chronos mode.
+     */
+    @Override
+    MaterialPairs createMaterialPairsForChronosMode(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
 

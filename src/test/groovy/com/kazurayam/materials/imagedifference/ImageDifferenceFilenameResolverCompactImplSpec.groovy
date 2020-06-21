@@ -50,7 +50,7 @@ class ImageDifferenceFilenameResolverCompactImplSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         TSuiteName tsn = new TSuiteName('main/TS1')
         TExecutionProfile tep = new TExecutionProfile('CURA_ProductionEnv')
-        MaterialPairs materialPairs = mr.createMaterialPairs(tsn, tep)
+        MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
         then:
         materialPairs.size() > 0
         when:

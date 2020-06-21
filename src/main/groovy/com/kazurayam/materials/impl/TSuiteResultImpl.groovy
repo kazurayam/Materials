@@ -306,10 +306,16 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName":' + this.getId().getTSuiteName().toString() + ',')
-        sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
-        sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
+        sb.append('"tSuiteName": "'
+                + Helpers.escapeAsJsonText(this.getId().getTSuiteName().toString()) + '",')
+        sb.append('"tExecutionProfile": "'
+                + Helpers.escapeAsJsonText(this.getId().getTExecutionProfile().getName()) + '",')
+        sb.append('"tSuiteTimestamp": "'
+                + Helpers.escapeAsJsonText(this.getId().getTSuiteTimestamp().format()) + '",')
+        sb.append('"tSuiteTimestampDir": "'
+                + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
+        sb.append('"lastModified": "'
+                + this.getLastModified().toString() + '",')
         sb.append('"length":' + this.getSize()+ ',')
         sb.append('"tCaseResults": [')
         def count = 0

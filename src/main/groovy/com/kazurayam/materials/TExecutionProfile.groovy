@@ -92,7 +92,7 @@ final class TExecutionProfile implements Comparable<TExecutionProfile> {
 
     @Override
     String toString() {
-        return profileName_
+        return this.getName()
     }
 
     @Override
