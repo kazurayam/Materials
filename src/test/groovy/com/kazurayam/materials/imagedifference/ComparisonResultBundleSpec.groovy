@@ -51,8 +51,6 @@ class ComparisonResultBundleSpec extends Specification {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_constructor_withJson")
             Path materials = caseOutputDir.resolve('Materials')
-            Path reports = caseOutputDir.resolve('Reports')
-            Files.createDirectories(reports)
             String jsonText = makeJsonText(caseOutputDir)
         then:
             jsonText != null
@@ -70,11 +68,11 @@ class ComparisonResultBundleSpec extends Specification {
                 )
             comparePaths(
                 cr.getExpectedMaterial().getPath(),
-                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/default/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
                 )
             comparePaths(
                 cr.getExpectedMaterial().getPathRelativeToRepositoryRoot(),
-                Paths.get('47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
+                Paths.get('47News_chronos_capture/default/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png')
                 )
             comparePaths(
                 cr.getActualMaterial().getBaseDir(),
@@ -82,11 +80,11 @@ class ComparisonResultBundleSpec extends Specification {
                 )
             comparePaths(
                 cr.getActualMaterial().getPath(),
-                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/47News_chronos_capture/default/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
                 )
             comparePaths(
                 cr.getActualMaterial().getPathRelativeToRepositoryRoot(),
-                Paths.get('47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
+                Paths.get('47News_chronos_capture/default/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png')
                 )
             comparePaths(
                 cr.getDiffMaterial().getBaseDir(),
@@ -94,11 +92,11 @@ class ComparisonResultBundleSpec extends Specification {
             )
             comparePaths(
                 cr.getDiffMaterial().getPath(),
-                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
+                Paths.get('build/tmp/testOutput/ComparisonResultBundleSpec/test_constructor_withJson/Materials/ImageDiff/default/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
             )                
             comparePaths(
                 cr.getDiffMaterial().getPathRelativeToRepositoryRoot(),
-                Paths.get('ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
+                Paths.get('ImageDiff/default/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png')
                 )
             cr.imagesAreSimilar() == true
             cr.getDiffRatio()== 16.86
@@ -136,8 +134,6 @@ class ComparisonResultBundleSpec extends Specification {
         when:
             Path caseOutputDir = specOutputDir.resolve("test_getByDiffMaterial")
             Path materials = caseOutputDir.resolve('Materials')
-            Path reports = caseOutputDir.resolve('Reports')
-            Files.createDirectories(reports)
             String jsonText = makeJsonText(caseOutputDir)
         then:
             jsonText != null
@@ -146,11 +142,11 @@ class ComparisonResultBundleSpec extends Specification {
         then:
             bundle.size()== 1
         when:
-            ComparisonResult cr = bundle.getByDiffMaterial("ImageDiff/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png")
+            ComparisonResult cr = bundle.getByDiffMaterial("ImageDiff/default/20190216_210203/ImageDiff/main.TC_47News.visitSite/47NEWS_TOP(16.86).png")
         then:
             cr != null
-            cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot() == '47News_chronos_capture/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png'
-            cr.getActualMaterial().getHrefRelativeToRepositoryRoot()   == '47News_chronos_capture/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png'
+            cr.getExpectedMaterial().getHrefRelativeToRepositoryRoot() == '47News_chronos_capture/default/20190216_064354/main.TC_47News.visitSite/47NEWS_TOP.png'
+            cr.getActualMaterial().getHrefRelativeToRepositoryRoot()   == '47News_chronos_capture/default/20190216_204329/main.TC_47News.visitSite/47NEWS_TOP.png'
     }
     
     String makeJsonText(Path caseOutputDir) {
@@ -164,35 +160,40 @@ class ComparisonResultBundleSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
         //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-        TExecutionProfile tExecutionProfile = new TExecutionProfile("default")
-        TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        TSuiteName examiningTSuiteName = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile examiningTExecutionProfile = new TExecutionProfile("default")
+        TCaseName  examiningTCaseName  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
         Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
-                tSuiteNameExam,
-                tExecutionProfile,
-                tCaseNameExam)
+                examiningTSuiteName,
+                examiningTExecutionProfile,
+                examiningTCaseName)
         // copy fixtures from the Stroage dir to the Materials dir
         TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-        ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-        ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
+        TExecutionProfile tep = new TExecutionProfile('default')
+        ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_204329')))
+        ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_064354')))
         mr.scan()
-        mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-        mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
+        mr.markAsCurrent(    'Test Suites/ImageDiff', 'default','20190216_210203')
+        mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'default', '20190216_210203')
             
         //when:
         // we use Java 8 Stream API to filter entries
-        MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+        MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
         StorageScanner.Options options = new StorageScanner.Options.Builder()
                 .previousImageDeltaStats(previousIDS)
                 .shiftCriteriaPercentageBy(15.0)
                 .build()
         StorageScanner storageScanner = new StorageScanner(ms, options)
-        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
         //
-        storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+        storageScanner.persist(imageDeltaStats,
+                examiningTSuiteName,
+                examiningTExecutionProfile,
+                new TSuiteTimestamp(),
+                examiningTCaseName)
         double ccp = imageDeltaStats.getCriteriaPercentage(
-                            new TSuiteName("47News_chronos_capture"),
-                            Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
+                            Paths.get('main.TC_47News.visitSite')
+                                    .resolve('47NEWS_TOP.png'))
         //then:
         assert 30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
         //when:
@@ -202,7 +203,10 @@ class ComparisonResultBundleSpec extends Specification {
                 new TCaseName('Test Cases/ImageDiff'),
                 imageDeltaStats)
         mr.scan()
-        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+        List<TSuiteResultId> tsriList =
+                mr.getTSuiteResultIdList(
+                        new TSuiteName('Test Suites/ImageDiff'),
+                        new TExecutionProfile('default'))
         assert tsriList.size() == 1
         TSuiteResultId tsri = tsriList.get(0)
         TSuiteResult tsr = mr.getTSuiteResult(tsri)
