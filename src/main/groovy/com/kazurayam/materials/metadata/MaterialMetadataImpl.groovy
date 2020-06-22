@@ -3,6 +3,7 @@ package com.kazurayam.materials.metadata
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TExecutionProfile
 import groovy.json.JsonOutput
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +22,7 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
     private String subPath_
     private URL url_
     private String fileName_
-    private String executionProfileName_
+    private TExecutionProfile tExecutionProfile_
 
 	/**
 	 * 
@@ -84,8 +85,8 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
         if (jsonObject.MaterialMetadata['FileName']) {
             metadata.setFileName(jsonObject.MaterialMetadata['FileName'])
         }
-        if (jsonObject.MaterialMetadata['ExecutionProfileName']) {
-            metadata.setExecutionProfileName(jsonObject.MaterialMetadata['ExecutionProfileName'])
+        if (jsonObject.MaterialMetadata['ExecutionProfile']) {
+            metadata.setExecutionProfileName(jsonObject.MaterialMetadata['ExecutionProfile'])
         }
         
         //
@@ -149,13 +150,13 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
     }
     
     @Override
-    void setExecutionProfileName(String profileName) {
-        this.executionProfileName_ = profileName
+    void setTExecutionProfile(TExecutionProfile tExecutionProfile) {
+        this.tExecutionProfile_ = tExecutionProfile
     }
     
     @Override
-    String getExecutionProfileName() {
-        return this.executionProfileName_
+    TExecutionProfile getTExecutionProfile() {
+        return this.tExecutionProfile_
     }
     
     @Override
@@ -208,9 +209,9 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
             sb.append(Helpers.escapeAsJsonText(this.getFileName()))
             sb.append('\"')
         }
-        if (this.getExecutionProfileName() != null) {
-            sb.append(',\"ExecutionProfileName\":\"')
-            sb.append(Helpers.escapeAsJsonText(this.getExecutionProfileName()))
+        if (this.getTExecutionProfile() != null) {
+            sb.append(',\"ExecutionProfile\":\"')
+            sb.append(Helpers.escapeAsJsonText(this.getTExecutionProfile().getName()))
             sb.append('\"')
         }
         sb.append('}')

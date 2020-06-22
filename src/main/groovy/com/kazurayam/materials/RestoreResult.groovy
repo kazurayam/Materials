@@ -15,7 +15,7 @@ interface RestoreResult {
     
     static RestoreResult NULL =
         new RestoreResultImpl(
-            new TSuiteResultImpl(TSuiteName.NULL, TSuiteTimestamp.NULL),
+            new TSuiteResultImpl(TSuiteName.NULL, TExecutionProfile.BLANK, TSuiteTimestamp.NULL),
             0)
     
     TSuiteResult getTSuiteResult()

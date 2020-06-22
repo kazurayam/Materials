@@ -2,6 +2,8 @@ package com.kazurayam.materials.metadata
 
 import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TExecutionProfile
+
 /**
  * The <pre>resolveMatherialPath(TCaseName tCaseName, String subpath, String fileName)</pre> method of 
  * <pre>com.kazurayam.materials.impl.MaterialRepositoryImpl</pre> class creates 
@@ -42,7 +44,7 @@ interface MaterialMetadata extends Comparable {
     void setFileName(String fileName)
     String getFileName()
     
-    void setExecutionProfileName(String profileName)
-    String getExecutionProfileName()
+    void setTExecutionProfile(TExecutionProfile tExecutionProfile)
+    TExecutionProfile getTExecutionProfile()
 
 }

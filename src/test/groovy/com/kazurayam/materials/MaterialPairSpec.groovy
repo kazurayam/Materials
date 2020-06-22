@@ -38,11 +38,14 @@ class MaterialPairSpec extends Specification {
     }
     def setup() {
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130419'))
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        TSuiteResult expectedTsr = repoRoot_.getTSuiteResult(tsn, tep,
+                TSuiteTimestamp.newInstance('20180530_130419'))
         TCaseResult expectedTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
         expectedMaterial_ = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
         //
-        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(tsn, TSuiteTimestamp.newInstance('20180530_130604'))
+        TSuiteResult actualTsr = repoRoot_.getTSuiteResult(tsn, tep,
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult actualTcr = expectedTsr.getTCaseResult(new TCaseName('main.TC1'))
         actualMaterial_   = expectedTcr.getMaterial(Paths.get('http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }

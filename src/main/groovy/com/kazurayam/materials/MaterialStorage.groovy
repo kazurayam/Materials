@@ -2,7 +2,6 @@ package com.kazurayam.materials
 
 import java.nio.file.Path
 
-
 /**
  * MaterialStorage is an external directory for Materials outside a Katalon Studio project.
  * You can backup your Materials from the project's Materials directory to the MaterialStorage.
@@ -44,7 +43,7 @@ interface MaterialStorage {
      * @return number of files transfered 
      * @throws IOException
      */
-    int backup(MaterialRepository fromMR) throws IOException
+    //int backup(MaterialRepository fromMR) throws IOException
     
     /**
      * delete all of subdirectories and material files which belogns to 
@@ -95,7 +94,8 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName)
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName,
+                                                       TExecutionProfile tExecutionProfile)
     
     /**
      * 
@@ -117,7 +117,7 @@ interface MaterialStorage {
      * @param tSuiteName
      * @return
      */
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
     
     /**
      * 
@@ -144,7 +144,7 @@ interface MaterialStorage {
      * @param options
      * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
      */
-    void status(Writer output, Map options)
+    void status(Writer output, Map<String, Object> options)
     
     /**
      * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
@@ -193,8 +193,7 @@ interface MaterialStorage {
      * @return RestoreResult containing a TSuiteResult and int count of Material files transfered
      * @throws IOException
      */
-    RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                RetrievalBy retrievalBy) throws IOException
+    //RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
     
 	/**
 	 * 
@@ -204,8 +203,10 @@ interface MaterialStorage {
 	 * @return
 	 * @throws IOException
 	 */
-    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                RetrievalBy retrievalBy) throws IOException
+    RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy retrievalBy) throws IOException
     
 	/**
 	 * 
@@ -215,8 +216,10 @@ interface MaterialStorage {
 	 * @return
 	 * @throws IOException
 	 */
-	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR, TSuiteName tSuiteName,
-								RetrievalBy retrievalBy) throws IOException
+	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR,
+                                                  TSuiteName tSuiteName,
+                                                  TExecutionProfile tExecutionProfile,
+                                                  RetrievalBy retrievalBy) throws IOException
 	
     /**
      * scan the Storage directory to reflesh memory so that it sync with the file system

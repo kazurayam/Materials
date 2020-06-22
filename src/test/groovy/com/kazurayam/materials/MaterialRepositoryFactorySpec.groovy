@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import spock.lang.Specification
+
 //@Ignore
 class MaterialRepositoryFactorySpec extends Specification {
 
@@ -33,8 +34,13 @@ class MaterialRepositoryFactorySpec extends Specification {
         when:
         Path materials = workdir_.resolve('Materials')
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        mr.markAsCurrent('Test Suites/TS1')
-        mr.ensureTSuiteResultPresent('Test Suites/TS1')
+        mr.markAsCurrent('Test Suites/TS1',
+                "CURA_DevelopmentEnv",
+                "20180810_140106")
+        mr.ensureTSuiteResultPresent('Test Suites/TS1',
+                "CURA_DevelopmentEnv",
+                "20180810_140106"
+        )
         then:
         mr != null
         mr.toString().contains('TS1')

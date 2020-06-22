@@ -1,5 +1,7 @@
 package com.kazurayam.materials.impl
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -21,6 +23,7 @@ class TSuiteResultIdImplSpec extends Specification {
     private static Path fixture_ = Paths.get("./src/test/fixture/Materials")
 
     private TSuiteName tsn
+    private TExecutionProfile tep
     private TSuiteTimestamp tst
     private TSuiteResultId tsri
     
@@ -34,8 +37,9 @@ class TSuiteResultIdImplSpec extends Specification {
     }
     def setup() {
         tsn = new TSuiteName("Test Suites/TS1")
+        tep = new TExecutionProfile("default")
         tst = TSuiteTimestamp.newInstance("20190202_073500")
-        tsri = TSuiteResultIdImpl.newInstance(tsn, tst)
+        tsri = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
     }
     def cleanup() {}
     def cleanupSpec() {}
@@ -44,15 +48,17 @@ class TSuiteResultIdImplSpec extends Specification {
     def testGetTSuiteName() {
         expect:
         tsri.getTSuiteName().equals(tsn)
+        tsri.getTExecutionProfile().equals(tep)
         tsri.getTSuiteTimestamp().equals(tst)
     }
     
     def testEquals() {
         when:
-        TSuiteResultId tsri0 = TSuiteResultIdImpl.newInstance(tsn, tst)
-        TSuiteResultId tsri1 = TSuiteResultIdImpl.newInstance(tsn, tst)
-        TSuiteResultId tsri2 = TSuiteResultIdImpl.newInstance(new TSuiteName("TS2"), tst)
-        TSuiteResultId tsri3 = TSuiteResultIdImpl.newInstance(tsn, TSuiteTimestamp.newInstance("20190203_070321"))
+        TSuiteResultId tsri0 = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
+        TSuiteResultId tsri1 = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
+        TSuiteResultId tsri2 = TSuiteResultIdImpl.newInstance(new TSuiteName("TS2"), tep, tst)
+        TSuiteResultId tsri3 = TSuiteResultIdImpl.newInstance(tsn, tep,
+                TSuiteTimestamp.newInstance("20190203_070321"))
         then:
         tsri0.equals(tsri1)
         !tsri0.equals(tsri2)
@@ -61,10 +67,11 @@ class TSuiteResultIdImplSpec extends Specification {
     
     def testHashCode() {
         when:
-        TSuiteResultId tsri0 = TSuiteResultIdImpl.newInstance(tsn, tst)
-        TSuiteResultId tsri1 = TSuiteResultIdImpl.newInstance(tsn, tst)
-        TSuiteResultId tsri2 = TSuiteResultIdImpl.newInstance(new TSuiteName("TS2"), tst)
-        TSuiteResultId tsri3 = TSuiteResultIdImpl.newInstance(tsn, TSuiteTimestamp.newInstance("20190203_070321"))
+        TSuiteResultId tsri0 = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
+        TSuiteResultId tsri1 = TSuiteResultIdImpl.newInstance(tsn, tep, tst)
+        TSuiteResultId tsri2 = TSuiteResultIdImpl.newInstance(new TSuiteName("TS2"), tep, tst)
+        TSuiteResultId tsri3 = TSuiteResultIdImpl.newInstance(tsn, tep,
+                TSuiteTimestamp.newInstance("20190203_070321"))
         then:
         tsri0.hashCode() == tsri1.hashCode()
         tsri0.hashCode() != tsri2.hashCode()

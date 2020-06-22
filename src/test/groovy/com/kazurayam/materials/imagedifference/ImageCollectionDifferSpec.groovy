@@ -1,5 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -50,18 +52,18 @@ class ImageCollectionDifferSpec extends Specification {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithFAILED")
         Path materials = caseOutputDir.resolve('Materials')
-        Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
         Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
-        Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
+        mr.markAsCurrent(    'Test Suites/ImageDiff',
+                'default', '20181014_060501')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                'default', '20181014_060501')
 
         MaterialPairs materialPairs =
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
+            mr.createMaterialPairsForTwinsMode(new TSuiteName('Test Suites/main/TS1'))
 
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(
@@ -70,8 +72,8 @@ class ImageCollectionDifferSpec extends Specification {
             5.0)          // specified value smaller than the actual diff ratio (6.72)
         //
         then:
-        Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic'))
-        Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic/' +
+        Files.exists(materials.resolve('ImageDiff/default/20181014_060501/ImageDiff/Main.Basic'))
+        Files.exists(materials.resolve('ImageDiff/default/20181014_060501/ImageDiff/Main.Basic/' +
             'CURA_Homepage(6.72)FAILED.png'))
     }
 
@@ -82,17 +84,17 @@ class ImageCollectionDifferSpec extends Specification {
         setup:
         Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_twins_shouldCreatePngWithoutFAILED")
         Path materials = caseOutputDir.resolve('Materials')
-        Path reports = caseOutputDir.resolve('Reports')
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
         Helpers.copyDirectory(fixtureDir.resolve('Materials'), materials)
-        Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-        mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
+        mr.markAsCurrent(    'Test Suites/ImageDiff',
+                'default', '20181014_060501')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                'default', '20181014_060501')
         MaterialPairs materialPairs =
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1'))
+            mr.createMaterialPairsForTwinsMode(new TSuiteName('Test Suites/main/TS1'))
 
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(
@@ -101,8 +103,8 @@ class ImageCollectionDifferSpec extends Specification {
             10.0)          // specified value larger than the actual diff ratio (6.72)
         //
         then:
-        Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic'))
-        Files.exists(materials.resolve('ImageDiff/20181014_060501/ImageDiff/Main.Basic/' +
+        Files.exists(materials.resolve('ImageDiff/default/20181014_060501/ImageDiff/Main.Basic'))
+        Files.exists(materials.resolve('ImageDiff/default/20181014_060501/ImageDiff/Main.Basic/' +
             'CURA_Homepage(6.72).png'))   
             // here we expect the file to be (6.72).png, rather than (6.72)FAILED.png
     }
@@ -115,70 +117,81 @@ class ImageCollectionDifferSpec extends Specification {
      */
     def test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage() {
         setup:
-            Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage")
-            Path materials = caseOutputDir.resolve('Materials')
-            Path storage = caseOutputDir.resolve('Storage')
-            Path reports = caseOutputDir.resolve('Reports')
-            Files.createDirectories(reports)
-            Files.createDirectories(materials)
-            FileUtils.deleteQuietly(materials.toFile())
-            Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
-            MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-            MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
-            TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
-            mr.scan()
-            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
+        Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_smallerCriteriaPercentage")
+        Path materials = caseOutputDir.resolve('Materials')
+        Path storage = caseOutputDir.resolve('Storage')
+        Files.createDirectories(materials)
+        FileUtils.deleteQuietly(materials.toFile())
+        Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
+        TSuiteName tsn = new TSuiteName('47News_chronos_capture')
+        TExecutionProfile tep = new TExecutionProfile('default')
+        ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_204329')))
+        ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_064354')))
+        mr.scan()
+        mr.markAsCurrent(    'Test Suites/ImageDiff', 'default', '20190216_210203')
+        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'default', '20190216_210203')
+
         when:
-            // we use Java 8 Stream API to filter entries
-            MaterialPairs materialPairs =
-                mr.createMaterialPairs(tsn)
-            //
-            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
-            //
-            StorageScanner.Options options = new StorageScanner.Options.Builder().
+        // we use Java 8 Stream API to filter entries
+        MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
+        //
+        TSuiteName examiningTSuiteName = new TSuiteName("47News_chronos_exam")
+        TExecutionProfile examiningTExecutionProfile = new TExecutionProfile('default')
+        TCaseName  examiningTCaseName  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    examiningTSuiteName,
+                    examiningTExecutionProfile,
+                    examiningTCaseName)
+        //
+        StorageScanner.Options options = new StorageScanner.Options.Builder().
                                                 previousImageDeltaStats(previousIDS).
                                                 build()
-            StorageScanner storageScanner = new StorageScanner(ms, options)
-            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
-            //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
-            //
-            double ccp = imageDeltaStats.getCriteriaPercentage(
-                            new TSuiteName("47News_chronos_capture"),
+        StorageScanner storageScanner = new StorageScanner(ms, options)
+        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
+        //
+        storageScanner.persist(imageDeltaStats,
+                examiningTSuiteName,
+                examiningTExecutionProfile,
+                new TSuiteTimestamp(),
+                examiningTCaseName)
+        //
+        double ccp = imageDeltaStats.getCriteriaPercentage(
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
-            15.0 < ccp && ccp < 16.0 // ccp == 15.197159598135954
+        15.0 < ccp && ccp < 16.0 // ccp == 15.197159598135954
+
         when:
-            ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
-            icd.makeImageCollectionDifferences(
+        ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
+        icd.makeImageCollectionDifferences(
                 materialPairs,
                 new TCaseName('Test Cases/ImageDiff'),
                 imageDeltaStats)
-            mr.scan()
+        mr.scan()
         then:
-            icd.getOutput() != null
+        icd.getOutput() != null
+
         when:
-            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
-            assert tsriList.size() == 1
-            TSuiteResultId tsri = tsriList.get(0)
-            TSuiteResult tsr = mr.getTSuiteResult(tsri)
-            TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
-            List<Material> mateList = tcr.getMaterialList()
-            assert mateList.size() == 2                     // diffImage + ComparisonResult.json
-            Material diffImage = tcr.getMaterialList('png$', true).get(0)
+        List<TSuiteResultId> tsriList =
+                mr.getTSuiteResultIdList(
+                        new TSuiteName('Test Suites/ImageDiff'),
+                        new TExecutionProfile('default'))
+        assert tsriList.size() == 1
+        TSuiteResultId tsri = tsriList.get(0)
+        TSuiteResult tsr = mr.getTSuiteResult(tsri)
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/ImageDiff"))
+        List<Material> mateList = tcr.getMaterialList()
+        assert mateList.size() == 2                     // diffImage + ComparisonResult.json
+        Material diffImage = tcr.getMaterialList('png$', true).get(0)
         then:
             diffImage.getPath().toString().endsWith('(16.86)FAILED.png')
-            //
+
         when:
-            // assert that we have ComparisonResults.json
-            List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
+        // assert that we have ComparisonResults.json
+        List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
         then:
-            jsons.size() == 1
+        jsons.size() == 1
     }
 
     /**
@@ -192,37 +205,45 @@ class ImageCollectionDifferSpec extends Specification {
             Path caseOutputDir = specOutputDir.resolve("test_makeImageCollectionDifferences_chronos_largerCriteriaPercentage")
             Path materials = caseOutputDir.resolve('Materials')
             Path storage = caseOutputDir.resolve('Storage')
-            Path reports = caseOutputDir.resolve('Reports')
-            Files.createDirectories(reports)
             Files.createDirectories(materials)
             FileUtils.deleteQuietly(materials.toFile())
             Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
             //
-            TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
-            TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            TSuiteName examiningTSuiteName = new TSuiteName("47News_chronos_exam")
+            TExecutionProfile examiningTExecutionProfile = new TExecutionProfile('default')
+            TCaseName  examiningTCaseName  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    examiningTSuiteName,
+                    examiningTExecutionProfile,
+                    examiningTCaseName)
             //
             TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
+            TExecutionProfile tep = new TExecutionProfile('default')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_204329')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.markAsCurrent(    'Test Suites/ImageDiff', '20190216_210203')
-            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent(    'Test Suites/ImageDiff',
+                    'default', '20190216_210203')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                    'default', '20190216_210203')
         when:
             MaterialPairs materialPairs =
-                mr.createMaterialPairs(tsn)
+                mr.createMaterialPairsForChronosMode(tsn, tep)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
                 build()
             StorageScanner storageScanner = new StorageScanner(ms, options)
-            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
             //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            storageScanner.persist(imageDeltaStats,
+                    examiningTSuiteName,
+                    examiningTExecutionProfile,
+                    new TSuiteTimestamp(),
+                    examiningTCaseName)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                            new TSuiteName("47News_chronos_capture"),
                             Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
             30.0 < ccp && ccp < 31.0 // ccp == 30.197159598135954
@@ -236,7 +257,10 @@ class ImageCollectionDifferSpec extends Specification {
         then:
             icd.getOutput() != null
         when:
-            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+            List<TSuiteResultId> tsriList =
+                    mr.getTSuiteResultIdList(
+                            new TSuiteName('Test Suites/ImageDiff'),
+                            new TExecutionProfile('default'))
             assert tsriList.size() == 1
             TSuiteResultId tsri = tsriList.get(0)
             TSuiteResult tsr = mr.getTSuiteResult(tsri)
@@ -259,25 +283,27 @@ class ImageCollectionDifferSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve("test_fakeMaterial")
         Path materials = caseOutputDir.resolve('Materials')
         Path storage = caseOutputDir.resolve('Storage')
-        Path reports = caseOutputDir.resolve('Reports')
-        Files.createDirectories(reports)
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
         Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
         TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
-        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_153731'))
-        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_154033'))
+        TExecutionProfile tep = new TExecutionProfile('default')
+        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_153731'))
+        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_154033'))
         ms.restore(mr, tsr0)
         ms.restore(mr, tsr1)
         mr.scan()
-        mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
-        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190512_154033')
+        mr.markAsCurrent(    'Test Suites/ImageDiff',
+                'default', '20190512_154033')
+        def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                'default', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         TCaseResult tcr1 = mr.getTCaseResult(
                             tsn,
+                            tep,
                             TSuiteTimestamp.newInstance('20190512_154033'),
                             new TCaseName('Test Cases/CURA/visitSite'))
         Material existing1 = tcr1.getMaterial(Paths.get('revisited.png'))
@@ -295,6 +321,7 @@ class ImageCollectionDifferSpec extends Specification {
         // appointment.php%23summary.png is found in the tsr0 but not in the tsr1
         TCaseResult tcr2 = mr.getTCaseResult(
                             tsn,
+                            tep,
                             TSuiteTimestamp.newInstance('20190512_153731'),
                             new TCaseName('Test Cases/CURA/visitSite'))
         Material existing2 = tcr2.getMaterial(Paths.get('appointment.php%23summary.png'))
@@ -315,33 +342,35 @@ class ImageCollectionDifferSpec extends Specification {
         Path caseOutputDir = specOutputDir.resolve("test_decoratedExpectedImage")
         Path materials = caseOutputDir.resolve('Materials')
         Path storage = caseOutputDir.resolve('Storage')
-        Path reports = caseOutputDir.resolve('Reports')
-        Files.createDirectories(reports)
         Files.createDirectories(materials)
         FileUtils.deleteQuietly(materials.toFile())
         Helpers.copyDirectory(fixtureDir.resolve('Storage'), storage)
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
         TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
-        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_153731'))
-        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190512_154033'))
+        TExecutionProfile tep = new TExecutionProfile('default')
+        TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_153731'))
+        TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_154033'))
         ms.restore(mr, tsr0)
         ms.restore(mr, tsr1)
         mr.scan()
-        mr.markAsCurrent(    'Test Suites/ImageDiff', '20190512_154033')
-        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190512_154033')
+        mr.markAsCurrent(    'Test Suites/ImageDiff', 'default', '20190512_154033')
+        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'default', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
-        MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+        MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
         StorageScanner storageScanner = new StorageScanner(ms)
-        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+        ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
         ImageCollectionDiffer icd = new ImageCollectionDiffer(mr)
         icd.makeImageCollectionDifferences(
             materialPairs,
             new TCaseName('Test Cases/ImageDiff'),
             imageDeltaStats)
         mr.scan()
-        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+        List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(
+                new TSuiteName('Test Suites/ImageDiff'),
+                new TExecutionProfile('default')
+        )
         assert tsriList.size() == 1
         TSuiteResultId tsri = tsriList.get(0)
         TSuiteResult tsr = mr.getTSuiteResult(tsri)

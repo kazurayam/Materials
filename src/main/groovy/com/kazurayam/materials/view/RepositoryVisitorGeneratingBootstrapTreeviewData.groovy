@@ -131,7 +131,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              // ExecutionProfile name
              sb.append(',')
              sb.append('"')
-             sb.append("${executionPropertiesWrapper.getExecutionProfile()}")
+             sb.append("${executionPropertiesWrapper.getTExecutionProfile()}")
              sb.append('"')
 
              // Browser name

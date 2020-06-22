@@ -19,15 +19,16 @@ class RestoreResultSpec extends Specification {
 
     def test_smoke() {
         setup:
-        TSuiteName tsName = new TSuiteName('Test Suites/TS1')
-        TSuiteTimestamp tsTimestamp = new TSuiteTimestamp('20190621_150102')
-        TSuiteResult tSuiteResult = new TSuiteResultImpl(tsName, tsTimestamp)
+        TSuiteName tsn = new TSuiteName('Test Suites/TS1')
+        TExecutionProfile tep = new TExecutionProfile("default")
+        TSuiteTimestamp tst = new TSuiteTimestamp('20190621_150102')
+        TSuiteResult tSuiteResult = new TSuiteResultImpl(tsn, tep, tst)
         Integer count = 10
         when:
         RestoreResult restoreResult = new RestoreResultImpl(tSuiteResult, count)
         then:
-        restoreResult.getTSuiteResult().getTSuiteName() == tsName
-        restoreResult.getTSuiteResult().getTSuiteTimestamp() == tsTimestamp
+        restoreResult.getTSuiteResult().getTSuiteName() == tsn
+        restoreResult.getTSuiteResult().getTSuiteTimestamp() == tst
         restoreResult.getCount() == count
     }
 }

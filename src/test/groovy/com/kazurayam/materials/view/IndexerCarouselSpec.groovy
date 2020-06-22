@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -61,7 +63,7 @@ class IndexerCarouselSpec extends Specification {
         when:
         indexer.execute()
         Path index = indexer.getOutput()
-        logger_.debug("#testSmoke index=${index.toString()}")
+        //logger_.debug("#testSmoke index=${index.toString()}")
         then:
         Files.exists(index)
         when:
@@ -105,7 +107,8 @@ class IndexerCarouselSpec extends Specification {
         html.contains('$(\'#tree\').treeview({')
         html.contains('modalize();')
     }
-    
+
+
     def testCarousel() {
         setup:
             Path caseOutputDir = specOutputDir.resolve('testCarousel')
@@ -120,28 +123,37 @@ class IndexerCarouselSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
             //
             TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+            TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    tSuiteNameExam,
+                    tExecutionProfile,
+                    tCaseNameExam)
             //
             TSuiteName tsn = new TSuiteName('47News_chronos_capture')
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_204329')))
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190216_064354')))
+            TExecutionProfile tep = new TExecutionProfile('default')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190216_204329')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190216_064354')))
             mr.scan()
-            mr.markAsCurrent('Test Suites/ImageDiff', '20190216_210203')
-            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20190216_210203')
+            mr.markAsCurrent('Test Suites/ImageDiff',
+                    'default', '20190216_210203')
+            def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                    'default', '20190216_210203')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
+            MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
             StorageScanner.Options options = new StorageScanner.Options.Builder().
             previousImageDeltaStats(previousIDS).
                 shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
                 build()
             StorageScanner storageScanner = new StorageScanner(ms, options)
-            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
             //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                            new TSuiteName("47News_chronos_capture"),
-                            Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
+                    Paths.get('main.TC_47News.visitSite')
+                            .resolve('47NEWS_TOP.png'))
         then:
             30.0 < ccp && ccp < 31.0
         when:
@@ -151,7 +163,9 @@ class IndexerCarouselSpec extends Specification {
                 new TCaseName('Test Cases/ImageDiff'),
                 imageDeltaStats)
             mr.scan()
-            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/ImageDiff'))
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(
+                    new TSuiteName('Test Suites/ImageDiff'),
+                    new TExecutionProfile('default'))
             assert tsriList.size() == 1
             TSuiteResultId tsri = tsriList.get(0)
             TSuiteResult tsr = mr.getTSuiteResult(tsri)
@@ -163,7 +177,7 @@ class IndexerCarouselSpec extends Specification {
             Indexer indexer = makeIndexerCarousel(caseOutputDir)
             indexer.execute()
             Path index = indexer.getOutput()
-            logger_.debug("#testSmoke index=${index.toString()}")
+            //logger_.debug("#testSmoke index=${index.toString()}")
         then:
             Files.exists(index)
         when:
@@ -223,28 +237,40 @@ class IndexerCarouselSpec extends Specification {
             MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
             //
             TSuiteName tSuiteNameExam = new TSuiteName("Test Suites/47news/chronos_exam")
+            TExecutionProfile tExecutionProfile = new TExecutionProfile('default')
             TCaseName  tCaseNameExam  = new TCaseName("Test Cases/47news/ImageDiff")
-            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+            Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                    tSuiteNameExam,
+                    tExecutionProfile,
+                    tCaseNameExam)
             //
             TSuiteName tsn = new TSuiteName('Test Suites/47news/chronos_capture')
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142150')))
-            ms.restore(mr, new TSuiteResultIdImpl(tsn, TSuiteTimestamp.newInstance('20190401_142748')))
+            TExecutionProfile tep = new TExecutionProfile('default')
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190401_142150')))
+            ms.restore(mr, new TSuiteResultIdImpl(tsn, tep,
+                    TSuiteTimestamp.newInstance('20190401_142748')))
             mr.scan()
-            mr.markAsCurrent('Test Suites/47news/ImageDiff', '20190401_142749')
-            def r = mr.ensureTSuiteResultPresent('Test Suites/47news/ImageDiff', '20190401_142749')
+            mr.markAsCurrent('Test Suites/47news/ImageDiff',
+                    'default',
+                    '20190401_142749')
+            def r = mr.ensureTSuiteResultPresent(
+                    'Test Suites/47news/ImageDiff',
+                    'default',
+                    '20190401_142749')
         when:
-            MaterialPairs materialPairs = mr.createMaterialPairs(tsn)
-            StorageScanner.Options options = new StorageScanner.Options.Builder().
-            previousImageDeltaStats(previousIDS).
-                shiftCriteriaPercentageBy(15.0).       // THIS IS THE POINT
-                build()
+            MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
+            StorageScanner.Options options = new StorageScanner.Options.Builder()
+                    .previousImageDeltaStats(previousIDS)
+                    .shiftCriteriaPercentageBy(15.0)    // THIS IS THE POINT
+                    .build()
             StorageScanner storageScanner = new StorageScanner(ms, options)
-            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn)
+            ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
             //
-            storageScanner.persist(imageDeltaStats, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+            storageScanner.persist(imageDeltaStats, tSuiteNameExam, tep, new TSuiteTimestamp(), tCaseNameExam)
             double ccp = imageDeltaStats.getCriteriaPercentage(
-                                                new TSuiteName("47news/chronos_capture"),
-                                                Paths.get('47news.visitSite').resolve('top.png'))
+                    Paths.get('47news.visitSite')
+                            .resolve('top.png'))
         then:
             27.0 < ccp && ccp < 28.0
         when:
@@ -254,7 +280,9 @@ class IndexerCarouselSpec extends Specification {
                 new TCaseName('Test Cases/47news/ImageDiff'),
                 imageDeltaStats)
             mr.scan()
-            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(new TSuiteName('Test Suites/47news/ImageDiff'))
+            List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(
+                    new TSuiteName('Test Suites/47news/ImageDiff'),
+                    new TExecutionProfile('default'))
             assert tsriList.size() == 1
             TSuiteResultId tsri = tsriList.get(0)
             TSuiteResult tsr = mr.getTSuiteResult(tsri)
@@ -266,7 +294,7 @@ class IndexerCarouselSpec extends Specification {
             Indexer indexer = makeIndexerCarousel(caseOutputDir)
             indexer.execute()
             Path index = indexer.getOutput()
-            logger_.debug("#testSmoke index=${index.toString()}")
+            //logger_.debug("#testSmoke index=${index.toString()}")
         then:
             Files.exists(index)
         when:
@@ -315,10 +343,10 @@ class IndexerCarouselSpec extends Specification {
         when:
             String html = index.toFile().text
         then:
-            html.contains('CURA.twins_exam/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.(0.00).png')
+            html.contains('CURA.twins_exam/default/20190412_161622/CURA.ImageDiff_twins/CURA.visitSite/top%2523appointment.20190412_161620_ProductionEnv-20190412_161621_DevelopmentEnv.(0.00).png')
             //                                                                                    ^^^                                                                           ^^^    ^^^
     }
-    
+
     /**
      * helper to make a CarouselIndexer object
      * @param caseOutputDir

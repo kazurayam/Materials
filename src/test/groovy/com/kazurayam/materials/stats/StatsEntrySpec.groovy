@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -35,15 +37,25 @@ class StatsEntrySpec extends Specification {
         Path storagedir = workdir_.resolve('Storage')
         MaterialStorage ms = MaterialStorageFactory.createInstance(storagedir)
         //
-        TSuiteName tSuiteNameExam = new TSuiteName("47News_chronos_exam")
+        TSuiteName tSuiteNameExam = new TSuiteName("47news.chronos_exam")
+        TExecutionProfile tExecutionProfileExam = new TExecutionProfile('default')
         TCaseName  tCaseNameExam  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
-        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms, tSuiteNameExam, tCaseNameExam)
+        Path previousIDS = StorageScanner.findLatestImageDeltaStats(ms,
+                tSuiteNameExam,
+                tExecutionProfileExam,
+                tCaseNameExam)
         StorageScanner.Options options = new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
                                             previousImageDeltaStats(previousIDS).
                                             build()
         StorageScanner scanner = new StorageScanner(ms, options)
-        ids_ = scanner.scan(new TSuiteName('47News_chronos_capture'))
-        scanner.persist(ids_, tSuiteNameExam, new TSuiteTimestamp(), tCaseNameExam)
+        ids_ = scanner.scan(
+                new TSuiteName('47news.chronos_capture'),
+                new TExecutionProfile('default'))
+        scanner.persist(ids_,
+                tSuiteNameExam,
+                tExecutionProfileExam,
+                new TSuiteTimestamp(),
+                tCaseNameExam)
     }
     def setup() {}
     def cleanup() {}
@@ -80,29 +92,61 @@ class StatsEntrySpec extends Specification {
      */
     def testGetMaterialStats() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
         when:
-        MaterialStats mStats1 = se.getMaterialStats(Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png"))
+        MaterialStats mStats1 = se.getMaterialStats(
+                Paths.get("47news.visitSite").resolve("47reporters.png"))
         then:
         mStats1 != null
         mStats1.getImageDeltaList().size() > 0
         when:
-        MaterialStats mStats2 = se.getMaterialStats(Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png"))
+        MaterialStats mStats2 = se.getMaterialStats(
+                Paths.get("47news.visitSite").resolve("47reporters.png"))
         logger_.debug("mStats2: ${mStats2.toString()}")
         then:
         mStats2 != null
         mStats2.getImageDeltaList().size() > 0
-        
-        
     }
-    
+
+    /**
+{   "TSuiteName":"47news.chronos_capture",
+    "TExecutionProfile":"default",
+    "materialStatsList":[
+        {
+            "path":"47news.visitSite/47reporters.png",
+            "degree":1,
+            "sum":2.64,
+            mean":2.64,
+            "variance":0.0,
+            "standardDeviation":0.0,
+            "tDistribution":0.0,
+            "confidenceInterval":{
+                "lowerBound":2.64,
+                "uppderBound":2.64,
+                "confidenceLevel":0.95
+            },
+            "criteriaPercentage":2.65,
+            "data":[2.64],
+            "imageDeltaList":[
+                {
+                    "a":"20190401_142748",
+                    "b":"20190401_142150",
+                    "d":2.64,"cached":true
+                }
+            ]
+        },
+        {
+            "path":"47news.visitSite/culture.png","degree":1,"sum":2.52,"mean":2.52,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":2.52,"uppderBound":2.52,"confidenceLevel":0.95},"criteriaPercentage":2.53,"data":[2.52],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":2.52,"cached":true}]},{"path":"47news.visitSite/economics.png","degree":1,"sum":2.67,"mean":2.67,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":2.67,"uppderBound":2.67,"confidenceLevel":0.95},"criteriaPercentage":2.67,"data":[2.67],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":2.67,"cached":true}]},{"path":"47news.visitSite/localnews.png","degree":1,"sum":8.11,"mean":8.11,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":8.11,"uppderBound":8.11,"confidenceLevel":0.95},"criteriaPercentage":8.11,"data":[8.11],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":8.11,"cached":true}]},{"path":"47news.visitSite/national.png","degree":1,"sum":14.15,"mean":14.15,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":14.15,"uppderBound":14.15,"confidenceLevel":0.95},"criteriaPercentage":14.16,"data":[14.15],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":14.15,"cached":true}]},{"path":"47news.visitSite/news.png","degree":1,"sum":15.79,"mean":15.79,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":15.79,"uppderBound":15.79,"confidenceLevel":0.95},"criteriaPercentage":15.79,"data":[15.79],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":15.79,"cached":true}]},{"path":"47news.visitSite/photo.png","degree":1,"sum":3.09,"mean":3.09,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":3.09,"uppderBound":3.09,"confidenceLevel":0.95},"criteriaPercentage":3.09,"data":[3.09],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":3.09,"cached":true}]},{"path":"47news.visitSite/politics.png","degree":1,"sum":3.42,"mean":3.42,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":3.42,"uppderBound":3.42,"confidenceLevel":0.95},"criteriaPercentage":3.42,"data":[3.42],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":3.42,"cached":true}]},{"path":"47news.visitSite/ranking.png","degree":1,"sum":2.96,"mean":2.96,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":2.96,"uppderBound":2.96,"confidenceLevel":0.95},"criteriaPercentage":2.96,"data":[2.96],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":2.96,"cached":true}]},{"path":"47news.visitSite/sports.png","degree":1,"sum":1.31,"mean":1.31,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":1.31,"uppderBound":1.31,"confidenceLevel":0.95},"criteriaPercentage":1.32,"data":[1.31],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":1.31,"cached":true}]},{"path":"47news.visitSite/top.png","degree":1,"sum":12.04,"mean":12.04,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":12.04,"uppderBound":12.04,"confidenceLevel":0.95},"criteriaPercentage":12.04,"data":[12.04],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":12.04,"cached":true}]},{"path":"47news.visitSite/world.png","degree":1,"sum":1.34,"mean":1.34,"variance":0.0,"standardDeviation":0.0,"tDistribution":0.0,"confidenceInterval":{"lowerBound":1.34,"uppderBound":1.34,"confidenceLevel":0.95},"criteriaPercentage":1.35,"data":[1.34],"imageDeltaList":[{"a":"20190401_142748","b":"20190401_142150","d":1.34,"cached":true}]}]}
+
+     */
     def testHasImageDelta() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
-        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
+        Path pathRelativeToTSuiteTimestampDir =
+                Paths.get("47news.visitSite").resolve("47reporters.png")
         when:
-        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
-        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        TSuiteTimestamp a = new TSuiteTimestamp("20190401_142748")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190401_142150")
         then:
         se.hasImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
         when:
@@ -113,11 +157,12 @@ class StatsEntrySpec extends Specification {
     
     def testGetImageDelta() {
         setup:
-        StatsEntry se = ids_.getImageDeltaStatsEntry(new TSuiteName('47News_chronos_capture'))
-        Path pathRelativeToTSuiteTimestampDir = Paths.get("main.TC_47News.visitSite").resolve("47NEWS_TOP.png")
+        StatsEntry se = ids_.getImageDeltaStatsEntry()
+        Path pathRelativeToTSuiteTimestampDir =
+                Paths.get("47news.visitSite").resolve("47reporters.png")
         when:
-        TSuiteTimestamp a = new TSuiteTimestamp("20190216_204329")
-        TSuiteTimestamp b = new TSuiteTimestamp("20190216_064354")
+        TSuiteTimestamp a = new TSuiteTimestamp("20190401_142748")
+        TSuiteTimestamp b = new TSuiteTimestamp("20190401_142150")
         ImageDelta id1 = se.getImageDelta(pathRelativeToTSuiteTimestampDir, a, b)
         then:
         id1 != null

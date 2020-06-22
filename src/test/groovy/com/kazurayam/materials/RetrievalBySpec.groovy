@@ -1,16 +1,13 @@
 package com.kazurayam.materials
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import spock.lang.Specification
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.DayOfWeek
 import java.time.LocalDateTime
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.RetrievalBy.SearchContext
-
-import spock.lang.Specification
 
 class RetrievalBySpec extends Specification {
     
@@ -36,43 +33,42 @@ class RetrievalBySpec extends Specification {
     def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
-    
-	
-	
 	
     // feature methods
-	
 	def test_findTSuiteResultsBeforeInclusive_TSuiteTimestamp_oneOrMoreFound() {
 		setup:
 		TSuiteName tsn = new TSuiteName("TS1")
-		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_DevelopmentEnv")
+		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
 		TSuiteTimestamp tst = new TSuiteTimestamp("20180810_140106")
 		when:
 		RetrievalBy by = RetrievalBy.by(tst)
 		List<TSuiteResult> list = by.findTSuiteResultsBeforeInclusive(context)
 		//                                                  ^^
 		then:
-		list.size() == 2
+		list.size() == 1
 		list.get(0).getTSuiteTimestamp().format() == "20180810_140106"
 	}
     
     def test_findTSuiteResultsBeforeExclusive_TSuiteTimestamp_oneOrMoreFound() {
         setup:
-        TSuiteName tsn = new TSuiteName("TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
-        TSuiteTimestamp tst = new TSuiteTimestamp("20180810_140106")
+        TSuiteName tsn = new TSuiteName("main/TS1")
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
+        TSuiteTimestamp tst = new TSuiteTimestamp("20181014_060501")
         RetrievalBy by = RetrievalBy.by(tst)
         List<TSuiteResult> list = by.findTSuiteResultsBeforeExclusive(context)
         then:
-        list.size() == 1
-		list.get(0).getTSuiteTimestamp().format() == "20180810_140105"
+        list.size() == 5
+		list.get(0).getTSuiteTimestamp().format() == "20181014_060500"
     }
 
     def test_findTSuiteResultsBeforeExclusive_TSuiteTimestamp_noneFound() {
         setup:
         TSuiteName tsn = new TSuiteName("Monitor47News")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("default")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         TSuiteTimestamp tst = new TSuiteTimestamp("20190123_153854")
         when:
         RetrievalBy by = RetrievalBy.by(tst)
@@ -89,7 +85,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultBeforeExclusive_findOne() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 18, 23, 59, 59)
         RetrievalBy by = RetrievalBy.by(base, 0, 0, 0)
@@ -102,7 +99,8 @@ class RetrievalBySpec extends Specification {
 	def test_findTSuiteResultBeforeInclusive_findOne() {
 		setup:
 		TSuiteName tsn = new TSuiteName("main/TS1")
-		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+		RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
 		when:
 		LocalDateTime base = LocalDateTime.of(2018, 7, 18, 23, 59, 59)
 		RetrievalBy by = RetrievalBy.by(base)
@@ -120,7 +118,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultBeforeExclusive_LocalDateTime_theDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 18, 23, 59, 59)
         RetrievalBy by = RetrievalBy.by(base, 0, 0, 0)
@@ -131,14 +130,15 @@ class RetrievalBySpec extends Specification {
         list[0].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130604'))
         list[1].getId().getTSuiteTimestamp().equals(new TSuiteTimestamp('20180530_130419'))
     }
-   
+
     /**
      *  retrieving TSuiteResults before the day (1 day prior to the specified date) + time
      */
     def test_findTSuiteResultBeforeExclusive_LocalDateTime_previousDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusDays(1)
@@ -163,7 +163,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultsBeforeExclusive_LocalDateTime_lastFriday() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusWeeks(1).with(DayOfWeek.FRIDAY)
@@ -186,7 +187,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultsBeforeExclusive_LocalDateTime_lastBusinessDay() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 5, 31, 0, 0, 0)
         RetrievalBy by = RetrievalBy.by(base, 0, 0, 0)
@@ -204,7 +206,8 @@ class RetrievalBySpec extends Specification {
     def test_findTSuiteResultsBeforeExclusive_LocalDateTime_25lastMonth() {
         setup:
         TSuiteName tsn = new TSuiteName("main/TS1")
-        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn)
+        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
+        RetrievalBy.SearchContext context = new RetrievalBy.SearchContext(mr_, tsn, tep)
         when:
         LocalDateTime base = LocalDateTime.of(2018, 7, 19, 23, 59, 59)
         LocalDateTime shifted = base.minusMonths(1).withDayOfMonth(25)

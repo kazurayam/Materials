@@ -2,12 +2,7 @@ package com.kazurayam.materials.imagedifference
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.ExecutionProfile
-import com.kazurayam.materials.view.ExecutionProfileImpl
-import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.TSuiteResult
 
 class ImageDifferenceFilenameResolverCompactImpl implements ImageDifferenceFilenameResolver {
     

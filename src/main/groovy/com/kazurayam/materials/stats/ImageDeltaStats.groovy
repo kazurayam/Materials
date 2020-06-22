@@ -7,15 +7,13 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.stats.StorageScanner.Options
 
 import groovy.json.JsonSlurper
 
 /**
- * ImageDeletaStats object:
+ * ImageDeltaStats object:
  * 
 <PRE>
 {
@@ -31,6 +29,7 @@ import groovy.json.JsonSlurper
     "imageDeltaStatsEntries": [
         {
             "TSuiteName": "47News_chronos_capture",
+            "TExecutionProfile": "default",
             "materialStatsList": [
                 {
                     "path": "main.TC_47News.visitSite/47NEWS_TOP.png",
@@ -116,25 +115,28 @@ abstract class ImageDeltaStats {
     
     abstract List<StatsEntry> getImageDeltaStatsEntryList()
     
-    abstract double getCriteriaPercentage(TSuiteName tSuiteName, Path pathRelativeToTSuiteTimestamp)
+    abstract double getCriteriaPercentage(
+            Path pathRelativeToTSuiteTimestamp)
     
-    abstract StatsEntry getImageDeltaStatsEntry(TSuiteName tSuiteName)
+    abstract StatsEntry getImageDeltaStatsEntry()
     
     /**
      * 
-     * @param tSuiteName
+     * @param capturingTSuiteName
      * @param relativeToTSuiteTimestampDir
      * @param a
      * @param b
      * @return
      */
-    abstract boolean hasImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    abstract boolean hasImageDelta(Path relativeToTSuiteTimestampDir,
+                                   TSuiteTimestamp a,
+                                   TSuiteTimestamp b)
     
     /**
      */
-    abstract ImageDelta getImageDelta(TSuiteName tSuiteName, Path relativeToTSuiteTimestampDir,
-                                            TSuiteTimestamp a, TSuiteTimestamp b)
+    abstract ImageDelta getImageDelta(Path relativeToTSuiteTimestampDir,
+                                      TSuiteTimestamp a,
+                                      TSuiteTimestamp b)
     
     /**
      * 
@@ -143,15 +145,8 @@ abstract class ImageDeltaStats {
     abstract void write(Path output)
     
     abstract void write(Writer writer)
-    
-    static Path resolvePath(TSuiteName imageDiffTSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
-        Path jsonPath = Paths.get(imageDiffTSuiteName.getValue()).
-                        resolve(tSuiteTimestamp.format()).
-                        resolve(tCaseName.getValue()).
-                        resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
-        return jsonPath
-    }
-    
+
+
     abstract toJsonText()
     
     /**
@@ -167,16 +162,7 @@ abstract class ImageDeltaStats {
             throw new FileNotFoundException("${jsonFilePath} is not found")
         }
     }
-    
-    static ImageDeltaStats fromJsonFile(File jsonFile) {
-        if (jsonFile.exists()) {
-            String jsonText = jsonFile.text
-            return ImageDeltaStats.fromJsonText(jsonText)
-        } else {
-            throw new FileNotFoundException("${jsonFile} is not found")
-        }
-    }
-    
+
     static ImageDeltaStats fromJsonText(String jsonText) {
         JsonSlurper slurper = new JsonSlurper()
         def jsonObject = slurper.parseText(jsonText)
@@ -187,8 +173,8 @@ abstract class ImageDeltaStats {
         Objects.requireNonNull(jsonObject, "jsonObject must not be null")
         if (jsonObject instanceof Map) {
             Map json = (Map)jsonObject
-            StorageScanner.Options ssOptions =
-                new com.kazurayam.materials.stats.StorageScanner.Options.Builder().
+            Options ssOptions =
+                new Options.Builder().
                     shiftCriteriaPercentageBy (json.storageScannerOptions.shiftCriteriaPercentageBy      ).
                     filterDataLessThan        (json.storageScannerOptions.filterDataLessThan             ).
                     maximumNumberOfImageDeltas(json.storageScannerOptions.maximumNumberOfImageDeltas     ).

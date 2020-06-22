@@ -94,8 +94,9 @@ class MaterialMetadataBundleSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         when:
         TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
-            new TSuiteName('Monitor47News'),
-            new TSuiteTimestamp('20190123_153854')))
+                new TSuiteName('Monitor47News'),
+                new TExecutionProfile("default"),
+                new TSuiteTimestamp('20190123_153854')))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/visit47NEWS'))
         assert tcr != null
         assert tcr.getMaterialList().size() > 0
@@ -154,6 +155,7 @@ class MaterialMetadataBundleSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         TSuiteResult tsr = mr.getTSuiteResult(TSuiteResultId.newInstance(
                 new TSuiteName('Monitor47News'),
+                new TExecutionProfile("default"),
                 new TSuiteTimestamp('20190123_153854')))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/visit47NEWS'))
         assert tcr != null

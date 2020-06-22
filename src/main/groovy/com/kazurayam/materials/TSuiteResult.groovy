@@ -11,11 +11,12 @@ import com.kazurayam.materials.repository.RepositoryRoot
  */
 abstract class TSuiteResult implements Comparable<TSuiteResult> {
 
-    static final TSuiteResult NULL = new TSuiteResultImpl(TSuiteName.NULL, TSuiteTimestamp.NULL)
-    
-    static TSuiteResult newInstance(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        return new TSuiteResultImpl(tSuiteName, tSuiteTimestamp)
+    static TSuiteResult newInstance(TSuiteName tSuiteName,
+                                    TExecutionProfile tExecutionProfile,
+                                    TSuiteTimestamp tSuiteTimestamp) {
+        return new TSuiteResultImpl(tSuiteName, tExecutionProfile, tSuiteTimestamp)
     }
+
     // ------------------ attribute setter & getter -------------------------------
     abstract TSuiteResultId getId()
 
@@ -28,6 +29,10 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     abstract Path getTSuiteNameDirectory()
 
     abstract TSuiteName getTSuiteName()
+
+    abstract Path getTExecutionProfileDirectory()
+
+    abstract TExecutionProfile getTExecutionProfile()
     
     abstract TSuiteTimestamp getTSuiteTimestamp()
     
@@ -71,8 +76,9 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         //if (this == obj) { return true }
         if (!(obj instanceof TSuiteResult)) { return false }
         TSuiteResult other = (TSuiteResult)obj
-        if (this.getId().getTSuiteName().equals(other.getId().getTSuiteName()) && 
-            this.getId().getTSuiteTimestamp().equals(other.getId().getTSuiteTimestamp())) {
+        if (this.getId().getTSuiteName() == other.getId().getTSuiteName() &&
+                this.getId().getTExecutionProfile() == other.getId().getTExecutionProfile() &&
+                this.getId().getTSuiteTimestamp() == other.getId().getTSuiteTimestamp()) {
             return true
         } else {
             return false
@@ -84,6 +90,7 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         final int prime = 31
         int result = 1
         result = prime * result + this.getId().getTSuiteName().hashCode()
+        result = prime * result + this.getId().getTExecutionProfile().hashCode()
         result = prime * result + this.getId().getTSuiteTimestamp().hashCode()
         return result
     }
@@ -102,12 +109,19 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      */
     @Override
     int compareTo(TSuiteResult other) {
-        int v = this.getId().getTSuiteName().compareTo(other.getId().getTSuiteName())
+        int v = this.getId().getTSuiteName().compareTo(
+                other.getId().getTSuiteName())
         if (v < 0) {
             return v
         } else if (v == 0) {
-            v = this.getId().getTSuiteTimestamp().compareTo(other.getId().getTSuiteTimestamp())
-            return v
+            v = this.getId().getTExecutionProfile().compareTo(
+                    other.getId().getTExecutionProfile())
+            if (v == 0) {
+                return this.getId().getTSuiteTimestamp().compareTo(
+                        other.getId().getTSuiteTimestamp())
+            } else {
+                return v
+            }
         } else {
             return v
         }
@@ -120,36 +134,54 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     }
     
     String toJsonText() {
-        StringBuilder sb = new StringBuilder()
-        sb.append("{")
-        sb.append("\"value\":\"")
-        sb.append(this.getId().getTSuiteName().getValue())
-        sb.append("\",\"format\":\"")
-        sb.append(this.getId().getTSuiteTimestamp().format())
-        sb.append("\"")
-        sb.append("}")
-        return sb.toString()
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("\"value\":\"");
+        sb.append(this.getId().getTSuiteName().getValue());
+        sb.append("\"");
+        sb.append(",\"profile\":\"");
+        sb.append(this.getId().getTExecutionProfile().getName());
+        sb.append("\"");
+        sb.append("\",\"format\":\"");
+        sb.append(this.getId().getTSuiteTimestamp().format());
+        sb.append("\"");
+        sb.append("}");
+        return sb.toString();
     }
+
+    static final TSuiteResult NULL =
+            new TSuiteResultImpl(TSuiteName.getNULL(),
+                    TExecutionProfile.getBLANK(),
+                    TSuiteTimestamp.getNULL())
 
     /**
      * sort a list of TSuiteResult by
      * 1. Descending order of TSuiteTimestamp
-     * 2. Ascending order of TSuiteName
+     * 2. Ascending order of TExecutionProfile
+     * 3. Ascending order of TSuiteName
+     *
+     * This method is required to find out the TSuiteResult which was created last
      */
-    public static class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
+    static class TimestampFirstTSuiteResultComparator implements Comparator<TSuiteResult> {
         @Override
         int compare(TSuiteResult a, TSuiteResult b) {
-            int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp())
+            int v = a.getId().getTSuiteTimestamp().compareTo(b.getId().getTSuiteTimestamp());
             if (v < 0) {
-                return v * -1
+                return v * -1;
             } else if (v == 0) {
-                v = a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName())
-                return v
+                v = a.getId().getTExecutionProfile().compareTo(b.getId().getTExecutionProfile());
+                if (v < 0) {
+                    return v;
+                } else if (v == 0) {
+                    return a.getId().getTSuiteName().compareTo(b.getId().getTSuiteName());
+                } else {
+                    return v;
+                }
             } else {
-                return v * -1
+                return v * -1;
             }
+
         }
     }
-
 }
 

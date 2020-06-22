@@ -8,7 +8,13 @@ import com.kazurayam.materials.impl.MaterialStorageImpl
 import com.kazurayam.materials.repository.RepositoryRoot
 
 /**
- * Strategy class that implements how to scan the MaterialRepository and the MaterialStorage for a List<TSuiteResults>.
+ * Strategy class that implements how to scan the MaterialRepository and
+ * the MaterialStorage for a List<TSuiteResults>.
+ *
+ * Caller need to instantiate an instance of RetrievalBy class specifying
+ * 1. TSuiteName object
+ * 2. TExecutionProfile object
+ *
  * Two strategies are implemented.
  * 1. before(TSuiteTimestamp)
  * 2. before(LocalDateTime base, int hour, int minute, in second)
@@ -118,7 +124,8 @@ abstract class RetrievalBy {
             Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
-            return rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            TExecutionProfile tep = context.getTExecutionProfile()
+            return rr.getTSuiteResultsBeforeExclusive(tsn, tep, tSuiteTimestamp_)
         }
         
         @Override
@@ -126,7 +133,8 @@ abstract class RetrievalBy {
             Objects.requireNonNull(context, "context must not be null")
             RepositoryRoot rr = context.getRepositoryRoot()
             TSuiteName tsn = context.getTSuiteName()
-            List<TSuiteResult> results = rr.getTSuiteResultsBeforeExclusive(tsn, tSuiteTimestamp_)
+            TExecutionProfile tep = context.getTExecutionProfile()
+            List<TSuiteResult> results = rr.getTSuiteResultsBeforeExclusive(tsn, tep, tSuiteTimestamp_)
 			
 			// for DEBUG
 			/*
@@ -152,7 +160,8 @@ abstract class RetrievalBy {
 			Objects.requireNonNull(context, "context must not be null")
 			RepositoryRoot rr = context.getRepositoryRoot()
 			TSuiteName tsn = context.getTSuiteName()
-			return rr.getTSuiteResultsBeforeInclusive(tsn, tSuiteTimestamp_)
+            TExecutionProfile tep = context.getTExecutionProfile()
+			return rr.getTSuiteResultsBeforeInclusive(tsn, tep, tSuiteTimestamp_)
 		}
 		
 		@Override
@@ -160,7 +169,8 @@ abstract class RetrievalBy {
 			Objects.requireNonNull(context, "context must not be null")
 			RepositoryRoot rr = context.getRepositoryRoot()
 			TSuiteName tsn = context.getTSuiteName()
-			List<TSuiteResult> results = rr.getTSuiteResultsBeforeInclusive(tsn, tSuiteTimestamp_)
+            TExecutionProfile tep = context.getTExecutionProfile()
+			List<TSuiteResult> results = rr.getTSuiteResultsBeforeInclusive(tsn, tep, tSuiteTimestamp_)
 			if (results.size() > 0) {
 				return results[0]
 			} else {
@@ -173,27 +183,38 @@ abstract class RetrievalBy {
 	
 	
     /**
-     * 
+     * One more layer of abstraction.
+     * We want to see a MaterialRepository object and a MaterialStorage object
+     * just the same way in terms of content search.
      */
     static class SearchContext {
         
         private RepositoryRoot repositoryRoot_
         private TSuiteName tSuiteName_
+        private TExecutionProfile tExecutionProfile_
         
-        SearchContext(MaterialRepository materialRepository, TSuiteName tSuiteName) {
+        SearchContext(MaterialRepository materialRepository,
+                      TSuiteName tSuiteName,
+                      TExecutionProfile tExecutionProfile) {
             Objects.requireNonNull(materialRepository, "materialRepository must not be null")
             Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+            Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
             MaterialRepositoryImpl mri = (MaterialRepositoryImpl)materialRepository
             repositoryRoot_ = mri.getRepositoryRoot()
             tSuiteName_ = tSuiteName
+            tExecutionProfile_ = tExecutionProfile
         }
         
-        SearchContext(MaterialStorage materialStorage, TSuiteName tSuiteName) {
+        SearchContext(MaterialStorage materialStorage,
+                      TSuiteName tSuiteName,
+                      TExecutionProfile tExecutionProfile) {
             Objects.requireNonNull(materialStorage, "materialStorage must not be null")
             Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+            Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
             MaterialStorageImpl msi = (MaterialStorageImpl)materialStorage
             repositoryRoot_ = msi.getRepositoryRoot()
             tSuiteName_ = tSuiteName
+            tExecutionProfile_ = tExecutionProfile
         }
         
         RepositoryRoot getRepositoryRoot() {
@@ -202,6 +223,10 @@ abstract class RetrievalBy {
         
         TSuiteName getTSuiteName() {
             return tSuiteName_
+        }
+
+        TExecutionProfile getTExecutionProfile() {
+            return tExecutionProfile_
         }
         
         String toJsonText() {

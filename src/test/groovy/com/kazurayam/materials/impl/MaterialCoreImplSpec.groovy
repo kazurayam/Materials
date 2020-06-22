@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialCore
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class MaterialCoreImplSpec extends Specification {
@@ -118,7 +119,8 @@ class MaterialCoreImplSpec extends Specification {
         enc != null
         enc == 'CURA.twins_exam/20190411_130902/CURA.ImageDiff_twins/CURA.visitSite/appointment.php%2523summary.20190411_130900_ProductionEnv-20190411_130901_DevelopmentEnv.(0.00).png'
     }
-	
+
+    @Ignore
 	def test_getEncodedHrefRelativeToRepositoryRoot_CJK() {
 		setup:
 		String jsonText = '''{

@@ -1,23 +1,23 @@
 package com.kazurayam.materials.impl
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.LocalDateTime
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.repository.RepositoryRoot
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultImpl>{
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.LocalDateTime
+
+class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     
     static final Logger logger_ = LoggerFactory.getLogger(TSuiteResultImpl.class)
 
@@ -25,6 +25,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     
     private RepositoryRoot repoRoot_
     private Path tSuiteNameDirectory_
+    private Path tExecutionProfileDirectory_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
     private LocalDateTime lastModified_
@@ -33,13 +34,22 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
 
     // ------------------ constructors & initializer -------------------------------
 	TSuiteResultImpl(TSuiteResultId tSuiteResultId) {
-		this(tSuiteResultId.getTSuiteName(), tSuiteResultId.getTSuiteTimestamp())
+		this(tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp())
 	}
 	
-    TSuiteResultImpl(TSuiteName testSuiteName, TSuiteTimestamp testSuiteTimestamp) {
-        Objects.requireNonNull(testSuiteName)
-        Objects.requireNonNull(testSuiteTimestamp)
-        tSuiteResultId_ = TSuiteResultIdImpl.newInstance(testSuiteName, testSuiteTimestamp)
+    TSuiteResultImpl(TSuiteName tSuiteName,
+                     TExecutionProfile tExecutionProfile,
+                     TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+
+        tSuiteResultId_ = TSuiteResultIdImpl.newInstance(tSuiteName,
+                tExecutionProfile,
+                tSuiteTimestamp)
+
         tCaseResults_   = new ArrayList<TCaseResult>()
         lastModified_   = LocalDateTime.MIN
         latestModified_ = false
@@ -48,18 +58,34 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     // ------------------ attribute setter & getter -------------------------------
     @Override
     TSuiteResultId getId() {
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(
+        return TSuiteResultIdImpl.newInstance(
                                     tSuiteResultId_.getTSuiteName(),
+                                    tSuiteResultId_.getTExecutionProfile(),
                                     tSuiteResultId_.getTSuiteTimestamp())
-        return tsri
     }
 
+    /**
+     * Here we create the directory tree of
+     *
+     * Materials/<Test Suite name>/<Execution Profile name>/<Test Suite timestamp>
+     *
+     * @param repoRoot
+     * @return
+     */
     @Override
     TSuiteResult setParent(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot)
         repoRoot_ = repoRoot
-        tSuiteNameDirectory_ = repoRoot_.getBaseDir().resolve(this.getId().getTSuiteName().getValue())
-        tSuiteTimestampDirectory_ = tSuiteNameDirectory_.resolve(this.getId().getTSuiteTimestamp().format())        
+
+        tSuiteNameDirectory_ = repoRoot_.getBaseDir()
+                .resolve(this.getId().getTSuiteName().getValue())
+
+        tExecutionProfileDirectory_ = tSuiteNameDirectory_
+                .resolve(this.getId().getTExecutionProfile().getNameInPathSafeChars())
+
+        tSuiteTimestampDirectory_ = tExecutionProfileDirectory_
+                .resolve(this.getId().getTSuiteTimestamp().format())
+
         return this
     }
 
@@ -77,12 +103,22 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     Path getTSuiteNameDirectory() {
         return tSuiteNameDirectory_
     }
+
+    @Override
+    Path getTExecutionProfileDirectory() {
+        return tExecutionProfileDirectory_
+    }
     
     @Override
     TSuiteName getTSuiteName() {
         return tSuiteResultId_.getTSuiteName()
     }
-    
+
+    @Override
+    TExecutionProfile getTExecutionProfile() {
+        return tSuiteResultId_.getTExecutionProfile()
+    }
+
     @Override
     TSuiteTimestamp getTSuiteTimestamp() {
         return tSuiteResultId_.getTSuiteTimestamp()
@@ -182,6 +218,8 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
         StringBuilder sb = new StringBuilder()
         sb.append(this.getId().getTSuiteName().getValue())
         sb.append('/')
+        sb.append(this.getId().getTExecutionProfile().getName())
+        sb.append('/')
         sb.append(this.getId().getTSuiteTimestamp().format())
         return sb.toString()
     }
@@ -247,7 +285,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
      *
      */
     @Override
-    int compareTo(TSuiteResultImpl other) {
+    int compareTo(TSuiteResult other) {
         int v = this.getId().getTSuiteName().compareTo(other.getId().getTSuiteName())
         if (v < 0) {
             return v
@@ -267,10 +305,16 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResultIm
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TSuiteResult":{')
-        sb.append('"tSuiteName":' + this.getId().getTSuiteName().toString() + ',')
-        sb.append('"tSuiteTimestamp": "' + this.getId().getTSuiteTimestamp().format() + '",')
-        sb.append('"tSuiteTimestampDir": "' + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
-        sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
+        sb.append('"tSuiteName": "'
+                + Helpers.escapeAsJsonText(this.getId().getTSuiteName().toString()) + '",')
+        sb.append('"tExecutionProfile": "'
+                + Helpers.escapeAsJsonText(this.getId().getTExecutionProfile().getName()) + '",')
+        sb.append('"tSuiteTimestamp": "'
+                + Helpers.escapeAsJsonText(this.getId().getTSuiteTimestamp().format()) + '",')
+        sb.append('"tSuiteTimestampDir": "'
+                + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
+        sb.append('"lastModified": "'
+                + this.getLastModified().toString() + '",')
         sb.append('"length":' + this.getSize()+ ',')
         sb.append('"tCaseResults": [')
         def count = 0

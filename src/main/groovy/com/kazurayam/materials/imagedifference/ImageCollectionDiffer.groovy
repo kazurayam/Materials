@@ -1,5 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -112,8 +114,9 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
                 decorated.getActual().getFileType() == FileType.PNG) {
                 Material expected = decorated.getExpected()
                 TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
+                TExecutionProfile tep = expected.getParent().getParent().getTExecutionProfile()
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
-                double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(tsn, path)
+                double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(path)
                 // compare 2 images and create a ComparisonResult object
                 ComparisonResult cr = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
                 // and put the ComparisonResult into buffer

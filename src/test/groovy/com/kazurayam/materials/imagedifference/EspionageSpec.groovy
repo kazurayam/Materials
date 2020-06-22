@@ -12,6 +12,10 @@ import com.kazurayam.materials.Helpers
 import spock.lang.Ignore
 import spock.lang.Specification
 
+/**
+ * This test is not necessary ; to be deleted
+ */
+@Ignore
 class EspionageSpec extends Specification {
 
     private static Path specFixtureDir

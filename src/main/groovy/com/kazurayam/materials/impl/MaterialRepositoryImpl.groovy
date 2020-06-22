@@ -24,11 +24,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * path of the Materials directory
      */
     private Path baseDir_
-    
-    private String executionProfileName_
-    
-    // set default Material path to the "./${baseDir name}/_/_" directory
+
+    // set default Material path to the "./${baseDir name}/_/_/_" directory
     private TSuiteName currentTSuiteName_ = TSuiteName.SUITELESS
+    private TExecutionProfile currentTExecutionProfile_ = TExecutionProfile.UNUSED
     private TSuiteTimestamp currentTSuiteTimestamp_ = TSuiteTimestamp.TIMELESS
     private boolean alreadyMarked_ = false
 
@@ -38,12 +37,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ---------------------- constructors & initializer ----------------------
 
-    /**
-     *
-     * @param baseDir required
-     * @param tsName required
-     * @param tsTimestamp required
-     */
     private MaterialRepositoryImpl(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         //
@@ -61,11 +54,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         
     }
 
-    /**
-     * 
-     * @param baseDir
-     * @return
-     */
     static MaterialRepositoryImpl newInstance(Path baseDir) {
         return new MaterialRepositoryImpl(baseDir)    
     }
@@ -77,55 +65,34 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
-    
-    @Override
-    void setExecutionProfileName(String profileName) {
-        executionProfileName_ = profileName
-    }
-    
-    @Override
-    String getExecutionProfileName() {
-        return executionProfileName_
-    }
-    
-    /**
-     * The current time now is assumed
-     *
-     * @param testSuiteId
-     */
-    @Override
-    void markAsCurrent(String testSuiteId) {
-        String now = Helpers.now()
-        this.markAsCurrent(testSuiteId, now)
-    }
 
     @Override
-    void markAsCurrent(String testSuiteId, String testSuiteTimestamp) {
+    void markAsCurrent(String testSuiteId,
+                       String executionProfile,
+                       String testSuiteTimestamp) {
         this.markTSuiteResultAsCurrent(
                 new TSuiteName(testSuiteId),
+                new TExecutionProfile(executionProfile),
                 new TSuiteTimestamp(testSuiteTimestamp))
     }
 
     @Override
-    void markAsCurrent(TSuiteName tSuiteName) {
-        this.markAsCurrent(
-                tSuiteName,
-                TSuiteTimestamp.newInstance(Helpers.now())
-        )
-    }
-
-    @Override
-    void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    void markAsCurrent(TSuiteName tSuiteName,
+                       TExecutionProfile tExecutionProfile,
+                       TSuiteTimestamp tSuiteTimestamp) {
         this.markTSuiteResultAsCurrent(
                 tSuiteName,
+                tExecutionProfile,
                 tSuiteTimestamp)
     }
     
     @Override
     void markAsCurrent(TSuiteResultId tSuiteResultId) {
         this.markTSuiteResultAsCurrent(
-            tSuiteResultId.getTSuiteName(),
-            tSuiteResultId.getTSuiteTimestamp())
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp()
+        )
     }
 
     /**
@@ -133,16 +100,20 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      * @param tSuiteName
      * @param tSuiteTimestamp
      */
-    private void markTSuiteResultAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    private void markTSuiteResultAsCurrent(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile,
+                                           TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // memorize this specified TestSuite as the current one
         currentTSuiteName_ = tSuiteName
+        currentTExecutionProfile_ = tExecutionProfile
         currentTSuiteTimestamp_ = tSuiteTimestamp
 
-        // ensure a directory forthe TSuiteResult
-        ensureTSuiteResultPresent(tSuiteName, tSuiteTimestamp)
+        // ensure a directory for the TSuiteResult
+        ensureTSuiteResultPresent(tSuiteName, tExecutionProfile, tSuiteTimestamp)
         
         // make the status easily looked up
         alreadyMarked_ = true
@@ -154,47 +125,41 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return alreadyMarked_
     }
 
+
     @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName) {
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName,
+                                           String executionProfile,
+                                           String testSuiteTimestamp) {
         return this.ensureTSuiteResultPresent(
-            testSuiteName,
-            Helpers.now())
-    }
-    
-    @Override
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName) {
-        return this.ensureTSuiteResultPresent(
-            tSuiteName,
-            TSuiteTimestamp.newInstance(Helpers.now()))
-    }
-    
-    @Override
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp) {
-        return this.ensureTSuiteResultPresent(
-            new TSuiteName(testSuiteName),
-            TSuiteTimestamp.newInstance(testSuiteTimestamp))
+                new TSuiteName(testSuiteName),
+                new TExecutionProfile(executionProfile),
+                TSuiteTimestamp.newInstance(testSuiteTimestamp))
     }
     
     @Override
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId) {
         return this.ensureTSuiteResultPresent(
-            tSuiteResultId.getTSuiteName(),
-            tSuiteResultId.getTSuiteTimestamp())
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp())
     }
     
     @Override
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile,
+                                           TSuiteTimestamp tSuiteTimestamp) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
         
         // add the specified TestSuite
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tSuiteTimestamp)
+        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tExecutionProfile, tSuiteTimestamp)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         
-        // if a TSuiteRusule of tSuiteName/tSuiteTimestamp is NOT found in the directory,
+        // if a TSuiteResult of tSuiteName/tExecutionProfile/tSuiteTimestamp is NOT found in the directory,
         // then create new object and create a directory for it 
         if (tsr == null) {
-            tsr = TSuiteResult.newInstance(tSuiteName, tSuiteTimestamp).setParent(repoRoot_)
+            tsr = TSuiteResult.newInstance(tSuiteName, tExecutionProfile, tSuiteTimestamp).setParent(repoRoot_)
             this.addTSuiteResult(tsr)
             tsr.createDirectories()
         }
@@ -206,7 +171,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path getCurrentTestSuiteDirectory() {
-        TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
+        TSuiteResultId tsri =
+                TSuiteResultId.newInstance(
+                        currentTSuiteName_,
+                        currentTExecutionProfile_,
+                        currentTSuiteTimestamp_)
         TSuiteResult tsr = this.getTSuiteResult(tsri)
         if (tsr != null) {
             return tsr.getTSuiteTimestampDirectory()
@@ -226,6 +195,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
+    String getCurrentExecutionProfile() {
+        return currentTExecutionProfile_.getName()
+    }
+
+    @Override
     String getCurrentTestSuiteTimestamp() {
         return currentTSuiteTimestamp_.format()
     }
@@ -233,7 +207,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     Path getTestCaseDirectory(String testCaseId) {
         Objects.requireNonNull(testCaseId)
-        return this.getTCaseResult(testCaseId).getTCaseDirectory()
+        TCaseResult tCaseResult = this.getTCaseResult(testCaseId)
+        if (tCaseResult != null) {
+            return tCaseResult.getTCaseDirectory()
+        } else
+            return null
     }
 
     // --------------------- create/add/get child nodes -----------------------
@@ -291,11 +269,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName) {
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
         for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
-            if (subject.getId().getTSuiteName().equals(tSuiteName)) {
+            if (subject.getId().getTSuiteName().equals(tSuiteName) &&
+                subject.getId().getTExecutionProfile().equals(tExecutionProfile)) {
                 list.add(subject.getId())
             }
         }
@@ -336,8 +317,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
         TSuiteResultId tsri = TSuiteResultId.newInstance(
-			new TSuiteName(this.getCurrentTestSuiteId()),
-			new TSuiteTimestamp(this.getCurrentTestSuiteTimestamp()))
+                new TSuiteName(this.getCurrentTestSuiteId()),
+                new TExecutionProfile(this.getCurrentExecutionProfile()),
+			    new TSuiteTimestamp(this.getCurrentTestSuiteTimestamp()))
         
 		TSuiteResult currentTsr = this.getTSuiteResult(tsri)
 		Path mmbPath = this.locateMaterialMetadataBundle(currentTsr)
@@ -380,7 +362,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     // ------------------ methods to resolve Material Paths  ------------------
 
-    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult, MaterialMetadata materialMetadata) {
+    private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult,
+                                                          MaterialMetadata materialMetadata) {
         Path bundleFile = this.locateMaterialMetadataBundle(tSuiteResult)
         MaterialMetadataBundle mmBundle = new MaterialMetadataBundle()
         if (Files.exists(bundleFile)) {
@@ -462,8 +445,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setUrl(url)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         //
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
@@ -548,8 +530,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setUrl(url)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         //
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         
@@ -648,8 +629,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(description, "description must not be null")
         if ( !this.isAlreadyMarked() ) {
             // in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
-            this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
-            this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
+            this.markAsCurrent(currentTSuiteName_,
+                    currentTExecutionProfile_,
+                    currentTSuiteTimestamp_)
+
+            this.ensureTSuiteResultPresent(currentTSuiteName_,
+                    currentTExecutionProfile_,
+                    currentTSuiteTimestamp_)
         }
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
@@ -684,8 +670,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                     description)
         metadata.setSubPath(subPath)
         metadata.setFileName(fileName)
-        metadata.setExecutionProfileName(this.executionProfileName_)
-        
+
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
@@ -722,43 +707,78 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         indexer.execute()
         return index
     }
-    
-    
+
+
     /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
-     *
-     * This method perform the following search under the &lt;projectDir&gt;/Materials directory
-     * in order to identify which Material object to be included.
-     *
-     * 1. selects all &lt;projectDir&gt;/Materials/&lt;Test Suite Name&gt;/&lt;yyyyMMdd_hhmmss&gt; directories 
-     *    with the name equals to the Test Suite Name specified as argument tSuiteName
-     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
-     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. please note that we do not check the profile name which was applied to each Test Suite run. also we do
-     *    not check the browser type used to each Test Suite run. 
-     * 5. Scan the 2 directories selected and create a List of Material objects. 
-     *    5.1 Two files which have the same path under the &lt;yyyyMMdd_hhmmss&gt; directory will be packaged as a pair to form a MaterialPair object.
-     *    5.2 The orphan file found in the ActualTSuiteResult will be silently ignored.
-     *    5.3 The orphan file found in the ExpectedTSuiteResult will also be silently ignored.
-     * 6. A List&lt;MaterialPair&gt; is created, fulfilled and returned as the result
-     *
-     * @return List<MaterialPair>
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Twins mode.
      */
     @Override
-    MaterialPairs createMaterialPairs(TSuiteName tSuiteName) {    
+    MaterialPairs createMaterialPairsForTwinsMode(TSuiteName tSuiteName) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        
-        
-        // before sorting, create copy of the list which is unmodifiable
-        List<TSuiteResult> tSuiteResults = new ArrayList<>(repoRoot_.getTSuiteResults(tSuiteName))
-        
-        // we expect 2 or more TSuiteResult objects with the tSuiteName
+
+        // before sorting, we create a copy of the list which is unmodifiable
+        List<TSuiteResult> tSuiteResults = new ArrayList<>(
+                repoRoot_.getTSuiteResults(tSuiteName))
+
+        // we expect 2 or more TSuiteResult objects with the given tSuiteName
         if (tSuiteResults.size() == 0) {
             logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 0")
             throw new IllegalStateException("No sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}.")
-        } else if (tSuiteResults.size()== 1) {
+        } else if (tSuiteResults.size() == 1) {
             logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 1")
-            throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}." 
+            throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}."
+                    + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
+                    + " Don\'t get surprised. Just execute the Chronos test suite again."
+                    + " Possibly Chronos mode will work fine next time.")
+        } else {
+            vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
+        }
+
+        // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
+        Collections.sort(tSuiteResults, Comparator.reverseOrder())
+
+        // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one"
+        TSuiteResult actualTSR   = tSuiteResults[0]
+        TSuiteResult expectedTSR = tSuiteResults[1]
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
+        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
+
+        // the result to be returned
+        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
+
+        // fill in entries into the MaterialPairs object
+        for (Material expectedMaterial : expectedTSR.getMaterialList()) {
+            mps.putExpectedMaterial(expectedMaterial)
+        }
+        for (Material actualMaterial : actualTSR.getMaterialList()) {
+            mps.putActualMaterial(actualMaterial)
+        }
+        return mps
+    }
+
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Chronos mode.
+     */
+    @Override
+    MaterialPairs createMaterialPairsForChronosMode(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+
+        // before sorting, we create a copy of the list which is unmodifiable
+        List<TSuiteResult> tSuiteResults = new ArrayList<>(
+                repoRoot_.getTSuiteResults(tSuiteName, tExecutionProfile))
+        
+        // we expect 2 or more TSuiteResult objects with the tSuiteName+tExecutionProfile
+        if (tSuiteResults.size() == 0) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\", TExecutionProfile \"${tExecutionProfile.getName()}\").size()=${tSuiteResults.size()} == 0")
+            throw new IllegalStateException("No sub directory found under ${tSuiteName.getValue()},${tExecutionProfile.getName()} in ${repoRoot_.getBaseDir().toString()}.")
+        } else if (tSuiteResults.size()== 1) {
+            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\", TExecutionProfile \"${tExecutionProfile.getName()}\").size()=${tSuiteResults.size()} == 1")
+            throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()},${tExecutionProfile.getName()} in ${repoRoot_.getBaseDir().toString()}."
                 + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
                 + " Don\'t get surprized. Just execute the chronos test suite again."
                 + " Possibly Chronos mode will work fine next time.")
@@ -815,9 +835,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     int clear(TSuiteResultId tSuiteResultId, boolean scan = true) throws IOException {
         Objects.requireNonNull(tSuiteResultId,"tSuiteResultId must not be null")
-        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
-        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
-        Path tstDir = this.getBaseDir().resolve(tSuiteName.getValue()).resolve(tSuiteTimestamp.format())
+        Path tstDir = this.getBaseDir()
+                .resolve(tSuiteResultId.getTSuiteName().getValue())
+                .resolve(tSuiteResultId.getTExecutionProfile().getNameInPathSafeChars())
+                .resolve(tSuiteResultId.getTSuiteTimestamp().format())
         int count = Helpers.deleteDirectory(tstDir)
         if (scan) {
             this.scan()
@@ -871,9 +892,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     // ----------------------------- getters ----------------------------------
 
     TSuiteResult getCurrentTSuiteResult() {
-		TSuiteResultId tsri = TSuiteResultId.newInstance(currentTSuiteName_, currentTSuiteTimestamp_)
-        TSuiteResult tsr = this.getTSuiteResult(tsri)
-        return tsr
+		TSuiteResultId tSuiteResultId =
+                TSuiteResultId.newInstance(currentTSuiteName_,
+                        currentTExecutionProfile_, currentTSuiteTimestamp_)
+        TSuiteResult tSuiteResult = this.getTSuiteResult(tSuiteResultId)
+        return tSuiteResult
     }
     
     @Override
@@ -886,9 +909,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
     
     @Override
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName) {
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName,
+                                                            TExecutionProfile tExecutionProfile) {
         Set<Path> set = new TreeSet<Path>()
-        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName)
+        List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
         for (TSuiteResultId id: idList) {
             TSuiteResult tSuiteResult = this.getTSuiteResult(id)
             List<Material> materialList = tSuiteResult.getMaterialList()
@@ -914,14 +938,16 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     /**
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @param tCaseName
-     * @return a TCaseResult object with tCaseName inside the tSuiteName + tSuiteTimestamp directory. Returns null if not found.@return 
+     * @return a TCaseResult object with tCaseName inside
+     * the tSuiteName + tSuiteTimestamp directory.
+     * Returns null if not found.@return
      */
     @Override
-    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName) {
-        return repoRoot_.getTCaseResult(tSuiteName, tSuiteTimestamp, tCaseName)
+    TCaseResult getTCaseResult(TSuiteName tSuiteName,
+                               TExecutionProfile tExecutionProfile,
+                               TSuiteTimestamp tSuiteTimestamp,
+                               TCaseName tCaseName) {
+        return repoRoot_.getTCaseResult(tSuiteName, tExecutionProfile, tSuiteTimestamp, tCaseName)
     }
 
     // ---------------------- overriding Object properties --------------------

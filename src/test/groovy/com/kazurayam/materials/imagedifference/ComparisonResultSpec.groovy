@@ -1,5 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -52,11 +54,15 @@ class ComparisonResultSpec extends Specification {
             Helpers.copyDirectory(fixtureDir.resolve('Reports'), reports)
         when:
             MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
-            mr.markAsCurrent(    'Test Suites/ImageDiff', '20181014_060501')
-            def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', '20181014_060501')
+            mr.markAsCurrent('Test Suites/ImageDiff',
+                    'default', '20181014_060501')
+            def tsr = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff',
+                    'default', '20181014_060501')
             List<MaterialPair> materialPairs =
             // we use Java 8 Stream API to filter entries
-            mr.createMaterialPairs(new TSuiteName('Test Suites/main/TS1')).getList().stream().filter { mp ->
+            mr.createMaterialPairsForChronosMode(new TSuiteName('Test Suites/main/TS1'),
+                                    new TExecutionProfile('CURA_ProductionEnv'))
+                    .getList().stream().filter { mp ->
                     mp.getLeft().getFileType() == FileType.PNG
                 }.collect(Collectors.toList())
             Material expected = materialPairs.get(0).getExpected()

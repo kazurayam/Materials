@@ -1,5 +1,7 @@
 package com.kazurayam.materials.stats
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -39,11 +41,11 @@ class StorageScanner {
 
     private ImageDeltaStats previousImageDeltaStats_
     
-    public StorageScanner(MaterialStorage materialStorage) {
+    StorageScanner(MaterialStorage materialStorage) {
         this(materialStorage, new Options.Builder().build())
     }
     
-    public StorageScanner(MaterialStorage materialStorage, Options options) {
+    StorageScanner(MaterialStorage materialStorage, Options options) {
         this.materialStorage_ = materialStorage
         // reflesh it.
         // this may heavy. i am not very sure if it is a good idea to call MaterialRepository.scan() here.
@@ -124,23 +126,27 @@ class StorageScanner {
      * @param materialStorage
      * @return a ImageDeltaStats object
      */
-    ImageDeltaStats scan(TSuiteName tSuiteName) {
+    ImageDeltaStats scan(TSuiteName capturingTSuiteName,
+                         TExecutionProfile capturingTExecutionProfile) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         
         ImageDeltaStatsImpl.Builder builder = 
-            new ImageDeltaStatsImpl.Builder().storageScannerOptions(options_)
+            new ImageDeltaStatsImpl.Builder()
+                    .capturingTSuiteName(capturingTSuiteName)
+                    .capturingTExecutionProfile(capturingTExecutionProfile)
+                    .storageScannerOptions(options_)
         //
-        if (materialStorage_.getTSuiteNameList().contains(tSuiteName)) {
-            StatsEntry se = this.makeStatsEntry(tSuiteName)
+        if (materialStorage_.getTSuiteNameList().contains(capturingTSuiteName)) {
+            StatsEntry se = this.makeStatsEntry(capturingTSuiteName, capturingTExecutionProfile)
             builder.addImageDeltaStatsEntry(se)
         } else {
-            logger_.warn("No ${tSuiteName} is found in ${materialStorage_}")
+            logger_.warn("No ${capturingTSuiteName} is found in ${materialStorage_}")
         }
         ImageDeltaStats ids = builder.build()
         
         stopWatch.stop()
-        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${capturingTSuiteName}"
         logger_.debug(msg)
         return ids
     }
@@ -158,22 +164,27 @@ class StorageScanner {
      * </PRE>
      * 
      * @param ms
-     * @param tSuiteName
+     * @param tSuiteNameCapture
      * @return a StatsEntry object
      */
-    StatsEntry makeStatsEntry(TSuiteName tSuiteName) {
+    StatsEntry makeStatsEntry(TSuiteName tSuiteNameCapture, TExecutionProfile tExecutionProfileCapture) {
+        Objects.requireNonNull(tSuiteNameCapture, "tSuiteNameCapture must not be null")
+        Objects.requireNonNull(tExecutionProfileCapture, "tExecutionProfileCapture must not be null")
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
-        StatsEntry statsEntry = new StatsEntry(tSuiteName)
-        Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(tSuiteName)
+        StatsEntry statsEntry = new StatsEntry(tSuiteNameCapture, tExecutionProfileCapture)
+
+        Set<Path> set = materialStorage_.getSetOfMaterialPathRelativeToTSuiteName(
+                tSuiteNameCapture, tExecutionProfileCapture)
 
         for (Path path : set) {
-            MaterialStats materialStats = this.makeMaterialStats(tSuiteName, path)
+            MaterialStats materialStats =
+                    this.makeMaterialStats(tSuiteNameCapture, tExecutionProfileCapture, path)
             statsEntry.addMaterialStats(materialStats)
         }
 
         stopWatch.stop()
-        String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteName}"
+        String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteNameCapture}"
         logger_.debug(msg)
         if (vtLogger_ != null) {
             vtLogger_.info(msg)
@@ -228,6 +239,7 @@ class StorageScanner {
      * @return
      */
     MaterialStats makeMaterialStats(TSuiteName tSuiteName,
+                                TExecutionProfile tExecutionProfile,
                                 Path pathRelativeToTSuiteTimestampDir) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
@@ -240,6 +252,7 @@ class StorageScanner {
         // This list is sorted by descending order of TSuiteTimestamp
         List<Material> materials = this.getMaterialsOfARelativePathInATSuiteName(
                                         tSuiteName,
+                                        tExecutionProfile,
                                         pathRelativeToTSuiteTimestampDir)
         
         // build the MaterialStats object while calculating the diff ratio 
@@ -254,17 +267,19 @@ class StorageScanner {
                 ImageDelta imageDelta
                 //println "#makeMaterialStats previousImageDeltaStats_ is not null: ${previousImageDeltaStats_ != null}"
                 if (previousImageDeltaStats_ != null) {
-                    boolean condition = previousImageDeltaStats_.hasImageDelta(tSuiteName,
-                                                    pathRelativeToTSuiteTimestampDir,
-                                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                    boolean condition = previousImageDeltaStats_
+                            .hasImageDelta(
+                                    pathRelativeToTSuiteTimestampDir,
+                                    materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                    materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                     
                     //println "#makeMaterialStats previousImageDeltaStats_.hasImageDelta() returned ${condition}"
                     if (condition) {
-                        imageDelta = previousImageDeltaStats_.getImageDelta(tSuiteName, 
-                                                pathRelativeToTSuiteTimestampDir,
-                                                materials.get(i).getParent().getParent().getTSuiteTimestamp(),
-                                                materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
+                        imageDelta = previousImageDeltaStats_
+                                .getImageDelta(
+                                        pathRelativeToTSuiteTimestampDir,
+                                        materials.get(i).getParent().getParent().getTSuiteTimestamp(),
+                                        materials.get(i + 1).getParent().getParent().getTSuiteTimestamp())
                         // turn this imageDelta marked isCached
                         imageDelta.setCached(true)
                     
@@ -313,12 +328,14 @@ class StorageScanner {
      */
     List<Material> getMaterialsOfARelativePathInATSuiteName(
                                 TSuiteName tSuiteName,
+                                TExecutionProfile tExecutionProfile,
                                 Path pathRelativeToTSuiteTimestamp) {
         StopWatch stopWatch = new StopWatch()
         stopWatch.start()
         List<Material> materialList = new ArrayList<Material>()
         // construct a list of Materials
-        List<TSuiteResultId> idsOfTSuiteName = materialStorage_.getTSuiteResultIdList(tSuiteName)
+        List<TSuiteResultId> idsOfTSuiteName =
+                materialStorage_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
         for (TSuiteResultId tSuiteResultId : idsOfTSuiteName) {
             TSuiteResult tSuiteResult = materialStorage_.getTSuiteResult(tSuiteResultId)
             for (Material mate: tSuiteResult.getMaterialList()) {
@@ -423,7 +440,9 @@ class StorageScanner {
             TCaseResult tcr = material.getParent()
             TSuiteResult tsr = tcr.getParent()
             TSuiteTimestamp tst = tsr.getTSuiteTimestamp()
-            logger_.debug("#isInRangeOfTSuiteTimestamp onlySinceInclusive=${onlySinceInclusive}, tst=${tst.toString()}, onlySince=${onlySince.toString()}")
+
+            // logger_.debug("#isInRangeOfTSuiteTimestamp onlySinceInclusive=${onlySinceInclusive}, tst=${tst.toString()}, onlySince=${onlySince.toString()}")
+
             if (onlySinceInclusive) {
                 return tst >= onlySince    
             } else {
@@ -436,12 +455,19 @@ class StorageScanner {
     }
     
     /**
-     *
+     * Write the imageDeltaStats (image-delta-stats.json) file
+     * into the Storage directory, into the subdirectory of Exam
+     * at the path specified by
+     * tSuiteName + tExecutionProfile + tSuiteTimestamp + tCaseName.
      */
     Path persist(ImageDeltaStats imageDeltaStats,
-            TSuiteName tSuiteNameExam, TSuiteTimestamp tSuiteTimestampExam, TCaseName tCaseNameExam) {
+                 TSuiteName tSuiteNameExam,
+                 TExecutionProfile tExecutionProfile,
+                 TSuiteTimestamp tSuiteTimestampExam,
+                 TCaseName tCaseNameExam) {
         Path inStorage = materialStorage_.getBaseDir().
                                 resolve(tSuiteNameExam.getValue()).
+                                resolve(tExecutionProfile.getNameInPathSafeChars()).
                                 resolve(tSuiteTimestampExam.format()).
                                 resolve(tCaseNameExam.getValue()).
                                 resolve(ImageDeltaStats.IMAGE_DELTA_STATS_FILE_NAME)
@@ -457,8 +483,13 @@ class StorageScanner {
      *
      * @return
      */
-    Path findLatestImageDeltaStats(TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
-        return StorageScanner.findLatestImageDeltaStats(materialStorage_, tSuiteNameExam, tCaseNameExam)
+    Path findLatestImageDeltaStats(TSuiteName tSuiteNameExam,
+                                   TExecutionProfile tExecutionProfile,
+                                   TCaseName tCaseNameExam) {
+        return StorageScanner.findLatestImageDeltaStats(materialStorage_,
+                tSuiteNameExam,
+                tExecutionProfile,
+                tCaseNameExam)
     }
     
     /**
@@ -468,10 +499,15 @@ class StorageScanner {
      * @param tCaseNameExam
      * @return
      */
-    static Path findLatestImageDeltaStats(MaterialStorage materialStorage, TSuiteName tSuiteNameExam, TCaseName tCaseNameExam) {
+    static Path findLatestImageDeltaStats(MaterialStorage materialStorage,
+                                          TSuiteName tSuiteNameExam,
+                                          TExecutionProfile tExecutionProfile,
+                                          TCaseName tCaseNameExam) {
         Objects.requireNonNull(tSuiteNameExam, "tSuiteNameExam must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(tCaseNameExam, "tCaseNameExam must not be null")
-        List<TSuiteResultId> tSuiteResultIdList = materialStorage.getTSuiteResultIdList(tSuiteNameExam)
+        List<TSuiteResultId> tSuiteResultIdList = materialStorage.getTSuiteResultIdList(
+                tSuiteNameExam, tExecutionProfile)
         List<TSuiteResult> tSuiteResultList = materialStorage.getTSuiteResultList(tSuiteResultIdList)
         Collections.sort(tSuiteResultList, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
         // logger_.debug("#findLatestImageDeltaStats tSuiteNameExam=${tSuiteNameExam}")

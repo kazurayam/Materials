@@ -1,5 +1,6 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
@@ -74,9 +75,11 @@ class RepositoryVisitorGeneratingBootstrapTreeviewDataSpec extends Specification
         ms.restore(mr, [
                 TSuiteResultId.newInstance(
                         new TSuiteName('Test Suites/47news/chronos_capture'),
+                        new TExecutionProfile('default'),
                         new TSuiteTimestamp('20190404_111956')),
                 TSuiteResultId.newInstance(
                         new TSuiteName('Test Suites/47news/chronos_capture'),
+                        new TExecutionProfile('default'),
                         new TSuiteTimestamp('20190404_112053')),
         ])
         ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)

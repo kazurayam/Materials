@@ -28,7 +28,7 @@ class MaterialStats {
     // following default values may be overridden by StorageScanner.Options object
     static final double DEFAULT_FILTER_DATA_LESS_THAN = 1.00
     static final double DEFAULT_PROBABILITY = 0.95
-    static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 10
+    static final int DEFAULT_MAXIMUM_NUMBER_OF_IMAGEDELTAS = 5
     static final double SUGGESTED_SHIFT_CRITERIA_PERCENTAGE_BY = 0.0
     
     private Path path

@@ -61,23 +61,51 @@ interface MaterialRepository {
      * @throws IOException
      */
     int clear(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
-    
+
 
     /**
-     * Scans the Materials directory to look up pairs of Material objects to compare.
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Twins mode.
      *
      * This method perform the following search under the Materials directory
      * in order to identify which Material object to be included.
      *
-     * 1. selects all ./Materials/<tSuiteName>/yyyyMMdd_hhmmss directories with specified tSuiteName
-     * 2. among them, select the directory with the 1st latest timestamp. This one is regarded as "Actual one".
-     * 3. among them, select the directory with the 2nd latest timestamp. This one is regarded as "Expected one".
-     * 4. Scan the 2 directories chosen. Create a List of Material objects. 2 files which have the same path
+     * 1. selects all ./Materials/<tSuiteName>/<ExecutionProfile>/yyyyMMdd_hhmmss directories
+     *    with specified tSuiteName. Twins-mode disregards the Execution Profile.
+     * 2. among them, select the directory with the 1st latest timestamp.
+     *    This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp.
+     *    This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects.
+     *    Two files which have the same path
      *    under the yyyyMMdd_hhmmss directory will be packaged as a pair to form a MaterialPair object.
      *
      * @return List<MaterialPair>
      */
-    MaterialPairs createMaterialPairs(TSuiteName tSuiteName)
+    MaterialPairs createMaterialPairsForTwinsMode(TSuiteName capturingTSuiteName)
+
+    /**
+     * Scans the Materials directory to look up pairs of Material objects to compare
+     * for the Chronos mode
+     *
+     * This method perform the following search under the Materials directory
+     * in order to identify which Material object to be included.
+     *
+     * 1. selects all ./Materials/<tSuiteName>/<ExecutionProfile>/yyyyMMdd_hhmmss directories
+     *    with specified tSuiteName and Execution Profile. For the Chronos mode,
+     *    the applied Execution Profile matters.
+     * 2. among them, select the directory with the 1st latest timestamp.
+     *    This one is regarded as "Actual one".
+     * 3. among them, select the directory with the 2nd latest timestamp.
+     *    This one is regarded as "Expected one".
+     * 4. Scan the 2 directories chosen. Create a List of Material objects.
+     *    Two files which have the same path under the yyyyMMdd_hhmmss directory
+     *    will be packaged as a pair to form a MaterialPair object.
+     *
+     * @return List<MaterialPair>
+     */
+    MaterialPairs createMaterialPairsForChronosMode(TSuiteName capturingTSuiteName,
+                                      TExecutionProfile capturingTExecutionProfile)
 
     /**
      *
@@ -85,14 +113,12 @@ interface MaterialRepository {
      */
     void deleteBaseDirContents() throws IOException
 
-    
-    void setExecutionProfileName(String executionProfileName)
-    String getExecutionProfileName()
-    
     Path getBaseDir()
     
     Path getCurrentTestSuiteDirectory()
+
     String getCurrentTestSuiteId()
+    String getCurrentExecutionProfile()
     String getCurrentTestSuiteTimestamp()
     
     long getSize()
@@ -100,29 +126,39 @@ interface MaterialRepository {
 
 	RepositoryRoot getRepositoryRoot()
     
-    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName)
+    Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName,
+                                                            TExecutionProfile tExecutionProfile)
+
     Path getTestCaseDirectory(String testCaseId)
     
     /**
      * 
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @param tCaseName
-     * @return a TCaseResult object with tCaseName inside the tSuiteName + tSuiteTimestamp directory. Returns null if not found.
+     * @return a TCaseResult object with tCaseName inside
+     * the tSuiteName + tExecutionProfile + tSuiteTimestamp directory.
+     * Returns null if not found.
      */
-    TCaseResult getTCaseResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp, TCaseName tCaseName)
+    TCaseResult getTCaseResult(TSuiteName tSuiteName,
+                               TExecutionProfile tExecutionProfile,
+                               TSuiteTimestamp tSuiteTimestamp,
+                               TCaseName tCaseName)
     
     List<TSuiteName> getTSuiteNameList()
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName)
+
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
     List<TSuiteResultId> getTSuiteResultIdList()
+
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
     List<TSuiteResult> getTSuiteResultList()
     
-    void markAsCurrent(String testSuiteId)
-    void markAsCurrent(TSuiteName tSuiteName)
-    void markAsCurrent(String testSuiteId, String testSuiteTimestamp)
-    void markAsCurrent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    void markAsCurrent(String testSuiteId,
+                       String executionProfile,
+                       String testSuiteTimestamp)
+
+    void markAsCurrent(TSuiteName tSuiteName,
+                       TExecutionProfile tExecutionProfile,
+                       TSuiteTimestamp tSuiteTimestamp)
+
     void markAsCurrent(TSuiteResultId tSuiteResultId)
     
     boolean isAlreadyMarked()
@@ -141,10 +177,14 @@ interface MaterialRepository {
     */
     Path makeIndex()
 
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName)
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName)
-    TSuiteResult ensureTSuiteResultPresent(String testSuiteName, String testSuiteTimestamp)
-    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp)
+    TSuiteResult ensureTSuiteResultPresent(String testSuiteName,
+                                           String executionProfile,
+                                           String testSuiteTimestamp)
+
+    TSuiteResult ensureTSuiteResultPresent(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile,
+                                           TSuiteTimestamp tSuiteTimestamp)
+
     TSuiteResult ensureTSuiteResultPresent(TSuiteResultId tSuiteResultId)
     
     

@@ -1,5 +1,7 @@
 package com.kazurayam.materials.repository
 
+import com.kazurayam.materials.TExecutionProfile
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -60,7 +62,7 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
         logger_.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
-        logger_.debug(prettyPrint(tSuiteResults))
+        //logger_.debug(prettyPrint(tSuiteResults))
         then:
         tSuiteResults != null
 
@@ -79,7 +81,9 @@ class RepositoryFileScannerSpec extends Specification {
         //
         when:
         TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS1"), TSuiteTimestamp.newInstance('20180530_130419'))
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
         then:
         tSuiteResult != null
         tSuiteResult.getRepositoryRoot() == repoRoot
@@ -109,7 +113,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         Material mate0 = materials[0]
         String p0 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
-            '/testScan/Materials/main.TS1/20180530_130419' +
+            '/testScan/Materials/main.TS1/CURA_ProductionEnv/20180530_130419' +
             '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F(1).png'
         then:
         mate0.getParent() == tCaseResult
@@ -120,7 +124,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         Material mate1 = materials[1]
         String p1 = 'build/tmp/testOutput/' + Helpers.getClassShortName(this.class) +
-                '/testScan/Materials/main.TS1/20180530_130419' +
+                '/testScan/Materials/main.TS1/CURA_ProductionEnv/20180530_130419' +
                 '/main.TC1/' + 'http%3A%2F%2Fdemoaut.katalon.com%2F.png'
         then:
         mate1.getParent() == tCaseResult
@@ -143,10 +147,13 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
+        //logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
+
         TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         LocalDateTime lastModifiedOfTCaseResult = tcr.getLastModified()
         LocalDateTime lastModifiedOfMaterials = LocalDateTime.MIN
@@ -174,10 +181,12 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
+        //logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
         LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
         List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResultList()
@@ -235,10 +244,12 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
+        //logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult tcr = ts1_20180530_130604.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         long length = tcr.getSize()
         then:
@@ -253,10 +264,12 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
+        //logger_.debug("#testScan_lengthOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
         when:
         TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         long length = ts1_20180530_130604.getSize()
         then:
         length == 9_313_714
@@ -264,8 +277,8 @@ class RepositoryFileScannerSpec extends Specification {
     
     /**
      * Test if the following files are recognized as Materials:
-     * "main.TS1/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
-     * "main.TS1/20180718_142832/main.TC4/foo/bar/smilechart.xls"
+     * "main.TS1/default/20180718_142832/main.TC4/foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png"
+     * "main.TS1/default/20180718_142832/main.TC4/foo/bar/smilechart.xls"
      *
      * These files resides under a TCaseResult directory with a subpath foo or foo/bar
      * This test is designed to confirm the subpath is appropriately recognized
@@ -282,13 +295,15 @@ class RepositoryFileScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         when:
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName('Test Suites/main/TS1'), TSuiteTimestamp.newInstance('20180718_142832'))
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180718_142832'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC4'))
         then:
         tcr != null
-        when:
-        logger_.debug("testScan_MaterialsUnderSubpath tcr.toJsonText()=${JsonOutput.prettyPrint(tcr.toJsonText())}")
-        then:
+        //when:
+        //logger_.debug("testScan_MaterialsUnderSubpath tcr.toJsonText()=${JsonOutput.prettyPrint(tcr.toJsonText())}")
+        //then:
         tcr.getMaterialList().size() == 2
         tcr.getMaterial(Paths.get('foo/bar/smilechart.xls')) != null
         tcr.getMaterial(Paths.get('foo/http%3A%2F%2Fdemoaut.katalon.com%2F.png')) != null
@@ -303,7 +318,9 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS1"), TSuiteTimestamp.newInstance('20180530_130604'))
+                new TSuiteName("Test Suites/main/TS1"),
+                new TExecutionProfile('CURA_ProductionEnv'),
+                TSuiteTimestamp.newInstance('20180530_130604'))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         when:
         List<Material> materials = tcr.getMaterialList()
@@ -323,7 +340,9 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS3"), TSuiteTimestamp.newInstance("20180627_140853"))
+                new TSuiteName("Test Suites/main/TS3"),
+                new TExecutionProfile('default'),
+                TSuiteTimestamp.newInstance("20180627_140853"))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         // .xlsx
         when:
@@ -355,7 +374,9 @@ class RepositoryFileScannerSpec extends Specification {
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         TSuiteResult tsr = repoRoot.getTSuiteResult(
-            new TSuiteName("Test Suites/main/TS3"), TSuiteTimestamp.newInstance("20180627_140853"))
+                new TSuiteName("Test Suites/main/TS3"),
+                new TExecutionProfile('default'),
+                TSuiteTimestamp.newInstance("20180627_140853"))
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName("Test Cases/main/TC3"))
         when:
         Material mate = tcr.getMaterial(

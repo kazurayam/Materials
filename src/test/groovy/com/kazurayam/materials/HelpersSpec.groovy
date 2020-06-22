@@ -120,12 +120,12 @@ class HelpersSpec extends Specification {
         then:
             count > 0
             Files.exists(targetDir.resolve('main.TS1'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130419'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130604'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1'))
-            Files.exists(targetDir.resolve('main.TS1/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130419'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130419/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130604'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130604/main.TC1'))
+            Files.exists(targetDir.resolve('main.TS1/CURA_ProductionEnv/20180530_130604/main.TC1/http%3A%2F%2Fdemoaut.katalon.com%2F.png'))
     }
     
     /**
