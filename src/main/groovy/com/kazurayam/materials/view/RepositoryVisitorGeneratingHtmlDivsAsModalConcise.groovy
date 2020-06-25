@@ -74,11 +74,11 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                     // Expected + Actual
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
-                            mkbuilder_.p "${this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
-                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: ''}" +
+                            mkbuilder_.p "${this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: 'profile?'}" +
+                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: 'timestamp?'}" +
                                         " | " +
-                                        " ${this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: ''}" +
-                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: ''}"
+                                        " ${this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: 'profile?'}" +
+                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: 'timestamp?'}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
                             mkbuilder_.div(['class':'row']) {

@@ -306,6 +306,10 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     
     protected String findTestSuiteTimestamp(RepositoryRoot repoRoot, MaterialCore materialCore) {
         Material material = repoRoot.getMaterial(materialCore)
+        if (material == null) {
+            logger_.warn("repoRoot.getMaterial(materialCore) returned null where materialCore=${materialCore.toString()}")
+            return null
+        }
         TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
         return tsr.getTSuiteTimestamp().format()
@@ -321,7 +325,8 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         Objects.requireNonNull(materialCore, "materialCore must not be null")
         Material material = repoRoot.getMaterial(materialCore)
         if (material == null) {
-            throw new IllegalStateException("repoRoot.getMaterial(materialCore) returned null where reporoot=${repoRoot}, materialCore=${materialCore}")
+            logger_.warn("repoRoot.getMaterial(materialCore) returned null for materialCore=${materialCore.toString()}")
+            return null
         }
 		TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
