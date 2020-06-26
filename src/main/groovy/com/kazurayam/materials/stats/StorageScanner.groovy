@@ -544,8 +544,11 @@ class StorageScanner {
         }
         BufferedImage read(Material material) {
             if (!buffer.containsKey(material)) {
-                BufferedImage bi = ImageIO.read(material.getPath().toFile())
-                buffer.put(material, bi)
+                BufferedImage bufferedImage
+                new FileInputStream(material.getPath().toFile()).withCloseable { res ->
+                    bufferedImage = ImageIO.read(res)
+                }
+                buffer.put(material, bufferedImage)
             }
             return buffer.get(material)
         }
