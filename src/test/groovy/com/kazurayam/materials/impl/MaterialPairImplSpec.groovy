@@ -1,6 +1,5 @@
 package com.kazurayam.materials.impl
 
-import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.MaterialRepositoryFactory
@@ -8,12 +7,9 @@ import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
-import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.impl.MaterialImpl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.awt.image.BufferedImage
@@ -22,6 +18,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class MaterialPairImplSpec extends Specification {
+
     // fields
     static Logger logger_ = LoggerFactory.getLogger(MaterialPairImplSpec.class)
 
