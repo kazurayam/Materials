@@ -305,9 +305,8 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         // free the memory occupied by the internal BufferedImage in the ImageDiff object
         diff.flush()
 
-        if (vtLogger_ != null) {
-            String eval = (similarity) ? 'Similar' : 'Different'
-            vtLogger_.info("${eval} ${diffMaterial.getPathRelativeToRepositoryRoot().toString()} ")
+        if (vtLogger_ != null && !similarity) {
+            vtLogger_.info("Different ${diffMaterial.getPathRelativeToRepositoryRoot().toString()} ")
         }
 
         return evalResult
