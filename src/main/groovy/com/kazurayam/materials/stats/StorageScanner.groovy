@@ -419,9 +419,9 @@ class StorageScanner {
         String msg = "#makeImageDelta took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for " + 
             "(${a.getPathRelativeToRepositoryRoot().toString()}, ${b.getPathRelativeToRepositoryRoot()})"
         //logger_.debug(msg)
-        if (vtLogger_ != null) {
-            vtLogger_.info(msg)
-        }
+        //if (vtLogger_ != null) {
+        //    vtLogger_.info(msg)
+        //}
         return imageDelta
     }
     
