@@ -90,12 +90,21 @@ final class MaterialPairImpl implements MaterialPair {
     
     @Override
     BufferedImage getExpectedBufferedImage() {
-        return ImageIO.read(this.getExpected().getPath().toFile())
+        BufferedImage bufferedImage
+        new FileInputStream(this.getExpected().getPath().toFile()).withCloseable { res ->
+            bufferedImage = ImageIO.read(res)
+        }
+        return bufferedImage
     }
 
     @Override
     BufferedImage getActualBufferedImage() {
-        return ImageIO.read(this.getActual().getPath().toFile())
+        //return ImageIO.read(this.getActual().getPath().toFile())
+        BufferedImage bufferedImage
+        new FileInputStream(this.getActual().getPath().toFile()).withCloseable { res ->
+            bufferedImage = ImageIO.read(res)
+        }
+        return bufferedImage
     }
     // ---------------- overriding Object properties --------------------------
     @Override

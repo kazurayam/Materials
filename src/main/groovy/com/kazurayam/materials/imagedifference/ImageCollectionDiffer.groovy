@@ -239,22 +239,31 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
         
         BufferedImage expectedBI
         if (expectedMaterial.fileExists()) {
-            expectedBI = ImageIO.read(expectedMaterial.getPath().toFile())
+            new FileInputStream(expectedMaterial.getPath().toFile()).withCloseable { res ->
+                expectedBI = ImageIO.read(res)
+            }
         } else {
             // generate a marker image which shows "File not found" and save it
             expectedBI = makeMarkerImage(expectedMaterial.getPath())
             Files.createDirectories(expectedMaterial.getPath().getParent())
-            ImageIO.write(expectedBI, "PNG", expectedMaterial.getPath().toFile())
+            new FileOutputStream(expectedMaterial.getPath().toFile()).withCloseable { res ->
+                ImageIO.write(expectedBI, "PNG", res)
+            }
         }
         
         BufferedImage actualBI
         if (actualMaterial.fileExists()) {
-            actualBI = ImageIO.read(actualMaterial.getPath().toFile())
+            new FileInputStream(actualMaterial.getPath().toFile()).withCloseable { res ->
+                actualBI = ImageIO.read(res)
+            }
         } else {
             // generate a marker image which shows "File not found" and save it
             actualBI = makeMarkerImage(actualMaterial.getPath())
             Files.createDirectories(actualMaterial.getPath().getParent())
-            ImageIO.write(actualBI, "PNG", actualMaterial.getPath().toFile())
+            //ImageIO.write(actualBI, "PNG", actualMaterial.getPath().toFile())
+            new FileOutputStream(actualMaterial.getPath().toFile()).withCloseable { res ->
+                ImageIO.write(actualBI, "PNG", res)
+            }
         }
         
         // create ImageDifference of the 2 given images
