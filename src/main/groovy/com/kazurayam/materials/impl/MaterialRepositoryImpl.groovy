@@ -501,9 +501,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (url.getPath() == null || url.getPath() == '') {
             return resolveScreenshotPath(tCaseName, subPath, url)
         }
-        
-        String fileName = resolveFileNameByURLPathComponents(url, startingDepth, defaultName)
-        
+
         TSuiteResult tSuiteResult = getCurrentTSuiteResult()
         if (tSuiteResult == null) {
             throw new IllegalStateException("getCurrentTSuiteResult() returned null")
@@ -514,8 +512,24 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             tSuiteResult.addTCaseResult(tCaseResult)
         }
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
-        
-        Material material = new MaterialImpl(tCaseResult, tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
+
+        String fileName = resolveFileNameByURLPathComponents(url, startingDepth, defaultName)
+        Material material = new MaterialImpl(tCaseResult,
+                tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
+
+        // see https://github.com/kazurayam/Materials/issues/28
+        // We will check the absolute path length of the material file.
+        // Ff the length exceed 255, Windows path length limit, then shorten the file name
+        // by filtering '%26' (& URL encoded) and '%3D' (= URL encoded) to '' and
+        // recreate the material
+        if (material.getPath().toAbsolutePath().toString().length() > 255) {
+            fileName =
+                    fileName.replace('%26', '')
+                            .replace('%3D', '')
+            material = new MaterialImpl(tCaseResult,
+                    tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
+        }
+
 
         //
         Files.createDirectories(material.getPath().getParent())

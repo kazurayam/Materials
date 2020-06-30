@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.77.1'
+version  = '0.77.2'
 
 
 sourceCompatibility = '1.8'
@@ -107,9 +107,9 @@ test {
     include '**/materials/*Spec.class'
     include '**/materials/**/*Spec.class'
     
-    //exclude '**/ComparisonResultBundleSpec.class'   // takes 145 sec
-    //exclude '**/ImageCollectionDifferSpec.class'    // takes 110 sec
-    //exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
+    exclude '**/ComparisonResultBundleSpec.class'   // takes 145 sec
+    exclude '**/ImageCollectionDifferSpec.class'    // takes 110 sec
+    exclude '**/stats/*Spec.class' // these specs take too long; include them only when necessary
     finalizedBy jacocoTestReport
     outputs.upToDateWhen {false}
 }
@@ -123,14 +123,14 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ComparisonResultBundleSpec.class"
     //include "**/imagedifference/ComparisonResultSpec.class"
     //include "**/imagedifference/imagedifference/EspionageSpec.class"
-    include "**/imagedifference/ImageCollectionDifferSpec.class"
+    //include "**/imagedifference/ImageCollectionDifferSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
-    include "**/impl/MaterialPairImpl.class"
-    //include "**/impl/MaterialRepositoryImplSpec.class"
+    //include "**/impl/MaterialPairImpl.class"
+    include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
@@ -159,7 +159,7 @@ task pinpoint(type: Test) {
     //include "**/stats/ImageDeltaStatsSpec.class"
     //include "**/stats/MaterialStatsSpec.class"
     //include "**/stats/StatsEntrySpec.class"
-    include "**/stats/StorageScannerSpec.class"
+    //include "**/stats/StorageScannerSpec.class"
     //include "**/TCaseNameSpec.class"
     //include "**/TCaseResultSpec.class"
     //include "**/TExecutionProfileSpec.class"

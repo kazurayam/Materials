@@ -11,7 +11,6 @@ import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
-import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import org.slf4j.Logger
