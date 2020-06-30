@@ -167,9 +167,30 @@ class MaterialRepositoryImplSpec extends Specification {
         then:
             Files.exists(metadataBundle)
     }
-    
 
-	/**
+    def testResolveScreenshotPathByURLPathComponents_longQuery() {
+        setup:
+        Path casedir = workdir_.resolve('testResolveScreenshotPathByURLPathComponents_longQuery')
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
+        mri.markAsCurrent('Test Suites/main/TS1',
+                'CURA_ProductionEnv', '20180530_130604')
+        TSuiteResult tsr = mri.ensureTSuiteResultPresent('Test Suites/main/TS1',
+                'CURA_ProductionEnv','20180530_130604')
+        when:
+        Path p = mri.resolveScreenshotPathByURLPathComponents('TC1',
+                new URL('https://my.home.net/gn/issueList.html' +
+                        "?KEY00=VAL00&KEY01=VAL01&KEY02=VAL02&KEY03=VAL03&KEY04=VAL04" +
+                        "&KEY05=VAL05"))
+        then:
+        p.toString().length() < 255
+
+    }
+
+
+
+    /**
 MaterialRepositoryImpl DEBUG #resolveMaterialPath count=1
 MaterialImpl DEBUG #getPath parentTCR_.getTCaseDirectory()=build\tmp\testOutput\MaterialRepositoryImplSpec\testResolveMaterialPath\Materials\TS1\20180530_130604\TC1
 MaterialImpl DEBUG #getPath subpath_=..\..\..\..\..\..\..\..\..\
@@ -358,6 +379,26 @@ MaterialImpl DEBUG #getPath p=http%3A%2F%2Fdemoaut.katalon.com%2F.png
         str.contains('{"MaterialRepository":{')
         str.contains(Helpers.escapeAsJsonText(casedir.toString()))
         str.contains('}}')
+    }
+
+    def test_resolveFileNameByURLPathComponents_simple() {
+        setup:
+        Path casedir = workdir_.resolve('test_resolveFileNameByURLPathComponents_simple')
+        Helpers.copyDirectory(fixture_, casedir)
+        Path materialsDir = casedir.resolve('Materials')
+        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
+        mri.markAsCurrent('Test Suites/TS1',
+                'CURA_ProductionEnv', '20180810_140105')
+        def tsr = mri.ensureTSuiteResultPresent('Test Suites/TS1',
+                'CURA_ProductionEnv', '20180910_140105')
+        when:
+        URL url = new URL("http://demoaut.katalon.com/")
+        int startingDepth = 0
+        String defaultName = "top"
+        String result = mri.resolveFileNameByURLPathComponents(
+                url, startingDepth, defaultName)
+        then:
+        assert "top.png" == result
     }
 
 }
