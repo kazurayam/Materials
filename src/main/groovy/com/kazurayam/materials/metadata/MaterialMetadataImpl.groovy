@@ -85,10 +85,6 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
         if (jsonObject.MaterialMetadata['FileName']) {
             metadata.setFileName(jsonObject.MaterialMetadata['FileName'])
         }
-        if (jsonObject.MaterialMetadata['ExecutionProfile']) {
-            metadata.setExecutionProfileName(jsonObject.MaterialMetadata['ExecutionProfile'])
-        }
-        
         //
         return metadata
     }
@@ -148,17 +144,7 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
     String getFileName() {
         return this.fileName_
     }
-    
-    @Override
-    void setTExecutionProfile(TExecutionProfile tExecutionProfile) {
-        this.tExecutionProfile_ = tExecutionProfile
-    }
-    
-    @Override
-    TExecutionProfile getTExecutionProfile() {
-        return this.tExecutionProfile_
-    }
-    
+
     @Override
     boolean equals(Object obj) {
         if (! obj instanceof MaterialMetadata) {
@@ -209,11 +195,7 @@ class MaterialMetadataImpl implements MaterialMetadata, Comparable<Object> {
             sb.append(Helpers.escapeAsJsonText(this.getFileName()))
             sb.append('\"')
         }
-        if (this.getTExecutionProfile() != null) {
-            sb.append(',\"ExecutionProfile\":\"')
-            sb.append(Helpers.escapeAsJsonText(this.getTExecutionProfile().getName()))
-            sb.append('\"')
-        }
+
         sb.append('}')
         sb.append('}')
         

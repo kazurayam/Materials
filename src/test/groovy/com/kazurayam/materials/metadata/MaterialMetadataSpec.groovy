@@ -3,10 +3,6 @@ package com.kazurayam.materials.metadata
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TExecutionProfile
-import com.kazurayam.materials.metadata.InvokedMethodName
-import com.kazurayam.materials.metadata.MaterialMetadata
-import com.kazurayam.materials.metadata.MaterialMetadataImpl
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.slf4j.Logger
@@ -146,7 +142,6 @@ class MaterialMetadataSpec extends Specification {
         metadata.setSubPath('')
         URL url = new URL('https://www.47news.jp/')
         metadata.setUrl(url)
-        metadata.setTExecutionProfile(new TExecutionProfile('develop'))
         //
         Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         OutputStream os = new FileOutputStream(serialized.toFile())
@@ -162,7 +157,7 @@ class MaterialMetadataSpec extends Specification {
         json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
         json.MaterialMetadata.SubPath == ""
         json.MaterialMetadata.URL == "https://www.47news.jp/"
-        json.MaterialMetadata.ExecutionProfile == 'develop'
+
     }
 
     def testSerializeAndDeserializeWithSubPath() {
@@ -208,7 +203,7 @@ class MaterialMetadataSpec extends Specification {
                     description)
         metadata.setSubPath('dir1')   // Bomb!
         metadata.setUrl(new URL('https://www.47news.jp/'))
-        metadata.setTExecutionProfile(new TExecutionProfile('develop'))
+        //metadata.setTExecutionProfile(new TExecutionProfile('develop'))
         //
         Path serialized = tSuiteResultPath.resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
         Files.createDirectories(serialized.getParent())
@@ -225,7 +220,7 @@ class MaterialMetadataSpec extends Specification {
         json.MaterialMetadata.InvokedMethodName == "resolveScreenshotPathByUrlPathComponents"
         json.MaterialMetadata.SubPath == "dir1"
         json.MaterialMetadata.URL == "https://www.47news.jp/"
-        json.MaterialMetadata.ExecutionProfile == 'develop'
+        //json.MaterialMetadata.ExecutionProfile == 'develop'
 	}
     
     @Ignore
