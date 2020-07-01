@@ -44,7 +44,5 @@ interface MaterialMetadata extends Comparable {
     void setFileName(String fileName)
     String getFileName()
     
-    void setTExecutionProfile(TExecutionProfile tExecutionProfile)
-    TExecutionProfile getTExecutionProfile()
 
 }
