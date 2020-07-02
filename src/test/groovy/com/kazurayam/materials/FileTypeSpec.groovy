@@ -57,6 +57,11 @@ class FileTypeSpec extends Specification {
         FileType.GIF.getExtension() == 'gif'
     }
 
+    def testHTML() {
+        expect:
+        FileType.HTML.getExtension() == 'html'
+    }
+
     def testJPEG() {
         expect:
         FileType.JPEG.getExtension() == 'jpeg'

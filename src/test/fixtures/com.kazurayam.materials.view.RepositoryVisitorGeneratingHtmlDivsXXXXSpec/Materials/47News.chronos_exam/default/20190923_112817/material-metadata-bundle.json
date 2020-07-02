@@ -2,7 +2,7 @@
     "MaterialMetadataBundle": [
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/image-delta-stats.json",
+                "MaterialPath": "47News.chronos_exam/default/20190923_112817/47News.ImageDiff_chronos/image-delta-stats.json",
                 "TCaseName": "Test Cases/47News/ImageDiff_chronos",
                 "MaterialDescription": {
                     "category": "category text",
@@ -15,7 +15,7 @@
         },
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/comparison-result-bundle.json",
+                "MaterialPath": "47News.chronos_exam/default/20190923_112817/47News.ImageDiff_chronos/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47News/ImageDiff_chronos",
                 "MaterialDescription": {
                     "category": "category text",
@@ -28,7 +28,7 @@
         },
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png",
+                "MaterialPath": "47News.chronos_exam/default/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png",
                 "TCaseName": "Test Cases/47News/ImageDiff_chronos",
                 "MaterialDescription": {
                     "category": "category text",
@@ -41,7 +41,7 @@
         },
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_exam/20190923_112817/47News.ImageDiff_chronos/comparison-result-bundle.json",
+                "MaterialPath": "47News.chronos_exam/default/20190923_112817/47News.ImageDiff_chronos/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47News/ImageDiff_chronos",
                 "MaterialDescription": {
                     "category": "category text",

@@ -14,7 +14,7 @@ import spock.lang.Specification
 
 class IndexerConciseSpec extends Specification {
 	
-	//static Logger logger_ = LoggerFactory.getLogger(ConciselIndexerSpec.class)
+	//static Logger logger_ = LoggerFactory.getLogger(IndexerConciseSpec.class)
 	
 	// fields
 	static Path specOutputDir

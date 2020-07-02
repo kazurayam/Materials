@@ -2,7 +2,7 @@
     "MaterialMetadataBundle": [
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_capture/20190923_112816/47News.visitSite/TOP.png",
+                "MaterialPath": "47News.chronos_capture/default/20190923_112816/47News.visitSite/TOP.png",
                 "TCaseName": "Test Cases/47News/visitSite",
                 "MaterialDescription": {
                     "category": "category text",
@@ -10,13 +10,12 @@
                 },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",
-                "URL": "https://www.47news.jp/",
-                "ExecutionProfileName": "development"
+                "URL": "https://www.47news.jp/"
             }
         },
         {
             "MaterialMetadata": {
-                "MaterialPath": "47News.chronos_capture/20190923_112816/47News.visitSite/TOP.highlight.json",
+                "MaterialPath": "47News.chronos_capture/default/20190923_112816/47News.visitSite/TOP.highlight.json",
                 "TCaseName": "Test Cases/47News/visitSite",
                 "MaterialDescription": {
                     "category": "category text",
@@ -24,8 +23,7 @@
                 },
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "",
-                "URL": "https://www.47news.jp/",
-                "ExecutionProfileName": "development"
+                "URL": "https://www.47news.jp/"
             }
         }
     ]

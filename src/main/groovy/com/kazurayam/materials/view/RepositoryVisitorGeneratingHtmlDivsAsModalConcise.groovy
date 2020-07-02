@@ -6,10 +6,8 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.imagedifference.ComparisonResult
 import com.kazurayam.materials.repository.RepositoryRoot
-import com.kazurayam.materials.repository.RepositoryVisitor
 
 import groovy.xml.MarkupBuilder
 
@@ -74,6 +72,10 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                     // Expected + Actual
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
+
+                            assert this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) != null
+                            assert this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) != null
+
                             mkbuilder_.p "${this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: 'profile?'}" +
                                         " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: 'timestamp?'}" +
                                         " | " +

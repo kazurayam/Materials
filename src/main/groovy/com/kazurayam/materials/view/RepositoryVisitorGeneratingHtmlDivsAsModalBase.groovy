@@ -1,7 +1,5 @@
 package com.kazurayam.materials.view
 
-import com.kazurayam.materials.TExecutionProfile
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -13,7 +11,6 @@ import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.MaterialCore
-import com.kazurayam.materials.MaterialRepository
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
@@ -64,8 +61,6 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
      * - 'modal-xl': extra large
      */
     abstract String getBootstrapModalSize()
-    
-    
     
     /**
      * constructor
@@ -330,40 +325,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         }
 		TCaseResult tcr = material.getParent()
         TSuiteResult tsr = tcr.getParent()
-        Path path = tsr.getTSuiteTimestampDirectory().resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
-        if (Files.exists(path)) {
-			MaterialMetadataBundle bundle = MaterialMetadataBundle.deserialize(path)
-
-            logger_.info("#findExecutionProfileName path=${path}")
-			logger_.info("#findExecutionProfileName bundle=${bundle}")
-
-            if (bundle == null) {
-                logger_.warn("#findExecutionProfileName failed to load material-metadata-bundle.json at ${path}")
-                return null
-            }
-            MaterialMetadata metadata = bundle.findLastByMaterialPath(material.getHrefRelativeToRepositoryRoot())
-            if (metadata != null) {
-                TExecutionProfile tep = metadata.getTExecutionProfile()
-                logger_.info("#findTExecutionProfile returned ${tep}")
-                if (tep != null) {
-                    return tep.getName()
-                } else
-                    return null
-            } else {
-                String msg = this.class.getSimpleName() +
-                            "#findLastByMaterialPath()) could not find a MaterialMetadata entry of " +
-                            "${material.getHrefRelativeToRepositoryRoot()} in the bundle at ${path}," +
-                            " bundle=${JsonOutput.prettyPrint(bundle.toString())}"
-                logger_.warn(msg)
-                vtLogger_.info(msg)
-                return null
-            }
-        } else {
-            String msg = this.class.getSimpleName() + "#findExecutionProfileName ${path} does not exist"
-            logger_.warn(msg)
-            vtLogger_.info(msg)
-            return null
-        }
+        return tsr.getId().getTExecutionProfile().getName()
     }
  
     
