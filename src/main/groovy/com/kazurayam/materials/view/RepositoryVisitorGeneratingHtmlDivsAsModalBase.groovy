@@ -175,6 +175,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
                 mkbuilder_.pre(['class':'pre-scrollable'], mate.getPath().toFile().getText('UTF-8'))
                 break
             case FileType.TXT:
+            case FileType.HTML:
                 mkbuilder_.div(['style':'height:350px;overflow:auto;']) {
                     File file = mate.getPath().toFile()
                     file.readLines('UTF-8').each { line ->
