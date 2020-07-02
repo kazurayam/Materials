@@ -8,6 +8,7 @@ enum FileType {
         'text/plain']),
     BMP  ('bmp',    ['image/bmp']),
     GIF  ('gif',    ['image/gif']),
+    HTML ('html',   ['text/html']),
     JPG  ('jpg',    ['image/jpeg']),
     JPEG ('jpeg',   ['image/jpeg']),
     PNG  ('png' ,   ['image/png']),
