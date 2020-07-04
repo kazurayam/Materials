@@ -62,6 +62,25 @@ interface MaterialRepository {
      */
     int clear(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
 
+    /**
+     * identify all TSuiteResultId contained in the MaterialRespository,
+     * and delete those except the specfied one. For example, you can identify
+     * the TSuiteResultId which is marked as current, and delete the rest except
+     * the current one by this:
+     *
+     * <PRE>
+     * MaterialRepository mr = ...
+     * TSuiteResultId currentTSuiteResultId = mr.getCurrentTSuiteResult().getId()
+     * mr.clearRest(currentTSuiteResultId, true)
+     * </PRE>
+     *
+     * @param tSuiteResultId
+     * @param Scan
+     * @return
+     * @throws IOException
+     */
+    int clearRest(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
+
 
     /**
      * Scans the Materials directory to look up pairs of Material objects to compare
@@ -120,7 +139,9 @@ interface MaterialRepository {
     String getCurrentTestSuiteId()
     String getCurrentExecutionProfile()
     String getCurrentTestSuiteTimestamp()
-    
+
+    TSuiteResult getCurrentTSuiteResult()
+
     long getSize()
     
 

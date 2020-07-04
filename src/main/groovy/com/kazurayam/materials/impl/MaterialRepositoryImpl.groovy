@@ -169,6 +169,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return tsr
     }
 
+
+    // -------------------------- attribute getters & setters ------------------------
+    @Override
+    Path getBaseDir() {
+        return baseDir_
+    }
+
     @Override
     Path getCurrentTestSuiteDirectory() {
         TSuiteResultId tsri =
@@ -181,12 +188,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             return tsr.getTSuiteTimestampDirectory()
         }
         return null
-    }
-
-    // -------------------------- attribute getters & setters ------------------------
-    @Override
-    Path getBaseDir() {
-        return baseDir_
     }
 
     @Override
@@ -255,7 +256,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     @Override
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        Objects.requireNonNull(tSuiteResultId)
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
         TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
         TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
         List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
@@ -861,6 +862,24 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
     @Override
+    int clearRest(TSuiteResultId exceptThis,
+                  boolean scan = true) throws IOException {
+        Objects.requireNonNull(exceptThis,
+                "exceptThisTSuiteResultId must not be null")
+        int count = 0
+        List<TSuiteResultId> list = this.getTSuiteResultIdList()
+        for (tsri in list) {
+            if (tsri != exceptThis) {
+                count += this.clear(tsri, false)
+            }
+        }
+        if (scan) {
+            this.scan()
+        }
+        return count
+    }
+
+    @Override
     int clear(List<TSuiteResultId> tSuiteResultIdList) throws IOException {
         int count = 0
         for (TSuiteResultId tsri : tSuiteResultIdList) {
@@ -869,7 +888,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         this.scan()
         return count
     }
-    
+
+
     /**
      * delete Material files and sub directories located in the tSuiteName+tSuiteTimestamp dir.
      * The tSuiteName directory is removed.
@@ -905,6 +925,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     // ----------------------------- getters ----------------------------------
 
+    @Override
     TSuiteResult getCurrentTSuiteResult() {
 		TSuiteResultId tSuiteResultId =
                 TSuiteResultId.newInstance(currentTSuiteName_,
