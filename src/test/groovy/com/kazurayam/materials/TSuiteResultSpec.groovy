@@ -278,5 +278,23 @@ class TSuiteResultSpec extends Specification {
         tSuiteResultList.get(1).getTSuiteTimestamp().equals(new TSuiteTimestamp('20181014_060500'))
         tSuiteResultList.get(2).getTSuiteTimestamp().equals(new TSuiteTimestamp('20180805_081908'))
     }
+
+    def test_getTExecutionProfileDirectory() {
+        setup:
+        String tsnStr = 'Test Suites/main/TS1'
+        String tepStr = 'CURA_ProductionEnv'
+        String tstStr = '20180530_130419'
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName(tsnStr),
+                new TExecutionProfile(tepStr),
+                TSuiteTimestamp.newInstance(tstStr))
+        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
+        when:
+        Path path = tsr.getTExecutionProfileDirectory()
+        then:
+        path.getFileName().toString() == 'CURA_ProductionEnv'
+        path.getParent().getFileName().toString() == 'main.TS1'
+    }
+
     // helper methods
 }
