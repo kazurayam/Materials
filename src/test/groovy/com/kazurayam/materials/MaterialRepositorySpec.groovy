@@ -13,7 +13,6 @@ import java.nio.file.Paths
 
 //@Ignore
 class MaterialRepositorySpec extends Specification {
-
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositorySpec.class);
 
     private static Path specOutputDir_
@@ -51,7 +50,7 @@ class MaterialRepositorySpec extends Specification {
 	/**
 	 * private Helper method to prepare an instance of MaterialRepository for each test case method in the specOutputDir
 	 * This Helper helps shortening the test case methods.
-	 * 
+	 *
 	 * @param methodName
 	 * @return
 	 */
@@ -73,7 +72,7 @@ class MaterialRepositorySpec extends Specification {
                 tSuiteResultId.getTSuiteTimestamp())
         return mr
     }
-	
+
 	private MaterialRepository prepareMR(String methodName, TSuiteName tSuiteName) {
 		Path caseDir = specOutputDir_.resolve(methodName)
 		Helpers.copyDirectory(
@@ -83,7 +82,7 @@ class MaterialRepositorySpec extends Specification {
 		MaterialRepository mr = MaterialRepositoryFactory.createInstance(caseDir.resolve('Materials'))
 	    return mr
     }
-	
+
     def test_toJsonText() {
         setup:
         String method = 'test_toJsonText'
@@ -116,7 +115,7 @@ class MaterialRepositorySpec extends Specification {
 		tSuiteDir != null
         tSuiteDir.getFileName().toString() == '20180810_140105'
     }
- 
+
     def test_getSetOfMaterialPathRelativeToTSuiteTimestamp() {
 		setup:
         String method = 'test_getSetOfMaterialPathRelativeToTSuiteTimestamp'
@@ -143,7 +142,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         tCaseResult != null
     }
-    
+
     def test_getTestCaseDirectory() {
 		setup:
         String method = 'test_getTestCaseDirectory'
@@ -154,7 +153,7 @@ class MaterialRepositorySpec extends Specification {
         testCaseDir != null
         testCaseDir.getFileName().toString() == 'TC1'
     }
-    
+
     def test_getTSuiteNameList() {
 		setup:
         String method = 'test_getTSuiteNameList'
@@ -166,7 +165,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         tsnList.size() == 10
     }
-    
+
     def test_getTSuiteResult_withTSuiteNameAndTSuiteTimestamp() {
         when:
         String method = 'test_getTSuiteResult_withTSuiteNameAndTSuiteTimestamp'
@@ -184,7 +183,7 @@ class MaterialRepositorySpec extends Specification {
         tsr.getId().getTSuiteName().equals(tsn)
         tsr.getId().getTExecutionProfile().equals(tep)
         tsr.getId().getTSuiteTimestamp().equals(tst)
-        
+
     }
 
     /**
@@ -207,7 +206,7 @@ class MaterialRepositorySpec extends Specification {
         list != null
         list.size() == 6
     }
-    
+
 	def test_getTSuiteResultIdList_withArgs() {
 		setup:
         String method = 'test_getTSuiteResultIdList_withArgs'
@@ -221,7 +220,7 @@ class MaterialRepositorySpec extends Specification {
         list != null
         list.size() == 6
     }
-    
+
 	def test_getTSuiteResultIdList_withoutArgs() {
     	setup:
         String method = 'test_getTSuiteResultIdList'
@@ -259,7 +258,7 @@ class MaterialRepositorySpec extends Specification {
         path.toString().replace('\\', '/').endsWith(
                 "Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/${fileName}")
     }
-    
+
 	def test_resolveMaterialPath_withSubpath() {
 		setup:
         String method = 'test_resolveMaterialPath_withSubpath'
@@ -272,7 +271,7 @@ class MaterialRepositorySpec extends Specification {
         path.toString().replace('\\', '/').endsWith(
                 'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/aaa/bbb/screenshot1.png')
     }
-    
+
 	def test_resolveScreenshotPath() {
 		setup:
         String method = 'test_resolveScreenshotPath'
@@ -421,6 +420,28 @@ class MaterialRepositorySpec extends Specification {
     }
 
 
+    def test_clearRest() {
+        setup:
+        String method = 'test_clearRest'
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
+        assert mr.getTSuiteResultIdList().size() == 1
+        // copy one more TSuiteResult
+        TSuiteResultId another = TSuiteResultId.newInstance(
+                new TSuiteName('Test Suites/TS1'),
+                new TExecutionProfile('CURA_DevelopmentEnv'),
+                TSuiteTimestamp.newInstance("20180810_140106") )
+        mr = prepareMR(method, another)
+        // now the MaterialRepository has 2 TSuiteResults contained
+        assert mr.getTSuiteResultIdList().size() == 2
+        when:
+        TSuiteResult currentTSuiteResult = mr.getCurrentTSuiteResult()
+        assert currentTSuiteResult != null
+        mr.clearRest(currentTSuiteResult.getId())
+        then:
+        assert mr.getTSuiteResultIdList().size() == 1
+    }
+
+
     /**
      *
      * @return
@@ -442,6 +463,8 @@ class MaterialRepositorySpec extends Specification {
 	}
 
 
+
+
     def test_markAsCurrent_ensureTSuiteResultPresent_withPOJOArgs() {
         setup:
         String method = 'test_markAsCurrent_ensureTSuiteResultPresent_withPOJOArgs'
@@ -457,7 +480,7 @@ class MaterialRepositorySpec extends Specification {
         then:
         timestampDir.toString().contains('withPOJOArgs')
         timestampDir.getFileName().toString().contains('20180616_160000')
-        
+
         when:
         def tSuiteTimestamp2 = new TSuiteTimestamp('20180505_000000')
         TSuiteResult ensured2 = mr.ensureTSuiteResultPresent(tsn, tep, tSuiteTimestamp2)
@@ -480,5 +503,6 @@ class MaterialRepositorySpec extends Specification {
 		then:
 		mmb != null
     }
+
 }
 
