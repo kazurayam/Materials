@@ -59,14 +59,26 @@ final class TSuiteName implements Comparable<TSuiteName> {
         abbreviatedId_ = abbreviate(id_)
     }
 
+    /**
+     *
+     * @return e.g., 'Test Suites/main/TS1'
+     */
     String getId() {
         return id_
     }
 
+    /**
+     *
+     * @return e.g, 'main/TS1'
+     */
     String getAbbreviatedId() {
         return abbreviatedId_    
     }
-    
+
+    /**
+     *
+     * @return e.g, 'main.TS1'
+     */
     String getValue() {
         return value_
     }

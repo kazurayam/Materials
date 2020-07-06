@@ -28,6 +28,7 @@ class TSuiteNameSpec extends Specification {
     def cleanup() {}
     def cleanupSpec() {}
 
+
     def testGetId() {
         setup:
         TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
@@ -36,6 +37,25 @@ class TSuiteNameSpec extends Specification {
         then:
         id == 'Test Suites/main/TS1'
     }
+
+    def testAbbreviatedId() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        when:
+        String abbreviatedId = tsn.getAbbreviatedId()
+        then:
+        abbreviatedId == 'main/TS1'
+    }
+
+    def testValue() {
+        setup:
+        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
+        when:
+        String value = tsn.getValue()
+        then:
+        value == 'main.TS1'
+    }
+
 
     def testChompPrefix() {
         setup:
