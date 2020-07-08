@@ -11,16 +11,12 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.impl.MaterialCoreImpl
-
 import groovy.json.JsonOutput
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class RepositoryRootSpec extends Specification {
@@ -68,23 +64,7 @@ class RepositoryRootSpec extends Specification {
         then:
         tsr == returned
     }
-    
-    def testGetMaterials_noArgs() {
-        when:
-        List<Material> mates = repoRoot_.getMaterials()
-        then:
-        mates.size() > 2
-    }
-    
-    def testGetMaterials_withArgs() {
-        when:
-        TSuiteName tsn = new TSuiteName('Test Suites/main/TS1')
-        TExecutionProfile tep = new TExecutionProfile("CURA_ProductionEnv")
-        TSuiteTimestamp tst = new TSuiteTimestamp('20180530_130419')
-        List<Material> mates = repoRoot_.getMaterials(tsn, tep, tst)
-        then:
-        mates.size() == 2
-    }
+
 
     def testGetTCaseResult() {
         when:

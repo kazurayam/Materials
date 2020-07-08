@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 
 final class RepositoryRoot {
 
@@ -250,6 +251,14 @@ final class RepositoryRoot {
     }
 
 
+    /**
+     *
+     * @param tSuiteName
+     * @param tExecutionProfile
+     * @param tSuiteTimestamp
+     * @param tCaseName
+     * @return
+     */
     TCaseResult getTCaseResult(TSuiteName tSuiteName,
                                TExecutionProfile tExecutionProfile,
                                TSuiteTimestamp tSuiteTimestamp,
@@ -266,88 +275,6 @@ final class RepositoryRoot {
         return tCaseResult
     }
 
-    /**
-     *
-     * @return
-     */
-    List<Material> getMaterials() {
-        List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
-            List<Material> mates = tsr.getMaterialList()
-            for (Material mate : mates) {
-                list.add(mate)
-            }
-        }
-        return Collections.unmodifiableList(list)
-    }
-
-    /**
-     *
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return
-     */
-    List<Material> getMaterials(TSuiteName tSuiteName) {
-        List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
-            if (tsr.getId().getTSuiteName().equals(tSuiteName)) {
-                List<Material> mates = tsr.getMaterialList()
-                for (Material mate : mates) {
-                    list.add(mate)
-                }
-            }
-        }
-        return Collections.unmodifiableList(list)
-    }
-
-
-    /**
-     *
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return
-     */
-    List<Material> getMaterials(TSuiteName tSuiteName,
-                                TExecutionProfile tExecutionProfile,
-                                TSuiteTimestamp tSuiteTimestamp) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
-        List<Material> list = new ArrayList<Material>()
-        for (TSuiteResult tsr : this.getSortedTSuiteResults()) {
-            if (tsr.getId().getTSuiteName().equals(tSuiteName) &&
-                    tsr.getId().getTExecutionProfile().equals(tExecutionProfile) &&
-                    tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)
-            ) {
-                List<Material> mates = tsr.getMaterialList()
-                for (Material mate : mates) {
-                    list.add(mate)
-                }
-            }
-        }
-        return Collections.unmodifiableList(list)
-    }
-
-    Material getMaterial(TSuiteName tSuiteName,
-                         TExecutionProfile tExecutionProfile,
-                         TSuiteTimestamp tSuiteTimestamp,
-                         TCaseName tCaseName) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
-        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
-        List<Material> materials = this.getMaterials(tSuiteName, tExecutionProfile, tSuiteTimestamp)
-        if (materials.size() > 0) {
-            for (Material material : materials) {
-                if (material.getTCaseName().equals(tCaseName)) {
-                    return material
-                }
-            }
-            return null
-        } else {
-            return null
-        }
-    }
 
     /**
      * Provided with an instance of MaterialCore which wraps the path info of material file,
