@@ -2,30 +2,21 @@ package com.kazurayam.materials.repository
 
 import com.kazurayam.materials.TExecutionProfile
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.LocalDateTime
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.TCaseName
-import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.model.Suffix
-
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-class TTrunkScannerSpec extends Specification {
+class TreeTrunkScannerSpec extends Specification {
 
-    static Logger logger_ = LoggerFactory.getLogger(TTrunkScannerSpec.class)
+    static Logger logger_ = LoggerFactory.getLogger(TreeTrunkScannerSpec.class)
 
     // fields
     private static Path workdir_
@@ -33,7 +24,7 @@ class TTrunkScannerSpec extends Specification {
 
     // fixture methods
     def setupSpec() {
-        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(TTrunkScannerSpec.class)}")
+        workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(TreeTrunkScannerSpec.class)}")
         if (!workdir_.toFile().exists()) {
             workdir_.toFile().mkdirs()
         }
@@ -54,7 +45,7 @@ class TTrunkScannerSpec extends Specification {
         Helpers.copyDirectory(fixture_, casedir)
         Path materialsDir = casedir.resolve('Materials')
         // now we touch it
-        TTrunkScanner scanner = new TTrunkScanner(materialsDir)
+        TreeTrunkScanner scanner = new TreeTrunkScanner(materialsDir)
         when:
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()

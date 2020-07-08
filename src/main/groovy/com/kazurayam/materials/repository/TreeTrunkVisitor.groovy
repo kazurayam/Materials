@@ -1,12 +1,10 @@
 package com.kazurayam.materials.repository
 
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.TCaseResult
+
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.impl.MaterialImpl
 
 import java.nio.file.FileSystemLoopException
 import java.nio.file.FileVisitResult
@@ -20,15 +18,12 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 
 import static java.nio.file.FileVisitResult.CONTINUE
-import static java.nio.file.FileVisitResult.CONTINUE
-import static java.nio.file.FileVisitResult.CONTINUE
-import static java.nio.file.FileVisitResult.CONTINUE
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE
 import static java.nio.file.FileVisitResult.TERMINATE
 
-final class TTrunkVisitor extends SimpleFileVisitor<Path> {
+final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
 
-    private static Logger logger_ = LoggerFactory.getLogger(TTrunkVisitor.class)
+    private static Logger logger_ = LoggerFactory.getLogger(TreeTrunkVisitor.class)
 
     private RepositoryRoot repoRoot_
 
@@ -37,40 +32,38 @@ final class TTrunkVisitor extends SimpleFileVisitor<Path> {
     private TSuiteTimestamp tSuiteTimestamp_
     private TSuiteResult tSuiteResult_
 
-    private static enum Layer {
-        INIT, ROOT, TESTSUITE, EXECPROFILE, TIMESTAMP
-    }
-    private Stack<Layer> directoryTransition_
+    private Stack<TreeLayer> directoryTransition_
 
-    TTrunkVisitor(RepositoryRoot repoRoot) {
+    TreeTrunkVisitor(RepositoryRoot repoRoot) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
         repoRoot_ = repoRoot
-        directoryTransition_ = new Stack<Layer>()
-        directoryTransition_.push(Layer.INIT)
+        directoryTransition_ = new Stack<TreeLayer>()
+        directoryTransition_.push(TreeLayer.INIT)
     }
 
     @Override
     FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         def from = directoryTransition_.peek()
         switch (from) {
-            case Layer.INIT:
+            case TreeLayer.INIT:
+                directoryTransition_.push(TreeLayer.ROOT)
                 logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
-                directoryTransition_.push(Layer.ROOT)
                 return CONTINUE
 
-            case Layer.ROOT:
+            case TreeLayer.ROOT:
+                directoryTransition_.push(TreeLayer.TESTSUITE)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                 tSuiteName_ = new TSuiteName(dir)
-                directoryTransition_.push(Layer.TESTSUITE)
                 return CONTINUE
 
-            case Layer.TESTSUITE:
+            case TreeLayer.TESTSUITE:
+                directoryTransition_.push(TreeLayer.EXECPROFILE)
                 logger_.debug("#preVisitDirectory visiting ${dir} as EXECPROFILE")
                 tExecutionProfile_ = new TExecutionProfile(dir)
-                directoryTransition_.push(Layer.EXECPROFILE)
                 return CONTINUE
 
-            case Layer.EXECPROFILE:
+            case TreeLayer.EXECPROFILE:
+                //directoryTransition_.push(Layer.TIMESTAMP)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
@@ -97,7 +90,6 @@ final class TTrunkVisitor extends SimpleFileVisitor<Path> {
                  * important ! we stop digging the tree here.
                  * we will let TBranchVisitor to do it
                  */
-                //directoryTransition_.push(Layer.TIMESTAMP)
                 return SKIP_SUBTREE
 
             default:
@@ -110,22 +102,22 @@ final class TTrunkVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult postVisitDirectory(Path dir, IOException exception) throws IOException {
         def to = directoryTransition_.peek()
         switch (to) {
-            case Layer.TIMESTAMP :
+            case TreeLayer.TIMESTAMP :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
                 directoryTransition_.pop()
                 return CONTINUE
 
-            case Layer.EXECPROFILE :
+            case TreeLayer.EXECPROFILE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as EXECPROFILE")
                 directoryTransition_.pop()
                 return CONTINUE
 
-            case Layer.TESTSUITE :
+            case TreeLayer.TESTSUITE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
                 directoryTransition_.pop()
                 return CONTINUE
 
-            case Layer.ROOT :
+            case TreeLayer.ROOT :
                 logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
                 directoryTransition_.pop()
                 return CONTINUE
@@ -142,19 +134,19 @@ final class TTrunkVisitor extends SimpleFileVisitor<Path> {
     @Override
     FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
         switch (directoryTransition_.peek()) {
-            case Layer.ROOT :
+            case TreeLayer.ROOT :
                 logger_.debug("#visitFile ${file} in ROOT; this file is ignored")
                 return CONTINUE
 
-            case Layer.TESTSUITE :
+            case TreeLayer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
                 return CONTINUE
 
-            case Layer.TESTSUITE :
+            case TreeLayer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in EXECPROFILE; this file is ignored")
                 return CONTINUE
 
-            case Layer.TIMESTAMP :
+            case TreeLayer.TIMESTAMP :
                 logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
                 return CONTINUE
 

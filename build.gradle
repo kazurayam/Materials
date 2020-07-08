@@ -149,6 +149,7 @@ task pinpoint(type: Test) {
     include "**/repository/RepositoryFileScannerSpec.class"
     //include "**/repository/RepositoryRootSpec.class"
     //include "**/repository/RepositoryWalkerSpec.class"
+    include "**/repository/TreeTrunkScannerSpec.class"
     //include "**/metadata/InvokedMethodNameSpec.class"
     //include "**/metadata/MaterialMetadataBundleSpec.class"
     //include "**/metadata/MaterialMetadataSpec.class"
