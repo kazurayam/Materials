@@ -298,9 +298,6 @@ interface MaterialRepository {
 	
 	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
 	boolean hasMaterialMetadataBundleOfCurrentTSuite()
-	
-	boolean printVisitedURLsAsMarkdown(Writer writer)
-	boolean printVisitedURLsAsTSV(Writer writer)
 
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
     

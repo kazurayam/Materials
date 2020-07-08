@@ -337,30 +337,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 		return (mmb != null)
 	}
 	
-	@Override
-	boolean printVisitedURLsAsMarkdown(Writer writer) {
-		if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
-			MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
-			mmb.serializeAsMarkdown(writer)
-			return true
-		} else {
-			logger_.info("no MaterialMetadataBundle of the current TSuite")
-			return false
-		}
-	}
-	
-	@Override
-	boolean printVisitedURLsAsTSV(Writer writer) {
-		if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
-			MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
-			mmb.serializeAsTSV(writer)
-			return true
-		} else {
-			logger_.info("no MaterialMetadataBundle of the current TSuite")
-			return false
-		}
-	}
-    
+
     // ------------------ methods to resolve Material Paths  ------------------
 
     private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult,
@@ -948,7 +925,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                                                             TExecutionProfile tExecutionProfile) {
         Set<Path> set = new TreeSet<Path>()
         List<TSuiteResultId> idList = this.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
-        for (TSuiteResultId id: idList) {
+        for (id in idList) {
             TSuiteResult tSuiteResult = this.getTSuiteResult(id)
             List<Material> materialList = tSuiteResult.getMaterialList()
             for (Material material: materialList) {

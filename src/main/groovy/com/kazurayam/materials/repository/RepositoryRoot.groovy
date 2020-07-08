@@ -1,8 +1,6 @@
 package com.kazurayam.materials.repository
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
-import com.kazurayam.materials.MaterialCore
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TExecutionProfile
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 
 final class RepositoryRoot {
 
@@ -275,51 +272,6 @@ final class RepositoryRoot {
         return tCaseResult
     }
 
-
-    /**
-     * Provided with an instance of MaterialCore which wraps the path info of material file,
-     * find an instance of Material with the same path in the MaterialRepository.
-     * If found, return it.　Otherwise return null.
-     *
-     * This method is just used by the com.kazurayam.materials.viw.RepositoryVisitorGeneratingHtmlDivsAsModalConcise class.
-     * The class uses the method for look up the name of Execution Profile which was used when a screenshot was taken.
-     * The name of Execution Profile is found in the <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/material-metadata-bundle.json file.
-     */
-    Material getMaterial(MaterialCore materialCore) {
-        //println "materialCore:${JsonOutput.prettyPrint(materialCore.toString())}"
-        Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
-        if (relativePath.getNameCount() < 4) {
-            throw new IllegalArgumentException("${relativePath} has nameCount smaller than 4")
-        }
-        Path tSuiteNamePath = relativePath.subpath(0, 1)
-        Path tExecutionProfilePath = relativePath.subpath(1, 2)
-        Path tSuiteTimestampPath = relativePath.subpath(2, 3)
-        Path tCaseNamePath = relativePath.subpath(3, 4)
-        Path subpathAndFilename = relativePath.subpath(4, relativePath.getNameCount())
-        /*
-        println "relativePath:          ${relativePath}"
-        println "tSuiteNamePath:        ${tSuiteNamePath}"
-        println "tExecutionProfilePath: ${tExecutionProfilePath}"
-        println "tSuiteTimestampPath:   ${tSuiteTimestampPath}"
-        println "tCaseNamePath:         ${tCaseNamePath}"
-        println "subpathAndFilename:    ${subpathAndFilename}"
-        */
-        TSuiteResult tSuiteResult = this.getTSuiteResult(
-                new TSuiteName(tSuiteNamePath.toString()),
-                new TExecutionProfile(tExecutionProfilePath.toString()),
-                new TSuiteTimestamp(tSuiteTimestampPath.toString()))
-        if (tSuiteResult == null) {
-            throw new IllegalArgumentException(
-                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath} is not found in the Material directory")
-        }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName(tCaseNamePath.toString()))
-        if (tCaseResult == null) {
-            throw new IllegalArgumentException(
-                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath}/${tCaseNamePath} is not found in the Material directory")
-        }
-        Material mate = tCaseResult.getMaterial(subpathAndFilename)
-        return mate
-    }
 
 
     // -------------- overriding java.lang.Object methods ---------------------

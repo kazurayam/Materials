@@ -28,9 +28,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     private Path tExecutionProfileDirectory_
     private Path tSuiteTimestampDirectory_
     private List<TCaseResult> tCaseResults_
-    private LocalDateTime lastModified_
     private boolean latestModified_
-    private long size_
 
     // ------------------ constructors & initializer -------------------------------
 	TSuiteResultImpl(TSuiteResultId tSuiteResultId) {
@@ -51,7 +49,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
                 tSuiteTimestamp)
 
         tCaseResults_   = new ArrayList<TCaseResult>()
-        lastModified_   = LocalDateTime.MIN
         latestModified_ = false
     }
 
@@ -144,14 +141,15 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     }
 
     @Override
-    TSuiteResult setLastModified(LocalDateTime lastModified) {
-        lastModified_ = lastModified
-        return this
-    }
-
-    @Override
     LocalDateTime getLastModified() {
-        return lastModified_
+        LocalDateTime lastModified = LocalDateTime.MIN
+        List<TCaseResult> tCaseResults = this.getTCaseResultList()
+        for (TCaseResult tcr : tCaseResults) {
+            if (tcr.getLastModified() > lastModified) {
+                lastModified = tcr.getLastModified()
+            }
+        }
+        return lastModified
     }
 
     @Override

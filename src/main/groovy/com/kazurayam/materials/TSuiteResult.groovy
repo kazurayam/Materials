@@ -40,9 +40,11 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     
     abstract Path createDirectories()
 
-    abstract TSuiteResult setLastModified(LocalDateTime lastModified)
-
     abstract LocalDateTime getLastModified()
+
+    abstract boolean isLatestModified()
+
+    abstract TSuiteResult setLatestModified(Boolean isLatest)
 
     /**
      * get the sum of length of files belonging to this TSuiteResult
@@ -51,10 +53,6 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      */
     abstract long getSize()
 
-    abstract boolean isLatestModified()
-
-    abstract TSuiteResult setLatestModified(Boolean isLatest)
-        
     // ------------------ add/get child nodes ------------------------------
     
     abstract TCaseResult getTCaseResult(TCaseName tCaseName)

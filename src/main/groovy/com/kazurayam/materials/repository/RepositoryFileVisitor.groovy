@@ -2,7 +2,8 @@ package com.kazurayam.materials.repository
 
 import com.kazurayam.materials.TExecutionProfile
 
-import static java.nio.file.FileVisitResult.*
+import static java.nio.file.FileVisitResult.CONTINUE
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE
 
 import java.nio.file.FileSystemLoopException
 import java.nio.file.FileVisitResult
@@ -22,12 +23,14 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.impl.MaterialImpl
 
+import static java.nio.file.FileVisitResult.TERMINATE
+
 /**
  *
  */
 final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
 
-    static Logger logger_ = LoggerFactory.getLogger(RepositoryFileVisitor.class)
+    private static Logger logger_ = LoggerFactory.getLogger(RepositoryFileVisitor.class)
 
     private RepositoryRoot repoRoot_
 
@@ -37,7 +40,6 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
     private TSuiteResult tSuiteResult_
     private TCaseName tCaseName_
     private TCaseResult tCaseResult_
-    private Material material_
 
     private static enum Layer {
         INIT, ROOT, TESTSUITE, EXECPROFILE, TIMESTAMP, TESTCASE, SUBDIR
@@ -62,19 +64,19 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
             case Layer.INIT :
                 logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
                 directoryTransition_.push(Layer.ROOT)
-                break
+                return CONTINUE
 
             case Layer.ROOT :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                 tSuiteName_ = new TSuiteName(dir)
                 directoryTransition_.push(Layer.TESTSUITE)
-                break
+                return CONTINUE
 
             case Layer.TESTSUITE:
                 logger_.debug("#preVisitDirectory visiting ${dir} as EXECPROFILE")
                 tExecutionProfile_ = new TExecutionProfile(dir)
                 directoryTransition_.push(Layer.EXECPROFILE)
-                break
+                return CONTINUE
 
             case Layer.EXECPROFILE :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
@@ -100,7 +102,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                             + " the TSuiteTimestamp format (${TSuiteTimestamp.DATE_TIME_PATTERN})")
                 }
                 directoryTransition_.push(Layer.TIMESTAMP)
-                break
+                return CONTINUE
 
             case Layer.TIMESTAMP :
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
@@ -111,21 +113,24 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     tSuiteResult_.addTCaseResult(tCaseResult_)
                 }
                 directoryTransition_.push(Layer.TESTCASE)
-                break
+                return CONTINUE
 
             case Layer.TESTCASE :
                 logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 //
                 subdirDepth_ += 1
                 directoryTransition_.push(Layer.SUBDIR)
-                break
+                return CONTINUE
 
             case Layer.SUBDIR :
                 logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 subdirDepth_ += 1
-                break
+                return CONTINUE
+
+            default:
+                logger_.error("#preVisitDirectory visiting ${dir} as uknown layer")
+                return TERMINATE
         }
-        return CONTINUE
     }
 
     /**
@@ -141,7 +146,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 if (subdirDepth_ == 0) {
                     directoryTransition_.pop()
                 }
-                break
+                return CONTINUE
 
             case Layer.TESTCASE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTCASE")
@@ -154,7 +159,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 tCaseResult_.setSize(length)
                 //
                 directoryTransition_.pop()
-                break
+                return CONTINUE
 
             case Layer.TIMESTAMP :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
@@ -168,24 +173,27 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                     long length = resolveLengthOfTSuiteResult(tSuiteResult_)
                 }
                 directoryTransition_.pop()
-                break
+                return CONTINUE
 
             case Layer.EXECPROFILE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as EXECPROFILE")
                 directoryTransition_.pop()
-                break
+                return CONTINUE
 
             case Layer.TESTSUITE :
                 logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
                 directoryTransition_.pop()
-                break
+                return CONTINUE
 
             case Layer.ROOT :
                 logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
                 directoryTransition_.pop()
-                break
+                return CONTINUE
+
+            default:
+                logger_.error("#postVisitDirectory leaving ${dir} as unknown")
+                return TERMINATE
         }
-        return CONTINUE
     }
 
     /**
@@ -196,16 +204,20 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
         switch (directoryTransition_.peek()) {
             case Layer.ROOT :
                 logger_.debug("#visitFile ${file} in ROOT; this file is ignored")
-                break
+                return CONTINUE
+
             case Layer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
-                break
+                return CONTINUE
+
             case Layer.TESTSUITE :
                 logger_.debug("#visitFile ${file} in EXECPROFILE; this file is ignored")
-                break
+                return CONTINUE
+
             case Layer.TIMESTAMP :
                 logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
-                break
+                return CONTINUE
+
             case Layer.TESTCASE :
             case Layer.SUBDIR :
                 Material material = new MaterialImpl(tCaseResult_, file)
@@ -214,9 +226,12 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 material.setDescription(tCaseResult_.getParent().getTSuiteTimestamp().format())
                 tCaseResult_.addMaterial(material)
                 logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
-                break
+                return CONTINUE
+
+            default:
+                logger_.error("visitFile ${file} in unknown")
+                return TERMINATE
         }
-        return CONTINUE
     }
 
 
