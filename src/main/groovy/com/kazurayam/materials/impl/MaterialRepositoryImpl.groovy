@@ -395,12 +395,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
         }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
-        // check if a Material is already there 
+
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
+
+        // check if a Material is already there
         Material material = tCaseResult.getMaterial(subPath, url, Suffix.NULL, FileType.PNG)
         logger_.debug("#resolveScreenshotPath material is ${material.toString()}")
         if (material == null) {
@@ -484,11 +482,9 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (tSuiteResult == null) {
             throw new IllegalStateException("getCurrentTSuiteResult() returned null")
         }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
+
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
+
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
 
         String fileName = resolveFileNameByURLPathComponents(url, startingDepth, defaultName)
@@ -633,11 +629,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         if (tSuiteResult == null) {
             throw new IllegalStateException("tSuiteResult is null")
         }
-        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(tCaseName)
-        if (tCaseResult == null) {
-            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(tSuiteResult)
-            tSuiteResult.addTCaseResult(tCaseResult)
-        }
+
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
         //logger_.debug("#resolveMaterialPath tCaseResult=${tCaseResult}")

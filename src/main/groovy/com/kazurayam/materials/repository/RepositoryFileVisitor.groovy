@@ -101,11 +101,7 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
                 directoryTransition_.push(TreeLayer.TESTCASE)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                 tCaseName_ = new TCaseName(dir)
-                tCaseResult_ = tSuiteResult_.getTCaseResult(tCaseName_)
-                if (tCaseResult_ == null) {
-                    tCaseResult_ = TCaseResult.newInstance(tCaseName_).setParent(tSuiteResult_)
-                    tSuiteResult_.addTCaseResult(tCaseResult_)
-                }
+                tCaseResult_ = tSuiteResult_.ensureTCaseResult(tCaseName_)
                 return CONTINUE
 
             case TreeLayer.TESTCASE :

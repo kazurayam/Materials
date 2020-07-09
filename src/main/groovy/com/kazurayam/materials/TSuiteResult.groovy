@@ -57,9 +57,38 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     
     abstract TCaseResult getTCaseResult(TCaseName tCaseName)
 
-    abstract List<TCaseResult> getTCaseResultList()
-
     abstract void addTCaseResult(TCaseResult tCaseResult)
+
+    /**
+     * This method makes sure we have a TCaseResult that is liked to the TSuiteResult object.
+     * If the TCaseResult object is already there then we will reuse it.
+     * If the TCaseResult object is NOT there then we will newly create it.
+     *
+     * This method drives
+     * 1. TSuiteResult.getTCaseResult(TCaseName) +
+     * 2. TCaseResult.setParent(TSuiteResult) +
+     * 3. TSuiteResult.addTCaseResult(TCaseResult)
+     * in one sequence.
+     *
+     * This sequence is frequently called up by
+     * - MaterialRepositoryImpl
+     * - RepositoryFileVisitor
+     * - TreeBranchVisitor
+     *
+     * @param tCaseName
+     * @return
+     */
+    TCaseResult ensureTCaseResult(TCaseName tCaseName) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        TCaseResult tCaseResult = this.getTCaseResult(tCaseName)
+        if (tCaseResult == null) {
+            tCaseResult = TCaseResult.newInstance(tCaseName).setParent(this)
+            this.addTCaseResult(tCaseResult)
+        }
+        return tCaseResult
+    }
+
+    abstract List<TCaseResult> getTCaseResultList()
 
     abstract String treeviewTitle()
 
