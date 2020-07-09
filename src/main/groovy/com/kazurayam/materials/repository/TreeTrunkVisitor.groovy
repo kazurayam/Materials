@@ -1,6 +1,5 @@
 package com.kazurayam.materials.repository
 
-
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult

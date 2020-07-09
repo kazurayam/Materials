@@ -65,6 +65,20 @@ final class RepositoryRoot {
     }
 
     /**
+     * return true if RepositoryRoot has the given TSuiteResult
+     * @param given tSuiteResult
+     * @return
+     */
+    boolean hasTSuiteResult(TSuiteResult given) {
+        Objects.requireNonNull(given, "arg 'given' must not be null")
+        TSuiteResult result =
+                this.getTSuiteResult(given.getTSuiteName(),
+                        given.getTExecutionProfile(),
+                        given.getTSuiteTimestamp())
+        return (result != null && result == given)
+    }
+
+    /**
      *
      * @param tSuiteName
      * @param tExecutionProfile

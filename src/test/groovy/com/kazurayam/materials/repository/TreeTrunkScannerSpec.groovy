@@ -35,7 +35,7 @@ class TreeTrunkScannerSpec extends Specification {
 
     // feature methods
     /**
-     * test RepositoryScanner#scan() method ; an ordinal case
+     * test TreeTrunkScanner#scan() method ; an ordinal case
      *
      * @return
      */

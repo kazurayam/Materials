@@ -21,27 +21,18 @@ final class TreeBranchScanner {
 
     private RepositoryRoot repoRoot_
 
-    TreeBranchScanner(Path baseDir) {
-        Objects.requireNonNull(baseDir, "baseDir must not be null")
-        if (!Files.exists(baseDir)) {
-            throw new IllegalArgumentException("${baseDir} does not exist")
-        }
-        if (!Files.isDirectory(baseDir)) {
-            throw new IllegalArgumentException("${baseDir} is not a directory")
-        }
-        repoRoot_ = new RepositoryRoot(baseDir)
+    TreeBranchScanner(RepositoryRoot repoRoot) {
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
+        this.repoRoot_ = repoRoot
     }
 
-    void scan(Path tSuiteTimestampDirectory) {
-        Objects.requireNonNull(tSuiteTimestampDirectory, "tSuiteTimestampDirectory must not be null")
-        if ( ! Files.exists(tSuiteTimestampDirectory) ) {
-            throw new IllegalArgumentException("${tSuiteTimestampDirectory} does not exist")
-        }
+    void scan(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult, "tSuiteResult must not be null")
         Files.walkFileTree(
-                tSuiteTimestampDirectory,
+                tSuiteResult.getTSuiteTimestampDirectory(),
                 new HashSet<>(),
                 Integer.MAX_VALUE,
-                new TreeBranchVisitor(repoRoot_, tSuiteTimestampDirectory)
+                new TreeBranchVisitor(repoRoot_, tSuiteResult)
         )
     }
 
@@ -62,22 +53,22 @@ final class TreeBranchScanner {
         Path baseDir = Paths.get(System.getProperty('user.dir') + '/src/test/fixture/Materials')
         TreeTrunkScanner trunkScanner = new TreeTrunkScanner(baseDir)
         trunkScanner.scan()
-        RepositoryRoot rr1 = trunkScanner.getRepositoryRoot()
-        TSuiteResult tsr1 = rr1.getTSuiteResult(
+        RepositoryRoot repoRoot = trunkScanner.getRepositoryRoot()
+        TSuiteResult tsr1 = repoRoot.getTSuiteResult(
                 new TSuiteName("TS1"),
                 new TExecutionProfile("CURA_ProductionEnv"),
                 new TSuiteTimestamp("20180810_140105")
         )
-        TreeBranchScanner branchScanner = new TreeBranchScanner(baseDir)
+        assert tsr1.getMaterialList().size() == 0
+        //
+        TreeBranchScanner branchScanner = new TreeBranchScanner(repoRoot)
         branchScanner.scan(tsr1.getTSuiteTimestampDirectory())
-        RepositoryRoot rr2 = branchScanner.getRepositoryRoot()
-        TSuiteResult tsr2 = rr2.getTSuiteResult(
+        TSuiteResult tsr2 = repoRoot.getTSuiteResult(
                 new TSuiteName("TS1"),
                 new TExecutionProfile("CURA_ProductionEnv"),
                 new TSuiteTimestamp("20180810_140105")
         )
-        List<Material> mateList = tsr2.getMaterialList()
-        assert mateList.size() > 0
+        assert tsr2.getMaterialList().size() > 0
         logger_.info("#main tsr2=" + JsonOutput.prettyPrint(tsr2.toJsonText()))
     }
 }

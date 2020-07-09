@@ -66,6 +66,21 @@ class RepositoryRootSpec extends Specification {
     }
 
 
+    def test_hasTSuiteResult() {
+        when:
+        TSuiteResult tsr = TSuiteResult.newInstance(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                new TSuiteTimestamp('20180530_235959'))     // this is a new entry
+        then:
+        assert ! repoRoot_.hasTSuiteResult(tsr)
+        when:
+        repoRoot_.addTSuiteResult(tsr)
+        then:
+        assert repoRoot_.hasTSuiteResult(tsr)
+    }
+
+
     def testGetTCaseResult() {
         when:
         TSuiteName tsn      = new TSuiteName('Test Suites/main/TS1')
@@ -90,6 +105,7 @@ class RepositoryRootSpec extends Specification {
         tSuiteResults != null
         tSuiteResults.size() == 15
     }
+
 
 
 

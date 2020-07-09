@@ -114,7 +114,6 @@ final class RepositoryFileVisitor extends SimpleFileVisitor<Path> {
             case TreeLayer.TESTCASE :
                 directoryTransition_.push(TreeLayer.SUBDIR)
                 logger_.debug("#preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
-                //
                 subdirDepth_ += 1
                 return CONTINUE
 
