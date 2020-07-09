@@ -29,7 +29,11 @@ class RepositoryRootSpec extends Specification {
     private static RepositoryRoot repoRoot_
 
     // fixture methods
-    def setupSpec() {
+    def setupSpec() {}
+
+    // we will initialize the workdir_ before every test cases
+    // to make every test cases independent each other
+    def setup() {
         workdir_ = Paths.get("./build/tmp/testOutput/${Helpers.getClassShortName(RepositoryRootSpec.class)}")
         if (workdir_.toFile().exists()) {
             Helpers.deleteDirectoryContents(workdir_)
@@ -48,7 +52,6 @@ class RepositoryRootSpec extends Specification {
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
-    def setup() {}
     def cleanup() {}
     def cleanupSpec() {}
 
