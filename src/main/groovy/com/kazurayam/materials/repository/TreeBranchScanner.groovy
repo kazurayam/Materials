@@ -1,19 +1,17 @@
 package com.kazurayam.materials.repository
 
-import com.kazurayam.materials.Material
+
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
+import groovy.json.JsonOutput
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import groovy.json.JsonOutput
 
 final class TreeBranchScanner {
 
@@ -54,21 +52,21 @@ final class TreeBranchScanner {
         TreeTrunkScanner trunkScanner = new TreeTrunkScanner(baseDir)
         trunkScanner.scan()
         RepositoryRoot repoRoot = trunkScanner.getRepositoryRoot()
-        TSuiteResult tsr1 = repoRoot.getTSuiteResult(
+        TSuiteResult skeltalTsr = repoRoot.getTSuiteResult(
                 new TSuiteName("TS1"),
                 new TExecutionProfile("CURA_ProductionEnv"),
                 new TSuiteTimestamp("20180810_140105")
         )
-        assert tsr1.getMaterialList().size() == 0
+        assert skeltalTsr.getMaterialList().size() == 0
         //
         TreeBranchScanner branchScanner = new TreeBranchScanner(repoRoot)
-        branchScanner.scan(tsr1.getTSuiteTimestampDirectory())
-        TSuiteResult tsr2 = repoRoot.getTSuiteResult(
+        branchScanner.scan(skeltalTsr)
+        TSuiteResult stuffedTsr = repoRoot.getTSuiteResult(
                 new TSuiteName("TS1"),
                 new TExecutionProfile("CURA_ProductionEnv"),
                 new TSuiteTimestamp("20180810_140105")
         )
-        assert tsr2.getMaterialList().size() > 0
-        logger_.info("#main tsr2=" + JsonOutput.prettyPrint(tsr2.toJsonText()))
+        assert stuffedTsr.getMaterialList().size() > 0
+        logger_.info("#main tsr2=" + JsonOutput.prettyPrint(stuffedTsr.toJsonText()))
     }
 }

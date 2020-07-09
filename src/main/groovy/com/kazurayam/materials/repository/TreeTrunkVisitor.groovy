@@ -4,15 +4,13 @@ import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.nio.file.FileSystemLoopException
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.LocalDateTime
 

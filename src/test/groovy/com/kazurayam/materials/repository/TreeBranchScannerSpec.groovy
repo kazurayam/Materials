@@ -1,18 +1,18 @@
 package com.kazurayam.materials.repository
 
-import com.kazurayam.materials.TExecutionProfile
-
-import java.nio.file.Path
-import java.nio.file.Paths
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import com.kazurayam.materials.Helpers
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TCaseResult
+import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import groovy.json.JsonOutput
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
+
+import java.nio.file.Path
+import java.nio.file.Paths
 
 class TreeBranchScannerSpec extends Specification {
 
@@ -35,6 +35,10 @@ class TreeBranchScannerSpec extends Specification {
 
 
     // feature methods
+
+    /**
+     *
+     */
     def testScan() {
         setup:
         Path casedir = workdir_.resolve("testScan")
@@ -47,15 +51,28 @@ class TreeBranchScannerSpec extends Specification {
         tts.scan()
         RepositoryRoot repoRoot = tts.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
-        // we want to further scan the filee tree
-        // for the branches(screenshots etc) under the yyyyMMdd_hhmmss directory
+        // we want to further scan the file tree
+        // for the branches (screenshot images) under the yyyyMMdd_hhmmss directory
         for (tsr in tSuiteResults) {
             TreeBranchScanner tbs = new TreeBranchScanner(repoRoot)
             tbs.scan(tsr)
         }
+        List<TSuiteResult> stuffedList = repoRoot.getTSuiteResults()
         then:
-        repoRoot.getTCaseResult().size() > 0
-
+        stuffedList.size() == 18
+        //
+        when:
+        TSuiteResult stuffedTsr =
+                repoRoot.getTSuiteResult(
+                        new TSuiteName("CURA.twins_capture"),
+                        new TExecutionProfile("CURA_DevelopmentEnv"),
+                        new TSuiteTimestamp("20190412_161621")
+                )
+        assert stuffedTsr.getTCaseResultList().size() == 1
+        TCaseResult tcr = stuffedTsr.getTCaseResultList()[0]
+        println stuffedTsr.getTCaseResultList()
+        then:
+        tcr.getTCaseName() == new TCaseName("CURA/visitSite")
     }
 
 }

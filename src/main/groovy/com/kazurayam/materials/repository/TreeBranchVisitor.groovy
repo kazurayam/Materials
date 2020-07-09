@@ -1,28 +1,21 @@
 package com.kazurayam.materials.repository
 
 import com.kazurayam.materials.Material
-import com.kazurayam.materials.impl.MaterialImpl
-
-import java.nio.file.FileSystemLoopException
-
-import static java.nio.file.FileVisitResult.*
-
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
-import com.kazurayam.materials.TExecutionProfile
-import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
-import com.kazurayam.materials.TSuiteTimestamp
-
-import java.nio.file.Files
-import java.nio.file.FileVisitResult
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-
+import com.kazurayam.materials.impl.MaterialImpl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import java.nio.file.FileSystemLoopException
+import java.nio.file.FileVisitResult
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+
+import static java.nio.file.FileVisitResult.CONTINUE
+import static java.nio.file.FileVisitResult.TERMINATE
 
 class TreeBranchVisitor extends SimpleFileVisitor<Path> {
 
@@ -54,13 +47,18 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
         }
 
         directoryTransition_ = new Stack<TreeLayer>()
-        directoryTransition_.push(TreeLayer.TIMESTAMP)
+        directoryTransition_.push(TreeLayer.INIT)
     }
 
     @Override
     FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         def from = directoryTransition_.peek()
         switch (from) {
+            case TreeLayer.INIT:
+                directoryTransition_.push(TreeLayer.TIMESTAMP)
+                logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
+                return CONTINUE
+
             case TreeLayer.TIMESTAMP:
                 directoryTransition_.push(TreeLayer.TESTCASE)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
