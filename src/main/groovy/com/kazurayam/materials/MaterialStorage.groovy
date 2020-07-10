@@ -10,7 +10,13 @@ import java.nio.file.Path
  * @author kazurayam
  */
 interface MaterialStorage extends TSuiteResultTree {
-    
+
+    /**
+     * scan the Storage directory to refresh memory so that it sync with the file system
+     */
+    void scan()
+
+
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp 
      * from the project's Materials folder (fromMR) into this Material Storage.
@@ -96,48 +102,7 @@ interface MaterialStorage extends TSuiteResultTree {
      */
     Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName,
                                                        TExecutionProfile tExecutionProfile)
-    
-    /**
-     * 
-     * @return
-     */
-    List<TSuiteName> getTSuiteNameList()
-    
-    /**
-     * 
-     * @param tSuiteName
-     * @param tSuiteTimestamp
-     * @return
-     */
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
-    
-    
-    /**
-     * 
-     * @param tSuiteName
-     * @return
-     */
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
-    
-    /**
-     * 
-     * @return
-     */
-    List<TSuiteResultId> getTSuiteResultIdList()
-    
-    /**
-     * 
-     * @param tSuiteName
-     * @return
-     */
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
-    
-    
-    /**
-     * 
-     */
-    List<TSuiteResult> getTSuiteResultList()
-    
+
     /**
      * list the current status of the Storage
      * 
@@ -145,9 +110,10 @@ interface MaterialStorage extends TSuiteResultTree {
      * @return a string containing lines which includes TSuiteName, TSuiteTimestamp, sum of file size
      */
     void status(Writer output, Map<String, Object> options)
-    
+
+
     /**
-     * Calcute the total file size in the Storage to check if it exceeds the target size in bytes.
+     * Calculate the total file size in the Storage to check if it exceeds the target size in bytes.
      * All of TSuiteNames are inspected as possible deletion target.
      * If exceeding, clear older TSuiteResults to reduce the total less than the target.
      * 
@@ -169,7 +135,8 @@ interface MaterialStorage extends TSuiteResultTree {
      * @throws IOException
      */
     RestoreResult restore(MaterialRepository intoMR, TSuiteResultId tSuiteResultId, boolean scan) throws IOException
-	
+
+
     /**
      * copy a set of Material files identified by a pair of a tSuiteName and a RetrievalBy object
      * from this Material Storage into the project's Materials folder (intoMR).
@@ -182,26 +149,9 @@ interface MaterialStorage extends TSuiteResultTree {
      */
     List<RestoreResult> restore(MaterialRepository intoMR, List<TSuiteResultId> tSuiteResultIdList) throws IOException
     
-    /**
-     * Retrieve a single TSuiteResult out of the MaterialStorage by the retrievalBy, then
-     * copy the Material files of the TSuiteResult from MaterialStorage into MaterialRespository.
-     * 
-     * synonym to unitaryRestore() mehtod
-     * 
-     * @param intoMR
-     * @param retrievalBy
-     * @return RestoreResult containing a TSuiteResult and int count of Material files transfered
-     * @throws IOException
-     */
-    //RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName, RetrievalBy retrievalBy) throws IOException
-    
+
 	/**
 	 * 
-	 * @param intoMR
-	 * @param tSuiteName
-	 * @param retrievalBy
-	 * @return
-	 * @throws IOException
 	 */
     RestoreResult retrievingRestoreUnaryExclusive(MaterialRepository intoMR,
                                                   TSuiteName tSuiteName,
@@ -210,23 +160,14 @@ interface MaterialStorage extends TSuiteResultTree {
     
 	/**
 	 * 
-	 * @param intoMR
-	 * @param tSuiteName
-	 * @param retrievalBy
-	 * @return
-	 * @throws IOException
 	 */
 	RestoreResult retrievingRestoreUnaryInclusive(MaterialRepository intoMR,
                                                   TSuiteName tSuiteName,
                                                   TExecutionProfile tExecutionProfile,
                                                   RetrievalBy retrievalBy) throws IOException
-	
-    /**
-     * scan the Storage directory to reflesh memory so that it sync with the file system
-     */
-    void scan()
-    
+
+
+
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
-    
     String toJsonText()
 }

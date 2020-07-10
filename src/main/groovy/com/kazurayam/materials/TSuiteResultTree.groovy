@@ -18,6 +18,7 @@ interface TSuiteResultTree {
 
     boolean hasTSuiteResult(TSuiteResult given)
 
+    List<TSuiteName> getTSuiteNameList()
 
     // methods that return TSuiteResult
 

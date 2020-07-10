@@ -57,7 +57,14 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     static MaterialRepositoryImpl newInstance(Path baseDir) {
         return new MaterialRepositoryImpl(baseDir)    
     }
-    
+
+
+
+    // ================================================================
+    //
+    //     implementing MaterialRepository interface
+    //
+    // ----------------------------------------------------------------
     @Override
     void scan() {
         //vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
@@ -170,7 +177,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-    // -------------------------- attribute getters & setters ------------------------
     @Override
     Path getBaseDir() {
         return baseDir_
@@ -216,121 +222,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-    // --------------------- implementing TSuiteResultTree -------------------
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    void addTSuiteResult(TSuiteResult tSuiteResult) {
-        repoRoot_.addTSuiteResult(tSuiteResult)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    boolean hasTSuiteResult(TSuiteResult given) {
-        throw new UnsupportedOperationException()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
-        return repoRoot_.getTSuiteResult(tSuiteName, tExecutionProfile, tSuiteTimestamp)
-    }
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        repoRoot_.getTSuiteResult(tSuiteResultId)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
-                                               TExecutionProfile tExecutionProfile) {
-        return repoRoot_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList() {
-        return repoRoot_.getTSuiteResultIdList()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList() {
-        return repoRoot_.getTSuiteResultList()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     * not used in fact
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
-        return repoRoot_.getTSuiteResultList(tSuiteName)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     * not used in fact
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
-        return repoRoot_.getTSuiteResultList(tSuiteName, tExecutionProfile)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
-        return repoRoot_.getTSuiteResultList(tSuiteResultIdList)
-    }
-
-    // ---------------------------------------------------------------------
-
-
-
-
-
-    @Override
-    List<TSuiteName> getTSuiteNameList() {
-        Set<TSuiteName> set = new HashSet<TSuiteName>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
-            set.add(subject.getTSuiteName())
-        }
-        return set.stream().collect(Collectors.toList())
-    }
-
-
-
-
-
-    // --------------------------------------------------------------------------
-    
     @Override
     MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
         TSuiteResultId tsri = TSuiteResultId.newInstance(
@@ -354,7 +245,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 	}
 	
 
-    // ------------------ methods to resolve Material Paths  ------------------
 
     private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult,
                                                           MaterialMetadata materialMetadata) {
@@ -402,7 +292,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(subPath, "subPath must not be null")
         Objects.requireNonNull(url, "url must not be null")
         Objects.requireNonNull(description, "description must not be null")
-		if ( !this.isAlreadyMarked() ) {
+        if ( !this.isAlreadyMarked() ) {
 			// in case when MaterialRepository is called by a Test Case outside a Test Suite so that Materials/_/_ dir is required
 			this.markAsCurrent(currentTSuiteName_, currentTSuiteTimestamp_)
 			this.ensureTSuiteResultPresent(currentTSuiteName_, currentTSuiteTimestamp_)
@@ -443,7 +333,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         
         return material.getPath().normalize()
     }
-    
+
+
     /**
      * 
      */
@@ -455,7 +346,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                                                   MaterialDescription description = MaterialDescription.EMPTY) {
         return this.resolveScreenshotPathByURLPathComponents(testCaseId, '', url, startingDepth, defaultName, description)
     }
-    
+
+
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName,
                                                   URL url,
@@ -464,7 +356,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                                                   MaterialDescription description = MaterialDescription.EMPTY) {
         return this.resolveScreenshotPathByURLPathComponents(tCaseName, '', url, startingDepth, defaultName, description)
     }
-    
+
+
     @Override
     Path resolveScreenshotPathByURLPathComponents(String testCaseId,
                                                   String subPath,
@@ -475,7 +368,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         TCaseName tCaseName = new TCaseName(testCaseId)
         return this.resolveScreenshotPathByURLPathComponents(tCaseName, subPath, url, startingDepth, defaultName, description)
     }
-    
+
+
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName,
                                                   String subPath,
@@ -519,8 +413,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             material = new MaterialImpl(tCaseResult,
                     tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
         }
-
-
         //
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())
@@ -583,6 +475,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return fileName
     }
 
+
     /**
      * given 'corp=abcd&foo=bar' as queryString, return ['corp':'abcd','foo':'bar']
      */
@@ -595,7 +488,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         }
         return query_pairs;
     }
-    
+
+
     /**
      *
      */
@@ -675,12 +569,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         MaterialMetadataBundle bundle = this.recordMaterialMetadata(tSuiteResult, metadata)
         //
         return material.getPath().normalize()
-    }
-
-
-    @Override
-    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-        this.vtLogger_ = vtLogger
     }
 
 
@@ -811,8 +699,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return mps
     }
 
-    // -------------------- House cleaning -----------------------------------
-
     /**
      *
      * @throws IOException
@@ -909,7 +795,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return repoRoot_
     }
 
-    // ----------------------------- getters ----------------------------------
 
     @Override
     TSuiteResult getCurrentTSuiteResult() {
@@ -974,6 +859,129 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
 
 
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
+
+    @Override
+    String toJsonText() {
+        StringBuilder sb = new StringBuilder()
+        sb.append('{"MaterialRepository":{')
+        sb.append('"baseDir":"' +
+                Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
+        sb.append('"currentTsName":' + currentTSuiteName_.toJsonText() + ',')
+        sb.append('"currentTsTimestamp":' + currentTSuiteTimestamp_.toJsonText() + ',')
+        sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
+        sb.append('}}')
+        return sb.toString()
+    }
+
+
+
+    // ================================================================
+    //
+    //     implementing TSuiteResultTree
+    //
+    // ----------------------------------------------------------------
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    void addTSuiteResult(TSuiteResult tSuiteResult) {
+        repoRoot_.addTSuiteResult(tSuiteResult)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    boolean hasTSuiteResult(TSuiteResult given) {
+        throw new UnsupportedOperationException()
+    }
+
+
+    @Override
+    List<TSuiteName> getTSuiteNameList() {
+        return repoRoot_.getTSuiteNameList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
+        return repoRoot_.getTSuiteResult(tSuiteName, tExecutionProfile, tSuiteTimestamp)
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        repoRoot_.getTSuiteResult(tSuiteResultId)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        return repoRoot_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        return repoRoot_.getTSuiteResultIdList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList() {
+        return repoRoot_.getTSuiteResultList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        return repoRoot_.getTSuiteResultList(tSuiteName)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        return repoRoot_.getTSuiteResultList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        return repoRoot_.getTSuiteResultList(tSuiteResultIdList)
+    }
+
 
 
     // ---------------------- overriding Object properties --------------------
@@ -982,16 +990,4 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return this.toJsonText()
     }
 
-    @Override
-    String toJsonText() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('{"MaterialRepository":{')
-        sb.append('"baseDir":"' +
-            Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
-		sb.append('"currentTsName":' + currentTSuiteName_.toJsonText() + ',')
-		sb.append('"currentTsTimestamp":' + currentTSuiteTimestamp_.toJsonText() + ',')
-		sb.append('"repoRoot":' + repoRoot_.toJsonText() + '')
-        sb.append('}}')
-        return sb.toString()
-    }
 }

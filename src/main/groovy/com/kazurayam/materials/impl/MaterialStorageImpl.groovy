@@ -51,7 +51,26 @@ class MaterialStorageImpl implements MaterialStorage {
     static MaterialStorage newInstance(Path baseDir) {
         return new MaterialStorageImpl(baseDir)
     }
-    
+
+
+    RepositoryRoot getRepositoryRoot() {
+        MaterialRepositoryImpl mri = (MaterialRepositoryImpl)componentMR_
+        return mri.getRepositoryRoot()
+    }
+
+
+    // ================================================================
+    //
+    //     implementing MaterialStorage interface
+    //
+    // ----------------------------------------------------------------
+
+    @Override
+    void scan() {
+        componentMR_.scan()
+    }
+
+
     /**
      * copy Material files belonging to the tSuiteName + tSuiteTimestamp 
      * from the Materials dir of the project into the external Storage directory
@@ -96,21 +115,7 @@ class MaterialStorageImpl implements MaterialStorage {
         return count
     }
 
-    /*
-    @Override
-    int backup(MaterialRepository fromMR) throws IOException {
-        Objects.requireNonNull(fromMR, "fromMR must not be null")
-        List<TSuiteResult> list = fromMR.getTSuiteResultList()
-        logger_.debug("#backup(MaterialRepository) list.size()=${list.size()}")
-        int count = 0
-        for (TSuiteResult tSuiteResult : list) {
-            count += this.backup(fromMR, tSuiteResult.getId(), false)
-        }
-        componentMR_.scan()
-        return count
-    }
-     */
-    
+
     @Override
     int clear(TSuiteResultId tSuiteResultId) throws IOException {
         int count = componentMR_.clear(tSuiteResultId, true)
@@ -137,135 +142,20 @@ class MaterialStorageImpl implements MaterialStorage {
     Path getBaseDir() {
         return componentMR_.getBaseDir()    
     }
-    
-    RepositoryRoot getRepositoryRoot() {
-        MaterialRepositoryImpl mri = (MaterialRepositoryImpl)componentMR_
-        return mri.getRepositoryRoot()
-    }
 
 
     @Override
     long getSize() {
         return componentMR_.getSize()
     }
-    
+
+
     @Override
     Set<Path> getSetOfMaterialPathRelativeToTSuiteName(TSuiteName tSuiteName,
                                                        TExecutionProfile tExecutionProfile) {
         return componentMR_.getSetOfMaterialPathRelativeToTSuiteTimestamp(tSuiteName, tExecutionProfile)
     }
     
-    /**
-     * list of TSuiteName, unique
-     */
-    @Override
-    List<TSuiteName> getTSuiteNameList() {
-        return componentMR_.getTSuiteNameList()
-    }
-    
-
-
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    void addTSuiteResult(TSuiteResult tSuiteResult) {
-        throw new UnsupportedOperationException("because we do not add TSuiteResult through the MaterialStorage view")
-    }
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    boolean hasTSuiteResult(TSuiteResult tSuiteResult) {
-        throw new UnsupportedOperationException()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
-        throw new UnsupportedOperationException()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        return componentMR_.getTSuiteResult(tSuiteResultId)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
-                                               TExecutionProfile tExecutionProfile) {
-        return componentMR_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList() {
-        return componentMR_.getTSuiteResultIdList()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     *
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList() {
-        return componentMR_.getTSuiteResultList()
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     * not used in fact
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
-        return componentMR_.getTSuiteResultList(tSuiteName)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     * not used in fact
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
-        return componentMR_.getTSuiteResultList(tSuiteName, tExecutionProfile)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
-        return componentMR_.getTSuiteResultList(tSuiteResultIdList)
-    }
-
-    //---------------------------------------------------------------------
 
     @Override
     void status(Writer output, Map<String, Object> options) {
@@ -426,20 +316,10 @@ class MaterialStorageImpl implements MaterialStorage {
 		}
 	}
 	    
-    @Override
-    void scan() {
-        componentMR_.scan()
-    }
 
     @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         this.vtLogger_ = vtLogger
-    }
-    
-    // ---------------------- overriding Object properties --------------------
-    @Override
-    String toString() {
-        return this.toJsonText()
     }
 
     @Override
@@ -447,10 +327,140 @@ class MaterialStorageImpl implements MaterialStorage {
         StringBuilder sb = new StringBuilder()
         sb.append('{"MaterialStorage":{')
         sb.append('"baseDir":"' +
-            Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
+                Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
         sb.append('"componentMR":' +
-            componentMR_.toJsonText())
+                componentMR_.toJsonText())
         sb.append('}}')
         return sb.toString()
     }
+
+
+
+    // ================================================================
+    //
+    //     implementing TSuiteResultTree interface
+    //
+    // ----------------------------------------------------------------
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    void addTSuiteResult(TSuiteResult tSuiteResult) {
+        throw new UnsupportedOperationException("because we do not add TSuiteResult through the MaterialStorage view")
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    boolean hasTSuiteResult(TSuiteResult tSuiteResult) {
+        throw new UnsupportedOperationException()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteName> getTSuiteNameList() {
+        return componentMR_.getTSuiteNameList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
+        throw new UnsupportedOperationException()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        return componentMR_.getTSuiteResult(tSuiteResultId)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        return componentMR_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        return componentMR_.getTSuiteResultIdList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList() {
+        return componentMR_.getTSuiteResultList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        return componentMR_.getTSuiteResultList(tSuiteName)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        return componentMR_.getTSuiteResultList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        return componentMR_.getTSuiteResultList(tSuiteResultIdList)
+    }
+
+
+
+
+    // ================================================================
+    //
+    //         overriding java.lang.Object methods
+    //
+    // ----------------------------------------------------------------
+    @Override
+    String toString() {
+        return this.toJsonText()
+    }
+
+
 }

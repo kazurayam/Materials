@@ -32,6 +32,12 @@ import com.kazurayam.materials.repository.RepositoryRoot
 interface MaterialRepository extends TSuiteResultTree {
 
     /**
+     * scan the baseDir to recognize the current directories/files configuration
+     */
+    void scan()
+
+
+    /**
      * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
      * will remove the tSuiteTimestamp directory, but will retain the tSuiteName directory.
      *
@@ -149,7 +155,6 @@ interface MaterialRepository extends TSuiteResultTree {
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName,
                                                             TExecutionProfile tExecutionProfile)
-
     Path getTestCaseDirectory(String testCaseId)
     
     /**
@@ -299,12 +304,9 @@ interface MaterialRepository extends TSuiteResultTree {
 	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
 	boolean hasMaterialMetadataBundleOfCurrentTSuite()
 
+
+
+
     void setVisualTestingLogger(VisualTestingLogger vtLogger)
-    
-    /**
-     * scan the baseDir to recognize the current directories/files configuration
-     */
-    void scan()
-    
     String toJsonText()
 }

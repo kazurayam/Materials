@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 
 final class RepositoryRoot implements TSuiteResultTree {
 
@@ -37,8 +38,11 @@ final class RepositoryRoot implements TSuiteResultTree {
 
 
 
-
-    // ------------------- child nodes operation ----------------------------
+    // ================================================================
+    //
+    //     implementing TSuiteResutTree interface
+    //
+    // ----------------------------------------------------------------
     /**
      * implementing TSuiteResultTree
      */
@@ -71,6 +75,17 @@ final class RepositoryRoot implements TSuiteResultTree {
                         given.getTExecutionProfile(),
                         given.getTSuiteTimestamp())
         return (result != null && result == given)
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    List<TSuiteName> getTSuiteNameList() {
+        Set<TSuiteName> set = new HashSet<TSuiteName>()
+        for (TSuiteResult subject : this.getTSuiteResultList()) {
+            set.add(subject.getTSuiteName())
+        }
+        return set.stream().collect(Collectors.toList())
     }
 
 
@@ -156,6 +171,7 @@ final class RepositoryRoot implements TSuiteResultTree {
     /**
      * implementing TSuiteResultTree
      */
+    @Override
     List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
@@ -171,6 +187,7 @@ final class RepositoryRoot implements TSuiteResultTree {
     /**
      * implementing TSuiteResultTree
      */
+    @Override
     List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName,
                                            TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
@@ -202,8 +219,11 @@ final class RepositoryRoot implements TSuiteResultTree {
     }
 
 
-    // ------------------------------------------------------------
-
+    // ================================================================
+    //
+    //     methods unique to RepositoryRoot
+    //
+    // ----------------------------------------------------------------
     /**
      * returns a List of TSuiteResult which has the given TSuiteName and
      * the given TExecutionProfile,
@@ -289,8 +309,6 @@ final class RepositoryRoot implements TSuiteResultTree {
         Collections.sort(sorted, TSuiteResultComparator_)
         return Collections.unmodifiableList(sorted)
     }
-
-
     /**
      * Comparator for TSuiteResult in the natural order :
      *      ascending order of TSuiteName + TExecutionProfile + TSuiteTimestamp
@@ -363,7 +381,11 @@ final class RepositoryRoot implements TSuiteResultTree {
 
 
 
-    // -------------- overriding java.lang.Object methods ---------------------
+    // ================================================================
+    //
+    //     overriding java.lang.Object methods
+    //
+    // ----------------------------------------------------------------
     @Override
     boolean equals(Object obj) {
         if (!(obj instanceof RepositoryRoot)) {
