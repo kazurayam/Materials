@@ -6,6 +6,7 @@ import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteResultTree
 import com.kazurayam.materials.TSuiteTimestamp
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.time.LocalDateTime
 
-final class RepositoryRoot {
+final class RepositoryRoot implements TSuiteResultTree {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryRoot.class)
 

@@ -145,6 +145,7 @@ class MaterialStorageImpl implements MaterialStorage {
         MaterialRepositoryImpl mri = (MaterialRepositoryImpl)componentMR_
         return mri.getRepositoryRoot()
     }
+
     /*
     @Override
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
@@ -238,7 +239,7 @@ class MaterialStorageImpl implements MaterialStorage {
         // need to clone the list as componentMR_.getTSuiteResultList() returns unmodifiable list
         List<TSuiteResult> source = new ArrayList<TSuiteResult>(componentMR_.getTSuiteResultList())
         // sort the list as required
-        Collections.sort(source, new com.kazurayam.materials.TSuiteResult.TimestampFirstTSuiteResultComparator())
+        Collections.sort(source, new TSuiteResult.TimestampFirstTSuiteResultComparator())
         // now calculate
         List<TSuiteResultId> toBeDeleted = new ArrayList<TSuiteResultId>()
         long size = 0
@@ -303,17 +304,7 @@ class MaterialStorageImpl implements MaterialStorage {
         return restoreResultList
     }
 
-    /*
-    @Override
-    RestoreResult restore(MaterialRepository intoMR, TSuiteName tSuiteName,
-                                    RetrievalBy by) throws IOException {
-        Objects.requireNonNull(intoMR, "intoMR must not be null")
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(by, "by must not be null")
-        return this.restoreUnaryExclusive(intoMR, tSuiteName, by)
-    }
-     */
-    
+
     /**
      *
      */
@@ -326,7 +317,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         Objects.requireNonNull(by, "by must not be null")
-        RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
+        SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
         // find one TSuiteResult object
         TSuiteResult tSuiteResult = by.findTSuiteResultBeforeExclusive(context)
 		//                                                   ^^ exclusive!
@@ -352,7 +343,7 @@ class MaterialStorageImpl implements MaterialStorage {
 		Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
 		Objects.requireNonNull(by, "by must not be null")
-		RetrievalBy.SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
+		SearchContext context = new SearchContext(this, tSuiteName, tExecutionProfile)
 		// find one TSuiteResult object
 		TSuiteResult tSuiteResult = by.findTSuiteResultBeforeInclusive(context)
 		//                                                   ^^ inclusive!

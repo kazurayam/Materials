@@ -183,12 +183,12 @@ class TSuiteResultSpec extends Specification {
                 TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
         // attention!
-        TCaseResult tcr = tsr.ensureTCaseResult(new TCaseName('TSX'))
+        TCaseResult tcr = tsr.ensureTCaseResultPresent(new TCaseName('TSX'))
         then:
         tcr != null
         tcr.getParent() == tsr
         when:
-        TCaseResult tcr2 = tsr.ensureTCaseResult(new TCaseName('TSX'))
+        TCaseResult tcr2 = tsr.ensureTCaseResultPresent(new TCaseName('TSX'))
         then:
         tcr2 != null
         tcr2.getParent() == tsr

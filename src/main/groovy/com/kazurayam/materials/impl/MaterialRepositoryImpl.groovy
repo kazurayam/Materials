@@ -396,7 +396,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalStateException("tSuiteResult is null")
         }
 
-        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResultPresent(tCaseName)
 
         // check if a Material is already there
         Material material = tCaseResult.getMaterial(subPath, url, Suffix.NULL, FileType.PNG)
@@ -483,7 +483,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalStateException("getCurrentTSuiteResult() returned null")
         }
 
-        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResultPresent(tCaseName)
 
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
 
@@ -630,7 +630,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             throw new IllegalStateException("tSuiteResult is null")
         }
 
-        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResult(tCaseName)
+        TCaseResult tCaseResult = tSuiteResult.ensureTCaseResultPresent(tCaseName)
         Helpers.ensureDirs(tCaseResult.getTCaseDirectory())
         
         //logger_.debug("#resolveMaterialPath tCaseResult=${tCaseResult}")

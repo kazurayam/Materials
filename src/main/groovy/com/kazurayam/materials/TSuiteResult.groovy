@@ -78,7 +78,7 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      * @param tCaseName
      * @return
      */
-    TCaseResult ensureTCaseResult(TCaseName tCaseName) {
+    TCaseResult ensureTCaseResultPresent(TCaseName tCaseName) {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         TCaseResult tCaseResult = this.getTCaseResult(tCaseName)
         if (tCaseResult == null) {

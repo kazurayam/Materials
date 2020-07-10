@@ -29,7 +29,7 @@ import com.kazurayam.materials.repository.RepositoryRoot
  * @author kazurayam
  *
  */
-interface MaterialRepository {
+interface MaterialRepository extends TSuiteResultTree {
 
     /**
      * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.

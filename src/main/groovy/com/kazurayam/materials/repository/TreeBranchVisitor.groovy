@@ -63,7 +63,7 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
                 directoryTransition_.push(TreeLayer.TESTCASE)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                 tCaseName_ = new TCaseName(dir)
-                tCaseResult_ = targetTSuiteResult_.ensureTCaseResult(tCaseName_)
+                tCaseResult_ = targetTSuiteResult_.ensureTCaseResultPresent(tCaseName_)
                 return CONTINUE
 
             case TreeLayer.TESTCASE:

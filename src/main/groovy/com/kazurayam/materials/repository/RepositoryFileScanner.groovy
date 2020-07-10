@@ -36,7 +36,10 @@ final class RepositoryFileScanner {
     }
 
     /**
-     * scan the baseDir to return an instance of RepositoryRoot
+     * scan the baseDir and all of contained files/subdirectories as one batch.
+     * the repoRoot_ variable will hold a pointer to a large tree of
+     * TSuiteResults + TCaseResults + Materials.
+     *
      */
     void scan() {
         Files.walkFileTree(
