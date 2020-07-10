@@ -9,7 +9,7 @@ import java.nio.file.Path
  * 
  * @author kazurayam
  */
-interface MaterialStorage {
+interface MaterialStorage extends TSuiteResultTree {
     
     /**
      * copy a set of Material files idenfified by a pair of a tSuiteName and a specific tSuiteTimestamp 
