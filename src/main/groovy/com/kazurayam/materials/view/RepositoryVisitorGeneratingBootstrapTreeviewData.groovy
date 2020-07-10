@@ -54,7 +54,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          this.reportsAccessor_ = reportsAccessor
      }
      
-	 // implements RepositoryVisitorExtended ----------------------------
+	 // -------- VTLoggerEnabled --------------------------------------
      
 	 @Override
      void setVisualTestingLogger(VisualTestingLogger vtLogger) {

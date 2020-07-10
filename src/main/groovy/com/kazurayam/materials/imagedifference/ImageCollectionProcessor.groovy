@@ -2,10 +2,11 @@ package com.kazurayam.materials.imagedifference
 
 import com.kazurayam.materials.MaterialPairs
 import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.stats.ImageDeltaStats
 
-abstract class ImageCollectionProcessor implements ImageCollectionProcessingContentHandler {
+abstract class ImageCollectionProcessor implements ImageCollectionProcessingContentHandler, VTLoggerEnabled {
     
     protected ImageDifferenceFilenameResolver       filenameResolver_
     protected VisualTestingLogger                   vtLogger_
@@ -18,7 +19,8 @@ abstract class ImageCollectionProcessor implements ImageCollectionProcessingCont
         Objects.requireNonNull(filenameResolver, "filenameResolver must not be null")
         this.filenameResolver_ = filenameResolver
     }
-    
+
+    @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
         Objects.requireNonNull(vtLogger, "vtLogger must not be null")
         this.vtLogger_ = vtLogger

@@ -168,6 +168,5 @@ interface MaterialStorage extends TSuiteResultTree {
 
 
 
-    void setVisualTestingLogger(VisualTestingLogger vtLogger)
     String toJsonText()
 }

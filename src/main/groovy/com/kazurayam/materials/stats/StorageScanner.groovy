@@ -1,6 +1,7 @@
 package com.kazurayam.materials.stats
 
 import com.kazurayam.materials.TExecutionProfile
+import com.kazurayam.materials.VTLoggerEnabled
 
 import java.awt.image.BufferedImage
 import java.nio.file.Files
@@ -30,7 +31,7 @@ import com.kazurayam.materials.imagedifference.ImageDifference
  * 
  * @author kazurayam
  */
-class StorageScanner {
+class StorageScanner implements VTLoggerEnabled {
     
     static Logger logger_ = LoggerFactory.getLogger(StorageScanner.class)
     
@@ -108,6 +109,7 @@ class StorageScanner {
      * 
      * @param listener
      */
+    @Override
     void setVisualTestingLogger(VisualTestingLogger logger) {
         this.vtLogger_ = logger
     }

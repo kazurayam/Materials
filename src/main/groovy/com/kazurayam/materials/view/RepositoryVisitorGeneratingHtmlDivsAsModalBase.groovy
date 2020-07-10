@@ -83,7 +83,9 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
         this.reportsAccessor_ = reportsAccessor
     }
-    // implementing RepositoryVisitorExtended interface -----------------------
+
+
+    // ---- VTLoggerEnabled -------------------------------------------
     
     @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {

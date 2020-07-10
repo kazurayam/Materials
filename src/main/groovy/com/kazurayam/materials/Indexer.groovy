@@ -3,15 +3,13 @@ package com.kazurayam.materials
 import java.nio.file.Path
 
 
-interface Indexer {
+interface Indexer extends VTLoggerEnabled {
     
     void setBaseDir(Path baseDir)
     
     void setReportsDir(Path reportsDir)
 
     void setOutput(Path outputFile)
-    
-    void setVisualTestingLogger(VisualTestingLogger vtLogger)
     
     Path getOutput()
 

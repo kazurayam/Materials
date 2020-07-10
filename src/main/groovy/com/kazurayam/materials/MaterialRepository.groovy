@@ -307,6 +307,5 @@ interface MaterialRepository extends TSuiteResultTree {
 
 
 
-    void setVisualTestingLogger(VisualTestingLogger vtLogger)
     String toJsonText()
 }

@@ -1,12 +1,5 @@
 package com.kazurayam.materials.view
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import groovy.json.JsonSlurper
-import java.nio.file.Files
-import java.nio.file.Path
-
-import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
@@ -18,8 +11,10 @@ import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-class RepositoryVisitorGeneratingModalEventHandler 
+class RepositoryVisitorGeneratingModalEventHandler
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, VTLoggerEnabled {
             
     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingModalEventHandler.class)
@@ -35,7 +30,7 @@ class RepositoryVisitorGeneratingModalEventHandler
         this.reportsAccessor_ = reportsAccessor
     }
     
-	// implementing RepositoryVisitorExtended ------------------------------------
+	// ---- VTLoggerEnabled -------------------------------------------
 	
 	@Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {

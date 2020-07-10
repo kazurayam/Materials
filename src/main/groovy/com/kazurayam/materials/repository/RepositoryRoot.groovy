@@ -9,6 +9,7 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteResultTree
 import com.kazurayam.materials.TSuiteTimestamp
+import com.kazurayam.materials.VisualTestingLogger
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -19,6 +20,8 @@ import java.util.stream.Collectors
 final class RepositoryRoot implements TSuiteResultTree {
 
     static Logger logger_ = LoggerFactory.getLogger(RepositoryRoot.class)
+
+    private VisualTestingLogger vtLogger_
 
     private Path baseDir_
 
@@ -382,6 +385,10 @@ final class RepositoryRoot implements TSuiteResultTree {
     }
 
 
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
+    }
 
     // ================================================================
     //

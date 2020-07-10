@@ -1,7 +1,6 @@
 package com.kazurayam.materials
 
 import java.nio.file.Path
-import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.view.JUnitReportWrapper
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 

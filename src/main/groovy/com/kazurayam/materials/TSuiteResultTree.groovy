@@ -12,7 +12,7 @@ package com.kazurayam.materials
  * - com.kazurayam.materials.MaterialStorage
  *
  */
-interface TSuiteResultTree {
+interface TSuiteResultTree extends VTLoggerEnabled {
 
     void addTSuiteResult(TSuiteResult tSuiteResult)
 
