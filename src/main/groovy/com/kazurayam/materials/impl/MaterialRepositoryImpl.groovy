@@ -253,6 +253,29 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         repoRoot_.getTSuiteResult(tSuiteResultId)
     }
 
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        return repoRoot_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        return repoRoot_.getTSuiteResultIdList()
+    }
+
+
+
+    // ---------------------------------------------------------------------
+
     @Override
     List<TSuiteName> getTSuiteNameList() {
         Set<TSuiteName> set = new HashSet<TSuiteName>()
@@ -262,30 +285,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         return set.stream().collect(Collectors.toList())
     }
 
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
-                                               TExecutionProfile tExecutionProfile) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
-            if (subject.getId().getTSuiteName().equals(tSuiteName) &&
-                subject.getId().getTExecutionProfile().equals(tExecutionProfile)) {
-                list.add(subject.getId())
-            }
-        }
-        return list
-    }
-    
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList() {
-        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
-            list.add(subject.getId())
-        }
-        return list
-    }
-    
+
     @Override
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")

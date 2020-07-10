@@ -106,6 +106,40 @@ final class RepositoryRoot implements TSuiteResultTree {
         )
     }
 
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
+                list.add(tsr.getId())
+            }
+        }
+        return list
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            list.add(tsr.getId())
+        }
+        return list
+    }
+
+
+    // ------------------------------------------------------------
     /**
      *
      * @param tSuiteName

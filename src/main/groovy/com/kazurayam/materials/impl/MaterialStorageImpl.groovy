@@ -164,17 +164,7 @@ class MaterialStorageImpl implements MaterialStorage {
     }
     
 
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
-                                               TExecutionProfile tExecutionProfile) {
-        return componentMR_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
-    }
-    
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList() {
-        return componentMR_.getTSuiteResultIdList()
-    }
-    
+
     @Override
     List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
         return componentMR_.getTSuiteResultList(tSuiteResultIdList)
@@ -224,6 +214,26 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getTSuiteResult(tSuiteResultId)
     }
 
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        return componentMR_.getTSuiteResultIdList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        return componentMR_.getTSuiteResultIdList()
+    }
 
 
     @Override

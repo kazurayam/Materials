@@ -13,6 +13,7 @@ import java.nio.file.Paths
 
 //@Ignore
 class MaterialRepositorySpec extends Specification {
+
     static Logger logger_ = LoggerFactory.getLogger(MaterialRepositorySpec.class);
 
     private static Path specOutputDir_

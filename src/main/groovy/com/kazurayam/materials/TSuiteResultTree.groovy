@@ -22,6 +22,10 @@ interface TSuiteResultTree {
 
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
 
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
+
+    List<TSuiteResultId> getTSuiteResultIdList()
+
     //List<TSuiteResult> getTSuiteResultList(
     //        TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
 
