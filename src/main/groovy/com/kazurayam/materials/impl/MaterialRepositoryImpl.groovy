@@ -216,7 +216,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-    // --------------------- create/add/get child nodes -----------------------
+    // --------------------- implementing TSuiteResultTree -------------------
 
     /**
      * implementing TSuiteResultTree
@@ -273,8 +273,48 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList() {
+        return repoRoot_.getTSuiteResultList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        return repoRoot_.getTSuiteResultList(tSuiteName)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        return repoRoot_.getTSuiteResultList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        return repoRoot_.getTSuiteResultList(tSuiteResultIdList)
+    }
 
     // ---------------------------------------------------------------------
+
+
+
+
 
     @Override
     List<TSuiteName> getTSuiteNameList() {
@@ -286,25 +326,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     }
 
 
-    @Override
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
-        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
-        List<TSuiteResult> list = new ArrayList<TSuiteResult>()
-        for (TSuiteResultId subject : tSuiteResultIdList) {
-            for (TSuiteResult tsr : repoRoot_.getTSuiteResultList()) {
-                if (tsr.getId().getTSuiteName().equals(subject.getTSuiteName()) &&
-                    tsr.getId().getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
-                    list.add(tsr)
-                }
-            }
-        }
-        return list
-    }
-    
-    @Override
-    List<TSuiteResult> getTSuiteResultList() {
-        return repoRoot_.getTSuiteResultList()
-    }
+
 
 
     // --------------------------------------------------------------------------
@@ -948,6 +970,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                                TCaseName tCaseName) {
         return repoRoot_.getTCaseResult(tSuiteName, tExecutionProfile, tSuiteTimestamp, tCaseName)
     }
+
+
+
+
+
 
     // ---------------------- overriding Object properties --------------------
     @Override

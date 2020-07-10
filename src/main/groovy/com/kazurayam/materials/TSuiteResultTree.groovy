@@ -18,15 +18,32 @@ interface TSuiteResultTree {
 
     boolean hasTSuiteResult(TSuiteResult given)
 
+
+    // methods that return TSuiteResult
+
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp)
 
     TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+
+
+    // methods that returns List<TSuiteResultId>
 
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
 
     List<TSuiteResultId> getTSuiteResultIdList()
 
-    //List<TSuiteResult> getTSuiteResultList(
-    //        TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
+
+
+    // methods that returns List<TSuiteResult>
+
+    List<TSuiteResult> getTSuiteResultList()
+
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName)
+
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
+
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList)
+
+
 
 }

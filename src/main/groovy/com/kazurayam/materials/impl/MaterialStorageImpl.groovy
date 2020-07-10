@@ -165,15 +165,6 @@ class MaterialStorageImpl implements MaterialStorage {
     
 
 
-    @Override
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
-        return componentMR_.getTSuiteResultList(tSuiteResultIdList)
-    }
-    
-    @Override
-    List<TSuiteResult> getTSuiteResultList() {
-        return componentMR_.getTSuiteResultList()
-    }
 
 
     /**
@@ -235,6 +226,46 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getTSuiteResultIdList()
     }
 
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList() {
+        return componentMR_.getTSuiteResultList()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        return componentMR_.getTSuiteResultList(tSuiteName)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     * not used in fact
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile) {
+        return componentMR_.getTSuiteResultList(tSuiteName, tExecutionProfile)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        return componentMR_.getTSuiteResultList(tSuiteResultIdList)
+    }
+
+    //---------------------------------------------------------------------
 
     @Override
     void status(Writer output, Map<String, Object> options) {
