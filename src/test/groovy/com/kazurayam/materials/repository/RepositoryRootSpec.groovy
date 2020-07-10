@@ -175,7 +175,7 @@ class RepositoryRootSpec extends Specification {
         def count = 0
         for (TSuiteResult tsr : tSuiteResults) {
             TSuiteTimestamp tst = tsr.getId().getTSuiteTimestamp()
-            logger_.debug("#testGetTSuiteResultsSortedByTSuiteTimestampReverseOrder tst${count}=${tst}")
+            logger_.debug("#testGetTSuiteResultsSortedTSuiteResults tst${count}=${tst}")
             count += 1
         }
         then:

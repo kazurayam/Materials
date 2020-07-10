@@ -136,6 +136,8 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      */
     @Override
     int compareTo(TSuiteResult other) {
+        return this.getId().compareTo(other.getId())
+        /*
         int v = this.getId().getTSuiteName().compareTo(
                 other.getId().getTSuiteName())
         if (v < 0) {
@@ -152,6 +154,7 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         } else {
             return v
         }
+         */
     }
 
     

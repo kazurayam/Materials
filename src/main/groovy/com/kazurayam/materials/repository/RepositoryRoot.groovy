@@ -22,201 +22,19 @@ final class RepositoryRoot implements TSuiteResultTree {
 
     private Path baseDir_
 
-    private List<TSuiteResult> tSuiteResults_
+    private Set<TSuiteResult> tSuiteResults_
 
     RepositoryRoot(Path baseDir) {
         Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
         baseDir_ = baseDir
-        tSuiteResults_ = new ArrayList<TSuiteResult>()
+        tSuiteResults_ = new HashSet<TSuiteResult>()
     }
 
-    // ------------------- getter -------------------------------------------
     Path getBaseDir() {
         return baseDir_
     }
 
-
-
-    // ================================================================
-    //
-    //     implementing TSuiteResutTree interface
-    //
-    // ----------------------------------------------------------------
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    void addTSuiteResult(TSuiteResult tSuiteResult) {
-        Objects.requireNonNull(tSuiteResult)
-        boolean found = false
-        for (TSuiteResult tsr : tSuiteResults_) {
-            if (tsr == tSuiteResult) {
-                found = true
-            }
-        }
-        if (!found) {
-            tSuiteResults_.add(tSuiteResult)
-            Collections.sort(tSuiteResults_)
-        }
-    }
-
-
-    /**
-     * return true if RepositoryRoot has the given TSuiteResult
-     *
-     * implementing TSuiteResultTree
-     */
-    @Override
-    boolean hasTSuiteResult(TSuiteResult given) {
-        Objects.requireNonNull(given, "arg 'given' must not be null")
-        TSuiteResult result =
-                this.getTSuiteResult(given.getTSuiteName(),
-                        given.getTExecutionProfile(),
-                        given.getTSuiteTimestamp())
-        return (result != null && result == given)
-    }
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    List<TSuiteName> getTSuiteNameList() {
-        Set<TSuiteName> set = new HashSet<TSuiteName>()
-        for (TSuiteResult subject : this.getTSuiteResultList()) {
-            set.add(subject.getTSuiteName())
-        }
-        return set.stream().collect(Collectors.toList())
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName,
-                                 TExecutionProfile tExecutionProfile,
-                                 TSuiteTimestamp tSuiteTimestamp) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
-        for (TSuiteResult tsr : tSuiteResults_) {
-            if (tsr.getId().getTSuiteName() == tSuiteName &&
-                    tsr.getId().getTExecutionProfile() == tExecutionProfile &&
-                    tsr.getId().getTSuiteTimestamp() == tSuiteTimestamp) {
-                return tsr
-            }
-        }
-        return null
-    }
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        return this.getTSuiteResult(
-                tSuiteResultId.getTSuiteName(),
-                tSuiteResultId.getTExecutionProfile(),
-                tSuiteResultId.getTSuiteTimestamp()
-        )
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
-                                               TExecutionProfile tExecutionProfile) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult tsr : this.getTSuiteResultList()) {
-            if (tsr.getId().getTSuiteName() == tSuiteName &&
-                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
-                list.add(tsr.getId())
-            }
-        }
-        return list
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResultId> getTSuiteResultIdList() {
-        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult tsr : this.getTSuiteResultList()) {
-            list.add(tsr.getId())
-        }
-        return list
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList() {
-        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tsr : tSuiteResults_) {
-            result.add(tsr)
-        }
-        return Collections.unmodifiableList(result)
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tsr : this.getTSuiteResultList()) {
-            if (tsr.getId().getTSuiteName() == tSuiteName) {
-                result.add(tsr)
-            }
-        }
-        return result
-    }
-
-
-    /**
-     * implementing TSuiteResultTree
-     */
-    @Override
-    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName,
-                                           TExecutionProfile tExecutionProfile) {
-        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
-        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
-        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-        for (TSuiteResult tsr : this.getTSuiteResultList()) {
-            if (tsr.getId().getTSuiteName() == tSuiteName &&
-                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
-                result.add(tsr)
-            }
-        }
-        return result
-    }
-
-
-    @Override
-    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
-        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
-        List<TSuiteResult> list = new ArrayList<TSuiteResult>()
-        for (TSuiteResultId subject : tSuiteResultIdList) {
-            for (TSuiteResult tsr : this.getTSuiteResultList()) {
-                if (tsr.getId().getTSuiteName() == subject.getTSuiteName() &&
-                        tsr.getId().getTSuiteTimestamp() == subject.getTSuiteTimestamp()) {
-                    list.add(tsr)
-                }
-            }
-        }
-        return list
-    }
 
 
     // ================================================================
@@ -255,7 +73,7 @@ final class RepositoryRoot implements TSuiteResultTree {
             }
         }
         Collections.sort(result, TSuiteResultComparator_)
-        return Collections.unmodifiableList(result)
+        return result
     }
 
     /**
@@ -273,15 +91,11 @@ final class RepositoryRoot implements TSuiteResultTree {
         Objects.requireNonNull(tExecutionProfile, "argument \'tExecutionProfile\' must not be null")
         Objects.requireNonNull(timestamp, "argument \'timestamp\' must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
-
         //println("RepositoryRoot#getTSuiteResultsBeforeIncludes() was invoked")
-
         for (TSuiteResult tsr : tSuiteResults_) {
-
             //println("tsr=${tsr}")
             //println("tSuiteName=${tSuiteName}, tsr.getId().getTSuiteName()=${tsr.getId().getTSuiteName()}")
             //println("tExecutionProfile=${tExecutionProfile}, tsr.getId().getTExecutionProfile()=${tsr.getId().getTExecutionProfile()}")
-
             if (tSuiteName.equals(tsr.getId().getTSuiteName()) &&
                     tExecutionProfile.equals(tsr.getId().getTExecutionProfile())) {
                 if (TSuiteResultComparator_.compare(tsr,
@@ -293,21 +107,21 @@ final class RepositoryRoot implements TSuiteResultTree {
             }
         }
         Collections.sort(result, TSuiteResultComparator_)
-        return Collections.unmodifiableList(result)
+        return result
     }
 
 
     /**
      * returns the sorted list of TSuiteResults ordered by
      * (1) TSuiteName in natural order
-     * (2) TSuiteTimestamp in the reverse order
+     * (2) TSuiteTimestamp in the REVERSE order
      *
      * @return
      */
     List<TSuiteResult> getSortedTSuiteResults() {
-        List<TSuiteResult> sorted = tSuiteResults_
-        Collections.sort(sorted, TSuiteResultComparator_)
-        return Collections.unmodifiableList(sorted)
+        List<TSuiteResult> list = this.getTSuiteResultList()
+        Collections.sort(list, TSuiteResultComparator_)
+        return list
     }
     /**
      * Comparator for TSuiteResult in the natural order :
@@ -316,7 +130,7 @@ final class RepositoryRoot implements TSuiteResultTree {
     private static Comparator<TSuiteResult> TSuiteResultComparator_ =
             new Comparator<TSuiteResult>() {
                 @Override
-                public int compare(TSuiteResult o1, TSuiteResult o2) {
+                int compare(TSuiteResult o1, TSuiteResult o2) {
                     int v = o1.getId().getTSuiteName().compareTo(o2.getId().getTSuiteName())
                     if (v < 0) {
                         return v // natural order of TSuiteName
@@ -377,6 +191,194 @@ final class RepositoryRoot implements TSuiteResultTree {
             tCaseResult = tsr.getTCaseResult(tCaseName)
         }
         return tCaseResult
+    }
+
+
+
+
+    // ================================================================
+    //
+    //     implementing TSuiteResutTree interface
+    //
+    // ----------------------------------------------------------------
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    void addTSuiteResult(TSuiteResult tSuiteResult) {
+        Objects.requireNonNull(tSuiteResult)
+        boolean found = false
+        for (tsr in tSuiteResults_) {
+            if (tsr == tSuiteResult) {
+                found = true
+            }
+        }
+        if (!found) {
+            tSuiteResults_.add(tSuiteResult)
+        }
+    }
+
+
+    /**
+     * return true if RepositoryRoot has the given TSuiteResult
+     *
+     * implementing TSuiteResultTree
+     */
+    @Override
+    boolean hasTSuiteResult(TSuiteResult given) {
+        Objects.requireNonNull(given, "arg 'given' must not be null")
+        TSuiteResult result =
+                this.getTSuiteResult(given.getTSuiteName(),
+                        given.getTExecutionProfile(),
+                        given.getTSuiteTimestamp())
+        return (result != null && result == given)
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    List<TSuiteName> getTSuiteNameList() {
+        Set<TSuiteName> set = new HashSet<TSuiteName>()
+        for (tsr in this.getTSuiteResultList()) {
+            set.add(tsr.getTSuiteName())
+        }
+        return set.stream().collect(Collectors.toList())
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName,
+                                 TExecutionProfile tExecutionProfile,
+                                 TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+        for (tsr in this.getTSuiteResultList()) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                    tsr.getId().getTExecutionProfile() == tExecutionProfile &&
+                    tsr.getId().getTSuiteTimestamp() == tSuiteTimestamp) {
+                return tsr
+            }
+        }
+        return null
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+        return this.getTSuiteResult(
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp()
+        )
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
+                                               TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (tsr in this.getTSuiteResultList()) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
+                list.add(tsr.getId())
+            }
+        }
+        Collections.sort(list)
+        return list
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResultId> getTSuiteResultIdList() {
+        List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
+        for (tsr in this.getTSuiteResultList()) {
+            list.add(tsr.getId())
+        }
+        Collections.sort(list)
+        return list
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList() {
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (tsr in tSuiteResults_) {
+            result.add(tsr)
+        }
+        Collections.sort(result)
+        return result
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            if (tsr.getId().getTSuiteName() == tSuiteName) {
+                result.add(tsr)
+            }
+        }
+        Collections.sort(result)
+        return result
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        List<TSuiteResult> result = new ArrayList<TSuiteResult>()
+        for (TSuiteResult tsr : this.getTSuiteResultList()) {
+            if (tsr.getId().getTSuiteName() == tSuiteName &&
+                    tsr.getId().getTExecutionProfile() == tExecutionProfile) {
+                result.add(tsr)
+            }
+        }
+        Collections.sort(result)
+        return result
+    }
+
+
+    @Override
+    List<TSuiteResult> getTSuiteResultList(List<TSuiteResultId> tSuiteResultIdList) {
+        Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
+        List<TSuiteResult> list = new ArrayList<TSuiteResult>()
+        for (TSuiteResultId subject : tSuiteResultIdList) {
+            for (TSuiteResult tsr : this.getTSuiteResultList()) {
+                if (tsr.getId().getTSuiteName() == subject.getTSuiteName() &&
+                        tsr.getId().getTSuiteTimestamp() == subject.getTSuiteTimestamp()) {
+                    list.add(tsr)
+                }
+            }
+        }
+        Collections.sort(list)
+        return list
     }
 
 
