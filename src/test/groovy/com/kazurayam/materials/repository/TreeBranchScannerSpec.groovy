@@ -50,14 +50,14 @@ class TreeBranchScannerSpec extends Specification {
         when:
         tts.scan()
         RepositoryRoot repoRoot = tts.getRepositoryRoot()
-        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResultList()
         // we want to further scan the file tree
         // for the branches (screenshot images) under the yyyyMMdd_hhmmss directory
         for (tsr in tSuiteResults) {
             TreeBranchScanner tbs = new TreeBranchScanner(repoRoot)
             tbs.scan(tsr)
         }
-        List<TSuiteResult> stuffedList = repoRoot.getTSuiteResults()
+        List<TSuiteResult> stuffedList = repoRoot.getTSuiteResultList()
         then:
         stuffedList.size() == 18
         //

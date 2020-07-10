@@ -51,7 +51,7 @@ class TreeTrunkScannerSpec extends Specification {
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         logger_.debug("repoRoot=${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
 
-        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResultList()
         logger_.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
         //logger_.debug(prettyPrint(tSuiteResults))
         then:

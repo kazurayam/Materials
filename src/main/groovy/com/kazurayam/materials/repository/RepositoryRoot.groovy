@@ -6,6 +6,7 @@ import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteResultTree
 import com.kazurayam.materials.TSuiteTimestamp
 import org.slf4j.Logger
@@ -22,7 +23,7 @@ final class RepositoryRoot implements TSuiteResultTree {
     private List<TSuiteResult> tSuiteResults_
 
     RepositoryRoot(Path baseDir) {
-        Objects.requireNonNull(baseDir)
+        Objects.requireNonNull(baseDir, "baseDir must not be null")
         Helpers.ensureDirs(baseDir)
         baseDir_ = baseDir
         tSuiteResults_ = new ArrayList<TSuiteResult>()
@@ -33,7 +34,14 @@ final class RepositoryRoot implements TSuiteResultTree {
         return baseDir_
     }
 
+
+
+
     // ------------------- child nodes operation ----------------------------
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
     void addTSuiteResult(TSuiteResult tSuiteResult) {
         Objects.requireNonNull(tSuiteResult)
         boolean found = false
@@ -49,6 +57,26 @@ final class RepositoryRoot implements TSuiteResultTree {
     }
 
 
+    /**
+     * return true if RepositoryRoot has the given TSuiteResult
+     *
+     * implementing TSuiteResultTree
+     */
+    @Override
+    boolean hasTSuiteResult(TSuiteResult given) {
+        Objects.requireNonNull(given, "arg 'given' must not be null")
+        TSuiteResult result =
+                this.getTSuiteResult(given.getTSuiteName(),
+                        given.getTExecutionProfile(),
+                        given.getTSuiteTimestamp())
+        return (result != null && result == given)
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
     TSuiteResult getTSuiteResult(TSuiteName tSuiteName,
                                  TExecutionProfile tExecutionProfile,
                                  TSuiteTimestamp tSuiteTimestamp) {
@@ -66,17 +94,16 @@ final class RepositoryRoot implements TSuiteResultTree {
     }
 
     /**
-     * return true if RepositoryRoot has the given TSuiteResult
-     * @param given tSuiteResult
-     * @return
+     * implementing TSuiteResultTree
      */
-    boolean hasTSuiteResult(TSuiteResult given) {
-        Objects.requireNonNull(given, "arg 'given' must not be null")
-        TSuiteResult result =
-                this.getTSuiteResult(given.getTSuiteName(),
-                        given.getTExecutionProfile(),
-                        given.getTSuiteTimestamp())
-        return (result != null && result == given)
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+        return this.getTSuiteResult(
+                tSuiteResultId.getTSuiteName(),
+                tSuiteResultId.getTExecutionProfile(),
+                tSuiteResultId.getTSuiteTimestamp()
+        )
     }
 
     /**
@@ -85,8 +112,8 @@ final class RepositoryRoot implements TSuiteResultTree {
      * @param tExecutionProfile
      * @return
      */
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName,
-                                        TExecutionProfile tExecutionProfile) {
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName,
+                                           TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
@@ -105,7 +132,7 @@ final class RepositoryRoot implements TSuiteResultTree {
      * @param tExecutionProfile
      * @return
      */
-    List<TSuiteResult> getTSuiteResults(TSuiteName tSuiteName) {
+    List<TSuiteResult> getTSuiteResultList(TSuiteName tSuiteName) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
@@ -121,7 +148,7 @@ final class RepositoryRoot implements TSuiteResultTree {
      *
      * @return List of all TSuiteResult in the Repository, the List is unmodifiable
      */
-    List<TSuiteResult> getTSuiteResults() {
+    List<TSuiteResult> getTSuiteResultList() {
         List<TSuiteResult> result = new ArrayList<TSuiteResult>()
         for (TSuiteResult tsr : tSuiteResults_) {
             result.add(tsr)
@@ -252,7 +279,7 @@ final class RepositoryRoot implements TSuiteResultTree {
     TSuiteResult getLatestModifiedTSuiteResult() {
         LocalDateTime lastModified = LocalDateTime.MIN
         TSuiteResult result = null
-        List<TSuiteResult> tSuiteResults = this.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = this.getTSuiteResultList()
         for (TSuiteResult tsr : tSuiteResults) {
             if (tsr.getLastModified() > lastModified) {
                 result = tsr
@@ -296,8 +323,8 @@ final class RepositoryRoot implements TSuiteResultTree {
             return false
         }
         RepositoryRoot other = (RepositoryRoot) obj
-        List<TSuiteResult> ownList = this.getTSuiteResults()
-        List<TSuiteResult> otherList = other.getTSuiteResults()
+        List<TSuiteResult> ownList = this.getTSuiteResultList()
+        List<TSuiteResult> otherList = other.getTSuiteResultList()
         logger_.debug("ownList=${ownList.toString()}")
         logger_.debug("otherList=${otherList.toString()}")
         if (ownList.size() == otherList.size()) {

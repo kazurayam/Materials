@@ -11,6 +11,7 @@ import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import org.slf4j.Logger
@@ -22,7 +23,6 @@ class MaterialStorageImpl implements MaterialStorage {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialStorageImpl.class)
     
-    private Path baseDir_
     private MaterialRepository componentMR_
     
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
@@ -38,11 +38,8 @@ class MaterialStorageImpl implements MaterialStorage {
         if (!baseDir.toFile().exists()) {
             throw new IllegalArgumentException("${baseDir} does not exist")
         }
-        baseDir_ = baseDir
-        // create the directory if not present
-        Helpers.ensureDirs(baseDir_)
         //
-        componentMR_ = MaterialRepositoryFactory.createInstance(baseDir_)
+        componentMR_ = MaterialRepositoryFactory.createInstance(baseDir)
     }
     
     /**
@@ -146,13 +143,7 @@ class MaterialStorageImpl implements MaterialStorage {
         return mri.getRepositoryRoot()
     }
 
-    /*
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        return componentMR_.getTSuiteResult(tSuiteName, tSuiteTimestamp)
-    }
-    */
-    
+
     @Override
     long getSize() {
         return componentMR_.getSize()
@@ -172,11 +163,7 @@ class MaterialStorageImpl implements MaterialStorage {
         return componentMR_.getTSuiteNameList()
     }
     
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        return componentMR_.getTSuiteResult(tSuiteResultId)
-    }
-    
+
     @Override
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
                                                TExecutionProfile tExecutionProfile) {
@@ -197,6 +184,47 @@ class MaterialStorageImpl implements MaterialStorage {
     List<TSuiteResult> getTSuiteResultList() {
         return componentMR_.getTSuiteResultList()
     }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    void addTSuiteResult(TSuiteResult tSuiteResult) {
+        throw new UnsupportedOperationException("because we do not add TSuiteResult through the MaterialStorage view")
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    boolean hasTSuiteResult(TSuiteResult tSuiteResult) {
+        throw new UnsupportedOperationException()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
+        throw new UnsupportedOperationException()
+    }
+
+
+    /**
+     * implementing TSuiteResultTree
+     *
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        return componentMR_.getTSuiteResult(tSuiteResultId)
+    }
+
+
 
     @Override
     void status(Writer output, Map<String, Object> options) {
@@ -378,7 +406,7 @@ class MaterialStorageImpl implements MaterialStorage {
         StringBuilder sb = new StringBuilder()
         sb.append('{"MaterialStorage":{')
         sb.append('"baseDir":"' +
-            Helpers.escapeAsJsonText(baseDir_.toString()) + '",')
+            Helpers.escapeAsJsonText(this.getBaseDir().toString()) + '",')
         sb.append('"componentMR":' +
             componentMR_.toJsonText())
         sb.append('}}')

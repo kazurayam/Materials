@@ -10,7 +10,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.Helpers
-import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteName
@@ -102,7 +101,7 @@ class RepositoryRootSpec extends Specification {
                 new TExecutionProfile("CURA_ProductionEnv"),
                 new TSuiteTimestamp('20180530_130419'))
         repoRoot_.addTSuiteResult(tsr)
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResultList()
         logger_.debug("#testGetTSuiteResults tSuiteResults=${tSuiteResults}")
         then:
         tSuiteResults != null

@@ -215,67 +215,60 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             return null
     }
 
+
     // --------------------- create/add/get child nodes -----------------------
 
     /**
-     *
-     * @param testSuiteId
-     * @param timestamp
-     * @return
+     * implementing TSuiteResultTree
      */
+    @Override
     void addTSuiteResult(TSuiteResult tSuiteResult) {
-        Objects.requireNonNull(tSuiteResult)
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
-        boolean found = false
-        for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr == tSuiteResult) {
-                found = true
-            }
-        }
-        if (!found) {
-            repoRoot_.addTSuiteResult(tSuiteResult)
-        }
+        repoRoot_.addTSuiteResult(tSuiteResult)
     }
 
-    /*
+
+    /**
+     * implementing TSuiteResultTree
+     */
     @Override
-    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TSuiteTimestamp tSuiteTimestamp) {
-        TSuiteResultId tsri = TSuiteResultIdImpl.newInstance(tSuiteName, tSuiteTimestamp)
-        return this.getTSuiteResult(tsri)
+    boolean hasTSuiteResult(TSuiteResult given) {
+        throw new UnsupportedOperationException()
     }
-    */
-    
+
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp) {
+        return repoRoot_.getTSuiteResult(tSuiteName, tExecutionProfile, tSuiteTimestamp)
+    }
+
+    /**
+     * implementing TSuiteResultTree
+     */
+    @Override
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
+        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
+        repoRoot_.getTSuiteResult(tSuiteResultId)
+    }
+
     @Override
     List<TSuiteName> getTSuiteNameList() {
         Set<TSuiteName> set = new HashSet<TSuiteName>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
             set.add(subject.getTSuiteName())
         }
         return set.stream().collect(Collectors.toList())
     }
-    
-    @Override
-    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId) {
-        Objects.requireNonNull(tSuiteResultId, "tSuiteResultId must not be null")
-        TSuiteName tSuiteName = tSuiteResultId.getTSuiteName()
-        TSuiteTimestamp tSuiteTimestamp = tSuiteResultId.getTSuiteTimestamp()
-        List<TSuiteResult> tSuiteResults = repoRoot_.getTSuiteResults()
-        for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr.getId().getTSuiteName().equals(tSuiteName) && 
-                tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)) {
-                return tsr
-            }
-        }
-        return null
-    }
-    
+
     @Override
     List<TSuiteResultId> getTSuiteResultIdList(TSuiteName tSuiteName,
                                                TExecutionProfile tExecutionProfile) {
         Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
         Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
             if (subject.getId().getTSuiteName().equals(tSuiteName) &&
                 subject.getId().getTExecutionProfile().equals(tExecutionProfile)) {
                 list.add(subject.getId())
@@ -287,7 +280,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     List<TSuiteResultId> getTSuiteResultIdList() {
         List<TSuiteResultId> list = new ArrayList<TSuiteResultId>()
-        for (TSuiteResult subject : repoRoot_.getTSuiteResults()) {
+        for (TSuiteResult subject : repoRoot_.getTSuiteResultList()) {
             list.add(subject.getId())
         }
         return list
@@ -298,7 +291,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Objects.requireNonNull(tSuiteResultIdList, "tSuiteResultIdList must not be null")
         List<TSuiteResult> list = new ArrayList<TSuiteResult>()
         for (TSuiteResultId subject : tSuiteResultIdList) {
-            for (TSuiteResult tsr : repoRoot_.getTSuiteResults()) {
+            for (TSuiteResult tsr : repoRoot_.getTSuiteResultList()) {
                 if (tsr.getId().getTSuiteName().equals(subject.getTSuiteName()) &&
                     tsr.getId().getTSuiteTimestamp().equals(subject.getTSuiteTimestamp())) {
                     list.add(tsr)
@@ -310,10 +303,11 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     
     @Override
     List<TSuiteResult> getTSuiteResultList() {
-        return repoRoot_.getTSuiteResults()
+        return repoRoot_.getTSuiteResultList()
     }
 
-    
+
+    // --------------------------------------------------------------------------
     
     @Override
     MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite() {
@@ -704,7 +698,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
         // before sorting, we create a copy of the list which is unmodifiable
         List<TSuiteResult> tSuiteResults = new ArrayList<>(
-                repoRoot_.getTSuiteResults(tSuiteName))
+                repoRoot_.getTSuiteResultList(tSuiteName))
 
         // we expect 2 or more TSuiteResult objects with the given tSuiteName
         if (tSuiteResults.size() == 0) {
@@ -755,7 +749,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
         // before sorting, we create a copy of the list which is unmodifiable
         List<TSuiteResult> tSuiteResults = new ArrayList<>(
-                repoRoot_.getTSuiteResults(tSuiteName, tExecutionProfile))
+                repoRoot_.getTSuiteResultList(tSuiteName, tExecutionProfile))
         
         // we expect 2 or more TSuiteResult objects with the tSuiteName+tExecutionProfile
         if (tSuiteResults.size() == 0) {

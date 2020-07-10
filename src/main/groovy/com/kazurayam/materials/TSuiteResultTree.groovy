@@ -14,4 +14,15 @@ package com.kazurayam.materials
  */
 interface TSuiteResultTree {
 
+    void addTSuiteResult(TSuiteResult tSuiteResult)
+
+    boolean hasTSuiteResult(TSuiteResult given)
+
+    TSuiteResult getTSuiteResult(TSuiteName tSuiteName, TExecutionProfile tExecutionProfile, TSuiteTimestamp tSuiteTimestamp)
+
+    TSuiteResult getTSuiteResult(TSuiteResultId tSuiteResultId)
+
+    //List<TSuiteResult> getTSuiteResultList(
+    //        TSuiteName tSuiteName, TExecutionProfile tExecutionProfile)
+
 }
