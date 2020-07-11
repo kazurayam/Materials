@@ -250,8 +250,30 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 		MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
 		return (mmb != null)
 	}
-	
 
+    @Override
+    boolean printVisitedURLsAsMarkdown(Writer writer) {
+        if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
+            MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
+            mmb.serializeAsMarkdown(writer)
+            return true
+        } else {
+            logger_.info("no MaterialMetadataBundle of the current TSuite")
+            return false
+        }
+    }
+
+    @Override
+    boolean printVisitedURLsAsTSV(Writer writer) {
+        if (this.hasMaterialMetadataBundleOfCurrentTSuite()) {
+            MaterialMetadataBundle mmb = this.findMaterialMetadataBundleOfCurrentTSuite()
+            mmb.serializeAsTSV(writer)
+            return true
+        } else {
+            logger_.info("no MaterialMetadataBundle of the current TSuite")
+            return false
+        }
+    }
 
     private MaterialMetadataBundle recordMaterialMetadata(TSuiteResult tSuiteResult,
                                                           MaterialMetadata materialMetadata) {

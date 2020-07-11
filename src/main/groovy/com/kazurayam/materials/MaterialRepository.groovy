@@ -304,7 +304,8 @@ interface MaterialRepository extends TSuiteResultTree {
 	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
 	boolean hasMaterialMetadataBundleOfCurrentTSuite()
 
-
+    boolean printVisitedURLsAsMarkdown(Writer writer)
+    boolean printVisitedURLsAsTSV(Writer writer)
 
 
     String toJsonText()

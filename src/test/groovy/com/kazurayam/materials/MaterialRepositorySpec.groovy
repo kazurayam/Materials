@@ -493,7 +493,6 @@ class MaterialRepositorySpec extends Specification {
     def test_findMaterialMetadataBundleOfCurrentTSuite() {
         setup:
         String method = 'test_findMaterialMetadataBundleOfCurrentTSuite'
-
         MaterialRepository mr = prepareMR(method, tSuiteResultId_)
         when:
         def tSuiteName = new TSuiteName('TS1')
@@ -505,5 +504,42 @@ class MaterialRepositorySpec extends Specification {
 		mmb != null
     }
 
+
+    def test_hasMaterialMetadataBundleOfCurrentTSuite() {
+        setup:
+        String method = 'test_hasMaterialMetadataBundleOfCurrentTSuite'
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
+        when:
+        mr.resolveScreenshotPath('TC1', new URL('http://demo-auto.katalon.com/'),
+                new MaterialDescription("category text", "description text"))
+        then:
+        mr.hasMaterialMetadataBundleOfCurrentTSuite() == true
+    }
+
+    def test_printVisitedURLsAsMarkdown() {
+        setup:
+        String method = 'test_printVisitedURLsAsMarkdown'
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
+        when:
+        mr.resolveScreenshotPath('TC1', new URL('http://demo-auto.katalon.com/'),
+                new MaterialDescription("category text", "description text"))
+        StringWriter sw = new StringWriter()
+        mr.printVisitedURLsAsMarkdown(sw)
+        then:
+        sw.toString().contains("| http://demo-auto.katalon.com/ |")
+    }
+
+    def test_printVisitedURLsAsTSV() {
+        setup:
+        String method = 'test_printVisitedURLsAsTSV'
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
+        when:
+        mr.resolveScreenshotPath('TC1', new URL('http://demo-auto.katalon.com/'),
+                new MaterialDescription("category text", "description text"))
+        StringWriter sw = new StringWriter()
+        mr.printVisitedURLsAsTSV(sw)
+        then:
+        sw.toString().contains("\thttp://demo-auto.katalon.com/\t")
+    }
 }
 
