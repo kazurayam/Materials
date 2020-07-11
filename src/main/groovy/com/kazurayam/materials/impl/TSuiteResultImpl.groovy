@@ -28,7 +28,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     private Path tExecutionProfileDirectory_
     private Path tSuiteTimestampDirectory_
 
-    private List<TCaseResult> tCaseResults_
+    private Set<TCaseResult> tCaseResults_
 
     private boolean latestModified_
 
@@ -50,7 +50,7 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
                 tExecutionProfile,
                 tSuiteTimestamp)
 
-        tCaseResults_   = new ArrayList<TCaseResult>()
+        tCaseResults_   = new HashSet<TCaseResult>()
         latestModified_ = false
     }
 
@@ -60,7 +60,9 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     // ----------------------------------------------------------------
     @Override
     List<TCaseResult> getTCaseResultList() {
-        return Collections.unmodifiableList(tCaseResults_)
+        List<TCaseResult> list = new ArrayList(tCaseResults_)
+        Collections.sort(list)
+        return list
     }
 
     @Override
@@ -91,7 +93,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         }
         if (!found) {
             tCaseResults_.add(tCaseResult)
-            Collections.sort(tCaseResults_)
         }
     }
 
