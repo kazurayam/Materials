@@ -10,8 +10,10 @@ import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
 import com.kazurayam.materials.TSuiteTimestamp
 import com.kazurayam.materials.repository.RepositoryRoot
+import com.kazurayam.materials.repository.TreeBranchScanner
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import sun.reflect.generics.tree.Tree
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -31,6 +33,17 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     private Set<TCaseResult> tCaseResults_
 
     private boolean latestModified_
+
+    /**
+     * This boolean flag marks if the directories/files under this TSuiteResult
+     * has been visited by com.kazurayam.materials.repository.TreeBranchVisitor.
+     * This flag is set false by the constructor.
+     * When TreeBranchVisitor visited this TSuiteResult it calls
+     * this.addTCaseResult(TCaseResult), then this flag is turned true.
+     * This means the TSuiteResult has meaningful information about the content
+     * TCaseResult branch.
+     */
+    private boolean hasBeenVisited_
 
     // ------------------ constructors & initializer -------------------------------
 	TSuiteResultImpl(TSuiteResultId tSuiteResultId) {
@@ -52,14 +65,28 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
 
         tCaseResults_   = new HashSet<TCaseResult>()
         latestModified_ = false
+        hasBeenVisited_ = false
     }
 
     // ================================================================
     //
+    //     methods that deal with TCaseResult objects
+    //     contained in this TSuiteResult
     //
     // ----------------------------------------------------------------
+
     @Override
     List<TCaseResult> getTCaseResultList() {
+        Objects.requireNonNull(this.getRepositoryRoot(),
+                "this.setParent(RepositoryRoot) must be performed beforehand")
+        // check if this TSuiteResult object has been visited by TreeBranchVisitor
+        // and the directories/files under the yyyyMMdd_hhmmss directory have been
+        // scanned. If not yet, do it now!
+        if ( ! hasBeenVisited_ ) {
+            TreeBranchScanner branchScanner = new TreeBranchScanner(this.getRepositoryRoot())
+            branchScanner.scan(this)
+        }
+        // return the contained TCaseResult objects as List
         List<TCaseResult> list = new ArrayList(tCaseResults_)
         Collections.sort(list)
         return list
@@ -93,10 +120,43 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         }
         if (!found) {
             tCaseResults_.add(tCaseResult)
+            this.hasBeenVisited_ = true
         }
     }
 
 
+
+
+
+    // ----------------------------------------------------------------
+    @Override
+    List<Material> getMaterialList() {
+        List<Material> materials = new ArrayList<Material>()
+        for (TCaseResult tcr : this.getTCaseResultList()) {
+            for (Material mate : tcr.getMaterialList()) {
+                materials.add(mate)
+            }
+        }
+        return Collections.unmodifiableList(materials)
+    }
+
+    @Override
+    List<Material> getMaterialList(Path pathRelativeToTSuiteTimestamp) {
+        List<Material> materials = new ArrayList<Material>()
+        for (TCaseResult tcr : this.getTCaseResultList()) {
+            for (Material mate : tcr.getMaterialList()) {
+                if (mate.getPathRelativeToTSuiteTimestamp()
+                        .equals(pathRelativeToTSuiteTimestamp)) {
+                    materials.add(mate)
+                }
+            }
+        }
+        return Collections.unmodifiableList(materials)
+    }
+
+
+
+    // ================================================================
     @Override
     TSuiteResultId getId() {
         return TSuiteResultIdImpl.newInstance(
@@ -238,30 +298,8 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         return sb.toString()
     }
 
-    // ------------------- helpers -----------------------------------------------
-    @Override
-    List<Material> getMaterialList() {
-        List<Material> materials = new ArrayList<Material>()
-        for (TCaseResult tcr : this.getTCaseResultList()) {
-            for (Material mate : tcr.getMaterialList()) {
-                materials.add(mate)
-            }
-        }
-        return Collections.unmodifiableList(materials)
-    }
-    
-    @Override
-    List<Material> getMaterialList(Path pathRelativeToTSuiteTimestamp) {
-        List<Material> materials = new ArrayList<Material>()
-        for (TCaseResult tcr : this.getTCaseResultList()) {
-            for (Material mate : tcr.getMaterialList()) {
-                if (mate.getPathRelativeToTSuiteTimestamp().equals(pathRelativeToTSuiteTimestamp)) {
-                    materials.add(mate)
-                }
-            }
-        }
-        return Collections.unmodifiableList(materials)
-    }
+
+
 
     // -------------------- overriding Object properties ----------------------
     @Override
