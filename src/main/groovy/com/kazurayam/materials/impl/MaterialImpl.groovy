@@ -1,29 +1,29 @@
 package com.kazurayam.materials.impl
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.FileType
 import com.kazurayam.materials.Helpers
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.TCaseName
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.model.MaterialFileName
 import com.kazurayam.materials.model.Suffix
 import com.kazurayam.materials.repository.RepositoryRoot
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 /**
  * A Material has a Path <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/<subpath>/<MaterialFileName>
  */
-class MaterialImpl implements Material, Comparable<Material> {
+class MaterialImpl implements Material, Comparable<Material>, VTLoggerEnabled {
     
     static Logger logger_ = LoggerFactory.getLogger(MaterialImpl.class)
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
@@ -129,12 +129,7 @@ class MaterialImpl implements Material, Comparable<Material> {
         this.description_ = description
     }
     
-    @Override
-    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-        this.vtLogger_ = vtLogger
-    }
 
-    // ------------- implematation of Material interface ----------------------
     @Override
     Material setParent(TCaseResult parent) {
         Objects.requireNonNull(parent)
@@ -378,6 +373,12 @@ class MaterialImpl implements Material, Comparable<Material> {
             sb.append(subpath.toString().replace(File.separator, '/'))
         }
         return sb.toString()
+    }
+
+    // ---------------- VTLoggerEnabled ---------------------------------------
+    @Override
+    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+        this.vtLogger_ = vtLogger
     }
 
     // ---------------- helpers -----------------------------------------------

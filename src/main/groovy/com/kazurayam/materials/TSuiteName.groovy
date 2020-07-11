@@ -59,14 +59,26 @@ final class TSuiteName implements Comparable<TSuiteName> {
         abbreviatedId_ = abbreviate(id_)
     }
 
+    /**
+     *
+     * @return e.g., 'Test Suites/main/TS1'
+     */
     String getId() {
         return id_
     }
 
+    /**
+     *
+     * @return e.g, 'main/TS1'
+     */
     String getAbbreviatedId() {
         return abbreviatedId_    
     }
-    
+
+    /**
+     *
+     * @return e.g, 'main.TS1'
+     */
     String getValue() {
         return value_
     }
@@ -94,17 +106,17 @@ final class TSuiteName implements Comparable<TSuiteName> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    boolean equals(Object obj) {
         //if (this == obj)
         //    return true
         if (!(obj instanceof TSuiteName))
             return false
         TSuiteName other = (TSuiteName)obj
-        return this.getValue().equals(other.getValue())
+        return this.getValue() == other.getValue()
     }
 
     @Override
-    public int hashCode() {
+    int hashCode() {
         return this.getValue().hashCode()
     }
 

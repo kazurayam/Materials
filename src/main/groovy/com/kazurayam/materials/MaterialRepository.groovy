@@ -29,7 +29,13 @@ import com.kazurayam.materials.repository.RepositoryRoot
  * @author kazurayam
  *
  */
-interface MaterialRepository {
+interface MaterialRepository extends TSuiteResultTree {
+
+    /**
+     * scan the baseDir to recognize the current directories/files configuration
+     */
+    void scan()
+
 
     /**
      * delete all descendant directories and files belonging to the tSuiteName + tSuiteTimestamp directory.
@@ -61,6 +67,25 @@ interface MaterialRepository {
      * @throws IOException
      */
     int clear(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
+
+    /**
+     * identify all TSuiteResultId contained in the MaterialRespository,
+     * and delete those except the specfied one. For example, you can identify
+     * the TSuiteResultId which is marked as current, and delete the rest except
+     * the current one by this:
+     *
+     * <PRE>
+     * MaterialRepository mr = ...
+     * TSuiteResultId currentTSuiteResultId = mr.getCurrentTSuiteResult().getId()
+     * mr.clearRest(currentTSuiteResultId, true)
+     * </PRE>
+     *
+     * @param tSuiteResultId
+     * @param Scan
+     * @return
+     * @throws IOException
+     */
+    int clearRest(TSuiteResultId tSuiteResultId, boolean scan) throws IOException
 
 
     /**
@@ -120,7 +145,9 @@ interface MaterialRepository {
     String getCurrentTestSuiteId()
     String getCurrentExecutionProfile()
     String getCurrentTestSuiteTimestamp()
-    
+
+    TSuiteResult getCurrentTSuiteResult()
+
     long getSize()
     
 
@@ -128,7 +155,6 @@ interface MaterialRepository {
     
     Set<Path> getSetOfMaterialPathRelativeToTSuiteTimestamp(TSuiteName tSuiteName,
                                                             TExecutionProfile tExecutionProfile)
-
     Path getTestCaseDirectory(String testCaseId)
     
     /**
@@ -277,16 +303,10 @@ interface MaterialRepository {
 	
 	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()
 	boolean hasMaterialMetadataBundleOfCurrentTSuite()
-	
-	boolean printVisitedURLsAsMarkdown(Writer writer)
-	boolean printVisitedURLsAsTSV(Writer writer)
 
-    void setVisualTestingLogger(VisualTestingLogger vtLogger)
-    
-    /**
-     * scan the baseDir to recognize the current directories/files configuration
-     */
-    void scan()
-    
+    boolean printVisitedURLsAsMarkdown(Writer writer)
+    boolean printVisitedURLsAsTSV(Writer writer)
+
+
     String toJsonText()
 }

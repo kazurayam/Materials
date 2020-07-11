@@ -1,22 +1,22 @@
 package com.kazurayam.materials.impl
 
-import java.nio.file.Files
-import java.nio.file.Path
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import com.kazurayam.materials.Material
 import com.kazurayam.materials.ReportsAccessor
 import com.kazurayam.materials.TCaseResult
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteResultId
+import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.view.ExecutionPropertiesWrapper
 import com.kazurayam.materials.view.JUnitReportWrapper
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-class ReportsAccessorImpl implements ReportsAccessor {
+import java.nio.file.Files
+import java.nio.file.Path
+
+class ReportsAccessorImpl implements ReportsAccessor, VTLoggerEnabled {
     
     static Logger logger_ = LoggerFactory.getLogger(ReportsAccessorImpl.class)
     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
@@ -33,11 +33,8 @@ class ReportsAccessorImpl implements ReportsAccessor {
         
         // do more business
     }
-	
-    void setVisualTestingLogger(VisualTestingLogger vtLogger) {
-        this.vtLogger_ = vtLogger
-    }
-    
+
+
     @Override
     Path getReportsDir() {
         return this.reportsDir_
@@ -214,6 +211,12 @@ class ReportsAccessorImpl implements ReportsAccessor {
 		} else {
 			return null
 		}
+	}
+
+
+	@Override
+	void setVisualTestingLogger(VisualTestingLogger vtLogger) {
+		this.vtLogger_ = vtLogger
 	}
 
 }

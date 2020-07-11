@@ -40,9 +40,11 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     
     abstract Path createDirectories()
 
-    abstract TSuiteResult setLastModified(LocalDateTime lastModified)
-
     abstract LocalDateTime getLastModified()
+
+    abstract boolean isLatestModified()
+
+    abstract TSuiteResult setLatestModified(Boolean isLatest)
 
     /**
      * get the sum of length of files belonging to this TSuiteResult
@@ -51,17 +53,39 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      */
     abstract long getSize()
 
-    abstract boolean isLatestModified()
-
-    abstract TSuiteResult setLatestModified(Boolean isLatest)
-        
     // ------------------ add/get child nodes ------------------------------
     
     abstract TCaseResult getTCaseResult(TCaseName tCaseName)
 
-    abstract List<TCaseResult> getTCaseResultList()
-
     abstract void addTCaseResult(TCaseResult tCaseResult)
+
+    /**
+     * This method makes sure we have a TCaseResult that is liked to the TSuiteResult object.
+     * If the TCaseResult object is already there then we will reuse it.
+     * If the TCaseResult object is NOT there then we will newly create it.
+     *
+     * This method drives
+     * 1. TSuiteResult.getTCaseResult(TCaseName) +
+     * 2. TCaseResult.setParent(TSuiteResult) +
+     * 3. TSuiteResult.addTCaseResult(TCaseResult)
+     * in one sequence.
+     *
+     * This sequence is frequently called up by
+     * - MaterialRepositoryImpl
+     * - RepositoryFileVisitor
+     * - TreeBranchVisitor
+     *
+     * @param tCaseName
+     * @return
+     */
+    TCaseResult ensureTCaseResultPresent(TCaseName tCaseName) {
+        Objects.requireNonNull(tCaseName, "tCaseName must not be null")
+        TCaseResult tCaseResult = TCaseResult.newInstance(tCaseName).setParent(this)
+        this.addTCaseResult(tCaseResult)
+        return tCaseResult
+    }
+
+    abstract List<TCaseResult> getTCaseResultList()
 
     abstract String treeviewTitle()
 
@@ -109,6 +133,8 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
      */
     @Override
     int compareTo(TSuiteResult other) {
+        return this.getId().compareTo(other.getId())
+        /*
         int v = this.getId().getTSuiteName().compareTo(
                 other.getId().getTSuiteName())
         if (v < 0) {
@@ -125,6 +151,7 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         } else {
             return v
         }
+         */
     }
 
     

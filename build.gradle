@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.77.4'
+version  = '0.78.0'
 
 
 sourceCompatibility = '1.8'
@@ -123,14 +123,14 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ComparisonResultBundleSpec.class"
     //include "**/imagedifference/ComparisonResultSpec.class"
     //include "**/imagedifference/imagedifference/EspionageSpec.class"
-    //include "**/imagedifference/ImageCollectionDifferSpec.class"
+    include "**/imagedifference/ImageCollectionDifferSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
     //include "**/impl/MaterialPairImpl.class"
-    include "**/impl/MaterialRepositoryImplSpec.class"
+    //include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
     //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
@@ -148,8 +148,9 @@ task pinpoint(type: Test) {
     //include "**/ReportsAccessorSpec.class"
     //include "**/repository/RepositoryFileScannerSpec.class"
     //include "**/repository/RepositoryRootSpec.class"
-    //include "**/repository/RepositoryRootSpec2.class"
     //include "**/repository/RepositoryWalkerSpec.class"
+    //include "**/repository/TreeBranchScannerSpec.class"
+    //include "**/repository/TreeTrunkScannerSpec.class"
     //include "**/metadata/InvokedMethodNameSpec.class"
     //include "**/metadata/MaterialMetadataBundleSpec.class"
     //include "**/metadata/MaterialMetadataSpec.class"

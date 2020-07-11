@@ -9,7 +9,7 @@ import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.TSuiteName
 import com.kazurayam.materials.TSuiteResult
 import com.kazurayam.materials.TSuiteTimestamp
-import com.kazurayam.materials.impl.MaterialImpl
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import spock.lang.Ignore
@@ -54,7 +54,7 @@ class MaterialImplSpec extends Specification {
 			mr.getTSuiteResult(
 				TSuiteResultIdImpl.newInstance(
 						new TSuiteName('CURA/twins_capture'),
-						new TExecutionProfile("default"),
+						new TExecutionProfile("CURA_DevelopmentEnv"),
 						new TSuiteTimestamp('20190412_161621')))
 		assert tSuiteResult != null
 		TCaseResult tCaseResult = tSuiteResult.getTCaseResult(

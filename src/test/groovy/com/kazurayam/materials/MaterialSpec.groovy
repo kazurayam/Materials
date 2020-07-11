@@ -51,6 +51,28 @@ class MaterialSpec extends Specification {
         tcr_ = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
     }
 
+    // helper
+    private static List<Material> getMaterialList(RepositoryRoot repoRoot,
+                                   TSuiteName tSuiteName,
+                                   TExecutionProfile tExecutionProfile,
+                                   TSuiteTimestamp tSuiteTimestamp) {
+        Objects.requireNonNull(tSuiteName, "tSuiteName must not be null")
+        Objects.requireNonNull(tExecutionProfile, "tExecutionProfile must not be null")
+        Objects.requireNonNull(tSuiteTimestamp, "tSuiteTimestamp must not be null")
+        List<Material> list = new ArrayList<Material>()
+        for (TSuiteResult tsr : repoRoot.getSortedTSuiteResults()) {
+            if (tsr.getId().getTSuiteName().equals(tSuiteName) &&
+                    tsr.getId().getTExecutionProfile().equals(tExecutionProfile) &&
+                    tsr.getId().getTSuiteTimestamp().equals(tSuiteTimestamp)
+            ) {
+                List<Material> mates = tsr.getMaterialList()
+                for (Material mate : mates) {
+                    list.add(mate)
+                }
+            }
+        }
+        return Collections.unmodifiableList(list)
+    }
 
     // feature methods
     def testCompareTo_byFileType() {
@@ -178,7 +200,7 @@ class MaterialSpec extends Specification {
 
     def testGetFileName() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(
+        List<Material> materials = getMaterialList(repoRoot_,
                 new TSuiteName("Test Suites/main/TS1"),
                 new TExecutionProfile("CURA_ProductionEnv"),
                 TSuiteTimestamp.newInstance("20180718_142832"))
@@ -364,7 +386,7 @@ class MaterialSpec extends Specification {
 
     def testGetSubpath_withoutSubpath() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(
+        List<Material> materials = getMaterialList(repoRoot_,
                 new TSuiteName("Test Suites/main/TS1"),
                 new TExecutionProfile('CURA_ProductionEnv'),
                 TSuiteTimestamp.newInstance("20180530_130419"))
@@ -393,7 +415,7 @@ class MaterialSpec extends Specification {
     
     def testGetSubpath_withSubpath_onceMore() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(
+        List<Material> materials = getMaterialList(repoRoot_,
                 new TSuiteName("Test Suites/main/TS1"),
                 new TExecutionProfile('CURA_ProductionEnv'),
                 TSuiteTimestamp.newInstance("20180718_142832"))
@@ -407,7 +429,7 @@ class MaterialSpec extends Specification {
 
     def testGetTCaseName() {
         when:
-        List<Material> materials = repoRoot_.getMaterials(
+        List<Material> materials = getMaterialList(repoRoot_,
                 new TSuiteName("Test Suites/main/TS1"),
                 new TExecutionProfile('CURA_ProductionEnv'),
                 TSuiteTimestamp.newInstance("20180718_142832"))

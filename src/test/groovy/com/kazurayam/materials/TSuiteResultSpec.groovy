@@ -150,12 +150,15 @@ class TSuiteResultSpec extends Specification {
                 new TExecutionProfile("CURA_ProductionEnv"),
                 TSuiteTimestamp.newInstance('20180530_130604'))
         TSuiteResult tsr = mri_.getTSuiteResult(tsri)
-        TCaseResult tcr = TCaseResult.newInstance(new TCaseName('TSX')).setParent(tsr)
+        TCaseName tcn = new TCaseName('TSX')
+        TCaseResult tcr = TCaseResult.newInstance(tcn).setParent(tsr)
+        // attention!
         tsr.addTCaseResult(tcr)
-        TCaseResult tcr2 = tsr.getTCaseResult(new TCaseName('TSX'))
+        TCaseResult tcr2 = tsr.getTCaseResult(tcn)
         then:
         tcr2 != null
         tcr2.getParent() == tsr
+        tcr == tcr2
     }
 
     def testAddTCaseResult_parentIsNotSet() {
@@ -171,7 +174,28 @@ class TSuiteResultSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
-    
+
+    def test_ensureTCaseResult() {
+        when:
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))
+        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
+        // attention!
+        TCaseResult tcr = tsr.ensureTCaseResultPresent(new TCaseName('TSX'))
+        then:
+        tcr != null
+        tcr.getParent() == tsr
+        when:
+        TCaseResult tcr2 = tsr.ensureTCaseResultPresent(new TCaseName('TSX'))
+        then:
+        tcr2 != null
+        tcr2.getParent() == tsr
+        //
+        tcr == tcr2
+    }
+
     def testGetTSuiteNameDirectory() {
         when:
         TSuiteResultId tsri = TSuiteResultId.newInstance(
@@ -278,5 +302,23 @@ class TSuiteResultSpec extends Specification {
         tSuiteResultList.get(1).getTSuiteTimestamp().equals(new TSuiteTimestamp('20181014_060500'))
         tSuiteResultList.get(2).getTSuiteTimestamp().equals(new TSuiteTimestamp('20180805_081908'))
     }
+
+    def test_getTExecutionProfileDirectory() {
+        setup:
+        String tsnStr = 'Test Suites/main/TS1'
+        String tepStr = 'CURA_ProductionEnv'
+        String tstStr = '20180530_130419'
+        TSuiteResultId tsri = TSuiteResultId.newInstance(
+                new TSuiteName(tsnStr),
+                new TExecutionProfile(tepStr),
+                TSuiteTimestamp.newInstance(tstStr))
+        TSuiteResult tsr = mri_.getTSuiteResult(tsri)
+        when:
+        Path path = tsr.getTExecutionProfileDirectory()
+        then:
+        path.getFileName().toString() == 'CURA_ProductionEnv'
+        path.getParent().getFileName().toString() == 'main.TS1'
+    }
+
     // helper methods
 }

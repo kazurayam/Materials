@@ -1,5 +1,10 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.TCaseName
+import com.kazurayam.materials.TExecutionProfile
+import com.kazurayam.materials.TSuiteName
+import com.kazurayam.materials.TSuiteTimestamp
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -78,7 +83,9 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     void setReportsAccessor(ReportsAccessor reportsAccessor) {
         this.reportsAccessor_ = reportsAccessor
     }
-    // implementing RepositoryVisitorExtended interface -----------------------
+
+
+    // ---- VTLoggerEnabled -------------------------------------------
     
     @Override
     void setVisualTestingLogger(VisualTestingLogger vtLogger) {
@@ -301,7 +308,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     
     
     protected String findTestSuiteTimestamp(RepositoryRoot repoRoot, MaterialCore materialCore) {
-        Material material = repoRoot.getMaterial(materialCore)
+        Material material = getMaterial(repoRoot, materialCore)
         if (material == null) {
             logger_.warn("repoRoot.getMaterial(materialCore) returned null where materialCore=${materialCore.toString()}")
             return null
@@ -319,7 +326,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
     protected String findExecutionProfileName(RepositoryRoot repoRoot, MaterialCore materialCore) {
         Objects.requireNonNull(repoRoot, "repoRoot must not be null")
         Objects.requireNonNull(materialCore, "materialCore must not be null")
-        Material material = repoRoot.getMaterial(materialCore)
+        Material material = getMaterial(repoRoot, materialCore)
         if (material == null) {
             logger_.warn("repoRoot.getMaterial(materialCore) returned null for materialCore=${materialCore.toString()}")
             return null
@@ -328,8 +335,54 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
         TSuiteResult tsr = tcr.getParent()
         return tsr.getId().getTExecutionProfile().getName()
     }
- 
-    
+
+    /**
+     * Provided with an instance of MaterialCore which wraps the path info of material file,
+     * find an instance of Material with the same path in the MaterialRepository.
+     * If found, return it.　Otherwise return null.
+     *
+     * This method is just used by the com.kazurayam.materials.viw.RepositoryVisitorGeneratingHtmlDivsAsModalConcise class.
+     * The class uses the method for look up the name of Execution Profile which was used when a screenshot was taken.
+     * The name of Execution Profile is found in the <TSuiteName>/<TSuiteTimestamp>/<TCaseName>/material-metadata-bundle.json file.
+     */
+    private static Material getMaterial(RepositoryRoot repoRoot, MaterialCore materialCore) {
+        Objects.requireNonNull(repoRoot, "repoRoot must not be null")
+        Objects.requireNonNull(materialCore, "materialCore must not be null")
+        //println "materialCore:${JsonOutput.prettyPrint(materialCore.toString())}"
+        Path relativePath = materialCore.getPathRelativeToRepositoryRoot()
+        if (relativePath.getNameCount() < 4) {
+            throw new IllegalArgumentException("${relativePath} has nameCount smaller than 4")
+        }
+        Path tSuiteNamePath = relativePath.subpath(0, 1)
+        Path tExecutionProfilePath = relativePath.subpath(1, 2)
+        Path tSuiteTimestampPath = relativePath.subpath(2, 3)
+        Path tCaseNamePath = relativePath.subpath(3, 4)
+        Path subpathAndFilename = relativePath.subpath(4, relativePath.getNameCount())
+        /*
+        println "relativePath:          ${relativePath}"
+        println "tSuiteNamePath:        ${tSuiteNamePath}"
+        println "tExecutionProfilePath: ${tExecutionProfilePath}"
+        println "tSuiteTimestampPath:   ${tSuiteTimestampPath}"
+        println "tCaseNamePath:         ${tCaseNamePath}"
+        println "subpathAndFilename:    ${subpathAndFilename}"
+        */
+        TSuiteResult tSuiteResult = repoRoot.getTSuiteResult(
+                new TSuiteName(tSuiteNamePath.toString()),
+                new TExecutionProfile(tExecutionProfilePath.toString()),
+                new TSuiteTimestamp(tSuiteTimestampPath.toString()))
+        if (tSuiteResult == null) {
+            throw new IllegalArgumentException(
+                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath} is not found in the Material directory")
+        }
+        TCaseResult tCaseResult = tSuiteResult.getTCaseResult(new TCaseName(tCaseNamePath.toString()))
+        if (tCaseResult == null) {
+            throw new IllegalArgumentException(
+                    "The path of ${tSuiteNamePath}/${tExecutionProfilePath}/${tSuiteTimestampPath}/${tCaseNamePath} is not found in the Material directory")
+        }
+        Material mate = tCaseResult.getMaterial(subpathAndFilename)
+        return mate
+    }
+
     /**
      *
      */

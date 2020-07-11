@@ -60,7 +60,7 @@ class RepositoryFileScannerSpec extends Specification {
         when:
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResults()
+        List<TSuiteResult> tSuiteResults = repoRoot.getTSuiteResultList()
         logger_.debug("#testScan() tSuiteResults.size()=${tSuiteResults.size()}")
         //logger_.debug(prettyPrint(tSuiteResults))
         then:

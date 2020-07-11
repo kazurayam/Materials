@@ -199,7 +199,7 @@ class TCaseResultSpec extends Specification {
     }
 
 
-    def testEquals() {
+    def testEquals_sameTSuiteResult() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
                 new TSuiteName('Test Suites/main/TS1'),
@@ -208,13 +208,33 @@ class TCaseResultSpec extends Specification {
         TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
         expect:
         tcr != "string"
+
         when:
         TCaseResult other = TCaseResult.newInstance(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
         then:
         tcr == other
     }
 
-    def testHashCode() {
+    def testEquals_differentTSuiteResult() {
+        setup:
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))   // different!
+        when:
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        then:
+        ! tcr1.equals(tcr2)
+        tcr1 != tcr2
+    }
+
+
+    def testHashCode_sameTSuiteResult() {
         setup:
         TSuiteResult tsr = repoRoot_.getTSuiteResult(
                 new TSuiteName('Test Suites/main/TS1'),
@@ -227,7 +247,50 @@ class TCaseResultSpec extends Specification {
         tcr.hashCode() == other.hashCode()
     }
 
+    def testHashCode_differentTSuiteResult() {
+        setup:
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))   // different!
+        when:
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        then:
+        tcr1.hashCode() != tcr2.hashCode()
+    }
 
+    def testCompareTo_sameTSuiteResult() {
+        setup:
+        TSuiteResult tsr = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
+        TCaseResult tcr = tsr.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        when:
+        TCaseResult other = TCaseResult.newInstance(new TCaseName('Test Cases/main/TC1')).setParent(tsr)
+        then:
+        tcr.compareTo(other) == 0
+    }
 
-    // helper methods
+    def testCompareTo_differentTSuiteResult() {
+        setup:
+        TSuiteResult tsr1 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130419'))
+        TSuiteResult tsr2 = repoRoot_.getTSuiteResult(
+                new TSuiteName('Test Suites/main/TS1'),
+                new TExecutionProfile("CURA_ProductionEnv"),
+                TSuiteTimestamp.newInstance('20180530_130604'))   // different!
+        when:
+        TCaseResult tcr1 = tsr1.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        TCaseResult tcr2 = tsr2.getTCaseResult(new TCaseName('Test Cases/main/TC1'))
+        then:
+        tcr1.compareTo(tcr2) != 0
+    }
 }
