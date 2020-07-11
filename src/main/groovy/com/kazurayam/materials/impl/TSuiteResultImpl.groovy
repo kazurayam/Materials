@@ -27,7 +27,9 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     private Path tSuiteNameDirectory_
     private Path tExecutionProfileDirectory_
     private Path tSuiteTimestampDirectory_
+
     private List<TCaseResult> tCaseResults_
+
     private boolean latestModified_
 
     // ------------------ constructors & initializer -------------------------------
@@ -52,13 +54,55 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         latestModified_ = false
     }
 
-    // ------------------ attribute setter & getter -------------------------------
+    // ================================================================
+    //
+    //
+    // ----------------------------------------------------------------
+    @Override
+    List<TCaseResult> getTCaseResultList() {
+        return Collections.unmodifiableList(tCaseResults_)
+    }
+
+    @Override
+    TCaseResult getTCaseResult(TCaseName tCaseName) {
+        Objects.requireNonNull(tCaseName)
+        for (tcr in this.getTCaseResultList()) {
+            if (tcr.getTCaseName() == tCaseName) {
+                return tcr
+            }
+        }
+        return null
+    }
+
+
+    @Override
+    void addTCaseResult(TCaseResult tCaseResult) {
+        Objects.requireNonNull(tCaseResult)
+        if (tCaseResult.getParent() != this) {
+            def msg = "tCaseResult ${tCaseResult.toString()} does not have appropriate parent"
+            logger_.error("#addTCaseResult ${msg}")
+            throw new IllegalArgumentException(msg)
+        }
+        boolean found = false
+        for (tcr in tCaseResults_) {
+            if (tcr == tCaseResult) {
+                found = true
+            }
+        }
+        if (!found) {
+            tCaseResults_.add(tCaseResult)
+            Collections.sort(tCaseResults_)
+        }
+    }
+
+
     @Override
     TSuiteResultId getId() {
         return TSuiteResultIdImpl.newInstance(
-                                    tSuiteResultId_.getTSuiteName(),
-                                    tSuiteResultId_.getTExecutionProfile(),
-                                    tSuiteResultId_.getTSuiteTimestamp())
+                tSuiteResultId_.getTSuiteName(),
+                tSuiteResultId_.getTExecutionProfile(),
+                tSuiteResultId_.getTSuiteTimestamp()
+        )
     }
 
     /**
@@ -129,7 +173,14 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
             return null
         }
     }
-    
+
+    /**
+     * create the directory of this TSuiteResult = the dir of TSuiteTimestamp
+     *
+     * <baseDir>/<TSuiteName>/<TExecutionProfile>/<TSuiteTimestamp>
+     *
+     * @return
+     */
     @Override
     Path createDirectories() {
         Path d = this.getTSuiteTimestampDirectory()
@@ -174,42 +225,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     }
 
 
-    // ------------------ add/get child nodes ------------------------------
-    @Override
-    TCaseResult getTCaseResult(TCaseName tCaseName) {
-        Objects.requireNonNull(tCaseName)
-        for (TCaseResult tcr : tCaseResults_) {
-            if (tcr.getTCaseName() == tCaseName) {
-                return tcr
-            }
-        }
-        return null
-    }
-
-    @Override
-    List<TCaseResult> getTCaseResultList() {
-        return Collections.unmodifiableList(tCaseResults_)
-    }
-
-    @Override
-    void addTCaseResult(TCaseResult tCaseResult) {
-        Objects.requireNonNull(tCaseResult)
-        if (tCaseResult.getParent() != this) {
-            def msg = "tCaseResult ${tCaseResult.toString()} does not have appropriate parent"
-            logger_.error("#addTCaseResult ${msg}")
-            throw new IllegalArgumentException(msg)
-        }
-        boolean found = false
-        for (TCaseResult tcr : tCaseResults_) {
-            if (tcr == tCaseResult) {
-                found = true
-            }
-        }
-        if (!found) {
-            tCaseResults_.add(tCaseResult)
-            Collections.sort(tCaseResults_)
-        }
-    }
 
     @Override
     String treeviewTitle() {
