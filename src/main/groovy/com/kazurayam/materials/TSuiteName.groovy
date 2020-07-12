@@ -106,17 +106,17 @@ final class TSuiteName implements Comparable<TSuiteName> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    boolean equals(Object obj) {
         //if (this == obj)
         //    return true
         if (!(obj instanceof TSuiteName))
             return false
         TSuiteName other = (TSuiteName)obj
-        return this.getValue().equals(other.getValue())
+        return this.getValue() == other.getValue()
     }
 
     @Override
-    public int hashCode() {
+    int hashCode() {
         return this.getValue().hashCode()
     }
 

@@ -306,6 +306,7 @@ class ImageCollectionDifferSpec extends Specification {
                             tep,
                             TSuiteTimestamp.newInstance('20190512_154033'),
                             new TCaseName('Test Cases/CURA/visitSite'))
+        assert tcr1 != null
         Material existing1 = tcr1.getMaterial(Paths.get('revisited.png'))
         assert existing1 != null
         Material fake1 = ImageCollectionDiffer.fakeMaterial(
@@ -324,6 +325,7 @@ class ImageCollectionDifferSpec extends Specification {
                             tep,
                             TSuiteTimestamp.newInstance('20190512_153731'),
                             new TCaseName('Test Cases/CURA/visitSite'))
+        assert tcr2 != null
         Material existing2 = tcr2.getMaterial(Paths.get('appointment.php%23summary.png'))
         assert existing2 != null
         Material fake2 = ImageCollectionDiffer.fakeMaterial(

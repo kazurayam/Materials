@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.77.5'
+version  = '0.78.0'
 
 
 sourceCompatibility = '1.8'
@@ -130,26 +130,26 @@ task pinpoint(type: Test) {
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
     //include "**/impl/MaterialPairImpl.class"
-    include "**/impl/MaterialRepositoryImplSpec.class"
+    //include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
-    //include "**/impl/TSuiteResultImplSpec.class"
+    include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
     //include "**/IndexerSpec.class"
     //include "**/MaterialDescriptionSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialPairsSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
-    include "**/MaterialRepositorySpec.class"
+    //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/MiscSpec.class"
     //include "**/model/MaterialFileNameSpec.class"
     //include "**/PathSpec.class"
     //include "**/ReportsAccessorSpec.class"
-    //include "**/repository/RepositoryFileScannerSpec.class"
     //include "**/repository/RepositoryRootSpec.class"
-    //include "**/repository/RepositoryRootSpec2.class"
     //include "**/repository/RepositoryWalkerSpec.class"
+    //include "**/repository/TreeBranchScannerSpec.class"
+    //include "**/repository/TreeTrunkScannerSpec.class"
     //include "**/metadata/InvokedMethodNameSpec.class"
     //include "**/metadata/MaterialMetadataBundleSpec.class"
     //include "**/metadata/MaterialMetadataSpec.class"
@@ -164,7 +164,7 @@ task pinpoint(type: Test) {
     //include "**/TCaseResultSpec.class"
     //include "**/TExecutionProfileSpec.class"
     //include "**/TSuiteNameSpec.class"
-    //include "**/TSuiteResultSpec.class"
+    include "**/TSuiteResultSpec.class"
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/IndexerCarouselSpec.class"

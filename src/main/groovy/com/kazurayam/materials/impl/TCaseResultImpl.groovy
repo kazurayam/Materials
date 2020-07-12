@@ -52,6 +52,10 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         return this
     }
 
+    /**
+     *
+     * @return if set returns the parent TSuiteResult, if not set returns null
+     */
     @Override
     TSuiteResult getParent() {
         return parent_
@@ -239,28 +243,6 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
         return newSuffix
     }
 
-    // ------------------ overriding Object properties ------------------------
-    @Override
-    boolean equals(Object obj) {
-        //if (this == obj) {
-        //    return true
-        //}
-        if (!(obj instanceof TCaseResult)) {
-            return false
-        }
-        TCaseResult other = (TCaseResult) obj
-        return tCaseName_.equals(other.getTCaseName())
-    }
-
-    @Override
-    int hashCode() {
-        return tCaseName_.hashCode()
-    }
-
-    @Override
-    int compareTo(TCaseResult other) {
-        return tCaseName_.compareTo(other.getTCaseName())
-    }
 
     @Override
     String toString() {

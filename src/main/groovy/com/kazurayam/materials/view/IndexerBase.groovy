@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.repository.TreeTrunkScanner
+
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -13,7 +15,7 @@ import com.kazurayam.materials.ReportsAccessorFactory
 import com.kazurayam.materials.VTLoggerEnabled
 import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
-import com.kazurayam.materials.repository.RepositoryFileScanner
+
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryWalker
@@ -49,7 +51,7 @@ abstract class IndexerBase implements Indexer {
 		vtLogger_.info(this.class.getSimpleName() + "#execute reportsDir is ${reportsDir_}")
 		vtLogger_.info(this.class.getSimpleName() + "#execute output is ${output_}")
 		//
-		RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
+		TreeTrunkScanner scanner = new TreeTrunkScanner(baseDir_)
 		scanner.scan()
 		repoRoot_ = scanner.getRepositoryRoot()
 		//

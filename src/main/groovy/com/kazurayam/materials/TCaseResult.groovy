@@ -49,6 +49,52 @@ abstract class TCaseResult implements Comparable<TCaseResult> {
     
     abstract String toJsonText()
 
+    // ------------------ overriding Object properties ------------------------
+    @Override
+    boolean equals(Object obj) {
+        if (!(obj instanceof TCaseResult)) {
+            return false
+        }
+        TCaseResult other = (TCaseResult) obj
+        println "this.getParent() != null && other.getParent() != null: ${this.getParent() != null && other.getParent() != null}"
+        if (this.getParent() != null && other.getParent() != null) {
+            int v = (this.getParent() <=> other.getParent())
+            if (v == 0) {
+                return this.getTCaseName() == other.getTCaseName()
+            } else {
+                return false
+            }
+        } else {
+            return this.getTCaseName() == other.getTCaseName()
+        }
+    }
+
+    @Override
+    int hashCode() {
+        //return this.getTCaseName().hashCode()
+        final int prime = 31
+        int result = 1
+        if (this.getParent() != null) {
+            result = prime * result + this.getParent().hashCode()
+        }
+        result = prime * result + this.getTCaseName().hashCode()
+        return result
+    }
+
+    @Override
+    int compareTo(TCaseResult other) {
+        if (this.getParent() != null && other.getParent() != null) {
+            int v = this.getParent().compareTo(other.getParent())
+            if (v == 0) {
+                return this.getTCaseName() <=> other.getTCaseName()
+            } else {
+                return v
+            }
+        } else {
+            return this.getTCaseName() <=> other.getTCaseName()
+        }
+    }
+
 }
 
 

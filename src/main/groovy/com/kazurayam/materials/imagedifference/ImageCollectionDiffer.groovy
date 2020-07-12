@@ -1,6 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
 import com.kazurayam.materials.TExecutionProfile
+import com.kazurayam.materials.VTLoggerEnabled
 
 import java.awt.image.BufferedImage
 import java.nio.file.Files
@@ -42,7 +43,7 @@ import groovy.json.JsonOutput
  *
  * @author kazurayam
  */
-final class ImageCollectionDiffer extends ImageCollectionProcessor {
+final class ImageCollectionDiffer extends ImageCollectionProcessor implements VTLoggerEnabled {
     
     static Logger logger_ = LoggerFactory.getLogger(ImageCollectionDiffer.class)
     
@@ -83,6 +84,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor {
      * 
      * @param listener
      */
+    @Override
     void setVisualTestingLogger(VisualTestingLogger logger) {
         this.vtLogger_ = logger
     }
