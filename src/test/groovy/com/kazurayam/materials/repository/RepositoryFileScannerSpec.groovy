@@ -167,38 +167,7 @@ class RepositoryFileScannerSpec extends Specification {
         lastModifiedOfTCaseResult == lastModifiedOfMaterials
     }
 
-    /**
-     * execute RepositoryScanner.scan() then check the result
-     * if a TSuiteResult object has a lastModified property with appropriate value which
-     * must be equal to the maximum value of contained TCaseResults.
-     *
-     */
-    def testScan_lastModifiedOfTSuiteResult() {
-        setup:
-        Path casedir = workdir_.resolve("testScan_lastModifiedOfTCaseResult")
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materialsDir = casedir.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
-        scanner.scan()
-        RepositoryRoot repoRoot = scanner.getRepositoryRoot()
-        //logger_.debug("#testScan_lastModifiedOfTCaseResult repoRoot: ${JsonOutput.prettyPrint(repoRoot.toJsonText())}")
-        when:
-        TSuiteResult ts1_20180530_130604 = repoRoot.getTSuiteResult(
-                new TSuiteName('Test Suites/main/TS1'),
-                new TExecutionProfile("CURA_ProductionEnv"),
-                TSuiteTimestamp.newInstance('20180530_130604'))
-        LocalDateTime lastModifiedOfTSuiteResult = ts1_20180530_130604.getLastModified()
-        LocalDateTime lastModifiedOfTCaseResults = LocalDateTime.MIN
-        List<TCaseResult> tCaseResults = ts1_20180530_130604.getTCaseResultList()
-        for (TCaseResult tcr : tCaseResults) {
-            if (tcr.getLastModified() > lastModifiedOfTCaseResults) {
-                lastModifiedOfTCaseResults = tcr.getLastModified()
-            }
-        }
-        then:
-        lastModifiedOfTSuiteResult == lastModifiedOfTCaseResults
-    }
-    
+
     /**
      * Reproduce a problem https://github.com/kazurayam/Materials/issues/5 to fix it.
      * 

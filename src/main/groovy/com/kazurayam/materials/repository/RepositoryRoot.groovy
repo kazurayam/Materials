@@ -154,23 +154,6 @@ final class RepositoryRoot implements TSuiteResultTree {
                 }
             }
 
-    /**
-     *
-     * @return
-     */
-    TSuiteResult getLatestModifiedTSuiteResult() {
-        LocalDateTime lastModified = LocalDateTime.MIN
-        TSuiteResult result = null
-        List<TSuiteResult> tSuiteResults = this.getTSuiteResultList()
-        for (TSuiteResult tsr : tSuiteResults) {
-            if (tsr.getLastModified() > lastModified) {
-                result = tsr
-                lastModified = tsr.getLastModified()
-            }
-        }
-        return result
-    }
-
 
     /**
      *

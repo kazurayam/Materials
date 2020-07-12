@@ -45,10 +45,6 @@ final class TreeTrunkScanner {
                 Integer.MAX_VALUE,
                 new TreeTrunkVisitor(repoRoot_)
         )
-        //
-        if (repoRoot_.getLatestModifiedTSuiteResult() != null) {
-            repoRoot_.getLatestModifiedTSuiteResult().setLatestModified(true)
-        }
     }
 
     RepositoryRoot getRepositoryRoot() {

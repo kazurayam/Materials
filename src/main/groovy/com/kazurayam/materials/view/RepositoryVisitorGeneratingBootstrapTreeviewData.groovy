@@ -86,7 +86,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          sb.append('"backColor":"#CCDDFF",')
          sb.append('"selectable":false,')
          sb.append('"state":{')
-         sb.append('    "expanded":' + tSuiteResult.isLatestModified() )
+         sb.append('    "expanded":' + (tSuiteResult.getTSuiteName().getValue().endsWith('_exam')))
          sb.append('},')
          sb.append('"nodes":[')
          pw_.print(sb.toString())

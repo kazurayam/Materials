@@ -60,7 +60,6 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
                 return CONTINUE
 
             case TreeLayer.EXECPROFILE:
-                //directoryTransition_.push(Layer.TIMESTAMP)
                 logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
@@ -87,6 +86,7 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
                  * important ! we stop digging the tree here.
                  * we will let TBranchVisitor to do it
                  */
+                //directoryTransition_.push(Layer.TIMESTAMP)
                 return SKIP_SUBTREE
 
             default:

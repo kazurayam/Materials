@@ -48,11 +48,9 @@ final class RepositoryFileScanner {
                 Integer.MAX_VALUE,
                 new RepositoryFileVisitor(repoRoot_)
         )
-        //
-        if (repoRoot_.getLatestModifiedTSuiteResult() != null) {
-            repoRoot_.getLatestModifiedTSuiteResult().setLatestModified(true)
-        }
+
     }
+
 
     RepositoryRoot getRepositoryRoot() {
         return repoRoot_
