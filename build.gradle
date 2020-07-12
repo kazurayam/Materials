@@ -146,7 +146,6 @@ task pinpoint(type: Test) {
     //include "**/model/MaterialFileNameSpec.class"
     //include "**/PathSpec.class"
     //include "**/ReportsAccessorSpec.class"
-    //include "**/repository/RepositoryFileScannerSpec.class"
     //include "**/repository/RepositoryRootSpec.class"
     //include "**/repository/RepositoryWalkerSpec.class"
     //include "**/repository/TreeBranchScannerSpec.class"

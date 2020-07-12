@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.repository.TreeTrunkScanner
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
@@ -12,7 +14,7 @@ import org.slf4j.LoggerFactory
 
 import com.kazurayam.materials.impl.MaterialImpl
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.repository.RepositoryFileScanner
+
 import com.kazurayam.materials.repository.RepositoryRoot
 
 import groovy.json.JsonOutput
@@ -39,7 +41,7 @@ class MaterialSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
+        TreeTrunkScanner scanner = new TreeTrunkScanner(materials)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

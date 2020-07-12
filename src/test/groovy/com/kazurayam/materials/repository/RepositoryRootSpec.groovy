@@ -48,7 +48,7 @@ class RepositoryRootSpec extends Specification {
             }
         }
         Path materialsDir = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
+        TreeTrunkScanner scanner = new TreeTrunkScanner(materialsDir)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }
@@ -165,7 +165,7 @@ class RepositoryRootSpec extends Specification {
     def testGetSortedTSuiteResults() {
         when:
         Path materialsDir = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materialsDir)
+        TreeTrunkScanner scanner = new TreeTrunkScanner(materialsDir)
         scanner.scan()
         RepositoryRoot repoRoot = scanner.getRepositoryRoot()
         List<TSuiteResult> tSuiteResults = repoRoot.getSortedTSuiteResults()
