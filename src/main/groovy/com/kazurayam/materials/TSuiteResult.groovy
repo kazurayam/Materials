@@ -40,12 +40,6 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
     
     abstract Path createDirectories()
 
-    abstract LocalDateTime getLastModified()
-
-    abstract boolean isLatestModified()
-
-    abstract TSuiteResult setLatestModified(Boolean isLatest)
-
     /**
      * get the sum of length of files belonging to this TSuiteResult
      *

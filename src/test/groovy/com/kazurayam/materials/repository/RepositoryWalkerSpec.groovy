@@ -29,7 +29,7 @@ class RepositoryWalkerSpec extends Specification {
         }
         Helpers.copyDirectory(fixture_, workdir_)
         Path materials = workdir_.resolve('Materials')
-        RepositoryFileScanner scanner = new RepositoryFileScanner(materials)
+        TreeTrunkScanner scanner = new TreeTrunkScanner(materials)
         scanner.scan()
         repoRoot_ = scanner.getRepositoryRoot()
     }

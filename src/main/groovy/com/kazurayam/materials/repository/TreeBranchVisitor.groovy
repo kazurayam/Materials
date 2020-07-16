@@ -122,7 +122,7 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
                 material.setLength(file.toFile().length())
                 material.setDescription(tCaseResult_.getParent().getTSuiteTimestamp().format())
                 tCaseResult_.addMaterial(material)
-                logger_.debug("#visitFile ${file} in TESTCASE, tCaseResult=${tCaseResult_.toString()}")
+                logger_.debug("#visitFile ${file} in TESTCASE; TCaseResult=${tCaseResult_.toString()}")
                 return CONTINUE
 
             default:
@@ -146,8 +146,4 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
     }
 
     // helpers
-
-
-
-
 }

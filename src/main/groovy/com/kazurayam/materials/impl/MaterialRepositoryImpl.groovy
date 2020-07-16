@@ -6,7 +6,7 @@ import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import com.kazurayam.materials.metadata.MaterialMetadataImpl
 import com.kazurayam.materials.model.Suffix
-import com.kazurayam.materials.repository.RepositoryFileScanner
+
 import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.TreeTrunkScanner
 import org.slf4j.Logger
@@ -66,14 +66,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
     //
     // ----------------------------------------------------------------
     @Override
-    /*
-    void scan() {
-        //vtLogger_.info(this.class.getSimpleName() + "#scan baseDir is ${baseDir_}")
-        RepositoryFileScanner scanner = new RepositoryFileScanner(baseDir_)
-        scanner.scan()
-        repoRoot_ = scanner.getRepositoryRoot()
-    }
-     */
     void scan() {
         TreeTrunkScanner scanner = new TreeTrunkScanner(baseDir_)
         scanner.scan()

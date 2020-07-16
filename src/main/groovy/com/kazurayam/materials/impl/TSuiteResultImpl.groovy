@@ -13,7 +13,6 @@ import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.TreeBranchScanner
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import sun.reflect.generics.tree.Tree
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -31,8 +30,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
     private Path tSuiteTimestampDirectory_
 
     private Set<TCaseResult> tCaseResults_
-
-    private boolean latestModified_
 
     /**
      * This boolean flag marks if the directories/files under this TSuiteResult
@@ -64,7 +61,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
                 tSuiteTimestamp)
 
         tCaseResults_   = new HashSet<TCaseResult>()
-        latestModified_ = false
         hasBeenVisited_ = false
     }
 
@@ -252,17 +248,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         }
     }
 
-    @Override
-    LocalDateTime getLastModified() {
-        LocalDateTime lastModified = LocalDateTime.MIN
-        List<TCaseResult> tCaseResults = this.getTCaseResultList()
-        for (TCaseResult tcr : tCaseResults) {
-            if (tcr.getLastModified() > lastModified) {
-                lastModified = tcr.getLastModified()
-            }
-        }
-        return lastModified
-    }
 
     @Override
     long getSize() {
@@ -273,18 +258,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
         }
         return length
     }
-    
-    @Override
-    boolean isLatestModified() {
-        return latestModified_
-    }
-
-    @Override
-    TSuiteResult setLatestModified(Boolean isLatest) {
-        latestModified_ = isLatest
-        return this
-    }
-
 
 
     @Override
@@ -365,8 +338,6 @@ class TSuiteResultImpl extends TSuiteResult implements Comparable<TSuiteResult>{
                 + Helpers.escapeAsJsonText(this.getId().getTSuiteTimestamp().format()) + '",')
         sb.append('"tSuiteTimestampDir": "'
                 + Helpers.escapeAsJsonText(this.getTSuiteTimestampDirectory().toString()) + '",')
-        sb.append('"lastModified": "'
-                + this.getLastModified().toString() + '",')
         sb.append('"length":' + this.getSize()+ ',')
         sb.append('"tCaseResults": [')
         def count = 0
