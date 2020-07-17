@@ -66,7 +66,7 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                         }
                         mkbuilder_.img(['src': "${cr.getDiffMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
                             'class': 'img-fluid d-block mx-auto',
-                            'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
+                            'style': "border: 1px solid #ddd;",
                             'alt' : "Diff"])
                     }
                     // Expected + Actual
