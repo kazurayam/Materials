@@ -294,6 +294,47 @@ interface MaterialRepository extends TSuiteResultTree {
     Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName)
     Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName, MaterialDescription description)
 
+
+    /**
+     *
+     * @param testCaseId
+     * @param subPath
+     * @param url
+     * @param startingDepth
+     * @param fileType
+     * @return
+     */
+    Path resolveMaterialPathByURLPathComponents(String testCaseId,
+                                                URL url,
+                                                int startingDepth,
+                                                String defaultName,
+                                                FileType fileType,
+                                                MaterialDescription description)
+
+    Path resolveMaterialPathByURLPathComponents(String testCaseId,
+                                                String subPath,
+                                                URL url,
+                                                int startingDepth,
+                                                String defaultName,
+                                                FileType fileType,
+                                                MaterialDescription description)
+
+    Path resolveMaterialPathByURLPathComponents(TCaseName testCaseName,
+                                                URL url,
+                                                int startingDepth,
+                                                String defaultName,
+                                                FileType fileType,
+                                                MaterialDescription description)
+
+    Path resolveMaterialPathByURLPathComponents(TCaseName testCaseName,
+                                                String subPath,
+                                                URL url,
+                                                int startingDepth,
+                                                String DefaultName,
+                                                FileType fileType,
+                                                MaterialDescription description)
+
+
     /**
      *
      * @param tSuiteResult
