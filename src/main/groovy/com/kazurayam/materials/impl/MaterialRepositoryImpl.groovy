@@ -361,9 +361,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
      */
     @Override
     Path resolveScreenshotPathByURLPathComponents(String testCaseId,
-                                                  URL url,
-                                                  int startingDepth = 0,
-                                                  String defaultName = 'default',
+                                                  URL url, int startingDepth = 0, String defaultName = 'default',
                                                   MaterialDescription description = MaterialDescription.EMPTY) {
         return this.resolveScreenshotPathByURLPathComponents(testCaseId, '', url, startingDepth, defaultName, description)
     }
@@ -371,20 +369,15 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName,
-                                                  URL url,
-                                                  int startingDepth = 0,
-                                                  String defaultName = 'default',
+                                                  URL url, int startingDepth = 0, String defaultName = 'default',
                                                   MaterialDescription description = MaterialDescription.EMPTY) {
         return this.resolveScreenshotPathByURLPathComponents(tCaseName, '', url, startingDepth, defaultName, description)
     }
 
 
     @Override
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId,
-                                                  String subPath,
-                                                  URL url,
-                                                  int startingDepth = 0,
-                                                  String defaultName = 'default',
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath,
+                                                  URL url, int startingDepth = 0, String defaultName = 'default',
                                                   MaterialDescription description = MaterialDescription.EMPTY) {
         TCaseName tCaseName = new TCaseName(testCaseId)
         return this.resolveScreenshotPathByURLPathComponents(tCaseName, subPath, url, startingDepth, defaultName, description)
@@ -392,11 +385,8 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
 
     @Override
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName,
-                                                  String subPath,
-                                                  URL url,
-                                                  int startingDepth = 0,
-                                                  String defaultName = 'default',
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath,
+                                                  URL url, int startingDepth = 0, String defaultName = 'default',
                                                   MaterialDescription description = MaterialDescription.EMPTY)
     {
         return this.resolveMaterialPathByURLPathComponents(tCaseName,
@@ -408,9 +398,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     Path resolveMaterialPathByURLPathComponents(String testCaseId,
-                                                URL url,
-                                                int startingDepth = 0,
-                                                String defaultName = 'default',
+                                                URL url, int startingDepth = 0, String defaultName = 'default',
                                                 FileType fileType = FileType.PNG,
                                                 MaterialDescription description = MaterialDescription.EMPTY)
     {

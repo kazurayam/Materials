@@ -228,14 +228,17 @@ interface MaterialRepository extends TSuiteResultTree {
      * 
      * </PRE>
      */
-    Path resolveScreenshotPath(String testCaseId, URL url)
-    Path resolveScreenshotPath(String testCaseId, URL url, MaterialDescription description)
-    Path resolveScreenshotPath(String testCaseId, String subPath, URL url)
-    Path resolveScreenshotPath(String testCaseId, String subPath, URL url, MaterialDescription description)
-    Path resolveScreenshotPath(TCaseName tCaseName, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, URL url, MaterialDescription description)
-    Path resolveScreenshotPath(TCaseName tCaseName, String subPath, URL url)
-    Path resolveScreenshotPath(TCaseName tCaseName, String subPath, URL url, MaterialDescription description)
+    Path resolveScreenshotPath(String testCaseId,
+                               URL url, MaterialDescription description)
+
+    Path resolveScreenshotPath(String testCaseId, String subPath,
+                               URL url, MaterialDescription description)
+
+    Path resolveScreenshotPath(TCaseName tCaseName,
+                               URL url, MaterialDescription description)
+
+    Path resolveScreenshotPath(TCaseName tCaseName, String subPath,
+                               URL url, MaterialDescription description)
 
     /**
      * Returns a Path of a Material file.
@@ -264,14 +267,17 @@ interface MaterialRepository extends TSuiteResultTree {
      * </PRE>
      * 
      */
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url, int startingDepth, String defaultName, MaterialDescription description)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath, URL url, int startingDepth, String defaultName, MaterialDescription description)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url, int startingDepth, String defaultName, MaterialDescription description)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath, URL url, int startingDepth, String defaultName)
-    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath, URL url, int startingDepth, String defaultName, MaterialDescription description)
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, URL url,
+                                                  int startingDepth, String defaultName, MaterialDescription description)
+
+    Path resolveScreenshotPathByURLPathComponents(String testCaseId, String subPath, URL url,
+                                                  int startingDepth, String defaultName, MaterialDescription description)
+
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, URL url,
+                                                  int startingDepth, String defaultName, MaterialDescription description)
+
+    Path resolveScreenshotPathByURLPathComponents(TCaseName tCaseName, String subPath, URL url,
+                                                  int startingDepth, String defaultName, MaterialDescription description)
 
 
     /**
@@ -285,14 +291,17 @@ interface MaterialRepository extends TSuiteResultTree {
      * assert path.toString().endsWith('Materials/main.TS1/20180530_130419/main.TC1/screenshot1.png')
      * </PRE>
      */
-    Path resolveMaterialPath(String testCaseId, String fileName)
-    Path resolveMaterialPath(String testCaseId, String fileName, MaterialDescription description)
-    Path resolveMaterialPath(String testCaseId, String subPath, String fileName)
-    Path resolveMaterialPath(String testCaseId, String subPath, String fileName, MaterialDescription description)
-    Path resolveMaterialPath(TCaseName testCaseName, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, String fileName, MaterialDescription description)
-    Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName)
-    Path resolveMaterialPath(TCaseName testCaseName, String subPath, String fileName, MaterialDescription description)
+    Path resolveMaterialPath(String testCaseId,
+                             String fileName, MaterialDescription description)
+
+    Path resolveMaterialPath(String testCaseId, String subPath,
+                             String fileName, MaterialDescription description)
+
+    Path resolveMaterialPath(TCaseName testCaseName,
+                             String fileName, MaterialDescription description)
+
+    Path resolveMaterialPath(TCaseName testCaseName, String subPath,
+                             String fileName, MaterialDescription description)
 
 
     /**
@@ -305,34 +314,20 @@ interface MaterialRepository extends TSuiteResultTree {
      * @return
      */
     Path resolveMaterialPathByURLPathComponents(String testCaseId,
-                                                URL url,
-                                                int startingDepth,
-                                                String defaultName,
-                                                FileType fileType,
-                                                MaterialDescription description)
+                                                URL url, int startingDepth, String defaultName,
+                                                FileType fileType, MaterialDescription description)
 
-    Path resolveMaterialPathByURLPathComponents(String testCaseId,
-                                                String subPath,
-                                                URL url,
-                                                int startingDepth,
-                                                String defaultName,
-                                                FileType fileType,
-                                                MaterialDescription description)
+    Path resolveMaterialPathByURLPathComponents(String testCaseId, String subPath,
+                                                URL url, int startingDepth, String defaultName,
+                                                FileType fileType, MaterialDescription description)
 
     Path resolveMaterialPathByURLPathComponents(TCaseName testCaseName,
-                                                URL url,
-                                                int startingDepth,
-                                                String defaultName,
-                                                FileType fileType,
-                                                MaterialDescription description)
+                                                URL url, int startingDepth, String defaultName,
+                                                FileType fileType, MaterialDescription description)
 
-    Path resolveMaterialPathByURLPathComponents(TCaseName testCaseName,
-                                                String subPath,
-                                                URL url,
-                                                int startingDepth,
-                                                String DefaultName,
-                                                FileType fileType,
-                                                MaterialDescription description)
+    Path resolveMaterialPathByURLPathComponents(TCaseName testCaseName, String subPath,
+                                                URL url, int startingDepth, String DefaultName,
+                                                FileType fileType, MaterialDescription description)
 
 
     /**
