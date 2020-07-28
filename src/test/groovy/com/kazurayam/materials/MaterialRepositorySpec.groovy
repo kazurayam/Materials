@@ -294,7 +294,7 @@ class MaterialRepositorySpec extends Specification {
             'Test Cases/main/TC1', new URL('http://demoaut.katalon.com/'), 0, 'top')
         then:
         path.getFileName().toString()== 'top.png'
-            path.toString().replace('\\', '/').endsWith(
+        path.toString().replace('\\', '/').endsWith(
                     'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/top.png')
     }
 
@@ -311,6 +311,24 @@ class MaterialRepositorySpec extends Specification {
         path.getFileName().toString()== 'profile.php%23login.png'
         path.toString().replace('\\', '/').endsWith(
                 'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/profile.php%23login.png')
+    }
+
+    def test_resolveMaterialPathByURLPathComponents_String() {
+        setup:
+        String method = "test_resolveMaterialPathByURLPathComponents_String"
+        MaterialRepository mr = prepareMR(method, tSuiteResultId_)
+        when:
+        Path path = mr.resolveMaterialPathByURLPathComponents(
+                'Test Cases/main/TC1',
+                'any/sub/path',
+                new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'),
+                0,
+                'top',
+                FileType.HTML, MaterialDescription.EMPTY)
+        then:
+        path.getFileName().toString() == 'profile.php%23login.html'
+        path.toString().replace('\\', '/').endsWith(
+                'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/any/sub/path/profile.php%23login.html')
     }
 
     def test_makeIndex() {

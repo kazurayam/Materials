@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.78.1'
+version  = '0.79.1'
 
 
 sourceCompatibility = '1.8'
@@ -130,16 +130,16 @@ task pinpoint(type: Test) {
     //include "**/impl/MaterialCoreImplSpec.class"
     //include "**/impl/MaterialImplSpec.class"
     //include "**/impl/MaterialPairImpl.class"
-    //include "**/impl/MaterialRepositoryImplSpec.class"
+    include "**/impl/MaterialRepositoryImplSpec.class"
     //include "**/impl/MaterialStorageImplSpec.class"
-    include "**/impl/TSuiteResultImplSpec.class"
+    //include "**/impl/TSuiteResultImplSpec.class"
     //include "**/IndexerFactorySpec.class"
     //include "**/IndexerSpec.class"
     //include "**/MaterialDescriptionSpec.class"
     //include "**/MaterialPairSpec.class"
     //include "**/MaterialPairsSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
-    //include "**/MaterialRepositorySpec.class"
+    include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
     //include "**/MaterialStorageSpec.class"
     //include "**/MiscSpec.class"
@@ -164,7 +164,7 @@ task pinpoint(type: Test) {
     //include "**/TCaseResultSpec.class"
     //include "**/TExecutionProfileSpec.class"
     //include "**/TSuiteNameSpec.class"
-    include "**/TSuiteResultSpec.class"
+    //include "**/TSuiteResultSpec.class"
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/IndexerCarouselSpec.class"

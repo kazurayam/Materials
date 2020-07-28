@@ -34,10 +34,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     @Override String getBootstrapModalSize() {
         return 'modal-xl'
     }
-    
-    String getImgWidth() {
-        return '502px'
-    }
 
     /**
     * generate HTML <div>s which presents 2 images (Back and Forth) in parallel format
@@ -69,36 +65,32 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
                             'style': "border: 1px solid #ddd;",
                             'alt' : "Diff"])
                     }
-                    // Expected + Actual
+                    // Expected
                     mkbuilder_.div(['class':'carousel-item']) {
                         mkbuilder_.div(['class':'carousel-caption d-block']) {
-
-                            assert this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) != null
-                            assert this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) != null
-
                             mkbuilder_.p "${this.findExecutionProfileName(repoRoot_, cr.getExpectedMaterial()) ?: 'profile?'}" +
-                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: 'timestamp?'}" +
-                                        " | " +
-                                        " ${this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: 'profile?'}" +
-                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: 'timestamp?'}"
+                                        " ${this.findTestSuiteTimestamp(repoRoot_, cr.getExpectedMaterial()) ?: 'timestamp?'}"
                         }
                         mkbuilder_.div(['class':'container-fluid']) {
-                            mkbuilder_.div(['class':'row']) {
-                                mkbuilder_.div(['class':'col']) {
-                                    mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                        'class': 'img-fluid d-block mx-auto',
-                                        'style': "border: 1px solid #ddd; width: ${this.getImgWidth();}",
-                                        'alt' : "Expected"])
-                                }
-                                mkbuilder_.div(['class':'col']) {
-                                    mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
-                                        'class': 'img-fluid d-block mx-auto',
-                                        'style': "border: 1px solid #ddd; width: ${this.getImgWidth()};",
-                                        'alt' : "Actual"])
-                                }
-                            }
+                            mkbuilder_.img(['src': "${cr.getExpectedMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                                            'class': 'img-fluid d-block mx-auto',
+                                            'style': "border: 1px solid #ddd;}",
+                                            'alt' : "Expected"])
+
                         }
-                        
+                    }
+                    // Actual
+                    mkbuilder_.div(['class':'carousel-item']) {
+                        mkbuilder_.div(['class':'carousel-caption d-block']) {
+                            mkbuilder_.p " ${this.findExecutionProfileName(repoRoot_, cr.getActualMaterial()) ?: 'profile?'}" +
+                                    " ${this.findTestSuiteTimestamp(repoRoot_, cr.getActualMaterial()) ?: 'timestamp?'}"
+                        }
+                        mkbuilder_.div(['class':'container-fluid']) {
+                            mkbuilder_.img(['src': "${cr.getActualMaterial().getEncodedHrefRelativeToRepositoryRoot()}",
+                                            'class': 'img-fluid d-block mx-auto',
+                                            'style': "border: 1px solid #ddd;",
+                                            'alt' : "Actual"])
+                        }
                     }
                     mkbuilder_.a(['class':'carousel-control-prev',
                             'href':"#${mate.hashCode()}carousel",
