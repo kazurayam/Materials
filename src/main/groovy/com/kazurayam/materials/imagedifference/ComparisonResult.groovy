@@ -26,7 +26,7 @@ class ComparisonResult implements Comparable<ComparisonResult> {
                      double criteriaPercentage,
                      boolean imagesAreSimilar,
                      double diffRatio,
-                     MaterialDescription materialDescription = MaterialDescirption.EMPTY
+                     MaterialDescription materialDescription = MaterialDescription.EMPTY
     ) {
         this.expectedMaterial_ = expected
         this.actualMaterial_ = actual

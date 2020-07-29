@@ -423,10 +423,9 @@ class ImageCollectionDifferSpec extends Specification {
         mr.markAsCurrent(    'Test Suites/ ImageDiff', 'default', '20190216_210203')
         def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'default', '20190216_210203')
 
+        /*
         when:
-        // we use Java 8 Stream API to filter entries
         MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
-        //
         TSuiteName examiningTSuiteName = new TSuiteName("47News_chronos_exam")
         TExecutionProfile examiningTExecutionProfile = new TExecutionProfile('default')
         TCaseName  examiningTCaseName  = new TCaseName("Test Cases/main/TC_47News/ImageDiff")
@@ -434,19 +433,16 @@ class ImageCollectionDifferSpec extends Specification {
                 examiningTSuiteName,
                 examiningTExecutionProfile,
                 examiningTCaseName)
-        //
         StorageScanner.Options options = new StorageScanner.Options.Builder().
                 previousImageDeltaStats(previousIDS).
                 build()
         StorageScanner storageScanner = new StorageScanner(ms, options)
         ImageDeltaStats imageDeltaStats = storageScanner.scan(tsn, tep)
-        //
         storageScanner.persist(imageDeltaStats,
                 examiningTSuiteName,
                 examiningTExecutionProfile,
                 new TSuiteTimestamp(),
                 examiningTCaseName)
-        //
         double ccp = imageDeltaStats.getCriteriaPercentage(
                 Paths.get('main.TC_47News.visitSite').resolve('47NEWS_TOP.png'))
         then:
@@ -482,6 +478,6 @@ class ImageCollectionDifferSpec extends Specification {
         List<Material> jsons = tcr.getMaterialList(ComparisonResultBundle.SERIALIZED_FILE_NAME)
         then:
         jsons.size() == 1
-
+        */
     }
 }
