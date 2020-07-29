@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
+
 import java.nio.file.Path
 
 interface MaterialPairs {
@@ -17,7 +19,7 @@ interface MaterialPairs {
     TSuiteResult getExpectedTSuiteResult()
     
     TSuiteResult getActualTSuiteResult()
-    
+
     Set<Path> keySet()
     
     boolean containsKey(Path pathRelativeToTSuiteTimestamp)

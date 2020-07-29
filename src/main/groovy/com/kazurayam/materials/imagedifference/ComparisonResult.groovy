@@ -1,6 +1,7 @@
 package com.kazurayam.materials.imagedifference
 
 import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.MaterialDescription
 
 /**
  * This class encloses an instance of ImageDifference and a criteriaPercentage against which
@@ -17,19 +18,23 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     private double criteriaPercentage_
     private boolean imagesAreSimilar_
     private double diffRatio_
+    private MaterialDescription materialDescription_
     
     ComparisonResult(MaterialCore expected,
-                        MaterialCore actual,
-                        MaterialCore diff,
-                        double criteriaPercentage,
-                        boolean imagesAreSimilar,
-                        double diffRatio) {
+                     MaterialCore actual,
+                     MaterialCore diff,
+                     double criteriaPercentage,
+                     boolean imagesAreSimilar,
+                     double diffRatio,
+                     MaterialDescription materialDescription = MaterialDescirption.EMPTY
+    ) {
         this.expectedMaterial_ = expected
-        this.actualMaterial_   = actual
-        this.diffMaterial_     = diff
+        this.actualMaterial_ = actual
+        this.diffMaterial_ = diff
         this.criteriaPercentage_ = criteriaPercentage
         this.imagesAreSimilar_ = imagesAreSimilar
         this.diffRatio_ = diffRatio
+        this.materialDescription_ = materialDescription
     }
         
     MaterialCore getExpectedMaterial() {
@@ -54,6 +59,10 @@ class ComparisonResult implements Comparable<ComparisonResult> {
     
     double getDiffRatio() {
         return this.diffRatio_
+    }
+
+    MaterialDescription getMaterialDescription() {
+        return this.materialDescription_
     }
     
     
@@ -118,7 +127,12 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         }
         "criteriaPercentage": 5.0,
         "imagesAreSimilar": true,
-        "diffRatio": 3.56
+        "diffRatio": 3.56,
+        "MaterialDescription": {
+            "category": "1.0",
+            "description": "Appointment Input Form"
+        }
+     }
     }
 }
      * </PRE>
@@ -134,7 +148,8 @@ class ComparisonResult implements Comparable<ComparisonResult> {
         sb.append('\"diffMaterial\":'       + this.getDiffMaterial().toJsonText() + ',')
         sb.append('\"criteriaPercentage\":' + this.getCriteriaPercentage() + ',')
         sb.append('\"imagesAreSimilar\":'   + this.imagesAreSimilar() + ',')
-        sb.append('\"diffRatio\":'          + this.getDiffRatio())
+        sb.append('\"diffRatio\":'          + this.getDiffRatio() + ',')
+        sb.append('\"MaterialDescription\":'+ this.getMaterialDescription().toJsonText())
         sb.append('}')
         sb.append('}')
         return sb.toString()

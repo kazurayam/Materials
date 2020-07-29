@@ -1,5 +1,7 @@
 package com.kazurayam.materials.impl
 
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
+
 import java.nio.file.Path
 
 import com.kazurayam.materials.Material
@@ -100,7 +102,7 @@ class MaterialPairsImpl implements MaterialPairs {
     public TSuiteResult getActualTSuiteResult() {
         return this.actualTSR
     }
-    
+
     @Override
     String toString() {
         return this.toJsonText()

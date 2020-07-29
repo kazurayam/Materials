@@ -1,7 +1,9 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.VTLoggerEnabled
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
 
 import java.awt.image.BufferedImage
 import java.nio.file.Files
@@ -115,12 +117,18 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
                 decorated.getExpected().getFileType() == FileType.PNG &&
                 decorated.getActual().getFileType() == FileType.PNG) {
                 Material expected = decorated.getExpected()
-                TSuiteName tsn = expected.getParent().getParent().getTSuiteName()
-                TExecutionProfile tep = expected.getParent().getParent().getTExecutionProfile()
+                TSuiteResult tsr = expected.getParent().getParent()
+                MaterialDescription expectedMaterialDescription =
+                        this.findMaterialDescription(tsr, expected)
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
                 double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(path)
                 // compare 2 images and create a ComparisonResult object
-                ComparisonResult cr = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
+                ComparisonResult cr =
+                        this.startMaterialPair(
+                                callerTCaseName,
+                                decorated,
+                                criteriaPercentage,
+                                expectedMaterialDescription)
                 // and put the ComparisonResult into buffer
                 this.endMaterialPair(cr)
             }
@@ -232,9 +240,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
     @Override
     ComparisonResult startMaterialPair( TCaseName tCaseName,
                                         MaterialPair materialPair,
-                                        double criteriaPercentage) throws ImageDifferenceException {
+                                        double criteriaPercentage,
+                                        MaterialDescription materialDescription
+    ) throws ImageDifferenceException {
         Objects.requireNonNull(tCaseName, "tCaseName must not be null")
         Objects.requireNonNull(materialPair, "materialPair must not be null")
+        Objects.requireNonNull(materialDescription, "materialDescription must not be null")
 
         Material expectedMaterial = materialPair.getExpected()
         Material actualMaterial = materialPair.getActual()
@@ -296,13 +307,15 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
         MaterialCoreImpl diffMaterial = new MaterialCoreImpl(mr_.getBaseDir(), pngFile)
         // construct a record of image comparison
         boolean similarity = diff.imagesAreSimilar(criteriaPercentage)
-        ComparisonResult evalResult = new ComparisonResult( expectedMaterial,
-                                                            actualMaterial,
-                                                            diffMaterial,
-                                                            criteriaPercentage,
-                                                            similarity,
-                                                            diff.getRatio()
-                                                            )
+        ComparisonResult evalResult =
+                new ComparisonResult(
+                        expectedMaterial,
+                        actualMaterial,
+                        diffMaterial,
+                        criteriaPercentage,
+                        similarity,
+                        diff.getRatio(),
+                        materialDescription)
 
         // free the memory occupied by the internal BufferedImage in the ImageDiff object
         diff.flush()
@@ -381,4 +394,65 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
         return result
     }
 
+
+    /**
+     * MaterialMetadataBundle file may look like as this:
+     * <PRE>
+     * {
+     *     "MaterialMetadataBundle": [
+     *         ...
+     *         {
+     *             "Matetadata": {
+     *                 "MaterialPath": "CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
+     *                 "TCaseName": "Test Cases/CURA/visitSite",
+     *                 "MaterialDescription": {
+     *                     "category": "1",
+     *                     "description": "Login page"
+     *                 },
+     *                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
+     *                 "SubPath": "screenshots",
+     *                 "URL": "https://katalon-demo-cura.herokullogin"
+     *             }
+     *         },
+     * </PRE>
+     *
+     * Material may look like this:
+     * <PRE>
+     * "Material": {
+     *                         "url": "null",
+     *                         "suffix": "",
+     *                         "fileType": {*                             "FileType": {*                                 "extension": "png",
+     *                                 "mimeTypes": [
+     *                                     "image/png"
+     *                                 ]
+     *}
+     *                         },
+     *                         "path": "/Users/kazuakiurayama/katalon-workspace/VisualTestingInKatalonStudio/Materials/CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
+     *                         "hrefRelativeToRepositoryRoot": "CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
+     *                         "lastModified": "2020-07-29T04:02:06",
+     *                         "descripti"
+     *                     }
+     * </PRE>
+     *
+     * Given above two arguments, find a MaterialDescription of the Material and return:
+     * <PRE>
+     * {
+     *      "category": "1",
+     *      "description": "Login page"
+     * }
+     * </PRE>
+     */
+    MaterialDescription findMaterialDescription(
+            TSuiteResult tSuiteResult, Material material) {
+        Objects.requireNonNull(mr_ , "mr_ must not be null")
+        Path bundleFile = mr_.locateMaterialMetadataBundle(tSuiteResult)
+        MaterialMetadataBundle mmBundle
+        if (Files.exists(bundleFile)) {
+            mmBundle = MaterialMetadataBundle.deserialize(bundleFile)
+        } else {
+            throw new IllegalStateException("${bundleFile} is not found")
+        }
+
+
+    }
 }
