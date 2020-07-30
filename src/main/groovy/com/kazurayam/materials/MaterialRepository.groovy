@@ -335,6 +335,7 @@ interface MaterialRepository extends TSuiteResultTree {
      * @param tSuiteResult
      * @return the path of <TSuiteResult>/material-metadata-bundle.json file
      */
+    Path locateMaterialMetadataBundle(TSuiteResultId tSuiteResultId)
     Path locateMaterialMetadataBundle(TSuiteResult tSuiteResult)
 	
 	MaterialMetadataBundle findMaterialMetadataBundleOfCurrentTSuite()

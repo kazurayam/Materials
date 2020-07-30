@@ -290,7 +290,7 @@ class ImageCollectionDifferSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
         TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
-        TExecutionProfile tep = new TExecutionProfile('default')
+        TExecutionProfile tep = new TExecutionProfile('CURA_DevelopmentEnv')
         TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_153731'))
         TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_154033'))
         ms.restore(mr, tsr0)
@@ -351,14 +351,14 @@ class ImageCollectionDifferSpec extends Specification {
         MaterialRepository mr = MaterialRepositoryFactory.createInstance(materials)
         MaterialStorage ms = MaterialStorageFactory.createInstance(storage)
         TSuiteName tsn = new TSuiteName('Test Suites/CURA/chronos_capture')
-        TExecutionProfile tep = new TExecutionProfile('default')
+        TExecutionProfile tep = new TExecutionProfile('CURA_DevelopmentEnv')
         TSuiteResultId tsr0 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_153731'))
         TSuiteResultId tsr1 = new TSuiteResultIdImpl(tsn, tep, TSuiteTimestamp.newInstance('20190512_154033'))
         ms.restore(mr, tsr0)
         ms.restore(mr, tsr1)
         mr.scan()
-        mr.markAsCurrent(    'Test Suites/ImageDiff', 'default', '20190512_154033')
-        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'default', '20190512_154033')
+        mr.markAsCurrent('Test Suites/ImageDiff', 'CURA_DevelopmentEnv', '20190512_154033')
+        def r = mr.ensureTSuiteResultPresent('Test Suites/ImageDiff', 'CURA_DevelopmentEnv', '20190512_154033')
         when:
         // revisited.png is found in the tsr1 but not in the tsr0
         MaterialPairs materialPairs = mr.createMaterialPairsForChronosMode(tsn, tep)
@@ -372,7 +372,7 @@ class ImageCollectionDifferSpec extends Specification {
         mr.scan()
         List<TSuiteResultId> tsriList = mr.getTSuiteResultIdList(
                 new TSuiteName('Test Suites/ImageDiff'),
-                new TExecutionProfile('default')
+                new TExecutionProfile('CURA_DevelopmentEnv')
         )
         assert tsriList.size() == 1
         TSuiteResultId tsri = tsriList.get(0)

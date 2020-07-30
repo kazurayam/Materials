@@ -3,6 +3,7 @@ package com.kazurayam.materials.imagedifference
 import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.TExecutionProfile
 import com.kazurayam.materials.VTLoggerEnabled
+import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
 
 import java.awt.image.BufferedImage
@@ -116,7 +117,11 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
             if (decorated.hasExpected() && decorated.hasActual() &&
                 decorated.getExpected().getFileType() == FileType.PNG &&
                 decorated.getActual().getFileType() == FileType.PNG) {
-                Material expected = decorated.getExpected()
+
+                //Material expected = decorated.getExpected()
+                Material expected = decorated.getActual()
+                // which is better? possibly we want to see description of the Actual one
+
                 TSuiteResult tsr = expected.getParent().getParent()
 
                 MaterialDescription expectedMaterialDescription =
@@ -415,7 +420,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
      *     "MaterialMetadataBundle": [
      *         ...
      *         {
-     *             "Matetadata": {
+     *             "MaterialMetadata": {
      *                 "MaterialPath": "CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
      *                 "TCaseName": "Test Cases/CURA/visitSite",
      *                 "MaterialDescription": {
@@ -431,10 +436,12 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
      *
      * Material may look like this:
      * <PRE>
-     * "Material": {
+     * {
      *                         "url": "null",
      *                         "suffix": "",
-     *                         "fileType": {*                             "FileType": {*                                 "extension": "png",
+     *                         "fileType": {
+     *                             "FileType": {
+     *                                 "extension": "png",
      *                                 "mimeTypes": [
      *                                     "image/png"
      *                                 ]
@@ -443,7 +450,7 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
      *                         "path": "/Users/kazuakiurayama/katalon-workspace/VisualTestingInKatalonStudio/Materials/CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
      *                         "hrefRelativeToRepositoryRoot": "CURA.chronos_capture/CURA_DevelopmentEnv/20200729_130109/CURA.visitSite/screenshots/profile.php%23login.png",
      *                         "lastModified": "2020-07-29T04:02:06",
-     *                         "descripti"
+     *                         "de_130109"
      *                     }
      * </PRE>
      *
@@ -458,14 +465,22 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
     MaterialDescription findMaterialDescription(
             TSuiteResult tSuiteResult, Material material) {
         Objects.requireNonNull(mr_ , "mr_ must not be null")
+        Objects.requireNonNull(tSuiteResult, "tSuiteResult must not be null")
+        Objects.requireNonNull(material, "material must not be nul")
+        // look up key
+        String key = material.getHrefRelativeToRepositoryRoot()
+        //
         Path bundleFile = mr_.locateMaterialMetadataBundle(tSuiteResult)
         MaterialMetadataBundle mmBundle
-        if (Files.exists(bundleFile)) {
-            mmBundle = MaterialMetadataBundle.deserialize(bundleFile)
-        } else {
-            throw new IllegalStateException("${bundleFile} is not found")
+        if (! Files.exists(bundleFile)) {
+            return MaterialDescription.EMPTY
         }
-
-
+        mmBundle = MaterialMetadataBundle.deserialize(bundleFile)
+        List<MaterialMetadata> list = mmBundle.findByMaterialPath(key)
+        if (list.size() == 0) {
+            return MaterialDescription.EMPTY
+        } else {
+            return list[0].getMaterialDescription()
+        }
     }
 }

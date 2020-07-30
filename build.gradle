@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.79.1'
+version  = '0.80.0'
 
 
 sourceCompatibility = '1.8'
@@ -123,7 +123,7 @@ task pinpoint(type: Test) {
     //include "**/imagedifference/ComparisonResultBundleSpec.class"
     //include "**/imagedifference/ComparisonResultSpec.class"
     //include "**/imagedifference/imagedifference/EspionageSpec.class"
-    include "**/imagedifference/ImageCollectionDifferSpec.class"
+    //include "**/imagedifference/ImageCollectionDifferSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverCompactImplSpec.class"
     //include "**/imagedifference/ImageDifferenceFilenameResolverDefaultImplSpec.class"
     //include "**/imagedifference/ImageDifferenceSpec.class"
@@ -137,7 +137,7 @@ task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialDescriptionSpec.class"
     //include "**/MaterialPairSpec.class"
-    //include "**/MaterialPairsSpec.class"
+    include "**/MaterialPairsSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"

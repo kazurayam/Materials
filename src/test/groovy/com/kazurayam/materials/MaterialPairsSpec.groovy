@@ -151,37 +151,6 @@ class MaterialPairsSpec extends Specification {
         then:
         pair.hasActual()
     }
-
-    def test_getActualMaterialMetadataBundle() {
-        setup:
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, expectedTsr_)
-        when:
-        MaterialMetadataBundle mmb = mps.getActualMaterialMetadataBundle()
-        then:
-        mmb != null
-        mmb.size() > 0
-        //when:
-        //MaterialMetadata mm = mmb.findByMaterialPath("")
-        //MaterialDescription md = mm.getMaterialDescription()
-        //then:
-        //md.getDescription().contains("foo)
-    }
-
-    def test_getExpectedMaterialMetadataBundle() {
-        setup:
-        MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTsr_, expectedTsr_)
-        when:
-        MaterialMetadataBundle mmb = mps.getExpectedMaterialMetadataBundle()
-        then:
-        mmb != null
-        mmb.size() > 0
-        //when:
-        //MaterialMetadata mm = mmb.findByMaterialPath("")
-        //MaterialDescription md = mm.getMaterialDescription()
-        //then:
-        //md.getDescription().contains("foo)
-    }
-
     
     def test_toJsonText() {
         setup:

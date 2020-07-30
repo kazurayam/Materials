@@ -1,6 +1,6 @@
 package com.kazurayam.materials
 
-
+import com.kazurayam.materials.metadata.MaterialMetadata
 import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import groovy.json.JsonOutput
 import org.slf4j.Logger
@@ -298,19 +298,33 @@ class MaterialRepositorySpec extends Specification {
                     'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/top.png')
     }
 
-	def test_resolveScreenshotPath_byURLPathComponents_login() {
+	def test_resolveScreenshotPathByURLPathComponents_writes_MaterialDescription_in_MaterialMetadataBundle() {
 		setup:
-        String method = 'test_resolveScreenshotPath_byURLPathComponents_login'
+        String method = 'test_resolveScreenshotPath_byURLPathComponents_login_writes_MaterialDescription_in_MaterialMetadataBundle'
 
         MaterialRepository mr = prepareMR(method, tSuiteResultId_)
         when:
         Path path = mr.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1',
-                new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'))
+                new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'),
+                0, "default",
+                new MaterialDescription("1.0", "any useful info about this Material"))
         then:
         path.getFileName().toString()== 'profile.php%23login.png'
         path.toString().replace('\\', '/').endsWith(
                 'Materials/TS1/CURA_ProductionEnv/20180810_140105/main.TC1/profile.php%23login.png')
+
+        // make sure the material-metadata-bundle.json contains the given MaterialDescription
+        when:
+        Path mmBundlePath = mr.locateMaterialMetadataBundle(tSuiteResultId_)
+        MaterialMetadataBundle mmBundle = MaterialMetadataBundle.deserialize(mmBundlePath)
+        MaterialMetadata mm = mmBundle.findLastByMaterialPath(
+                "TS1/CURA_ProductionEnv/20180810_140105/main.TC1/profile.php%23login.png"
+        )
+        MaterialDescription md = mm.getMaterialDescription()
+        then:
+        md.getCategory() == "1.0"
+        md.getDescription() == "any useful info about this Material"
     }
 
     def test_resolveMaterialPathByURLPathComponents_String() {
