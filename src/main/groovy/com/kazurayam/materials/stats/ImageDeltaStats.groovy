@@ -186,7 +186,7 @@ abstract class ImageDeltaStats {
             ImageDeltaStatsImpl.Builder builder = new ImageDeltaStatsImpl.Builder()
             builder.storageScannerOptions(ssOptions)
             //
-            logger_.debug("#fromJsonObject json.imageDeltaStatsEntries.size()=${json.imageDeltaStatsEntries.size()}")
+            //logger_.debug("#fromJsonObject json.imageDeltaStatsEntries.size()=${json.imageDeltaStatsEntries.size()}")
             for (Map statsEntry : (List)json.imageDeltaStatsEntries) {
                 StatsEntry se = StatsEntry.fromJsonObject(statsEntry)
                 builder.addImageDeltaStatsEntry(se)

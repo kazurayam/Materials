@@ -118,8 +118,10 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
                 decorated.getActual().getFileType() == FileType.PNG) {
                 Material expected = decorated.getExpected()
                 TSuiteResult tsr = expected.getParent().getParent()
+
                 MaterialDescription expectedMaterialDescription =
                         this.findMaterialDescription(tsr, expected)
+
                 Path path = expected.getPathRelativeToTSuiteTimestamp()
                 double criteriaPercentage = imageDeltaStats.getCriteriaPercentage(path)
                 // compare 2 images and create a ComparisonResult object
@@ -172,8 +174,19 @@ final class ImageCollectionDiffer extends ImageCollectionProcessor implements VT
             if (decorated.hasExpected() && decorated.hasActual() &&
                 decorated.getExpected().getFileType() == FileType.PNG &&
                 decorated.getActual().getFileType() == FileType.PNG) {
+                Material expected = decorated.getExpected()
+                TSuiteResult tsr = expected.getParent().getParent()
+
+                MaterialDescription expectedMaterialDescription =
+                        this.findMaterialDescription(tsr, expected)
+
                 // compare 2 images, make an diff image, store it into file, record and return the comparison result
-                ComparisonResult evalResult = this.startMaterialPair(callerTCaseName, decorated, criteriaPercentage)
+                ComparisonResult evalResult =
+                        this.startMaterialPair(
+                                callerTCaseName,
+                                decorated,
+                                criteriaPercentage,
+                                expectedMaterialDescription)
                 
 				// put the evalResult into the bundle
                 this.endMaterialPair(evalResult)

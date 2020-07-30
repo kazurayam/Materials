@@ -692,13 +692,13 @@ final class MaterialRepositoryImpl implements MaterialRepository {
             logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 0")
             throw new IllegalStateException("No sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}.")
         } else if (tSuiteResults.size() == 1) {
-            logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 1")
+            //logger_.warn("#createMaterialPairs(TSuiteName \"${tSuiteName.getValue()}\").size()=${tSuiteResults.size()} == 1")
             throw new IllegalStateException("Only 1 sub directory found under ${tSuiteName.getValue()} in ${repoRoot_.getBaseDir().toString()}."
                     + " Chronos mode requires 2 sub direstories under ${tSuiteName.getValue()}."
                     + " Don\'t get surprised. Just execute the Chronos test suite again."
                     + " Possibly Chronos mode will work fine next time.")
         } else {
-            vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
+            //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
         }
 
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
@@ -707,10 +707,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one"
         TSuiteResult actualTSR   = tSuiteResults[0]
         TSuiteResult expectedTSR = tSuiteResults[1]
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
 
         // the result to be returned
         MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)
@@ -749,7 +749,7 @@ final class MaterialRepositoryImpl implements MaterialRepository {
                 + " Don\'t get surprized. Just execute the chronos test suite again."
                 + " Possibly Chronos mode will work fine next time.")
         } else {
-            vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
+            //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() tSuiteResults.size() is ${tSuiteResults.size()}")
         }
         
         // sort the List<TSuiteResult> by descending order of the tSuiteTimestamp
@@ -758,10 +758,10 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         // pickup the 1st LATEST TSuiteResult as "Actual one", the 2nd LATEST as "Expeted one" 
         TSuiteResult actualTSR   = tSuiteResults[0]
         TSuiteResult expectedTSR = tSuiteResults[1]
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
-        vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR is ${actualTSR.getId().toString()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() actualTSR.getMaterialList().size() is ${actualTSR.getMaterialList().size()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR IS ${expectedTSR.getId().toString()}")
+        //vtLogger_.info("MaterialRepositoryImpl#createMaterialPairs() expectedTSR.getMaterialList().size() is ${expectedTSR.getMaterialList().size()}")
         
         // the result to be returned
         MaterialPairs mps = MaterialPairsImpl.MaterialPairs(expectedTSR, actualTSR)

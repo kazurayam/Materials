@@ -237,7 +237,7 @@ class MaterialStorageImpl implements MaterialStorage {
         Path toDir   = tSuiteResultInMR.getTSuiteTimestampDirectory()
         
         // now copy files from the Storage dir into the Materials dir
-        logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
+        //logger_.debug("#restore processing ${tSuiteResultId} fromDir=${fromDir} toDir=${toDir}")
         boolean skipIfIdentical = false
         Integer count = Helpers.copyDirectory(fromDir, toDir, skipIfIdentical)
         
