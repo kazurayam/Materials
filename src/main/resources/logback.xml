@@ -24,7 +24,7 @@
     <logger name="com.kazurayam.materials.model.TCaseResult"                     level="info"/>
     <logger name="com.kazurayam.materials.view.IndexerByVisitorImpl"             level="info"/>
 
-    <logger name="root" level="debug" />
+    <logger name="root" level="info" />
 
     <root>
         <appender-ref ref="STDOUT" />
