@@ -44,23 +44,23 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
         switch (from) {
             case TreeLayer.INIT:
                 directoryTransition_.push(TreeLayer.ROOT)
-                logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as ROOT")
                 return CONTINUE
 
             case TreeLayer.ROOT:
                 directoryTransition_.push(TreeLayer.TESTSUITE)
-                logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as TESTSUITE")
                 tSuiteName_ = new TSuiteName(dir)
                 return CONTINUE
 
             case TreeLayer.TESTSUITE:
                 directoryTransition_.push(TreeLayer.EXECPROFILE)
-                logger_.debug("#preVisitDirectory visiting ${dir} as EXECPROFILE")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as EXECPROFILE")
                 tExecutionProfile_ = new TExecutionProfile(dir)
                 return CONTINUE
 
             case TreeLayer.EXECPROFILE:
-                logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 LocalDateTime ldt = TSuiteTimestamp.parse(dir.getFileName().toString())
                 if (ldt != null) {
                     tSuiteTimestamp_ = new TSuiteTimestamp(ldt)
@@ -100,27 +100,27 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
         def to = directoryTransition_.peek()
         switch (to) {
             case TreeLayer.TIMESTAMP :
-                logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
+                //logger_.debug("#postVisitDirectory leaving ${dir} as TIMESTAMP")
                 directoryTransition_.pop()
                 return CONTINUE
 
             case TreeLayer.EXECPROFILE :
-                logger_.debug("#postVisitDirectory leaving ${dir} as EXECPROFILE")
+                //logger_.debug("#postVisitDirectory leaving ${dir} as EXECPROFILE")
                 directoryTransition_.pop()
                 return CONTINUE
 
             case TreeLayer.TESTSUITE :
-                logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
+                //logger_.debug("#postVisitDirectory leaving ${dir} as TESTSUITE")
                 directoryTransition_.pop()
                 return CONTINUE
 
             case TreeLayer.ROOT :
-                logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
+                //logger_.debug("#postVisitDirectory leaving ${dir} as ROOT")
                 directoryTransition_.pop()
                 return CONTINUE
 
             default:
-                logger_.error("#postVisitDirectory leaving ${dir} as unknown")
+                //logger_.error("#postVisitDirectory leaving ${dir} as unknown")
                 return TERMINATE
         }
     }
@@ -132,15 +132,15 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
         switch (directoryTransition_.peek()) {
             case TreeLayer.ROOT :
-                logger_.debug("#visitFile ${file} in ROOT; this file is ignored")
+                //logger_.debug("#visitFile ${file} in ROOT; this file is ignored")
                 return CONTINUE
 
             case TreeLayer.TESTSUITE :
-                logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
+                //logger_.debug("#visitFile ${file} in TESTSUITE; this file is ignored")
                 return CONTINUE
 
             case TreeLayer.TESTSUITE :
-                logger_.debug("#visitFile ${file} in EXECPROFILE; this file is ignored")
+                //logger_.debug("#visitFile ${file} in EXECPROFILE; this file is ignored")
                 return CONTINUE
 
             case TreeLayer.TIMESTAMP :
@@ -148,7 +148,7 @@ final class TreeTrunkVisitor extends SimpleFileVisitor<Path> {
                 return CONTINUE
 
             default:
-                logger_.error("visitFile ${file} in unknown")
+                //logger_.error("visitFile ${file} in unknown")
                 return TERMINATE
         }
     }

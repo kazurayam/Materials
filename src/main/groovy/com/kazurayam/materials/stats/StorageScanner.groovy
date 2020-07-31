@@ -149,7 +149,7 @@ class StorageScanner implements VTLoggerEnabled {
         
         stopWatch.stop()
         String msg = "#scan took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${capturingTSuiteName}"
-        logger_.debug(msg)
+        //logger_.debug(msg)
         return ids
     }
         
@@ -187,11 +187,11 @@ class StorageScanner implements VTLoggerEnabled {
 
         stopWatch.stop()
         String msg = "#makeStatsEntry took ${stopWatch.getTime(TimeUnit.MILLISECONDS)} milliseconds for ${tSuiteNameCapture}"
-        logger_.debug(msg)
-        if (vtLogger_ != null) {
-            vtLogger_.info(msg)
-        }
-        logger_.debug("#makeStatsEntry statsEntry=${statsEntry}")
+        //logger_.debug(msg)
+        //if (vtLogger_ != null) {
+        //    vtLogger_.info(msg)
+        //}
+        //logger_.debug("#makeStatsEntry statsEntry=${statsEntry}")
         return statsEntry
     }
 

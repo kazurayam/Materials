@@ -56,29 +56,29 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
         switch (from) {
             case TreeLayer.INIT:
                 directoryTransition_.push(TreeLayer.TIMESTAMP)
-                logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as TIMESTAMP")
                 return CONTINUE
 
             case TreeLayer.TIMESTAMP:
                 directoryTransition_.push(TreeLayer.TESTCASE)
-                logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as TESTCASE")
                 tCaseName_ = new TCaseName(dir)
                 tCaseResult_ = targetTSuiteResult_.ensureTCaseResultPresent(tCaseName_)
                 return CONTINUE
 
             case TreeLayer.TESTCASE:
                 directoryTransition_.push(TreeLayer.SUBDIR)
-                logger_.debug("preVisitDirectory visiting ${dir} as SUBIDR(${subdirDepth_})")
+                //logger_.debug("preVisitDirectory visiting ${dir} as SUBIDR(${subdirDepth_})")
                 subdirDepth_ += 1
                 return CONTINUE
 
             case TreeLayer.SUBDIR:
-                logger_.debug("preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
+                //logger_.debug("preVisitDirectory visiting ${dir} as SUBDIR(${subdirDepth_})")
                 subdirDepth_ += 1
                 return CONTINUE
 
             default:
-                logger_.debug("#preVisitDirectory visiting ${dir} as unknown layer")
+                //logger_.debug("#preVisitDirectory visiting ${dir} as unknown layer")
                 return TERMINATE
         }
     }
@@ -88,7 +88,7 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
         def to = directoryTransition_.peek()
         switch (to) {
             case TreeLayer.SUBDIR:
-                logger_.debug("#postVisitDirectory leaving ${dir} as SUBIDR(${subdirDepth_})")
+                //logger_.debug("#postVisitDirectory leaving ${dir} as SUBIDR(${subdirDepth_})")
                 subdirDepth_ -= 1
                 if (subdirDepth_ == 0) {
                     directoryTransition_.pop()
@@ -96,12 +96,12 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
                 return CONTINUE
 
             case TreeLayer.TESTCASE:
-                logger_.debug('#postVisitDirectory leaving ${dir} as TESTCASE')
+                //logger_.debug('#postVisitDirectory leaving ${dir} as TESTCASE')
                 directoryTransition_.pop()
                 return CONTINUE
 
             case TreeLayer.TIMESTAMP:
-                logger_.debug('#postVisitDirectory leaving ${dir} as TIMESTAMP')
+                //logger_.debug('#postVisitDirectory leaving ${dir} as TIMESTAMP')
                 assert targetTSuiteResult_.getTSuiteTimestampDirectory() == dir
                 directoryTransition_.pop()
                 return CONTINUE
@@ -112,7 +112,7 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
     FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
         switch (directoryTransition_.peek()) {
             case TreeLayer.TIMESTAMP :
-                logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
+                //logger_.debug("#visitFile ${file} in TIMESTAMP; this file is ignored")
                 return CONTINUE
 
             case TreeLayer.TESTCASE :
@@ -122,7 +122,7 @@ class TreeBranchVisitor extends SimpleFileVisitor<Path> {
                 material.setLength(file.toFile().length())
                 material.setDescription(tCaseResult_.getParent().getTSuiteTimestamp().format())
                 tCaseResult_.addMaterial(material)
-                logger_.debug("#visitFile ${file} in TESTCASE; TCaseResult=${tCaseResult_.toString()}")
+                //logger_.debug("#visitFile ${file} in TESTCASE; TCaseResult=${tCaseResult_.toString()}")
                 return CONTINUE
 
             default:

@@ -1,5 +1,7 @@
 package com.kazurayam.materials
 
+import com.kazurayam.materials.metadata.MaterialMetadata
+import com.kazurayam.materials.metadata.MaterialMetadataBundle
 import com.kazurayam.materials.repository.TreeTrunkScanner
 
 import java.nio.file.Path
