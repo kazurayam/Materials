@@ -46,7 +46,11 @@
                 },
                 "criteriaPercentage": 17.99,
                 "imagesAreSimilar": true,
-                "diffRatio": 16.99
+                "diffRatio": 16.99,
+                "MaterialDescription": {
+                    "category": "1.0",
+                    "description": "47News Top page"
+                }
             }
         }
     ]

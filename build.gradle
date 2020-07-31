@@ -137,7 +137,7 @@ task pinpoint(type: Test) {
     //include "**/IndexerSpec.class"
     //include "**/MaterialDescriptionSpec.class"
     //include "**/MaterialPairSpec.class"
-    include "**/MaterialPairsSpec.class"
+    //include "**/MaterialPairsSpec.class"
     //include "**/MaterialRepositoryFactorySpec.class"
     //include "**/MaterialRepositorySpec.class"
     //include "**/MaterialSpec.class"
@@ -168,9 +168,10 @@ task pinpoint(type: Test) {
     //include "**/TSuiteTimestampSpec.class"
     //include "**/view/ExecutionPropertiesWrapperSpec.class"
     //include "**/view/IndexerCarouselSpec.class"
-	//include "**/view/IndexerConciseSpec.class"
+	include "**/view/IndexerConciseSpec.class"
 	//include "**/view/IndexerParallelSpec.class"
     //include "**/view/JUnitReportWrapperSpec.class"
+    include "**/view/RepositoryVisitorGeneratingBootstrapTreeviewDataSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalCarouselSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalConciseSpec.class"
     //include "**/view/RepositoryVisitorGeneratingHtmlDivsAsModalParallelSpec.class"
@@ -199,10 +200,6 @@ task publishGroovydoc(type: Copy) {
 }
 groovydoc.finalizedBy publishGroovydoc
 
-
-jar {
-    exclude('logback-test.xml')
-}
 
 
 bintray {

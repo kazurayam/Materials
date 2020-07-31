@@ -5,8 +5,8 @@
                 "MaterialPath": "47news.chronos_capture/20190404_111956/47news.visitSite/top.png",
                 "TCaseName": "Test Cases/47news/visitSite",
                 "MaterialDescription": {
-                    "category": "category text",
-                    "description": "description text"
+                    "category": "1.0",
+                    "description": "Top page"
                 },
                 "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
                 "SubPath": "",

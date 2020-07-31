@@ -6,6 +6,7 @@ import com.kazurayam.materials.VisualTestingLogger
 import com.kazurayam.materials.impl.VisualTestingLoggerDefaultImpl
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import spock.lang.IgnoreRest
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -60,10 +61,10 @@ class RepositoryVisitorGeneratingBootstrapTreeviewDataSpec extends Specification
     @Ignore
     def testFoo() {}
 
-    def testSmoke() {
+    def test_chronos_capture() {
         setup:
         // copy fixture files from the fixture_origin directory to the Storage directory
-        Path  caseOutputDir = specOutputDir_.resolve("testSmoke")
+        Path  caseOutputDir = specOutputDir_.resolve("test_chronos_capture")
         Helpers.copyDirectory(fixture_, caseOutputDir)
         //
         Path materialsDir = caseOutputDir.resolve("Materials")
@@ -118,6 +119,41 @@ class RepositoryVisitorGeneratingBootstrapTreeviewDataSpec extends Specification
 
     }
 
+
+    @IgnoreRest
+    def test_chronos_exam() {
+        setup:
+        // copy fixture files from the fixture_origin directory to the Storage directory
+        Path  caseOutputDir = specOutputDir_.resolve("test_chronos_exam")
+        Helpers.copyDirectory(fixture_, caseOutputDir)
+        //
+        Path materialsDir = caseOutputDir.resolve("Materials")
+        Path storageDir = caseOutputDir.resolve("Storage")
+        Path reportsDir = caseOutputDir.resolve("Reports")
+        MaterialRepository mr = MaterialRepositoryFactory.createInstance(materialsDir)
+        MaterialStorage ms = MaterialStorageFactory.createInstance(storageDir)
+        ReportsAccessor ra = ReportsAccessorFactory.createInstance(reportsDir)
+        when:
+        StringWriter jsonSnippet = new StringWriter()
+        VTLoggerEnabled visitor =
+                new RepositoryVisitorGeneratingBootstrapTreeviewData(jsonSnippet)
+        visitor.setReportsAccessor(ra)
+        visitor.setVisualTestingLogger(vtLogger_)
+        RepositoryWalker.walkRepository(mr.getRepositoryRoot(), visitor)
+        println "jsonSnippet is ${JsonOutput.prettyPrint(jsonSnippet.toString())}"
+
+        //
+        JsonSlurper slurper = new JsonSlurper()
+        def json = slurper.parseText(jsonSnippet.toString())
+        then:
+        // 47news.chronos_exam/20190404_112054
+        json[2].tags[0] == "EXECUTED:1,FAILED:0,ERROR:0"
+        json[2].tags[1] == "TIME:6"
+        json[2].tags[2] == "PNG:1"
+        json[2].tags[3] == "default"
+        json[2].tags[4] == "Firefox"
+
+    }
 
 }
 

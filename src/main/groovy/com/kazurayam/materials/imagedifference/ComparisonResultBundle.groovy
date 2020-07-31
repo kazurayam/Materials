@@ -1,9 +1,11 @@
 package com.kazurayam.materials.imagedifference
 
+import com.kazurayam.materials.MaterialDescription
+
 import java.nio.file.Path
-import java.nio.file.Paths
 
 import com.kazurayam.materials.MaterialCore
+import com.kazurayam.materials.MaterialDescription
 import com.kazurayam.materials.impl.MaterialCoreImpl
 
 import groovy.json.JsonOutput
@@ -35,17 +37,27 @@ class ComparisonResultBundle {
             throw new IllegalArgumentException("comparisonResults was expected to be List but was ${comparisonResults.class.getName()}")
         }
 
-        for (def jsonObjectCR : comparisonResults) {
+        for (jsonObjectCR in comparisonResults) {
             // println "#ComparisonResultBundle jsonObjectCR=${jsonObjectCR}"
-            MaterialCore expected     = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.expectedMaterial))
-            MaterialCore actual       = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.actualMaterial))
-            MaterialCore diff         = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.diffMaterial))
+            MaterialCore expected = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.expectedMaterial))
+            MaterialCore actual = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.actualMaterial))
+            MaterialCore diff = new MaterialCoreImpl(baseDir, JsonOutput.toJson(jsonObjectCR.ComparisonResult.diffMaterial))
             double criteriaPercentage = jsonObjectCR.ComparisonResult.criteriaPercentage
-            boolean imagesAreSimilar  = jsonObjectCR.ComparisonResult.imagesAreSimilar
-            double diffRatio          = jsonObjectCR.ComparisonResult.diffRatio
+            boolean imagesAreSimilar = jsonObjectCR.ComparisonResult.imagesAreSimilar
+            double diffRatio = jsonObjectCR.ComparisonResult.diffRatio
+
+            MaterialDescription mDesc = MaterialDescription.EMPTY
+            if (jsonObjectCR.ComparisonResult.MaterialDescription != null) {
+                String category = jsonObjectCR.ComparisonResult.MaterialDescription.category
+                String description = jsonObjectCR.ComparisonResult.MaterialDescription.description
+                mDesc = new MaterialDescription(category, description)
+            }
+
             //
-            ComparisonResult cr = new ComparisonResult(expected, actual, diff,
-                                            criteriaPercentage, imagesAreSimilar, diffRatio)
+            ComparisonResult cr =
+                    new ComparisonResult(expected, actual, diff,
+                            criteriaPercentage, imagesAreSimilar, diffRatio, mDesc)
+
             bundle_.add(cr)
         }
     }

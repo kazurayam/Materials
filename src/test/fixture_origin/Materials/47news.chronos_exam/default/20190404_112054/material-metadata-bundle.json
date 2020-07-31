@@ -6,8 +6,8 @@
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "InvokedMethodName": "resolveMaterialPath",
                 "MaterialDescription": {
-                    "category": "category text",
-                    "description": "description text"
+                    "category": "",
+                    "description": ""
                 },
                 "SubPath": "",
                 "FileName": "image-delta-stats.json"
@@ -18,8 +18,8 @@
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "MaterialDescription": {
-                    "category": "category text",
-                    "description": "description text"
+                    "category": "",
+                    "description": ""
                 },
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "",
@@ -31,8 +31,8 @@
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/47news.visitSite/top.20190404_111956_default-20190404_112053_default.(16.99).png",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "MaterialDescription": {
-                    "category": "category text",
-                    "description": "description text"
+                    "category": "",
+                    "description": ""
                 },
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "47news.visitSite",
@@ -44,8 +44,8 @@
                 "MaterialPath": "47news.chronos_exam/20190404_112054/47news.ImageDiff/comparison-result-bundle.json",
                 "TCaseName": "Test Cases/47news/ImageDiff",
                 "MaterialDescription": {
-                    "category": "category text",
-                    "description": "description text"
+                    "category": "",
+                    "description": ""
                 },
                 "InvokedMethodName": "resolveMaterialPath",
                 "SubPath": "",

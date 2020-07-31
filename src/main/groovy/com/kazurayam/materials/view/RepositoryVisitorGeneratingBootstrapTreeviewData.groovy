@@ -1,5 +1,7 @@
 package com.kazurayam.materials.view
 
+import com.kazurayam.materials.imagedifference.ComparisonResult
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -20,7 +22,9 @@ import com.kazurayam.materials.repository.RepositoryRoot
 import com.kazurayam.materials.repository.RepositoryVisitResult
 import com.kazurayam.materials.repository.RepositoryVisitor
 import com.kazurayam.materials.repository.RepositoryVisitorSimpleImpl
-import java.util.stream.Collectors;
+import java.util.stream.Collectors
+
+import groovy.json.JsonOutput
 
 /**
  *
@@ -29,31 +33,30 @@ import java.util.stream.Collectors;
  */
 class RepositoryVisitorGeneratingBootstrapTreeviewData
         extends RepositoryVisitorSimpleImpl implements RepositoryVisitor, VTLoggerEnabled {
+
+    static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
      
-     static Logger logger_ = LoggerFactory.getLogger(RepositoryVisitorGeneratingBootstrapTreeviewData.class)
+    private ReportsAccessor reportsAccessor_
+    private ComparisonResultBundle comparisonResultBundle_ = null
+    private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
+
+    private int tSuiteResultCount
+    private int tCaseResultCount
+    private int materialsCount
+
+    private static List<String> fileNamesToIgnore = [
+            'comparison-result-bundle.json',
+            'image-delta-stats.json',
+            '.highlight.json']
      
-     private ReportsAccessor reportsAccessor_
-     private VisualTestingLogger vtLogger_ = new VisualTestingLoggerDefaultImpl()
+    RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
+        super(writer)
+    }
      
-     private int tSuiteResultCount
-     private int tCaseResultCount
-     private int materialsCount
-     private def comparisonResultBundle
-     
-     private static List<String> fileNamesToIgnore = [
-         'comparison-result-bundle.json',
-         'image-delta-stats.json',
-         '.highlight.json'
-         ]
-     
-     RepositoryVisitorGeneratingBootstrapTreeviewData(Writer writer) {
-         super(writer)
-     }
-     
-     void setReportsAccessor(ReportsAccessor reportsAccessor) {
-         this.reportsAccessor_ = reportsAccessor
-     }
-     
+    void setReportsAccessor(ReportsAccessor reportsAccessor) {
+        this.reportsAccessor_ = reportsAccessor
+    }
+
 	 // -------- VTLoggerEnabled --------------------------------------
      
 	 @Override
@@ -108,7 +111,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              // number of Tests
              sb.append(',')
              sb.append('"tags": ["')
-             logger_.info("#toBootstrapTreeviewData this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
+             //logger_.debug("#postVisitTSuiteResult this.getTSuiteName() is '${tSuiteResult.getId().getTSuiteName()}'")
              sb.append(junitReportWrapper.getTestSuiteSummary(tSuiteResult.getId().getTSuiteName().getId()))
              sb.append('"')
 
@@ -168,9 +171,11 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          if (crbMaterial != null) {
              Path baseDir = tCaseResult.getParent().getParent().getBaseDir()
              String jsonText = crbMaterial.getPath().toFile().text
-             this.comparisonResultBundle = new ComparisonResultBundle(baseDir, jsonText)
+             this.comparisonResultBundle_ = new ComparisonResultBundle(baseDir, jsonText)
+             //logger_.info("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is successfully found in ${tCaseResult.getTCaseDirectory()}")
+             //logger_.info("${JsonOutput.prettyPrint(comparisonResultBundle_.toJsonText())}")
          } else {
-             logger_.info("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.toString()}")
+             logger_.debug("${ComparisonResultBundle.SERIALIZED_FILE_NAME} is not found in ${tCaseResult.getTCaseDirectory()}")
          }
          //
          return RepositoryVisitResult.SUCCESS
@@ -206,7 +211,7 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
          pw_.print(sb.toString())
          pw_.flush()
          //
-         this.comparisonResultBundle = null
+         this.comparisonResultBundle_ = null
          //
          return RepositoryVisitResult.SUCCESS
      }
@@ -221,7 +226,20 @@ class RepositoryVisitorGeneratingBootstrapTreeviewData
              // TODO Carousel based on the info of the comparisonResultBundle
          
              sb.append('{')
-             sb.append('"text":"' + Helpers.escapeAsJsonText(material.getIdentifier())+ '",')
+             sb.append('"text":"')
+             sb.append(Helpers.escapeAsJsonText(material.getIdentifier()))
+             if (this.comparisonResultBundle_ != null) {
+                 ComparisonResult cr =
+                         comparisonResultBundle_.getByDiffMaterial(
+                            material.getHrefRelativeToRepositoryRoot())
+                 if (cr != null) {
+                     sb.append(' \\"')
+                     def desc = cr.getMaterialDescription().getDescription()
+                     sb.append(Helpers.escapeAsJsonText(desc))
+                     sb.append('\\" ')
+                 }
+             }
+             sb.append('",')
              sb.append('"selectable":true,')
              if (material.getPath().getFileName().toString().endsWith('FAILED.png')) {
                  sb.append('"backColor": "#9F86FF",')
