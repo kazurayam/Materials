@@ -253,7 +253,7 @@ final class TCaseResultImpl extends TCaseResult implements Comparable<TCaseResul
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{"TCaseResult":{')
-        sb.append('"tCaseName":'   + this.getTCaseName().toString()   + ',')
+        sb.append('"tCaseName":'   + this.getTCaseName().toJsonText()   + ',')
         sb.append('"tCaseDir":"'    + Helpers.escapeAsJsonText(this.getTCaseDirectory().toString())    + '",')
         sb.append('"lastModified":"' + this.getLastModified().toString() + '",')
         sb.append('"length":' + this.getSize()+ ',')

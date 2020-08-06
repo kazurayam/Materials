@@ -1,5 +1,7 @@
 package com.kazurayam.materials.metadata
 
+import com.kazurayam.materials.Helpers
+
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -185,7 +187,9 @@ class MaterialMetadataBundle {
     String toJsonText() {
         StringBuilder sb = new StringBuilder()
         sb.append('{')
-        sb.append("\"${TOP_PROPERTY_NAME}\":[")
+        sb.append("\"")
+        sb.append(Helpers.escapeAsJsonText(TOP_PROPERTY_NAME))
+        sb.append("\": [")
         int count = 0
         for (MaterialMetadata resolution: this.materialMetadataList_) {
             if (count > 0) {

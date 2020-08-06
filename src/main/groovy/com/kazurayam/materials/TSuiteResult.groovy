@@ -158,13 +158,13 @@ abstract class TSuiteResult implements Comparable<TSuiteResult> {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("\"value\":\"");
-        sb.append(this.getId().getTSuiteName().getValue());
+        sb.append(Helpers.escapeAsJsonText(this.getId().getTSuiteName().getValue()));
         sb.append("\"");
         sb.append(",\"profile\":\"");
-        sb.append(this.getId().getTExecutionProfile().getName());
+        sb.append(Helpers.escapeAsJsonText(this.getId().getTExecutionProfile().getName()));
         sb.append("\"");
         sb.append("\",\"format\":\"");
-        sb.append(this.getId().getTSuiteTimestamp().format());
+        sb.append(Helpers.escapeAsJsonText(this.getId().getTSuiteTimestamp().format()));
         sb.append("\"");
         sb.append("}");
         return sb.toString();
