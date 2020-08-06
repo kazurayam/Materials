@@ -19,7 +19,7 @@ apply plugin: 'com.jfrog.bintray'
 
 group    = 'com.kazurayam'
 archivesBaseName = 'Materials'
-version  = '0.80.0'
+version  = '0.80.1'
 
 
 sourceCompatibility = '1.8'

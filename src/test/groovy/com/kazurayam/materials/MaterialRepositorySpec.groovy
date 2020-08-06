@@ -304,11 +304,13 @@ class MaterialRepositorySpec extends Specification {
 
         MaterialRepository mr = prepareMR(method, tSuiteResultId_)
         when:
+        String description = '【dqn061】search[\\\\machine-id\\f$\\cgi_16\\company\\mobile'
         Path path = mr.resolveScreenshotPathByURLPathComponents(
             'Test Cases/main/TC1',
                 new URL('https://katalon-demo-cura.herokuapp.com/profile.php#login'),
                 0, "default",
-                new MaterialDescription("1.0", "any useful info about this Material"))
+                new MaterialDescription("1.0", description))
+                                // Be careful for a string with JSON-sensible characters such as \
         then:
         path.getFileName().toString()== 'profile.php%23login.png'
         path.toString().replace('\\', '/').endsWith(
@@ -324,7 +326,7 @@ class MaterialRepositorySpec extends Specification {
         MaterialDescription md = mm.getMaterialDescription()
         then:
         md.getCategory() == "1.0"
-        md.getDescription() == "any useful info about this Material"
+        md.getDescription() == description
     }
 
     def test_resolveMaterialPathByURLPathComponents_String() {
