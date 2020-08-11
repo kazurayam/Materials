@@ -263,9 +263,9 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
                 }
             }
         } else {
-            String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is found to be null"
+            String msg = this.class.getSimpleName() + "#generateAnchorsToOrigins this.comparisonResultBundle_ is null"
             logger_.warn(msg)
-            vtLogger_.info(msg)
+            vtLogger_.warn(msg)
         }
     }
 
@@ -412,20 +412,20 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
  }
 }
       */
-    private String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+    String getExpectedMaterialOriginHref(Path baseDir, ComparisonResult cr) {
         def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
         return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.expectedMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
-    private String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
+    String getActualMaterialOriginHref(Path baseDir, ComparisonResult cr) {
         def jsonObject = new JsonSlurper().parseText(cr.toJsonText())
         return getXMaterialOriginHref(baseDir, jsonObject.ComparisonResult.actualMaterial.Material.hrefRelativeToRepositoryRoot)
     }
     
-    private String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
-        String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', '20190404_111956', '47news.visitSite', 'top.png' ]
+    String getXMaterialOriginHref(Path baseDir, String hrefRelativeToRepositoryRoot) {
+        String[] components = hrefRelativeToRepositoryRoot.split('/')             // [ '47news.chronos_capture', 'default', '20190923_112138', '47news.visitSite', 'top.png' ]
         if (components.length > 2) {
-            Path metadataBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
+            Path metadataBundlePath = baseDir.resolve(components[0]).resolve(components[1]).resolve(components[2]).resolve(MaterialMetadataBundle.SERIALIZED_FILE_NAME)
             if (Files.exists(metadataBundlePath)) {
                 MaterialMetadataBundle metadataBundle = MaterialMetadataBundle.deserialize(metadataBundlePath)
                 MaterialMetadata metadata = metadataBundle.findLastByMaterialPath(hrefRelativeToRepositoryRoot)
@@ -435,14 +435,17 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
                 * {
                 *   "MaterialMetadataBundle": [
                 *     {
-                *       "MaterialMetadata": {
-                *         "MaterialPath": "47news.chronos_capture/20190404_112053/47news.visitSite/top.png",
-                *         "TCaseName": "Test Cases/47news/visitSite",
-                *         "InvokedMethodName": "resolveScreenshotPathByUrlPathComponents",
-                *         "SubPath": "",
-                *         "URL": "https://www.47news.jp/",
-                *         "ExecutionProfileName": "default"
-                *       }
+                *         "MaterialMetadata": {
+                *             "MaterialPath": "47News.chronos_exam/default/20190923_112817/47News.ImageDiff_chronos/47News.visitSite/TOP(7.07).png",
+                *             "TCaseName": "Test Cases/47News/ImageDiff_chronos",
+                *             "MaterialDescription": {
+                *                 "category": "category text",
+                *                 "description": "description text"
+                *             },
+                *             "InvokedMethodName": "resolveMaterialPath",
+                *             "SubPath": "47News.visitSite",
+                *             "FileName": "TOP(7.07).png"
+                *         }
                 *     }
                 *   ]
                 * }
@@ -456,7 +459,7 @@ abstract class RepositoryVisitorGeneratingHtmlDivsAsModalBase
                     return null
                 }
             } else {
-                String msg = "#getXMaterialOriginHref ${metadataBundlePath} does ot exist"
+                String msg = "#getXMaterialOriginHref ${metadataBundlePath} does not exist"
                 logger_.warn(msg)
                 vtLogger_.failed(msg)
                 return null

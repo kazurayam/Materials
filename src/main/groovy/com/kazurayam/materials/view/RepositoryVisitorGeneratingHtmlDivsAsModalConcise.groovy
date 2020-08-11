@@ -40,7 +40,6 @@ class RepositoryVisitorGeneratingHtmlDivsAsModalConcise
     */
     @Override
     void generateImgTags(Material mate) {
-        println "${this.getClass().getName()}#generateImgTags(${mate}) was invoked"
         if (this.comparisonResultBundle_ != null &&
             this.comparisonResultBundle_.containsImageDiff(mate.getPath())) {
             // This material is a diff image, so render it in Carousel format of Diff > Expected + Actual
