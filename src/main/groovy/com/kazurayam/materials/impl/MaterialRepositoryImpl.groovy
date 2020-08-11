@@ -474,18 +474,6 @@ final class MaterialRepositoryImpl implements MaterialRepository {
         Material material = new MaterialImpl(tCaseResult,
                 tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
 
-        // see https://github.com/kazurayam/Materials/issues/28
-        // We will check the absolute path length of the material file.
-        // Ff the length exceed 255, Windows path length limit, then shorten the file name
-        // by filtering '%26' (& URL encoded) and '%3D' (= URL encoded) to '' and
-        // recreate the material
-        if (material.getPath().toAbsolutePath().toString().length() > 255) {
-            fileName =
-                    fileName.replace('%26', '')
-                            .replace('%3D', '')
-            material = new MaterialImpl(tCaseResult,
-                    tCaseResult.getTCaseDirectory().resolve(subPath).resolve(fileName))
-        }
         //
         Files.createDirectories(material.getPath().getParent())
         //Helpers.touch(material.getPath())

@@ -168,25 +168,6 @@ class MaterialRepositoryImplSpec extends Specification {
             Files.exists(metadataBundle)
     }
 
-    def testResolveScreenshotPathByURLPathComponents_longQuery() {
-        setup:
-        Path casedir = workdir_.resolve('testResolveScreenshotPathByURLPathComponents_longQuery')
-        Helpers.copyDirectory(fixture_, casedir)
-        Path materialsDir = casedir.resolve('Materials')
-        MaterialRepositoryImpl mri = MaterialRepositoryImpl.newInstance(materialsDir)
-        mri.markAsCurrent('Test Suites/main/TS1',
-                'CURA_ProductionEnv', '20180530_130604')
-        TSuiteResult tsr = mri.ensureTSuiteResultPresent('Test Suites/main/TS1',
-                'CURA_ProductionEnv','20180530_130604')
-        when:
-        Path p = mri.resolveScreenshotPathByURLPathComponents('TC1',
-                new URL('https://my.home.net/gn/issueList.html' +
-                        "?KEY00=VAL00&KEY01=VAL01&KEY02=VAL02&KEY03=VAL03&KEY04=VAL04" +
-                        "&KEY05=VAL05"))
-        then:
-        p.toString().length() < 255
-
-    }
 
 
 
