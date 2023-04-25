@@ -1,5 +1,8 @@
-Materials
-====
+This project was abandoned. The last version is 0.73.2. I will no longer maintain this. The project was succeeded by another project at
+
+- [materialstore](https://github.com/kazurayam/materialstore)
+
+# Materials
 
 ## Abstract
 

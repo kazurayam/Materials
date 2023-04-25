@@ -1,6 +1,14 @@
 Revision History of materials
 =============================
 
+This project was abandoned. The last version is 0.73.2. I will no longer maintain this.
+
+The project was succeeded by another project at 
+
+- [materialstore](https://github.com/kazurayam/materialstore)
+
+
+
 ## Changes made at 0.73.0 -> 0.73.1
 
 Date: 02,Dec 2019
